@@ -4,10 +4,10 @@ For some applications, it may be desirable to perform processing of the camera i
 
 Since the [`XRCameraSubsystem.GetTextures`](https://docs.unity3d.com/ScriptReference/Experimental.XR.XRCameraSubsystem.GetTextures.html) provides a list of external textures, they would need to be read back from the GPU in order to do additional processing, which can be prohibitively expensive. In addition, the number and format of textures varies by platform.
 
-To interact with the CPU camera image, you will need to first obtain a `CameraImage` using the `XRCameraSubsystem` extension method
+To interact with the CPU camera image, you will need to first obtain a `CameraImage` using the `ARCameraManager`:
 
 ```csharp
-public static bool TryGetLatestImage(this XRCameraSubsystem cameraSubsystem, out CameraImage cameraImage)
+public bool TryGetLatestImage(out XRCameraImage cameraImage)
 ```
 
 The `CameraImage` is a `struct` which represents a native resource. When you are finished using it, you must call `Dispose` on it to release it back to the system. Although you may hold a `CameraImage` for multiple frames, most platforms have a limited number of them, so failure to `Dispose` them may prevent the system from providing new camera images.
@@ -28,10 +28,8 @@ If you need access to the raw, platform-specific YUV data, you can get each imag
 ### Example:
 
 ```csharp
-var cameraSubsystem = ARSubsystemManager.cameraSubsystem;
-
 CameraImage image;
-if (!cameraSubsystem.TryGetLatestImage(out image))
+if (!cameraManager.TryGetLatestImage(out image))
     return;
 
 // Consider each image plane
@@ -97,8 +95,8 @@ using System;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-using UnityEngine.XR.ARExtensions;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class CameraImageExample : MonoBehaviour
 {
@@ -106,21 +104,18 @@ public class CameraImageExample : MonoBehaviour
 
     void OnEnable()
     {
-        ARSubsystemManager.cameraFrameReceived += OnCameraFrameReceived;
+        cameraManager.cameraFrameReceived += OnCameraFrameReceived;
     }
 
     void OnDisable()
     {
-        ARSubsystemManager.cameraFrameReceived -= OnCameraFrameReceived;
+        cameraManager.cameraFrameReceived -= OnCameraFrameReceived;
     }
 
     unsafe void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
     {
-        // Get the image in the ARSubsystemManager.cameraFrameReceived callback
-        var cameraSubsystem = ARSubsystemManager.cameraSubsystem;
-
         CameraImage image;
-        if (!cameraSubsystem.TryGetLatestImage(out image))
+        if (!cameraManager.TryGetLatestImage(out image))
             return;
 
         var conversionParams = new CameraImageConversionParams
@@ -199,7 +194,7 @@ public void GetImageAsync()
 {
     // Get information about the camera image
     CameraImage image;
-    if (ARSubsystemManager.cameraSubsystem.TryGetLatestImage(out image))
+    if (cameraManager.TryGetLatestImage(out image))
     {
         // If successful, launch a coroutine that waits for the image
         // to be ready, then apply it to a texture.
@@ -273,7 +268,7 @@ public void GetImageAsync()
 {
     // Get information about the camera image
     CameraImage image;
-    if (ARSubsystemManager.cameraSubsystem.TryGetLatestImage(out image))
+    if (cameraManager.TryGetLatestImage(out image))
     {
         // If successful, launch a coroutine that waits for the image
         // to be ready, then apply it to a texture.

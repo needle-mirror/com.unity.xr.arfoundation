@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine.Experimental.XR;
-using UnityEngine.XR.FaceSubsystem;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -13,126 +13,100 @@ namespace UnityEngine.XR.ARFoundation
     /// a face in the environment.
     /// </remarks>
     [DisallowMultipleComponent]
-    public sealed class ARFace : MonoBehaviour
+    [DefaultExecutionOrder(ARUpdateOrder.k_Face)]
+    public sealed class ARFace : ARTrackable<XRFace, ARFace>
     {
-        [SerializeField]
-        [Tooltip("If true, this component's GameObject will be removed immediately when the plane is removed.")]
-        bool m_DestroyOnRemoval = true;
+        /// <summary>
+        /// Invoked when the face is updated. If face meshes are supported, there will be
+        /// updated <see cref="vertices"/>, <see cref="normals"/>, <see cref="indices"/>, and
+        /// <see cref="uvs"/>.
+        /// </summary>
+        public event Action<ARFaceUpdatedEventArgs> updated;
 
         /// <summary>
-        /// If true, this component's <c>GameObject</c> will be removed immediately when the face is removed.
+        /// The vertices representing the face mesh. Check for existence with <c>vertices.IsCreated</c>.
+        /// This array is parallel to <see cref="normals"/> and <see cref="uvs"/>. Vertices are
+        /// provided in face space, that is, relative to this <see cref="ARFace"/>'s local
+        /// position and rotation.
         /// </summary>
-        /// <remarks>
-        /// Setting this to false will keep the face's <c>GameObject</c> around. You may want to do this, for example,
-        /// if you have custom removal logic, such as a fade out.
-        /// </remarks>
-        public bool destroyOnRemoval
-        {
-            get { return m_DestroyOnRemoval; }
-            set { m_DestroyOnRemoval = value; }
-        }
-
-        /// <summary>
-        /// The <c>XRFace</c> data struct which defines this <see cref="ARFace"/>.
-        /// </summary>
-        public XRFace xrFace
-        {
-            get { return m_XRFace; }
-
-            internal set
-            {
-                m_XRFace = value;
-
-                lastUpdatedFrame = Time.frameCount;
-
-                var pose = m_XRFace.pose;
-                transform.localPosition = pose.position;
-                transform.localRotation = pose.rotation;
-                m_TrackingState = m_XRFace.isTracked ? TrackingState.Tracking : TrackingState.Unavailable;
-
-                if (updated != null)
-                {
-                    updated(this);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the current <c>TrackingState</c> of this <see cref="ARFace"/>.
-        /// </summary>
-        public TrackingState trackingState
+        public unsafe NativeArray<Vector3> vertices
         {
             get
             {
-                if (!m_TrackingState.HasValue || ARSubsystemManager.faceSubsystem == null)
-                {
-                    m_TrackingState = TrackingState.Unknown;
-                }
- 
-                return m_TrackingState.Value;
+                return GetUndisposable(m_FaceMesh.vertices);
             }
         }
 
         /// <summary>
-        /// The last frame on which this plane was updated.
+        /// The normals representing the face mesh. Check for existence with <c>normals.IsCreated</c>.
+        /// This array is parallel to <see cref="vertices"/> and <see cref="uvs"/>.
         /// </summary>
-        public int lastUpdatedFrame { get; private set; }
-
-        /// <summary>
-        /// Invoked whenever the face updates
-        /// </summary>
-        public event Action<ARFace> updated;
-
-        /// <summary>
-        /// Invoked just before the face is about to be removed.
-        /// </summary>
-        public event Action<ARFace> removed;
-
-        /// <summary>
-        /// Attempts to fill in the List of Vector3 with the face mesh vertex positions in face space.
-        /// </summary>
-        /// <param name="verticesOut">If successful, the contents are replaced with the <see cref="ARFace"/>'s mesh vertex positions.</param>
-        /// <returns>True if the  mesh vertex positions were successfully retrieved.</returns>
-        public bool TryGetFaceMeshVertices(List<Vector3> verticesOut)
+        public unsafe NativeArray<Vector3> normals
         {
-            return ARSubsystemManager.faceSubsystem.TryGetFaceMeshVertices(m_XRFace.trackableId, verticesOut);
-        }
-
-        /// <summary>
-        /// Attempt to fill in the List of Vector2 that are the face mesh texture coordinates.
-        /// </summary>
-        /// <param name="uvsOut">If successful, the contents are replaced with the <see cref="ARFace"/>'s mesh texture coordinates.</param>
-        /// <returns>True if the mesh texture coordinates were successfully retrieved.</returns>
-        public bool TryGetFaceMeshUVs(List<Vector2> uvsOut)
-        {
-            return ARSubsystemManager.faceSubsystem.TryGetFaceMeshUVs(m_XRFace.trackableId, uvsOut);
-        }
-
-        /// <summary>
-        /// Fills in the List of int that are the face mesh triangle indices.
-        /// </summary>
-        /// <param name="indicesOut">If successful, the contents are replaced with the <see cref="ARFace"/>'s mesh triangle indices.</param>
-        /// <returns>True if the mesh triangle indices were successfully retrieved.</returns>
-        public bool TryGetFaceMeshIndices(List<int> indicesOut)
-        {
-            return ARSubsystemManager.faceSubsystem.TryGetFaceMeshIndices(m_XRFace.trackableId, indicesOut);
-        }
-
-        internal void OnRemove()
-        {
-            if (removed != null)
+            get
             {
-                removed(this);
-            }
-
-            if (destroyOnRemoval)
-            {
-                Destroy(gameObject);
+                return GetUndisposable(m_FaceMesh.normals);
             }
         }
 
-        XRFace m_XRFace;
+        /// <summary>
+        /// The indices defining the triangles of the face mesh. Check for existence with <c>indices.IsCreated</c>.
+        /// The are three times as many indices as triangles, so this will always be a multiple of 3.
+        /// </summary>
+        public NativeArray<int> indices
+        {
+            get
+            {
+                return GetUndisposable(m_FaceMesh.indices);
+            }
+        }
 
-        TrackingState? m_TrackingState;
+        /// <summary>
+        /// The texture coordinates representing the face mesh. Check for existence with <c>uvs.IsCreated</c>.
+        /// This array is parallel to <see cref="vertices"/> and <see cref="normals"/>.
+        /// </summary>
+        public NativeArray<Vector2> uvs
+        {
+            get
+            {
+                return GetUndisposable(m_FaceMesh.uvs);
+            }
+        }
+
+        void Update()
+        {
+            if (m_Updated && updated != null)
+            {
+                updated(new ARFaceUpdatedEventArgs(this));
+                m_Updated = false;
+            }
+        }
+
+        void OnDestroy()
+        {
+            m_FaceMesh.Dispose();
+        }
+
+        // Creates an alias to the same array, but the caller cannot Dispose it.
+        unsafe NativeArray<T> GetUndisposable<T>(NativeArray<T> disposable) where T : struct
+        {
+            if (!disposable.IsCreated)
+                return default(NativeArray<T>);
+
+            return NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<T>(
+                disposable.GetUnsafePtr(),
+                disposable.Length,
+                Allocator.None);
+        }
+
+        internal void UpdateMesh(XRFaceSubsystem subsystem)
+        {
+            subsystem.GetFaceMesh(sessionRelativeData.trackableId, Allocator.Persistent, ref m_FaceMesh);
+            m_Updated = true;
+        }
+
+        XRFaceMesh m_FaceMesh;
+
+        bool m_Updated;
     }
 }

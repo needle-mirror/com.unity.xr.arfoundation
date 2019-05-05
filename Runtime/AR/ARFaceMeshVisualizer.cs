@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine.Experimental.XR;
+using Unity.Collections;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -35,6 +36,18 @@ namespace UnityEngine.XR.ARFoundation
             m_MeshRenderer.enabled = visible;
         }
 
+        static bool TryCopyToList<T>(NativeArray<T> array, List<T> list) where T : struct
+        {
+            list.Clear();
+            if (!array.IsCreated || array.Length == 0)
+                return false;
+
+            foreach (var item in array)
+                list.Add(item);
+
+            return true;
+        }
+
         void SetMeshTopology()
         {
             if (mesh == null)
@@ -44,19 +57,27 @@ namespace UnityEngine.XR.ARFoundation
 
             mesh.Clear();
 
-            if (m_Face.TryGetFaceMeshVertices(s_Vertices) && m_Face.TryGetFaceMeshIndices(s_Indices))
+            if (TryCopyToList(m_Face.vertices, s_Vertices) && TryCopyToList(m_Face.indices, s_Indices))
             {
                 mesh.SetVertices(s_Vertices);
                 mesh.SetTriangles(s_Indices, 0);
                 mesh.RecalculateBounds();
-                mesh.RecalculateNormals();
+
+                if (TryCopyToList(m_Face.normals, s_Vertices))
+                {
+                    mesh.SetNormals(s_Vertices);
+                }
+                else
+                {
+                    mesh.RecalculateNormals();
+                }
             }
 
-            if (m_Face.TryGetFaceMeshUVs(s_UVs))
+            if (TryCopyToList(m_Face.uvs, s_UVs))
             {
                 mesh.SetUVs(0, s_UVs);
             }
-            
+
             var meshFilter = GetComponent<MeshFilter>();
             if (meshFilter != null)
             {
@@ -75,15 +96,15 @@ namespace UnityEngine.XR.ARFoundation
         void UpdateVisibility()
         {
             var visible = enabled &&
-                (m_Face.trackingState != TrackingState.Unavailable) &&
-                (ARSubsystemManager.systemState > ARSystemState.Ready);
+                (m_Face.trackingState != TrackingState.None) &&
+                (ARSession.state > ARSessionState.Ready);
 
             SetVisible(visible);
         }
 
-        void OnUpdated(ARFace face)
+        void OnUpdated(ARFaceUpdatedEventArgs eventArgs)
         {
-             UpdateVisibility();
+            UpdateVisibility();
             if (!m_TopologyUpdatedThisFrame)
             {
                 SetMeshTopology();
@@ -91,7 +112,7 @@ namespace UnityEngine.XR.ARFoundation
             m_TopologyUpdatedThisFrame = false;
         }
 
-        void OnSystemStateChanged(ARSystemStateChangedEventArgs eventArgs)
+        void OnSessionStateChanged(ARSessionStateChangedEventArgs eventArgs)
         {
             UpdateVisibility();
         }
@@ -109,14 +130,14 @@ namespace UnityEngine.XR.ARFoundation
         void OnEnable()
         {
             m_Face.updated += OnUpdated;
-            ARSubsystemManager.systemStateChanged += OnSystemStateChanged;
+            ARSession.stateChanged += OnSessionStateChanged;
             UpdateVisibility();
         }
 
         void OnDisable()
         {
             m_Face.updated -= OnUpdated;
-            ARSubsystemManager.systemStateChanged -= OnSystemStateChanged;
+            ARSession.stateChanged -= OnSessionStateChanged;
         }
 
         ARFace m_Face;

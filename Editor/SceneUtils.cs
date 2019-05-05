@@ -24,7 +24,10 @@ namespace UnityEditor.XR.ARFoundation
         {
             var originGo = ObjectFactory.CreateGameObject("AR Session Origin", typeof(ARSessionOrigin));
             var cameraGo = ObjectFactory.CreateGameObject("AR Camera",
-                typeof(Camera), typeof(TrackedPoseDriver), typeof(ARCameraBackground));
+                typeof(Camera),
+                typeof(TrackedPoseDriver),
+                typeof(ARCameraManager),
+                typeof(ARCameraBackground));
 
             Undo.SetTransformParent(cameraGo.transform, originGo.transform, "Parent camera to session origin");
 
@@ -44,7 +47,7 @@ namespace UnityEditor.XR.ARFoundation
         [MenuItem("GameObject/XR/AR Session", false, 10)]
         static void CreateARSession()
         {
-            ObjectFactory.CreateGameObject("AR Session", typeof(ARSession));
+            ObjectFactory.CreateGameObject("AR Session", typeof(ARSession), typeof(ARInputManager));
         }
 
         [MenuItem("GameObject/XR/AR Default Point Cloud", false, 10)]

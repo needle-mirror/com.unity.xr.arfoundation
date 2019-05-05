@@ -4,7 +4,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.1.0-preview.6] - 2019-03-12
+## [1.5.0-preview.2] - 2019-05-06
+### New
+- Add support for image tracking (`XRImageTrackingSubsystem`).
+- Add support for environment probes (`XREnvironmentProbeSubsystem`).
+- Add support for face tracking (`XRFaceSubsystem`).
+- Add support for object tracking (`XRObjectTrackingSubsystem`).
+
+## Changes
+- See the [Migration Guide](Documentation~/migration-guide.md).
+
+## [1.1.0-preview.1] - 2019-01-16
 ### Fixes
 - Add dependency on Legacy Input Helpers, which were moved from Unity to a package in 2019.1.
 
@@ -15,7 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.0-preview.21] - 2018-12-13
 
 ### New
-- Added Face Tracking support:  `ARFaceManager`, `ARFace`, `ARFaceMeshVisualizer` and related scripts. See documentation for usage. 
+- Added Face Tracking support:  `ARFaceManager`, `ARFace`, `ARFaceMeshVisualizer` and related scripts. See documentation for usage.
 
 ### Improvements
 - Plane detection modes: Add ability to selectively enable detection for horizontal, vertical, or both types of planes. The `ARPlaneManager` includes a new setting, which defaults to both.
@@ -41,8 +51,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### New
 - Added `ARPlane.normal` to get the `ARPlane`'s normal in world space.
 
-### LWRP support 
-Added LWRP support by allowing `ARCameraBackground` to use a background renderer that overrides the default functionality.  This works in conjunction with some *LWRPSupport* files (see [arfoundation-samples](https://github.com/Unity-Technologies/arfoundation-samples)) that will live in your LWRP project.  
+### LWRP support
+Added LWRP support by allowing `ARCameraBackground` to use a background renderer that overrides the default functionality.  This works in conjunction with some *LWRPSupport* files (see [arfoundation-samples](https://github.com/Unity-Technologies/arfoundation-samples)) that will live in your LWRP project.
 
 ## [1.0.0-preview.17] - 2018-08-02
 ### Fixes
