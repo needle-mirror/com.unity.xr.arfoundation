@@ -2,20 +2,28 @@
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity.
 
-AR Foundation is a set of `MonoBehaviour`s for dealing with devices that support following concepts:
-- Planar surface detection
-- Point clouds, also known as feature points
-- Reference points: an arbitrary position and orientation that the device tracks
+AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support following concepts:
+- World tracking: track the device's position and orientation in physical space.
+- Plane detection: detect horizontal and vertical surfaces.
+- Point clouds, also known as feature points.
+- Reference points: an arbitrary position and orientation that the device tracks.
 - Light estimation: estimates for average color temperature and brightness in physical space.
-- World tracking: tracking the device's position and orientation in physical space.
+- Environment probes: a means for generating a cube map to represent a particular area of the physical environment.
+- Face tracking: detect and track human faces.
+- Image tracking: detect and track 2D images.
+- Object tracking: detect 3D objects.
 
 If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration-guide.md).
+
+## Subsystems
+
+AR Foundation is built on subsystems. A "subsystem" is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@2.1/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
 
 # Installing AR Foundation
 
 To install this package, follow the instructions in the [Package Manager documentation](https://docs.unity3d.com/Packages/com.unity.package-manager-ui@latest/index.html).
 
-AR Foundation is an interface for working with AR platforms, so you will also need to install at least one platform-specific AR package (*Window > Package Manager*):
+Subsystems are implemented in other packages, so to use AR Foundation, you will also need to install at least one platform-specific AR package (*Window > Package Manager*):
 
  - ARKit XR Plugin
  - ARCore XR Plugin
@@ -32,6 +40,8 @@ AR Foundation is an interface for working with AR platforms, so you will also ne
 
 # Using AR Foundation
 
+For examples, see the [ARFoundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub respository.
+
 ## Basic Setup
 
 A basic AR scene hierarchy looks like this:
@@ -45,9 +55,10 @@ You can create these automatically by right-clicking in the scene hiearachy and 
 The required components are explained in more detail below.
 
 ### ARSession
+
 An AR scene should include an `ARSession` component. The AR Session controls the lifecycle of an AR experience, enabling or disabling AR on the target platform. The `ARSession` can be on any `GameObject`.
 
-![alt text](images/ar_session.png "ARSession component")
+![alt text](images/ar-session.png "ARSession component")
 
 If the `ARSession` is disabled, the system no longer tracks features in its environment, but if it is enabled at a later time, the system will attempt to recover and maintain previously detected features.
 
@@ -83,7 +94,6 @@ public class MyComponent {
         }
     }
 }
-
 ```
 
 #### Session State
@@ -103,7 +113,7 @@ To determine the current state of the session (for example, whether the device i
 
 ### ARSessionOrigin
 
-![alt text](images/ar_session_origin.png "AR Session Origin")
+![alt text](images/ar-session-origin.png "AR Session Origin")
 
 The purpose of the `ARSessionOrigin` is to transform trackable features (such as planar surfaces and feature points) into their final position, orientation, and scale in the Unity scene. Because AR devices provide their data in "session space", an unscaled space relative to the beginning of the AR session, the `ARSessionOrigin` performs the appropriate transformation into Unity space.
 
@@ -117,30 +127,28 @@ The `ARSessionOrigin` also allows you to scale virtual content and apply an offs
 
 To apply scale to the `ARSessionOrigin`, simply set its `transform`'s scale. This has the effect of scaling all the data coming from the device, including the `AR Camera`'s position and any detected trackables. Larger values will make AR content appear smaller, so, for example, a scale of 10 would make your content appear 10 times smaller, while 0.1 would make your content appear 10 times larger.
 
-### TrackedPoseDriver
+### Tracked Pose Driver
 
 Parented to the `ARSessionOrigin`'s' `GameObject` should be (at least) one camera, which will be used to render any trackables you wish to visualize. The camera should also have a `TrackedPoseDriver` component on it, which will drive the camera's local position and rotation according to the device's tracking information. This setup allows the camera's local space to match the AR "session space".
 
-![alt text](images/tracked_pose_driver.png "TrackedPoseDriver")
+![alt text](images/tracked-pose-driver.png "Tracked Pose Driver")
 
-The `Camera` must be a child of the `ARSessionOrigin`.
-
-### ARCameraManager
+### AR Camera Manager
 
 The `ARCameraManager` enables camera features, such as textures representing the video feed and controls light estimation modes.
 
-![alt text](images/ar_camera_manager.png "ARCameraManager")
+![alt text](images/ar-camera-manager.png "AR Camera Manager")
 
 | Option | Meaning |
 |-|-|
 | Focus Mode | May be "Auto" or "Fixed". "Auto" enables the hardware camera's automatic focus mode, while "fixed" disables it (the focus is "fixed" and does not change automatically). |
 | Light Estimation | May be "Disabled" or "Ambient intensity". If not disabled, this instructs the platform to produce light estimation information, estimating the average light intensity and color in the physical environment. This can have an impact on performance, so disable it if you are not using it. |
 
-### ARCameraBackground
+### AR Camera Background
 
 If you want to render the device's color camera texture to the background, you need to add an `ARCameraBackground` component to a camera. This will subscribe to AR camera events and blit the camera texture to the screen. This is not required, but common for AR apps.
 
-![alt text](images/ar_camera_background.png "ARCameraBackground")
+![alt text](images/ar-camera-background.png "ARCameraBackground")
 
 The `Custom Material` property is optional, and typically you do not need to set it. The platform-specific packages provided by Unity (e.g., `ARCore` and `ARKit`) provide their own shaders for background rendering.
 
@@ -156,71 +164,35 @@ The camera textures are likely [External Textures](https://docs.unity3d.com/Scri
 Graphics.Blit(null, m_MyRenderTexture, m_ARBackgroundCamera.material);
 ```
 
+### Accessing the Camera Image on the CPU
+
+See [Camera Image Manual Documentation](cpu-camera-image.md).
+
+### AR Input Manager
+
+This component is necessary for enabling world tracking. Without it, the Tracked Pose Driver mentioned above will not be able to acquire a pose for the device.
+
+It does not matter where this component is in your scene, and you should not have more than one.
+
+![alt text](images/ar-input-manager.png "AR Input Manager")
+
 ### Trackable Managers
 
-The `ARSessionOrigin`'s' `GameObject` can also have a number of additional components on it, which manage the addition, updating, and removal of `GameObject`s to represent planes, point cloud, and reference points. These are the `ARPlaneManager`, `ARPointCloudManager`, and `ARReferencePointManager`, respectively, which each manager a single type of trackable:
-
-![alt text](images/ar_session_origin_with_managers.png "AR Session Origin with Managers")
-
-Each manager creates `GameObject`s for each detected trackable. The generated `GameObject`s are parented to a special `GameObject` under the `ARSessionOrigin`, accessible via `ARSessionOrigin.trackablesParent`.
-
-Each manager also accepts an optional prefab, which will be instantiated to represent the trackable. If no prefab is specified, a `GameObject` is created with an appropriate trackable component:
-
-| Trackable Manager         | Trackable           |
-|---------------------------|---------------------|
-| `ARPlaneManager`          | `ARPlane`           |
-| `ARPointCloudManager`     | `ARPointCloud`      |
-| `ARReferencePointManager` | `ARReferencePoint`  |
-
-Each trackable component stores information about the trackable, but does not visualize it. Its `Transform` is updated by its manager whenever the AR device reports an update.
-
-Trackables can be enumerated via their manager with the `trackables` member, e.g.,
-
-```csharp
-var planeManager = GetComponent<ARPlaneManager>();
-foreach (ARPlane plane in planeManager.trackables)
-{
-    // Do something with the ARPlane
-}
-```
-
-#### Events
-
-Each trackable manager has a single event which reports all added, updated, and removed trackables for that frame:
-
-| Trackable Manager | Event |
-|-|-|
-|`ARPlaneManager`| `planesChanged`|
-|`ARPointCloudManager`|`pointCloudsChanged`|
-|`ARReferencePointManager`|`referencePointsChanged`|
-
-Additionally, the `ARPlane` has a `boundaryChanged` event, which is invoked when the boundary points change by more than `ARPlane.vertexChangedThreshold`.
+See [trackable managers](trackable-managers.md).
 
 ### Visualizing Trackables
 
 The trackable components do not do anything on their own; they just contain data associated with each trackable. There are many ways to visualize the trackables, so AR Foundation includes some visualizers that can be used for debugging or as a starting point to create a visualizer suitable for your application.
 
-#### ARPlaneMeshVisualizer
-
-To visualize planes, you'll need to create a prefab or `GameObject` which includes a component that subscribes to `ARPlane`'s `boundaryChanged` event. `ARFoundation` provides an `ARPlaneMeshVisualizer`. This component will generate a `Mesh` from the boundary vertices and assign it to a `MeshCollider`, `MeshFilter`, and `LineRenderer`, if present.
-
-There is a menu item `GameObject > XR > AR Default Plane` which will create a new `GameObject` which you can use to create your prefab.
-
-![alt text](images/ar_default_plane.png "AR Default Plane")
-
-Once created, you should assign it to the `ARPlaneManager`'s `Plane Prefab` field. You can use it directly or create a prefab by dragging the `GameObject` into your Assets folder.  It is recommended to save the `AR Default Plane` as a prefab first, delete the `AR Default Plane` GameObject, and then use that in the prefab field as leaving the plane in your scene will leave a zero scale plane artifact in the scene.
-
-![alt text](images/ar_default_plane_as_prefab.png "AR Default Plane Prefab")
-
-There is a similar menu item for point cloud visualization.
-
-These components are included for ease of use, but you may wish to create your own visualizers (or other logic) as you see fit.
-
 ## Raycasting
 
 Also known as hit testing, raycasting allows you to determine where a ray (defined by an origin and direction) intersects with a trackable. The current raycast interface only tests against planes and points in the point cloud. The raycasting interface is similar to the one in the Unity Physics module, but since AR trackables may not necessarily have a presence in the physics world, AR Foundation provides a separate interface.
 
-To perform a raycast, add an `ARRaycastManager` to the same `GameObject` as the `ARSessionOrigin`. There are two raycasting methods on the `ARSessionOrigin`:
+To perform a raycast, add an `ARRaycastManager` to the same `GameObject` as the `ARSessionOrigin`.
+
+![alt text](images/ar-raycast-manager.png "AR Raycast Manager")
+
+There are two raycasting methods on the `ARRaycastManager`:
 
 ```csharp
 public bool Raycast(Vector2 screenPoint, List<ARRaycastHit> hitResults, TrackableType trackableTypeMask = TrackableType.All);
@@ -230,7 +202,8 @@ public bool Raycast(Ray ray, List<ARRaycastHit> hitResults, TrackableType tracka
 The first method takes a two dimensional position on the screen. You can, for example, pass a touch position directly:
 
 ```csharp
-rig.Raycast(Input.GetTouch(0).position, ...);
+var raycastManager = GetComponent<ARRaycastManager>();
+raycastManager.Raycast(Input.GetTouch(0).position, ...);
 ```
 
 The second method takes an arbitrary `Ray` (a position and direction).
@@ -247,7 +220,7 @@ The following table summarizes the other parameters:
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.2 and later
+* 2019.2a8 and later
 
 ## Known limitations
 
@@ -259,6 +232,7 @@ AR Foundation includes the following known limitations:
 
 |Date|Reason|
 |---|---|
+|April 18, 2019|Update documentation to include new features (environment probes, image tracking, face tracking, object tracking).|
 |March 4, 2019|Update documentation to reflect 2.0.0 changes.|
 |November 15, 2018|Face Tracking added.|
 |July 25, 2018|Update `ARCameraBackground` image and description following refactor.<br/>Add howto section for blitting the camera image to a render texture.|

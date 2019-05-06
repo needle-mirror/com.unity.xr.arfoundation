@@ -12,3 +12,7 @@ Use the AR Foundation package to add high-level functionality for working with a
 * `1.1.x` - Target this branch for changes that should be in the 1.1.x package versions.
 
 * `1.1.x-staging` - Only merge to this branch from `1.1.x` in preparation for a release. This package should ideally contain the exact contents of the latest release on [staging Bintray](https://bintray.com/unity/unity-staging/com.unity.xr.arfoundation). So before a new release QA would validate against `1.1.x` and then a merge would take place into `1.1.x-staging`.
+
+* `1.0.x` - Target this branch for changes that should be in the 1.0.x package versions.
+
+* `1.0.x-staging` - Only merge to this branch from `1.0.x` in preparation for a release. This package should ideally contain the exact contents of the latest release on [staging Bintray](https://bintray.com/unity/unity-staging/com.unity.xr.arfoundation). So before a new release QA would validate against `1.0.x` and then a merge would take place into `1.0.x-staging`.

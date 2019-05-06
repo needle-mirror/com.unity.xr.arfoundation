@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.0/api/UnityEngine.XR.ARFoundation.ARSession.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.ARSession.html")]
     public sealed class ARSession : SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor>
     {
         [SerializeField]

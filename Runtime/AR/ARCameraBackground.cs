@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(ARCameraManager))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.0/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
     public sealed class ARCameraBackground : MonoBehaviour
     {
         [SerializeField, FormerlySerializedAs("m_OverrideMaterial")]

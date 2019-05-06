@@ -1,5 +1,9 @@
 using System.Collections.Generic;
 
+#if !UNITY_2019_2_OR_NEWER
+using UnityEngine.Experimental;
+#endif
+
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -17,7 +21,18 @@ namespace UnityEngine.XR.ARFoundation
         public TSubsystem subsystem { get; private set; }
 
         /// <summary>
-        /// Creates a <c>TSubsystem</c>. 
+        /// The descriptor for the subsystem.
+        /// </summary>
+        /// <value>
+        /// The descriptor for the subsystem.
+        /// </value>
+        public TSubsystemDescriptor descriptor
+        {
+            get { return (subsystem == null) ? null : subsystem.SubsystemDescriptor; }
+        }
+
+        /// <summary>
+        /// Creates a <c>TSubsystem</c>.
         /// </summary>
         /// <returns>The first Subsystem of matching the <c>TSubsystemDescriptor</c>, or <c>null</c> if there aren't any.</returns>
         protected virtual TSubsystem CreateSubsystem()

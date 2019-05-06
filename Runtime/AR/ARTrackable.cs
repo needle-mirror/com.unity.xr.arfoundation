@@ -48,6 +48,12 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Pending means the trackable was added manually (usually via an <c>AddTrackable</c>-style method
+        /// on its manager) but has not yet been reported as added.
+        /// </summary>
+        public bool pending { get; internal set; }
+
+        /// <summary>
         /// The session-relative data associated with this trackable.
         /// </summary>
         protected TSessionRelativeData sessionRelativeData { get; private set; }

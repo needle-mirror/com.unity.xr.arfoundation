@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_ReferencePoint)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.0/api/UnityEngine.XR.ARFoundation.ARReferencePoint.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.ARReferencePoint.html")]
     public sealed class ARReferencePoint : ARTrackable<XRReferencePoint, ARReferencePoint>
     {
         /// <summary>

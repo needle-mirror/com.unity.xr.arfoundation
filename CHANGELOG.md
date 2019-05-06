@@ -4,21 +4,21 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [2.0.2] - 2019-03-20
-- Specify package is only compatible with 2019.2.0a8+
+## [2.1.0-preview.2] - 2019-05-07
+### New
+- Add support for image tracking (`XRImageTrackingSubsystem`).
+- Add support for environment probes (`XREnvironmentProbeSubsystem`).
+- Add support for face tracking (`XRFaceSubsystem`).
+- Add support for object tracking (`XRObjectTrackingSubsystem`).
 
 ## [2.0.1] - 2019-03-05
 ## Changes
 
 - See the [Migration Guide](Documentation~/migration-guide.md).
 
-## [1.1.0-preview.1] - 2019-??-??
+## [1.1.0-preview.1] - 2019-01-16
 ### Fixes
 - Add dependency on Legacy Input Helpers, which were moved from Unity to a package in 2019.1.
-
-## [1.0.0-preview.23] - 2019-??-??
-### New
-- Add a generic base class for future tracking subsystems.
 
 ## [1.0.0-preview.22] - 2018-12-13
 

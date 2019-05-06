@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 
+#if !UNITY_2019_2_OR_NEWER
+using UnityEngine.Experimental;
+#endif
+
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -61,7 +65,7 @@ namespace UnityEngine.XR.ARFoundation
         protected Dictionary<TrackableId, TTrackable> m_Trackables;
 
         /// <summary>
-        /// A dictionary of trackables added via CreateImmedate but not yet reported as added.
+        /// A dictionary of trackables added via <see cref="CreateTrackableImmediate(TSessionRelativeData)"/> but not yet reported as added.
         /// </summary>
         protected Dictionary<TrackableId, TTrackable> m_PendingAdds;
 
@@ -135,6 +139,13 @@ namespace UnityEngine.XR.ARFoundation
         { }
 
         /// <summary>
+        /// Invoked after creating the trackable. The trackable's <c>sessionRelativeData</c> property will already be set.
+        /// </summary>
+        /// <param name="trackable">The newly created trackable.</param>
+        protected virtual void OnCreateTrackable(TTrackable trackable)
+        { }
+
+        /// <summary>
         /// Invoked just after session relative data has been set on a trackable.
         /// </summary>
         /// <param name="trackable">The trackable that has just been updated.</param>
@@ -166,6 +177,7 @@ namespace UnityEngine.XR.ARFoundation
         protected TTrackable CreateTrackableImmediate(TSessionRelativeData sessionRelativeData)
         {
             var trackable = CreateOrUpdateTrackable(sessionRelativeData);
+            trackable.pending = true;
             m_PendingAdds.Add(trackable.trackableId, trackable);
             return trackable;
         }
@@ -265,26 +277,24 @@ namespace UnityEngine.XR.ARFoundation
             return trackable;
         }
 
-        TTrackable GetOrCreateTrackable(TrackableId trackableId)
+        TTrackable CreateOrUpdateTrackable(TSessionRelativeData sessionRelativeData)
         {
+            var trackableId = sessionRelativeData.trackableId;
             TTrackable trackable;
             if (m_Trackables.TryGetValue(trackableId, out trackable))
             {
                 m_PendingAdds.Remove(trackableId);
+                trackable.pending = false;
+                trackable.SetSessionRelativeData(sessionRelativeData);
             }
             else
             {
                 trackable = CreateTrackable(trackableId);
                 m_Trackables.Add(trackableId, trackable);
+                trackable.SetSessionRelativeData(sessionRelativeData);
+                OnCreateTrackable(trackable);
             }
 
-            return trackable;
-        }
-
-        TTrackable CreateOrUpdateTrackable(TSessionRelativeData sessionRelativeData)
-        {
-            var trackable = GetOrCreateTrackable(sessionRelativeData.trackableId);
-            trackable.SetSessionRelativeData(sessionRelativeData);
             OnAfterSetSessionRelativeData(trackable, sessionRelativeData);
             trackable.OnAfterSetSessionRelativeData();
             return trackable;

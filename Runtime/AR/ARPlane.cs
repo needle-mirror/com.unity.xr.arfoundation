@@ -15,8 +15,8 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_Plane)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.0/api/UnityEngine.XR.ARFoundation.ARPlane.html")]
-    public sealed class ARPlane : ARTrackable<BoundedPlane, ARPlane> 
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.ARPlane.html")]
+    public sealed class ARPlane : ARTrackable<BoundedPlane, ARPlane>
     {
         [SerializeField]
         [Tooltip("The largest value by which a plane's vertex may change before the boundaryChanged event is invoked. Units are in meters.")]

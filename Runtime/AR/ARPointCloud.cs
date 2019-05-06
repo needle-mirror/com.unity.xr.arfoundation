@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloud)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.0/api/UnityEngine.XR.ARFoundation.ARPointCloud.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.ARPointCloud.html")]
     public class ARPointCloud : ARTrackable<XRPointCloud, ARPointCloud>
     {
         /// <summary>
@@ -22,7 +22,7 @@ namespace UnityEngine.XR.ARFoundation
         /// An array of positions for each point in the point cloud.
         /// This array is parallel to <see cref="identifiers"/> and
         /// <see cref="confidenceValues"/>. Check for existence with
-        /// <c>positions.IsCreated</c>. Positions are provided in 
+        /// <c>positions.IsCreated</c>. Positions are provided in
         /// point cloud space, that is, relative to this <see cref="ARPointCloud"/>'s
         /// local position and rotation.
         /// </summary>

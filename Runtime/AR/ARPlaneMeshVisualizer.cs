@@ -10,11 +10,11 @@ namespace UnityEngine.XR.ARFoundation
     /// <remarks>
     /// If this <c>GameObject</c> has a <c>MeshFilter</c> and/or <c>MeshCollider</c>,
     /// this component will generate a mesh from the underlying <c>BoundedPlane</c>.
-    /// 
+    ///
     /// It will also update a <c>LineRenderer</c> with the boundary points, if present.
     /// </remarks>
     [RequireComponent(typeof(ARPlane))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.0/api/UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer.html")]
     public sealed class ARPlaneMeshVisualizer : MonoBehaviour
     {
         /// <summary>

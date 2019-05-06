@@ -57,5 +57,53 @@ namespace UnityEngine.XR.ARFoundation
         /// the <see cref="ARSession"/>.
         /// </summary>
         public const int k_CameraManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARFaceManager"/>'s update order. Should come after
+        /// the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_FaceManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARFace"/>'s update order. Should come after
+        /// the <see cref="ARFaceManager"/>.
+        /// </summary>
+        public const int k_Face = k_FaceManager + 1;
+
+        /// <summary>
+        /// The <see cref="ARTrackedImageManager"/>'s update order.
+        /// Should come after the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_TrackedImageManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARTrackedImage"/>'s update order.
+        /// Should come after the <see cref="ARTrackedImageManager"/>.
+        /// </summary>
+        public const int k_TrackedImage = k_TrackedImageManager + 1;
+
+        /// <summary>
+        /// The <see cref="AREnvironmentProbeManager"/>'s update order. Should come after
+        /// the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_EnvironmentProbeManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="AREnvironmentProbe"/>'s update order. Should come after
+        /// the <see cref="AREnvironmentProbeManager"/>.
+        /// </summary>
+        public const int k_EnvironmentProbe = k_EnvironmentProbeManager + 1;
+
+        /// <summary>
+        /// The <see cref="ARTrackedObjectManager"/>'s update order. Should come after
+        /// the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_TrackedObjectManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARTrackedObject"/>'s update order. Should come after
+        /// the <see cref="ARTrackedObjectManager"/>.
+        /// </summary>
+        public const int k_TrackedObject = k_TrackedObjectManager + 1;
     }
 }

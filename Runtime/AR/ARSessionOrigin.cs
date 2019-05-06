@@ -49,7 +49,7 @@ namespace UnityEngine.XR.ARFoundation
     /// for example, do not perform well when scaled very small.
     /// </remarks>
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.0/api/UnityEngine.XR.ARFoundation.ARSessionOrigin.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.ARSessionOrigin.html")]
     public class ARSessionOrigin : MonoBehaviour
     {
         [SerializeField]
