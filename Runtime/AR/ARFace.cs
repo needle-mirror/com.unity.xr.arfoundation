@@ -14,6 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Face)]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARFace.html")]
     public sealed class ARFace : ARTrackable<XRFace, ARFace>
     {
         /// <summary>

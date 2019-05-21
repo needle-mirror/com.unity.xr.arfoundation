@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(ReflectionProbe))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbe)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest/api/UnityEngine.XR.ARFoundation.AREnvironmentProbe.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.AREnvironmentProbe.html")]
     public class AREnvironmentProbe : ARTrackable<XREnvironmentProbe, AREnvironmentProbe>
     {
         /// <summary>
@@ -163,7 +163,7 @@ namespace UnityEngine.XR.ARFoundation
                 // Create a new environment texture object.
                 m_ReflectionProbe.customBakedTexture = CreateEnvironmentTexture(textureDescriptor);
             }
-#if UNITY_2019_1_OR_NEWER            
+#if UNITY_2019_1_OR_NEWER
             else
             {
                 // Else, we have a current texture object with identical metadata, we simply update the external
