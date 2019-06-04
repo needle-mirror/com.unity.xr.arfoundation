@@ -105,5 +105,18 @@ namespace UnityEngine.XR.ARFoundation
         /// the <see cref="ARTrackedObjectManager"/>.
         /// </summary>
         public const int k_TrackedObject = k_TrackedObjectManager + 1;
+
+        /// <summary>
+        /// The <see cref="ARHumanBodyManager"/>'s update order. Should come after
+        /// the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_HumanBodyManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARHumanBody"/>'s update order. Should come after
+        /// the <see cref="ARHumanBodyManager"/>.
+        /// </summary>
+        public const int k_HumanBody = k_HumanBodyManager + 1;
+
     }
 }

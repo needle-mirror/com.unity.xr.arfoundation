@@ -8,7 +8,7 @@ The tracked image manager will create `GameObject`s for each detected image in t
 
 ## Reference Library
 
-Refer to the documentation for the [Tracked Image Subsystem](http://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@2.1/manual/image-tracking.html) for instructions for creating a reference image library.
+Refer to the documentation for the [Tracked Image Subsystem](http://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/image-tracking.html) for instructions for creating a reference image library.
 
 The reference image library can be set at runtime, but as long as the tracked image manager component is enabled, the reference image library must be non-null.
 

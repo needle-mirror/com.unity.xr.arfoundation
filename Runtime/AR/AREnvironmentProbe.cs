@@ -171,6 +171,7 @@ namespace UnityEngine.XR.ARFoundation
                 cubemapTexture.UpdateExternalTexture(textureDescriptor.nativeTexture);
             }
 #endif
+
             // Update the current environment texture metadata.
             m_CurrentTextureDescriptor = textureDescriptor;
         }

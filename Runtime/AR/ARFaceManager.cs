@@ -36,6 +36,51 @@ namespace UnityEngine.XR.ARFoundation
             set { m_FacePrefab = value; }
         }
 
+        [SerializeField]
+        [Tooltip("The maximum number of faces to track simultaneously.")]
+        int m_MaximumFaceCount = 1;
+
+        /// <summary>
+        /// Get or set the maximum number of faces to track simultaneously
+        /// </summary>
+        public int maximumFaceCount
+        {
+            get
+            {
+                if (subsystem != null)
+                {
+                    m_MaximumFaceCount = subsystem.maximumFaceCount;
+                }
+
+                return m_MaximumFaceCount;
+            }
+            set
+            {
+                if (subsystem != null)
+                {
+                    m_MaximumFaceCount = subsystem.maximumFaceCount = value;
+                }
+                else
+                {
+                    m_MaximumFaceCount = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the supported number of faces that can be tracked simultaneously.
+        /// </summary>
+        public int supportedFaceCount
+        {
+            get
+            {
+                if (subsystem == null)
+                    throw new InvalidOperationException("Cannot query for supportedFaceCount when subsystem is null.");
+
+                return subsystem.supportedFaceCount;
+            }
+        }
+
         /// <summary>
         /// Not all devices support face tracking, even if the target platform generally does.
         /// Use this to check whether face tracking is supported at runtime.
@@ -67,11 +112,16 @@ namespace UnityEngine.XR.ARFoundation
             return face;
         }
 
+        protected override void OnBeforeStart()
+        {
+            subsystem.maximumFaceCount = m_MaximumFaceCount;
+        }
+
         protected override void OnEnable()
         {
             if (supported)
             {
-                subsystem.Start();
+                base.OnEnable();
             }
             else
             {

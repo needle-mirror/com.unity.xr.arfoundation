@@ -57,6 +57,25 @@ namespace UnityEngine.XR.ARFoundation
         FilterMode m_EnvironmentTextureFilterMode = FilterMode.Trilinear;
 
         /// <summary>
+        /// Specifies whether the environment textures should be returned as HDR textures.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the environment textures should be returned as HDR textures. Otherwise, <c>false</c>.
+        /// </value>
+        public bool environmentTextureHDR
+        {
+            get { return m_EnvironmentTextureHDR; }
+            set
+            {
+                m_EnvironmentTextureHDR = value;
+                SetEnvironmentTextureHDRStateOnSubsystem();
+            }
+        }
+        [SerializeField]
+        [Tooltip("Whether the environment textures should be returned as HDR textures.")]
+        bool m_EnvironmentTextureHDR = true;
+
+        /// <summary>
         /// Specifies a debug prefab that will be attached to all environment probes.
         /// </summary>
         /// <value>
@@ -201,6 +220,7 @@ namespace UnityEngine.XR.ARFoundation
         protected override void OnBeforeStart()
         {
             SetAutomaticPlacementStateOnSubsystem();
+            SetEnvironmentTextureHDRStateOnSubsystem();
         }
 
         /// <summary>
@@ -239,10 +259,21 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         void SetAutomaticPlacementStateOnSubsystem()
         {
-            if ((subsystem != null)
-                && subsystem.SubsystemDescriptor.supportsAutomaticPlacement)
+            if ((subsystem != null) && subsystem.SubsystemDescriptor.supportsAutomaticPlacement)
             {
                 subsystem.automaticPlacement = m_AutomaticPlacement;
+            }
+        }
+
+        /// <summary>
+        /// Sets the current state of the <see cref="environmentTextureHDR"/> property to the
+        /// <c>XREnvironmentProbeSubsystem</c>, if the subsystem exists and supports HDR environment textures.
+        /// </summary>
+        void SetEnvironmentTextureHDRStateOnSubsystem()
+        {
+            if ((subsystem != null) && subsystem.SubsystemDescriptor.supportsEnvironmentTextureHDR)
+            {
+                subsystem.environmentTextureHDR = m_EnvironmentTextureHDR;
             }
         }
     }

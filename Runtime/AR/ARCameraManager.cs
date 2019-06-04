@@ -208,7 +208,7 @@ namespace UnityEngine.XR.ARFoundation
             XRCameraFrame frame;
             if (subsystem.TryGetLatestFrame(cameraParams, out frame))
             {
-                UpdateTexturesInfos();
+                UpdateTexturesInfos(frame);
 
                 if (frameReceived != null)
                     InvokeFrameReceivedEvent(frame);
@@ -231,7 +231,8 @@ namespace UnityEngine.XR.ARFoundation
         /// Pull the texture descriptors from the camera subsystem, and update the texture information maintained by
         /// this component.
         /// </summary>
-        void UpdateTexturesInfos()
+        /// <param name="frame">The latest updated camera frame.</param>
+        void UpdateTexturesInfos(XRCameraFrame frame)
         {
             var textureDescriptors = subsystem.GetTextureDescriptors(Allocator.Temp);
             try
@@ -241,7 +242,7 @@ namespace UnityEngine.XR.ARFoundation
                 // Update the existing textures that are in common between the two arrays.
                 for (int i = 0; i < numUpdated; ++i)
                 {
-                    m_TextureInfos[i] = TextureInfo.GetUpdatedTextureInfo(m_TextureInfos[i], textureDescriptors[i]);
+                    m_TextureInfos[i] = ARTextureInfo.GetUpdatedTextureInfo(m_TextureInfos[i], textureDescriptors[i]);
                 }
 
                 // If there are fewer textures in the current frame than we had previously, destroy any remaining unneeded
@@ -250,7 +251,7 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     for (int i = numUpdated; i < m_TextureInfos.Count; ++i)
                     {
-                        m_TextureInfos[i].DestroyTexture();
+                        m_TextureInfos[i].Reset();
                     }
                     m_TextureInfos.RemoveRange(numUpdated, (m_TextureInfos.Count - numUpdated));
                 }
@@ -260,7 +261,7 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     for (int i = numUpdated; i < textureDescriptors.Length; ++i)
                     {
-                        m_TextureInfos.Add(new TextureInfo(textureDescriptors[i]));
+                        m_TextureInfos.Add(new ARTextureInfo(textureDescriptors[i]));
                     }
                 }
             }
@@ -319,149 +320,10 @@ namespace UnityEngine.XR.ARFoundation
 
         static List<int> s_PropertyIds = new List<int>();
 
-        readonly List<TextureInfo> m_TextureInfos = new List<TextureInfo>();
+        readonly List<ARTextureInfo> m_TextureInfos = new List<ARTextureInfo>();
 
         Camera m_Camera;
 
         bool m_PreRenderInvertCullingValue;
-
-        /// <summary>
-        /// Container that pairs a <see cref="Unity.XR.ARSubsystems.XRTextureDescriptor"/> that wraps a native texture
-        /// object and a <c>Texture2D</c> that is created for the native texture object.
-        /// </summary>
-        struct TextureInfo
-        {
-            /// <summary>
-            /// Constant for whether the texture is in a linear color space.
-            /// </summary>
-            /// <value>
-            /// Constant for whether the texture is in a linear color space.
-            /// </value>
-            const bool k_TextureHasLinearColorSpace = false;
-
-            /// <summary>
-            /// Constructs the texture info with the given descriptor and material.
-            /// </summary>
-            /// <param name="descriptor">The texture descriptor wrapping a native texture object.</param>
-            public TextureInfo(XRTextureDescriptor descriptor)
-            {
-                m_Descriptor = descriptor;
-                m_Texture = CreateTexture(m_Descriptor);
-            }
-
-            /// <summary>
-            /// The texture descriptor describing the metadata for the native texture object.
-            /// </summary>
-            /// <value>
-            /// The texture descriptor describing the metadata for the native texture object.
-            /// </value>
-            public XRTextureDescriptor descriptor
-            {
-                get { return m_Descriptor; }
-            }
-            XRTextureDescriptor m_Descriptor;
-
-            /// <summary>
-            /// The Unity <c>Texture2D</c> object for the native texture.
-            /// </summary>
-            /// <value>
-            /// The Unity <c>Texture2D</c> object for the native texture.
-            /// </value>
-            public Texture2D texture
-            {
-                get { return m_Texture; }
-            }
-            Texture2D m_Texture;
-
-            /// <summary>
-            /// Sets the current descriptor, and creates/updates the associated texture as appropriate.
-            /// </summary>
-            /// <param name="textureInfo">The texture info to update.</param>
-            /// <param name="descriptor">The texture descriptor wrapping a native texture object.</param>
-            /// <returns>
-            /// The updated texture information.
-            /// </returns>
-            public static TextureInfo GetUpdatedTextureInfo(TextureInfo textureInfo, XRTextureDescriptor descriptor)
-            {
-                // If the current and given descriptors are equal, exit early from this method.
-                if (textureInfo.m_Descriptor.Equals(descriptor))
-                {
-                    return textureInfo;
-                }
-
-                // If there is a texture already and if the descriptors have identical texture metadata, we only need
-                // to update the existing texture with the given native texture object.
-                if ((textureInfo.m_Texture != null) && textureInfo.m_Descriptor.hasIdenticalTextureMetadata(descriptor))
-                {
-                    // Update the current descriptor with the given descriptor.
-                    textureInfo.m_Descriptor = descriptor;
-
-                    // Update the current texture with the native texture object.
-                    textureInfo.m_Texture.UpdateExternalTexture(textureInfo.m_Descriptor.nativeTexture);
-                }
-                // Else, we need to create a new texture object.
-                else
-                {
-                    // Update the current descriptor with the given descriptor.
-                    textureInfo.m_Descriptor = descriptor;
-
-                    // Replace the current texture with a newly created texture, and update the material.
-                    textureInfo.DestroyTexture();
-                    textureInfo.m_Texture = CreateTexture(textureInfo.m_Descriptor);
-                }
-
-                return textureInfo;
-            }
-
-            /// <summary>
-            /// Destroys the texture, and sets the property to <c>null</c>
-            /// </summary>
-            public void DestroyTexture()
-            {
-                if (m_Texture != null)
-                {
-                    UnityEngine.Object.Destroy(m_Texture);
-                    m_Texture = null;
-                }
-            }
-
-            /// <summary>
-            /// Create the texture object for the native texture wrapped by the valid descriptor.
-            /// </summary>
-            /// <param name="descriptor">The texture descriptor wrapping a native texture object.</param>
-            /// <returns>
-            /// If the descriptor is valid, the <c>Texture2D</c> object created from the texture descriptor. Otherwise,
-            /// <c>null</c>.
-            /// </returns>
-            static Texture2D CreateTexture(XRTextureDescriptor descriptor)
-            {
-                if (!descriptor.valid)
-                {
-                    return null;
-                }
-
-                Texture2D texture = Texture2D.CreateExternalTexture(descriptor.width, descriptor.height,
-                                                                    descriptor.format, (descriptor.mipmapCount != 0),
-                                                                    k_TextureHasLinearColorSpace,
-                                                                    descriptor.nativeTexture);
-
-                // NB: SetWrapMode needs to be the first call here, and the value passed
-                //     needs to be kTexWrapClamp - this is due to limitations of what
-                //     wrap modes are allowed for external textures in OpenGL (which are
-                //     used for ARCore), as Texture::ApplySettings will eventually hit
-                //     an assert about an invalid enum (see calls to glTexParameteri
-                //     towards the top of ApiGLES::TextureSampler)
-                // reference: "3.7.14 External Textures" section of
-                // https://www.khronos.org/registry/OpenGL/extensions/OES/OES_EGL_image_external.txt
-                // (it shouldn't ever matter what the wrap mode is set to normally, since
-                // this is for a pass-through video texture, so we shouldn't ever need to
-                // worry about the wrap mode as textures should never "wrap")
-                texture.wrapMode = TextureWrapMode.Clamp;
-                texture.filterMode = FilterMode.Bilinear;
-                texture.hideFlags = HideFlags.HideAndDontSave;
-
-                return texture;
-            }
-        }
     }
 }

@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.2.0-preview.2] - 2019-06-05
+- Adding support for ARKit 3 functionality: Human pose estimation, human segmentation images, session collaboration, multiple face tracking, and tracking a face (with front camera) while in world tracking (with rear camera).
+
+## [2.1.0-preview.4] - 2019-06-03
+- Fix NativeArray handling when `ENABLE_UNITY_COLLECTIONS_CHECKS` is set. This fixes an issue when running ARFoundation in the Editor. This is not set in the Player, so it is not an issue when running on device.
+
 ## [2.1.0-preview.3] - 2019-05-22
 ### Fixes
 - Fix documentation links.
@@ -17,7 +23,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.0.1] - 2019-03-05
 ## Changes
-
 - See the [Migration Guide](Documentation~/migration-guide.md).
 
 ## [1.1.0-preview.1] - 2019-01-16
