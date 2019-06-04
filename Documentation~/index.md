@@ -17,7 +17,7 @@ If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration
 
 ## Subsystems
 
-AR Foundation is built on subsystems. A "subsystem" is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@1.5/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
+AR Foundation is built on subsystems. A "subsystem" is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
 
 # Installing AR Foundation
 
@@ -220,7 +220,7 @@ The following table summarizes the other parameters:
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.2a8 and later
+* 2018.4
 
 ## Known limitations
 

@@ -25,5 +25,10 @@ namespace UnityEngine.XR.ARFoundation
         /// the next <see cref="ARSession"/> update.
         /// </remarks>
         public IntPtr nativePtr { get { return sessionRelativeData.nativePtr; } }
+
+        /// <summary>
+        /// Get the session identifier from which this reference point originated.
+        /// </summary>
+        public Guid sessionId { get { return sessionRelativeData.sessionId; } }
     }
 }

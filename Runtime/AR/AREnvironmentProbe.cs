@@ -147,6 +147,7 @@ namespace UnityEngine.XR.ARFoundation
 #else
             const bool k_NoCubemapUpdate = true;
 #endif
+
             // If there is no current reflection probe texture or if the current environment texture data is not
             // identical to the given environment texture metadata, then we need to create a new environment texture
             // object.
@@ -162,14 +163,14 @@ namespace UnityEngine.XR.ARFoundation
                 // Create a new environment texture object.
                 m_ReflectionProbe.customBakedTexture = CreateEnvironmentTexture(textureDescriptor);
             }
-#if UNITY_2019_1_OR_NEWER                
+#if UNITY_2019_1_OR_NEWER
             else
             {
                 // Else, we have a current texture object with identical metadata, we simply update the external
                 // texture with the native texture.
                 cubemapTexture.UpdateExternalTexture(textureDescriptor.nativeTexture);
             }
-#endif                
+#endif
 
             // Update the current environment texture metadata.
             m_CurrentTextureDescriptor = textureDescriptor;

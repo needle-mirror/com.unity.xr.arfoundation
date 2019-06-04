@@ -94,10 +94,12 @@ namespace UnityEngine.XR.ARFoundation
         public bool Equals(ARCameraFrameEventArgs other)
         {
             return
-                (lightEstimation.Equals(other.lightEstimation)) &&
-                (projectionMatrix == other.projectionMatrix) &&
-                (displayMatrix == other.displayMatrix) &&
-                (timestampNs == other.timestampNs);
+                lightEstimation.Equals(other.lightEstimation)
+                && timestampNs.Equals(other.timestampNs)
+                && projectionMatrix.Equals(other.projectionMatrix)
+                && displayMatrix.Equals(other.displayMatrix)
+                && textures.Equals(other.textures)
+                && propertyNameIds.Equals(other.propertyNameIds);
         }
 
         public static bool operator ==(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs)

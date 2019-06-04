@@ -10,7 +10,7 @@ scene. Rendering 3D objects using this environment texture allows for real-world
 rendered objects. The result is generally realistic reflections and lighting of virtual objects as influenced by the
 real-world views.
 
-For more details, refer to the [Environment Probe Subsystem](http://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@1.0/manual/environment-probe-subsystem.md).
+For more details, refer to the [Environment Probe Subsystem](http://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/environment-probe-subsystem.html).
 
 ## Manual Placement
 

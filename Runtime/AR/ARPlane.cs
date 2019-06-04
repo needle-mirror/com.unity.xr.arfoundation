@@ -102,10 +102,18 @@ namespace UnityEngine.XR.ARFoundation
                 if (!m_Boundary.IsCreated)
                     return default(NativeArray<Vector2>);
 
-                return NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<Vector2>(
+                var boundary = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<Vector2>(
                     m_Boundary.GetUnsafePtr(),
                     m_Boundary.Length,
                     Allocator.None);
+
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
+                NativeArrayUnsafeUtility.SetAtomicSafetyHandle(
+                    ref boundary,
+                    NativeArrayUnsafeUtility.GetAtomicSafetyHandle(m_Boundary));
+#endif
+
+                return boundary;
             }
         }
 

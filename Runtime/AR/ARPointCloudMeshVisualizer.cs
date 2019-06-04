@@ -7,6 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     /// Renders an <see cref="ARPointCloud"/> as a <c>Mesh</c> with <c>MeshTopology.Points</c>.
     /// </summary>
     [RequireComponent(typeof(ARPointCloud))]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@1.5/api/UnityEngine.XR.ARFoundation.ARPointCloudMeshVisualizer.html")]
     public sealed class ARPointCloudMeshVisualizer : MonoBehaviour
     {
         /// <summary>
@@ -61,7 +62,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void UpdateVisibility()
         {
-            var visible = 
+            var visible =
                 enabled &&
                 (m_PointCloud.trackingState != TrackingState.None);
 
