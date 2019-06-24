@@ -83,10 +83,18 @@ namespace UnityEngine.XR.ARFoundation
             if (!disposable.IsCreated)
                 return default(NativeArray<T>);
 
-            return NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<T>(
+            var array = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<T>(
                 disposable.GetUnsafePtr(),
                 disposable.Length,
                 Allocator.None);
+
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
+                NativeArrayUnsafeUtility.SetAtomicSafetyHandle(
+                    ref array,
+                    NativeArrayUnsafeUtility.GetAtomicSafetyHandle(disposable));
+#endif
+
+            return array;
         }
 
         internal void UpdateData(XRDepthSubsystem subsystem)

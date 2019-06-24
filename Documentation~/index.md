@@ -11,7 +11,6 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - Environment probes: a means for generating a cube map to represent a particular area of the physical environment.
 - Face tracking: detect and track human faces.
 - Image tracking: detect and track 2D images.
-- Object tracking: detect 3D objects.
 
 If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration-guide.md).
 
@@ -232,6 +231,7 @@ AR Foundation includes the following known limitations:
 
 |Date|Reason|
 |---|---|
+|June 25, 2019|Removed object tracking for 2019.3 verified package.|
 |April 18, 2019|Update documentation to include new features (environment probes, image tracking, face tracking, object tracking).|
 |March 4, 2019|Update documentation to reflect 2.0.0 changes.|
 |November 15, 2018|Face Tracking added.|

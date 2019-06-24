@@ -113,7 +113,12 @@ namespace UnityEngine.XR.ARFoundation
             try
             {
                 // User events
-                OnTrackablesChanged(s_Added, s_Updated, s_Removed);
+                if ((s_Added.Count) > 0 ||
+                    (s_Updated.Count) > 0 ||
+                    (s_Removed.Count) > 0)
+                {
+                    OnTrackablesChanged(s_Added, s_Updated, s_Removed);
+                }
             }
             finally
             {

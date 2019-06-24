@@ -4,6 +4,20 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2019-06-25
+- 2019.3 verified release
+### New
+- Add support for ARSession.notTrackingReason.
+- Add an `ARMeshManager` to interface with the [`XRMeshSubsystem`](https://docs.unity3d.com/ScriptReference/Experimental.XR.XRMeshSubsystem.html). This is useful for XR Plugins that can generate meshes at runtime.
+
+## [2.1.0-preview.4] - 2019-06-17
+### Improvements
+- Added an option to synchronize the Unity frame with the AR session's update. See `ARSession.matchFrameRate`.
+- Fix NativeArray handling when `ENABLE_UNITY_COLLECTIONS_CHECKS` is set. This fixes an issue when running ARFoundation in the Editor. This is not set in the Player, so it is not an issue when running on device.
+
+### Changes
+- Previously, a trackable manager's changed event (e.g., `ARPlaneSubsystem.planesChanged`) was invoked every frame even if nothing had changed. Now, it is only invoked on frames when a change has occurred.
+
 ## [2.1.0-preview.3] - 2019-05-22
 ### Fixes
 - Fix documentation links.
