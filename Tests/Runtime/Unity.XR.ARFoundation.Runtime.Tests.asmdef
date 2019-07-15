@@ -1,7 +1,8 @@
 {
   "name": "Unity.XR.ARFoundation.Runtime.Tests",
     "references": [
-        "Unity.XR.ARFoundation"
+        "Unity.XR.ARFoundation",
+        "Unity.XR.ARSubsystems"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

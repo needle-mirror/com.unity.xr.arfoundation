@@ -42,6 +42,24 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Iterates over every instantiated <see cref="ARTrackable"/> and
+        /// activates or deactivates its <c>GameObject</c> based on the value of
+        /// <paramref name="active"/>.
+        /// This calls
+        /// <a href="https://docs.unity3d.com/ScriptReference/GameObject.SetActive.html">GameObject.SetActive</a>
+        /// on each trackable's <c>GameObject</c>.
+        /// </summary>
+        /// <param name="active">If <c>true</c> each trackable's <c>GameObject</c> is activated.
+        /// Otherwise, it is deactivated.</param>
+        public void SetTrackablesActive(bool active)
+        {
+            foreach (var trackable in trackables)
+            {
+                trackable.gameObject.SetActive(active);
+            }
+        }
+
+        /// <summary>
         /// The <c>ARSessionOrigin</c> which will be used to instantiate detected trackables.
         /// </summary>
         protected ARSessionOrigin sessionOrigin { get; private set; }
@@ -113,7 +131,12 @@ namespace UnityEngine.XR.ARFoundation
             try
             {
                 // User events
-                OnTrackablesChanged(s_Added, s_Updated, s_Removed);
+                if ((s_Added.Count) > 0 ||
+                    (s_Updated.Count) > 0 ||
+                    (s_Removed.Count) > 0)
+                {
+                    OnTrackablesChanged(s_Added, s_Updated, s_Removed);
+                }
             }
             finally
             {

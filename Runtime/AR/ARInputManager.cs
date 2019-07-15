@@ -5,6 +5,10 @@ using UnityEngine.Experimental;
 using UnityEngine.Experimental.XR;
 #endif
 
+#if USE_XR_MANAGEMENT
+using UnityEngine.XR.Management;
+#endif
+
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -21,10 +25,11 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public XRInputSubsystem subsystem { get; private set; }
 
+        bool m_CleanupSubsystemOnDestroy = true;
+
         void OnEnable()
         {
-            if (subsystem == null)
-                subsystem = CreateSubsystem();
+            CreateSubsystemIfNecessary();
 
             if (subsystem != null)
                 subsystem.Start();
@@ -38,10 +43,29 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDestroy()
         {
-            if (subsystem != null)
+            if (m_CleanupSubsystemOnDestroy && subsystem != null)
                 subsystem.Destroy();
 
             subsystem = null;
+        }
+
+        void CreateSubsystemIfNecessary()
+        {
+            // Use the subsystem that has been instantiated by XR Management
+            // if available, otherwise create the subsystem.
+
+            if (subsystem == null)
+            {
+                subsystem = GetActiveSubsystemInstance();
+
+                // If the subsystem has already been created by XR management, it controls the lifetime
+                // of the subsystem.
+                if (subsystem != null)
+                    m_CleanupSubsystemOnDestroy = false;
+            }
+
+            if (subsystem == null)
+                subsystem = CreateSubsystem();
         }
 
         XRInputSubsystem CreateSubsystem()
@@ -63,6 +87,33 @@ namespace UnityEngine.XR.ARFoundation
             {
                 return null;
             }
+        }
+
+        XRInputSubsystem GetActiveSubsystemInstance()
+        {
+            XRInputSubsystem activeSubsystem = null;
+
+#if USE_XR_MANAGEMENT
+            // If the XR management package has been included, query the currently
+            // active loader for the created subsystem, if one exists.
+            if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
+            {
+                XRLoader loader = XRGeneralSettings.Instance.Manager.activeLoader;
+                if (loader != null)
+                    activeSubsystem = loader.GetLoadedSubsystem<XRInputSubsystem>();
+            }
+#endif
+            // If XR management is not used or no loader has been set, check for
+            // any active subsystem instances in the SubsystemManager.
+            if (activeSubsystem == null)
+            {
+                List<XRInputSubsystem> subsystemInstances = new List<XRInputSubsystem>();
+                SubsystemManager.GetInstances(subsystemInstances);
+                if (subsystemInstances.Count > 0)
+                    activeSubsystem = subsystemInstances[0];
+            }
+
+            return activeSubsystem;
         }
 
         static List<XRInputSubsystemDescriptor> s_SubsystemDescriptors =

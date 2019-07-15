@@ -33,27 +33,50 @@ namespace UnityEngine.XR.ARFoundation
         ARTextureInfo m_HumanDepthInfo;
 
         /// <summary>
-        /// Whether human pose estimation is enabled.
+        /// Whether 2D human pose estimation is enabled.
         /// </summary>
         /// <value>
-        /// <c>true</c> if human pose estimation is enabled. Otherwise, <c>false</c>.
+        /// <c>true</c> if 2D human pose estimation is enabled. Otherwise, <c>false</c>.
         /// </value>
-        public bool humanBodyPoseEstimationEnabled
+        public bool humanBodyPose2DEstimationEnabled
         {
-            get { return m_HumanBodyPoseEstimationEnabled; }
+            get { return m_HumanBodyPose2DEstimationEnabled; }
             set
             {
-                m_HumanBodyPoseEstimationEnabled = value;
+                m_HumanBodyPose2DEstimationEnabled = value;
                 if (enabled && subsystem != null)
                 {
-                    subsystem.humanBodyPoseEstimationEnabled = value;
+                    subsystem.humanBodyPose2DEstimationEnabled = value;
                 }
             }
         }
 
         [SerializeField]
-        [Tooltip("Whether to estimate the pose for any human bodies detected.")]
-        bool m_HumanBodyPoseEstimationEnabled = false;
+        [Tooltip("Whether to estimate the 2D pose for any human bodies detected.")]
+        bool m_HumanBodyPose2DEstimationEnabled = false;
+
+        /// <summary>
+        /// Whether 3D human pose estimation is enabled.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if 3D human pose estimation is enabled. Otherwise, <c>false</c>.
+        /// </value>
+        public bool humanBodyPose3DEstimationEnabled
+        {
+            get { return m_HumanBodyPose3DEstimationEnabled; }
+            set
+            {
+                m_HumanBodyPose3DEstimationEnabled = value;
+                if (enabled && subsystem != null)
+                {
+                    subsystem.humanBodyPose3DEstimationEnabled = value;
+                }
+            }
+        }
+
+        [SerializeField]
+        [Tooltip("Whether to estimate the 3D pose for any human bodies detected.")]
+        bool m_HumanBodyPose3DEstimationEnabled = false;
 
         /// <summary>
         /// The mode for generating the human segmentation stencil texture.
@@ -222,7 +245,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnBeforeStart()
         {
-            subsystem.humanBodyPoseEstimationEnabled = m_HumanBodyPoseEstimationEnabled;
+            subsystem.humanBodyPose2DEstimationEnabled = m_HumanBodyPose2DEstimationEnabled;
+            subsystem.humanBodyPose3DEstimationEnabled = m_HumanBodyPose3DEstimationEnabled;
             subsystem.humanSegmentationStencilMode = m_HumanSegmentationStencilMode;
             subsystem.humanSegmentationDepthMode = m_HumanSegmentationDepthMode;
         }

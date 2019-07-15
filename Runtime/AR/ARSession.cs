@@ -35,6 +35,55 @@ namespace UnityEngine.XR.ARFoundation
             set { m_AttemptUpdate = value; }
         }
 
+        [SerializeField]
+        [Tooltip("If enabled, the Unity frame will be synchronized with the AR session. Otherwise, the AR session will be updated independently of the Unity frame.")]
+        bool m_MatchFrameRate = true;
+
+        /// <summary>
+        /// If <c>True</c>, the session will block execution until a new AR frame is available
+        /// and set
+        /// <a href="https://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html">Application.targetFrameRate</a>
+        /// to match the native update frequency of the AR session.
+        /// Otherwise, the AR session is updated indpendently of the Unity frame.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If enabled with a simple scene, the <c>ARSession.Update</c> may appear to take a long time.
+        /// This is simply waiting for the next AR frame, similar to the way Unity will <c>WaitForTargetFPS</c> at the
+        /// end of a frame. If the rest of the Unity frame takes non-trivial time, then the next <c>ARSession.Update</c>
+        /// will take a proportionally less amount of time.
+        /// </para><para>
+        /// This option does three things:
+        /// - Enables a setting on the <c>XRSessionSubsystem</c> which causes the update to block until the next AR frame is ready.
+        /// - Sets <c>Application.targetFrameRate</c> to the session's preferred update rate.
+        /// - Sets <c><a href="https://docs.unity3d.com/ScriptReference/QualitySettings-vSyncCount.html">QualitySettings.vSyncCount</a></c> to zero
+        /// </para>
+        /// </remarks>
+        public bool matchFrameRate
+        {
+            get
+            {
+                return m_MatchFrameRate;
+            }
+
+            set
+            {
+                if (m_MatchFrameRate == value)
+                    return;
+
+                if (descriptor != null)
+                {
+                    // At runtime
+                    SetMatchFrameRateEnabled(value);
+                }
+                else
+                {
+                    // In the Editor, or if there is no subsystem
+                    m_MatchFrameRate = value;
+                }
+            }
+        }
+
         /// <summary>
         /// This event is invoked whenever the <see cref="systemState"/> changes.
         /// </summary>
@@ -52,9 +101,20 @@ namespace UnityEngine.XR.ARFoundation
                     return;
 
                 s_State = value;
+
+                UpdateNotTrackingReason();
+
                 if (stateChanged != null)
                     stateChanged(new ARSessionStateChangedEventArgs(state));
             }
+        }
+
+        /// <summary>
+        /// The reason AR tracking was lost.
+        /// </summary>
+        public static NotTrackingReason notTrackingReason
+        {
+            get { return s_NotTrackingReason; }
         }
 
         /// <summary>
@@ -68,6 +128,23 @@ namespace UnityEngine.XR.ARFoundation
 
             if (state > ARSessionState.Ready)
                 state = ARSessionState.SessionInitializing;
+        }
+
+        void SetMatchFrameRateEnabled(bool enabled)
+        {
+            // Only set it if supported
+            if (descriptor.supportsMatchFrameRate)
+                subsystem.matchFrameRate = enabled;
+
+            // Read the value back. If not supported, this will be false.
+            m_MatchFrameRate = subsystem.matchFrameRate;
+
+            // Set the application's target frame rate to match
+            if (m_MatchFrameRate)
+            {
+                Application.targetFrameRate = subsystem.frameRate;
+                QualitySettings.vSyncCount = 0;
+            }
         }
 
         /// <summary>
@@ -222,7 +299,19 @@ namespace UnityEngine.XR.ARFoundation
             CreateSubsystemIfNecessary();
 
             if (subsystem != null)
+            {
                 StartCoroutine(Initialize());
+            }
+#if DEVELOPMENT_BUILD
+            else
+            {
+                Debug.LogWarningFormat(
+                    "No ARSession available for the current platform. " + 
+                    "Please ensure you have installed the relevant XR Plugin package " + 
+                    "for this platform via the Package Manager."
+                );
+            }
+#endif
         }
 
         IEnumerator Initialize()
@@ -245,7 +334,7 @@ namespace UnityEngine.XR.ARFoundation
             // If we're still enabled and everything is ready, then start.
             if (state == ARSessionState.Ready && enabled)
             {
-                subsystem.Start();
+                StartSubsystem();
             }
             else
             {
@@ -253,9 +342,16 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        void StartSubsystem()
+        {
+            SetMatchFrameRateEnabled(m_MatchFrameRate);
+            subsystem.Start();
+        }
+
         void Awake()
         {
             s_Instance = this;
+            s_NotTrackingReason = NotTrackingReason.None;
         }
 
         void Update()
@@ -312,7 +408,31 @@ namespace UnityEngine.XR.ARFoundation
             s_Instance = null;
         }
 
+        static void UpdateNotTrackingReason()
+        {
+            switch (state)
+            {
+                case ARSessionState.None:
+                case ARSessionState.SessionInitializing:
+                    s_NotTrackingReason = (s_Instance == null || s_Instance.subsystem == null) ?
+                        NotTrackingReason.Unsupported : s_Instance.subsystem.notTrackingReason;
+                    break;
+                case ARSessionState.Unsupported:
+                    s_NotTrackingReason = NotTrackingReason.Unsupported;
+                    break;
+                case ARSessionState.CheckingAvailability:
+                case ARSessionState.NeedsInstall:
+                case ARSessionState.Installing:
+                case ARSessionState.Ready:
+                case ARSessionState.SessionTracking:
+                    s_NotTrackingReason = NotTrackingReason.None;
+                    break;
+            }
+        }
+
         static ARSessionState s_State;
+
+        static NotTrackingReason s_NotTrackingReason;
 
         static SessionAvailability s_Availability;
 

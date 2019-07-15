@@ -282,6 +282,9 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.hasAverageBrightness)
                 lightEstimation.averageBrightness = frame.averageBrightness;
+            
+            if (frame.hasAverageIntensityInLumens)
+                lightEstimation.averageIntensityInLumens = frame.averageIntensityInLumens;
 
             if (frame.hasAverageColorTemperature)
                 lightEstimation.averageColorTemperature = frame.averageColorTemperature;
