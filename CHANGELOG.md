@@ -4,8 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.3] - 2019-08-06
+### Updated
+- Update depedency on Legacy Input Helpers package to version 1.3.7. This should not impact existing functionality, but helps with future compatibility.
+
 ## [2.1.1] - 2019-06-25
+### Updated
 - 2019.3 verified release
+
 ### New
 - Add support for ARSession.notTrackingReason.
 - Add an `ARMeshManager` to interface with the [`XRMeshSubsystem`](https://docs.unity3d.com/ScriptReference/Experimental.XR.XRMeshSubsystem.html). This is useful for XR Plugins that can generate meshes at runtime.
