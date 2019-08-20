@@ -1,292 +1,264 @@
-﻿using System;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Add this component to a <c>Camera</c> to copy the color camera's texture onto the background.
+    /// <para>Add this component to a <c>Camera</c> to copy the color camera's texture onto the background.</para>
+    /// <para>If you are using the Lightweight Render Pipeline (version 5.7.2 or later) or the Univerisal Render
+    /// Pipeline (version 7.0.0 or later), you must also add the <see cref="ARBackgroundRendererFeature"/> to the list
+    /// of render features for the scriptable renderer.</para>
     /// </summary>
     /// <remarks>
-    /// This is the component-ized version of <c>UnityEngine.XR.ARBackgroundRenderer</c>.
+    /// <para>
+    /// To add the <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable
+    /// renderer:
+    /// <list type="bullet">
+    /// <item><description>In Project Settings -> Graphics, select the render pipeline asset (either
+    /// <c>LightweightRenderPipelineAsset</c> or <c>UniversalRenderPipelineAsset</c>) that is in the Scriptable Render
+    /// Pipeline Settings field.</description></item>
+    /// <item><description>In the Inspector with the render pipeline asset selected, ensure that the Render Type is set
+    /// to Custom.</description></item>
+    /// <item><description>In the Inspector with the render pipeline asset selected, select the Render Type -> Data
+    /// asset which would be of type <c>ForwardRendererData</c>.</description></item>
+    /// <item><description>In the Inspector with the forward renderer data selected, ensure the Render Features list
+    /// contains a <see cref="ARBackgroundRendererFeature"/>.</description></item>
+    /// </list>
+    /// </para>
+    /// <para>To customize background rendering with the legacy render pipeline, override both the
+    /// <see cref="ConfigureLegacyRenderPipelineBackgroundRendering"/> method and the
+    /// <see cref="TeardownLegacyRenderPipelineBackgroundRendering"/> method to modify the given
+    /// <c>CommandBuffer</c> with rendering commands and to inject the given <c>CommandBuffer</c> into the camera's
+    /// rendering.</para>
+    /// <para>To customize background rendering with a scriptable render pipeline, create a
+    /// <c>ScriptableRendererFeature</c> with the background rendering commands, and insert the
+    /// <c>ScriptableRendererFeature</c> into the list of render features for the scriptable renderer.</para>
     /// </remarks>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(ARCameraManager))]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
-    public sealed class ARCameraBackground : MonoBehaviour
+    public class ARCameraBackground : MonoBehaviour
     {
+        /// <summary>
+        /// Name for the custom rendering command buffer.
+        /// </summary>
+        const string k_CustomRenderPassName = "AR Background Pass (LegacyRP)";
+
+        /// <summary>
+        /// Name of the main texture parameter for the material
+        /// </summary>
+        internal const string k_MainTexName = "_MainTex";
+
+        /// <summary>
+        /// Name of the shader parameter for the display transform matrix.
+        /// </summary>
+        const string k_DisplayTransformName = "_UnityDisplayTransform";
+
+        /// <summary>
+        /// Property ID for the shader parameter for the display transform matrix.
+        /// </summary>
+        static readonly int k_DisplayTransformId = Shader.PropertyToID(k_DisplayTransformName);
+
+        /// <summary>
+        /// The camera to which the projection matrix is set on each frame event.
+        /// </summary>
+        Camera m_Camera;
+
+        /// <summary>
+        /// The camera manager from which frame information is pulled.
+        /// </summary>
+        ARCameraManager m_CameraManager;
+
+        /// <summary>
+        /// Command buffer for any custom rendering commands.
+        /// </summary>
+        CommandBuffer m_CommandBuffer;
+
+        /// <summary>
+        /// Whether to use the custom material for rendering the background.
+        /// </summary>
         [SerializeField, FormerlySerializedAs("m_OverrideMaterial")]
         bool m_UseCustomMaterial;
 
         /// <summary>
-        /// When <c>false</c>, a material is generated automatically from the shader included in the platform-specific package.
-        /// When <c>true</c>, <see cref="customMaterial"/> is used instead, overriding the automatically generated one.
-        /// This is not necessary for most AR experiences.
+        /// A custom material for rendering the background.
         /// </summary>
-        public bool useCustomMaterial
-        {
-            get { return m_UseCustomMaterial; }
-            set
-            {
-                m_UseCustomMaterial = value;
-                UpdateMaterial();
-            }
-        }
-
         [SerializeField, FormerlySerializedAs("m_Material")]
         Material m_CustomMaterial;
 
         /// <summary>
-        /// If <see cref="useCustomMaterial"/> is <c>true</c>, this <c>Material</c> will be used
-        /// instead of the one included with the platform-specific AR package.
+        /// The default material for rendering the background.
         /// </summary>
-        public Material customMaterial
-        {
-            get { return m_CustomMaterial; }
-            set
-            {
-                m_CustomMaterial = value;
-                UpdateMaterial();
-            }
-        }
+        Material m_DefaultMaterial;
+
+        /// <summary>
+        /// The camera to which the projection matrix is set on each frame event.
+        /// </summary>
+        /// <value>
+        /// The camera to which the projection matrix is set on each frame event.
+        /// </value>
+#if UNITY_EDITOR
+        protected new Camera camera { get => m_Camera; }
+#else // UNITY_EDITOR
+        protected Camera camera { get => m_Camera; }
+#endif // UNITY_EDITOR
+
+        /// <summary>
+        /// The camera manager from which frame information is pulled.
+        /// </summary>
+        /// <value>
+        /// The camera manager from which frame information is pulled.
+        /// </value>
+        protected ARCameraManager cameraManager { get => m_CameraManager; }
 
         /// <summary>
         /// The current <c>Material</c> used for background rendering.
         /// </summary>
         public Material material
         {
-            get
-            {
-                return m_BackgroundRenderer.backgroundMaterial;
-            }
-            private set
-            {
-                m_BackgroundRenderer.backgroundMaterial = value;
-            }
+            get { return (useCustomMaterial && (customMaterial != null)) ? customMaterial : defaultMaterial; }
         }
-
-        [SerializeField]
-        bool m_UseCustomRendererAsset;
 
         /// <summary>
-        /// Whether to use a <see cref="ARBackgroundRendererAsset"/>. This can assist with
-        /// usage of the light weight render pipeline.
+        /// Whether to use the custom material for rendering the background.
         /// </summary>
-        public bool useCustomRendererAsset
-        {
-            get { return m_UseCustomRendererAsset; }
-            set
-            {
-                m_UseCustomRendererAsset = value;
-                SetupBackgroundRenderer();
-            }
-        }
-
-        [SerializeField]
-        ARBackgroundRendererAsset m_CustomRendererAsset;
+        /// <value>
+        /// <c>true</c> if the custom material should be used for rendering the camera background. Otherwise,
+        /// <c>false</c>.
+        /// </value>
+        public bool useCustomMaterial { get => m_UseCustomMaterial; set => m_UseCustomMaterial = value; }
 
         /// <summary>
-        /// Get the custom <see cref="ARBackgroundRendererAsset "/> to use. This can
-        /// assist with usage of the light weight render pipeline.
+        /// A custom material for rendering the background.
         /// </summary>
-        public ARBackgroundRendererAsset customRendererAsset
-        {
-            get { return m_CustomRendererAsset; }
-            set
-            {
-                m_CustomRendererAsset = value;
-                SetupBackgroundRenderer();
-            }
-        }
+        /// <value>
+        /// A custom material for rendering the background.
+        /// </value>
+        public Material customMaterial { get => m_CustomMaterial; set => m_CustomMaterial = value; }
 
-        ARFoundationBackgroundRenderer m_BackgroundRenderer { get; set; }
+        /// <summary>
+        /// The default material for rendering the background.
+        /// </summary>
+        /// <value>
+        /// The default material for rendering the background.
+        /// </value>
+        Material defaultMaterial { get => cameraManager.cameraMaterial; }
 
-        Material CreateMaterialFromSubsystemShader()
-        {
-            if (m_CameraSetupThrewException)
-                return null;
-
-            // Try to create a material from the plugin's provided shader.
-            if (String.IsNullOrEmpty(m_CameraManager.shaderName))
-                return null;
-
-            var shader = Shader.Find(m_CameraManager.shaderName);
-            if (shader == null)
-            {
-                // If an exception is thrown, then something is irrecoverably wrong.
-                // Set this flag so we don't try to do this every frame.
-                m_CameraSetupThrewException = true;
-
-                throw new InvalidOperationException(string.Format(
-                    "Could not find shader named \"{0}\" required for video overlay on camera subsystem.",
-                    m_CameraManager.shaderName));
-            }
-
-            return new Material(shader);
-        }
-
-        void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
-        {
-            UpdateMaterial();
-
-            var mat = material;
-            var count = eventArgs.textures.Count;
-            for (int i = 0; i < count; ++i)
-            {
-                mat.SetTexture(
-                    eventArgs.propertyNameIds[i],
-                    eventArgs.textures[i]);
-            }
-
-            mode = ARRenderMode.MaterialAsBackground;
-
-            if (eventArgs.displayMatrix.HasValue)
-                mat.SetMatrix(k_DisplayTransformId, eventArgs.displayMatrix.Value);
-
-            if (eventArgs.projectionMatrix.HasValue)
-                m_Camera.projectionMatrix = eventArgs.projectionMatrix.Value;
-        }
-
-        void SetupBackgroundRenderer()
-        {
-            if (useRenderPipeline)
-            {
-                if (m_LwrpBackgroundRenderer == null)
-                {
-                    m_LwrpBackgroundRenderer = m_CustomRendererAsset.CreateARBackgroundRenderer();
-                    m_CustomRendererAsset.CreateHelperComponents(gameObject);
-                }
-
-                m_BackgroundRenderer = m_LwrpBackgroundRenderer;
-            }
-            else
-            {
-                if (m_LegacyBackgroundRenderer == null)
-                    m_LegacyBackgroundRenderer = new ARFoundationBackgroundRenderer();
-
-                m_BackgroundRenderer = m_LegacyBackgroundRenderer;
-            }
-
-            m_BackgroundRenderer.mode = mode;
-            m_BackgroundRenderer.camera = m_Camera;
-        }
+        /// <summary>
+        /// Whether to use the legacy rendering pipeline.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> fi the legacy render pipeline is in use. Otherwise, <c>false</c>.
+        /// </value>
+        bool useLegacyRenderPipeline { get => GraphicsSettings.renderPipelineAsset == null; }
 
         void Awake()
         {
             m_Camera = GetComponent<Camera>();
             m_CameraManager = GetComponent<ARCameraManager>();
-            SetupBackgroundRenderer();
         }
 
         void OnEnable()
         {
-            UpdateMaterial();
-            m_CameraManager.frameReceived += OnCameraFrameReceived;
-            ARSession.stateChanged += OnSessionStateChanged;
+            cameraManager.frameReceived += OnCameraFrameReceived;
+
+            Material material = defaultMaterial;
+            if (useLegacyRenderPipeline && (material != null))
+            {
+                EnableLegacyRenderPipelineBackgroundRendering();
+            }
         }
 
         void OnDisable()
         {
-            mode = ARRenderMode.StandardBackground;
-            m_CameraManager.frameReceived -= OnCameraFrameReceived;
-            ARSession.stateChanged -= OnSessionStateChanged;
-            m_CameraSetupThrewException = false;
+            cameraManager.frameReceived -= OnCameraFrameReceived;
 
-            // We are no longer setting the projection matrix
-            // so tell the camera to resume its normal projection
-            // matrix calculations.
-            m_Camera.ResetProjectionMatrix();
+            DisableLegacyRenderPipelineBackgroundRendering();
+
+            // We are no longer setting the projection matrix so tell the camera to resume its normal projection matrix
+            // calculations.
+            camera.ResetProjectionMatrix();
         }
 
-        void OnSessionStateChanged(ARSessionStateChangedEventArgs eventArgs)
+        /// <summary>
+        /// Enable background rendering getting a command buffer, and configure it for rendering the background.
+        /// </summary>
+        void EnableLegacyRenderPipelineBackgroundRendering()
         {
-            // If the session goes away then return to using standard background mode
-            if (eventArgs.state < ARSessionState.SessionInitializing && m_BackgroundRenderer != null)
-                mode = ARRenderMode.StandardBackground;
-        }
+            if (m_CommandBuffer == null)
+            {
+                m_CommandBuffer = new CommandBuffer();
+                m_CommandBuffer.name = k_CustomRenderPassName;
 
-        void UpdateMaterial()
-        {
-            if (useRenderPipeline)
-            {
-                material = lwrpMaterial;
-            }
-            else
-            {
-                material = m_UseCustomMaterial ? m_CustomMaterial : subsystemMaterial;
+                ConfigureLegacyRenderPipelineBackgroundRendering(m_CommandBuffer);
             }
         }
 
-        bool m_CameraSetupThrewException;
-
-        Camera m_Camera;
-
-        ARCameraManager m_CameraManager;
-
-        Material m_SubsystemMaterial;
-
-        private Material subsystemMaterial
+        /// <summary>
+        /// Disable background rendering by removing the command buffer from the camera.
+        /// </summary>
+        void DisableLegacyRenderPipelineBackgroundRendering()
         {
-            get
+            if (m_CommandBuffer != null)
             {
-                if (m_SubsystemMaterial == null)
-                    m_SubsystemMaterial = CreateMaterialFromSubsystemShader();
+                TeardownLegacyRenderPipelineBackgroundRendering(m_CommandBuffer);
 
-                return m_SubsystemMaterial;
+                m_CommandBuffer = null;
             }
         }
 
-        Material m_LwrpMaterial;
-
-        Material lwrpMaterial
+        /// <summary>
+        /// Configure the command buffer for background rendering by inserting the blit, and adding the command buffer
+        /// into the camera.
+        /// </summary>
+        /// <param name="commandBuffer">The command buffer to configure.</param>
+        protected virtual void ConfigureLegacyRenderPipelineBackgroundRendering(CommandBuffer commandBuffer)
         {
-            get
-            {
-                if (m_LwrpMaterial != null)
-                    return m_LwrpMaterial;
+            Texture texture = !material.HasProperty(k_MainTexName) ? null : material.GetTexture(k_MainTexName);
 
-                if (m_UseCustomRendererAsset && m_CustomRendererAsset != null)
+            commandBuffer.Blit(texture, BuiltinRenderTextureType.CameraTarget, material);
+            camera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_CommandBuffer);
+            camera.AddCommandBuffer(CameraEvent.BeforeGBuffer, m_CommandBuffer);
+        }
+
+        /// <summary>
+        /// Teardown the command buffer that was configured for background rendering by removing the command buffer
+        /// from the camera.
+        /// </summary>
+        /// <param name="commandBuffer">The command buffer to teaerdown.</param>
+        protected virtual void TeardownLegacyRenderPipelineBackgroundRendering(CommandBuffer commandBuffer)
+        {
+            camera.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque, m_CommandBuffer);
+            camera.RemoveCommandBuffer(CameraEvent.BeforeGBuffer, m_CommandBuffer);
+        }
+
+        /// <summary>
+        /// Callback for the camera frame event.
+        /// </summary>
+        /// <param name="eventArgs">The camera event arguments.</param>
+        void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
+        {
+            Material material = this.material;
+            if (material != null)
+            {
+                var count = eventArgs.textures.Count;
+                for (int i = 0; i < count; ++i)
                 {
-                    m_LwrpMaterial = m_CustomRendererAsset.CreateCustomMaterial();
+                    material.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
                 }
 
-                return m_LwrpMaterial;
+                if (eventArgs.displayMatrix.HasValue)
+                {
+                    material.SetMatrix(k_DisplayTransformId, eventArgs.displayMatrix.Value);
+                }
             }
-        }
 
-        ARFoundationBackgroundRenderer m_LegacyBackgroundRenderer;
-
-        ARFoundationBackgroundRenderer m_LwrpBackgroundRenderer;
-
-        ARRenderMode m_Mode;
-
-        ARRenderMode mode
-        {
-            get { return m_Mode; }
-            set
+            if (eventArgs.projectionMatrix.HasValue)
             {
-                m_Mode = value;
-                if (m_LwrpBackgroundRenderer != null)
-                    m_LwrpBackgroundRenderer.mode = m_Mode;
-                if (m_LegacyBackgroundRenderer != null)
-                    m_LegacyBackgroundRenderer.mode = m_Mode;
+                camera.projectionMatrix = eventArgs.projectionMatrix.Value;
             }
         }
-
-        bool useRenderPipeline
-        {
-            get
-            {
-                return
-                    m_UseCustomRendererAsset &&
-                    (m_CustomRendererAsset != null) &&
-                    (GraphicsSettings.renderPipelineAsset != null);
-            }
-        }
-
-        const string k_DisplayTransformName = "_UnityDisplayTransform";
-
-        static readonly int k_DisplayTransformId = Shader.PropertyToID(k_DisplayTransformName);
     }
 }

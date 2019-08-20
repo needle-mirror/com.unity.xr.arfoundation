@@ -72,6 +72,10 @@ namespace UnityEngine.XR.ARFoundation
             set { m_AverageIntensityInLumens = value; }
         }
 
+        /// <summary>
+        /// Generates a hash code suitable for use in <c>HashSet</c> and <c>Dictionary</c>.
+        /// </summary>
+        /// <returns>A hash of the <see cref="ARLightEstimationData"/>.</returns>
         public override int GetHashCode()
         {
             unchecked
@@ -80,10 +84,16 @@ namespace UnityEngine.XR.ARFoundation
                     ((averageBrightness.GetHashCode() * 486187739 +
                     averageColorTemperature.GetHashCode()) * 486187739 +
                     colorCorrection.GetHashCode()) * 486187739 +
-                    averageIntensityInLumens.GetHashCode();
+                    averageIntensityInLumens.GetHashCode() * 486187739;
             }
         }
 
+        /// <summary>
+        /// Compares for equality.
+        /// </summary>
+        /// <param name="obj">An <c>object</c> to compare against.</param>
+        /// <returns><c>true</c> if <paramref name="obj"/> is an <see cref="ARLightEstimationData"/> and
+        /// <see cref="Equals(ARLightEstimationData)"/> is also <c>true</c>. Otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             if (!(obj is ARLightEstimationData))
@@ -98,20 +108,37 @@ namespace UnityEngine.XR.ARFoundation
                 averageBrightness, averageColorTemperature, colorCorrection, averageIntensityInLumens);
         }
 
+        /// <summary>
+        /// Compares for equality.
+        /// </summary>
+        /// <param name="other">The other <see cref="ARLightEstimationData"/> to compare against.</param>
+        /// <returns><c>true</c> if the <see cref="ARLightEstimationData"/> represents the same object.</returns>
         public bool Equals(ARLightEstimationData other)
         {
             return
                 (averageBrightness.Equals(other.averageBrightness)) &&
                 (averageColorTemperature.Equals(other.averageColorTemperature)) &&
                 (colorCorrection.Equals(other.colorCorrection)) &&
-                (averageIntensityInLumens.Equals(other.averageIntensityInLumens)) ;
+                (averageIntensityInLumens.Equals(other.averageIntensityInLumens));
         }
 
+        /// <summary>
+        /// Compares <paramref name="lhs"/> and <paramref name="rhs"/> for equality using <see cref="Equals(ARLightEstimationData)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
+        /// <param name="rhs">The right-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
+        /// <returns><c>true</c> if <paramref name="lhs"/> compares equal to <paramref name="rhs"/>, <c>false</c> otherwise.</returns>
         public static bool operator ==(ARLightEstimationData lhs, ARLightEstimationData rhs)
         {
             return lhs.Equals(rhs);
         }
 
+        /// <summary>
+        /// Compares <paramref name="lhs"/> and <paramref name="rhs"/> for inequality using <see cref="Equals(ARLightEstimationData)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
+        /// <param name="rhs">The right-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
+        /// <returns><c>false</c> if <paramref name="lhs"/> compares equal to <paramref name="rhs"/>, <c>true</c> otherwise.</returns>
         public static bool operator !=(ARLightEstimationData lhs, ARLightEstimationData rhs)
         {
             return !lhs.Equals(rhs);

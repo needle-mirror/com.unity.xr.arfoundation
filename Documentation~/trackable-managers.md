@@ -18,8 +18,9 @@ This table summarizes the trackable managers and their trackables.
 | [`AREnvironmentProbeManager`](environment-probe-manager.md) | `AREnvironmentProbe` | Creates cubemaps representing the environment. |
 | [`ARFaceManager`](face-manager.md)                          | `ARFace`             | Detects and tracks human faces. |
 | [`ARTrackedObjectManager`](tracked-object-manager.md)       | `ARTrackedObject`    | Detects 3D objects. |
+| [`ARParticipantManager`](participant-manager.md)            | `ARParticipant`      | Tracks other users in a multi-user collaborative session |
 
-Each trackable component stores information about the trackable, but does not visualize it. Its `ransform` is updated by its manager whenever the AR device reports an update.
+Each trackable component stores information about the trackable, but does not visualize it. Its `transform` is updated by its manager whenever the AR device reports an update.
 
 ## Enabling and Disabling Features
 
@@ -45,19 +46,20 @@ Each trackable can be added, updated, and removed. Each frame, the managers quer
 
 | Trackable Manager | Event |
 |-|-|
-|`ARPlaneManager`| `planesChanged`|
-|`ARPointCloudManager`|`pointCloudsChanged`|
-|`ARReferencePointManager`|`referencePointsChanged`|
-| `ARTrackedImageManager`   | `trackedImagesChanged`    |
-| `AREnvironmentProbeManager`| `environmentProbesChanged` |
-| `ARFaceManager`           | `facesChanged` |
-| `ARTrackedObjectManager`  | `trackedObjectsChanged` |
+|`ARPlaneManager`               | `planesChanged`|
+|`ARPointCloudManager`          |`pointCloudsChanged`|
+|`ARReferencePointManager`      |`referencePointsChanged`|
+| `ARTrackedImageManager`       | `trackedImagesChanged`    |
+| `AREnvironmentProbeManager`   | `environmentProbesChanged` |
+| `ARFaceManager`               | `facesChanged` |
+| `ARTrackedObjectManager`      | `trackedObjectsChanged` |
+| `ARParticipantManager`        | `participantsChanged` |
 
 A trackable will always be added before it is updated or removed. Likewise, a trackable can not be removed unless it was first added. Updates depend on the semantics of the trackable, and the provider-specific implementation.
 
 ### Adding and Removing Trackables
 
-Some trackables, like reference points and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be both manually added and automatically created. The relevant mangers provide methods for addtion and removal when supported.
+Some trackables, like reference points and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be both manually added and automatically created. The relevant managers provide methods for addtion and removal when supported.
 
 You should never `Destroy` a trackable component or its `GameObject` directly. For trackables that support manual removal, its manager will provide a method to remove it. For example, to remove a reference point, you would call `RemoveReferencePoint` on the `ARReferencePointManager`.
 

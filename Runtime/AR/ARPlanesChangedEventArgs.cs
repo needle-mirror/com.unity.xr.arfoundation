@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Event arguments for the <see cref="ARPlaneManager.PlaneChanged"/> event.
+    /// Event arguments for the <see cref="ARPlaneManager.planesChanged"/> event.
     /// </summary>
     public struct ARPlanesChangedEventArgs : IEquatable<ARPlanesChangedEventArgs>
     {

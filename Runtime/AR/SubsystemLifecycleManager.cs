@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 #if !UNITY_2019_2_OR_NEWER
@@ -105,10 +106,22 @@ namespace UnityEngine.XR.ARFoundation
             // any active subsystem instances in the SubsystemManager.
             if (activeSubsystem == null)
             {
-                List<TSubsystem> subsystemInstances = new List<TSubsystem>();
-                SubsystemManager.GetInstances(subsystemInstances);
-                if (subsystemInstances.Count > 0)
-                    activeSubsystem = subsystemInstances[0];
+                SubsystemManager.GetInstances(s_SubsystemInstances);
+
+#if !UNITY_2019_3_OR_NEWER
+                foreach (var instance in s_SubsystemInstances)
+                {
+                   if (!s_DestroyedSubsystemTypes.Contains(instance))
+                   {
+                        return instance;
+                   }
+                }
+#else
+                if (s_SubsystemInstances.Count > 0)
+                {
+                    activeSubsystem = s_SubsystemInstances[0];
+                }
+#endif
             }
 
             return activeSubsystem;
@@ -124,8 +137,14 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem != null)
             {
                 OnBeforeStart();
-                subsystem.Start();
-                OnAfterStart();
+
+                // The derived class may disable the
+                // component if it has invalid state
+                if (enabled)
+                {
+                    subsystem.Start();
+                    OnAfterStart();
+                }
             }
         }
 
@@ -143,8 +162,15 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected virtual void OnDestroy()
         {
+
             if (m_CleanupSubsystemOnDestroy && subsystem != null)
+            {
+#if !UNITY_2019_3_OR_NEWER
+                s_DestroyedSubsystemTypes.Add(subsystem);
+#endif
+
                 subsystem.Destroy();
+            }
 
             subsystem = null;
         }
@@ -165,5 +191,13 @@ namespace UnityEngine.XR.ARFoundation
 
         static List<TSubsystemDescriptor> s_SubsystemDescriptors =
             new List<TSubsystemDescriptor>();
+
+        static List<TSubsystem> s_SubsystemInstances = 
+            new List<TSubsystem>();
+            
+#if !UNITY_2019_3_OR_NEWER
+        static HashSet<TSubsystem> s_DestroyedSubsystemTypes = 
+            new HashSet<TSubsystem>();
+#endif
     }
 }

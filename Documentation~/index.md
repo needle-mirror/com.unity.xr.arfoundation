@@ -1,6 +1,6 @@
 # About AR Foundation
 
-AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity.
+AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but does not implement any AR features itself. To use AR Foundation on a target device, you will also need a separate package for that platform (e.g., `ARKit XR Plugin` on iOS or `ARCore XR Plugin` on Android).
 
 AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support following concepts:
 - World tracking: track the device's position and orientation in physical space.
@@ -18,6 +18,16 @@ If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration
 ## Subsystems
 
 AR Foundation is built on subsystems. A "subsystem" is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
+
+Each subsystem handles some specific functionality. For example, the plane detection interface is provided by the `XRPlaneSubsystem`.
+
+### Providers
+
+A "provider" is a concrete implementation of a subsystem. For example, the `ARCore XR Plugin` package contains the ARCore implementation for many of the AR subsystems.
+
+Because different providers have varying support for specific features, each subsystem also has a descriptor that indicates which specific subsystem features it supports. For example, the `XRPlaneSubsystemDescriptor` contains properties indicating whether horizontal or vertical plane detection is supported.
+
+While it is up to the providers to determine how they will implement each subsystem, in general they are wrapping that platform's native SDK (e.g., ARKit on iOS and ARCore on Android).
 
 # Installing AR Foundation
 
@@ -39,6 +49,8 @@ Subsystems are implemented in other packages, so to use AR Foundation, you will 
 | Session Space | The coordinate system relative to the beginning of the AR session. For example, session space (0, 0, 0) refers to the position at which the AR session was created. An AR device typically reports trackables and tracking information relative to its session origin.|
 
 # Using AR Foundation
+
+## Samples
 
 For examples, see the [ARFoundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub respository.
 
@@ -155,6 +167,10 @@ The `Custom Material` property is optional, and typically you do not need to set
 If `Use Custom Material` is `true`, then the `ARCameraBackground` will use the `Material` you specify for background rendering.
 
 If you have exactly one `ARSessionOrigin`, then you can simply add the `ARCameraBackground` to that camera. If you have multiple `ARSessionOrigin`s (to selectively render different content at different scales, for instance), you should use separate cameras for each `ARSessionOrigin` and a separate, single camera for the `ARCameraBackground`.
+
+#### Configuring AR Camera Background with a Scriptable Render Pipeline
+
+Please refer to [this additional documentation to configure an AR Foundation project with a SRP](ar-camera-background-with-scriptable-render-pipeline.md). This applies to Lightweight Render Pipeline (LWRP) and Universal Render Pipeline (URP).
 
 #### Copying the Camera Texture to a Render Texture
 

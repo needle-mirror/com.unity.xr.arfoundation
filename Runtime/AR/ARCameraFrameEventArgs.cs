@@ -48,6 +48,22 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public List<int> propertyNameIds { get; set; }
 
+        /// <summary>
+        /// The exposure duration in seconds with sub-millisecond precision.  Utilized in calculating motion blur.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="exposureDuration"/> may be null if platform does not support exposure duration.
+        /// </remarks>
+        public double? exposureDuration { get; set; }
+
+        /// <summary>
+        /// The offset of camera exposure.  Used to scale scene lighting in post-processed lighting stage.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="exposureOffset"/> may be null if platform does not support exposure offset.
+        /// </remarks>
+        public float? exposureOffset { get; set; }
+
         public override int GetHashCode()
         {
             unchecked
@@ -58,6 +74,8 @@ namespace UnityEngine.XR.ARFoundation
                 hash = hash * 486187739 + displayMatrix.GetHashCode();
                 hash = hash * 486187739 + (textures == null ? 0 : textures.GetHashCode());
                 hash = hash * 486187739 + (propertyNameIds == null ? 0 : propertyNameIds.GetHashCode());
+                hash = hash * 486187739 + exposureDuration.GetHashCode();
+                hash = hash * 486187739 + exposureOffset.GetHashCode();
                 return hash;
             }
         }
@@ -99,7 +117,9 @@ namespace UnityEngine.XR.ARFoundation
                 && projectionMatrix.Equals(other.projectionMatrix)
                 && displayMatrix.Equals(other.displayMatrix)
                 && textures.Equals(other.textures)
-                && propertyNameIds.Equals(other.propertyNameIds);
+                && propertyNameIds.Equals(other.propertyNameIds) 
+                && (exposureDuration.Equals(other.exposureDuration))
+                && (exposureOffset.Equals(other.exposureOffset));
         }
 
         public static bool operator ==(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs)

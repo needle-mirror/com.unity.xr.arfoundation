@@ -130,9 +130,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="scale">The scale of the new environment probe.</param>
         /// <param name="size">The size (dimensions) of the new environment probe.</param>
         /// <returns>A new <see cref="AREnvironmentProbe"/> if successful, otherwise <c>null</c>.</returns>
-        /// <exception cref="System.InvalidOperationException"/>Thrown if this manager is not enabled</exception>
-        /// <exception cref="System.InvalidOperationException"/>Thrown if this manager has no subsystem.</exception>
-        /// <exception cref="System.NotSupportedException"/>Thrown if manual placement is not supported by this subsystem.
+        /// <exception cref="System.InvalidOperationException">Thrown if this manager is not enabled</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if this manager has no subsystem.</exception>
+        /// <exception cref="System.NotSupportedException">Thrown if manual placement is not supported by this subsystem.
         /// Check for support with <see cref="subsystem"/><c>.SubsystemDescriptor.supportsManualPlacement</c></exception>
         public AREnvironmentProbe AddEnvironmentProbe(Pose pose, Vector3 scale, Vector3 size)
         {

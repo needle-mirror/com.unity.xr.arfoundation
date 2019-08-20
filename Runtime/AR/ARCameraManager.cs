@@ -80,20 +80,12 @@ namespace UnityEngine.XR.ARFoundation
         public event Action<ARCameraFrameEventArgs> frameReceived;
 
         /// <summary>
-        /// The name of the shader used in background rendering.
+        /// The material used in background rendering.
         /// </summary>
         /// <value>
-        /// The name of the shader used in background rendering.
+        /// The material used in background rendering.
         /// </value>
-        public string shaderName
-        {
-            get
-            {
-                if (subsystem != null)
-                    return subsystem.shaderName;
-                return null;
-            }
-        }
+        public Material cameraMaterial { get => (subsystem == null) ? null : subsystem.cameraMaterial; }
 
         /// <summary>
         /// Tries to get camera intrinsics. Camera intrinsics refers to properties
@@ -282,7 +274,7 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.hasAverageBrightness)
                 lightEstimation.averageBrightness = frame.averageBrightness;
-            
+
             if (frame.hasAverageIntensityInLumens)
                 lightEstimation.averageIntensityInLumens = frame.averageIntensityInLumens;
 
@@ -304,6 +296,12 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.hasDisplayMatrix)
                 eventArgs.displayMatrix = frame.displayMatrix;
+
+            if (frame.hasExposureDuration)
+                eventArgs.exposureDuration = frame.exposureDuration;
+
+            if (frame.hasExposureOffset)
+                eventArgs.exposureOffset = frame.exposureOffset;
 
             s_Textures.Clear();
             s_PropertyIds.Clear();

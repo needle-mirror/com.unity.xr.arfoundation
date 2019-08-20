@@ -123,5 +123,15 @@ namespace UnityEngine.XR.ARFoundation
         /// the <see cref="ARSession"/>.
         /// </summary>
         public const int k_MeshManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARParticipantManager"/>'s update order. Should come after the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_ParticipantManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARParticipant"/>'s update order. Should come after the <see cref="ARParticipantManager"/>.
+        /// </summary>
+        public const int k_Participant = k_ParticipantManager + 1;
     }
 }
