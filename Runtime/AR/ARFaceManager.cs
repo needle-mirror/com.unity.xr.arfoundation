@@ -134,6 +134,9 @@ namespace UnityEngine.XR.ARFoundation
             XRFace sessionRelativeData)
         {
             face.UpdateMesh(subsystem);
+
+            if (subsystem.SubsystemDescriptor.supportsEyeTracking)
+                face.UpdateEyes();
         }
 
         protected override void OnTrackablesChanged(

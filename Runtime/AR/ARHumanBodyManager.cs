@@ -79,6 +79,29 @@ namespace UnityEngine.XR.ARFoundation
         bool m_HumanBodyPose3DEstimationEnabled = false;
 
         /// <summary>
+        /// Whether 3D human body scale estimation is enabled.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if 3D human body scale estimation is enabled. Otherwise, <c>false</c>.
+        /// </value>
+        public bool humanBodyPose3DScaleEstimationEnabled
+        {
+            get { return m_HumanBodyPose3DScaleEstimationEnabled; }
+            set
+            {
+                m_HumanBodyPose3DScaleEstimationEnabled = value;
+                if (enabled && subsystem != null)
+                {
+                    subsystem.humanBodyPose3DScaleEstimationEnabled = value;
+                }
+            }
+        }
+
+        [SerializeField]
+        [Tooltip("Whether to estimate the 3D pose for any human bodies detected.")]
+        bool m_HumanBodyPose3DScaleEstimationEnabled = false;
+
+        /// <summary>
         /// The mode for generating the human segmentation stencil texture.
         /// </summary>
         /// <value>
@@ -247,6 +270,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             subsystem.humanBodyPose2DEstimationEnabled = m_HumanBodyPose2DEstimationEnabled;
             subsystem.humanBodyPose3DEstimationEnabled = m_HumanBodyPose3DEstimationEnabled;
+            subsystem.humanBodyPose3DScaleEstimationEnabled = m_HumanBodyPose3DScaleEstimationEnabled;
             subsystem.humanSegmentationStencilMode = m_HumanSegmentationStencilMode;
             subsystem.humanSegmentationDepthMode = m_HumanSegmentationDepthMode;
         }

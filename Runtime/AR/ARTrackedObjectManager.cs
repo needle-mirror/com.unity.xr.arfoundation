@@ -84,7 +84,17 @@ namespace UnityEngine.XR.ARFoundation
         protected override void OnBeforeStart()
         {
             UpdateReferenceObjects();
-            this.subsystem.library = referenceLibrary;
+            if (referenceLibrary != null)
+            {
+                subsystem.library = referenceLibrary;
+            }
+            else
+            {
+                enabled = false;
+#if DEVELOPMENT_BUILD
+                Debug.LogWarning($"{nameof(ARTrackedObjectManager)} '{name}' was enabled but no reference object library is specified. To enable, set a valid reference object library and then re-enable this component.");
+#endif
+            }
         }
 
         protected override void OnAfterSetSessionRelativeData(

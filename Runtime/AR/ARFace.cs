@@ -74,6 +74,44 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        /// <summary>
+        /// Get a native pointer associated with this face.
+        /// </summary>
+        /// <remarks>
+        /// The data pointed to by this member is implementation defined.
+        /// The lifetime of the pointed to object is also
+        /// implementation defined, but should be valid at least until the next
+        /// <see cref="ARSession"/> update.
+        /// </remarks>
+        public IntPtr nativePtr => sessionRelativeData.nativePtr;
+
+        /// <summary>
+        /// The pose of the left eye in relation to the face.
+        /// Use <c>leftEyePose.HasValue</c> to determine if this data is available.
+        /// </summary>
+        /// <remarks>
+        /// The data is returned in relation to the face pose itself and not session space.
+        /// </remarks>
+        public Transform leftEye { get; private set; }
+
+        /// <summary>
+        /// The pose of the right eye in relation to the face.
+        /// Use <c>rightEyePose.HasValue</c> to determine if this data is available.
+        /// </summary>
+        /// <remarks>
+        /// The data is returned in relation to the face pose itself and not session space.
+        /// </remarks>
+        public Transform rightEye { get; private set; }
+
+        /// <summary>
+        /// The position of which the eyes are fixated in relation to the face.
+        /// Use <c>fixationPoint.HasValue</c> to determine if this data is available.
+        /// </summary>
+        /// <remarks>
+        /// The data is returned in relation to the face pose itself and not session space.
+        /// </remarks>
+        public Transform fixationPoint { get; private set; }
+
         void Update()
         {
             if (m_Updated && updated != null)
@@ -104,6 +142,26 @@ namespace UnityEngine.XR.ARFoundation
         {
             subsystem.GetFaceMesh(sessionRelativeData.trackableId, Allocator.Persistent, ref m_FaceMesh);
             m_Updated = true;
+        }
+
+        internal void UpdateEyes()
+        {
+            if (leftEye == null && rightEye == null && fixationPoint == null)
+            {
+                leftEye = Instantiate(new GameObject(), transform).transform;
+                rightEye = Instantiate(new GameObject(), transform).transform;
+                fixationPoint = Instantiate(new GameObject(), transform).transform;
+            }
+
+            UpdateTransformFromPose(leftEye, sessionRelativeData.leftEyePose);
+            UpdateTransformFromPose(rightEye, sessionRelativeData.rightEyePose);
+            fixationPoint.localPosition = sessionRelativeData.fixationPoint;
+        }
+
+        private void UpdateTransformFromPose(Transform eyeTransform, Pose eyePose)
+        {
+            eyeTransform.localPosition = eyePose.position;
+            eyeTransform.localRotation = eyePose.rotation;
         }
 
         XRFaceMesh m_FaceMesh;

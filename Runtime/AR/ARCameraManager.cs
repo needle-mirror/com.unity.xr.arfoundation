@@ -302,6 +302,12 @@ namespace UnityEngine.XR.ARFoundation
             if (frame.hasDisplayMatrix)
                 eventArgs.displayMatrix = frame.displayMatrix;
 
+            if (frame.hasExposureDuration)
+                eventArgs.exposureDuration = frame.exposureDuration;
+
+            if (frame.hasExposureOffset)
+                eventArgs.exposureOffset = frame.exposureOffset;
+
             s_Textures.Clear();
             s_PropertyIds.Clear();
             foreach (var textureInfo in m_TextureInfos)

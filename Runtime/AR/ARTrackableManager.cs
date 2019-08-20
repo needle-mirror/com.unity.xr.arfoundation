@@ -80,20 +80,18 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// A dictionary of all trackables, keyed by <c>TrackableId</c>.
         /// </summary>
-        protected Dictionary<TrackableId, TTrackable> m_Trackables;
+        protected Dictionary<TrackableId, TTrackable> m_Trackables = new Dictionary<TrackableId, TTrackable>();
 
         /// <summary>
         /// A dictionary of trackables added via <see cref="CreateTrackableImmediate(TSessionRelativeData)"/> but not yet reported as added.
         /// </summary>
-        protected Dictionary<TrackableId, TTrackable> m_PendingAdds;
+        protected Dictionary<TrackableId, TTrackable> m_PendingAdds = new Dictionary<TrackableId, TTrackable>();
 
         /// <summary>
         /// Invoked by Unity once when this component wakes up.
         /// </summary>
         protected virtual void Awake()
         {
-            m_Trackables = new Dictionary<TrackableId, TTrackable>();
-            m_PendingAdds = new Dictionary<TrackableId, TTrackable>();
             sessionOrigin = GetComponent<ARSessionOrigin>();
         }
 

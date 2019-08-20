@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -18,24 +19,77 @@ namespace UnityEngine.XR.ARFoundation
         ARTrackedImage>
     {
         [SerializeField]
+        [FormerlySerializedAs("m_ReferenceLibrary")]
         [Tooltip("The library of images which will be detected and/or tracked in the physical environment.")]
-        XRReferenceImageLibrary m_ReferenceLibrary;
+        XRReferenceImageLibrary m_SerializedLibrary;
 
         /// <summary>
-        /// The <c>XRReferenceImageLibrary</c> to use during image detection. This is the
-        /// library of images which will be detected and/or tracked in the physical environment.
+        /// Get or set the reference image library, the set of images to search for in the physical environment.
         /// </summary>
-        public XRReferenceImageLibrary referenceLibrary
+        /// <remarks>
+        /// An <c>IReferenceImageLibrary</c> can be either an <c>XRReferenceImageLibrary</c>
+        /// or a <c>RuntimeReferenceImageLibrary</c>. <c>XRReferenceImageLibrary</c>s can only be
+        /// constructed at edit-time and are immutable at runtime. A <c>RuntimeReferenceImageLibrary</c>
+        /// is the runtime representation of a <c>XRReferenceImageLibrary</c> and may be mutable
+        /// at runtime (see <c>MutableRuntimeReferenceImageLibrary</c>).
+        /// </remarks>
+        /// <exception cref="System.InvalidOperationException">Thrown if the <see cref="referenceLibrary"/> is set to <c>null</c> while image tracking is enabled.</exception>
+        public IReferenceImageLibrary referenceLibrary
         {
-            get { return m_ReferenceLibrary; }
+            get
+            {
+                if (subsystem != null)
+                {
+                    return subsystem.imageLibrary;
+                }
+                else
+                {
+                    return m_SerializedLibrary;
+                }
+            }
+
             set
             {
-                m_ReferenceLibrary = value;
-                UpdateReferenceImages();
+                if (value == null && subsystem != null && subsystem.running)
+                    throw new InvalidOperationException("Cannot set a null reference library while image tracking is enabled.");
+
+                if (value is XRReferenceImageLibrary serializedLibrary)
+                {
+                    m_SerializedLibrary = serializedLibrary;
+                    if (subsystem != null)
+                        subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(serializedLibrary);
+                }
+                else if (value is RuntimeReferenceImageLibrary runtimeLibrary)
+                {
+                    m_SerializedLibrary = null;
+                    CreateSubsystemIfNecessary();
+                    if (subsystem != null)
+                        subsystem.imageLibrary = runtimeLibrary;
+                }
 
                 if (subsystem != null)
-                    subsystem.imageLibrary = m_ReferenceLibrary;
+                    UpdateReferenceImages(subsystem.imageLibrary);
             }
+        }
+
+        /// <summary>
+        /// Creates a <c>UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary</c> from an existing
+        /// <c>UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary</c>
+        /// or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.
+        /// Use this to construct reference image libraries at runtime. If the library is of type
+        /// <c>MutableRuntimeReferenceImageLibrary</c>, it is modifiable at runtime.
+        /// </summary>
+        /// <param name="serializedLibrary">An existing <c>XRReferenceImageLibrary</c>, or <c>null</c> to create an empty mutable image library.</param>
+        /// <returns>A new <c>RuntimeReferenceImageLibrary</c> representing the deserialized version of <paramref name="serializedLibrary"/>or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if there is no subsystem. This usually means image tracking is not supported.</exception>
+        public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary = null)
+        {
+            CreateSubsystemIfNecessary();
+
+            if (subsystem == null)
+                throw new NotSupportedException("No image tracking subsystem found. This usually means image tracking is not supported.");
+
+            return subsystem.CreateRuntimeLibrary(serializedLibrary);
         }
 
         [SerializeField]
@@ -93,37 +147,65 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Initializes private members.
-        /// </summary>
-        protected override void Awake()
-        {
-            base.Awake();
-            m_ReferenceImages = new Dictionary<Guid, XRReferenceImage>();
-        }
-
-        /// <summary>
         /// Sets the image library on the subsystem before Start() is called on the <c>XRImageTrackingSubsystem</c>.
         /// </summary>
         protected override void OnBeforeStart()
         {
-            UpdateReferenceImages();
+            if (subsystem.imageLibrary == null && m_SerializedLibrary != null)
+            {
+                subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(m_SerializedLibrary);
+                m_SerializedLibrary = null;
+            }
+
+            UpdateReferenceImages(subsystem.imageLibrary);
             SetMaxNumberOfMovingImages(m_MaxNumberOfMovingImages);
-            subsystem.imageLibrary = m_ReferenceLibrary;
+
+            enabled = (subsystem.imageLibrary != null);
+#if DEVELOPMENT_BUILD
+            if (subsystem.imageLibrary == null)
+            {
+                Debug.LogWarning($"{nameof(ARTrackedImageManager)} '{name}' was enabled but no reference image library is specified. To enable, set a valid reference image library and then re-enable this component.");
+            }
+#endif
+        }
+
+        bool FindReferenceImage(Guid guid, out XRReferenceImage referenceImage)
+        {
+            if (m_ReferenceImages.TryGetValue(guid, out referenceImage))
+                return true;
+
+            // If we are using a mutable library, then its possible an image
+            // has been added that we don't yet know about, so search the library.
+            if (referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
+            {
+                foreach (var candidateImage in mutableLibrary)
+                {
+                    if (candidateImage.guid.Equals(guid))
+                    {
+                        referenceImage = candidateImage;
+                        m_ReferenceImages.Add(referenceImage.guid, referenceImage);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         protected override void OnAfterSetSessionRelativeData(
             ARTrackedImage image,
             XRTrackedImage sessionRelativeData)
         {
-            XRReferenceImage referenceImage;
-            if (m_ReferenceImages.TryGetValue(sessionRelativeData.sourceImageId, out referenceImage))
+            if (FindReferenceImage(sessionRelativeData.sourceImageId, out XRReferenceImage referenceImage))
             {
                 image.referenceImage = referenceImage;
             }
+#if DEVELOPMENT_BUILD
             else
             {
-                Debug.LogErrorFormat("Could not find reference image with guid {0}", sessionRelativeData.sourceImageId);
+                Debug.LogError($"Could not find reference image with guid {sessionRelativeData.sourceImageId}");
             }
+#endif
         }
 
         /// <summary>
@@ -145,14 +227,17 @@ namespace UnityEngine.XR.ARFoundation
                         removed));
         }
 
-        void UpdateReferenceImages()
+        void UpdateReferenceImages(RuntimeReferenceImageLibrary library)
         {
-            m_ReferenceImages.Clear();
-            if (m_ReferenceLibrary == null)
+            if (library == null)
                 return;
 
-            foreach (var image in m_ReferenceLibrary)
-                m_ReferenceImages[image.guid] = image;
+            int count = library.count;
+            for (int i = 0; i < count; ++i)
+            {
+                var referenceImage = library[i];
+                m_ReferenceImages[referenceImage.guid] = referenceImage;
+            }
         }
 
         void SetMaxNumberOfMovingImages(int value)
@@ -164,6 +249,6 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        Dictionary<Guid, XRReferenceImage> m_ReferenceImages;
+        Dictionary<Guid, XRReferenceImage> m_ReferenceImages = new Dictionary<Guid, XRReferenceImage>();
     }
 }

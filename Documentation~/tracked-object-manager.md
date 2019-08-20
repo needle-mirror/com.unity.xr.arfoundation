@@ -14,6 +14,18 @@ The reference object library can be set at runtime, but as long as the tracked o
 
 The reference object library is an instance of the `ScriptableObject` `XRReferenceImageLibrary`. This object contains mostly Editor data. The actual library data (containing the object data) is provider-specific. Refer to your provider's documentation for details.
 
+## Creating a manager at runtime
+
+When you add a component to an active `GameObject` at runtime, Unity immediately invokes its `OnEnable` method. However, the `ARTrackedObjectManager` requires a non-null reference object library. Therefore, if the reference object library is null when the `ARTrackedObjectManager` is enabled, it will automatically disable itself.
+
+To add an `ARTrackedObjectManager` at runtime, set its reference object library and then re-enable it:
+
+```csharp
+var manager = gameObject.AddComponent<ARTrackedObjectManager>();
+manager.referenceLibrary = myLibrary;
+manager.enabled = true;
+```
+
 ## Tracked Object Prefab
 
 This prefab will be instantiated whenever an object from the reference object library is detected. The manager ensures the instantiated `GameObject` includes an `ARTrackedObject` component. You can get the reference object that was used to detect the `ARTrackedObject` with the `ARTrackedObject.referenceObject` property.

@@ -4,6 +4,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.5.0-preview.7] - 2019-08-21
+### New
+- Added support for [XRParticipantSubsystem](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@2.2/manual/participant-subsystem.html), which can track other users in a multi-user collaborative session.
+- Added support for exposure duration
+- Added support for exposure offset
+- Add support for height scale estimatation for the 3D human body subsystem.
+- Added support for eye tracking.
+### Improvements
+- Add `IEquatable` to `TrackableCollection`.
+- Previously, the `ARTrackedImageManager` and `ARTrackedObjectManager` would throw an exception if enabled without a valid reference library. These managers no longer throw; now, they disable themselves. This makes it possible to add one of these managers at runtime, since Unity will automatically invoke `OnEnable` before you have a chance to set a valid reference library. If you create one of these managers at runtime, you will need to set a valid reference library and then re-enable it.
+
 ## [1.5.0-preview.6] - 2019-07-16
 ### Improvements
 - Added an option to synchronize the Unity frame with the AR session's update. See `ARSession.matchFrameRate`.
