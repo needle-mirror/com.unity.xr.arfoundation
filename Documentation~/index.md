@@ -236,7 +236,7 @@ The following table summarizes the other parameters:
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.1 and later
+* 2019.2 and later
 
 ## Known limitations
 

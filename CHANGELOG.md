@@ -4,10 +4,18 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.0-preview.2] - 2019-09-05
+### Fixes
+- Fix issue where having the camera clearFlags property set to Skybox would break background rendering.
+- Fix issue where screen would flash green before the first camera frame was received.
+
+### Improvements
+- Converted dependency on Legacy Input Helpers package to optional dependency.  ARFoundation will continue to support the use of [TrackedPoseDriver](https://docs.unity3d.com/2018.3/Documentation/ScriptReference/SpatialTracking.TrackedPoseDriver.html) and the `UnityEngine.SpatialTracking` namespace but there is no longer a dependency on that package.  ARFoundation can instead use the `ARTrackedPoseDriver` self-contained component to surface the device's pose.
+
 ## [3.0.0-preview.1] - 2019-08-21
 ### New
 - Added support for eye tracking.
-- Added support for [XRParticipantSubsystem](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@2.2/manual/participant-subsystem.html), which can track other users in a multi-user collaborative session.
+- Added support for [XRParticipantSubsystem](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@3.0/manual/participant-subsystem.html), which can track other users in a multi-user collaborative session.
 - Added support for exposure duration
 - Added support for exposure offset
 - Add support for Lightweight Render Pipeline and Universal Render Pipeline.

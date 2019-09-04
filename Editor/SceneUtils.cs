@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
-using UnityEngine.SpatialTracking;
 
 namespace UnityEditor.XR.ARFoundation
 {
@@ -25,13 +24,16 @@ namespace UnityEditor.XR.ARFoundation
             var originGo = ObjectFactory.CreateGameObject("AR Session Origin", typeof(ARSessionOrigin));
             var cameraGo = ObjectFactory.CreateGameObject("AR Camera",
                 typeof(Camera),
-                typeof(TrackedPoseDriver),
+                typeof(ARPoseDriver),
                 typeof(ARCameraManager),
                 typeof(ARCameraBackground));
 
             Undo.SetTransformParent(cameraGo.transform, originGo.transform, "Parent camera to session origin");
 
             var camera = cameraGo.GetComponent<Camera>();
+            // Enforce local transform as identity for new ARSessionOrigins
+            camera.transform.localPosition = Vector3.zero;
+            camera.transform.localRotation = Quaternion.identity;
             camera.clearFlags = CameraClearFlags.Color;
             camera.backgroundColor = Color.black;
             camera.nearClipPlane = 0.1f;
@@ -39,9 +41,6 @@ namespace UnityEditor.XR.ARFoundation
 
             var origin = originGo.GetComponent<ARSessionOrigin>();
             origin.camera = camera;
-
-            var tpd = cameraGo.GetComponent<TrackedPoseDriver>();
-            tpd.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.ColorCamera);
         }
 
         [MenuItem("GameObject/XR/AR Session", false, 10)]

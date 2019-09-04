@@ -43,7 +43,7 @@ namespace UnityEngine.XR.ARFoundation
             if ((currentCamera != null) && (currentCamera.cameraType == CameraType.Game))
             {
                 ARCameraBackground cameraBackground = currentCamera.gameObject.GetComponent<ARCameraBackground>();
-                if ((cameraBackground != null) && cameraBackground.enabled && (cameraBackground.material != null))
+                if ((cameraBackground != null) && cameraBackground.backgroundRenderingEnabled && (cameraBackground.material != null))
                 {
                     m_ScriptablePass.Setup(cameraBackground.material, renderer.cameraColorTarget, renderer.cameraDepth);
                     renderer.EnqueuePass(m_ScriptablePass);
@@ -115,7 +115,7 @@ namespace UnityEngine.XR.ARFoundation
             public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
             {
                 ConfigureTarget(m_ColorTargetIdentifier, m_DepthTargetIdentifier);
-                ConfigureClear(ClearFlag.All, Color.clear);
+                ConfigureClear(ClearFlag.Depth, Color.clear);
             }
 
             /// <summary>

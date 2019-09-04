@@ -94,6 +94,16 @@ namespace UnityEngine.XR.ARFoundation
         Material m_DefaultMaterial;
 
         /// <summary>
+        /// The previous clear flags for the camera, if any.
+        /// </summary>
+        CameraClearFlags? m_PreviousCameraClearFlags;
+
+        /// <summary>
+        /// Whether background rendering is enabled.
+        /// </summary>
+        bool m_BackgroundRenderingEnabled;
+
+        /// <summary>
         /// The camera to which the projection matrix is set on each frame event.
         /// </summary>
         /// <value>
@@ -139,6 +149,15 @@ namespace UnityEngine.XR.ARFoundation
         public Material customMaterial { get => m_CustomMaterial; set => m_CustomMaterial = value; }
 
         /// <summary>
+        /// Whether background rendering is enabled.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if background rendering is enabled and if at least one camera frame has been received.
+        /// Otherwise, <c>false</c>.
+        /// </value>
+        public bool backgroundRenderingEnabled => m_BackgroundRenderingEnabled;
+
+        /// <summary>
         /// The default material for rendering the background.
         /// </summary>
         /// <value>
@@ -162,7 +181,26 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnEnable()
         {
+            // Ensure that background rendering is disabled until the first camera frame is received.
+            m_BackgroundRenderingEnabled = false;
             cameraManager.frameReceived += OnCameraFrameReceived;
+        }
+
+        void OnDisable()
+        {
+            cameraManager.frameReceived -= OnCameraFrameReceived;
+            DisableBackgroundRendering();
+        }
+
+        /// <summary>
+        /// Enable background rendering by disabling the camera's clear flags, and enabling the legacy RP background
+        /// rendering if we are in legacy RP mode.
+        /// </summary>
+        void EnableBackgroundRendering()
+        {
+            m_BackgroundRenderingEnabled = true;
+
+            DisableBackgroundClearFlags();
 
             Material material = defaultMaterial;
             if (useLegacyRenderPipeline && (material != null))
@@ -171,15 +209,41 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void OnDisable()
+        /// <summary>
+        /// Disable background rendering by disabling the legacy RP background rendering if we are in legacy RP mode
+        /// and restoring the camera's clear flags.
+        /// </summary>
+        void DisableBackgroundRendering()
         {
-            cameraManager.frameReceived -= OnCameraFrameReceived;
+            m_BackgroundRenderingEnabled = false;
 
             DisableLegacyRenderPipelineBackgroundRendering();
+
+            RestoreBackgroundClearFlags();
 
             // We are no longer setting the projection matrix so tell the camera to resume its normal projection matrix
             // calculations.
             camera.ResetProjectionMatrix();
+        }
+
+        /// <summary>
+        /// Set the camera's clear flags to do nothing while preserving the previous camera clear flags.
+        /// </summary>
+        void DisableBackgroundClearFlags()
+        {
+            m_PreviousCameraClearFlags = m_Camera.clearFlags;
+            m_Camera.clearFlags = CameraClearFlags.Nothing;
+        }
+
+        /// <summary>
+        /// Restore the previous camera's clear flags, if any.
+        /// </summary>
+        void RestoreBackgroundClearFlags()
+        {
+            if (m_PreviousCameraClearFlags != null)
+            {
+                m_Camera.clearFlags = m_PreviousCameraClearFlags.Value;
+            }
         }
 
         /// <summary>
@@ -218,6 +282,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             Texture texture = !material.HasProperty(k_MainTexName) ? null : material.GetTexture(k_MainTexName);
 
+            commandBuffer.ClearRenderTarget(true, false, Color.clear);
             commandBuffer.Blit(texture, BuiltinRenderTextureType.CameraTarget, material);
             camera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_CommandBuffer);
             camera.AddCommandBuffer(CameraEvent.BeforeGBuffer, m_CommandBuffer);
@@ -240,6 +305,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="eventArgs">The camera event arguments.</param>
         void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
         {
+            // Enable background rendering when first frame is received.
+            if (!m_BackgroundRenderingEnabled)
+            {
+                EnableBackgroundRendering();
+            }
+
             Material material = this.material;
             if (material != null)
             {

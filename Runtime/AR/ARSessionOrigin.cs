@@ -1,5 +1,7 @@
 using System;
+#if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
 using UnityEngine.SpatialTracking;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -190,18 +192,21 @@ namespace UnityEngine.XR.ARFoundation
 
             if (camera != null)
             {
+                var arPoseDriver = camera.GetComponent<ARPoseDriver>();
+#if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
                 var trackedPoseDriver = camera.GetComponent<TrackedPoseDriver>();
 
-                // Warn if not using a TrackedPoseDriver
-                if (trackedPoseDriver == null)
+                // Warn if not using a ARPoseDriver or a TrackedPoseDriver
+                if (arPoseDriver == null && trackedPoseDriver == null)
                 {
                     Debug.LogWarningFormat(
-                        "Camera \"{0}\" does not use a Tracked Pose Driver, so its transform " +
-                        "will not be updated by an XR device.", camera.name);
+                        "Camera \"{0}\" does not use a AR Pose Driver or a Tracked Pose Driver, " + 
+                        "so its transform will not be updated by an XR device.  In order for this to be " +
+                        "updated, please add either an AR Pose Driver or a Tracked Pose Driver.", camera.name);
                 }
-                // If we are using a TrackedPoseDriver, and the user hasn't chosen "make relative"
+                // If we are using an TrackedPoseDriver, and the user hasn't chosen "make relative"
                 // then warn if the camera has a non-identity transform (since it will be overwritten).
-                else if (!trackedPoseDriver.UseRelativeTransform)
+                else if ((trackedPoseDriver != null && !trackedPoseDriver.UseRelativeTransform))
                 {
                     var cameraTransform = camera.transform;
                     if ((cameraTransform.localPosition != Vector3.zero) || (cameraTransform.localRotation != Quaternion.identity))
@@ -216,15 +221,45 @@ namespace UnityEngine.XR.ARFoundation
                             cameraTransform.localRotation);
                     }
                 }
+                // If using ARPoseDriver then it will get overwritten no matter what
+                else
+                {
+                    var cameraTransform = camera.transform;
+                    if ((cameraTransform.localPosition != Vector3.zero) || (cameraTransform.localRotation != Quaternion.identity))
+                    {
+                        Debug.LogWarningFormat(
+                            "Camera \"{0}\" has a non-identity transform (position = {1}, rotation = {2}). " +
+                            "The camera's local position and rotation will be overwritten by the XR device.",
+                            camera.name,
+                            cameraTransform.localPosition,
+                            cameraTransform.localRotation);
+                    }
+                }
+#else // !(USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
+                if (arPoseDriver == null)
+                {
+                    Debug.LogWarningFormat(
+                        "Camera \"{0}\" does not use a AR Pose Driver, so its transform will not be updated by " +
+                        "an XR device.  In order for this to be updated, please add an AR Pose Driver component.", 
+                        camera.name);
+                }
+#endif // USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
             }
         }
 
         Pose GetCameraOriginPose()
         {
+            var localOriginPose = Pose.identity;
+
+#if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
             var trackedPoseDriver = camera.GetComponent<TrackedPoseDriver>();
             if (trackedPoseDriver != null)
             {
-                var localOriginPose = trackedPoseDriver.originPose;
+                localOriginPose = trackedPoseDriver.originPose;
+            }
+
+            if(localOriginPose != Pose.identity)
+            {
                 var parent = camera.transform.parent;
 
                 if (parent == null)
@@ -232,19 +267,34 @@ namespace UnityEngine.XR.ARFoundation
 
                 return parent.TransformPose(localOriginPose);
             }
+#endif // USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
 
-            return Pose.identity;
+            return localOriginPose;
         }
 
         void Update()
         {
             if (camera != null)
             {
-                // Make sure the trackables has the same local transform as the camera's origin
                 var pose = GetCameraOriginPose();
                 trackablesParent.position = pose.position;
                 trackablesParent.rotation = pose.rotation;
             }
         }
+
+#if UNITY_EDITOR && (USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
+        void OnValidate()
+        {
+            var arPoseDriver = GetComponent<ARPoseDriver>();
+            var trackedPoseDriver = GetComponent<TrackedPoseDriver>();
+            if (trackedPoseDriver != null && arPoseDriver != null && trackedPoseDriver.enabled && arPoseDriver.enabled)
+            {
+                Debug.LogErrorFormat("Camera \"{0}\" has an AR Pose Driver and a Tracked Pose Driver and both are enabled.  " +
+                    "This configuration will cause the camera transform to be updated from both components in a non-deterministic " +
+                    "way.  This is likely an unintended error.", 
+                    camera.name);
+            }
+        }
+#endif // UNITY_EDITOR && (USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
     }
 }
