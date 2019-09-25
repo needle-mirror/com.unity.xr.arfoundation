@@ -16,8 +16,12 @@ namespace UnityEngine.XR.ARFoundation
         {
             var points = s_Vertices;
             points.Clear();
-            foreach (var point in m_PointCloud.positions)
-                s_Vertices.Add(point);
+
+            if (m_PointCloud.positions.HasValue)
+            {
+                foreach (var point in m_PointCloud.positions.Value)
+                    s_Vertices.Add(point);
+            }
 
             int numParticles = points.Count;
             if (m_Particles == null || m_Particles.Length < numParticles)

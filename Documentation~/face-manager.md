@@ -4,7 +4,7 @@ The face manager is a type of [trackable manager](trackable-managers.md).
 
 ![alt text](images/ar-face-manager.png "AR Face Manager")
 
-The plane manager will create `GameObject`s for each detected face in the environment. The system only detects human faces.
+The face manager will create `GameObject`s for each detected face in the environment. The system only detects human faces.
 
 In some implementations, face tracking requires a different camera (e.g., front-facing vs rear-facing) and may be incompatible with other features, such as plane or image tracking. Consider disabling other AR managers which manage trackables. These include
 * [Plane Tracking](plane-manager.md)
@@ -12,7 +12,7 @@ In some implementations, face tracking requires a different camera (e.g., front-
 * [Object Tracking](tracked-object-manager.md)
 * [Environment Probes](environment-probe-manager.md)
 
-## Responding to Planes
+## Responding to Faces
 
 Faces can be added, updated, and removed. Once per frame, the `facesChanged` event may be invoked with `List`s of faces that have been added, updated, and removed since the last frame.
 

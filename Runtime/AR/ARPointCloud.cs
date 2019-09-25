@@ -21,30 +21,38 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// An array of positions for each point in the point cloud.
         /// This array is parallel to <see cref="identifiers"/> and
-        /// <see cref="confidenceValues"/>. Check for existence with
-        /// <c>positions.IsCreated</c>. Positions are provided in
+        /// <see cref="confidenceValues"/>. Positions are provided in
         /// point cloud space, that is, relative to this <see cref="ARPointCloud"/>'s
         /// local position and rotation.
         /// </summary>
-        public NativeArray<Vector3> positions
+        public NativeSlice<Vector3>? positions
         {
             get
             {
-                return GetUndisposable(m_Data.positions);
+                if (m_Data.positions.IsCreated)
+                {
+                    return m_Data.positions;
+                }
+
+                return null;
             }
         }
 
         /// <summary>
         /// An array of identifiers for each point in the point cloud.
         /// This array is parallel to <see cref="positions"/> and
-        /// <see cref="confidenceValues"/>. Check for existence with
-        /// <c>identifiers.IsCreated</c>.
+        /// <see cref="confidenceValues"/>.
         /// </summary>
-        public NativeArray<ulong> identifiers
+        public NativeSlice<ulong>? identifiers
         {
             get
             {
-                return GetUndisposable(m_Data.identifiers);
+                if (m_Data.identifiers.IsCreated)
+                {
+                    return m_Data.identifiers;
+                }
+
+                return null;
             }
         }
 
@@ -55,11 +63,16 @@ namespace UnityEngine.XR.ARFoundation
         /// <see cref="identifiers"/>. Check for existence with
         /// <c>confidenceValues.IsCreated</c>.
         /// </summary>
-        public NativeArray<float> confidenceValues
+        public NativeArray<float>? confidenceValues
         {
             get
             {
-                return GetUndisposable(m_Data.confidenceValues);
+                if (m_Data.confidenceValues.IsCreated)
+                {
+                    return m_Data.confidenceValues;
+                }
+
+                return null;
             }
         }
 
@@ -75,26 +88,6 @@ namespace UnityEngine.XR.ARFoundation
         void OnDestroy()
         {
             m_Data.Dispose();
-        }
-
-        // Creates an alias to the same array, but the caller cannot Dispose it.
-        unsafe NativeArray<T> GetUndisposable<T>(NativeArray<T> disposable) where T : struct
-        {
-            if (!disposable.IsCreated)
-                return default(NativeArray<T>);
-
-            var array = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<T>(
-                disposable.GetUnsafePtr(),
-                disposable.Length,
-                Allocator.None);
-
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                NativeArrayUnsafeUtility.SetAtomicSafetyHandle(
-                    ref array,
-                    NativeArrayUnsafeUtility.GetAtomicSafetyHandle(disposable));
-#endif
-
-            return array;
         }
 
         internal void UpdateData(XRDepthSubsystem subsystem)

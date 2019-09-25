@@ -51,7 +51,6 @@ namespace UnityEngine.XR.ARFoundation
             set { m_MeshPrefab = value; }
         }
 
-#if UNITY_2019_2_OR_NEWER
         [SerializeField]
         [Tooltip("The density of the generated mesh [0..1]. 1 will be highly tesselated while 0 will be very low.")]
         [Range(0, 1)]
@@ -77,7 +76,6 @@ namespace UnityEngine.XR.ARFoundation
                     m_Subsystem.meshDensity = m_Density;
             }
         }
-#endif
 
         [SerializeField]
         [Tooltip("If enabled, a normal is requested for each vertex.")]
@@ -214,9 +212,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void SetBoundingVolume()
         {
-#if UNITY_2019_2_OR_NEWER
             m_Subsystem.SetBoundingVolume(transform.localPosition, transform.localScale);
-#endif
             transform.hasChanged = false;
         }
 
@@ -233,9 +229,7 @@ namespace UnityEngine.XR.ARFoundation
 
             if (m_Subsystem != null)
             {
-#if UNITY_2019_2_OR_NEWER
                 m_Subsystem.meshDensity = m_Density;
-#endif
                 SetBoundingVolume();
                 m_Subsystem.Start();
             }
@@ -245,14 +239,12 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-#if UNITY_2019_2_OR_NEWER
         void OnDrawGizmosSelected()
         {
             Gizmos.color = new Color(0, .5f, 0, .35f);
             Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.DrawCube(Vector3.zero, Vector3.one);
         }
-#endif
 
         void Update()
         {

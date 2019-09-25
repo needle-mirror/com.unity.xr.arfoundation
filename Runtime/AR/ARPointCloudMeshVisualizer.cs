@@ -18,8 +18,11 @@ namespace UnityEngine.XR.ARFoundation
         void OnPointCloudChanged(ARPointCloudUpdatedEventArgs eventArgs)
         {
             s_Vertices.Clear();
-            foreach (var point in m_PointCloud.positions)
-                s_Vertices.Add(point);
+            if (m_PointCloud.positions.HasValue)
+            {
+                foreach (var point in m_PointCloud.positions)
+                    s_Vertices.Add(point);
+            }
 
             mesh.Clear();
             mesh.SetVertices(s_Vertices);

@@ -1,14 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
 using NUnit.Framework;
-
-using UnityEngine;
-using UnityEngine.TestTools;
-using UnityEngine.XR.ARFoundation;
+using System.Collections.Generic;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -28,7 +19,7 @@ namespace UnityEngine.XR.ARFoundation
                 {1f, 2000f},
                 {1.3f, 2000f}
             };
-            
+
             var obj = new ARLightEstimationData();
             foreach (var testPair in brightnessToLumensMapping)
             {
@@ -56,7 +47,7 @@ namespace UnityEngine.XR.ARFoundation
                 {2000f, 1f},
                 {2500f, 1f}
             };
-            
+
             var obj = new ARLightEstimationData();
             foreach (var testPair in brightnessToLumensMapping)
             {
@@ -73,7 +64,7 @@ namespace UnityEngine.XR.ARFoundation
 
         [Test]
         public void ARLightEstimationData_TestGetHashCode()
-        {           
+        {
             var obj1 = new ARLightEstimationData();
             var obj2 = new ARLightEstimationData();
 

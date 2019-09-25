@@ -358,6 +358,12 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (subsystem != null && subsystem.running)
             {
+                if (m_MatchFrameRate && descriptor.supportsMatchFrameRate)
+                {
+                    Application.targetFrameRate = subsystem.frameRate;
+                    QualitySettings.vSyncCount = 0;
+                }
+
                 subsystem.Update(new XRSessionUpdateParams
                 {
                     screenOrientation = Screen.orientation,

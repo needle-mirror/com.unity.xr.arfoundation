@@ -127,6 +127,12 @@ namespace UnityEngine.XR.ARFoundation
 
             foreach (var pointCloud in trackableCollection)
             {
+                // Collect the points in the point cloud
+                if (!pointCloud.positions.HasValue)
+                    continue;
+
+                var points = pointCloud.positions.Value;
+
                 var sessionSpacePose = new Pose(
                     pointCloud.transform.localPosition,
                     pointCloud.transform.localRotation);
@@ -137,9 +143,6 @@ namespace UnityEngine.XR.ARFoundation
                 var ray = new Ray(
                     invRotation * (rayInSessionSpace.origin - sessionSpacePose.position),
                     invRotation * rayInSessionSpace.direction);
-
-                // Collect the points in the point cloud
-                var points = pointCloud.positions;
 
                 // Perform the raycast against each point
                 var infos = new NativeArray<PointCloudRaycastInfo>(points.Length, Allocator.TempJob);
@@ -153,6 +156,8 @@ namespace UnityEngine.XR.ARFoundation
 
                 // Collect the hits
                 using (var hitBuffer = new NativeArray<XRRaycastHit>(infos.Length, Allocator.TempJob))
+                using (infos)
+                using (var count = new NativeArray<int>(1, Allocator.TempJob))
                 {
                     var collectResultsJob = new PointCloudRaycastCollectResultsJob
                     {
@@ -162,23 +167,15 @@ namespace UnityEngine.XR.ARFoundation
                         cosineThreshold = Mathf.Cos(raycastAngleInRadians * .5f),
                         pose = sessionSpacePose,
                         trackableId = pointCloud.trackableId,
-                        count = new NativeArray<int>(1, Allocator.TempJob)
+                        count = count
                     };
                     var collectResultsHandle = collectResultsJob.Schedule(raycastHandle);
 
                     // Wait for it to finish
                     collectResultsHandle.Complete();
 
-                    // Read out the count
-                    var count = collectResultsJob.count[0];
-
-                    // Done with native arrays
-                    infos.Dispose();
-                    points.Dispose();
-                    collectResultsJob.count.Dispose();
-
                     // Copy out the results
-                    Append(ref allHits, hitBuffer, count, allocator);
+                    Append(ref allHits, hitBuffer, count[0], allocator);
                 }
             }
 
@@ -207,7 +204,7 @@ namespace UnityEngine.XR.ARFoundation
         struct PointCloudRaycastJob : IJobParallelFor
         {
             [ReadOnly]
-            public NativeArray<Vector3> points;
+            public NativeSlice<Vector3> points;
 
             [WriteOnly]
             public NativeArray<PointCloudRaycastInfo> infoOut;
@@ -231,7 +228,7 @@ namespace UnityEngine.XR.ARFoundation
         struct PointCloudRaycastCollectResultsJob : IJob
         {
             [ReadOnly]
-            public NativeArray<Vector3> points;
+            public NativeSlice<Vector3> points;
 
             [ReadOnly]
             public NativeArray<PointCloudRaycastInfo> infos;

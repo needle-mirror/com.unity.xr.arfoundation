@@ -82,19 +82,6 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Not all devices support face tracking, even if the target platform generally does.
-        /// Use this to check whether face tracking is supported at runtime.
-        /// </summary>
-        public bool supported
-        {
-            get
-            {
-                CreateSubsystemIfNecessary();
-                return (subsystem != null) && subsystem.supported;
-            }
-        }
-
-        /// <summary>
         /// Raised for each new <see cref="ARFace"/> detected in the environment.
         /// </summary>
         public event Action<ARFacesChangedEventArgs> facesChanged;
@@ -115,18 +102,6 @@ namespace UnityEngine.XR.ARFoundation
         protected override void OnBeforeStart()
         {
             subsystem.maximumFaceCount = m_MaximumFaceCount;
-        }
-
-        protected override void OnEnable()
-        {
-            if (supported)
-            {
-                base.OnEnable();
-            }
-            else
-            {
-                enabled = false;
-            }
         }
 
         protected override void OnAfterSetSessionRelativeData(
