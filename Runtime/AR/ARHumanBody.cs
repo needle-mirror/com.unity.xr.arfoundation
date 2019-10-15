@@ -27,6 +27,17 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// The scale factor that relates the implementation's default body height to the estimated height.
+        /// </summary>
+        /// <value>
+        /// The scale factor that relates the implementation's default body height to the estimated height.
+        /// </value>
+        public float estimatedHeightScaleFactor
+        {
+            get => sessionRelativeData.estimatedHeightScaleFactor;
+        }
+
+        /// <summary>
         /// The array of joints making up the human body skeleton.
         /// </summary>
         /// <value>

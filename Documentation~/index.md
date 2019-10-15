@@ -19,6 +19,16 @@ If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration
 
 AR Foundation is built on subsystems. A "subsystem" is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
 
+Each subsystem handles some specific functionality. For example, the plane detection interface is provided by the `XRPlaneSubsystem`.
+
+### Providers
+
+A "provider" is a concrete implementation of a subsystem. For example, the `ARCore XR Plugin` package contains the ARCore implementation for many of the AR subsystems.
+
+Because different providers have varying support for specific features, each subsystem also has a descriptor that indicates which specific subsystem features it supports. For example, the `XRPlaneSubsystemDescriptor` contains properties indicating whether horizontal or vertical plane detection is supported.
+
+While it is up to the providers to determine how they will implement each subsystem, in general they are wrapping that platform's native SDK (e.g., ARKit on iOS and ARCore on Android).
+
 # Installing AR Foundation
 
 To install this package, follow the instructions in the [Package Manager documentation](https://docs.unity3d.com/Packages/com.unity.package-manager-ui@latest/index.html).
@@ -39,6 +49,8 @@ Subsystems are implemented in other packages, so to use AR Foundation, you will 
 | Session Space | The coordinate system relative to the beginning of the AR session. For example, session space (0, 0, 0) refers to the position at which the AR session was created. An AR device typically reports trackables and tracking information relative to its session origin.|
 
 # Using AR Foundation
+
+## Samples
 
 For examples, see the [ARFoundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub respository.
 

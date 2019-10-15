@@ -1,5 +1,7 @@
 using System;
+#if !UNITY_WEBGL
 using UnityEngine.SpatialTracking;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -188,6 +190,7 @@ namespace UnityEngine.XR.ARFoundation
             trackablesParent.localRotation = Quaternion.identity;
             trackablesParent.localScale = Vector3.one;
 
+#if !UNITY_WEBGL
             if (camera != null)
             {
                 var trackedPoseDriver = camera.GetComponent<TrackedPoseDriver>();
@@ -217,8 +220,10 @@ namespace UnityEngine.XR.ARFoundation
                     }
                 }
             }
+#endif
         }
 
+#if !UNITY_WEBGL
         Pose GetCameraOriginPose()
         {
             var trackedPoseDriver = camera.GetComponent<TrackedPoseDriver>();
@@ -246,5 +251,6 @@ namespace UnityEngine.XR.ARFoundation
                 trackablesParent.rotation = pose.rotation;
             }
         }
+#endif
     }
 }

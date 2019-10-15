@@ -124,8 +124,14 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem != null)
             {
                 OnBeforeStart();
-                subsystem.Start();
-                OnAfterStart();
+
+                // The derived class may disable the
+                // component if it has invalid state
+                if (enabled)
+                {
+                    subsystem.Start();
+                    OnAfterStart();
+                }
             }
         }
 

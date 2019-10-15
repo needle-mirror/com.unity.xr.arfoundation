@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARFoundation
     /// in a <c>foreach</c> statement.
     /// </summary>
     /// <typeparam name="TTrackable">The concrete <see cref="ARTrackable{TSessionRelativeData, TTrackable}"/>.</typeparam>
-    public struct TrackableCollection<TTrackable> 
+    public struct TrackableCollection<TTrackable> : IEquatable<TrackableCollection<TTrackable>>
     {
         /// <summary>
         /// Creates an <c>Enumerator</c> for this collection.
@@ -70,6 +70,66 @@ namespace UnityEngine.XR.ARFoundation
                         e);
                 }
             }
+        }
+
+        /// <summary>
+        /// Retrieves the hashcode of the <see cref="TrackableCollection{TTrackable}"/>.
+        /// </summary>
+        /// <returns>The hashcode of if the <see cref="TrackableCollection{TTrackable}"/> is instantiated and <c>0</c> if it is <c>null</c>.</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return m_Trackables == null ? 0 : m_Trackables.GetHashCode();
+            }
+        }
+
+        /// <summary>
+        /// Checks the equality of this object against this <see cref="TrackableCollection{TTrackable}"/>.
+        /// </summary>
+        /// <param name="obj">The object that this collection should be checked against for equivalency.</param>
+        /// <returns><c>true</c> if the object is a <see cref="TrackableCollection{TTrackable}"/> and is considered equivalent to this and <c>false</c> otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            if (!(obj is TrackableCollection<TTrackable>))
+                return false;
+
+            return Equals((TrackableCollection<TTrackable>) obj);
+        }
+
+        /// <summary>
+        /// Checks the equality of this <see cref="TrackableCollection{TTrackable}"/> against another <see cref="TrackableCollection{TTrackable}"/> of the same <c>TTrackable</c> generic type.
+        /// </summary>
+        /// <param name="other">The <see cref="TrackableCollection{TTrackable}"/> that this collection should be checked against for equivalency.</param>
+        /// <returns><c>true</c> if the two <see cref="TrackableCollection{TTrackable}"/>s are considered equivalent and <c>false</c> otherwise.</returns>
+        public bool Equals(TrackableCollection<TTrackable> other)
+        {
+            return ReferenceEquals(m_Trackables, other.m_Trackables);
+        }
+
+        /// <summary>
+        /// Overloads the <c>==</c> operator to utilize the equals method for equality checking.
+        /// </summary>
+        /// <param name="lhs">The <see cref="TrackableCollection{TTrackable}"/> on the left hand side of the operator.</param>
+        /// <param name="rhs">The <see cref="TrackableCollection{TTrackable}"/> on the right hand side of the operator.</param>
+        /// <returns><c>true</c> if the two <see cref="TrackableCollection{TTrackable}"/>s are considered equivalent and <c>false</c> otherwise.</returns>
+        /// <seealso cref="TrackableCollection.Equals(TrackableCollection{TTrackable})"/>
+        public static bool operator ==(TrackableCollection<TTrackable> lhs, TrackableCollection<TTrackable> rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+
+        /// <summary>
+        /// Overloads the <c>!=</c> operator to utilize the equals method for equality checking.
+        /// </summary>
+        /// <param name="lhs">The <see cref="TrackableCollection{TTrackable}"/> on the left hand side of the operator.</param>
+        /// <param name="rhs">The <see cref="TrackableCollection{TTrackable}"/> on the right hand side of the operator.</param>
+        /// <returns><c>true</c> if the two <see cref="TrackableCollection{TTrackable}"/>s are not considered equivalent and <c>false</c> otherwise.</returns>
+        /// <seealso cref="TrackableCollection.Equals(TrackableCollection{TTrackable})"/>
+        public static bool operator !=(TrackableCollection<TTrackable> lhs, TrackableCollection<TTrackable> rhs)
+        {
+            return !lhs.Equals(rhs);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ The reference point manager is a type of [trackable manager](trackable-managers.
 
 ![alt text](images/ar-reference-point-manager.png "AR Reference Point Manager")
 
-The reference point manager will create `GameObject`s for each reference point. A reference point is a particular point in space that you are asking the device to track. The device typically performs additional work to update the position and orientation of the reference point throughout its lifetime. Reference points are generally resource intensive objects that should be used sparingly.
+The reference point manager will create `GameObject`s for each reference point. A reference point is a particular point in space that you are asking the device to track. Some SDKs refer to these as "anchors". The device typically performs additional work to update the position and orientation of the reference point throughout its lifetime. Reference points are generally resource intensive objects that should be used sparingly.
 
 ## Adding and Removing Reference Points
 

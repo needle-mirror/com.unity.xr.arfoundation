@@ -286,6 +286,9 @@ namespace UnityEngine.XR.ARFoundation
             if (frame.hasAverageIntensityInLumens)
                 lightEstimation.averageIntensityInLumens = frame.averageIntensityInLumens;
 
+            if (frame.hasAverageIntensityInLumens)
+                lightEstimation.averageIntensityInLumens = frame.averageIntensityInLumens;
+
             if (frame.hasAverageColorTemperature)
                 lightEstimation.averageColorTemperature = frame.averageColorTemperature;
 
@@ -304,6 +307,12 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.hasDisplayMatrix)
                 eventArgs.displayMatrix = frame.displayMatrix;
+
+            if (frame.hasExposureDuration)
+                eventArgs.exposureDuration = frame.exposureDuration;
+
+            if (frame.hasExposureOffset)
+                eventArgs.exposureOffset = frame.exposureOffset;
 
             s_Textures.Clear();
             s_PropertyIds.Clear();
