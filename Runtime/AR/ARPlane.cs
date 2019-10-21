@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_Plane)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARPlane.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARPlane.html")]
     public sealed class ARPlane : ARTrackable<BoundedPlane, ARPlane>
     {
         [SerializeField]
@@ -27,8 +27,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public float vertexChangedThreshold
         {
-            get { return m_VertexChangedThreshold; }
-            set { m_VertexChangedThreshold = Mathf.Max(0f, value); }
+            get => m_VertexChangedThreshold;
+            set => m_VertexChangedThreshold = Mathf.Max(0f, value);
         }
 
         /// <summary>
@@ -39,10 +39,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Gets the normal to this plane in world space.
         /// </summary>
-        public Vector3 normal
-        {
-            get { return transform.up; }
-        }
+        public Vector3 normal => transform.up;
 
         /// <summary>
         /// The <see cref="ARPlane"/> which has subsumed this plane, or <c>null</c>
@@ -53,32 +50,37 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The alignment of this plane.
         /// </summary>
-        public PlaneAlignment alignment { get { return sessionRelativeData.alignment; } }
+        public PlaneAlignment alignment => sessionRelativeData.alignment;
+
+        /// <summary>
+        /// The classification of this plane.
+        /// </summary>
+        public PlaneClassification classification { get { return sessionRelativeData.classification; } }
 
         /// <summary>
         /// The 2D center point, in plane space
         /// </summary>
-        public Vector2 centerInPlaneSpace { get { return sessionRelativeData.center; } }
+        public Vector2 centerInPlaneSpace => sessionRelativeData.center;
 
         /// <summary>
         /// The 3D center point, in Unity world space.
         /// </summary>
-        public Vector3 center { get { return transform.TransformPoint(centerInPlaneSpace); } }
+        public Vector3 center => transform.TransformPoint(new Vector3(centerInPlaneSpace.x, 0, centerInPlaneSpace.y));
 
         /// <summary>
         /// The physical extents (half dimensions) of the plane in meters.
         /// </summary>
-        public Vector2 extents { get { return sessionRelativeData.extents; } }
+        public Vector2 extents => sessionRelativeData.extents;
 
         /// <summary>
         /// The physical size (dimensions) of the plane in meters.
         /// </summary>
-        public Vector2 size { get { return sessionRelativeData.size; } }
+        public Vector2 size => sessionRelativeData.size;
 
         /// <summary>
         /// Get the infinite plane associated with this <see cref="ARPlane"/>.
         /// </summary>
-        public Plane infinitePlane { get { return new Plane(normal, transform.position); } }
+        public Plane infinitePlane => new Plane(normal, transform.position);
 
         /// <summary>
         /// Get a native pointer associated with this plane.
@@ -89,7 +91,7 @@ namespace UnityEngine.XR.ARFoundation
         /// implementation defined, but should be valid at least until the next
         /// <see cref="ARSession"/> update.
         /// </remarks>
-        public IntPtr nativePtr { get { return sessionRelativeData.nativePtr; } }
+        public IntPtr nativePtr => sessionRelativeData.nativePtr;
 
         /// <summary>
         /// The plane's boundary points, in plane space, that is, relative to this <see cref="ARPlane"/>'s

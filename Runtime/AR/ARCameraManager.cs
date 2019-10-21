@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
     public sealed class ARCameraManager : SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>
     {
         [SerializeField]
@@ -27,12 +27,24 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public CameraFocusMode focusMode
         {
-            get { return m_FocusMode; }
+            get
+            {
+                if (subsystem != null)
+                {
+                    return subsystem.focusMode;
+                }
+                else
+                {
+                    return m_FocusMode;
+                }
+            }
             set
             {
                 m_FocusMode = value;
-                if (enabled)
-                    subsystem.focusMode = focusMode;
+                if (enabled && subsystem != null)
+                {
+                    subsystem.focusMode = value;
+                }
             }
         }
 

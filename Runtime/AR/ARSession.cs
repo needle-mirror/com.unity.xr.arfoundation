@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARSession.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARSession.html")]
     public sealed class ARSession : SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor>
     {
         [SerializeField]
@@ -61,11 +61,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         public bool matchFrameRate
         {
-            get
-            {
-                return m_MatchFrameRate;
-            }
-
+            get => m_MatchFrameRate;
             set
             {
                 if (m_MatchFrameRate == value)
@@ -83,6 +79,11 @@ namespace UnityEngine.XR.ARFoundation
                 }
             }
         }
+
+        /// <summary>
+        /// Get the number of AR frames produced per second, or null if the frame rate cannot be determined.
+        /// </summary>
+        public int? frameRate => (descriptor?.supportsMatchFrameRate ?? false) ? new Nullable<int>(subsystem.frameRate) : null;
 
         /// <summary>
         /// This event is invoked whenever the <see cref="systemState"/> changes.
@@ -306,8 +307,8 @@ namespace UnityEngine.XR.ARFoundation
             else
             {
                 Debug.LogWarningFormat(
-                    "No ARSession available for the current platform. " + 
-                    "Please ensure you have installed the relevant XR Plugin package " + 
+                    "No ARSession available for the current platform. " +
+                    "Please ensure you have installed the relevant XR Plugin package " +
                     "for this platform via the Package Manager."
                 );
             }

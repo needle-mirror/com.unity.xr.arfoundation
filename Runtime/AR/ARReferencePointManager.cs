@@ -19,7 +19,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_ReferencePointManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARReferencePointManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARReferencePointManager.html")]
     public sealed class ARReferencePointManager : ARTrackableManager<
         XRReferencePointSubsystem,
         XRReferencePointSubsystemDescriptor,

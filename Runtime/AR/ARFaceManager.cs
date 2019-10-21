@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(ARSessionOrigin))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_FaceManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARFaceManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARFaceManager.html")]
     public sealed class ARFaceManager : ARTrackableManager<
         XRFaceSubsystem,
         XRFaceSubsystemDescriptor,
@@ -70,16 +70,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Get the supported number of faces that can be tracked simultaneously.
         /// </summary>
-        public int supportedFaceCount
-        {
-            get
-            {
-                if (subsystem == null)
-                    throw new InvalidOperationException("Cannot query for supportedFaceCount when subsystem is null.");
-
-                return subsystem.supportedFaceCount;
-            }
-        }
+        public int supportedFaceCount => subsystem != null ? subsystem.supportedFaceCount : 0;
 
         /// <summary>
         /// Raised for each new <see cref="ARFace"/> detected in the environment.

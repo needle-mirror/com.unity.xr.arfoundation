@@ -51,7 +51,7 @@ namespace UnityEngine.XR.ARFoundation
     /// for example, do not perform well when scaled very small.
     /// </remarks>
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest?preview=1&subfolder=/api/UnityEngine.XR.ARFoundation.ARSessionOrigin.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARSessionOrigin.html")]
     public class ARSessionOrigin : MonoBehaviour
     {
         [SerializeField]
@@ -190,7 +190,7 @@ namespace UnityEngine.XR.ARFoundation
             trackablesParent.localRotation = Quaternion.identity;
             trackablesParent.localScale = Vector3.one;
 
-            if (camera != null)
+            if (camera)
             {
                 var arPoseDriver = camera.GetComponent<ARPoseDriver>();
 #if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
@@ -199,11 +199,12 @@ namespace UnityEngine.XR.ARFoundation
                 // Warn if not using a ARPoseDriver or a TrackedPoseDriver
                 if (arPoseDriver == null && trackedPoseDriver == null)
                 {
-                    Debug.LogWarningFormat(
-                        "Camera \"{0}\" does not use a AR Pose Driver or a Tracked Pose Driver, " + 
+                    Debug.LogWarning(
+                        $"Camera \"{camera.name}\" does not use a AR Pose Driver or a Tracked Pose Driver, " +
                         "so its transform will not be updated by an XR device.  In order for this to be " +
-                        "updated, please add either an AR Pose Driver or a Tracked Pose Driver.", camera.name);
+                        "updated, please add either an AR Pose Driver or a Tracked Pose Driver.");
                 }
+
                 // If we are using an TrackedPoseDriver, and the user hasn't chosen "make relative"
                 // then warn if the camera has a non-identity transform (since it will be overwritten).
                 else if ((trackedPoseDriver != null && !trackedPoseDriver.UseRelativeTransform))
@@ -211,14 +212,12 @@ namespace UnityEngine.XR.ARFoundation
                     var cameraTransform = camera.transform;
                     if ((cameraTransform.localPosition != Vector3.zero) || (cameraTransform.localRotation != Quaternion.identity))
                     {
-                        Debug.LogWarningFormat(
-                            "Camera \"{0}\" has a non-identity transform (position = {1}, rotation = {2}). " +
+                        Debug.LogWarning(
+                            $"Camera \"{camera.name}\" has a non-identity transform " +
+                            $"(position = {cameraTransform.localPosition}, rotation = {cameraTransform.localRotation}). " +
                             "The camera's local position and rotation will be overwritten by the XR device, " +
                             "so this starting transform will have no effect. Tick the \"Make Relative\" " +
-                            "checkbox on the camera's Tracked Pose Driver to apply this starting transform.",
-                            camera.name,
-                            cameraTransform.localPosition,
-                            cameraTransform.localRotation);
+                            "checkbox on the camera's Tracked Pose Driver to apply this starting transform.");
                     }
                 }
                 // If using ARPoseDriver then it will get overwritten no matter what
@@ -227,21 +226,18 @@ namespace UnityEngine.XR.ARFoundation
                     var cameraTransform = camera.transform;
                     if ((cameraTransform.localPosition != Vector3.zero) || (cameraTransform.localRotation != Quaternion.identity))
                     {
-                        Debug.LogWarningFormat(
-                            "Camera \"{0}\" has a non-identity transform (position = {1}, rotation = {2}). " +
-                            "The camera's local position and rotation will be overwritten by the XR device.",
-                            camera.name,
-                            cameraTransform.localPosition,
-                            cameraTransform.localRotation);
+                        Debug.LogWarning(
+                            $"Camera \"{camera.name}\" has a non-identity transform " +
+                            $"(position = {cameraTransform.localPosition}, rotation = {cameraTransform.localRotation}). " +
+                            "The camera's local position and rotation will be overwritten by the XR device.");
                     }
                 }
 #else // !(USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
                 if (arPoseDriver == null)
                 {
-                    Debug.LogWarningFormat(
-                        "Camera \"{0}\" does not use a AR Pose Driver, so its transform will not be updated by " +
-                        "an XR device.  In order for this to be updated, please add an AR Pose Driver component.", 
-                        camera.name);
+                    Debug.LogWarning(
+                        $"Camera \"{camera.name}\" does not use a AR Pose Driver, so its transform will not be updated by " +
+                        "an XR device.  In order for this to be updated, please add an AR Pose Driver component.");
                 }
 #endif // USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
             }
@@ -250,31 +246,22 @@ namespace UnityEngine.XR.ARFoundation
         Pose GetCameraOriginPose()
         {
             var localOriginPose = Pose.identity;
+            var parent = camera.transform.parent;
 
 #if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
             var trackedPoseDriver = camera.GetComponent<TrackedPoseDriver>();
-            if (trackedPoseDriver != null)
+            if (trackedPoseDriver)
             {
                 localOriginPose = trackedPoseDriver.originPose;
             }
-
-            if(localOriginPose != Pose.identity)
-            {
-                var parent = camera.transform.parent;
-
-                if (parent == null)
-                    return localOriginPose;
-
-                return parent.TransformPose(localOriginPose);
-            }
 #endif // USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
 
-            return localOriginPose;
+            return parent?.TransformPose(localOriginPose) ?? localOriginPose;
         }
 
         void Update()
         {
-            if (camera != null)
+            if (camera)
             {
                 var pose = GetCameraOriginPose();
                 trackablesParent.position = pose.position;
@@ -285,14 +272,16 @@ namespace UnityEngine.XR.ARFoundation
 #if UNITY_EDITOR && (USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
         void OnValidate()
         {
-            var arPoseDriver = GetComponent<ARPoseDriver>();
-            var trackedPoseDriver = GetComponent<TrackedPoseDriver>();
-            if (trackedPoseDriver != null && arPoseDriver != null && trackedPoseDriver.enabled && arPoseDriver.enabled)
+            if (camera)
             {
-                Debug.LogErrorFormat("Camera \"{0}\" has an AR Pose Driver and a Tracked Pose Driver and both are enabled.  " +
-                    "This configuration will cause the camera transform to be updated from both components in a non-deterministic " +
-                    "way.  This is likely an unintended error.", 
-                    camera.name);
+                if ((camera.GetComponent<TrackedPoseDriver>()?.enabled ?? false) &&
+                    (camera.GetComponent<ARPoseDriver>()?.enabled ?? false))
+                {
+                    Debug.LogWarning(
+                        $"Camera \"{camera.name}\" has an AR Pose Driver and a Tracked Pose Driver and both are enabled. " +
+                        "This configuration will cause the camera transform to be updated from both components in a non-deterministic " +
+                        "way. This is likely an unintended error.");
+                }
             }
         }
 #endif // UNITY_EDITOR && (USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
