@@ -1,4 +1,7 @@
-using UnityEngine;
+using AOT;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
@@ -26,9 +29,9 @@ namespace UnityEngine.XR.ARFoundation
     /// contains a <see cref="ARBackgroundRendererFeature"/>.</description></item>
     /// </list>
     /// </para>
-    /// <para>To customize background rendering with the legacy render pipeline, override both the
-    /// <see cref="ConfigureLegacyRenderPipelineBackgroundRendering"/> method and the
-    /// <see cref="TeardownLegacyRenderPipelineBackgroundRendering"/> method to modify the given
+    /// <para>To customize background rendering with the legacy render pipeline, you may override the
+    /// <see cref="legacyCameraEvents"/> property and the
+    /// <see cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/> method to modify the given
     /// <c>CommandBuffer</c> with rendering commands and to inject the given <c>CommandBuffer</c> into the camera's
     /// rendering.</para>
     /// <para>To customize background rendering with a scriptable render pipeline, create a
@@ -110,9 +113,9 @@ namespace UnityEngine.XR.ARFoundation
         /// The camera to which the projection matrix is set on each frame event.
         /// </value>
 #if UNITY_EDITOR
-        protected new Camera camera { get => m_Camera; }
+        protected new Camera camera => m_Camera;
 #else // UNITY_EDITOR
-        protected Camera camera { get => m_Camera; }
+        protected Camera camera => m_Camera;
 #endif // UNITY_EDITOR
 
         /// <summary>
@@ -121,7 +124,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The camera manager from which frame information is pulled.
         /// </value>
-        protected ARCameraManager cameraManager { get => m_CameraManager; }
+        protected ARCameraManager cameraManager => m_CameraManager;
 
         /// <summary>
         /// The current <c>Material</c> used for background rendering.
@@ -163,7 +166,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The default material for rendering the background.
         /// </value>
-        Material defaultMaterial { get => cameraManager.cameraMaterial; }
+        Material defaultMaterial => cameraManager.cameraMaterial;
 
         /// <summary>
         /// Whether to use the legacy rendering pipeline.
@@ -171,7 +174,45 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// <c>true</c> fi the legacy render pipeline is in use. Otherwise, <c>false</c>.
         /// </value>
-        bool useLegacyRenderPipeline { get => GraphicsSettings.renderPipelineAsset == null; }
+        bool useLegacyRenderPipeline => GraphicsSettings.renderPipelineAsset == null;
+
+        /// <summary>
+        /// Stores the previous culling state (XRCameraSubsystem.invertCulling).
+        /// If the requested culling state changes, the command buffer must be rebuilt.
+        /// </summary>
+        bool m_CommandBufferCullingState;
+
+        /// <summary>
+        /// A function that can be invoked by
+        /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
+        /// This function does nothing, but Unity requires a valid function pointer in order to add IssuePluginEvent to a command
+        /// buffer. Doing so has the side effect of resetting the OpenGL state.
+        /// </summary>
+        /// <param name="eventId">The id of the event</param>
+        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
+        [MonoPInvokeCallback(typeof(Action<int>))]
+        static void ResetGlState(int eventId) {}
+
+        /// <summary>
+        /// A delegate representation of <see cref="ResetGlState(int)"/>. This maintains a strong
+        /// reference to the delegate, which is converted to an IntPtr by <see cref="s_ResetGlStateFuncPtr"/>.
+        /// </summary>
+        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
+        static Action<int> s_ResetGlStateDelegate = ResetGlState;
+
+        /// <summary>
+        /// A pointer to <see cref="ResetGlState(int)"/> that can be passed to
+        /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
+        /// </summary>
+        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
+        static readonly IntPtr s_ResetGlStateFuncPtr = Marshal.GetFunctionPointerForDelegate(s_ResetGlStateDelegate);
+
+        /// <summary>
+        /// Whether culling should be inverted. Used during command buffer configuration,
+        /// see [CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html).
+        /// </summary>
+        /// <seealso cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/>
+        protected bool shouldInvertCulling => m_CameraManager?.subsystem?.invertCulling ?? false;
 
         void Awake()
         {
@@ -247,6 +288,44 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// The list of [CameraEvent](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.html)s
+        /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html).
+        /// </summary>
+        static readonly CameraEvent[] s_DefaultCameraEvents = new[]
+        {
+            CameraEvent.BeforeForwardOpaque,
+            CameraEvent.BeforeGBuffer
+        };
+
+        /// <summary>
+        /// The list of [CameraEvent](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.html)s
+        /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html).
+        /// By default, returns
+        /// [BeforeForwardOpaque](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.BeforeForwardOpaque.html)
+        /// and
+        /// [BeforeGBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.BeforeGBuffer.html)}.
+        /// Override to use different camera events.
+        /// </summary>
+        protected virtual IEnumerable<CameraEvent> legacyCameraEvents => s_DefaultCameraEvents;
+
+        /// <summary>
+        /// Configures the <paramref name="commandBuffer"/> by first clearing it,
+        /// and then adding necessary render commands.
+        /// </summary>
+        /// <param name="commandBuffer">The command buffer to configure.</param>
+        protected virtual void ConfigureLegacyCommandBuffer(CommandBuffer commandBuffer)
+        {
+            Texture texture = !material.HasProperty(k_MainTexName) ? null : material.GetTexture(k_MainTexName);
+
+            commandBuffer.Clear();
+            AddOpenGLES3ResetStateCommand(commandBuffer);
+            m_CommandBufferCullingState = shouldInvertCulling;
+            commandBuffer.SetInvertCulling(m_CommandBufferCullingState);
+            commandBuffer.ClearRenderTarget(true, false, Color.clear);
+            commandBuffer.Blit(texture, BuiltinRenderTextureType.CameraTarget, material);
+        }
+
+        /// <summary>
         /// Enable background rendering getting a command buffer, and configure it for rendering the background.
         /// </summary>
         void EnableLegacyRenderPipelineBackgroundRendering()
@@ -256,7 +335,11 @@ namespace UnityEngine.XR.ARFoundation
                 m_CommandBuffer = new CommandBuffer();
                 m_CommandBuffer.name = k_CustomRenderPassName;
 
-                ConfigureLegacyRenderPipelineBackgroundRendering(m_CommandBuffer);
+                ConfigureLegacyCommandBuffer(m_CommandBuffer);
+                foreach (var cameraEvent in legacyCameraEvents)
+                {
+                    camera.AddCommandBuffer(cameraEvent, m_CommandBuffer);
+                }
             }
         }
 
@@ -267,36 +350,29 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (m_CommandBuffer != null)
             {
-                TeardownLegacyRenderPipelineBackgroundRendering(m_CommandBuffer);
+                foreach (var cameraEvent in legacyCameraEvents)
+                {
+                    camera.RemoveCommandBuffer(cameraEvent, m_CommandBuffer);
+                }
 
                 m_CommandBuffer = null;
             }
         }
 
         /// <summary>
-        /// Configure the command buffer for background rendering by inserting the blit, and adding the command buffer
-        /// into the camera.
+        /// When using OpenGLES3, this adds a command to the <paramref name="commandBuffer"/>
+        /// which will force Unity to reset the OpenGL state. This is necessary on devices using OpenGLES3.
+        /// If OpenGLES3 is not the current graphics device type, this method does nothing. This should be
+        /// the first command in the command buffer.
         /// </summary>
-        /// <param name="commandBuffer">The command buffer to configure.</param>
-        protected virtual void ConfigureLegacyRenderPipelineBackgroundRendering(CommandBuffer commandBuffer)
+        /// <param name="commandBuffer">The [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
+        /// to add the command to.</param>
+        internal protected static void AddOpenGLES3ResetStateCommand(CommandBuffer commandBuffer)
         {
-            Texture texture = !material.HasProperty(k_MainTexName) ? null : material.GetTexture(k_MainTexName);
-
-            commandBuffer.ClearRenderTarget(true, false, Color.clear);
-            commandBuffer.Blit(texture, BuiltinRenderTextureType.CameraTarget, material);
-            camera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_CommandBuffer);
-            camera.AddCommandBuffer(CameraEvent.BeforeGBuffer, m_CommandBuffer);
-        }
-
-        /// <summary>
-        /// Teardown the command buffer that was configured for background rendering by removing the command buffer
-        /// from the camera.
-        /// </summary>
-        /// <param name="commandBuffer">The command buffer to teaerdown.</param>
-        protected virtual void TeardownLegacyRenderPipelineBackgroundRendering(CommandBuffer commandBuffer)
-        {
-            camera.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque, m_CommandBuffer);
-            camera.RemoveCommandBuffer(CameraEvent.BeforeGBuffer, m_CommandBuffer);
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.OpenGLES3)
+            {
+                commandBuffer.IssuePluginEvent(s_ResetGlStateFuncPtr, 0);
+            }
         }
 
         /// <summary>
@@ -306,7 +382,14 @@ namespace UnityEngine.XR.ARFoundation
         void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
         {
             // Enable background rendering when first frame is received.
-            if (!m_BackgroundRenderingEnabled)
+            if (m_BackgroundRenderingEnabled)
+            {
+                if (m_CommandBuffer != null && m_CommandBufferCullingState != shouldInvertCulling)
+                {
+                    ConfigureLegacyCommandBuffer(m_CommandBuffer);
+                }
+            }
+            else
             {
                 EnableBackgroundRendering();
             }

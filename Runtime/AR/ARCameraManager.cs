@@ -219,18 +219,6 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void OnPreRender()
-        {
-            m_PreRenderInvertCullingValue = GL.invertCulling;
-            if (subsystem != null)
-                GL.invertCulling = subsystem.invertCulling;
-        }
-
-        void OnPostRender()
-        {
-            GL.invertCulling = m_PreRenderInvertCullingValue;
-        }
-
         /// <summary>
         /// Pull the texture descriptors from the camera subsystem, and update the texture information maintained by
         /// this component.
