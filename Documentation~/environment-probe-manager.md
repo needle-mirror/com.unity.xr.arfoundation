@@ -14,7 +14,7 @@ For more details, refer to the [Environment Probe Subsystem](http://docs.unity3d
 
 ## Manual Placement
 
-Environment probes can be created by calling `AREnvironmentProbeManager.AddEnvironmentProbe`. Like [reference points](reference-point-manager.md), the resulting `AREnvironmentProbe` may be in a "pending" state for a few frames.
+Environment probes can be created by calling `AREnvironmentProbeManager.AddEnvironmentProbe`. Like [anchors](anchor-manager.md), the resulting `AREnvironmentProbe` may be in a "pending" state for a few frames.
 
 You can remove an environment probe by calling `AREnvironmentProbeManager.RemoveEnvironmentProbe`. Note you should not `Destroy` an `AREnvironmentProbe` unless its manager has already been destroyed.
 

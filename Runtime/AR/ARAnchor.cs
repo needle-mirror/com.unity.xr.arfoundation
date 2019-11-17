@@ -4,20 +4,20 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Represents a Reference Point tracked by an XR device.
+    /// Represents an Anchor tracked by an XR device.
     /// </summary>
     /// <remarks>
-    /// A reference point is a pose in the physical environment that is tracked by an XR device.
-    /// As the device refines its understanding of the environment, reference points will be
+    /// A anchor is a pose in the physical environment that is tracked by an XR device.
+    /// As the device refines its understanding of the environment, anchors will be
     /// updated, helping you to keep virtual content connected to a real-world position and orientation.
     /// </remarks>
-    [DefaultExecutionOrder(ARUpdateOrder.k_ReferencePoint)]
+    [DefaultExecutionOrder(ARUpdateOrder.k_Anchor)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARReferencePoint.html")]
-    public sealed class ARReferencePoint : ARTrackable<XRReferencePoint, ARReferencePoint>
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARAnchor.html")]
+    public sealed class ARAnchor : ARTrackable<XRAnchor, ARAnchor>
     {
         /// <summary>
-        /// Get the native pointer associated with this <see cref="ARReferencePoint"/>.
+        /// Get the native pointer associated with this <see cref="ARAnchor"/>.
         /// </summary>
         /// <remarks>
         /// The data pointed to by this pointer is implementation defined. While its
@@ -27,7 +27,7 @@ namespace UnityEngine.XR.ARFoundation
         public IntPtr nativePtr { get { return sessionRelativeData.nativePtr; } }
 
         /// <summary>
-        /// Get the session identifier from which this reference point originated.
+        /// Get the session identifier from which this anchor originated.
         /// </summary>
         public Guid sessionId { get { return sessionRelativeData.sessionId; } }
     }

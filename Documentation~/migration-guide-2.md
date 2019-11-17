@@ -10,7 +10,7 @@ In the Editor, it will always be an `XRReferenceImageLibrary`. However, at runti
 
 ## Background shaders
 
-The `ARCameraBackground` has been updated to support the lightweight render pipeline (LWRP) and Universal Render Pipelines (UniversalRP) when those packages are present. This involved a breaking change to the `XRCameraSubsystem`: the property `shaderName` is now `cameraMaterial`. It is unlikely most developers would need to access this directly. The shader name was only used by ARFoundation to construct the background material. That functionality has moved to the subsystem.
+The `ARCameraBackground` has been updated to support the Universal Render Pipeline (UniversalRP) when that package is present. This involved a breaking change to the `XRCameraSubsystem`: the property `shaderName` is now `cameraMaterial`. It is unlikely most developers would need to access this directly. The shader name was only used by ARFoundation to construct the background material. That functionality has moved to the subsystem.
 
 ## Point Clouds
 
@@ -26,3 +26,14 @@ Additionally, these arrays are not necessarily present. Previously, you could ch
 ## Face Tracking
 
 The [`ARFaceManager`](face-manager.md)'s `supported` property has been removed. If face tracking is not supported, the manager's subsystem will be null. This was done for consistency as no other manager has this property. If a manager's subsystem is null after enabling the manager, that generally means the subsystem is not supported.
+
+## Reference Point renamed to Anchor
+
+To align with industry standard terminology, we've renamed "Reference Points" to "Anchors":
+
+| Old class | New class |
+| --------- | --------- |
+| ARReferencePointManager | ARAnchorManager |
+| ARReferencePoint | ARAnchor |
+
+When you open an existing project that used the old reference point API, Unity will prompt you with the option to automatically update your scripts to the new API.

@@ -35,16 +35,16 @@ namespace UnityEngine.XR.ARFoundation
         public const int k_PointCloud = k_PointCloudManager + 1;
 
         /// <summary>
-        /// The <see cref="ARReferencePointManager"/>'s update order.
+        /// The <see cref="ARAnchorManager"/>'s update order.
         /// Should come after the <see cref="ARSession"/>.
         /// </summary>
-        public const int k_ReferencePointManager = k_Session + 1;
+        public const int k_AnchorManager = k_Session + 1;
 
         /// <summary>
-        /// The <see cref="ARReferencePointManager"/>'s update order.
-        /// Should come after the <see cref="ARReferencePointManager"/>.
+        /// The <see cref="ARAnchorManager"/>'s update order.
+        /// Should come after the <see cref="ARAnchorManager"/>.
         /// </summary>
-        public const int k_ReferencePoint = k_ReferencePointManager + 1;
+        public const int k_Anchor = k_AnchorManager + 1;
 
         /// <summary>
         /// The <see cref="ARInputManager"/>'s update order. Should come after
@@ -93,30 +93,6 @@ namespace UnityEngine.XR.ARFoundation
         /// the <see cref="AREnvironmentProbeManager"/>.
         /// </summary>
         public const int k_EnvironmentProbe = k_EnvironmentProbeManager + 1;
-
-        /// <summary>
-        /// The <see cref="ARTrackedObjectManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
-        /// </summary>
-        public const int k_TrackedObjectManager = k_Session + 1;
-
-        /// <summary>
-        /// The <see cref="ARTrackedObject"/>'s update order. Should come after
-        /// the <see cref="ARTrackedObjectManager"/>.
-        /// </summary>
-        public const int k_TrackedObject = k_TrackedObjectManager + 1;
-
-        /// <summary>
-        /// The <see cref="ARHumanBodyManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
-        /// </summary>
-        public const int k_HumanBodyManager = k_Session + 1;
-
-        /// <summary>
-        /// The <see cref="ARHumanBody"/>'s update order. Should come after
-        /// the <see cref="ARHumanBodyManager"/>.
-        /// </summary>
-        public const int k_HumanBody = k_HumanBodyManager + 1;
 
         /// <summary>
         /// The <see cref="ARMeshManager"/>'s update order. Should come after

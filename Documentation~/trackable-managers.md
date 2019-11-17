@@ -1,6 +1,6 @@
 # Trackable Managers
 
-In AR Foundation, a "trackable" is anything that can be detected and tracked in the real world. Planes, point clouds, reference points, environment probes, faces, images, and 3d objects are all examples of trackables.
+In AR Foundation, a "trackable" is anything that can be detected and tracked in the real world. Planes, point clouds, anchors, environment probes, faces, images, and 3d objects are all examples of trackables.
 
 Each trackable has a trackable manager. All the trackable managers must be on the same `GameObject` as the AR Session Origin. This is because the session origin defines the transform to which all the detected trackables are relative. The trackable managers use the session origin to place the detected trackables in the correct place in the Unity scene graph.
 
@@ -13,7 +13,7 @@ This table summarizes the trackable managers and their trackables.
 |-------------------------------------------------------------|----------------------|---------|
 | [`ARPlaneManager`](plane-manager.md)                        | `ARPlane`            | Detects flat surfaces. |
 | [`ARPointCloudManager`](point-cloud-manager.md)             | `ARPointCloud`       | Detects feature points. |
-| [`ARReferencePointManager`](reference-point-manager.md)     | `ARReferencePoint`   | Manages reference points. You can manually add and remove them with `ARReferencePointManager.AddReferencePoint` and `ARReferencePointManager.RemoveReferencePoint`. |
+| [`ARAnchorManager`](anchor-manager.md)                      | `ARAnchor`           | Manages anchors. You can manually add and remove them with `ARAnchorManager.AddAnchor` and `ARAnchorManager.RemoveAnchor`. |
 | [`ARTrackedImageManager`](tracked-image-manager.md)         | `ARTrackedImage`     | Detects and tracks 2D images. |
 | [`AREnvironmentProbeManager`](environment-probe-manager.md) | `AREnvironmentProbe` | Creates cubemaps representing the environment. |
 | [`ARFaceManager`](face-manager.md)                          | `ARFace`             | Detects and tracks human faces. |
@@ -46,9 +46,9 @@ Each trackable can be added, updated, and removed. Each frame, the managers quer
 
 | Trackable Manager | Event |
 |-|-|
-|`ARPlaneManager`               | `planesChanged`|
-|`ARPointCloudManager`          |`pointCloudsChanged`|
-|`ARReferencePointManager`      |`referencePointsChanged`|
+| `ARPlaneManager`              | `planesChanged`|
+| `ARPointCloudManager`         | `pointCloudsChanged`|
+| `ARAnchorManager`             | `anchorsChanged`|
 | `ARTrackedImageManager`       | `trackedImagesChanged`    |
 | `AREnvironmentProbeManager`   | `environmentProbesChanged` |
 | `ARFaceManager`               | `facesChanged` |
@@ -59,23 +59,23 @@ A trackable will always be added before it is updated or removed. Likewise, a tr
 
 ### Adding and Removing Trackables
 
-Some trackables, like reference points and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be both manually added and automatically created. The relevant managers provide methods for addtion and removal when supported.
+Some trackables, like anchors and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be both manually added and automatically created. The relevant managers provide methods for addtion and removal when supported.
 
-You should never `Destroy` a trackable component or its `GameObject` directly. For trackables that support manual removal, its manager will provide a method to remove it. For example, to remove a reference point, you would call `RemoveReferencePoint` on the `ARReferencePointManager`.
+You should never `Destroy` a trackable component or its `GameObject` directly. For trackables that support manual removal, its manager will provide a method to remove it. For example, to remove an anchor, you would call `RemoveAnchor` on the `ARAnchorManager`.
 
 When you manually add a trackable, it may not be tracked by the underlying subsystem immediately. You will not get an added event for that trackable until the subsystem reports that it has been added (typically on the next frame). During the time between manual addition and the added event, the trackable will be in a "pending" state. You can check this with the `pending` property on every trackable.
 
-For example, if you add a reference point, it will likely be pending until the next frame:
+For example, if you add an anchor, it will likely be pending until the next frame:
 ```csharp
-var referencePoint = referencePointManager.AddReferencePoint(new Pose(position, rotation));
-Debug.Log(referencePoint.pending); // "true"
+var anchor = AnchorManager.AddAnchor(new Pose(position, rotation));
+Debug.Log(anchor.pending); // "true"
 
 // -- next frame --
-void OnReferencePointsChanged(ARReferencePointsChangedEventArgs eventArgs)
+void OnAnchorsChanged(ARAnchorsChangedEventArgs eventArgs)
 {
-    foreach (var referencePoint in eventArgs.added)
+    foreach (var anchor in eventArgs.added)
     {
-        // reference point added above now appears in this list.
+        // anchor added above now appears in this list.
     }
 }
 ```

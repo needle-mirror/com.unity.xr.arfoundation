@@ -6,12 +6,11 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - World tracking: track the device's position and orientation in physical space.
 - Plane detection: detect horizontal and vertical surfaces.
 - Point clouds, also known as feature points.
-- Reference points: an arbitrary position and orientation that the device tracks.
+- Anchor: an arbitrary position and orientation that the device tracks.
 - Light estimation: estimates for average color temperature and brightness in physical space.
-- Environment probes: a means for generating a cube map to represent a particular area of the physical environment.
+- Environment probe: a means for generating a cube map to represent a particular area of the physical environment.
 - Face tracking: detect and track human faces.
 - Image tracking: detect and track 2D images.
-- Object tracking: detect 3D objects.
 
 If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration-guide.md).
 
@@ -170,7 +169,7 @@ If you have exactly one `ARSessionOrigin`, then you can simply add the `ARCamera
 
 #### Configuring AR Camera Background with a Scriptable Render Pipeline
 
-Please refer to [this additional documentation to configure an AR Foundation project with a SRP](ar-camera-background-with-scriptable-render-pipeline.md). This applies to Lightweight Render Pipeline (LWRP) and Universal Render Pipeline (URP).
+Please refer to [this additional documentation to configure an AR Foundation project with a SRP](ar-camera-background-with-scriptable-render-pipeline.md). This applies to Universal Render Pipeline (URP).
 
 #### Copying the Camera Texture to a Render Texture
 
