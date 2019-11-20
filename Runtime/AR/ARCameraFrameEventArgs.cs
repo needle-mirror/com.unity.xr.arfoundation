@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// A structure for camera-related information pertaining to a particular frame.
-    /// This is used to communicate information in the <see cref="ARSubsystemManager.cameraFrameReceived" /> event.
+    /// This is used to communicate information in the <see cref="ARCameraManager.frameReceived" /> event.
     /// </summary>
     public struct ARCameraFrameEventArgs : IEquatable<ARCameraFrameEventArgs>
     {
@@ -81,12 +81,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         public override bool Equals(object obj)
-        {
-            if (!(obj is ARCameraFrameEventArgs))
-                return false;
-
-            return Equals((ARCameraFrameEventArgs)obj);
-        }
+            => (obj is ARCameraFrameEventArgs) && Equals((ARCameraFrameEventArgs)obj);
 
         /// <summary>
         /// Generates a string representation of this struct suitable for debug
@@ -116,20 +111,15 @@ namespace UnityEngine.XR.ARFoundation
                 && timestampNs.Equals(other.timestampNs)
                 && projectionMatrix.Equals(other.projectionMatrix)
                 && displayMatrix.Equals(other.displayMatrix)
-                && textures.Equals(other.textures)
-                && propertyNameIds.Equals(other.propertyNameIds) 
+                && ((textures == null) ? (other.textures == null) : textures.Equals(other.textures))
+                && ((propertyNameIds == null) ? (other.propertyNameIds == null)
+                    : propertyNameIds.Equals(other.propertyNameIds))
                 && (exposureDuration.Equals(other.exposureDuration))
                 && (exposureOffset.Equals(other.exposureOffset));
         }
 
-        public static bool operator ==(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs)
-        {
-            return lhs.Equals(rhs);
-        }
+        public static bool operator ==(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs) => lhs.Equals(rhs);
 
-        public static bool operator !=(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        public static bool operator !=(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs) => !lhs.Equals(rhs);
     }
 }

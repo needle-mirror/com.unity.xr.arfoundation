@@ -6,9 +6,9 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - World tracking: track the device's position and orientation in physical space.
 - Plane detection: detect horizontal and vertical surfaces.
 - Point clouds, also known as feature points.
-- Reference points: an arbitrary position and orientation that the device tracks.
+- Anchor: an arbitrary position and orientation that the device tracks.
 - Light estimation: estimates for average color temperature and brightness in physical space.
-- Environment probes: a means for generating a cube map to represent a particular area of the physical environment.
+- Environment probe: a means for generating a cube map to represent a particular area of the physical environment.
 - Face tracking: detect and track human faces.
 - Image tracking: detect and track 2D images.
 - Object tracking: detect 3D objects.
@@ -170,7 +170,13 @@ If you have exactly one `ARSessionOrigin`, then you can simply add the `ARCamera
 
 #### Configuring AR Camera Background with a Scriptable Render Pipeline
 
-Please refer to [this additional documentation to configure an AR Foundation project with a SRP](ar-camera-background-with-scriptable-render-pipeline.md). This applies to Lightweight Render Pipeline (LWRP) and Universal Render Pipeline (URP).
+Please refer to [this additional documentation to configure an AR Foundation project with a SRP](ar-camera-background-with-scriptable-render-pipeline.md). This applies to Universal Render Pipeline (URP).
+
+#### Automatic Occlusion
+
+Some devices offer depth information about the real world. For instance, with a feature known as person occlusion, iOS devices with the A12 Bionic chip (and newer) provide depth information for humans detected in the camera frame. In the future, more devices are expected to produce real world depth information.
+
+Adding the `AROcclusionManager` component to the camera with the `ARCameraBackground` component will automatically enable the background rendering pass to incorporate any available depth information when rendering the depth buffer. This allows for rendered geometry to be occluded by detected geometry from the real world. For example, in the case of iOS devices that support person occlusion, detected humans will occlude rendered content that exists behind them.
 
 #### Copying the Camera Texture to a Render Texture
 
@@ -243,20 +249,3 @@ This version of AR Foundation is compatible with the following versions of the U
 AR Foundation includes the following known limitations:
 
 * No known issues
-
-## Document revision history
-
-|Date|Reason|
-|---|---|
-|April 18, 2019|Update documentation to include new features (environment probes, image tracking, face tracking, object tracking).|
-|March 4, 2019|Update documentation to reflect 2.0.0 changes.|
-|November 15, 2018|Face Tracking added.|
-|July 25, 2018|Update `ARCameraBackground` image and description following refactor.<br/>Add howto section for blitting the camera image to a render texture.|
-|July 16, 2018|Additional explanation for `ARSessionOrigin`|
-|June 14, 2018|Update `ARSessionOrigin` photos|
-|June 12, 2018|Update `ARPlaneMeshVisualizer` and `ARPointCloudMeshVisualizer` with additional debug recommendations and standards.|
-|June 7, 2018|Remove known issue.|
-|June 6, 2018|Update ARSession image.|
-|April 25, 2018|Updated docs and screen shots after package rename.|
-|April 19, 2018|Updated screen shots and information after code changes. Added section on `ARBackgroundRenderer` component. |
-|April 10, 2018|Document created.|

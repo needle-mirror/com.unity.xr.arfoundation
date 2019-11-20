@@ -35,16 +35,16 @@ namespace UnityEngine.XR.ARFoundation
         public const int k_PointCloud = k_PointCloudManager + 1;
 
         /// <summary>
-        /// The <see cref="ARReferencePointManager"/>'s update order.
+        /// The <see cref="ARAnchorManager"/>'s update order.
         /// Should come after the <see cref="ARSession"/>.
         /// </summary>
-        public const int k_ReferencePointManager = k_Session + 1;
+        public const int k_AnchorManager = k_Session + 1;
 
         /// <summary>
-        /// The <see cref="ARReferencePointManager"/>'s update order.
-        /// Should come after the <see cref="ARReferencePointManager"/>.
+        /// The <see cref="ARAnchorManager"/>'s update order.
+        /// Should come after the <see cref="ARAnchorManager"/>.
         /// </summary>
-        public const int k_ReferencePoint = k_ReferencePointManager + 1;
+        public const int k_Anchor = k_AnchorManager + 1;
 
         /// <summary>
         /// The <see cref="ARInputManager"/>'s update order. Should come after
@@ -57,6 +57,12 @@ namespace UnityEngine.XR.ARFoundation
         /// the <see cref="ARSession"/>.
         /// </summary>
         public const int k_CameraManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="AROcclusionManager"/>'s update order. Should come after
+        /// the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_OcclusionManager = k_Session + 1;
 
         /// <summary>
         /// The <see cref="ARFaceManager"/>'s update order. Should come after

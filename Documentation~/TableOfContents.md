@@ -6,7 +6,7 @@
     * [Image Tracking](tracked-image-manager)
     * [Object Tracking](tracked-object-manager)
     * [Face Tracking](face-manager)
-    * [Reference Points / Anchors](reference-point-manager)
+    * [Anchors](anchor-manager)
     * [Point Clouds](point-cloud-manager)
     * [Environment Probes](environment-probe-manager)
     * [Participants](participant-manager)

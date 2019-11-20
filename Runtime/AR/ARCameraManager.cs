@@ -27,17 +27,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public CameraFocusMode focusMode
         {
-            get
-            {
-                if (subsystem != null)
-                {
-                    return subsystem.focusMode;
-                }
-                else
-                {
-                    return m_FocusMode;
-                }
-            }
+            get => (subsystem != null) ? subsystem.focusMode : m_FocusMode;
             set
             {
                 m_FocusMode = value;
@@ -60,7 +50,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public LightEstimationMode lightEstimationMode
         {
-            get { return m_LightEstimationMode; }
+            get => m_LightEstimationMode;
             set
             {
                 m_LightEstimationMode = value;
@@ -75,16 +65,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// <c>true</c> if permission has been granted. Otherwise, <c>false</c>.
         /// </value>
-        public bool permissionGranted
-        {
-            get
-            {
-                if (subsystem != null)
-                    return subsystem.permissionGranted;
-
-                return false;
-            }
-        }
+        public bool permissionGranted => (subsystem != null) && subsystem.permissionGranted;
 
         /// <summary>
         /// An event which fires each time a new camera frame is received.
@@ -97,7 +78,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The material used in background rendering.
         /// </value>
-        public Material cameraMaterial { get => (subsystem == null) ? null : subsystem.cameraMaterial; }
+        public Material cameraMaterial => (subsystem == null) ? null : subsystem.cameraMaterial;
 
         /// <summary>
         /// Tries to get camera intrinsics. Camera intrinsics refers to properties
@@ -128,10 +109,8 @@ namespace UnityEngine.XR.ARFoundation
         /// The supported camera configurations.
         /// </returns>
         public NativeArray<XRCameraConfiguration> GetConfigurations(Allocator allocator)
-        {
-            return ((subsystem == null) ? new NativeArray<XRCameraConfiguration>(0, allocator)
-                    : subsystem.GetConfigurations(allocator));
-        }
+            => ((subsystem == null) ? new NativeArray<XRCameraConfiguration>(0, allocator)
+                : subsystem.GetConfigurations(allocator));
 
         /// <summary>
         /// The current camera configuration.
@@ -149,7 +128,7 @@ namespace UnityEngine.XR.ARFoundation
         /// implementation is unable to set the current camera configuration.</exception>
         public XRCameraConfiguration? currentConfiguration
         {
-            get { return (subsystem == null) ? null : subsystem.currentConfiguration; }
+            get => (subsystem == null) ? null : subsystem.currentConfiguration;
             set
             {
                 if (subsystem != null)
@@ -212,7 +191,7 @@ namespace UnityEngine.XR.ARFoundation
             XRCameraFrame frame;
             if (subsystem.TryGetLatestFrame(cameraParams, out frame))
             {
-                UpdateTexturesInfos(frame);
+                UpdateTexturesInfos();
 
                 if (frameReceived != null)
                     InvokeFrameReceivedEvent(frame);
@@ -223,8 +202,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Pull the texture descriptors from the camera subsystem, and update the texture information maintained by
         /// this component.
         /// </summary>
-        /// <param name="frame">The latest updated camera frame.</param>
-        void UpdateTexturesInfos(XRCameraFrame frame)
+        void UpdateTexturesInfos()
         {
             var textureDescriptors = subsystem.GetTextureDescriptors(Allocator.Temp);
             try

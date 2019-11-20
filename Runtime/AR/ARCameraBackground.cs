@@ -52,12 +52,17 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Name of the main texture parameter for the material
         /// </summary>
-        internal const string k_MainTexName = "_MainTex";
+        const string k_MainTexName = "_MainTex";
 
         /// <summary>
         /// Name of the shader parameter for the display transform matrix.
         /// </summary>
         const string k_DisplayTransformName = "_UnityDisplayTransform";
+
+        /// <summary>
+        /// Property ID for the shader parameter for the main texture.
+        /// </summary>
+        internal static readonly int k_MainTexId = Shader.PropertyToID(k_MainTexName);
 
         /// <summary>
         /// Property ID for the shader parameter for the display transform matrix.
@@ -73,6 +78,11 @@ namespace UnityEngine.XR.ARFoundation
         /// The camera manager from which frame information is pulled.
         /// </summary>
         ARCameraManager m_CameraManager;
+
+        /// <summary>
+        /// The occlusion manager, which may not exist, from which occlusion information is pulled.
+        /// </summary>
+        AROcclusionManager m_OcclusionManager;
 
         /// <summary>
         /// Command buffer for any custom rendering commands.
@@ -127,12 +137,14 @@ namespace UnityEngine.XR.ARFoundation
         protected ARCameraManager cameraManager => m_CameraManager;
 
         /// <summary>
+        /// The occlusion manager, which may not exist, from which occlusion information is pulled.
+        /// </summary>
+        protected AROcclusionManager occlusionManager => m_OcclusionManager;
+
+        /// <summary>
         /// The current <c>Material</c> used for background rendering.
         /// </summary>
-        public Material material
-        {
-            get { return (useCustomMaterial && (customMaterial != null)) ? customMaterial : defaultMaterial; }
-        }
+        public Material material => (useCustomMaterial && (customMaterial != null)) ? customMaterial : defaultMaterial;
 
         /// <summary>
         /// Whether to use the custom material for rendering the background.
@@ -218,6 +230,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             m_Camera = GetComponent<Camera>();
             m_CameraManager = GetComponent<ARCameraManager>();
+            m_OcclusionManager = GetComponent<AROcclusionManager>();
         }
 
         void OnEnable()
@@ -225,10 +238,18 @@ namespace UnityEngine.XR.ARFoundation
             // Ensure that background rendering is disabled until the first camera frame is received.
             m_BackgroundRenderingEnabled = false;
             cameraManager.frameReceived += OnCameraFrameReceived;
+            if (occlusionManager != null)
+            {
+                occlusionManager.frameReceived += OnOcclusionFrameReceived;
+            }
         }
 
         void OnDisable()
         {
+            if (occlusionManager != null)
+            {
+                occlusionManager.frameReceived -= OnOcclusionFrameReceived;
+            }
             cameraManager.frameReceived -= OnCameraFrameReceived;
             DisableBackgroundRendering();
         }
@@ -412,6 +433,45 @@ namespace UnityEngine.XR.ARFoundation
             if (eventArgs.projectionMatrix.HasValue)
             {
                 camera.projectionMatrix = eventArgs.projectionMatrix.Value;
+            }
+        }
+
+        /// <summary>
+        /// Callback for the occlusion frame event.
+        /// </summary>
+        /// <param name="eventArgs">The occlusion frame event arguments.</param>
+        void OnOcclusionFrameReceived(AROcclusionFrameEventArgs eventArgs)
+        {
+            Material material = this.material;
+            if (material != null)
+            {
+                var count = eventArgs.textures.Count;
+                for (int i = 0; i < count; ++i)
+                {
+                    material.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
+                }
+
+                if (eventArgs.enabledMaterialKeywords != null)
+                {
+                    foreach (var materialKeyword in eventArgs.enabledMaterialKeywords)
+                    {
+                        if (!material.IsKeywordEnabled(materialKeyword))
+                        {
+                            material.EnableKeyword(materialKeyword);
+                        }
+                    }
+                }
+
+                if (eventArgs.disabledMaterialKeywords != null)
+                {
+                    foreach (var materialKeyword in eventArgs.disabledMaterialKeywords)
+                    {
+                        if (material.IsKeywordEnabled(materialKeyword))
+                        {
+                            material.DisableKeyword(materialKeyword);
+                        }
+                    }
+                }
             }
         }
     }

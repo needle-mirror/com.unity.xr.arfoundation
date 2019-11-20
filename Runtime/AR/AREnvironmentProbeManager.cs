@@ -180,7 +180,7 @@ namespace UnityEngine.XR.ARFoundation
         public bool RemoveEnvironmentProbe(AREnvironmentProbe probe)
         {
             if (!enabled)
-                throw new InvalidOperationException("Cannot remove an environment probe from a disabled reference point manager.");
+                throw new InvalidOperationException("Cannot remove an environment probe from a disabled environment probe manager.");
 
             if (subsystem == null)
                 throw new InvalidOperationException("Environment probe manager has no subsystem. Enable the manager first.");

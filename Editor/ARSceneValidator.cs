@@ -65,7 +65,7 @@ namespace UnityEditor.XR.ARFoundation
             typeof(ARCameraBackground),
             typeof(ARPlaneManager),
             typeof(ARPointCloudManager),
-            typeof(ARReferencePointManager)
+            typeof(ARAnchorManager)
         };
     }
 }

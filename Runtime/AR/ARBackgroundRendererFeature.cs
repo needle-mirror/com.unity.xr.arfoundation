@@ -109,7 +109,7 @@ namespace UnityEngine.XR.ARFoundation
                               RenderTargetIdentifier depthTargetIdentifier, bool invertCulling)
             {
                 m_Material = material;
-                m_Texture = !m_Material.HasProperty(ARCameraBackground.k_MainTexName) ? null : m_Material.GetTexture(ARCameraBackground.k_MainTexName);
+                m_Texture = !m_Material.HasProperty(ARCameraBackground.k_MainTexId) ? null : m_Material.GetTexture(ARCameraBackground.k_MainTexId);
                 m_ColorTargetIdentifier = colorTargetIdentifier;
                 m_DepthTargetIdentifier = depthTargetIdentifier;
                 m_InvertCulling = invertCulling;
