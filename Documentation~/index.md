@@ -89,7 +89,7 @@ public class MyComponent {
     [SerializeField] ARSession m_Session;
 
     IEnumerator Start() {
-        if ((ARSession.state == ARSessionState.None ||)
+        if ((ARSession.state == ARSessionState.None) ||
             (ARSession.state == ARSessionState.CheckingAvailability))
         {
             yield return ARSession.CheckAvailability();

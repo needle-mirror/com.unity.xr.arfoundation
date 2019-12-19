@@ -1,4 +1,7 @@
 using System;
+using UnityEngine.Rendering;
+
+using StringBuilder = System.Text.StringBuilder;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -26,7 +29,7 @@ namespace UnityEngine.XR.ARFoundation
 
                 return null;
             }
-            set { m_AverageBrightness = value; }
+            set => m_AverageBrightness = value;
         }
 
         /// <summary>
@@ -69,8 +72,66 @@ namespace UnityEngine.XR.ARFoundation
 
                 return null;
             }
-            set { m_AverageIntensityInLumens = value; }
+            set => m_AverageIntensityInLumens = value;
         }
+
+        /// <summary>
+        /// An estimate of the intensity of the main light in lumens.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="mainLightIntensityLumens"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// or a platform-specific error has occurred.
+        /// </remarks>
+        public float? mainLightIntensityLumens { get; set; }
+
+        /// <summary>
+        /// An estimate for the average brightness of the main light estimate in the scene.
+        /// Use <c>averageMainLightBrightness.HasValue</c> to determine if this information is available.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="averageMainLightBrightness"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>,
+        /// or if a platform-specific error has occurred.
+        /// </remarks>
+        public float? averageMainLightBrightness
+        {
+            get 
+            {
+                if (m_MainLightBrightness.HasValue)
+                    return m_MainLightBrightness;
+                else if (mainLightIntensityLumens.HasValue)
+                    return ConvertLumensToBrightness(mainLightIntensityLumens.Value);
+
+                return null;
+            }
+            set => m_MainLightBrightness = value;
+        }
+
+        /// <summary>
+        /// The estimated color of the main light.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="mainLightColor"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// or a platform-specific error has occurred.
+        /// </remarks>
+        public Color? mainLightColor { get; set; }
+
+        /// <summary>
+        /// An estimate of where the main light of the scene is coming from.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="mainLightDirection"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// or a platform-specific error has occurred.
+        /// </remarks>
+        public Vector3? mainLightDirection { get; set; }
+
+        /// <summary>
+        /// An estimation of the ambient scene lighting using spherical harmonics at the Level 2.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="ambientSphericalHarmonics"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// or a platform-specific error has occurred.
+        /// </remarks>
+        public SphericalHarmonicsL2? ambientSphericalHarmonics { get; set; }
 
         /// <summary>
         /// Generates a hash code suitable for use in <c>HashSet</c> and <c>Dictionary</c>.
@@ -84,7 +145,11 @@ namespace UnityEngine.XR.ARFoundation
                     ((averageBrightness.GetHashCode() * 486187739 +
                     averageColorTemperature.GetHashCode()) * 486187739 +
                     colorCorrection.GetHashCode()) * 486187739 +
-                    averageIntensityInLumens.GetHashCode() * 486187739;
+                    averageIntensityInLumens.GetHashCode() * 486187739 +
+                    mainLightDirection.GetHashCode() * 486187739 +
+                    mainLightColor.GetHashCode() * 486187739 +
+                    mainLightIntensityLumens.GetHashCode() * 486187739 +
+                    ambientSphericalHarmonics.GetHashCode() * 486187739;
             }
         }
 
@@ -104,8 +169,24 @@ namespace UnityEngine.XR.ARFoundation
 
         public override string ToString()
         {
-            return string.Format("(Avg. Brightness: {0}, Avg. Color Temperature: {1}, Color Correction: {2}, Avg. Intensity in Lumens: {3})",
-                averageBrightness, averageColorTemperature, colorCorrection, averageIntensityInLumens);
+            var sphericalHarmonicsCoefficientsStr = new StringBuilder("");
+
+            if (ambientSphericalHarmonics.HasValue)
+            {
+                sphericalHarmonicsCoefficientsStr.Append("[");
+                for (int i = 0; i < 3; ++i)
+                {
+                    for (int j = 0; j < 9; ++j)
+                    {
+                        sphericalHarmonicsCoefficientsStr.Append(i * 3 + j != 26 ? $"{ambientSphericalHarmonics.Value[i, j]}, " : $"{ambientSphericalHarmonics.Value[i, j]}]");
+                    }
+                }
+            }
+
+            return $"(Avg. Brightness: {averageBrightness}, Avg. Color Temperature: {averageColorTemperature}, " 
+                + $"Color Correction: {colorCorrection}, Avg. Intensity in Lumens: {averageIntensityInLumens}, "
+                + $"Est. Main Light Direction: {mainLightDirection}, Est. Main Light Channel Intensity: {mainLightColor}, "
+                + $"Est. Main Light Intensity in Lumens: {mainLightIntensityLumens}, Est. Ambient Spherical Harmonics:\n{sphericalHarmonicsCoefficientsStr}";
         }
 
         /// <summary>
@@ -119,7 +200,11 @@ namespace UnityEngine.XR.ARFoundation
                 (averageBrightness.Equals(other.averageBrightness)) &&
                 (averageColorTemperature.Equals(other.averageColorTemperature)) &&
                 (colorCorrection.Equals(other.colorCorrection)) &&
-                (averageIntensityInLumens.Equals(other.averageIntensityInLumens));
+                (averageIntensityInLumens.Equals(other.averageIntensityInLumens)) &&
+                (mainLightColor.Equals(other.mainLightColor)) &&
+                (mainLightDirection.Equals(other.mainLightDirection)) &&
+                (mainLightIntensityLumens.Equals(other.mainLightIntensityLumens)) &&
+                (ambientSphericalHarmonics.Equals(other.ambientSphericalHarmonics));
         }
 
         /// <summary>
@@ -156,6 +241,8 @@ namespace UnityEngine.XR.ARFoundation
 
         private float? m_AverageBrightness;
         private float? m_AverageIntensityInLumens;
+        private float? m_MainLightBrightness;
+
         const float k_MaxLuminosity = 2000.0f;
     }
 }

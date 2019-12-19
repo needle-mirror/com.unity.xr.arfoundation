@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloudManager)]
     [RequireComponent(typeof(ARSessionOrigin))]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARPointCloudManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARPointCloudManager.html")]
     public class ARPointCloudManager : ARTrackableManager<
         XRDepthSubsystem,
         XRDepthSubsystemDescriptor,

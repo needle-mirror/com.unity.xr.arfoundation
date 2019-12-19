@@ -22,12 +22,34 @@ namespace UnityEngine.XR.ARFoundation
         CustomRenderPass m_ScriptablePass;
 
         /// <summary>
+        /// The mesh for rendering the background shader.
+        /// </summary>
+        Mesh m_BackgroundMesh;
+
+        /// <summary>
         /// Create the scriptable render pass.
         /// </summary>
         public override void Create()
         {
 #if !UNITY_EDITOR
             m_ScriptablePass = new CustomRenderPass(RenderPassEvent.BeforeRenderingOpaques);
+
+            m_BackgroundMesh = new Mesh();
+            m_BackgroundMesh.vertices =  new Vector3[]
+            {
+                new Vector3(0f, 0f, 0.1f),
+                new Vector3(0f, 1f, 0.1f),
+                new Vector3(1f, 1f, 0.1f),
+                new Vector3(1f, 0f, 0.1f),
+            };
+            m_BackgroundMesh.uv = new Vector2[]
+            {
+                new Vector2(0f, 0f),
+                new Vector2(0f, 1f),
+                new Vector2(1f, 1f),
+                new Vector2(1f, 0f),
+            };
+            m_BackgroundMesh.triangles = new int[] {0, 1, 2, 0, 2, 3};
 #endif // !UNITY_EDITOR
         }
 
@@ -43,10 +65,12 @@ namespace UnityEngine.XR.ARFoundation
             if ((currentCamera != null) && (currentCamera.cameraType == CameraType.Game))
             {
                 ARCameraBackground cameraBackground = currentCamera.gameObject.GetComponent<ARCameraBackground>();
-                if ((cameraBackground != null) && cameraBackground.backgroundRenderingEnabled && (cameraBackground.material != null))
+                if ((cameraBackground != null) && cameraBackground.backgroundRenderingEnabled
+                    && (cameraBackground.material != null))
                 {
                     bool invertCulling = cameraBackground.GetComponent<ARCameraManager>()?.subsystem?.invertCulling ?? false;
-                    m_ScriptablePass.Setup(cameraBackground.material, renderer.cameraColorTarget, renderer.cameraDepth, invertCulling);
+                    m_ScriptablePass.Setup(m_BackgroundMesh, cameraBackground.material, invertCulling,
+                                           renderer.cameraColorTarget, renderer.cameraDepth);
                     renderer.EnqueuePass(m_ScriptablePass);
                 }
             }
@@ -64,27 +88,33 @@ namespace UnityEngine.XR.ARFoundation
             const string k_CustomRenderPassName = "AR Background Pass (URP)";
 
             /// <summary>
-            /// The material used for blitting the camera video texture to the device background.
+            /// The orthogonal projection matrix for the background rendering.
             /// </summary>
-            Material m_Material;
+            static readonly Matrix4x4 k_BackgroundOrthoProjection = Matrix4x4.Ortho(0f, 1f, 0f, 1f, -0.1f, 9.9f);
 
             /// <summary>
-            /// The camera video texture used for blitting to the device background.
+            /// The mesh for rendering the background material.
             /// </summary>
-            Texture m_Texture;
+            Mesh m_BackgroundMesh;
 
             /// <summary>
-            /// The destination render target identifier for blitting the background color.
+            /// The material used for rendering the device background using the camera video texture and potentially
+            /// other device-specific properties and textures.
+            /// </summary>
+            Material m_BackgroundMaterial;
+
+            /// <summary>
+            /// The destination render target identifier for rendering the background color.
             /// </summary>
             RenderTargetIdentifier m_ColorTargetIdentifier;
 
             /// <summary>
-            /// The destination render target identifier for blitting the background depth.
+            /// The destination render target identifier for rendering the background depth.
             /// </summary>
             RenderTargetIdentifier m_DepthTargetIdentifier;
 
             /// <summary>
-            /// Whether the culling mode should be inverted
+            /// Whether the culling mode should be inverted.
             /// ([CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html)).
             /// </summary>
             bool m_InvertCulling;
@@ -101,18 +131,21 @@ namespace UnityEngine.XR.ARFoundation
             /// <summary>
             /// Setup the background render pass.
             /// </summary>
-            /// <param name="material">The material to use when blitting the background texture.</param>
-            /// <param name="colorTargetIdentifier">The color target to which to blit the background texture.</param>
-            /// <param name="depthTargetIdentifier">The depth target to which to blit the background texture.</param>
+            /// <param name="backgroundMesh">The mesh used for rendering the device background.</param>
+            /// <param name="backgroundMaterial">The material used for rendering the device background.</param>
+            /// <param name="invertCulling">Whether the culling mode should be inverted.</param>
+            /// <param name="colorTargetIdentifier">The color target to which to render the background texture.</param>
+            /// <param name="depthTargetIdentifier">The depth target to which to render the background texture.</param>
 
-            public void Setup(Material material, RenderTargetIdentifier colorTargetIdentifier,
-                              RenderTargetIdentifier depthTargetIdentifier, bool invertCulling)
+            public void Setup(Mesh backgroundMesh, Material backgroundMaterial, bool invertCulling,
+                              RenderTargetIdentifier colorTargetIdentifier,
+                              RenderTargetIdentifier depthTargetIdentifier)
             {
-                m_Material = material;
-                m_Texture = !m_Material.HasProperty(ARCameraBackground.k_MainTexId) ? null : m_Material.GetTexture(ARCameraBackground.k_MainTexId);
+                m_BackgroundMesh = backgroundMesh;
+                m_BackgroundMaterial = backgroundMaterial;
+                m_InvertCulling = invertCulling;
                 m_ColorTargetIdentifier = colorTargetIdentifier;
                 m_DepthTargetIdentifier = depthTargetIdentifier;
-                m_InvertCulling = invertCulling;
             }
 
             /// <summary>
@@ -127,17 +160,24 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             /// <summary>
-            /// Execute the render commands to blit the camera background texture.
+            /// Execute the commands to render the camera background.
             /// </summary>
             /// <param name="context">The render context for executing the render commands.</param>
             /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
                 var cmd = CommandBufferPool.Get(k_CustomRenderPassName);
+                cmd.BeginSample(k_CustomRenderPassName);
 
                 ARCameraBackground.AddOpenGLES3ResetStateCommand(cmd);
                 cmd.SetInvertCulling(m_InvertCulling);
-                Blit(cmd, m_Texture, m_ColorTargetIdentifier, m_Material);
+
+                cmd.SetViewProjectionMatrices(Matrix4x4.identity, k_BackgroundOrthoProjection);
+                cmd.DrawMesh(m_BackgroundMesh, Matrix4x4.identity, m_BackgroundMaterial);
+                cmd.SetViewProjectionMatrices(renderingData.cameraData.camera.worldToCameraMatrix,
+                                              renderingData.cameraData.camera.projectionMatrix);
+
+                cmd.EndSample(k_CustomRenderPassName);
                 context.ExecuteCommandBuffer(cmd);
 
                 CommandBufferPool.Release(cmd);

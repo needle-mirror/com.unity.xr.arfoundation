@@ -41,7 +41,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(ARCameraManager))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
     public class ARCameraBackground : MonoBehaviour
     {
         /// <summary>
@@ -62,7 +62,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Property ID for the shader parameter for the main texture.
         /// </summary>
-        internal static readonly int k_MainTexId = Shader.PropertyToID(k_MainTexName);
+        static readonly int k_MainTexId = Shader.PropertyToID(k_MainTexName);
 
         /// <summary>
         /// Property ID for the shader parameter for the display transform matrix.

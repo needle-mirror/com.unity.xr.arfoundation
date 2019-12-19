@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
     public sealed class ARCameraManager : SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>
     {
         [SerializeField]
@@ -261,6 +261,18 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.hasColorCorrection)
                 lightEstimation.colorCorrection = frame.colorCorrection;
+
+            if (frame.hasMainLightDirection)
+                lightEstimation.mainLightDirection = frame.mainLightDirection;
+
+            if (frame.hasMainLightIntensityLumens)
+                lightEstimation.mainLightIntensityLumens = frame.mainLightIntensityLumens;
+
+            if (frame.hasMainLightColor)
+                lightEstimation.mainLightColor = frame.mainLightColor;
+
+            if (frame.hasAmbientSphericalHarmonics)
+                lightEstimation.ambientSphericalHarmonics = frame.ambientSphericalHarmonics;
 
             var eventArgs = new ARCameraFrameEventArgs();
 
