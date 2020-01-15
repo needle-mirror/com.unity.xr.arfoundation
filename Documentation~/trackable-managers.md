@@ -1,34 +1,35 @@
-# Trackable Managers
+# Trackable managers
 
-In AR Foundation, a "trackable" is anything that can be detected and tracked in the real world. Planes, point clouds, anchors, environment probes, faces, images, and 3d objects are all examples of trackables.
+In AR Foundation, a "trackable" is anything that can be detected and tracked in the real world. Planes, point clouds, anchors, environment probes, faces, images, and 3D objects are all examples of trackables.
 
 Each trackable has a trackable manager. All the trackable managers must be on the same `GameObject` as the AR Session Origin. This is because the session origin defines the transform to which all the detected trackables are relative. The trackable managers use the session origin to place the detected trackables in the correct place in the Unity scene graph.
 
 This image shows the session origin with all the trackable managers:
 
-![alt text](images/ar-session-origin-with-managers.png "AR Session Origin with Managers")
+![AR session origin with trackable managers](images/ar-session-origin-with-managers.png "AR session origin with trackable managers")
 
 This table summarizes the trackable managers and their trackables.
-| Trackable Manager                                           | Trackable            | Purpose |
-|-------------------------------------------------------------|----------------------|---------|
+
+| **Trackable Manager** | **Trackable** | **Purpose** |
+|-|-|-|
 | [`ARPlaneManager`](plane-manager.md)                        | `ARPlane`            | Detects flat surfaces. |
 | [`ARPointCloudManager`](point-cloud-manager.md)             | `ARPointCloud`       | Detects feature points. |
 | [`ARAnchorManager`](anchor-manager.md)                      | `ARAnchor`           | Manages anchors. You can manually add and remove them with `ARAnchorManager.AddAnchor` and `ARAnchorManager.RemoveAnchor`. |
 | [`ARTrackedImageManager`](tracked-image-manager.md)         | `ARTrackedImage`     | Detects and tracks 2D images. |
-| [`AREnvironmentProbeManager`](environment-probe-manager.md) | `AREnvironmentProbe` | Creates cubemaps representing the environment. |
+| [`AREnvironmentProbeManager`](environment-probe-manager.md) | `AREnvironmentProbe` | Creates cubemaps that represent the environment. |
 | [`ARFaceManager`](face-manager.md)                          | `ARFace`             | Detects and tracks human faces. |
 | [`ARTrackedObjectManager`](tracked-object-manager.md)       | `ARTrackedObject`    | Detects 3D objects. |
-| [`ARParticipantManager`](participant-manager.md)            | `ARParticipant`      | Tracks other users in a multi-user collaborative session |
+| [`ARParticipantManager`](participant-manager.md)            | `ARParticipant`      | Tracks other users in a multi-user collaborative session. |
 
-Each trackable component stores information about the trackable, but does not visualize it. Its `transform` is updated by its manager whenever the AR device reports an update.
+Each trackable component stores information about the trackable, but doesn't visualize it. Its manager updates its `transform` whenever the AR device reports an update.
 
-## Enabling and Disabling Features
+## Enabling and disabling features
 
-Enabling a trackable manager will enable or "turn on" that feature. For example, you can toggle plane detection by enabling or disabling the AR Plane Manager. Enabling a particular feature may cause the device to consume more power, so it is best to disable managers when you are not using them.
+Enabling a trackable manager enables that feature. For example, you can toggle plane detection by enabling or disabling the AR Plane Manager. Enabling a particular feature can cause the device to consume more power, so it's best to disable managers when your application isn't using them.
 
-## Enumerating Trackables
+## Enumerating trackables
 
-Trackables can be enumerated via their manager with the `trackables` member, e.g.,
+Trackables can be enumerated via their manager with the `trackables` member. For example:
 
 ```csharp
 var planeManager = GetComponent<ARPlaneManager>();
@@ -40,11 +41,11 @@ foreach (ARPlane plane in planeManager.trackables)
 
 The `trackables` property returns a `TrackableCollection`, which can be enumerated in a `foreach` statement as in the above example. You can also query for a particular trackable with the `TryGetTrackable` method.
 
-## Trackable Lifetime
+## Trackable lifetime
 
 Each trackable can be added, updated, and removed. Each frame, the managers query for the set of changes to their trackables since the previous frame. Each manager has an event to which you can subscribe to be notified of these changes:
 
-| Trackable Manager | Event |
+| **Trackable Manager** | **Event** |
 |-|-|
 | `ARPlaneManager`              | `planesChanged`|
 | `ARPointCloudManager`         | `pointCloudsChanged`|
@@ -55,17 +56,18 @@ Each trackable can be added, updated, and removed. Each frame, the managers quer
 | `ARTrackedObjectManager`      | `trackedObjectsChanged` |
 | `ARParticipantManager`        | `participantsChanged` |
 
-A trackable will always be added before it is updated or removed. Likewise, a trackable can not be removed unless it was first added. Updates depend on the semantics of the trackable, and the provider-specific implementation.
+A trackable will always be added before it is updated or removed. Likewise, a trackable can't be removed unless it was added first. Updates depend on the trackable's semantics and the provider-specific implementation.
 
-### Adding and Removing Trackables
+### Adding and removing trackables
 
-Some trackables, like anchors and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be both manually added and automatically created. The relevant managers provide methods for addtion and removal when supported.
+Some trackables, like anchors and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be added manually or created automatically. Where supported, the relevant managers provide methods for addtion and removal.
 
-You should never `Destroy` a trackable component or its `GameObject` directly. For trackables that support manual removal, its manager will provide a method to remove it. For example, to remove an anchor, you would call `RemoveAnchor` on the `ARAnchorManager`.
+You should never `Destroy` a trackable component or its `GameObject` directly. For trackables that support manual removal, their manager provides a method to remove it. For example, to remove an anchor, you need to call `RemoveAnchor` on the `ARAnchorManager`.
 
-When you manually add a trackable, it may not be tracked by the underlying subsystem immediately. You will not get an added event for that trackable until the subsystem reports that it has been added (typically on the next frame). During the time between manual addition and the added event, the trackable will be in a "pending" state. You can check this with the `pending` property on every trackable.
+When you manually add a trackable, the underlying subsystem might not track it immediately. You won't get an added event for that trackable until the subsystem reports that it has been added (typically on the next frame). During the time between manual addition and the added event, the trackable will be in a "pending" state. You can check this with the `pending` property on every trackable.
 
 For example, if you add an anchor, it will likely be pending until the next frame:
+
 ```csharp
 var anchor = AnchorManager.AddAnchor(new Pose(position, rotation));
 Debug.Log(anchor.pending); // "true"
@@ -82,15 +84,15 @@ void OnAnchorsChanged(ARAnchorsChangedEventArgs eventArgs)
 
 The exact amount of time a trackable spends in the `pending` state depends on the underlying implementation.
 
-When a trackable receives a removal notification, its manager will `Destroy` the trackable's `GameObject` unless `destroyOnRemoval` is false.
+When a trackable receives a removal notification, its manager `Destroy`s the trackable's `GameObject` unless `destroyOnRemoval` is false.
 
-![alt text](images/ar-plane.png "Destroy on Removal")
+![Destroy On Removal](images/ar-plane.png "Destroy on Removal")
 
-#### Deactivating Existing Trackables
+#### Deactivating existing trackables
 
-Sometimes, you may want to stop performing behavior associated with a trackable without disabling its manager. For example, you may wish to stop rendering detected planes even though you do not wish to stop plane detection.
+Sometimes, you might want to stop performing behavior associated with a trackable without disabling its manager. For example, you might wish to stop rendering detected planes without stopping plane detection.
 
-Simply deactivate each trackable's `GameObject`:
+To do this, deactivate each trackable's `GameObject`:
 
 ```csharp
 var planeManager = GetComponent<ARPlaneManager>();
@@ -100,8 +102,8 @@ foreach (var plane in planeManager.trackables)
 }
 ```
 
-## Controlling the `GameObject` for a Trackable
+## Controlling a trackable's `GameObject`
 
-When a new trackable is detected, its manager will instantiate a prefab configurable on the manager. The instantiated `GameObject` must have an `ARTrackable` component for that type of trackable. If the prefab is `null`, a `GameObject` with only the relevant `ARTrackable` will be created. If your prefab does not have the relevant `ARTrackable`, one will be added.
+When a new trackable is detected, its manager instantiates a prefab configurable on the manager. The instantiated `GameObject` must have an `ARTrackable` component for that type of trackable. If the prefab is `null`, the system creates a `GameObject` with only the relevant `ARTrackable`. If your prefab doesn't have the relevant `ARTrackable`, the system adds one.
 
-For example, when the plane manager detects a plane, it will create a `GameObject` using the "Plane Prefab" if specified, or an empty `GameObject` otherwise. Then it will ensure it has an `ARPlane` component on it.
+For example, when the plane manager detects a plane, it creates a `GameObject` using the "Plane Prefab" if specified, or an empty `GameObject` otherwise, then ensures that the `GameObject` has an `ARPlane` component on it.

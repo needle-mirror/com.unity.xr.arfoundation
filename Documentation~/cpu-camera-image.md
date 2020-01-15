@@ -1,69 +1,73 @@
-# Accessing the Camera Image on the CPU
+# Accessing the device camera image on the CPU
 
-For some applications, it may be desirable to perform processing of the camera image on the CPU, for example, if using a custom computer vision algorithm.
 
-Since the [`XRCameraSubsystem.GetTextures`](https://docs.unity3d.com/ScriptReference/Experimental.XR.XRCameraSubsystem.GetTextures.html) provides a list of external textures, they would need to be read back from the GPU in order to do additional processing, which can be prohibitively expensive. In addition, the number and format of textures varies by platform.
+You can access the device camera image on the CPU by using [`ARCameraManager.TryGetLatestImage`](../api/UnityEngine.XR.ARFoundation.ARCameraManager.html#UnityEngine_XR_ARFoundation_ARCameraManager_TryGetLatestImage_XRCameraImage__).
 
-To interact with the CPU camera image, you will need to first obtain a `CameraImage` using the `ARCameraManager`:
+When you call `ARCameraManager.TryGetLatestImage`, Unity transfers textures from the GPU to the CPU. This is a resource-intensive process that impacts performance, so this method should be used only when you need to access the pixel data from the device camera to be used by code that runs on the CPU. For example, most computer vision code requires this data to be accessible on the CPU.
+
+The number and format of textures varies by platform.
+
+To interact with the CPU copy of the device camera image, you must first obtain a `XRCameraImage` using the `ARCameraManager`:
 
 ```csharp
 public bool TryGetLatestImage(out XRCameraImage cameraImage)
 ```
 
-The `CameraImage` is a `struct` which represents a native resource. When you are finished using it, you must call `Dispose` on it to release it back to the system. Although you may hold a `CameraImage` for multiple frames, most platforms have a limited number of them, so failure to `Dispose` them may prevent the system from providing new camera images.
+The `XRCameraImage` is a `struct` which represents a native resource. When your application no longer needs it, you must call `Dispose` on it to release it back to the system. You can hold a `XRCameraImage` for multiple frames, but most platforms have a limited number of frames, so failure to `Dispose` them might prevent the system from providing new device camera images.
 
-The `CameraImage` gives you access to three features:
-- [Raw Image Planes](#raw-image-planes)
-- [Synchronously Convert to Grayscale and Color](#synchronously-convert-to-grayscale-and-color)
-- [Asynchronously Convert to Grayscale and Color](#asynchronously-convert-to-grayscale-and-color)
+The `XRCameraImage` gives you access to three features:
 
-## Raw Image Planes
+- [Raw image planes](#raw-image-planes)
+- [Synchronously convert to grayscale and color](#synchronously-convert-to-grayscale-and-color)
+- [Asynchronously convert to grayscale and color](#asynchronously-convert-to-grayscale-and-color)
 
-**Note:** An image "plane" in this context refers to a channel used in the video format (not a planar surface and not related to an `ARPlane`).
+## Raw image planes
 
-Most video formats use a YUV encoding variant, where Y is the luminance plane, and the UV plane(s) contain chromaticity information. U and V may be interleaved or separate planes, and there could be additional padding per pixel or per row.
+**Note:** An image "plane", in this context, refers to a channel used in the video format. It's not a planar surface and not related to an `ARPlane`.
 
-If you need access to the raw, platform-specific YUV data, you can get each image "plane" with the method `CameraImage.GetPlane`.
+Most video formats use a YUV encoding variant, where Y is the luminance plane, and the UV plane(s) contain chromaticity information. U and V can be interleaved or separate planes, and there might be additional padding per pixel or per row.
 
-### Example:
+If you need access to the raw, platform-specific YUV data, you can get each image "plane" using the `XRCameraImage.GetPlane` method.
+
+### Example
 
 ```csharp
-CameraImage image;
+XRCameraImage image;
 if (!cameraManager.TryGetLatestImage(out image))
     return;
 
-// Consider each image plane
+// Consider each image plane.
 for (int planeIndex = 0; planeIndex < image.planeCount; ++planeIndex)
 {
-    // Log information about the image plane
-    CameraImagePlane plane = image.GetPlane(planeIndex);
+    // Log information about the image plane.
+    XRCameraImagePlane plane = image.GetPlane(planeIndex);
     Debug.LogFormat("Plane {0}:\n\tsize: {1}\n\trowStride: {2}\n\tpixelStride: {3}",
         planeIndex, plane.data.Length, plane.rowStride, plane.pixelStride);
 
-    // Do something with the data:
+    // Do something with the data.
     MyComputerVisionAlgorithm(plane.data);
 }
 
-// You must dispose the CameraImage to avoid resource leaks.
+// Dispose the XRCameraImage to avoid resource leaks.
 image.Dispose();
 ```
 
-A `CameraImagePlane` provides direct access to a native memory buffer via a `NativeArray<byte>`. This represents a "view" into the native memory; you do not need to dispose the `NativeArray`, and the data is only valid until the `CameraImage` is disposed. You should consider the memory read-only.
+A `XRCameraImagePlane` provides direct access to a native memory buffer via a `NativeArray<byte>`. This represents a "view" into the native memory; you don't need to dispose the `NativeArray`, and the data is only valid until the `XRCameraImage` is disposed. You should consider this memory read-only.
 
-## Synchronously Convert to Grayscale and Color
+## Synchronously convert to grayscale and color
 
-To obtain grayscale or color versions of the camera image, the raw plane data needs to be converted. `CameraImage` provides both synchronous and asynchronous conversion methods. This section convers the synchronous version.
+To obtain grayscale or color versions of the camera image, you need to convert the raw plane data. `XRCameraImage` provides both synchronous and asynchronous conversion methods. This section covers the synchronous method.
 
-This method converts the `CameraImage` into the `TextureFormat` specified by `conversionParams` and writes the data to the buffer at `destinationBuffer`. Grayscale images (`TextureFormat.Alpha8` and `TextureFormat.R8`) are typically very fast, while color conversions require CPU intensive computations.
+This method converts the `XRCameraImage` into the `TextureFormat` specified by `conversionParams`, and writes the data to the buffer at `destinationBuffer`. Grayscale images (`TextureFormat.Alpha8` and `TextureFormat.R8`) are typically very fast, while color conversions require CPU-intensive computations.
 
 ```csharp
-public void Convert(CameraImageConversionParams conversionParams, IntPtr destinationBuffer, int bufferLength)
+public void Convert(XRCameraImageConversionParams conversionParams, IntPtr destinationBuffer, int bufferLength)
 ```
 
-Let's look at `CameraImageConversionParams` in more detail:
+Here's a more detailed look at `XRCameraImageConversionParams`:
 
 ```csharp
-public struct CameraImageConversionParams
+public struct XRCameraImageConversionParams
 {
     public RectInt inputRect;
     public Vector2Int outputDimensions;
@@ -72,23 +76,21 @@ public struct CameraImageConversionParams
 }
 ```
 
-|Property|Meaning|
+|Property|Description|
 |-|-|
-|`inputRect`|The portion of the `CameraImage` to convert. This can be the full image or some sub rectangle of the image. The `inputRect` must fit completely inside the original image. It can be significantly faster convert a sub rectangle of the original image if know which part of the image you need.|
-|`outputDimensions`|The dimensions of the output image. The `CameraImage` converter supports downsampling (using nearest neighbor), allowing you to specify a smaller output image than the `inputRect.width` and `inputRect.height` parameters. For example, you could supply `(inputRect.width / 2, inputRect.height / 2)` to get a half resolution image. This can decrease the time it takes to perform a color conversion. The `outputDimensions` must be less than or equal to the `inputRect`'s dimensions (no upsampling).|
-|`outputFormat`|The following formats are currently supported<ul><li>`TextureFormat.RGB24`</li><li>`TextureFormat.RGBA24`</li><li>`TextureFormat.ARGB32`</li><li>`TextureFormat.BGRA32`</li><li>`TextureFormat.Alpha8`</li><li>`TextureFormat.R8`</li></ul>You can also use `CameraImage.FormatSupported` to test a texture format before calling one of the conversion methods.|
-|`transformation`|Let's you specify a transformation to apply during the conversion, such as mirroring the image across the X or Y (or both) axis. This typically does not increase the processing time.|
+|`inputRect`|The portion of the `XRCameraImage` to convert. This can be the full image or a sub-rectangle of the image. The `inputRect` must fit completely inside the original image. It can be significantly faster to convert a sub-rectangle of the original image if you know which part of the image you need.|
+|`outputDimensions`|The dimensions of the output image. The `XRCameraImage` converter supports downsampling (using nearest neighbor), allowing you to specify a smaller output image than the `inputRect.width` and `inputRect.height` parameters. For example, you could supply `(inputRect.width / 2, inputRect.height / 2)` to get a half resolution image. This can decrease the time it takes to perform a color conversion. The `outputDimensions` must be less than or equal to the `inputRect`'s dimensions (no upsampling).|
+|`outputFormat`|The following formats are currently supported<ul><li>`TextureFormat.RGB24`</li><li>`TextureFormat.RGBA24`</li><li>`TextureFormat.ARGB32`</li><li>`TextureFormat.BGRA32`</li><li>`TextureFormat.Alpha8`</li><li>`TextureFormat.R8`</li></ul>You can also use `XRCameraImage.FormatSupported` to test a texture format before calling one of the conversion methods.|
+|`transformation`|Use this property to specify a transformation to apply during the conversion, such as mirroring the image across the X or Y axis, or both axes. This typically doesn't increase the processing time.|
 
-Since you must supply the destination buffer, you also need to know how many bytes you'll need to store the converted image. Use
+Since you must supply the destination buffer, you also need to know how many bytes you'll need to store the converted image. To get the required number of bytes, use:
 
 ```csharp
-public int GetConvertedDataSize(int width, int height, TextureFormat format)
+public int GetConvertedDataSize(Vector2Int dimensions, TextureFormat format)
 ```
-To get the required number of bytes.
-
 The data produced by the conversion is compatible with `Texture2D` using [`Texture2D.LoadRawTextureData`](https://docs.unity3d.com/ScriptReference/Texture2D.LoadRawTextureData.html).
 
-### Example:
+### Example
 
 ```csharp
 using System;
@@ -114,42 +116,42 @@ public class CameraImageExample : MonoBehaviour
 
     unsafe void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
     {
-        CameraImage image;
+        XRCameraImage image;
         if (!cameraManager.TryGetLatestImage(out image))
             return;
 
-        var conversionParams = new CameraImageConversionParams
+        var conversionParams = new XRCameraImageConversionParams
         {
-            // Get the entire image
+            // Get the entire image.
             inputRect = new RectInt(0, 0, image.width, image.height),
 
-            // Downsample by 2
+            // Downsample by 2.
             outputDimensions = new Vector2Int(image.width / 2, image.height / 2),
 
-            // Choose RGBA format
+            // Choose RGBA format.
             outputFormat = TextureFormat.RGBA32,
 
-            // Flip across the vertical axis (mirror image)
+            // Flip across the vertical axis (mirror image).
             transformation = CameraImageTransformation.MirrorY
         };
 
-        // See how many bytes we need to store the final image.
+        // See how many bytes you need to store the final image.
         int size = image.GetConvertedDataSize(conversionParams);
 
-        // Allocate a buffer to store the image
+        // Allocate a buffer to store the image.
         var buffer = new NativeArray<byte>(size, Allocator.Temp);
 
         // Extract the image data
         image.Convert(conversionParams, new IntPtr(buffer.GetUnsafePtr()), buffer.Length);
 
         // The image was converted to RGBA32 format and written into the provided buffer
-        // so we can dispose of the CameraImage. We must do this or it will leak resources.
+        // so you can dispose of the XRCameraImage. You must do this or it will leak resources.
         image.Dispose();
 
-        // At this point, we could process the image, pass it to a computer vision algorithm, etc.
-        // In this example, we'll just apply it to a texture to visualize it.
+        // At this point, you can process the image, pass it to a computer vision algorithm, etc.
+        // In this example, you apply it to a texture to visualize it.
 
-        // We've got the data; let's put it into a texture so we can visualize it.
+        // You've got the data; let's put it into a texture so you can visualize it.
         m_Texture = new Texture2D(
             conversionParams.outputDimensions.x,
             conversionParams.outputDimensions.y,
@@ -159,31 +161,32 @@ public class CameraImageExample : MonoBehaviour
         m_Texture.LoadRawTextureData(buffer);
         m_Texture.Apply();
 
-        // Done with our temporary data
+        // Done with your temporary data, so you can dispose it.
         buffer.Dispose();
     }
 }
 ```
 
-## Asynchronously Convert to Grayscale and Color
+## Asynchronously convert to grayscale and color
 
-If you do not need the current image immediately, there is also an asynchronous version: `CameraImage.ConvertAsync`. You can make as many asynchronous image requests as you like. They are typically ready by the next frame, but since there is no limit on the number of outstanding requests, it could take some time if there are several in the queue. Requests are processed in the order they are received.
+If you don't need the current image immediately, you can convert it asynchronously using `XRCameraImage.ConvertAsync`. You can make as many asynchronous image requests as you like. They're typically ready by the next frame, but since there is no limit on the number of outstanding requests, your request might take some time if there are several images in the queue. Requests are processed in the order they're received.
 
-`CameraImage.ConvertAsync` returns an `AsyncCameraImageConversion`. This lets you query the status of the conversion and, once complete, get the pixel data.
+`XRCameraImage.ConvertAsync` returns an `XRAsyncCameraImageConversion`. This lets you query the status of the conversion and, once complete, get the pixel data.
 
-Once you have a conversion object, you can query its status to find out if it is done:
+Once you have a conversion object, you can query its status to find out if it's done:
+
 ```csharp
-AsyncCameraImageConversion conversion = image.ConvertAsync(...);
+XRAsyncCameraImageConversion conversion = image.ConvertAsync(...);
 while (!conversion.status.IsDone())
     yield return null;
 ```
-Use the `status` to determine whether the request has completed. If the status `AsyncCameraImageConversionStatus.Ready`, then you may call `GetData<T>` to get the pixel data as a `NativeArray<T>`.
+Use the `status` to determine whether the request is complete. If the status is `AsyncCameraImageConversionStatus.Ready`, you can call `GetData<T>` to get the pixel data as a `NativeArray<T>`.
 
-`GetData<T>` returns a `NativeArray<T>` which is a direct "view" into native memory. It is valid until you call `Dispose` on the `AsyncCameraImageConversion`. It is an error to access the `NativeArray<T>` after the `AsyncCameraImageConversion` has been disposed. You do not need to dispose the `NativeArray<T>` returned by `GetData<T>`, only the `AsyncCameraImageConversion`.
+`GetData<T>` returns a `NativeArray<T>` which is a direct "view" into native memory and is valid until you call `Dispose` on the `XRAsyncCameraImageConversion`. It's an error to access the `NativeArray<T>` after the `XRAsyncCameraImageConversion` has been disposed. You don't need to dispose the `NativeArray<T>` that `GetData<T>` returns.
 
-**Important:** `AsyncCameraImageConversion`s must be explicitly disposed. Failing to dispose an `AsyncCameraImageConversion` will leak memory until the `XRCameraSubsystem` is destroyed. (The `XRCameraSubsystem` will remove all async conversions when it is destroyed.)
+**Important:** You must explicitly dispose `XRAsyncCameraImageConversion`s. Failing to dispose an `XRAsyncCameraImageConversion` will leak memory until the `XRCameraSubsystem` is destroyed. The `XRCameraSubsystem` will remove all async conversions when destroyed.
 
-**Note:** `CameraImage` may be disposed before the asynchronous conversion has completed. The data contained by the `AsyncCameraImageConversion` is not tied to the `CameraImage`.
+**Note:** You can dispose `XRCameraImage` before the asynchronous conversion completes. The data contained by the `XRAsyncCameraImageConversion` isn't tied to the `XRCameraImage`.
 
 ### Example
 
@@ -192,45 +195,45 @@ Texture2D m_Texture;
 
 public void GetImageAsync()
 {
-    // Get information about the camera image
-    CameraImage image;
+    // Get information about the device camera image.
+    XRCameraImage image;
     if (cameraManager.TryGetLatestImage(out image))
     {
         // If successful, launch a coroutine that waits for the image
         // to be ready, then apply it to a texture.
         StartCoroutine(ProcessImage(image));
 
-        // It is safe to dispose the image before the async operation completes.
+        // It's safe to dispose the image before the async operation completes.
         image.Dispose();
     }
 }
 
-IEnumerator ProcessImage(CameraImage image)
+IEnumerator ProcessImage(XRCameraImage image)
 {
-    // Create the async conversion request
-    var request = image.ConvertAsync(new CameraImageConversionParams
+    // Create the async conversion request.
+    var request = image.ConvertAsync(new XRCameraImageConversionParams
     {
-        // Use the full image
+        // Use the full image.
         inputRect = new RectInt(0, 0, image.width, image.height),
 
-        // Downsample by 2
+        // Downsample by 2.
         outputDimensions = new Vector2Int(image.width / 2, image.height / 2),
 
-        // Color image format
+        // Color image format.
         outputFormat = TextureFormat.RGB24,
 
-        // Flip across the Y axis
+        // Flip across the Y axis.
         transformation = CameraImageTransformation.MirrorY
     });
 
-    // Wait for it to complete
+    // Wait for the conversion to complete.
     while (!request.status.IsDone())
         yield return null;
 
-    // Check status to see if it completed successfully.
+    // Check status to see if the conversion completed successfully.
     if (request.status != AsyncCameraImageConversionStatus.Ready)
     {
-        // Something went wrong
+        // Something went wrong.
         Debug.LogErrorFormat("Request failed with status {0}", request.status);
 
         // Dispose even if there is an error.
@@ -241,7 +244,7 @@ IEnumerator ProcessImage(CameraImage image)
     // Image data is ready. Let's apply it to a Texture2D.
     var rawData = request.GetData<byte>();
 
-    // Create a texture if necessary
+    // Create a texture if necessary.
     if (m_Texture == null)
     {
         m_Texture = new Texture2D(
@@ -251,7 +254,7 @@ IEnumerator ProcessImage(CameraImage image)
             false);
     }
 
-    // Copy the image data into the texture
+    // Copy the image data into the texture.
     m_Texture.LoadRawTextureData(rawData);
     m_Texture.Apply();
 
@@ -261,40 +264,40 @@ IEnumerator ProcessImage(CameraImage image)
 }
 ```
 
-There is also a version of `ConvertAsync` which accepts a delegate and does not return an `AsynCameraImageConversion`:
+There's also a version of `ConvertAsync` which accepts a delegate and doesn't return an `AsynCameraImageConversion`:
 
 ```csharp
 public void GetImageAsync()
 {
-    // Get information about the camera image
-    CameraImage image;
+    // Get information about the device camera image.
+    XRCameraImage image;
     if (cameraManager.TryGetLatestImage(out image))
     {
         // If successful, launch a coroutine that waits for the image
         // to be ready, then apply it to a texture.
-        image.ConvertAsync(new CameraImageConversionParams
+        image.ConvertAsync(new XRCameraImageConversionParams
         {
-            // Get the full image
+            // Get the full image.
             inputRect = new RectInt(0, 0, image.width, image.height),
 
-            // Downsample by 2
+            // Downsample by 2.
             outputDimensions = new Vector2Int(image.width / 2, image.height / 2),
 
-            // Color image format
+            // Color image format.
             outputFormat = TextureFormat.RGB24,
 
-            // Flip across the Y axis
+            // Flip across the Y axis.
             transformation = CameraImageTransformation.MirrorY
 
-            // Call ProcessImage when the async operation completes
+            // Call ProcessImage when the async operation completes.
         }, ProcessImage);
 
-        // It is safe to dispose the image before the async operation completes.
+        // It's safe to dispose the image before the async operation completes.
         image.Dispose();
     }
 }
 
-void ProcessImage(AsyncCameraImageConversionStatus status, CameraImageConversionParams conversionParams, NativeArray<byte> data)
+void ProcessImage(AsyncCameraImageConversionStatus status, XRCameraImageConversionParams conversionParams, NativeArray<byte> data)
 {
     if (status != AsyncCameraImageConversionStatus.Ready)
     {
@@ -302,11 +305,11 @@ void ProcessImage(AsyncCameraImageConversionStatus status, CameraImageConversion
         return;
     }
 
-    // Do something useful, like copy to a Texture2D or pass to a computer vision algorithm
+    // Do something useful, like copy to a Texture2D or pass to a computer vision algorithm.
     DoSomethingWithImageData(data);
 
-    // data is destroyed upon return; no need to dispose
+    // Data is destroyed upon return; no need to dispose.
 }
 ```
 
-In this version, the `NativeArray<byte>` is again a "view" into the native memory associated with the request, and you need not dispose of it. It is only valid for the duration of the delegate invocation and is destroyed immediately upon return. If you need the data to live beyond the lifetime of your delegate, make a copy (see [`NativeArray<T>.CopyTo`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyTo.html) & [`NativeArray<T>.CopyFrom`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyFrom.html)).
+In this version, the `NativeArray<byte>` is again a "view" into the native memory associated with the request, and you don't need to dispose it. It's only valid for the duration of the delegate invocation and is destroyed immediately upon return. If you need the data to live beyond the lifetime of your delegate, make a copy (see [`NativeArray<T>.CopyTo`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyTo.html) and [`NativeArray<T>.CopyFrom`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyFrom.html)).

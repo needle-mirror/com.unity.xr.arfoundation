@@ -1,27 +1,28 @@
-# AR Face Manager
+# AR face manager
 
 The face manager is a type of [trackable manager](trackable-managers.md).
 
-![alt text](images/ar-face-manager.png "AR Face Manager")
+![AR face manager](images/ar-face-manager.png "AR face manager")
 
-The face manager will create `GameObject`s for each detected face in the environment. The system only detects human faces.
+The face manager creates `GameObject`s for each face detected in the environment. The system only detects human faces.
 
-In some implementations, face tracking requires a different camera (e.g., front-facing vs rear-facing) and may be incompatible with other features, such as plane or image tracking. Consider disabling other AR managers which manage trackables. These include
-* [Plane Tracking](plane-manager.md)
-* [Image Tracking](tracked-image-manager.md)
-* [Object Tracking](tracked-object-manager.md)
-* [Environment Probes](environment-probe-manager.md)
+In some implementations, face tracking requires a different camera (for example, front-facing vs rear-facing) and might be incompatible with other features, such as plane or image tracking. Consider disabling other AR managers which manage trackables. These include:
 
-## Responding to Faces
+* [Plane tracking](plane-manager.md)
+* [Image tracking](tracked-image-manager.md)
+* [Object tracking](tracked-object-manager.md)
+* [Environment probes](environment-probe-manager.md)
 
-Faces can be added, updated, and removed. Once per frame, the `facesChanged` event may be invoked with `List`s of faces that have been added, updated, and removed since the last frame.
+## Responding to faces
 
-When a face is detected, the AR Face Manager will instantiate the Face Prefab to represent the face. The Face Prefab may be left `null`, but the face manager ensures the instantiated `GameObject` has an `ARFace` component on it. The `ARFace` component just contains data about the detected face.
+Faces can be added, updated, and removed. Once per frame, if the application detects a face, the AR face manager invokes the `facesChanged` event. This events contains three `List`s of faces that have been added, updated, and removed since the last frame.
 
-## Visualizing Faces
+When a face is detected, the AR face manager instantiates the Face Prefab to represent the face. The Face Prefab can be left `null`, but the face manager ensures the instantiated `GameObject` has an `ARFace` component on it. The `ARFace` component only contains data about the detected face.
 
-The face provider may provide a mesh representing the face. The `ARFace` component exposes `vertices`, `normals`, `indices`, and `uvs` (texture coordinates). Some or all of these may be available.
+## Visualizing faces
 
-The `ARFaceMeshVisualizer` component will generate a `UnityEngine.Mesh` and update the `MeshFilter` on the same `GameObject` based on the data provided by the `ARFace`.
+The face provider might provide a mesh that represents the face. The `ARFace` component exposes `vertices`, `normals`, `indices`, and `uvs` (texture coordinates). Some or all of these can be available.
+
+The `ARFaceMeshVisualizer` component generates a `UnityEngine.Mesh` and updates the `MeshFilter` on the same `GameObject` based on the data that the `ARFace` provides.
 
 Check the face subsystem's `SubsystemDescriptor` (`ARFaceManager.descriptor`) for provider-specific features.
