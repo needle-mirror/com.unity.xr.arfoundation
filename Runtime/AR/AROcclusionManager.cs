@@ -38,6 +38,22 @@ namespace UnityEngine.XR.ARFoundation
         readonly List<int> m_TexturePropertyIds = new List<int>();
 
         /// <summary>
+        /// The human stencil texture info.
+        /// </summary>
+        /// <value>
+        /// The human stencil texture info.
+        /// </value>
+        ARTextureInfo m_HumanStencilTextureInfo;
+
+        /// <summary>
+        /// The human depth texture info.
+        /// </summary>
+        /// <value>
+        /// The human depth texture info.
+        /// </value>
+        ARTextureInfo m_HumanDepthTextureInfo;
+
+        /// <summary>
         /// An event which fires each time a occlusioncamera frame is received.
         /// </summary>
         public event Action<AROcclusionFrameEventArgs> frameReceived;
@@ -107,8 +123,9 @@ namespace UnityEngine.XR.ARFoundation
             {
                 if ((subsystem != null) && subsystem.TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor))
                 {
-                    ARTextureInfo textureInfo = new ARTextureInfo(humanStencilDescriptor);
-                    return textureInfo.texture;
+                    m_HumanStencilTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanStencilTextureInfo,
+                                                                                    humanStencilDescriptor);
+                    return m_HumanStencilTextureInfo.texture;
                 }
                 return null;
             }
@@ -126,8 +143,9 @@ namespace UnityEngine.XR.ARFoundation
             {
                 if ((subsystem != null) && subsystem.TryGetHumanDepth(out XRTextureDescriptor humanDepthDescriptor))
                 {
-                    ARTextureInfo textureInfo = new ARTextureInfo(humanDepthDescriptor);
-                    return textureInfo.texture;
+                    m_HumanDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanDepthTextureInfo,
+                                                                                  humanDepthDescriptor);
+                    return m_HumanDepthTextureInfo.texture;
                 }
                 return null;
             }
@@ -140,6 +158,20 @@ namespace UnityEngine.XR.ARFoundation
         {
             subsystem.humanSegmentationStencilMode = m_HumanSegmentationStencilMode;
             subsystem.humanSegmentationDepthMode = m_HumanSegmentationDepthMode;
+
+            m_HumanStencilTextureInfo.Reset();
+            m_HumanDepthTextureInfo.Reset();
+        }
+
+        /// <summary>
+        /// Callback when the manager is being disabled.
+        /// </summary>
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            m_HumanStencilTextureInfo.Reset();
+            m_HumanDepthTextureInfo.Reset();
         }
 
         /// <summary>

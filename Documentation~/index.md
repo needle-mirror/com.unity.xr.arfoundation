@@ -124,7 +124,7 @@ To determine the current state of the session (for example, whether the device i
 |`SessionInitialized`|An AR session is initializing (that is, starting up). This usually means AR is working, but hasn't gathered enough information about the environment.|
 |`SessionTracking`|An AR session is running and is tracking (that is, the device is able to determine its position and orientation in the world).|
 
-### ARSessionOrigin
+### AR Session Origin
 
 ![AR session origin](images/ar-session-origin.png "AR Session Origin")
 
@@ -140,9 +140,14 @@ Likewise, trackables that an AR device produces, such as planes, are provided in
 
 To apply scale to the `ARSessionOrigin`, set its `transform`'s scale. This has the effect of scaling all the data coming from the device, including the AR Camera's position and any detected trackables. Larger values make AR content appear smaller. For example, a scale of 10 would make your content appear 10 times smaller, while 0.1 would make your content appear 10 times larger.
 
-### Tracked Pose Driver
+### AR Pose Driver
 
-The AR Camera, which will be used to render any trackables you wish to visualize, should be parented to the `ARSessionOrigin`'s `GameObject`. The AR Camera should also have a `TrackedPoseDriver` component on it to drive the AR Camera’s local position and orientation according to the device's tracking information. This setup allows the AR Camera’s local space to match the AR "session space".
+The `AR Pose Driver` drives the local position and orientation of the parent GameObject according to the device's tracking information.  The most common use-case for this would be attaching the `ARPoseDriver` to the AR Camera to drive the camera's position and orientation in an AR scene.
+
+![AR Pose Driver](images/ar-pose-driver.png "AR Pose Driver")
+
+#### Legacy Input Helpers and the Tracked Pose Driver component
+The `ARPoseDriver` provides a similar functionality to the `TrackedPoseDriver` from the `com.unity.xr.legacyinputhelpers` package and was implemented to remove the dependency on that package. Projects are able to use either the `ARPoseDriver` component or the `TrackedPoseDriver` component to drive a GameObjects transform. It is not recommended to use both as the behaviour is undefined. `Use Relative Transform` option is unavailable for the `ARPoseDriver` because it introduces additional unnecesary transformations.
 
 ![Tracked Pose Driver](images/tracked-pose-driver.png "Tracked Pose Driver")
 
