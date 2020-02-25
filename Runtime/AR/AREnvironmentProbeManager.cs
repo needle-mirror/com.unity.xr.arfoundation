@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbeManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.html")]
     public sealed class AREnvironmentProbeManager : ARTrackableManager<
         XREnvironmentProbeSubsystem,
         XREnvironmentProbeSubsystemDescriptor,
@@ -24,19 +24,42 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// A property of the environment probe subsystem that, if enabled, automatically generates environment probes
         /// for the scene.
+        /// This method is obsolete.
+        /// Use <see cref="automaticPlacementRequested"/> or <see cref="automaticPlacementEnabled"/> instead.
         /// </summary>
         /// <value>
         /// <c>true</c> if automatic environment probe placement is enabled. Otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("Use automaticPlacementRequested or automaticPlacementEnabled instead. (2020-01-16)")]
         public bool automaticPlacement
         {
-            get { return m_AutomaticPlacement; }
+            get => m_AutomaticPlacement;
+            set => automaticPlacementRequested = value;
+        }
+
+        bool supportsAutomaticPlacement => descriptor?.supportsAutomaticPlacement == true;
+
+        /// <summary>
+        /// If enabled, requests automatic generation of environment probes for the scene.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if automatic environment probe placement is requested. Otherwise, <c>false</c>.
+        /// </value>
+        public bool automaticPlacementRequested
+        {
+            get => supportsAutomaticPlacement ? subsystem.automaticPlacementRequested : m_AutomaticPlacement;
             set
             {
                 m_AutomaticPlacement = value;
                 SetAutomaticPlacementStateOnSubsystem();
              }
         }
+
+        /// <summary>
+        /// <c>true</c> if automatic placement is enabled on the subsystem.
+        /// </summary>
+        public bool automaticPlacementEnabled => supportsAutomaticPlacement ? subsystem.automaticPlacementEnabled : false;
+
         [SerializeField]
         [Tooltip("Whether environment probes should be automatically placed in the environment (if supported).")]
         bool m_AutomaticPlacement = true;
@@ -49,8 +72,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public FilterMode environmentTextureFilterMode
         {
-            get { return m_EnvironmentTextureFilterMode; }
-            set { m_EnvironmentTextureFilterMode = value; }
+            get => m_EnvironmentTextureFilterMode;
+            set => m_EnvironmentTextureFilterMode = value;
         }
         [SerializeField]
         [Tooltip("The texture filter mode to be used with the reflection probe environment texture.")]
@@ -62,18 +85,36 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// <c>true</c> if the environment textures should be returned as HDR textures. Otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("Use environmentTextureHDRRequested or environmentTextureHDREnabled instead. (2020-01-16)")]
         public bool environmentTextureHDR
         {
-            get { return m_EnvironmentTextureHDR; }
+            get => m_EnvironmentTextureHDR;
+            set => environmentTextureHDRRequested = value;
+        }
+        [SerializeField]
+        [Tooltip("Whether the environment textures should be returned as HDR textures.")]
+        bool m_EnvironmentTextureHDR = true;
+
+        bool supportsEnvironmentTextureHDR => descriptor?.supportsEnvironmentTextureHDR == true;
+
+        /// <summary>
+        /// Get or set whether high dynamic range environment textures are requested.
+        /// </summary>
+        /// <value></value>
+        public bool environmentTextureHDRRequested
+        {
+            get => supportsEnvironmentTextureHDR ? subsystem.environmentTextureHDRRequested : m_EnvironmentTextureHDR;
             set
             {
                 m_EnvironmentTextureHDR = value;
                 SetEnvironmentTextureHDRStateOnSubsystem();
             }
         }
-        [SerializeField]
-        [Tooltip("Whether the environment textures should be returned as HDR textures.")]
-        bool m_EnvironmentTextureHDR = true;
+
+        /// <summary>
+        /// Queries whether environment textures will be provided with high dynamic range.
+        /// </summary>
+        public bool environmentTextureHDREnabled => supportsEnvironmentTextureHDR ? subsystem.environmentTextureHDREnabled : false;
 
         /// <summary>
         /// Specifies a debug prefab that will be attached to all environment probes.
@@ -88,8 +129,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         public GameObject debugPrefab
         {
-            get { return m_DebugPrefab; }
-            set { m_DebugPrefab = value; }
+            get => m_DebugPrefab;
+            set => m_DebugPrefab = value;
         }
         [SerializeField]
         [Tooltip("A debug prefab that allows for these environment probes to be more readily visualized.")]
@@ -203,15 +244,9 @@ namespace UnityEngine.XR.ARFoundation
             return false;
         }
 
-        protected override string gameObjectName
-        {
-            get { return "AREnvironmentProbe"; }
-        }
+        protected override string gameObjectName => "AREnvironmentProbe";
 
-        protected override GameObject GetPrefab()
-        {
-            return m_DebugPrefab;
-        }
+        protected override GameObject GetPrefab() => m_DebugPrefab;
 
         /// <summary>
         /// Enables the environment probe functionality by registering listeners for the environment probe events, if
@@ -244,6 +279,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (environmentProbesChanged != null)
             {
+                using (new ScopedProfiler("OnEnvironmentProbesChanged"))
                 environmentProbesChanged(new AREnvironmentProbesChangedEvent(added, updated, removed));
             }
         }
@@ -259,9 +295,9 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         void SetAutomaticPlacementStateOnSubsystem()
         {
-            if ((subsystem != null) && subsystem.SubsystemDescriptor.supportsAutomaticPlacement)
+            if (enabled && supportsAutomaticPlacement)
             {
-                subsystem.automaticPlacement = m_AutomaticPlacement;
+                subsystem.automaticPlacementRequested = m_AutomaticPlacement;
             }
         }
 
@@ -271,9 +307,9 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         void SetEnvironmentTextureHDRStateOnSubsystem()
         {
-            if ((subsystem != null) && subsystem.SubsystemDescriptor.supportsEnvironmentTextureHDR)
+            if (enabled && supportsEnvironmentTextureHDR)
             {
-                subsystem.environmentTextureHDR = m_EnvironmentTextureHDR;
+                subsystem.environmentTextureHDRRequested = m_EnvironmentTextureHDR;
             }
         }
     }

@@ -14,4 +14,5 @@
 * [Camera Image](cpu-camera-image)
 * [Migration From 1.0](migration-guide)
 * [Migration From 2.x](migration-guide-2)
+* [Migration From 3.x](migration-guide-3)
 * [Extensions](extensions)

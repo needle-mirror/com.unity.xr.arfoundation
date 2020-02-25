@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     /// this component will generate a mesh from the underlying <c>XRFace</c>.
     /// </remarks>
     [RequireComponent(typeof(ARFace))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARFaceMeshVisualizer.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARFaceMeshVisualizer.html")]
     public sealed class ARFaceMeshVisualizer : MonoBehaviour
     {
         /// <summary>
@@ -37,18 +37,6 @@ namespace UnityEngine.XR.ARFoundation
             m_MeshRenderer.enabled = visible;
         }
 
-        static bool TryCopyToList<T>(NativeArray<T> array, List<T> list) where T : struct
-        {
-            list.Clear();
-            if (!array.IsCreated || array.Length == 0)
-                return false;
-
-            foreach (var item in array)
-                list.Add(item);
-
-            return true;
-        }
-
         void SetMeshTopology()
         {
             if (mesh == null)
@@ -56,42 +44,54 @@ namespace UnityEngine.XR.ARFoundation
                 return;
             }
 
-            mesh.Clear();
-
-            if (TryCopyToList(m_Face.vertices, s_Vertices) && TryCopyToList(m_Face.indices, s_Indices))
+            using (new ScopedProfiler("SetMeshTopology"))
             {
-                mesh.SetVertices(s_Vertices);
-                mesh.SetTriangles(s_Indices, 0);
-                mesh.RecalculateBounds();
+                using (new ScopedProfiler("ClearMesh"))
+                mesh.Clear();
 
-                if (TryCopyToList(m_Face.normals, s_Vertices))
+                if (m_Face.vertices.Length > 0 && m_Face.indices.Length > 0)
                 {
-                    mesh.SetNormals(s_Vertices);
+                    using (new ScopedProfiler("SetVertices"))
+                    mesh.SetVertices(m_Face.vertices);
+
+                    using (new ScopedProfiler("SetIndices"))
+                    mesh.SetIndices(m_Face.indices, MeshTopology.Triangles, 0, false);
+
+                    using (new ScopedProfiler("RecalculateBounds"))
+                    mesh.RecalculateBounds();
+
+                    if (m_Face.normals.Length == m_Face.vertices.Length)
+                    {
+                        using (new ScopedProfiler("SetNormals"))
+                        mesh.SetNormals(m_Face.normals);
+                    }
+                    else
+                    {
+                        using (new ScopedProfiler("RecalculateNormals"))
+                        mesh.RecalculateNormals();
+                    }
                 }
-                else
+
+                if (m_Face.uvs.Length > 0)
                 {
-                    mesh.RecalculateNormals();
+                    using (new ScopedProfiler("SetUVs"))
+                    mesh.SetUVs(0, m_Face.uvs);
                 }
-            }
 
-            if (TryCopyToList(m_Face.uvs, s_UVs))
-            {
-                mesh.SetUVs(0, s_UVs);
-            }
+                var meshFilter = GetComponent<MeshFilter>();
+                if (meshFilter != null)
+                {
+                    meshFilter.sharedMesh = mesh;
+                }
 
-            var meshFilter = GetComponent<MeshFilter>();
-            if (meshFilter != null)
-            {
-                meshFilter.sharedMesh = mesh;
-            }
+                var meshCollider = GetComponent<MeshCollider>();
+                if (meshCollider != null)
+                {
+                    meshCollider.sharedMesh = mesh;
+                }
 
-            var meshCollider = GetComponent<MeshCollider>();
-            if (meshCollider != null)
-            {
-                meshCollider.sharedMesh = mesh;
+                m_TopologyUpdatedThisFrame = true;
             }
-
-            m_TopologyUpdatedThisFrame = true;
         }
 
         void UpdateVisibility()
@@ -123,9 +123,6 @@ namespace UnityEngine.XR.ARFoundation
             mesh = new Mesh();
             m_MeshRenderer = GetComponent<MeshRenderer>();
             m_Face = GetComponent<ARFace>();
-            s_Indices = new List<int>();
-            s_Vertices = new List<Vector3>();
-            s_UVs = new List<Vector2>();
         }
 
         void OnEnable()
@@ -144,8 +141,5 @@ namespace UnityEngine.XR.ARFoundation
         ARFace m_Face;
         MeshRenderer m_MeshRenderer;
         bool m_TopologyUpdatedThisFrame;
-        static List<Vector3> s_Vertices;
-        static List<Vector2> s_UVs;
-        static List<int> s_Indices;
     }
 }

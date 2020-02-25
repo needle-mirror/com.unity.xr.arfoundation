@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBody)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@2.2/api/UnityEngine.XR.ARFoundation.ARHumanBody.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARHumanBody.html")]
     public class ARHumanBody : ARTrackable<XRHumanBody, ARHumanBody>, IDisposable
     {
         /// <summary>
@@ -21,10 +21,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The pose for the human body origin.
         /// </value>
-        public Pose pose
-        {
-            get { return sessionRelativeData.pose; }
-        }
+        public Pose pose => sessionRelativeData.pose;
 
         /// <summary>
         /// The scale factor that relates the implementation's default body height to the estimated height.
@@ -32,10 +29,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The scale factor that relates the implementation's default body height to the estimated height.
         /// </value>
-        public float estimatedHeightScaleFactor
-        {
-            get => sessionRelativeData.estimatedHeightScaleFactor;
-        }
+        public float estimatedHeightScaleFactor => sessionRelativeData.estimatedHeightScaleFactor;
 
         /// <summary>
         /// The array of joints making up the human body skeleton.
@@ -43,10 +37,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The array of joints making up the human body skeleton.
         /// </value>
-        public NativeArray<XRHumanBodyJoint> joints
-        {
-            get { return m_Joints; }
-        }
+        public NativeArray<XRHumanBodyJoint> joints => m_Joints;
         NativeArray<XRHumanBodyJoint> m_Joints;
 
         /// <summary>
@@ -58,10 +49,7 @@ namespace UnityEngine.XR.ARFoundation
             bodySubsystem.GetSkeleton(trackableId, Allocator.Persistent, ref m_Joints);
         }
 
-        public override string ToString()
-        {
-            return ToString("0.000");
-        }
+        public override string ToString() => ToString("0.000");
 
         public string ToString(string floatingPointFormat)
         {
@@ -82,5 +70,7 @@ namespace UnityEngine.XR.ARFoundation
                 m_Joints.Dispose();
             }
         }
+
+        void OnDestroy() => Dispose();
     }
 }

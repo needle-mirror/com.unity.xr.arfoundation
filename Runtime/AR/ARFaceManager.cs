@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.Serialization;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -16,7 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(ARSessionOrigin))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_FaceManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARFaceManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARFaceManager.html")]
     public sealed class ARFaceManager : ARTrackableManager<
         XRFaceSubsystem,
         XRFaceSubsystemDescriptor,
@@ -32,8 +33,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public GameObject facePrefab
         {
-            get { return m_FacePrefab; }
-            set { m_FacePrefab = value; }
+            get => m_FacePrefab;
+            set => m_FacePrefab = value;
         }
 
         [SerializeField]
@@ -41,36 +42,42 @@ namespace UnityEngine.XR.ARFoundation
         int m_MaximumFaceCount = 1;
 
         /// <summary>
-        /// Get or set the maximum number of faces to track simultaneously
+        /// Get or set the requested maximum number of faces to track simultaneously
         /// </summary>
-        public int maximumFaceCount
+        public int requestedMaximumFaceCount
         {
-            get
-            {
-                if (subsystem != null)
-                {
-                    m_MaximumFaceCount = subsystem.maximumFaceCount;
-                }
-
-                return m_MaximumFaceCount;
-            }
+            get => subsystem?.requestedMaximumFaceCount ?? m_MaximumFaceCount;
             set
             {
-                if (subsystem != null)
+                m_MaximumFaceCount = value;
+                if (enabled && subsystem != null)
                 {
-                    m_MaximumFaceCount = subsystem.maximumFaceCount = value;
-                }
-                else
-                {
-                    m_MaximumFaceCount = value;
+                    subsystem.requestedMaximumFaceCount = value;
                 }
             }
         }
 
         /// <summary>
-        /// Get the supported number of faces that can be tracked simultaneously.
+        /// Get or set the maximum number of faces to track simultaneously. This method is obsolete.
+        /// Use <see cref="currentMaximumFaceCount"/> or <see cref="requestedMaximumFaceCount"/> instead.
         /// </summary>
-        public int supportedFaceCount => subsystem != null ? subsystem.supportedFaceCount : 0;
+        [Obsolete("Use requestedMaximumFaceCount or currentMaximumFaceCount instead. (2020-01-14)")]
+        public int maximumFaceCount
+        {
+            get => subsystem?.currentMaximumFaceCount ?? m_MaximumFaceCount;
+            set => requestedMaximumFaceCount = value;
+        }
+
+        /// <summary>
+        /// Get the maximum number of faces to track simultaneously.
+        /// </summary>
+        public int currentMaximumFaceCount => subsystem?.currentMaximumFaceCount ?? 0;
+
+        /// <summary>
+        /// Get the supported number of faces that can be tracked simultaneously. This value
+        /// may change when the configuration changes.
+        /// </summary>
+        public int supportedFaceCount => subsystem?.supportedFaceCount ?? 0;
 
         /// <summary>
         /// Raised for each new <see cref="ARFace"/> detected in the environment.
@@ -84,15 +91,13 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>The <see cref="ARFace"/>if found. <c>null</c> otherwise.</returns>
         public ARFace TryGetFace(TrackableId faceId)
         {
-            ARFace face;
-            m_Trackables.TryGetValue(faceId, out face);
-
+            m_Trackables.TryGetValue(faceId, out ARFace face);
             return face;
         }
 
         protected override void OnBeforeStart()
         {
-            subsystem.maximumFaceCount = m_MaximumFaceCount;
+            subsystem.requestedMaximumFaceCount = m_MaximumFaceCount;
         }
 
         protected override void OnAfterSetSessionRelativeData(
@@ -112,22 +117,13 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (facesChanged != null)
             {
-                facesChanged(
-                    new ARFacesChangedEventArgs(
-                        added,
-                        updated,
-                        removed));
+                using (new ScopedProfiler("OnFacesChanged"))
+                facesChanged(new ARFacesChangedEventArgs(added, updated, removed));
             }
         }
 
-        protected override GameObject GetPrefab()
-        {
-            return m_FacePrefab;
-        }
+        protected override GameObject GetPrefab() => m_FacePrefab;
 
-        protected override string gameObjectName
-        {
-            get { return "ARFace"; }
-        }
+        protected override string gameObjectName => "ARFace";
     }
 }

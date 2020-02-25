@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedObjectManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARTrackedObjectManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARTrackedObjectManager.html")]
     public sealed class ARTrackedObjectManager : ARTrackableManager<
         XRObjectTrackingSubsystem,
         XRObjectTrackingSubsystemDescriptor,
@@ -28,14 +28,16 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public XRReferenceObjectLibrary referenceLibrary
         {
-            get { return m_ReferenceLibrary; }
+            get => m_ReferenceLibrary;
             set
             {
                 m_ReferenceLibrary = value;
                 UpdateReferenceObjects();
 
                 if (subsystem != null)
+                {
                     subsystem.library = m_ReferenceLibrary;
+                }
             }
         }
 
@@ -48,14 +50,11 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public GameObject trackedObjectPrefab
         {
-            get { return m_TrackedObjectPrefab; }
-            set { m_TrackedObjectPrefab = value; }
+            get => m_TrackedObjectPrefab;
+            set => m_TrackedObjectPrefab = value;
         }
 
-        protected override GameObject GetPrefab()
-        {
-            return m_TrackedObjectPrefab;
-        }
+        protected override GameObject GetPrefab() => m_TrackedObjectPrefab;
 
         /// <summary>
         /// Invoked once per frame with information about the <see cref="ARTrackedObject"/>s that have changed, i.e., been added, updated, or removed.
@@ -67,16 +66,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new Object is detected.
         /// </summary>
-        protected override string gameObjectName
-        {
-            get { return "ARTrackedObject"; }
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            m_ReferenceObjects = new Dictionary<Guid, XRReferenceObject>();
-        }
+        protected override string gameObjectName => "ARTrackedObject";
 
         /// <summary>
         /// Sets the Object library on the subsystem before Start() is called on the base class.
@@ -123,11 +113,14 @@ namespace UnityEngine.XR.ARFoundation
             List<ARTrackedObject> removed)
         {
             if (trackedObjectsChanged != null)
+            {
+                using (new ScopedProfiler("OnTrackedObjectsChanged"))
                 trackedObjectsChanged(
                     new ARTrackedObjectsChangedEventArgs(
                         added,
                         updated,
                         removed));
+            }
         }
 
         void UpdateReferenceObjects()
@@ -140,6 +133,6 @@ namespace UnityEngine.XR.ARFoundation
                 m_ReferenceObjects[referenceObject.guid] = referenceObject;
         }
 
-        Dictionary<Guid, XRReferenceObject> m_ReferenceObjects;
+        Dictionary<Guid, XRReferenceObject> m_ReferenceObjects = new Dictionary<Guid, XRReferenceObject>();
     }
 }

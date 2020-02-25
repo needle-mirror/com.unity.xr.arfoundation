@@ -1,14 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine.XR.ARSubsystems;
-
-#if UNITY_2019_3_OR_NEWER
 using LegacyMeshId = UnityEngine.XR.MeshId;
-#else
-using LegacyMeshId = UnityEngine.Experimental.XR.TrackableId;
-using MeshInfo = UnityEngine.Experimental.XR.MeshInfo;
-using MeshChangeState = UnityEngine.Experimental.XR.MeshChangeState;
-#endif
 
 namespace UnityEngine.XR.ARFoundation
 {

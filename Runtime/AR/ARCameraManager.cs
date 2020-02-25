@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -12,52 +13,138 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
-    public sealed class ARCameraManager : SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
+    public sealed class ARCameraManager : SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>, ISerializationCallbackReceiver
     {
         [SerializeField]
-        [Tooltip("The focus mode to request on the (physical) AR camera.")]
+        [HideInInspector]
         CameraFocusMode m_FocusMode = CameraFocusMode.Auto;
 
-        /// <summary>
-        /// The <c>CameraFocusMode</c> for the camera.
-        /// </summary>
-        /// <value>
-        /// The focus mode for the camera.
-        /// </value>
-        public CameraFocusMode focusMode
+        [SerializeField]
+        [HideInInspector]
+        LightEstimationMode m_LightEstimationMode = LightEstimationMode.Disabled;
+
+        public void OnBeforeSerialize() {}
+
+        public void OnAfterDeserialize()
         {
-            get => (subsystem != null) ? subsystem.focusMode : m_FocusMode;
+            if (m_FocusMode != (CameraFocusMode)(-1))
+            {
+                m_AutoFocus = m_FocusMode == CameraFocusMode.Auto;
+                m_FocusMode = (CameraFocusMode)(-1);
+            }
+
+            if (m_LightEstimationMode != (LightEstimationMode)(-1))
+            {
+                m_LightEstimation = m_LightEstimationMode.ToLightEstimation();
+                m_LightEstimationMode = (LightEstimationMode)(-1);
+            }
+        }
+
+        [SerializeField]
+        [Tooltip("When enabled, auto focus will be requested on the (physical) AR camera.")]
+        bool m_AutoFocus = true;
+
+        /// <summary>
+        /// Get or set whether auto focus is requested
+        /// </summary>
+        public bool autoFocusRequested
+        {
+            get => subsystem?.autoFocusRequested ?? m_AutoFocus;
             set
             {
-                m_FocusMode = value;
+                m_AutoFocus = value;
                 if (enabled && subsystem != null)
                 {
-                    subsystem.focusMode = value;
+                    subsystem.autoFocusRequested = value;
                 }
             }
         }
 
-        [SerializeField]
-        [Tooltip("The light estimation mode for the AR camera.")]
-        LightEstimationMode m_LightEstimationMode = LightEstimationMode.Disabled;
+        /// <summary>
+        /// Get or set the focus mode. This method is obsolete. The getter uses
+        /// <see cref="autoFocusEnabled"/> and the setter uses <see cref="autoFocusRequested"/>.
+        /// </summary>
+        [Obsolete("Use autoFocusEnabled or autoFocusRequested instead. (2019-12-13)")]
+        public CameraFocusMode focusMode
+        {
+            get => autoFocusEnabled ? CameraFocusMode.Auto : CameraFocusMode.Fixed;
+            set => autoFocusRequested = (value == CameraFocusMode.Auto);
+        }
 
         /// <summary>
-        /// The <c>LightEstimationMode</c> for the camera.
+        /// Get the current focus mode in use by the subsystem, or <c>false</c> if there
+        /// is no subsystem.
+        /// </summary>
+        public bool autoFocusEnabled => subsystem?.autoFocusEnabled ?? false;
+
+        [SerializeField]
+        [Tooltip("The light estimation mode for the AR camera.")]
+        LightEstimation m_LightEstimation = LightEstimation.None;
+
+        /// <summary>
+        /// Get or set the requested <c>LightEstimation</c> for the camera.
         /// </summary>
         /// <value>
         /// The light estimation mode for the camera.
         /// </value>
-        public LightEstimationMode lightEstimationMode
+        public LightEstimation requestedLightEstimation
         {
-            get => m_LightEstimationMode;
+            get => subsystem?.requestedLightEstimation.ToLightEstimation() ?? m_LightEstimation;
             set
             {
-                m_LightEstimationMode = value;
+                m_LightEstimation = value;
                 if (enabled && subsystem != null)
-                    subsystem.lightEstimationMode = value;
+                {
+                    subsystem.requestedLightEstimation = value.ToFeature();
+                }
             }
         }
+
+        /// <summary>
+        /// Get the current light estimation mode used by the subsystem, or <c>LightEstimation.None</c>
+        /// if there is no subsystem.
+        /// </summary>
+        public LightEstimation currentLightEstimation => subsystem?.currentLightEstimation.ToLightEstimation() ?? LightEstimation.None;
+
+        /// <summary>
+        /// Get or set the light estimation mode. This method is obsolete. The getter
+        /// uses <see cref="currentLightEstimation"/> and the setter uses
+        /// <see cref="requestedLightEstimation"/>.
+        /// </summary>
+        [Obsolete("Use currentLightEstimation or requestedLightEstimation instead. (2019-12-13)")]
+        public LightEstimationMode lightEstimationMode
+        {
+            get => m_LightEstimation.ToLightEstimationMode();
+            set => requestedLightEstimation = value.ToLightEstimation();
+        }
+
+        [SerializeField]
+        [Tooltip("The requested camera facing direction")]
+        CameraFacingDirection m_FacingDirection = CameraFacingDirection.World;
+
+        /// <summary>
+        /// Get or set the requested camera facing direction.
+        /// </summary>
+        public CameraFacingDirection requestedFacingDirection
+        {
+            get => subsystem?.requestedCamera.ToCameraFacingDirection() ?? m_FacingDirection;
+            set
+            {
+                m_FacingDirection = value;
+                if (enabled && subsystem != null)
+                {
+                    subsystem.requestedCamera = value.ToFeature();
+                }
+            }
+        }
+
+        /// <summary>
+        /// The current camera facing direction. This should usually match <see cref="requestedFacingDirection"/>
+        /// but may be different if the platform cannot service the requested camera facing direction, or it may
+        /// take a few frames for the requested facing direction to become active.
+        /// </summary>
+        public CameraFacingDirection currentFacingDirection => subsystem?.currentCamera.ToCameraFacingDirection() ?? CameraFacingDirection.None;
 
         /// <summary>
         /// Determines whether camera permission has been granted.
@@ -170,8 +257,9 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnBeforeStart()
         {
-            subsystem.focusMode = m_FocusMode;
-            subsystem.lightEstimationMode = m_LightEstimationMode;
+            subsystem.autoFocusRequested = m_AutoFocus;
+            subsystem.requestedLightEstimation = m_LightEstimation.ToFeature();
+            subsystem.requestedCamera = m_FacingDirection.ToFeature();
         }
 
         /// <summary>
@@ -193,6 +281,10 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (subsystem == null)
                 return;
+
+            m_FacingDirection = subsystem.requestedCamera.ToCameraFacingDirection();
+            m_LightEstimation = subsystem.requestedLightEstimation.ToLightEstimation();
+            m_AutoFocus = subsystem.autoFocusRequested;
 
             var cameraParams = new XRCameraParams
             {

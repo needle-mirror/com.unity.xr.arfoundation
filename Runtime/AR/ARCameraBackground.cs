@@ -41,7 +41,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(ARCameraManager))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
     public class ARCameraBackground : MonoBehaviour
     {
         /// <summary>
@@ -252,6 +252,10 @@ namespace UnityEngine.XR.ARFoundation
             }
             cameraManager.frameReceived -= OnCameraFrameReceived;
             DisableBackgroundRendering();
+
+            // We are no longer setting the projection matrix so tell the camera to resume its normal projection matrix
+            // calculations.
+            camera.ResetProjectionMatrix();
         }
 
         /// <summary>
@@ -282,10 +286,6 @@ namespace UnityEngine.XR.ARFoundation
             DisableLegacyRenderPipelineBackgroundRendering();
 
             RestoreBackgroundClearFlags();
-
-            // We are no longer setting the projection matrix so tell the camera to resume its normal projection matrix
-            // calculations.
-            camera.ResetProjectionMatrix();
         }
 
         /// <summary>
@@ -405,12 +405,16 @@ namespace UnityEngine.XR.ARFoundation
             // Enable background rendering when first frame is received.
             if (m_BackgroundRenderingEnabled)
             {
-                if (m_CommandBuffer != null && m_CommandBufferCullingState != shouldInvertCulling)
+            	if (eventArgs.textures.Count == 0)
+            	{
+            		DisableBackgroundRendering();
+            	}
+                else if (m_CommandBuffer != null && m_CommandBufferCullingState != shouldInvertCulling)
                 {
                     ConfigureLegacyCommandBuffer(m_CommandBuffer);
                 }
             }
-            else
+            else if (eventArgs.textures.Count > 0)
             {
                 EnableBackgroundRendering();
             }

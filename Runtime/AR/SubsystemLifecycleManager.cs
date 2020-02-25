@@ -31,10 +31,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The descriptor for the subsystem.
         /// </value>
-        public TSubsystemDescriptor descriptor
-        {
-            get { return (subsystem == null) ? null : subsystem.SubsystemDescriptor; }
-        }
+        public TSubsystemDescriptor descriptor => subsystem?.SubsystemDescriptor;
 
         bool m_CleanupSubsystemOnDestroy = true;
 
@@ -192,11 +189,11 @@ namespace UnityEngine.XR.ARFoundation
         static List<TSubsystemDescriptor> s_SubsystemDescriptors =
             new List<TSubsystemDescriptor>();
 
-        static List<TSubsystem> s_SubsystemInstances = 
+        static List<TSubsystem> s_SubsystemInstances =
             new List<TSubsystem>();
-            
+
 #if !UNITY_2019_3_OR_NEWER
-        static HashSet<TSubsystem> s_DestroyedSubsystemTypes = 
+        static HashSet<TSubsystem> s_DestroyedSubsystemTypes =
             new HashSet<TSubsystem>();
 #endif
     }

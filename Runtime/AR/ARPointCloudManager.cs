@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloudManager)]
     [RequireComponent(typeof(ARSessionOrigin))]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARPointCloudManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARPointCloudManager.html")]
     public class ARPointCloudManager : ARTrackableManager<
         XRDepthSubsystem,
         XRDepthSubsystemDescriptor,
@@ -29,8 +29,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public GameObject pointCloudPrefab
         {
-            get { return m_PointCloudPrefab; }
-            set { m_PointCloudPrefab = value; }
+            get => m_PointCloudPrefab;
+            set => m_PointCloudPrefab = value;
         }
 
         /// Invoked once per frame with information about the <see cref="ARTrackedObject"/>s that have changed, i.e., been added, updated, or removed.
@@ -62,18 +62,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// ARTrackableManager interface.
         /// </summary>
-        protected override GameObject GetPrefab()
-        {
-            return m_PointCloudPrefab;
-        }
+        protected override GameObject GetPrefab() => m_PointCloudPrefab;
 
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new Object is detected.
         /// </summary>
-        protected override string gameObjectName
-        {
-            get { return "ARPointCloud"; }
-        }
+        protected override string gameObjectName => "ARPointCloud";
 
         protected override void OnAfterSetSessionRelativeData(
             ARPointCloud pointCloud,
@@ -94,11 +88,14 @@ namespace UnityEngine.XR.ARFoundation
             List<ARPointCloud> removed)
         {
             if (pointCloudsChanged != null)
+            {
+                using (new ScopedProfiler("OnPointCloudsChanged"))
                 pointCloudsChanged(
                     new ARPointCloudChangedEventArgs(
                         added,
                         updated,
                         removed));
+            }
         }
 
         /// <summary>

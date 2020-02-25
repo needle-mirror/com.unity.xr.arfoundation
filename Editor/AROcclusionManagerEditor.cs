@@ -15,7 +15,7 @@ namespace UnityEditor.XR.ARFoundation
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(m_HumanSegmentationStencilMode);
-            if (!((SegmentationStencilMode)m_HumanSegmentationStencilMode.enumValueIndex).Enabled())
+            if (!((HumanSegmentationStencilMode)m_HumanSegmentationStencilMode.enumValueIndex).Enabled())
             {
                 ++EditorGUI.indentLevel;
                 EditorGUILayout.HelpBox("Automatic occlusion during runtime rendering will be disabled with "
@@ -26,7 +26,7 @@ namespace UnityEditor.XR.ARFoundation
             }
 
             EditorGUILayout.PropertyField(m_HumanSegmentationDepthMode);
-            if (!((SegmentationDepthMode)m_HumanSegmentationDepthMode.enumValueIndex).Enabled())
+            if (!((HumanSegmentationDepthMode)m_HumanSegmentationDepthMode.enumValueIndex).Enabled())
             {
                 ++EditorGUI.indentLevel;
                 EditorGUILayout.HelpBox("Automatic occlusion during runtime rendering will be disabled with "

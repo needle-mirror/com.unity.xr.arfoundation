@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_PlaneManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARPlaneManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARPlaneManager.html")]
     public sealed class ARPlaneManager : ARTrackableManager<
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
@@ -30,35 +30,46 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public GameObject planePrefab
         {
-            get { return m_PlanePrefab; }
-            set { m_PlanePrefab = value; }
+            get => m_PlanePrefab;
+            set => m_PlanePrefab = value;
         }
 
         [SerializeField, PlaneDetectionModeMask]
         [Tooltip("The types of planes to detect.")]
-        [FormerlySerializedAs("PlaneDetectionFlags")]
-        PlaneDetectionMode m_DetectionMode = k_PlaneDetectionModeEverything;
+        PlaneDetectionMode m_DetectionMode = (PlaneDetectionMode)(-1);
 
         /// <summary>
         /// Get or set the <c>PlaneDetectionMode</c> to use for plane detection.
+        /// This property is obsolete.
+        /// Use <see cref="requestedDetectionMode"/> or <see cref="currentDetectionMode"/> instead.
         /// </summary>
+        [Obsolete("Use requestedDetectionMode or currentDetectionMode instead")]
         public PlaneDetectionMode detectionMode
         {
-            get
-            {
-                if (m_DetectionMode == k_PlaneDetectionModeEverything)
-                    return PlaneDetectionMode.Horizontal | PlaneDetectionMode.Vertical;
+            get => m_DetectionMode;
+            set => requestedDetectionMode = value;
+        }
 
-                return m_DetectionMode;
-            }
+        /// <summary>
+        /// Get or set the requested plane detection mode.
+        /// </summary>
+        public PlaneDetectionMode requestedDetectionMode
+        {
+            get => subsystem?.requestedPlaneDetectionMode ?? m_DetectionMode;
             set
             {
                 m_DetectionMode = value;
-
-                if (subsystem != null)
-                    subsystem.planeDetectionMode = detectionMode;
+                if (enabled && subsystem != null)
+                {
+                    subsystem.requestedPlaneDetectionMode = value;
+                }
             }
         }
+
+        /// <summary>
+        /// Get the current plane detection mode in use by the subsystem.
+        /// </summary>
+        public PlaneDetectionMode currentDetectionMode => subsystem?.currentPlaneDetectionMode ?? PlaneDetectionMode.None;
 
         /// <summary>
         /// Invoked when planes have changed (been added, updated, or removed).
@@ -70,14 +81,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="trackableId">The <see cref="TrackableId"/> of the plane to retrieve.</param>
         /// <returns>The <see cref="ARPlane"/> with <paramref name="trackableId"/>, or <c>null</c> if it does not exist.</returns>
-        public ARPlane GetPlane(TrackableId trackableId)
-        {
-            ARPlane plane;
-            if (m_Trackables.TryGetValue(trackableId, out plane))
-                return plane;
-
-            return null;
-        }
+        public ARPlane GetPlane(TrackableId trackableId) => m_Trackables.TryGetValue(trackableId, out ARPlane plane) ? plane : null;
 
         /// <summary>
         /// Performs a raycast against all currently tracked planes.
@@ -208,14 +212,11 @@ namespace UnityEngine.XR.ARFoundation
             return windingNumber;
         }
 
-        protected override GameObject GetPrefab()
-        {
-            return m_PlanePrefab;
-        }
+        protected override GameObject GetPrefab() => m_PlanePrefab;
 
         protected override void OnBeforeStart()
         {
-            subsystem.planeDetectionMode = detectionMode;
+            subsystem.requestedPlaneDetectionMode = m_DetectionMode;
         }
 
         protected override void OnAfterSetSessionRelativeData(
@@ -242,6 +243,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (planesChanged != null)
             {
+                using (new ScopedProfiler("OnPlanesChanged"))
                 planesChanged(
                     new ARPlanesChangedEventArgs(
                         added,
@@ -253,10 +255,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new plane is detected.
         /// </summary>
-        protected override string gameObjectName
-        {
-            get { return "ARPlane"; }
-        }
+        protected override string gameObjectName => "ARPlane";
 
         protected override void OnEnable()
         {
@@ -278,9 +277,5 @@ namespace UnityEngine.XR.ARFoundation
             if (raycastManager != null)
                 raycastManager.UnregisterRaycaster(this);
         }
-
-        static List<Vector2> s_PlaneSpaceBoundary = new List<Vector2>();
-
-        const PlaneDetectionMode k_PlaneDetectionModeEverything = (PlaneDetectionMode)(-1);
     }
 }

@@ -1,20 +1,68 @@
 # About AR Foundation
 
-AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need a separate package for that platform (for example, `ARKit XR Plugin` on iOS or `ARCore XR Plugin` on Android).
+AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
+
+* [`ARCore XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.0/manual/index.html) on Android
+* [`ARKit XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.0/manual/index.html) on iOS
+* [`Magic Leap XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@3.0/manual/index.html) on Magic Leap
+* [`Windows XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@3.0/manual/index.html) on HoloLens
 
 AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support the following concepts:
 
-- World tracking: track the device's position and orientation in physical space.
+- Device tracking: track the device's position and orientation in physical space.
 - Plane detection: detect horizontal and vertical surfaces.
 - Point clouds, also known as feature points.
 - Anchor: an arbitrary position and orientation that the device tracks.
 - Light estimation: estimates for average color temperature and brightness in physical space.
 - Environment probe: a means for generating a cube map to represent a particular area of the physical environment.
 - Face tracking: detect and track human faces.
-- Image tracking: detect and track 2D images.
-- Object tracking: detect 3D objects.
+- 2D image tracking: detect and track 2D images.
+- 3D object tracking: detect 3D objects.
+- Meshing: generate triangle meshes that correspond to the physical space.
+- Body tracking: 2D and 3D representations of humans recognized in physical space.
+- Colaborative participants: track the position and orientation of other devices in a shared AR experience. 
+- Human segmentation and occlusion: apply distance to objects in the physical world to rendered 3D content, which achieves a realistic blending of physical and virtual objects.
+- Raycast: queries physical surroundings for detected planes and feature points.
+- Pass-through video: optimized rendering of mobile camera image onto touch screen as the background for AR content.
+- Session management: manipulation of the platform-level configuration automatically when AR Features are enable or disabled.
 
-If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration-guide.md).
+## Platform Support
+
+AR Foundation does not implement any AR features itself but, instead, defines a multi-platform API that allows you to work with functionality common to multiple platforms.
+
+### Feature Support Per Platform
+
+You can refer to this table to understand which parts of AR Foundation are relevant on specific platforms:
+
+|                                |ARCore|ARKit|Magic Leap|HoloLens|
+|--------------------------------|:----:|:---:|:--------:|:------:|
+|Device tracking                 |  ✓   |  ✓  |    ✓     |   ✓    |
+|Plane tracking                  |  ✓   |  ✓  |    ✓     |        |
+|Point clouds                    |  ✓   |  ✓  |          |        |
+|Anchors                         |  ✓   |  ✓  |    ✓     |   ✓    |
+|Light estimation                |  ✓   |  ✓  |          |        |
+|Environment probes              |  ✓   |  ✓  |          |        |
+|Face tracking                   |  ✓   |  ✓  |          |        |
+|2D Image tracking               |  ✓   |  ✓  |    ✓     |        |
+|3D Object tracking              |      |  ✓  |          |        |
+|Meshing                         |      |     |    ✓     |   ✓    |
+|2D & 3D body tracking           |      |  ✓  |          |        |
+|Collaborative participants      |      |  ✓  |          |        |
+|Human segmentation and occlusion|      |  ✓  |          |        |
+|Raycast                         |  ✓   |  ✓  |    ✓     |        |
+|Pass-through video              |  ✓   |  ✓  |          |        |
+|Session management              |  ✓   |  ✓  |    ✓     |   ✓    |
+
+### Supported Platform Packages
+The following platform packages and later imnplement the AR Foundation features indicated above:
+
+|Package Name|Version|
+|:---|:---|
+|ARCore XR Plugin|4.0.0-preview.1|
+|ARKit XR Plugin|4.0.0-preview.1|
+|ARKit Face Tracking|4.0.0-preview.1|
+|Magic Leap XR Plugin|5.0.0|
+|Windows XR Plugin|3.0.0|
 
 ## Subsystems
 
@@ -215,7 +263,7 @@ Trackable components don't do anything on their own; they just contain data asso
 
 ## Ray casting
 
-Also known as hit testing, ray casting allows you to determine where a ray (defined by an origin and direction) intersects with a trackable. The current ray cast interface only tests against planes and points in the point cloud. The ray casting interface is similar to the one in the Unity Physics module, but since AR trackables may not necessarily have a presence in the physics world, AR Foundation provides a separate interface.
+Also known as hit testing, ray casting allows you to determine where a ray (defined by an origin and direction) intersects with a trackable. The current ray cast interface only tests against planes and points in the point cloud. The ray casting interface is similar to the one in the Unity Physics module, but since AR trackables can't necessarily have a presence in the physics world, AR Foundation provides a separate interface.
 
 To perform a ray cast, add an `ARRaycastManager` to the same `GameObject` as the `ARSessionOrigin`.
 
@@ -250,10 +298,5 @@ The following table summarizes the other parameters:
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.2 and later
-
-## Known limitations
-
-AR Foundation includes the following known limitations:
-
-* No known issues
+* 2019.2
+* 2019.3

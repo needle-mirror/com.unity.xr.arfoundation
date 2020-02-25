@@ -60,7 +60,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         /// <param name="pose">The pose, in Unity world space, of the <see cref="ARReferencePoint"/>.</param>
         /// <returns>A new <see cref="ARReferencePoint"/> if successful, otherwise <c>null</c>.</returns>
-        [Obsolete("ARReferencePointManger.AddReferencePoint() has been deprecated. Use ARAnchorManager.AddAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.AddAnchor(*)", true)]        
+        [Obsolete("ARReferencePointManger.AddReferencePoint() has been deprecated. Use ARAnchorManager.AddAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.AddAnchor(*)", true)]
         public ARReferencePoint AddReferencePoint(Pose pose)
         {
             if (!enabled)
@@ -85,7 +85,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="plane">The <see cref="ARPlane"/> to which to attach.</param>
         /// <param name="pose">The initial <c>Pose</c>, in Unity world space, of the reference point.</param>
         /// <returns>A new <see cref="ARReferencePoint"/> if successful, otherwise <c>null</c>.</returns>
-        [Obsolete("ARReferencePointManger.AttachReferencePoint() has been deprecated. Use ARAnchorManager.AttachAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.AttachAnchor(*)", true)]        
+        [Obsolete("ARReferencePointManger.AttachReferencePoint() has been deprecated. Use ARAnchorManager.AttachAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.AttachAnchor(*)", true)]
         public ARReferencePoint AttachReferencePoint(ARPlane plane, Pose pose)
         {
             if (!enabled)
@@ -113,7 +113,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <c>True</c> if the reference point was successfully removed.
         /// <c>False</c> usually means the reference point is not longer tracked by the system.
         /// </returns>
-        [Obsolete("ARReferencePointManger.RemoveReferencePoint() has been deprecated. Use ARAnchorManager.RemoveAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.RemoveAnchor(*)", true)]        
+        [Obsolete("ARReferencePointManger.RemoveReferencePoint() has been deprecated. Use ARAnchorManager.RemoveAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.RemoveAnchor(*)", true)]
         public bool RemoveReferencePoint(ARReferencePoint referencePoint)
         {
             if (!enabled)
@@ -140,7 +140,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="trackableId">The <see cref="TrackableId"/> of the <see cref="ARReferencePoint"/> to retrieve.</param>
         /// <returns>The <see cref="ARReferencePoint"/> with <paramref name="trackableId"/> or <c>null</c> if it does not exist.</returns>
-        [Obsolete("ARReferencePointManger.GetReferencePoint() has been deprecated. Use ARAnchorManager.GetAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.GetAnchor(*)", true)]        
+        [Obsolete("ARReferencePointManger.GetReferencePoint() has been deprecated. Use ARAnchorManager.GetAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.GetAnchor(*)", true)]
         public ARReferencePoint GetReferencePoint(TrackableId trackableId)
         {
             ARReferencePoint referencePoint;
@@ -167,6 +167,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (referencePointsChanged != null)
             {
+                using (new ScopedProfiler("OnReferencePointsChanged"))
                 referencePointsChanged(
                     new ARReferencePointsChangedEventArgs(
                         addedPoints,

@@ -20,7 +20,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARAnchorManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARAnchorManager.html")]
     public sealed class ARAnchorManager : ARTrackableManager<
         XRAnchorSubsystem,
         XRAnchorSubsystemDescriptor,
@@ -145,15 +145,9 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
-        protected override GameObject GetPrefab()
-        {
-            return m_AnchorPrefab;
-        }
+        protected override GameObject GetPrefab() => m_AnchorPrefab;
 
-        protected override string gameObjectName
-        {
-            get { return "Anchor"; }
-        }
+        protected override string gameObjectName => "Anchor";
 
         protected override void OnTrackablesChanged(
             List<ARAnchor> addedPoints,
@@ -162,11 +156,11 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (anchorsChanged != null)
             {
-                anchorsChanged(
-                    new ARAnchorsChangedEventArgs(
-                        addedPoints,
-                        updatedPoints,
-                        removedPoints));
+                using (new ScopedProfiler("OnAnchorsChanged"))
+                anchorsChanged(new ARAnchorsChangedEventArgs(
+                    addedPoints,
+                    updatedPoints,
+                    removedPoints));
             }
         }
     }

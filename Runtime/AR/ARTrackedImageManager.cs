@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImageManager)]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARTrackedImageManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARTrackedImageManager.html")]
     public sealed class ARTrackedImageManager : ARTrackableManager<
         XRImageTrackingSubsystem,
         XRImageTrackingSubsystemDescriptor,
@@ -97,21 +97,41 @@ namespace UnityEngine.XR.ARFoundation
         int m_MaxNumberOfMovingImages;
 
         /// <summary>
-        /// The maximum number of moving images to track in realtime. Support may vary between devices and providers. Check
-        /// for support at runtime with <see cref="subsystem"/><c>.SubsystemDescriptor.supportsMovingImages</c>.
+        /// The maximum number of moving images to track in realtime.
+        /// This property is obsolete.
+        /// Use <see cref="requestedMaxNumberOfMovingImages"/>
+        /// or  <see cref="currentMaxNumberOfMovingImages"/> instead.
         /// </summary>
-        /// <exception cref="System.InvalidOperationException">Thrown if the subsystem does not support moving images.</exception>
+        [Obsolete("Use requestedMaxNumberOfMovingImages or currentMaxNumberOfMovingImages instead. (2020-01-16)")]
         public int maxNumberOfMovingImages
         {
-            get { return m_MaxNumberOfMovingImages; }
+            get => m_MaxNumberOfMovingImages;
+            set => requestedMaxNumberOfMovingImages = value;
+        }
+
+        bool supportsMovingImages => descriptor?.supportsMovingImages == true;
+
+        /// <summary>
+        /// The requested maximum number of moving images to track in realtime. Support may vary between devices and providers. Check
+        /// for support at runtime with <see cref="subsystem"/><c>.SubsystemDescriptor.supportsMovingImages</c>.
+        /// </summary>
+        public int requestedMaxNumberOfMovingImages
+        {
+            get => supportsMovingImages ? subsystem.requestedMaxNumberOfMovingImages : m_MaxNumberOfMovingImages;
             set
             {
-                if (value == m_MaxNumberOfMovingImages)
-                    return;
-
-                SetMaxNumberOfMovingImages(value);
+                m_MaxNumberOfMovingImages = value;
+                 if (enabled && (descriptor?.supportsMovingImages == true))
+                {
+                    subsystem.requestedMaxNumberOfMovingImages = value;
+                }
             }
         }
+
+        /// <summary>
+        /// Get the maximum number of moving images to track in realtime currently in use by the subsystem.
+        /// </summary>
+        public int currentMaxNumberOfMovingImages => supportsMovingImages ? subsystem.currentMaxNumberOfMovingImages : 0;
 
         [SerializeField]
         [Tooltip("If not null, instantiates this prefab for each detected image.")]
@@ -122,14 +142,11 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public GameObject trackedImagePrefab
         {
-            get { return m_TrackedImagePrefab; }
-            set { m_TrackedImagePrefab = value; }
+            get => m_TrackedImagePrefab;
+            set => m_TrackedImagePrefab = value;
         }
 
-        protected override GameObject GetPrefab()
-        {
-            return m_TrackedImagePrefab;
-        }
+        protected override GameObject GetPrefab() => m_TrackedImagePrefab;
 
         /// <summary>
         /// Invoked once per frame with information about the <see cref="ARTrackedImage"/>s that have changed, i.e., been added, updated, or removed.
@@ -141,10 +158,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new image is detected.
         /// </summary>
-        protected override string gameObjectName
-        {
-            get { return "ARTrackedImage"; }
-        }
+        protected override string gameObjectName => "ARTrackedImage";
 
         /// <summary>
         /// Sets the image library on the subsystem before Start() is called on the <c>XRImageTrackingSubsystem</c>.
@@ -158,7 +172,10 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             UpdateReferenceImages(subsystem.imageLibrary);
-            SetMaxNumberOfMovingImages(m_MaxNumberOfMovingImages);
+            if (supportsMovingImages)
+            {
+                subsystem.requestedMaxNumberOfMovingImages = m_MaxNumberOfMovingImages;
+            }
 
             enabled = (subsystem.imageLibrary != null);
 #if DEVELOPMENT_BUILD
@@ -220,11 +237,14 @@ namespace UnityEngine.XR.ARFoundation
             List<ARTrackedImage> removed)
         {
             if (trackedImagesChanged != null)
+            {
+                using (new ScopedProfiler("OnTrackedImagesChanged"))
                 trackedImagesChanged(
                     new ARTrackedImagesChangedEventArgs(
                         added,
                         updated,
                         removed));
+            }
         }
 
         void UpdateReferenceImages(RuntimeReferenceImageLibrary library)
@@ -237,15 +257,6 @@ namespace UnityEngine.XR.ARFoundation
             {
                 var referenceImage = library[i];
                 m_ReferenceImages[referenceImage.guid] = referenceImage;
-            }
-        }
-
-        void SetMaxNumberOfMovingImages(int value)
-        {
-            m_MaxNumberOfMovingImages = value;
-            if (subsystem != null && descriptor.supportsMovingImages)
-            {
-                subsystem.maxNumberOfMovingImages = value;
             }
         }
 

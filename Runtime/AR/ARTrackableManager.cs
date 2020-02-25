@@ -104,24 +104,38 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem == null)
                 return;
 
+            using (new ScopedProfiler("GetChanges"))
             using (var changes = subsystem.GetChanges(Allocator.Temp))
             {
-                ClearAndSetCapacity(s_Added, changes.added.Length);
-                foreach (var added in changes.added)
-                    s_Added.Add(CreateOrUpdateTrackable(added));
-
-                ClearAndSetCapacity(s_Updated, changes.updated.Length);
-                foreach (var updated in changes.updated)
-                    s_Updated.Add(CreateOrUpdateTrackable(updated));
-
-                ClearAndSetCapacity(s_Removed, changes.removed.Length);
-                foreach (var trackableId in changes.removed)
+                using (new ScopedProfiler("ProcessAdded"))
                 {
-                    TTrackable trackable;
-                    if (m_Trackables.TryGetValue(trackableId, out trackable))
+                    ClearAndSetCapacity(s_Added, changes.added.Length);
+                    foreach (var added in changes.added)
                     {
-                        m_Trackables.Remove(trackableId);
-                        s_Removed.Add(trackable);
+                        s_Added.Add(CreateOrUpdateTrackable(added));
+                    }
+                }
+
+                using (new ScopedProfiler("ProcessUpdated"))
+                {
+                    ClearAndSetCapacity(s_Updated, changes.updated.Length);
+                    foreach (var updated in changes.updated)
+                    {
+                        s_Updated.Add(CreateOrUpdateTrackable(updated));
+                    }
+                }
+
+                using (new ScopedProfiler("ProcessRemoved"))
+                {
+                    ClearAndSetCapacity(s_Removed, changes.removed.Length);
+                    foreach (var trackableId in changes.removed)
+                    {
+                        TTrackable trackable;
+                        if (m_Trackables.TryGetValue(trackableId, out trackable))
+                        {
+                            m_Trackables.Remove(trackableId);
+                            s_Removed.Add(trackable);
+                        }
                     }
                 }
             }
@@ -285,6 +299,7 @@ namespace UnityEngine.XR.ARFoundation
 
         GameObject CreateGameObject(TrackableId trackableId)
         {
+            using (new ScopedProfiler("CreateGameObject"))
             return CreateGameObject(GetTrackableName(trackableId));
         }
 

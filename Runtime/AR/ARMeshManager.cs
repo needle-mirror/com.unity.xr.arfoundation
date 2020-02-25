@@ -1,23 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
-
-#if UNITY_2019_3_OR_NEWER
 using LegacyMeshId = UnityEngine.XR.MeshId;
-#else
-using LegacyMeshId = UnityEngine.Experimental.XR.TrackableId;
-using MeshInfo = UnityEngine.Experimental.XR.MeshInfo;
-using XRMeshSubsystem = UnityEngine.Experimental.XR.XRMeshSubsystem;
-using XRMeshSubsystemDescriptor = UnityEngine.Experimental.XR.XRMeshSubsystemDescriptor;
-using MeshChangeState = UnityEngine.Experimental.XR.MeshChangeState;
-using MeshVertexAttributes = UnityEngine.Experimental.XR.MeshVertexAttributes;
-using MeshGenerationStatus = UnityEngine.Experimental.XR.MeshGenerationStatus;
-using MeshGenerationResult = UnityEngine.Experimental.XR.MeshGenerationResult;
-#endif
-
-#if !UNITY_2019_2_OR_NEWER
-using SubsystemManager = UnityEngine.Experimental.SubsystemManager;
-#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -31,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     /// without blocking the main thread.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_MeshManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARMeshManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARMeshManager.html")]
     [DisallowMultipleComponent]
     public class ARMeshManager : MonoBehaviour
     {

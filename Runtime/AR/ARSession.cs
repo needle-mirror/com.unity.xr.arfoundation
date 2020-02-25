@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARSession.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARSession.html")]
     public sealed class ARSession : SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor>
     {
         [SerializeField]
@@ -31,8 +31,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public bool attemptUpdate
         {
-            get { return m_AttemptUpdate; }
-            set { m_AttemptUpdate = value; }
+            get => m_AttemptUpdate;
+            set => m_AttemptUpdate = value;
         }
 
         [SerializeField]
@@ -40,9 +40,25 @@ namespace UnityEngine.XR.ARFoundation
         bool m_MatchFrameRate = true;
 
         /// <summary>
-        /// If <c>True</c>, the session will block execution until a new AR frame is available
-        /// and set
-        /// <a href="https://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html">Application.targetFrameRate</a>
+        /// If <c>True</c>, the session will block execution until a new AR frame is available.
+        /// This property is obsolete. Use <see cref="matchFrameRateRequested"/> or <see cref="matchFrameRateEnabled"/> instead.
+        /// </summary>
+        [Obsolete("Use matchFrameRateRequested or matchFrameRateEnabled instead. (2020-01-28)")]
+        public bool matchFrameRate
+        {
+            get => m_MatchFrameRate;
+            set => matchFrameRateRequested = value;
+        }
+
+        /// <summary>
+        /// Whether the underlying subsystem will attempt to synchronize the AR frame rate with Unity's.
+        /// </summary>
+        /// <seealso cref="matchFrameRateRequested"/>
+        public bool matchFrameRateEnabled => descriptor?.supportsMatchFrameRate == true ? subsystem.matchFrameRateEnabled : false;
+
+        /// <summary>
+        /// If <c>True</c>, the session will block execution until a new AR frame is available and set
+        /// [Application.targetFrameRate](https://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html)
         /// to match the native update frequency of the AR session.
         /// Otherwise, the AR session is updated indpendently of the Unity frame.
         /// </summary>
@@ -56,29 +72,39 @@ namespace UnityEngine.XR.ARFoundation
         /// This option does three things:
         /// - Enables a setting on the <c>XRSessionSubsystem</c> which causes the update to block until the next AR frame is ready.
         /// - Sets <c>Application.targetFrameRate</c> to the session's preferred update rate.
-        /// - Sets <c><a href="https://docs.unity3d.com/ScriptReference/QualitySettings-vSyncCount.html">QualitySettings.vSyncCount</a></c> to zero
+        /// - Sets [QualitySettings.vSyncCount](https://docs.unity3d.com/ScriptReference/QualitySettings-vSyncCount.html) to zero
         /// </para>
         /// </remarks>
-        public bool matchFrameRate
+        public bool matchFrameRateRequested
         {
-            get => m_MatchFrameRate;
+            get => descriptor?.supportsMatchFrameRate == true ? subsystem.matchFrameRateRequested : m_MatchFrameRate;
+            set => SetMatchFrameRateRequested(value);
+        }
+
+        [SerializeField]
+        [Tooltip("The requested tracking mode.")]
+        TrackingMode m_TrackingMode = TrackingMode.PositionAndRotation;
+
+        /// <summary>
+        /// Get or set the <c>TrackingMode</c> for the session.
+        /// </summary>
+        public TrackingMode requestedTrackingMode
+        {
+            get => subsystem?.requestedTrackingMode.ToTrackingMode() ?? m_TrackingMode;
             set
             {
-                if (m_MatchFrameRate == value)
-                    return;
-
-                if (descriptor != null)
+                m_TrackingMode = value;
+                if (enabled && subsystem != null)
                 {
-                    // At runtime
-                    SetMatchFrameRateEnabled(value);
-                }
-                else
-                {
-                    // In the Editor, or if there is no subsystem
-                    m_MatchFrameRate = value;
+                    subsystem.requestedTrackingMode = value.ToFeature();
                 }
             }
         }
+
+        /// <summary>
+        /// Get the current <c>TrackingMode</c> in use by the session.
+        /// </summary>
+        public TrackingMode currentTrackingMode => subsystem?.currentTrackingMode.ToTrackingMode() ?? (TrackingMode)0;
 
         /// <summary>
         /// Get the number of AR frames produced per second, or null if the frame rate cannot be determined.
@@ -95,7 +121,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public static ARSessionState state
         {
-            get { return s_State; }
+            get => s_State;
             private set
             {
                 if (s_State == value)
@@ -113,10 +139,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The reason AR tracking was lost.
         /// </summary>
-        public static NotTrackingReason notTrackingReason
-        {
-            get { return s_NotTrackingReason; }
-        }
+        public static NotTrackingReason notTrackingReason => s_NotTrackingReason;
 
         /// <summary>
         /// Resets the AR Session. This destroys the current session, including all trackables, and
@@ -131,20 +154,12 @@ namespace UnityEngine.XR.ARFoundation
                 state = ARSessionState.SessionInitializing;
         }
 
-        void SetMatchFrameRateEnabled(bool enabled)
+        void SetMatchFrameRateRequested(bool value)
         {
-            // Only set it if supported
-            if (descriptor.supportsMatchFrameRate)
-                subsystem.matchFrameRate = enabled;
-
-            // Read the value back. If not supported, this will be false.
-            m_MatchFrameRate = subsystem.matchFrameRate;
-
-            // Set the application's target frame rate to match
-            if (m_MatchFrameRate)
+            m_MatchFrameRate = value;
+            if (descriptor?.supportsMatchFrameRate == true)
             {
-                Application.targetFrameRate = subsystem.frameRate;
-                QualitySettings.vSyncCount = 0;
+                subsystem.matchFrameRateRequested = value;
             }
         }
 
@@ -345,7 +360,8 @@ namespace UnityEngine.XR.ARFoundation
 
         void StartSubsystem()
         {
-            SetMatchFrameRateEnabled(m_MatchFrameRate);
+            SetMatchFrameRateRequested(m_MatchFrameRate);
+            subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
             subsystem.Start();
         }
 
@@ -357,9 +373,10 @@ namespace UnityEngine.XR.ARFoundation
 
         void Update()
         {
-            if (subsystem != null && subsystem.running)
+            if (subsystem?.running == true)
             {
-                if (m_MatchFrameRate && descriptor.supportsMatchFrameRate)
+                m_TrackingMode = subsystem.requestedTrackingMode.ToTrackingMode();
+                if (subsystem.matchFrameRateEnabled)
                 {
                     Application.targetFrameRate = subsystem.frameRate;
                     QualitySettings.vSyncCount = 0;

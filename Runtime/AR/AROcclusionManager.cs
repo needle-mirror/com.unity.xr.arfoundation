@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -10,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_OcclusionManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.AROcclusionManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.AROcclusionManager.html")]
     public sealed class AROcclusionManager : SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor>
     {
         /// <summary>
@@ -60,22 +61,37 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The mode for generating the human segmentation stencil texture.
+        /// This method is obsolete.
+        /// Use <see cref="requestedHumanStencilMode"/>
+        /// or  <see cref="currentHumanStencilMode"/> instead.
         /// </summary>
-        /// <value>
-        /// The mode for generating the human segmentation stencil texture.
-        /// </value>
-        public SegmentationStencilMode humanSegmentationStencilMode
+        [Obsolete("Use requestedSegmentationStencilMode or currentSegmentationStencilMode instead. (2020-01-14)")]
+        public HumanSegmentationStencilMode humanSegmentationStencilMode
         {
             get => m_HumanSegmentationStencilMode;
+            set => requestedHumanStencilMode = value;
+        }
+
+        /// <summary>
+        /// The requested mode for generating the human segmentation stencil texture.
+        /// </summary>
+        public HumanSegmentationStencilMode requestedHumanStencilMode
+        {
+            get => subsystem?.requestedHumanStencilMode ?? m_HumanSegmentationStencilMode;
             set
             {
                 m_HumanSegmentationStencilMode = value;
-                if (enabled && subsystem != null)
+                if (enabled && descriptor?.supportsHumanSegmentationStencilImage == true)
                 {
-                    subsystem.humanSegmentationStencilMode = value;
+                    subsystem.requestedHumanStencilMode = value;
                 }
             }
         }
+
+        /// <summary>
+        /// Get the current mode in use for generating the human segmentation stencil mode.
+        /// </summary>
+        public HumanSegmentationStencilMode currentHumanStencilMode => subsystem?.currentHumanStencilMode ?? HumanSegmentationStencilMode.Disabled;
 
         [SerializeField]
         [Tooltip("The mode for generating human segmentation stencil texture.\n\n"
@@ -83,33 +99,48 @@ namespace UnityEngine.XR.ARFoundation
                  + "Fastest -- Minimal rendering quality. Minimal frame computation.\n"
                  + "Medium -- Medium rendering quality. Medium frame computation.\n"
                  + "Best -- Best rendering quality. Increased frame computation.")]
-        SegmentationStencilMode m_HumanSegmentationStencilMode = SegmentationStencilMode.Fastest;
+        HumanSegmentationStencilMode m_HumanSegmentationStencilMode = HumanSegmentationStencilMode.Fastest;
 
         /// <summary>
         /// The mode for generating the human segmentation depth texture.
+        /// This method is obsolete.
+        /// Use <see cref="requestedHumanDepthMode"/>
+        /// or  <see cref="currentHumanDepthMode"/> instead.
         /// </summary>
-        /// <value>
-        /// The mode for generating the human segmentation depth texture.
-        /// </value>
-        public SegmentationDepthMode humanSegmentationDepthMode
+        [Obsolete("Use requestedSegmentationDepthMode or currentSegmentationDepthMode instead. (2020-01-15)")]
+        public HumanSegmentationDepthMode humanSegmentationDepthMode
         {
             get => m_HumanSegmentationDepthMode;
+            set => requestedHumanDepthMode = value;
+        }
+
+        /// <summary>
+        /// Get or set the requested human segmentation depth mode.
+        /// </summary>
+        public HumanSegmentationDepthMode requestedHumanDepthMode
+        {
+            get => subsystem?.requestedHumanDepthMode ?? m_HumanSegmentationDepthMode;
             set
             {
                 m_HumanSegmentationDepthMode = value;
-                if (enabled && subsystem != null)
+                if (enabled && descriptor?.supportsHumanSegmentationDepthImage == true)
                 {
-                    subsystem.humanSegmentationDepthMode = value;
+                    subsystem.requestedHumanDepthMode = value;
                 }
             }
         }
+
+        /// <summary>
+        /// Get the current human segmentation depth mode in use by the subsystem.
+        /// </summary>
+        public HumanSegmentationDepthMode currentHumanDepthMode => subsystem?.currentHumanDepthMode ?? HumanSegmentationDepthMode.Disabled;
 
         [SerializeField]
         [Tooltip("The mode for generating human segmentation depth texture.\n\n"
                  + "Disabled -- No human depth texture produced.\n"
                  + "Fastest -- Minimal rendering quality. Minimal frame computation.\n"
                  + "Best -- Best rendering quality. Increased frame computation.")]
-        SegmentationDepthMode m_HumanSegmentationDepthMode = SegmentationDepthMode.Fastest;
+        HumanSegmentationDepthMode m_HumanSegmentationDepthMode = HumanSegmentationDepthMode.Fastest;
 
         /// <summary>
         /// The human segmentation stencil texture.
@@ -156,9 +187,15 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnBeforeStart()
         {
-            subsystem.humanSegmentationStencilMode = m_HumanSegmentationStencilMode;
-            subsystem.humanSegmentationDepthMode = m_HumanSegmentationDepthMode;
-
+            if (descriptor.supportsHumanSegmentationStencilImage)
+            {
+                subsystem.requestedHumanStencilMode = m_HumanSegmentationStencilMode;
+            }
+            if (descriptor.supportsHumanSegmentationDepthImage)
+            {
+                subsystem.requestedHumanDepthMode = m_HumanSegmentationDepthMode;
+            }
+            
             m_HumanStencilTextureInfo.Reset();
             m_HumanDepthTextureInfo.Reset();
         }
