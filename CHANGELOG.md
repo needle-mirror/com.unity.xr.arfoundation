@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.1.0-preview.7] - 2020-03-03
+### Fixes
+- Patched a memory leak by destroying the camera textures when the camera manager is disabled.
+
 ## [3.1.0-preview.6] - 2020-01-21
 ### Fixes
 - Fixed memory leak when accessing the `humanStencilTexture` and `humanDepthTexture` properties of the `ARHumanOcclusionManager`.
@@ -26,15 +30,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Breaking changes
 - Renaming the concept of `Reference Points` to `Anchors`. The Unity script updater should convert any references to `ARReferencePointManager`, `ARReferencePoint`, and `ARReferencePointsChangedEventArgs` the next time the project is loaded into the Editor.
 
-### Fixes
-- Fixed an issue which could cause the background camera texture to stop functioning correctly on certain devices running OpenGLES3.
-- Removed references to LWRP from the documentation.
-
 ### New
 - Added the new [AROcclusionManager](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.AROcclusionManager.html) with human segmentation functionality (on some iOS hardware).
 
 ## [3.0.1] - 2019-11-18
 - 2020.1 verified version
+
+### Fixes
+- Removed references to LWRP from the documentation.
 
 ## [3.0.0-preview.6] - 2019-11-14
 

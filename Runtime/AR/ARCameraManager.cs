@@ -174,6 +174,21 @@ namespace UnityEngine.XR.ARFoundation
             subsystem.lightEstimationMode = m_LightEstimationMode;
         }
 
+        /// <summary>
+        /// Callback when the manager is disabled.
+        /// </summary>
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            foreach (var textureInfo in m_TextureInfos)
+            {
+                textureInfo.Dispose();
+            }
+
+            m_TextureInfos.Clear();
+        }
+
         void Update()
         {
             if (subsystem == null)
