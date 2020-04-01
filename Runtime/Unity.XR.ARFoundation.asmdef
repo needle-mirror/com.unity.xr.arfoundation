@@ -2,7 +2,8 @@
     "name": "Unity.XR.ARFoundation",
     "references": [
         "UnityEngine.SpatialTracking",
-        "Unity.XR.ARSubsystems"
+        "Unity.XR.ARSubsystems",
+        "Unity.XR.Management"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
@@ -12,5 +13,11 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.management",
+            "expression": "3.2.0",
+            "define": "USE_XR_MANAGEMENT"
+        }
+    ]
 }

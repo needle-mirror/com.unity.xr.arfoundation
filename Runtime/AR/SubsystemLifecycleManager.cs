@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
-#if !UNITY_2019_2_OR_NEWER
-using UnityEngine.Experimental;
+#if USE_XR_MANAGEMENT
+using UnityEngine.XR.Management;
 #endif
 
 namespace UnityEngine.XR.ARFoundation
@@ -30,6 +30,8 @@ namespace UnityEngine.XR.ARFoundation
         {
             get { return (subsystem == null) ? null : subsystem.SubsystemDescriptor; }
         }
+
+        bool m_CleanupSubsystemOnDestroy = true;
 
         /// <summary>
         /// Creates a <c>TSubsystem</c>.
@@ -61,6 +63,19 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected void CreateSubsystemIfNecessary()
         {
+            // Use the subsystem that has been instantiated by XR Management
+            // if available, otherwise create the subsystem.
+
+            if (subsystem == null)
+            {
+                subsystem = GetActiveSubsystemInstance();
+
+                // If the subsystem has already been created by XR management, it controls the lifetime
+                // of the subsystem.
+                if (subsystem != null)
+                    m_CleanupSubsystemOnDestroy = false;
+            }
+
             if (subsystem == null)
                 subsystem = CreateSubsystem();
         }
@@ -90,11 +105,43 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Returns the active <c>TSubsystem</c> instance if present, otherwise returns null.
+        /// </summary>
+        protected TSubsystem GetActiveSubsystemInstance()
+        {
+            TSubsystem activeSubsystem = null;
+
+#if USE_XR_MANAGEMENT
+            // If the XR management package has been included, query the currently
+            // active loader for the created subsystem, if one exists.
+            if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
+            {
+                XRLoader loader = XRGeneralSettings.Instance.Manager.activeLoader;
+                if (loader != null)
+                {
+                    activeSubsystem = loader.GetLoadedSubsystem<TSubsystem>();
+                }
+            }
+#endif
+            // If XR management is not used or no loader has been set, check for
+            // any active subsystem instances in the SubsystemManager.
+            if (activeSubsystem == null)
+            {
+                List<TSubsystem> subsystemInstances = new List<TSubsystem>();
+                SubsystemManager.GetInstances(subsystemInstances);
+                if (subsystemInstances.Count > 0)
+                    activeSubsystem = subsystemInstances[0];
+            }
+
+            return activeSubsystem;
+        }
+
+        /// <summary>
         /// Destroys the <c>TSubsystem</c>.
         /// </summary>
         protected virtual void OnDestroy()
         {
-            if (subsystem != null)
+            if (m_CleanupSubsystemOnDestroy && subsystem != null)
                 subsystem.Destroy();
 
             subsystem = null;
