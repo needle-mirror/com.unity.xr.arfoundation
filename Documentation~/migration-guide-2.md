@@ -2,9 +2,6 @@
 
 This guide covers the differences between AR Foundation 2.x and 3.x.
 
-## AR Pose Driver
-There is a new component: `ARPoseDriver`. This component was added to provide similar functionality to the `TrackedPoseDriver` and remove the dependency on the `com.unity.xr.legacyinputhelpers` package for AR Foundation. You can now use either the `ARPoseDriver` or the `TrackedPoseDriver` to drive a GameObject's local position and orientation according to the device's tracking information. Having both the `ARPoseDriver` and the `TrackedPoseDriver` components enabled on the same GameObject is not recommended as the behaviour is undefined.
-
 ## Image tracking
 
 The image tracking manager `ARTrackedImageManager` has a `referenceLibrary` property on it to set the reference image library (the set of images to detect in the environment). Previously, this was an `XRReferenceImageLibrary`. Now, it is an `IReferenceImageLibrary`, and `XRReferenceImageLibrary` implements `IReferenceImageLibrary`. If your code previously set the the `referenceLibrary` property to an `XRReferenceImageLibrary`, it should continue to work as before. However, if you previously treated the `referenceLibrary` as an `XRReferenceImageLibrary`, you will have to attempt to cast it to a `XRReferenceImageLibrary`.

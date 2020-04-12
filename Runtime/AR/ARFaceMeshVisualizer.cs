@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     /// this component will generate a mesh from the underlying <c>XRFace</c>.
     /// </remarks>
     [RequireComponent(typeof(ARFace))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARFaceMeshVisualizer.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARFaceMeshVisualizer.html")]
     public sealed class ARFaceMeshVisualizer : MonoBehaviour
     {
         /// <summary>

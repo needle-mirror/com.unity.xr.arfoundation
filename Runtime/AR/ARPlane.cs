@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_Plane)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARPlane.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARPlane.html")]
     public sealed class ARPlane : ARTrackable<BoundedPlane, ARPlane>
     {
         [SerializeField]

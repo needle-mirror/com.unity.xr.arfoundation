@@ -59,12 +59,6 @@ namespace UnityEngine.XR.ARFoundation
         public const int k_CameraManager = k_Session + 1;
 
         /// <summary>
-        /// The <see cref="AROcclusionManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
-        /// </summary>
-        public const int k_OcclusionManager = k_Session + 1;
-
-        /// <summary>
         /// The <see cref="ARFaceManager"/>'s update order. Should come after
         /// the <see cref="ARSession"/>.
         /// </summary>
@@ -99,30 +93,6 @@ namespace UnityEngine.XR.ARFoundation
         /// the <see cref="AREnvironmentProbeManager"/>.
         /// </summary>
         public const int k_EnvironmentProbe = k_EnvironmentProbeManager + 1;
-
-        /// <summary>
-        /// The <see cref="ARTrackedObjectManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
-        /// </summary>
-        public const int k_TrackedObjectManager = k_Session + 1;
-
-        /// <summary>
-        /// The <see cref="ARTrackedObject"/>'s update order. Should come after
-        /// the <see cref="ARTrackedObjectManager"/>.
-        /// </summary>
-        public const int k_TrackedObject = k_TrackedObjectManager + 1;
-
-        /// <summary>
-        /// The <see cref="ARHumanBodyManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
-        /// </summary>
-        public const int k_HumanBodyManager = k_Session + 1;
-
-        /// <summary>
-        /// The <see cref="ARHumanBody"/>'s update order. Should come after
-        /// the <see cref="ARHumanBodyManager"/>.
-        /// </summary>
-        public const int k_HumanBody = k_HumanBodyManager + 1;
 
         /// <summary>
         /// The <see cref="ARMeshManager"/>'s update order. Should come after

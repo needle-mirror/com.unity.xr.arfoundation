@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_Anchor)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARAnchor.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARAnchor.html")]
     public sealed class ARAnchor : ARTrackable<XRAnchor, ARAnchor>
     {
         /// <summary>

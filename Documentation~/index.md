@@ -12,7 +12,6 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - Environment probe: a means for generating a cube map to represent a particular area of the physical environment.
 - Face tracking: detect and track human faces.
 - Image tracking: detect and track 2D images.
-- Object tracking: detect 3D objects.
 
 If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration-guide.md).
 
@@ -90,7 +89,7 @@ public class MyComponent {
     [SerializeField] ARSession m_Session;
 
     IEnumerator Start() {
-        if ((ARSession.state == ARSessionState.None) ||
+        if ((ARSession.state == ARSessionState.None ||)
             (ARSession.state == ARSessionState.CheckingAvailability))
         {
             yield return ARSession.CheckAvailability();
@@ -124,7 +123,7 @@ To determine the current state of the session (for example, whether the device i
 |`SessionInitialized`|An AR session is initializing (that is, starting up). This usually means AR is working, but hasn't gathered enough information about the environment.|
 |`SessionTracking`|An AR session is running and is tracking (that is, the device is able to determine its position and orientation in the world).|
 
-### AR Session Origin
+### ARSessionOrigin
 
 ![AR session origin](images/ar-session-origin.png "AR Session Origin")
 
@@ -140,14 +139,9 @@ Likewise, trackables that an AR device produces, such as planes, are provided in
 
 To apply scale to the `ARSessionOrigin`, set its `transform`'s scale. This has the effect of scaling all the data coming from the device, including the AR Camera's position and any detected trackables. Larger values make AR content appear smaller. For example, a scale of 10 would make your content appear 10 times smaller, while 0.1 would make your content appear 10 times larger.
 
-### AR Pose Driver
+### Tracked Pose Driver
 
-The `AR Pose Driver` drives the local position and orientation of the parent GameObject according to the device's tracking information.  The most common use-case for this would be attaching the `ARPoseDriver` to the AR Camera to drive the camera's position and orientation in an AR scene.
-
-![AR Pose Driver](images/ar-pose-driver.png "AR Pose Driver")
-
-#### Legacy Input Helpers and the Tracked Pose Driver component
-The `ARPoseDriver` provides a similar functionality to the `TrackedPoseDriver` from the `com.unity.xr.legacyinputhelpers` package and was implemented to remove the dependency on that package. Projects are able to use either the `ARPoseDriver` component or the `TrackedPoseDriver` component to drive a GameObjects transform. It is not recommended to use both as the behaviour is undefined. `Use Relative Transform` option is unavailable for the `ARPoseDriver` because it introduces additional unnecesary transformations.
+The AR Camera, which will be used to render any trackables you wish to visualize, should be parented to the `ARSessionOrigin`'s `GameObject`. The AR Camera should also have a `TrackedPoseDriver` component on it to drive the AR Camera’s local position and orientation according to the device's tracking information. This setup allows the AR Camera’s local space to match the AR "session space".
 
 ![Tracked Pose Driver](images/tracked-pose-driver.png "Tracked Pose Driver")
 
@@ -177,12 +171,6 @@ If you have exactly one `ARSessionOrigin`, you only need to add the `ARCameraBac
 #### Configuring ARCameraBackground with the Universal Render Pipeline (URP)
 
 Please refer to [this additional documentation to configure an AR Foundation project with a URP](ar-camera-background-with-scriptable-render-pipeline.md).
-
-#### Automatic occlusion
-
-Some devices offer depth information about the real world. For instance, with a feature known as person occlusion, iOS devices with the A12 Bionic chip (and newer) provide depth information for humans detected in the AR Camera frame. In the future, more devices are expected to produce real-world depth information.
-
-Adding the `AROcclusionManager` component to the Camera with the `ARCameraBackground` component automatically enables the background rendering pass to incorporate any available depth information when rendering the depth buffer. This allows for rendered geometry to be occluded by detected geometry from the real world. For example, in the case of iOS devices that support person occlusion, detected humans occlude rendered content that exists behind them.
 
 #### Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU
 
@@ -257,3 +245,20 @@ This version of AR Foundation is compatible with the following versions of the U
 AR Foundation includes the following known limitations:
 
 * No known issues
+
+## Document revision history
+
+|Date|Reason|
+|---|---|
+|April 18, 2019|Update documentation to include new features (environment probes, image tracking, face tracking, object tracking).|
+|March 4, 2019|Update documentation to reflect 2.0.0 changes.|
+|November 15, 2018|Face Tracking added.|
+|July 25, 2018|Update `ARCameraBackground` image and description following refactor.<br/>Add howto section for blitting the camera image to a render texture.|
+|July 16, 2018|Additional explanation for `ARSessionOrigin`|
+|June 14, 2018|Update `ARSessionOrigin` photos|
+|June 12, 2018|Update `ARPlaneMeshVisualizer` and `ARPointCloudMeshVisualizer` with additional debug recommendations and standards.|
+|June 7, 2018|Remove known issue.|
+|June 6, 2018|Update ARSession image.|
+|April 25, 2018|Updated docs and screen shots after package rename.|
+|April 19, 2018|Updated screen shots and information after code changes. Added section on `ARBackgroundRenderer` component. |
+|April 10, 2018|Document created.|

@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Face)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARFace.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARFace.html")]
     public sealed class ARFace : ARTrackable<XRFace, ARFace>
     {
         /// <summary>
@@ -86,30 +86,18 @@ namespace UnityEngine.XR.ARFoundation
         public IntPtr nativePtr => sessionRelativeData.nativePtr;
 
         /// <summary>
-        /// The pose of the left eye in relation to the face.
-        /// Use <c>leftEyePose.HasValue</c> to determine if this data is available.
+        /// The [transform](https://docs.unity3d.com/ScriptReference/Transform.html) of the left eye of the face, or `null` if there is no data for the left eye.
         /// </summary>
-        /// <remarks>
-        /// The data is returned in relation to the face pose itself and not session space.
-        /// </remarks>
         public Transform leftEye { get; private set; }
 
         /// <summary>
-        /// The pose of the right eye in relation to the face.
-        /// Use <c>rightEyePose.HasValue</c> to determine if this data is available.
+        /// The [transform](https://docs.unity3d.com/ScriptReference/Transform.html) of the right eye of the face, or `null` if there is no data for the right eye.
         /// </summary>
-        /// <remarks>
-        /// The data is returned in relation to the face pose itself and not session space.
-        /// </remarks>
         public Transform rightEye { get; private set; }
 
         /// <summary>
-        /// The position of which the eyes are fixated in relation to the face.
-        /// Use <c>fixationPoint.HasValue</c> to determine if this data is available.
+        /// The [transform](https://docs.unity3d.com/ScriptReference/Transform.html) representing the point at which the eyes are fixated upon or `null` if there is no fixation data.
         /// </summary>
-        /// <remarks>
-        /// The data is returned in relation to the face pose itself and not session space.
-        /// </remarks>
         public Transform fixationPoint { get; private set; }
 
         void Update()

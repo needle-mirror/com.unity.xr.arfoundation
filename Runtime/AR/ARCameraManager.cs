@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
     public sealed class ARCameraManager : SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>
     {
         [SerializeField]
@@ -27,7 +27,17 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public CameraFocusMode focusMode
         {
-            get => (subsystem != null) ? subsystem.focusMode : m_FocusMode;
+            get
+            {
+                if (subsystem != null)
+                {
+                    return subsystem.focusMode;
+                }
+                else
+                {
+                    return m_FocusMode;
+                }
+            }
             set
             {
                 m_FocusMode = value;
@@ -50,7 +60,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public LightEstimationMode lightEstimationMode
         {
-            get => m_LightEstimationMode;
+            get { return m_LightEstimationMode; }
             set
             {
                 m_LightEstimationMode = value;
@@ -65,7 +75,16 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// <c>true</c> if permission has been granted. Otherwise, <c>false</c>.
         /// </value>
-        public bool permissionGranted => (subsystem != null) && subsystem.permissionGranted;
+        public bool permissionGranted
+        {
+            get
+            {
+                if (subsystem != null)
+                    return subsystem.permissionGranted;
+
+                return false;
+            }
+        }
 
         /// <summary>
         /// An event which fires each time a new camera frame is received.
@@ -78,7 +97,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The material used in background rendering.
         /// </value>
-        public Material cameraMaterial => (subsystem == null) ? null : subsystem.cameraMaterial;
+        public Material cameraMaterial { get => (subsystem == null) ? null : subsystem.cameraMaterial; }
 
         /// <summary>
         /// Tries to get camera intrinsics. Camera intrinsics refers to properties
@@ -109,8 +128,10 @@ namespace UnityEngine.XR.ARFoundation
         /// The supported camera configurations.
         /// </returns>
         public NativeArray<XRCameraConfiguration> GetConfigurations(Allocator allocator)
-            => ((subsystem == null) ? new NativeArray<XRCameraConfiguration>(0, allocator)
-                : subsystem.GetConfigurations(allocator));
+        {
+            return ((subsystem == null) ? new NativeArray<XRCameraConfiguration>(0, allocator)
+                    : subsystem.GetConfigurations(allocator));
+        }
 
         /// <summary>
         /// The current camera configuration.
@@ -128,7 +149,7 @@ namespace UnityEngine.XR.ARFoundation
         /// implementation is unable to set the current camera configuration.</exception>
         public XRCameraConfiguration? currentConfiguration
         {
-            get => (subsystem == null) ? null : subsystem.currentConfiguration;
+            get { return (subsystem == null) ? null : subsystem.currentConfiguration; }
             set
             {
                 if (subsystem != null)
@@ -206,7 +227,7 @@ namespace UnityEngine.XR.ARFoundation
             XRCameraFrame frame;
             if (subsystem.TryGetLatestFrame(cameraParams, out frame))
             {
-                UpdateTexturesInfos();
+                UpdateTexturesInfos(frame);
 
                 if (frameReceived != null)
                     InvokeFrameReceivedEvent(frame);
@@ -217,7 +238,8 @@ namespace UnityEngine.XR.ARFoundation
         /// Pull the texture descriptors from the camera subsystem, and update the texture information maintained by
         /// this component.
         /// </summary>
-        void UpdateTexturesInfos()
+        /// <param name="frame">The latest updated camera frame.</param>
+        void UpdateTexturesInfos(XRCameraFrame frame)
         {
             var textureDescriptors = subsystem.GetTextureDescriptors(Allocator.Temp);
             try
@@ -277,18 +299,6 @@ namespace UnityEngine.XR.ARFoundation
             if (frame.hasColorCorrection)
                 lightEstimation.colorCorrection = frame.colorCorrection;
 
-            if (frame.hasMainLightDirection)
-                lightEstimation.mainLightDirection = frame.mainLightDirection;
-
-            if (frame.hasMainLightIntensityLumens)
-                lightEstimation.mainLightIntensityLumens = frame.mainLightIntensityLumens;
-
-            if (frame.hasMainLightColor)
-                lightEstimation.mainLightColor = frame.mainLightColor;
-
-            if (frame.hasAmbientSphericalHarmonics)
-                lightEstimation.ambientSphericalHarmonics = frame.ambientSphericalHarmonics;
-
             var eventArgs = new ARCameraFrameEventArgs();
 
             eventArgs.lightEstimation = lightEstimation;
@@ -316,8 +326,12 @@ namespace UnityEngine.XR.ARFoundation
                 s_PropertyIds.Add(textureInfo.descriptor.propertyNameId);
             }
 
+            subsystem.GetMaterialKeywords(out List<string> enabledMaterialKeywords, out List<string>disabledMaterialKeywords);
+
             eventArgs.textures = s_Textures;
             eventArgs.propertyNameIds = s_PropertyIds;
+            eventArgs.enabledMaterialKeywords = enabledMaterialKeywords;
+            eventArgs.disabledMaterialKeywords = disabledMaterialKeywords;
 
             frameReceived(eventArgs);
         }

@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// A structure for camera-related information pertaining to a particular frame.
-    /// This is used to communicate information in the <see cref="ARCameraManager.frameReceived" /> event.
+    /// This is used to communicate information in the <see cref="ARSubsystemManager.cameraFrameReceived" /> event.
     /// </summary>
     public struct ARCameraFrameEventArgs : IEquatable<ARCameraFrameEventArgs>
     {
@@ -64,6 +64,16 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         public float? exposureOffset { get; set; }
 
+        /// <summary>
+        /// The list of keywords to be enabled for the material.
+        /// </summary>
+        public List<string> enabledMaterialKeywords { get; internal set; }
+
+        /// <summary>
+        /// The list of keywords to be disabled for the material.
+        /// </summary>
+        public List<string> disabledMaterialKeywords { get; internal set; }
+
         public override int GetHashCode()
         {
             unchecked
@@ -76,12 +86,19 @@ namespace UnityEngine.XR.ARFoundation
                 hash = hash * 486187739 + (propertyNameIds == null ? 0 : propertyNameIds.GetHashCode());
                 hash = hash * 486187739 + exposureDuration.GetHashCode();
                 hash = hash * 486187739 + exposureOffset.GetHashCode();
+                hash = hash * 486187739 + (enabledMaterialKeywords == null ? 0 : enabledMaterialKeywords.GetHashCode());
+                hash = hash * 486187739 + (disabledMaterialKeywords == null ? 0 : disabledMaterialKeywords.GetHashCode());
                 return hash;
             }
         }
 
         public override bool Equals(object obj)
-            => (obj is ARCameraFrameEventArgs) && Equals((ARCameraFrameEventArgs)obj);
+        {
+            if (!(obj is ARCameraFrameEventArgs))
+                return false;
+
+            return Equals((ARCameraFrameEventArgs)obj);
+        }
 
         /// <summary>
         /// Generates a string representation of this struct suitable for debug
@@ -114,12 +131,22 @@ namespace UnityEngine.XR.ARFoundation
                 && ((textures == null) ? (other.textures == null) : textures.Equals(other.textures))
                 && ((propertyNameIds == null) ? (other.propertyNameIds == null)
                     : propertyNameIds.Equals(other.propertyNameIds))
-                && (exposureDuration.Equals(other.exposureDuration))
-                && (exposureOffset.Equals(other.exposureOffset));
+                && exposureDuration.Equals(other.exposureDuration)
+                && exposureOffset.Equals(other.exposureOffset)
+                && ((enabledMaterialKeywords == null) ? (other.enabledMaterialKeywords == null)
+                    : enabledMaterialKeywords.Equals(other.enabledMaterialKeywords))
+                && ((disabledMaterialKeywords == null) ? (other.disabledMaterialKeywords == null)
+                    : disabledMaterialKeywords.Equals(other.disabledMaterialKeywords));
         }
 
-        public static bool operator ==(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs) => lhs.Equals(rhs);
+        public static bool operator ==(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs)
+        {
+            return lhs.Equals(rhs);
+        }
 
-        public static bool operator !=(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs) => !lhs.Equals(rhs);
+        public static bool operator !=(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
     }
 }
