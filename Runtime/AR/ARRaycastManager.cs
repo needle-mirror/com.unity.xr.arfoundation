@@ -10,11 +10,27 @@ namespace UnityEngine.XR.ARFoundation
     /// to raycast against trackables (i.e., detected features in the physical environment) when they do not have
     /// a presence in the Physics world.
     /// </summary>
+    [DefaultExecutionOrder(ARUpdateOrder.k_RaycastManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARRaycastManager.html")]
-    public sealed class ARRaycastManager : SubsystemLifecycleManager<XRRaycastSubsystem, XRRaycastSubsystemDescriptor>
+    public sealed class ARRaycastManager : ARTrackableManager<
+        XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
+        XRRaycast, ARRaycast>
     {
+        [SerializeField]
+        [Tooltip("If not null, instantiates this prefab for each raycast.")]
+        GameObject m_RaycastPrefab;
+
+        /// <summary>
+        /// If not null, this prefab will be instantiated for each <see cref="ARRaycast"/>.
+        /// </summary>
+        public GameObject raycastPrefab
+        {
+            get => m_RaycastPrefab;
+            set => m_RaycastPrefab = value;
+        }
+
         /// <summary>
         /// Cast a ray from a point in screen space against trackables, i.e., detected features such as planes.
         /// </summary>
@@ -34,7 +50,7 @@ namespace UnityEngine.XR.ARFoundation
                 throw new ArgumentNullException("hitResults");
 
             var nativeHits = m_RaycastViewportDelegate(screenPoint, trackableTypes, Allocator.Temp);
-            var originTransform = m_SessionOrigin.camera != null ? m_SessionOrigin.camera.transform : m_SessionOrigin.trackablesParent;
+            var originTransform = sessionOrigin.camera != null ? sessionOrigin.camera.transform : sessionOrigin.trackablesParent;
             return TransformAndDisposeNativeHitResults(nativeHits, hitResults, originTransform.position);
         }
 
@@ -54,12 +70,62 @@ namespace UnityEngine.XR.ARFoundation
                 return false;
 
             if (hitResults == null)
-                throw new ArgumentNullException("hitResults");
+                throw new ArgumentNullException(nameof(hitResults));
 
-            var sessionSpaceRay = m_SessionOrigin.trackablesParent.InverseTransformRay(ray);
+            var sessionSpaceRay = sessionOrigin.trackablesParent.InverseTransformRay(ray);
             var nativeHits = m_RaycastRayDelegate(sessionSpaceRay, trackableTypes, Allocator.Temp);
             return TransformAndDisposeNativeHitResults(nativeHits, hitResults, ray.origin);
         }
+
+        /// <summary>
+        /// Creates an <see cref="ARRaycast"/> that updates automatically. <see cref="ARRaycast"/>s will
+        /// continue to update until you remove them with <see cref="RemoveRaycast(ARRaycast)"/> or disable
+        /// this component.
+        /// </summary>
+        /// <param name="screenPoint">A point on the screen, in pixels.</param>
+        /// <param name="estimatedDistance">The estimated distance to the intersection point.
+        /// This can be used to determine a potential intersection before the environment has been fully mapped.</param>
+        /// <returns>A new <see cref="ARRaycast"/> if successful; otherwise `null`.</returns>
+        public ARRaycast AddRaycast(Vector2 screenPoint, float estimatedDistance)
+        {
+            if (subsystem == null)
+                return null;
+
+            var normalizedScreenPoint = new Vector2(
+                Mathf.Clamp01(screenPoint.x / Screen.width),
+                Mathf.Clamp01(screenPoint.y / Screen.height));
+
+            if (subsystem.TryAddRaycast(normalizedScreenPoint, estimatedDistance, out XRRaycast sessionRelativeData))
+            {
+                return CreateTrackableImmediate(sessionRelativeData);
+            }
+
+            if (sessionOrigin.camera && subsystem.TryAddRaycast(ScreenPointToSessionSpaceRay(screenPoint), estimatedDistance, out sessionRelativeData))
+            {
+                return CreateTrackableImmediate(sessionRelativeData);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Removes an existing <see cref="ARRaycast"/>.
+        /// </summary>
+        /// <param name="raycast">The <see cref="ARRaycast"/> to remove.</param>
+        /// <exception cref="ArgumentNullException">Thrown is <paramref name="raycast"/> is `null`.</exception>
+        public void RemoveRaycast(ARRaycast raycast)
+        {
+            if (raycast == null)
+                throw new ArgumentNullException(nameof(raycast));
+
+            subsystem?.RemoveRaycast(raycast.trackableId);
+        }
+
+        /// <summary>
+        /// Gets the prefab that should be instantiated for each <see cref="ARRaycast"/>. May be `null`.
+        /// </summary>
+        /// <returns>The prefab that should be instantiated for each <see cref="ARRaycast"/>.</returns>
+        protected override GameObject GetPrefab() => m_RaycastPrefab;
 
         static void TransformAndSortRaycastResults(
             Transform transform,
@@ -82,7 +148,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="raycaster">A raycaster implementing the IRaycast interface.</param>
         internal void RegisterRaycaster(IRaycaster raycaster)
         {
-            ConstructIfNecessary();
             if (!m_Raycasters.Contains(raycaster))
                 m_Raycasters.Add(raycaster);
         }
@@ -97,6 +162,9 @@ namespace UnityEngine.XR.ARFoundation
                 m_Raycasters.Remove(raycaster);
         }
 
+        /// <summary>
+        /// Invoked just after the subsystem has been `Start`ed. Used to set raycast delegates internally.
+        /// </summary>
         protected override void OnAfterStart()
         {
             if (subsystem.SubsystemDescriptor.supportsViewportBasedRaycast)
@@ -122,17 +190,21 @@ namespace UnityEngine.XR.ARFoundation
                 RegisterRaycaster((IRaycaster)raycaster);
         }
 
+        Ray ScreenPointToSessionSpaceRay(Vector2 screenPoint)
+        {
+            var worldSpaceRay = sessionOrigin.camera.ScreenPointToRay(screenPoint);
+            return sessionOrigin.trackablesParent.InverseTransformRay(worldSpaceRay);
+        }
+
         NativeArray<XRRaycastHit> RaycastViewportAsRay(
             Vector2 screenPoint,
             TrackableType trackableTypeMask,
             Allocator allocator)
         {
-            if (m_SessionOrigin.camera == null)
+            if (sessionOrigin.camera == null)
                 return new NativeArray<XRRaycastHit>(0, allocator);
 
-            var worldSpaceRay = m_SessionOrigin.camera.ScreenPointToRay(screenPoint);
-            var sessionSpaceRay = m_SessionOrigin.trackablesParent.InverseTransformRay(worldSpaceRay);
-            return m_RaycastRayDelegate(sessionSpaceRay, trackableTypeMask, allocator);
+            return m_RaycastRayDelegate(ScreenPointToSessionSpaceRay(screenPoint), trackableTypeMask, allocator);
         }
 
         NativeArray<XRRaycastHit> RaycastViewport(
@@ -199,7 +271,7 @@ namespace UnityEngine.XR.ARFoundation
             try
             {
                 // Results are in "trackables space", so transform results back into world space
-                TransformAndSortRaycastResults(m_SessionOrigin.trackablesParent, nativeHits, managedHits, rayOrigin);
+                TransformAndSortRaycastResults(sessionOrigin.trackablesParent, nativeHits, managedHits, rayOrigin);
                 managedHits.Sort(s_RaycastHitComparer);
                 return managedHits.Count > 0;
             }
@@ -209,28 +281,31 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void ConstructIfNecessary()
+        /// <summary>
+        /// Invoked just after a <see cref="ARRaycast"/> has been updated.
+        /// </summary>
+        /// <param name="raycast">The <see cref="ARRaycast"/> being updated.</param>
+        /// <param name="sessionRelativeData">The new data associated with the raycast. All spatial
+        /// data is is session-relative space.</param>
+        protected override void OnAfterSetSessionRelativeData(ARRaycast raycast, XRRaycast sessionRelativeData)
         {
-            if (m_Raycasters == null)
-                m_Raycasters = new List<IRaycaster>();
+            var planeManager = GetComponent<ARPlaneManager>();
+            raycast.plane = planeManager ? planeManager.GetPlane(sessionRelativeData.hitTrackableId) : null;
         }
 
-        void Awake()
-        {
-            m_SessionOrigin = GetComponent<ARSessionOrigin>();
-            ConstructIfNecessary();
-        }
+        /// <summary>
+        /// The name of the `GameObject` for each instantiated <see cref="ARRaycast"/>.
+        /// </summary>
+        protected override string gameObjectName => "ARRaycast";
 
         static Comparison<ARRaycastHit> s_RaycastHitComparer = RaycastHitComparer;
 
         static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new List<NativeArray<XRRaycastHit>>();
 
-        ARSessionOrigin m_SessionOrigin;
-
         Func<Vector2, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastViewportDelegate;
 
         Func<Ray, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastRayDelegate;
 
-        List<IRaycaster> m_Raycasters;
+        List<IRaycaster> m_Raycasters = new List<IRaycaster>();
     }
 }

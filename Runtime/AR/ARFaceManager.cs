@@ -95,11 +95,20 @@ namespace UnityEngine.XR.ARFoundation
             return face;
         }
 
+        /// <summary>
+        /// Invoked just before calling `Start` on the Subsystem. Used to set the `requestedMaximumFaceCount`
+        /// on the subsystem.
+        /// </summary>
         protected override void OnBeforeStart()
         {
             subsystem.requestedMaximumFaceCount = m_MaximumFaceCount;
         }
 
+        /// <summary>
+        /// Invoked just after a <see cref="ARFace"/> has been updated.
+        /// </summary>
+        /// <param name="face"></param>
+        /// <param name="sessionRelativeData"></param>
         protected override void OnAfterSetSessionRelativeData(
             ARFace face,
             XRFace sessionRelativeData)
@@ -110,6 +119,12 @@ namespace UnityEngine.XR.ARFoundation
                 face.UpdateEyes();
         }
 
+        /// <summary>
+        /// Invoked when the base class detects trackable changes.
+        /// </summary>
+        /// <param name="added">The list of added <see cref="ARFace"/>s.</param>
+        /// <param name="updated">The list of updated <see cref="ARFace"/>s.</param>
+        /// <param name="removed">The list of removed <see cref="ARFace"/>s.</param>
         protected override void OnTrackablesChanged(
             List<ARFace> added,
             List<ARFace> updated,
@@ -122,8 +137,15 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        /// <summary>
+        /// Get the prefab that will be instantiated for each <see cref="ARFace"/>. May be `null`.
+        /// </summary>
+        /// <returns>The prefab that will be instantiated for each <see cref="ARFace"/>.</returns>
         protected override GameObject GetPrefab() => m_FacePrefab;
 
+        /// <summary>
+        /// The name assigned to each `GameObject` belonging to each <see cref="ARFace"/>.
+        /// </summary>
         protected override string gameObjectName => "ARFace";
     }
 }

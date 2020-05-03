@@ -24,8 +24,16 @@ namespace UnityEngine.XR.ARFoundation
         [HideInInspector]
         LightEstimationMode m_LightEstimationMode = LightEstimationMode.Disabled;
 
+        /// <summary>
+        /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
+        /// interface. Invoked before serialization.
+        /// </summary>
         public void OnBeforeSerialize() {}
 
+        /// <summary>
+        /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
+        /// interface. Invoked after deserialization.
+        /// </summary>
         public void OnAfterDeserialize()
         {
             if (m_FocusMode != (CameraFocusMode)(-1))
@@ -408,8 +416,12 @@ namespace UnityEngine.XR.ARFoundation
                 s_PropertyIds.Add(textureInfo.descriptor.propertyNameId);
             }
 
+            subsystem.GetMaterialKeywords(out List<string> enabledMaterialKeywords, out List<string>disabledMaterialKeywords);
+
             eventArgs.textures = s_Textures;
             eventArgs.propertyNameIds = s_PropertyIds;
+            eventArgs.enabledMaterialKeywords = enabledMaterialKeywords;
+            eventArgs.disabledMaterialKeywords = disabledMaterialKeywords;
 
             frameReceived(eventArgs);
         }

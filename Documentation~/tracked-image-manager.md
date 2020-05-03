@@ -83,3 +83,21 @@ Some providers can track moving images. This typically requires more CPU resourc
 ## Tracked image prefab
 
 This prefab is instantiated whenever an image from the reference image library is detected. The manager ensures the instantiated `GameObject` includes an `ARTrackedImage` component. You can get the reference image that was used to detect the `ARTrackedImage` with the `ARTrackedImage.referenceImage` property.
+
+## Tracking State
+There are three possible tracking states for `ARTrackedImages`: `TrackingState.Tracked`, `TrackingState.Limited`, and `TrackingState.None`:
+
+| TrackingState   | Description
+|----------|-------------|
+| Tracked |  The underlying AR SDK reports that it is actively tracking the image. |
+| Limited |  The image is being tracked, but not as well. The situations in which an image is considered `Limited` instead of `Tracking` depend on the underlying AR framework. Examples that may cause `Limited` tracking include:  <ul><li>Obscuring the image so that it is not visible to the camera.</li><li>The image is not tracked as a moving image. This can happen, for example, if the `maxNumberOfMovingImages` is exceeded.</li></ul>
+| None | The image is not being tracked. |
+
+
+
+
+### Determining when an image is visible
+
+There is no API to determine the visibility of an image. Generally, if the tracking state is `Tracked`, it will likely change to `Limited` when the image is not visible. However, there are other situations in which the tracking state can be in states other than `Tracked`.
+
+If this information is important to your application, considering comparing the `ARTrackedImage`'s transform with the camera's view frustum.

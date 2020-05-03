@@ -167,6 +167,10 @@ namespace UnityEngine.XR.ARFoundation
             return Equals((ARLightEstimationData)obj);
         }
 
+        /// <summary>
+        /// Generates a string representation of this <see cref="ARLightEstimationData"/>.
+        /// </summary>
+        /// <returns>A string representation of this <see cref="ARLightEstimationData"/>.</returns>
         public override string ToString()
         {
             var sphericalHarmonicsCoefficientsStr = new StringBuilder("");
@@ -197,14 +201,14 @@ namespace UnityEngine.XR.ARFoundation
         public bool Equals(ARLightEstimationData other)
         {
             return
-                (averageBrightness.Equals(other.averageBrightness)) &&
-                (averageColorTemperature.Equals(other.averageColorTemperature)) &&
-                (colorCorrection.Equals(other.colorCorrection)) &&
-                (averageIntensityInLumens.Equals(other.averageIntensityInLumens)) &&
-                (mainLightColor.Equals(other.mainLightColor)) &&
-                (mainLightDirection.Equals(other.mainLightDirection)) &&
-                (mainLightIntensityLumens.Equals(other.mainLightIntensityLumens)) &&
-                (ambientSphericalHarmonics.Equals(other.ambientSphericalHarmonics));
+                (averageBrightness == other.averageBrightness) &&
+                (averageColorTemperature == other.averageColorTemperature) &&
+                (colorCorrection == other.colorCorrection) &&
+                (averageIntensityInLumens == other.averageIntensityInLumens) &&
+                (mainLightColor == other.mainLightColor) &&
+                (mainLightDirection == other.mainLightDirection) &&
+                (mainLightIntensityLumens == other.mainLightIntensityLumens) &&
+                (ambientSphericalHarmonics == other.ambientSphericalHarmonics);
         }
 
         /// <summary>
@@ -213,10 +217,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="lhs">The left-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
         /// <param name="rhs">The right-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
         /// <returns><c>true</c> if <paramref name="lhs"/> compares equal to <paramref name="rhs"/>, <c>false</c> otherwise.</returns>
-        public static bool operator ==(ARLightEstimationData lhs, ARLightEstimationData rhs)
-        {
-            return lhs.Equals(rhs);
-        }
+        public static bool operator ==(ARLightEstimationData lhs, ARLightEstimationData rhs) => lhs.Equals(rhs);
 
         /// <summary>
         /// Compares <paramref name="lhs"/> and <paramref name="rhs"/> for inequality using <see cref="Equals(ARLightEstimationData)"/>.
@@ -224,10 +225,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="lhs">The left-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
         /// <param name="rhs">The right-hand-side <see cref="ARLightEstimationData"/> of the comparison.</param>
         /// <returns><c>false</c> if <paramref name="lhs"/> compares equal to <paramref name="rhs"/>, <c>true</c> otherwise.</returns>
-        public static bool operator !=(ARLightEstimationData lhs, ARLightEstimationData rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        public static bool operator !=(ARLightEstimationData lhs, ARLightEstimationData rhs) => !lhs.Equals(rhs);
 
         float ConvertBrightnessToLumens(float brightness)
         {

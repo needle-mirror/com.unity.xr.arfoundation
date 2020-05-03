@@ -2,10 +2,6 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 
-#if !UNITY_2019_2_OR_NEWER
-using UnityEngine.Experimental;
-#endif
-
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -33,13 +29,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// A collection of all trackables managed by this component.
         /// </summary>
-        public TrackableCollection<TTrackable> trackables
-        {
-            get
-            {
-                return new TrackableCollection<TTrackable>(m_Trackables);
-            }
-        }
+        public TrackableCollection<TTrackable> trackables => new TrackableCollection<TTrackable>(m_Trackables);
 
         /// <summary>
         /// Iterates over every instantiated <see cref="ARTrackable"/> and
@@ -70,12 +60,10 @@ namespace UnityEngine.XR.ARFoundation
         protected abstract string gameObjectName { get; }
 
         /// <summary>
-        /// The prefab that should be instantiated when adding a trackable.
+        /// The prefab that should be instantiated when adding a trackable. May be `null`.
         /// </summary>
-        protected virtual GameObject GetPrefab()
-        {
-            return null;
-        }
+        /// <returns>The prefab should be instantiated when adding a trackable.</returns>
+        protected virtual GameObject GetPrefab() => null;
 
         /// <summary>
         /// A dictionary of all trackables, keyed by <c>TrackableId</c>.
@@ -199,7 +187,7 @@ namespace UnityEngine.XR.ARFoundation
         /// This method creates a trackable immediately, and marks it as "pending"
         /// until it is reported as added by the subsystem. This is useful for subsystems that deal
         /// with trackables that can be both detected and manually created.
-        /// </para></<para>
+        /// </para><para>
         /// This method does not invoke <see cref="OnTrackablesChanged(List{TTrackable}, List{TTrackable}, List{TTrackable})"/>,
         /// so no "added" notifications will occur until the next call to <see cref="Update"/>.
         /// However, this method does invoke <see cref="ARTrackable{TSessionRelativeData, TTrackable}.updated"/>
@@ -208,6 +196,8 @@ namespace UnityEngine.XR.ARFoundation
         /// The trackable will appear in the <see cref="trackables"/> collection immediately.
         /// </para>
         /// </remarks>
+        /// <param name="sessionRelativeData">The data associated with the trackable. All spatial data should
+        /// be relative to the <see cref="ARSessionOrigin"/>.</param>
         /// <returns>A new <c>TTrackable</c></returns>
         protected TTrackable CreateTrackableImmediate(TSessionRelativeData sessionRelativeData)
         {
@@ -250,6 +240,7 @@ namespace UnityEngine.XR.ARFoundation
         /// on the trackable.
         /// </para>
         /// </remarks>
+        /// <param name="trackableId">The id of the trackable to destroy.</param>
         /// <returns><c>True</c> if the trackable is "pending" (i.e., not yet reported as "added").</returns>
         protected bool DestroyPendingTrackable(TrackableId trackableId)
         {

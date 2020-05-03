@@ -16,40 +16,50 @@ namespace UnityEngine.XR.ARFoundation
         /// Constructor invoked by the <see cref="ARFaceManager"/> which triggered the event.
         /// </summary>
         /// <param name="face">The <see cref="ARFace"/> component that was updated.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="face"/> is `null`.</exception>
         public ARFaceUpdatedEventArgs(ARFace face)
         {
             if (face == null)
-                throw new ArgumentNullException("face");
+                throw new ArgumentNullException(nameof(face));
 
             this.face = face;
         }
 
-        public override int GetHashCode()
-        {
-            return (face == null) ? 0 : face.GetHashCode();
-        }
+        /// <summary>
+        /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
+        /// </summary>
+        /// <returns>A hash code generated from this object's fields.</returns>
+        public override int GetHashCode() => HashCode.ReferenceHash(face);
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is ARFaceUpdatedEventArgs))
-                return false;
+        /// <summary>
+        /// Tests for equality.
+        /// </summary>
+        /// <param name="obj">The `object` to compare against.</param>
+        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="ARFaceUpdatedEventArgs"/> and
+        /// <see cref="Equals(ARFaceUpdatedEventArgs)"/> also returns `true`; otherwise `false`.</returns>
+        public override bool Equals(object obj) => obj is ARFaceUpdatedEventArgs other && Equals(other);
 
-            return Equals((ARFaceUpdatedEventArgs)obj);
-        }
+        /// <summary>
+        /// Tests for equality.
+        /// </summary>
+        /// <param name="other">The other <see cref="ARFaceUpdatedEventArgs"/> to compare against.</param>
+        /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="ARFaceUpdatedEventArgs"/>, otherwise false.</returns>
+        public bool Equals(ARFaceUpdatedEventArgs other) => face == other.face;
 
-        public bool Equals(ARFaceUpdatedEventArgs other)
-        {
-            return face == other.face;
-        }
+        /// <summary>
+        /// Tests for equality. Same as <see cref="Equals(ARFaceUpdatedEventArgs)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand side of the comparison.</param>
+        /// <param name="rhs">The right-hand side of the comparison.</param>
+        /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        public static bool operator==(ARFaceUpdatedEventArgs lhs, ARFaceUpdatedEventArgs rhs) => lhs.Equals(rhs);
 
-        public static bool operator==(ARFaceUpdatedEventArgs lhs, ARFaceUpdatedEventArgs rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-
-        public static bool operator!=(ARFaceUpdatedEventArgs lhs, ARFaceUpdatedEventArgs rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        /// <summary>
+        /// Tests for inequality. Same as `!`<see cref="Equals(ARFaceUpdatedEventArgs)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand side of the comparison.</param>
+        /// <param name="rhs">The right-hand side of the comparison.</param>
+        /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        public static bool operator!=(ARFaceUpdatedEventArgs lhs, ARFaceUpdatedEventArgs rhs) => !lhs.Equals(rhs);
     }
 }

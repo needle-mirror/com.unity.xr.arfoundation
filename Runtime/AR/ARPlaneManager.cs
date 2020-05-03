@@ -212,13 +212,27 @@ namespace UnityEngine.XR.ARFoundation
             return windingNumber;
         }
 
+        /// <summary>
+        /// Get the prefab which will be instantiated for each <see cref="ARPlane"/>. May be `null`.
+        /// </summary>
+        /// <returns>The prefab which will be instantiated for each <see cref="ARPlane"/>.</returns>
         protected override GameObject GetPrefab() => m_PlanePrefab;
 
+        /// <summary>
+        /// Invoked just before `Start`ing the plane subsystem. Used to set the subsystem's
+        /// `requestedPlaneDetectionMode`.
+        /// </summary>
         protected override void OnBeforeStart()
         {
             subsystem.requestedPlaneDetectionMode = m_DetectionMode;
         }
 
+        /// <summary>
+        /// Invoked just after each <see cref="ARPlane"/> is updated.
+        /// </summary>
+        /// <param name="plane">The <see cref="ARPlane"/> being updated.</param>
+        /// <param name="sessionRelativeData">The new data associated with the plane. All spatial
+        /// data is is session-relative space.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARPlane plane,
             BoundedPlane sessionRelativeData)
@@ -236,6 +250,12 @@ namespace UnityEngine.XR.ARFoundation
             plane.UpdateBoundary(subsystem);
         }
 
+        /// <summary>
+        /// Invoked when the base class detects trackable changes.
+        /// </summary>
+        /// <param name="added">The list of added <see cref="ARPlane"/>s.</param>
+        /// <param name="updated">The list of updated <see cref="ARPlane"/>s.</param>
+        /// <param name="removed">The list of removed <see cref="ARPlane"/>s.</param>
         protected override void OnTrackablesChanged(
             List<ARPlane> added,
             List<ARPlane> updated,
@@ -257,6 +277,9 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override string gameObjectName => "ARPlane";
 
+        /// <summary>
+        /// Invoked when Unity enables this `MonoBehaviour`. Used to register with the <see cref="ARRaycastManager"/>.
+        /// </summary>
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -269,6 +292,9 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        /// <summary>
+        /// Invoked when Unity disables this `MonoBehaviour`. Used to unregister with the <see cref="ARRaycastManager"/>.
+        /// </summary>
         protected override void OnDisable()
         {
             base.OnDisable();

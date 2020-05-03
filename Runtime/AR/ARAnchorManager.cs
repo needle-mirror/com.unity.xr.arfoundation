@@ -33,12 +33,12 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_AnchorPrefab;
 
         /// <summary>
-        /// Getter/setter for the Anchor Prefab.
+        /// This prefab will be instantiated for each <see cref="ARAnchor"/>. May be `null`.
         /// </summary>
         public GameObject anchorPrefab
         {
-            get { return m_AnchorPrefab; }
-            set { m_AnchorPrefab = value; }
+            get => m_AnchorPrefab;
+            set => m_AnchorPrefab = value;
         }
 
         /// <summary>
@@ -59,6 +59,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         /// <param name="pose">The pose, in Unity world space, of the <see cref="ARAnchor"/>.</param>
         /// <returns>A new <see cref="ARAnchor"/> if successful, otherwise <c>null</c>.</returns>
+        /// <exception cref="System.InvalidOperationException">Thrown if this `MonoBehaviour` is not enabled.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if the underlying subsystem is `null`.</exception>
         public ARAnchor AddAnchor(Pose pose)
         {
             if (!enabled)
@@ -145,22 +147,35 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
+        /// <summary>
+        /// Get the prefab to instantiate for each <see cref="ARAnchor"/>.
+        /// </summary>
+        /// <returns>The prefab to instantiate for each <see cref="ARAnchor"/>.</returns>
         protected override GameObject GetPrefab() => m_AnchorPrefab;
 
+        /// <summary>
+        /// The name to assign to the `GameObject` instantiated for each <see cref="ARAnchor"/>.
+        /// </summary>
         protected override string gameObjectName => "Anchor";
 
+        /// <summary>
+        /// Invoked when the base class detects trackable changes.
+        /// </summary>
+        /// <param name="added">The list of added anchors.</param>
+        /// <param name="updated">The list of updated anchors.</param>
+        /// <param name="removed">The list of removed anchors.</param>
         protected override void OnTrackablesChanged(
-            List<ARAnchor> addedPoints,
-            List<ARAnchor> updatedPoints,
-            List<ARAnchor> removedPoints)
+            List<ARAnchor> added,
+            List<ARAnchor> updated,
+            List<ARAnchor> removed)
         {
             if (anchorsChanged != null)
             {
                 using (new ScopedProfiler("OnAnchorsChanged"))
                 anchorsChanged(new ARAnchorsChangedEventArgs(
-                    addedPoints,
-                    updatedPoints,
-                    removedPoints));
+                    added,
+                    updated,
+                    removed));
             }
         }
     }

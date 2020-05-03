@@ -49,8 +49,18 @@ namespace UnityEngine.XR.ARFoundation
             bodySubsystem.GetSkeleton(trackableId, Allocator.Persistent, ref m_Joints);
         }
 
+        /// <summary>
+        /// Generates a string representation of this <see cref="ARHumanBody"/>. Floating point numbers
+        /// use 3 digits of precision after the decimal point.
+        /// </summary>
+        /// <returns>A string representation of this <see cref="ARHumanBody"/>.</returns>
         public override string ToString() => ToString("0.000");
 
+        /// <summary>
+        /// Generates a string representation of this <see cref="ARHumanBody"/>.
+        /// </summary>
+        /// <param name="floatingPointFormat">The floating point format specifier used for floating point properties.</param>
+        /// <returns>A string representation of this <see cref="ARHumanBody"/>.</returns>
         public string ToString(string floatingPointFormat)
         {
             StringBuilder sb = new StringBuilder();
@@ -62,7 +72,10 @@ namespace UnityEngine.XR.ARFoundation
             }
             return sb.ToString();
         }
-
+        
+        /// <summary>
+        /// Disposes the <see cref="joints"/> array, if it was created.
+        /// </summary>
         public void Dispose()
         {
             if (m_Joints.IsCreated)

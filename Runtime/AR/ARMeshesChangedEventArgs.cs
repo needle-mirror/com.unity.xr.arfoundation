@@ -40,19 +40,13 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Generates a hash code suitable for use in a <c>Dictionary</c> or <c>HashSet</c>.
+        /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 0;
-                hash = hash * 486187739 + (added == null ? 0 : added.GetHashCode());
-                hash = hash * 486187739 + (updated == null ? 0 : updated.GetHashCode());
-                hash = hash * 486187739 + (removed == null ? 0 : removed.GetHashCode());
-                return hash;
-            }
-        }
+        /// <returns>A hash code generated from this object's fields.</returns>
+        public override int GetHashCode() => HashCode.Combine(
+            HashCode.ReferenceHash(added),
+            HashCode.ReferenceHash(updated),
+            HashCode.ReferenceHash(removed));
 
         /// <summary>
         /// <c>IEquatable</c> interface.

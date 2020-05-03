@@ -54,6 +54,10 @@ namespace UnityEngine.XR.ARFoundation
             set => m_TrackedObjectPrefab = value;
         }
 
+        /// <summary>
+        /// Get the prefab to instantiate for each <see cref="ARTrackedObject"/>.
+        /// </summary>
+        /// <returns>The prefab to instantiate for each <see cref="ARTrackedObject"/>.</returns>
         protected override GameObject GetPrefab() => m_TrackedObjectPrefab;
 
         /// <summary>
@@ -87,6 +91,12 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        /// <summary>
+        /// Invoked just after each <see cref="ARTrackedObject"/> has been updated.
+        /// </summary>
+        /// <param name="trackedObject">The <see cref="ARTrackedObject"/> being updated.</param>
+        /// <param name="sessionRelativeData">New data associated with <paramref name="trackedObject"/>.
+        /// All spatial data is relative to the <see cref="ARSessionOrigin"/>.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARTrackedObject trackedObject,
             XRTrackedObject sessionRelativeData)

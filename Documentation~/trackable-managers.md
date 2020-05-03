@@ -15,6 +15,7 @@ This table summarizes the trackable managers and their trackables.
 | [`ARPlaneManager`](plane-manager.md)                        | `ARPlane`            | Detects flat surfaces. |
 | [`ARPointCloudManager`](point-cloud-manager.md)             | `ARPointCloud`       | Detects feature points. |
 | [`ARAnchorManager`](anchor-manager.md)                      | `ARAnchor`           | Manages anchors. You can manually add and remove them with `ARAnchorManager.AddAnchor` and `ARAnchorManager.RemoveAnchor`. |
+| [`ARRaycastManager`](raycast-manager.md)                    | `ARRaycast`          | Repeats and updates a raycast automatically. |
 | [`ARTrackedImageManager`](tracked-image-manager.md)         | `ARTrackedImage`     | Detects and tracks 2D images. |
 | [`AREnvironmentProbeManager`](environment-probe-manager.md) | `AREnvironmentProbe` | Creates cubemaps that represent the environment. |
 | [`ARFaceManager`](face-manager.md)                          | `ARFace`             | Detects and tracks human faces. |

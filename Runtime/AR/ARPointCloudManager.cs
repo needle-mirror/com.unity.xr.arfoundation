@@ -33,11 +33,16 @@ namespace UnityEngine.XR.ARFoundation
             set => m_PointCloudPrefab = value;
         }
 
+        /// <summary>
         /// Invoked once per frame with information about the <see cref="ARTrackedObject"/>s that have changed, i.e., been added, updated, or removed.
         /// This happens just before <see cref="ARTrackedObject"/>s are destroyed, so you can set <c>ARTrackedObject.destroyOnRemoval</c> to <c>false</c>
         /// from this event to suppress this behavior.
+        /// </summary>
         public event Action<ARPointCloudChangedEventArgs> pointCloudsChanged;
 
+        /// <summary>
+        /// Invoked when this `MonoBehaviour` is enabled. Used to register with the <see cref="ARRaycastManager"/>.
+        /// </summary>
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -50,6 +55,9 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        /// <summary>
+        /// Invoked when this `MonoBehaviour` is disabled. Used to unregister with the <see cref="ARRaycastManager"/>.
+        /// </summary>
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -60,8 +68,9 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// ARTrackableManager interface.
+        /// The prefab that will be instantiated for each <see cref="ARPointCloud"/>. May be `null`.
         /// </summary>
+        /// <returns>The prefab that will be instantiated for each <see cref="ARPointCloud"/>.</returns>
         protected override GameObject GetPrefab() => m_PointCloudPrefab;
 
         /// <summary>
@@ -69,6 +78,12 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override string gameObjectName => "ARPointCloud";
 
+        /// <summary>
+        /// Invoked after each point cloud is updated with new data.
+        /// </summary>
+        /// <param name="pointCloud">The <see cref="ARPointCloud"/> being updated.</param>
+        /// <param name="sessionRelativeData">The new data associated with the point cloud.
+        /// All spatial data is relative to the <see cref="ARSessionOrigin"/>.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARPointCloud pointCloud,
             XRPointCloud sessionRelativeData)

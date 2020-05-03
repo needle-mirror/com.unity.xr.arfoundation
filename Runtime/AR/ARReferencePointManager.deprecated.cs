@@ -9,16 +9,16 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     /// <remarks>
     /// <para>Use this component to programmatically add, remove, or query for
-    /// reference points. Reference points are <c>Pose</c>s in the world
+    /// reference points. Reference points are `Pose`s in the world
     /// which will be periodically updated by an AR device as its understanding
     /// of the world changes.</para>
-    /// <para>Subscribe to changes (added, updated, & removed) via the
+    /// <para>Subscribe to changes (added, updated, and removed) via the
     /// <see cref="ARReferencePointManager.referencePointsChanged"/> event.</para>
     /// </remarks>
     /// <seealso cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}"/>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.0/api/UnityEngine.XR.ARFoundation.ARReferencePointManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARReferencePointManager.html")]
     [Obsolete("ARReferencePointManager has been deprecated. Use ARAnchorManager instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager", true)]
     public sealed class ARReferencePointManager : ARTrackableManager<
         XRReferencePointSubsystem,
@@ -31,14 +31,13 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_ReferencePointPrefab;
 
         /// <summary>
-        /// Getter/setter for the Reference Point Prefab.
+        /// This prefab will be instantiated for each <see cref="ARReferencePoint"/>. May be `null`.
         /// </summary>
-
         [Obsolete("ARReferencePointManger.referencePointPrefab has been renamed. Use ARAnchorManager.anchorPrefab instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.anchorPrefab", true)]
         public GameObject referencePointPrefab
         {
-            get { return m_ReferencePointPrefab; }
-            set { m_ReferencePointPrefab = value; }
+            get => m_ReferencePointPrefab;
+            set => m_ReferencePointPrefab = value;
         }
 
         /// <summary>
@@ -150,29 +149,36 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
-        protected override GameObject GetPrefab()
-        {
-            return m_ReferencePointPrefab;
-        }
+        /// <summary>
+        /// Gets the prefab that will be instantiated for each <see cref="ARReferencePoint"/>.
+        /// </summary>
+        /// <returns>The prefab that will be instantiated for each <see cref="ARReferencePoint"/>.</returns>
+        protected override GameObject GetPrefab() => m_ReferencePointPrefab;
 
-        protected override string gameObjectName
-        {
-            get { return "ReferencePoint"; }
-        }
+        /// <summary>
+        /// The name given to each `GameObject` associated with each <see cref="ARReferencePoint"/>.
+        /// </summary>
+        protected override string gameObjectName => "ReferencePoint";
 
+        /// <summary>
+        /// Invoked when the base class detects trackable changes.
+        /// </summary>
+        /// <param name="added">The list of added <see cref="ARReferencePoint"/>s.</param>
+        /// <param name="updated">The list of updated <see cref="ARReferencePoint"/>s.</param>
+        /// <param name="removed">The list of removed <see cref="ARReferencePoint"/>s.</param>
         protected override void OnTrackablesChanged(
-            List<ARReferencePoint> addedPoints,
-            List<ARReferencePoint> updatedPoints,
-            List<ARReferencePoint> removedPoints)
+            List<ARReferencePoint> added,
+            List<ARReferencePoint> updated,
+            List<ARReferencePoint> removed)
         {
             if (referencePointsChanged != null)
             {
                 using (new ScopedProfiler("OnReferencePointsChanged"))
                 referencePointsChanged(
                     new ARReferencePointsChangedEventArgs(
-                        addedPoints,
-                        updatedPoints,
-                        removedPoints));
+                        added,
+                        updated,
+                        removed));
             }
         }
     }

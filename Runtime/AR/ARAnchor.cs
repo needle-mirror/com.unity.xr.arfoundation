@@ -24,11 +24,11 @@ namespace UnityEngine.XR.ARFoundation
         /// lifetime is also implementation defined, it should be valid until at least
         /// the next <see cref="ARSession"/> update.
         /// </remarks>
-        public IntPtr nativePtr { get { return sessionRelativeData.nativePtr; } }
+        public IntPtr nativePtr => sessionRelativeData.nativePtr;
 
         /// <summary>
         /// Get the session identifier from which this anchor originated.
         /// </summary>
-        public Guid sessionId { get { return sessionRelativeData.sessionId; } }
+        public Guid sessionId => sessionRelativeData.sessionId;
     }
 }

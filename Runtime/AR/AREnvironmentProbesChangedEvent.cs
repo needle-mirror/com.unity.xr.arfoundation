@@ -39,35 +39,40 @@ namespace UnityEngine.XR.ARFoundation
             this.removed = removed;
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 0;
-                hash = hash * 486187739 + (added == null ? 0 : added.GetHashCode());
-                hash = hash * 486187739 + (updated == null ? 0 : updated.GetHashCode());
-                hash = hash * 486187739 + (removed == null ? 0 : removed.GetHashCode());
-                return hash;
-            }
-        }
+        /// <summary>
+        /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
+        /// </summary>
+        /// <returns>A hash code generated from this object's fields.</returns>
+        public override int GetHashCode() => HashCode.Combine(
+            HashCode.ReferenceHash(added),
+            HashCode.ReferenceHash(updated),
+            HashCode.ReferenceHash(removed));
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is AREnvironmentProbesChangedEvent))
-                return false;
+        /// <summary>
+        /// Tests for equality.
+        /// </summary>
+        /// <param name="obj">The `object` to compare against.</param>
+        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="AREnvironmentProbesChangedEvent"/> and
+        /// <see cref="Equals(AREnvironmentProbesChangedEvent)"/> also returns `true`; otherwise `false`.</returns>
+        public override bool Equals(object obj) => (obj is AREnvironmentProbesChangedEvent other) && Equals(other);
 
-            return Equals((AREnvironmentProbesChangedEvent)obj);
-        }
-
+        /// <summary>
+        /// Generates a string representation of this <see cref="AREnvironmentProbesChangedEvent"/>.
+        /// </summary>
+        /// <returns>A string representation of this <see cref="AREnvironmentProbesChangedEvent"/>.</returns>
         public override string ToString()
         {
             return string.Format("Added: {0}, Updated: {1}, Removed: {2}",
                 added == null ? 0 : added.Count,
                 updated == null ? 0 : updated.Count,
                 removed == null ? 0 : removed.Count);
-
         }
 
+        /// <summary>
+        /// Tests for equality.
+        /// </summary>
+        /// <param name="other">The other <see cref="AREnvironmentProbesChangedEvent"/> to compare against.</param>
+        /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="AREnvironmentProbesChangedEvent"/>, otherwise false.</returns>
         public bool Equals(AREnvironmentProbesChangedEvent other)
         {
             return
@@ -76,14 +81,20 @@ namespace UnityEngine.XR.ARFoundation
                 ReferenceEquals(removed, other.removed);
         }
 
-        public static bool operator ==(AREnvironmentProbesChangedEvent lhs, AREnvironmentProbesChangedEvent rhs)
-        {
-            return lhs.Equals(rhs);
-        }
+        /// <summary>
+        /// Tests for equality. Same as <see cref="Equals(AREnvironmentProbesChangedEvent)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand side of the comparison.</param>
+        /// <param name="rhs">The right-hand side of the comparison.</param>
+        /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        public static bool operator ==(AREnvironmentProbesChangedEvent lhs, AREnvironmentProbesChangedEvent rhs) => lhs.Equals(rhs);
 
-        public static bool operator !=(AREnvironmentProbesChangedEvent lhs, AREnvironmentProbesChangedEvent rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        /// <summary>
+        /// Tests for inequality. Same as `!`<see cref="Equals(AREnvironmentProbesChangedEvent)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand side of the comparison.</param>
+        /// <param name="rhs">The right-hand side of the comparison.</param>
+        /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        public static bool operator !=(AREnvironmentProbesChangedEvent lhs, AREnvironmentProbesChangedEvent rhs) => !lhs.Equals(rhs);
     }
 }

@@ -10,16 +10,17 @@ namespace UnityEngine.XR.ARFoundation
     public struct ARPointCloudUpdatedEventArgs : IEquatable<ARPointCloudUpdatedEventArgs>
     {
         /// <summary>
-        /// Generates a hash code suitable for use in a <c>Dictionary</c> or <c>HashSet</c>.
+        /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return 0;
-            }
-        }
+        /// <returns>A hash code generated from this object's fields.</returns>
+        public override int GetHashCode() => 0;
 
+        /// <summary>
+        /// Tests for equality.
+        /// </summary>
+        /// <param name="obj">The `object` to compare against.</param>
+        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="ARPointCloudUpdatedEventArgs"/> and
+        /// <see cref="Equals(ARPointCloudUpdatedEventArgs)"/> also returns `true`; otherwise `false`.</returns>
         public override bool Equals(object obj)
         {
             if (!(obj is ARPointCloudUpdatedEventArgs))
@@ -29,21 +30,26 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Interface for <c>IEquatable</c>
+        /// Tests for equality.
         /// </summary>
-        public bool Equals(ARPointCloudUpdatedEventArgs other)
-        {
-            return true;
-        }
+        /// <param name="other">The other <see cref="ARPointCloudUpdatedEventArgs"/> to compare against.</param>
+        /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="ARPointCloudUpdatedEventArgs"/>, otherwise false.</returns>
+        public bool Equals(ARPointCloudUpdatedEventArgs other) => true;
 
-        public static bool operator ==(ARPointCloudUpdatedEventArgs lhs, ARPointCloudUpdatedEventArgs rhs)
-        {
-            return lhs.Equals(rhs);
-        }
+        /// <summary>
+        /// Tests for equality. Same as <see cref="Equals(ARPointCloudUpdatedEventArgs)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand side of the comparison.</param>
+        /// <param name="rhs">The right-hand side of the comparison.</param>
+        /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        public static bool operator ==(ARPointCloudUpdatedEventArgs lhs, ARPointCloudUpdatedEventArgs rhs) => lhs.Equals(rhs);
 
-        public static bool operator !=(ARPointCloudUpdatedEventArgs lhs, ARPointCloudUpdatedEventArgs rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        /// <summary>
+        /// Tests for inequality. Same as `!`<see cref="Equals(ARPointCloudUpdatedEventArgs)"/>.
+        /// </summary>
+        /// <param name="lhs">The left-hand side of the comparison.</param>
+        /// <param name="rhs">The right-hand side of the comparison.</param>
+        /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        public static bool operator !=(ARPointCloudUpdatedEventArgs lhs, ARPointCloudUpdatedEventArgs rhs) => !lhs.Equals(rhs);
     }
 }

@@ -139,5 +139,15 @@ namespace UnityEngine.XR.ARFoundation
         /// The <see cref="ARParticipant"/>'s update order. Should come after the <see cref="ARParticipantManager"/>.
         /// </summary>
         public const int k_Participant = k_ParticipantManager + 1;
+
+        /// <summary>
+        /// The <see cref="ARRaycastManager"/>'s update order. Should come after the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_RaycastManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARRaycast"/>'s update order. Should come after the <see cref="ARRaycastManager"/>.
+        /// </summary>
+        public const int k_Raycast = k_RaycastManager + 1;
     }
 }

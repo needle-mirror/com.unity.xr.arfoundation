@@ -39,7 +39,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public FilterMode environmentTextureFilterMode
         {
-            get { return m_EnvironmentTextureFilterMode; }
+            get => m_EnvironmentTextureFilterMode;
             set
             {
                 m_EnvironmentTextureFilterMode = value;
@@ -60,18 +60,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The size (dimensions) of the environment probe.
         /// </summary>
-        public Vector3 size
-        {
-            get { return sessionRelativeData.size; }
-        }
+        public Vector3 size => sessionRelativeData.size;
 
         /// <summary>
         /// The extents of the environment probe. This is always half the <see cref="size"/>.
         /// </summary>
-        public Vector3 extents
-        {
-            get { return size * .5f; }
-        }
+        public Vector3 extents => size * .5f;
 
         /// <summary>
         /// A native pointer associated with this environment probe.
@@ -79,18 +73,12 @@ namespace UnityEngine.XR.ARFoundation
         /// While the lifetime is also implementation defined, it should be valid at
         /// least until the next frame.
         /// </summary>
-        public IntPtr nativePtr
-        {
-            get { return sessionRelativeData.nativePtr; }
-        }
+        public IntPtr nativePtr => sessionRelativeData.nativePtr;
 
         /// <summary>
         /// The <c>XRTextureDescriptor</c> associated with this environment probe. This is used to generate the cubemap texture on the reflection probe component.
         /// </summary>
-        public XRTextureDescriptor textureDescriptor
-        {
-            get { return m_CurrentTextureDescriptor; }
-        }
+        public XRTextureDescriptor textureDescriptor => m_CurrentTextureDescriptor;
 
         /// <summary>
         /// Initializes the game object transform and reflection probe component from the scene.
@@ -190,6 +178,10 @@ namespace UnityEngine.XR.ARFoundation
             return cubemap;
         }
 
+        /// <summary>
+        /// Generates a string representation of this <see cref="AREnvironmentProbe"/>.
+        /// </summary>
+        /// <returns>A string representation of this <see cref="AREnvironmentProbe"/>.</returns>
         public override string ToString()
         {
             return string.Format("{0} [trackableId:{1}]", name, trackableId.ToString());

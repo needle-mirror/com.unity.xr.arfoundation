@@ -1,13 +1,6 @@
 using System.Collections.Generic;
 
-#if !UNITY_2019_2_OR_NEWER
-using UnityEngine.Experimental;
-using UnityEngine.Experimental.XR;
-#endif
-
-#if USE_XR_MANAGEMENT
 using UnityEngine.XR.Management;
-#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -25,11 +18,9 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public XRInputSubsystem subsystem { get; private set; }
 
-        bool m_CleanupSubsystemOnDestroy = true;
-
         void OnEnable()
         {
-            CreateSubsystemIfNecessary();
+            subsystem = GetActiveSubsystemInstance();
 
             if (subsystem != null)
                 subsystem.Start();
@@ -43,75 +34,25 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDestroy()
         {
-            if (m_CleanupSubsystemOnDestroy && subsystem != null)
-                subsystem.Destroy();
-
             subsystem = null;
-        }
-
-        void CreateSubsystemIfNecessary()
-        {
-            // Use the subsystem that has been instantiated by XR Management
-            // if available, otherwise create the subsystem.
-
-            if (subsystem == null)
-            {
-                subsystem = GetActiveSubsystemInstance();
-
-                // If the subsystem has already been created by XR management, it controls the lifetime
-                // of the subsystem.
-                if (subsystem != null)
-                    m_CleanupSubsystemOnDestroy = false;
-            }
-
-            if (subsystem == null)
-                subsystem = CreateSubsystem();
-        }
-
-        XRInputSubsystem CreateSubsystem()
-        {
-            SubsystemManager.GetSubsystemDescriptors(s_SubsystemDescriptors);
-            if (s_SubsystemDescriptors.Count > 0)
-            {
-                var descriptor = s_SubsystemDescriptors[0];
-                if (s_SubsystemDescriptors.Count > 1)
-                {
-                    Debug.LogWarningFormat("Multiple {0} found. Using {1}",
-                        typeof(XRInputSubsystem).Name,
-                        descriptor.id);
-                }
-
-                return descriptor.Create();
-            }
-            else
-            {
-                return null;
-            }
         }
 
         XRInputSubsystem GetActiveSubsystemInstance()
         {
             XRInputSubsystem activeSubsystem = null;
 
-#if USE_XR_MANAGEMENT
-            // If the XR management package has been included, query the currently
-            // active loader for the created subsystem, if one exists.
+            // Query the currently active loader for the created subsystem, if one exists.
             if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
             {
                 XRLoader loader = XRGeneralSettings.Instance.Manager.activeLoader;
                 if (loader != null)
                     activeSubsystem = loader.GetLoadedSubsystem<XRInputSubsystem>();
             }
-#endif
-            // If XR management is not used or no loader has been set, check for
-            // any active subsystem instances in the SubsystemManager.
+
             if (activeSubsystem == null)
-            {
-                List<XRInputSubsystem> subsystemInstances = new List<XRInputSubsystem>();
-                SubsystemManager.GetInstances(subsystemInstances);
-                if (subsystemInstances.Count > 0)
-                    activeSubsystem = subsystemInstances[0];
-            }
+                Debug.LogWarningFormat("No active {0} is available. Please ensure that a " +
+                                       "valid loader configuration exists in the XR project settings.",
+                                       typeof(XRInputSubsystem).FullName);
 
             return activeSubsystem;
         }

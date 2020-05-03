@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-#if !UNITY_2019_2_OR_NEWER
-using UnityEngine.Experimental;
-#endif
-
-#if USE_XR_MANAGEMENT
 using UnityEngine.XR.Management;
-#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -33,95 +27,35 @@ namespace UnityEngine.XR.ARFoundation
         /// </value>
         public TSubsystemDescriptor descriptor => subsystem?.SubsystemDescriptor;
 
-        bool m_CleanupSubsystemOnDestroy = true;
-
-        /// <summary>
-        /// Creates a <c>TSubsystem</c>.
-        /// </summary>
-        /// <returns>The first Subsystem of matching the <c>TSubsystemDescriptor</c>, or <c>null</c> if there aren't any.</returns>
-        protected virtual TSubsystem CreateSubsystem()
-        {
-            SubsystemManager.GetSubsystemDescriptors(s_SubsystemDescriptors);
-            if (s_SubsystemDescriptors.Count > 0)
-            {
-                var descriptor = s_SubsystemDescriptors[0];
-                if (s_SubsystemDescriptors.Count > 1)
-                {
-                    Debug.LogWarningFormat("Multiple {0} found. Using {1}",
-                        typeof(TSubsystem).Name,
-                        descriptor.id);
-                }
-
-                return descriptor.Create();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Creates a subsystem if subsystem is <c>null</c>.
-        /// </summary>
-        protected void CreateSubsystemIfNecessary()
-        {
-            // Use the subsystem that has been instantiated by XR Management
-            // if available, otherwise create the subsystem.
-
-            if (subsystem == null)
-            {
-                subsystem = GetActiveSubsystemInstance();
-
-                // If the subsystem has already been created by XR management, it controls the lifetime
-                // of the subsystem.
-                if (subsystem != null)
-                    m_CleanupSubsystemOnDestroy = false;
-            }
-
-            if (subsystem == null)
-                subsystem = CreateSubsystem();
-        }
-
         /// <summary>
         /// Returns the active <c>TSubsystem</c> instance if present, otherwise returns null.
         /// </summary>
+        /// <returns>The active subsystem instance, or `null` if there isn't one.</returns>
         protected TSubsystem GetActiveSubsystemInstance()
         {
             TSubsystem activeSubsystem = null;
 
-#if USE_XR_MANAGEMENT
-            // If the XR management package has been included, query the currently
-            // active loader for the created subsystem, if one exists.
+            // Query the currently active loader for the created subsystem, if one exists.
             if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
             {
                 XRLoader loader = XRGeneralSettings.Instance.Manager.activeLoader;
                 if (loader != null)
                     activeSubsystem = loader.GetLoadedSubsystem<TSubsystem>();
             }
-#endif
-            // If XR management is not used or no loader has been set, check for
-            // any active subsystem instances in the SubsystemManager.
-            if (activeSubsystem == null)
-            {
-                SubsystemManager.GetInstances(s_SubsystemInstances);
 
-#if !UNITY_2019_3_OR_NEWER
-                foreach (var instance in s_SubsystemInstances)
-                {
-                   if (!s_DestroyedSubsystemTypes.Contains(instance))
-                   {
-                        return instance;
-                   }
-                }
-#else
-                if (s_SubsystemInstances.Count > 0)
-                {
-                    activeSubsystem = s_SubsystemInstances[0];
-                }
-#endif
-            }
+            if (activeSubsystem == null)
+                Debug.LogWarningFormat($"No active {typeof(TSubsystem).FullName} is available. Please ensure that a " +
+                                       "valid loader configuration exists in the XR project settings.");
 
             return activeSubsystem;
+        }
+
+        /// <summary>
+        /// Called by derived classes to initialize the subsystem is initialized before use
+        /// </summary>
+        protected void EnsureSubsystemInstanceSet()
+        {
+            subsystem = GetActiveSubsystemInstance();
         }
 
         /// <summary>
@@ -129,7 +63,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected virtual void OnEnable()
         {
-            CreateSubsystemIfNecessary();
+            EnsureSubsystemInstanceSet();
 
             if (subsystem != null)
             {
@@ -159,16 +93,6 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected virtual void OnDestroy()
         {
-
-            if (m_CleanupSubsystemOnDestroy && subsystem != null)
-            {
-#if !UNITY_2019_3_OR_NEWER
-                s_DestroyedSubsystemTypes.Add(subsystem);
-#endif
-
-                subsystem.Destroy();
-            }
-
             subsystem = null;
         }
 
@@ -191,10 +115,5 @@ namespace UnityEngine.XR.ARFoundation
 
         static List<TSubsystem> s_SubsystemInstances =
             new List<TSubsystem>();
-
-#if !UNITY_2019_3_OR_NEWER
-        static HashSet<TSubsystem> s_DestroyedSubsystemTypes =
-            new HashSet<TSubsystem>();
-#endif
     }
 }

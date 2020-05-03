@@ -64,7 +64,7 @@ namespace UnityEngine.XR.ARFoundation
         /// You may override this method to perform further updates specific
         /// to the derived trackable.
         /// </summary>
-        internal protected virtual void OnAfterSetSessionRelativeData()
+        protected internal virtual void OnAfterSetSessionRelativeData()
         { }
 
         internal void SetSessionRelativeData(TSessionRelativeData sessionRelativeData)

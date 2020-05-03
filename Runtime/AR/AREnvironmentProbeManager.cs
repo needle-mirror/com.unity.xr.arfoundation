@@ -244,8 +244,15 @@ namespace UnityEngine.XR.ARFoundation
             return false;
         }
 
+        /// <summary>
+        /// The name of the `GameObject` for each instantiated <see cref="AREnvironmentProbe"/>.
+        /// </summary>
         protected override string gameObjectName => "AREnvironmentProbe";
 
+        /// <summary>
+        /// Gets the prefab that should be instantiated for each <see cref="AREnvironmentProbe"/>. May be `null`.
+        /// </summary>
+        /// <returns>The prefab that should be instantiated for each <see cref="AREnvironmentProbe"/>.</returns>
         protected override GameObject GetPrefab() => m_DebugPrefab;
 
         /// <summary>
@@ -272,6 +279,12 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        /// <summary>
+        /// Invoked when the base class detects trackable changes.
+        /// </summary>
+        /// <param name="added">The list of added <see cref="AREnvironmentProbe"/>.</param>
+        /// <param name="updated">The list of updated <see cref="AREnvironmentProbe"/>.</param>
+        /// <param name="removed">The list of removed <see cref="AREnvironmentProbe"/>.</param>
         protected override void OnTrackablesChanged(
             List<AREnvironmentProbe> added,
             List<AREnvironmentProbe> updated,
@@ -284,6 +297,10 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        /// <summary>
+        /// Invoked when an <see cref="AREnvironmentProbe"/> is created.
+        /// </summary>
+        /// <param name="probe">The <see cref="AREnvironmentProbe"/> that was just created.</param>
         protected override void OnCreateTrackable(AREnvironmentProbe probe)
         {
             probe.environmentTextureFilterMode = m_EnvironmentTextureFilterMode;

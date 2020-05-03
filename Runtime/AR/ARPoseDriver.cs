@@ -18,11 +18,7 @@ namespace UnityEngine.XR.ARFoundation
             internal Quaternion? rotation;
         }
 
-        private void Awake()
-        {
-        }
-
-        protected void OnEnable()
+        void OnEnable()
         {
             Application.onBeforeRender += OnBeforeRender;
 #if UNITY_2020_1_OR_NEWER
@@ -40,7 +36,7 @@ namespace UnityEngine.XR.ARFoundation
 #endif // UNITY_UNITY_2020_1_OR_NEWER
         }
 
-        protected void OnDisable()
+        void OnDisable()
         {
             Application.onBeforeRender -= OnBeforeRender;
 #if UNITY_2020_1_OR_NEWER
@@ -48,17 +44,11 @@ namespace UnityEngine.XR.ARFoundation
 #endif // UNITY_UNITY_2020_1_OR_NEWER
         }
 
-        protected void Update()
-        {
-            PerformUpdate();
-        }
+        void Update() => PerformUpdate();
 
-        protected void OnBeforeRender()
-        {
-            PerformUpdate();
-        }
+        void OnBeforeRender() => PerformUpdate();
 
-        protected void PerformUpdate()
+        void PerformUpdate()
         {
             if (!enabled)
                 return;
@@ -74,10 +64,7 @@ namespace UnityEngine.XR.ARFoundation
 #if UNITY_2020_1_OR_NEWER
         static internal InputDevice? s_InputTrackingDevice = null;
 
-        void OnInputDeviceConnected(InputDevice device)
-        {
-            CheckConnectedDevice(device);
-        }
+        void OnInputDeviceConnected(InputDevice device) => CheckConnectedDevice(device);
 
         void CheckConnectedDevice(InputDevice device, bool displayWarning = true)
         {
@@ -137,7 +124,7 @@ namespace UnityEngine.XR.ARFoundation
                     var pose = Pose.identity;
                     var positionSuccess = nodeState.TryGetPosition(out pose.position);
                     var rotationSuccess = nodeState.TryGetRotation(out pose.rotation);
-                    
+
                     if (positionSuccess)
                         resultPose.position = pose.position;
                     if (rotationSuccess)

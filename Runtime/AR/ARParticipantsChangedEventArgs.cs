@@ -40,26 +40,20 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Generates a hash suitable for use with containers like <c>HashSet</c> and <c>Dictionary</c>.
+        /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
-        /// <returns>A hash suitable for use with containers like <c>HashSet</c> and <c>Dictionary</c>.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 0;
-                hash = hash * 486187739 + (added == null ? 0 : added.GetHashCode());
-                hash = hash * 486187739 + (updated == null ? 0 : updated.GetHashCode());
-                hash = hash * 486187739 + (removed == null ? 0 : removed.GetHashCode());
-                return hash;
-            }
-        }
+        /// <returns>A hash code generated from this object's fields.</returns>
+        public override int GetHashCode() => HashCode.Combine(
+            HashCode.ReferenceHash(added),
+            HashCode.ReferenceHash(updated),
+            HashCode.ReferenceHash(removed));
 
         /// <summary>
         /// Tests for equality.
         /// </summary>
-        /// <param name="other">The other <see cref="ARParticipantsChangedEventArgs"/> to compare against.</param>
-        /// <returns><c>true</c> if <paramref name="other"/> is equal to this <see cref="ARParticipantsChangedEventArgs"/>.</returns>
+        /// <param name="obj">The `object` to compare against.</param>
+        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="ARParticipantsChangedEventArgs"/> and
+        /// <see cref="Equals(ARParticipantsChangedEventArgs)"/> also returns `true`; otherwise `false`.</returns>
         public override bool Equals(object obj) => (obj is ARParticipantsChangedEventArgs) && Equals((ARParticipantsChangedEventArgs)obj);
 
         int GetCount(List<ARParticipant> list) => list != null ? list.Count : 0;

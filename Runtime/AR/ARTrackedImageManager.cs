@@ -62,7 +62,8 @@ namespace UnityEngine.XR.ARFoundation
                 else if (value is RuntimeReferenceImageLibrary runtimeLibrary)
                 {
                     m_SerializedLibrary = null;
-                    CreateSubsystemIfNecessary();
+                    EnsureSubsystemInstanceSet();
+
                     if (subsystem != null)
                         subsystem.imageLibrary = runtimeLibrary;
                 }
@@ -84,7 +85,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <exception cref="System.NotSupportedException">Thrown if there is no subsystem. This usually means image tracking is not supported.</exception>
         public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary = null)
         {
-            CreateSubsystemIfNecessary();
+            EnsureSubsystemInstanceSet();
 
             if (subsystem == null)
                 throw new NotSupportedException("No image tracking subsystem found. This usually means image tracking is not supported.");
@@ -146,6 +147,10 @@ namespace UnityEngine.XR.ARFoundation
             set => m_TrackedImagePrefab = value;
         }
 
+        /// <summary>
+        /// Get the prefab that will be instantiated for each <see cref="ARTrackedImage"/>.
+        /// </summary>
+        /// <returns>The prefab that will be instantiated for each <see cref="ARTrackedImage"/>.</returns>
         protected override GameObject GetPrefab() => m_TrackedImagePrefab;
 
         /// <summary>
@@ -209,6 +214,12 @@ namespace UnityEngine.XR.ARFoundation
             return false;
         }
 
+        /// <summary>
+        /// Invoked just after updating each <see cref="ARTrackedImage"/>. Used to update the <see cref="ARTrackedImage.referenceImage"/>.
+        /// </summary>
+        /// <param name="image">The tracked image being updated.</param>
+        /// <param name="sessionRelativeData">New data associated with the tracked image. Spatial data is
+        /// relative to the <see cref="ARSessionOrigin"/>.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARTrackedImage image,
             XRTrackedImage sessionRelativeData)

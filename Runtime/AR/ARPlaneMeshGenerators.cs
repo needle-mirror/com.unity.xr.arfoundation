@@ -20,6 +20,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <paramref name="convexPolygon"/> is not checked for its convexness. Concave polygons will produce incorrect results.
         /// </remarks>
         /// <param name="mesh">The <c>Mesh</c> to write results to.</param>
+        /// <param name="pose">The session-space pose of the mesh.</param>
         /// <param name="convexPolygon">The vertices of the plane's boundary, in plane-space.</param>
         /// <param name="areaTolerance">If any triangle in the generated mesh is less than this, then the entire mesh is ignored.
         /// This handles an edge case which prevents degenerate or very small triangles. Units are meters-squared.</param>
@@ -74,9 +75,10 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Generates a <c>List<Vector2></c> of UVs from the given parameters.
+        /// Generates a `List` of UVs from the given parameters.
         /// </summary>
-        /// <param name="Uvs">The <c>List<Vector2></c> to write results to.</param>
+        /// <param name="Uvs">The `List` to write results to.</param>
+        /// /// <param name="pose">The session-space pose of the mesh.</param>
         /// <param name="vertices">The vertices of the plane's boundary, in plane-space.</param>
         public static void GenerateUvs(List<Vector2> Uvs, Pose pose, List<Vector3> vertices)
         {
@@ -109,15 +111,15 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Generates a <c>List<int></c> of indices from the given parameters, forming a triangle fan.
+        /// Generates a `List` of indices from the given parameters, forming a triangle fan.
         /// The <paramref name="convexPolygon"/> is assumed to be convex.
         /// </summary>
         /// <remarks>
         /// <paramref name="convexPolygon"/> is not checked for its convexness. Concave polygons will produce incorrect results.
         /// </remarks>
-        /// <param name="Uvs">The <c>List<int></c> to write results to.</param>
+        /// <param name="indices">The `List` to write results to.</param>
         /// <param name="convexPolygon">The vertices of the plane's boundary, in plane-space.</param>
-        /// <param name="areaTolerance">If any triangle in the generated mesh is less than this, then the entire mesh is ignored.
+        /// <param name="areaTolerance">If any triangle in the generated mesh is less than this, then the entire mesh is ignored.</param>
         /// <returns><c>True</c> if the indices were generated, <c>False</c> if a triangle whose area is less than <paramref name="areaTolerance"/> is found.</returns>
         public static bool GenerateIndices(List<int> indices, List<Vector3> convexPolygon, float areaTolerance = 1e-6f)
         {

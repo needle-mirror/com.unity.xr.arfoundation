@@ -17,11 +17,6 @@
     "defineConstraints": [],
     "versionDefines": [
         {
-            "name": "com.unity.xr.management",
-            "expression": "2.0.0-preview.22",
-            "define": "USE_XR_MANAGEMENT"
-        },
-        {
             "name": "com.unity.render-pipelines.lightweight",
             "expression": "[5.7.2,7.0.0)",
             "define": "MODULE_LWRP_ENABLED"

@@ -432,6 +432,8 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     material.SetMatrix(k_DisplayTransformId, eventArgs.displayMatrix.Value);
                 }
+
+                SetMaterialKeywords(material, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
             }
 
             if (eventArgs.projectionMatrix.HasValue)
@@ -455,25 +457,31 @@ namespace UnityEngine.XR.ARFoundation
                     material.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
                 }
 
-                if (eventArgs.enabledMaterialKeywords != null)
+                SetMaterialKeywords(material, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
+            }
+        }
+
+        void SetMaterialKeywords(Material material, List<string> enabledMaterialKeywords,
+                                 List<string> disabledMaterialKeywords)
+        {
+            if (enabledMaterialKeywords != null)
+            {
+                foreach (var materialKeyword in enabledMaterialKeywords)
                 {
-                    foreach (var materialKeyword in eventArgs.enabledMaterialKeywords)
+                    if (!material.IsKeywordEnabled(materialKeyword))
                     {
-                        if (!material.IsKeywordEnabled(materialKeyword))
-                        {
-                            material.EnableKeyword(materialKeyword);
-                        }
+                        material.EnableKeyword(materialKeyword);
                     }
                 }
+            }
 
-                if (eventArgs.disabledMaterialKeywords != null)
+            if (disabledMaterialKeywords != null)
+            {
+                foreach (var materialKeyword in disabledMaterialKeywords)
                 {
-                    foreach (var materialKeyword in eventArgs.disabledMaterialKeywords)
+                    if (material.IsKeywordEnabled(materialKeyword))
                     {
-                        if (material.IsKeywordEnabled(materialKeyword))
-                        {
-                            material.DisableKeyword(materialKeyword);
-                        }
+                        material.DisableKeyword(materialKeyword);
                     }
                 }
             }

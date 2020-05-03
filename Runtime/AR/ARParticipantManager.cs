@@ -28,8 +28,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public GameObject participantPrefab
         {
-            get { return m_ParticipantPrefab; }
-            set { m_ParticipantPrefab = value; }
+            get => m_ParticipantPrefab;
+            set => m_ParticipantPrefab = value;
         }
 
         /// <summary>
@@ -50,11 +50,18 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
-        protected override GameObject GetPrefab()
-        {
-            return m_ParticipantPrefab;
-        }
+        /// <summary>
+        /// The prefab which will be instantiated for each <see cref="ARParticipant"/>. May be `null`.
+        /// </summary>
+        /// <returns>A prefab to instantiate for each <see cref="ARParticipant"/>.</returns>
+        protected override GameObject GetPrefab() => m_ParticipantPrefab;
 
+        /// <summary>
+        /// Invoked when the base class detects trackable changes.
+        /// </summary>
+        /// <param name="added">The list of added <see cref="ARParticipant"/>s.</param>
+        /// <param name="updated">The list of updated <see cref="ARParticipant"/>s.</param>
+        /// <param name="removed">The list of removed <see cref="ARParticipant"/>s.</param>
         protected override void OnTrackablesChanged(
             List<ARParticipant> added,
             List<ARParticipant> updated,
@@ -74,9 +81,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new participant is detected.
         /// </summary>
-        protected override string gameObjectName
-        {
-            get { return "ARParticipant"; }
-        }
+        protected override string gameObjectName => "ARParticipant";
     }
 }

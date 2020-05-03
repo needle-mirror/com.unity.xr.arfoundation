@@ -4,20 +4,38 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.0-preview.3] - 2020-05-04
+### New
+- Add support for tracked raycasts. A tracked raycast is repeated and updated automatically. See [ARRaycastManager.AddRaycast](../api/UnityEngine.XR.ARFoundation.ARRaycastManager.html#UnityEngine_XR_ARFoundation_ARRaycastManager_AddRaycast).
+
+### Fixes
+- Fixed all broken or missing scripting API documentation.
+
+### Changes
+- Updating dependency on com.unity.xr.management to 3.2.10.
+
 ## [4.0.0-preview.1] - 2020-02-26
 ### Improvements
 - Improved performance of face mesh updates by using the [new mesh APIs in 2019.3 which accept NativeArrays](https://docs.unity3d.com/ScriptReference/Mesh.SetVertices.html). This avoids a copy of the `NativeArray` to `List`.
 
 ### Breaking Changes
 - See the [Migration Guide](../manual/migration-guide-3.md).
+- AR Foundation now relies on [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html) to initialize subsystems. If your project's configuration does not enable an XR Loader appropriate for your target platforms then the underlying subsystems AR Foundation depends on will not be available. Previously AR Foundation would attempt to initialize subsystems itself in the absence of a valid XR Management configuration.
+
+## [3.1.3] - 2020-04-13
+### Fixes
+- The documentation for the `ARFace` scripting API for accessing left eye, right eye, and fixation point incorrectly referred to a nullable value type, when in fact the returned type is a [Transform](https://docs.unity3d.com/ScriptReference/Transform.html). This has been fixed.
+- Eliminating shader compiler errors that started with Unity 2020.1 and that originate from the ARKit package.
+
+## [3.1.0-preview.8] - 2020-03-12
 
 ## [3.1.0-preview.7] - 2020-03-03
 ### Fixes
 - Patched a memory leak by destroying the camera textures when the camera manager is disabled.
 
-## [3.1.0-preview.5] - 2020-01-21
+## [3.1.0-preview.6] - 2020-01-21
 ### Fixes
-- Fixed memory leak when accessing the `humanStencilTexture` and `humanDepthTexture` properties of the `ARHumanOcclusionManager`.
+- Fixed memory leak when accessing the `humanStencilTexture` and `humanDepthTexture` properties of the `AROcclusionManager`.
 
 ## [3.1.0-preview.4] - 2020-01-16
 ### Improvements
@@ -34,18 +52,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added script updater support for facilitating the rename of Reference Points to Anchors
 
 ## [3.1.0-preview.1] - 2019-11-21
-### Breaking changes
-- Renaming the concept of `Reference Points` to `Anchors`. The Unity script updater should convert any references to `ARReferencePointManager`, `ARReferencePoint`, and `ARReferencePointsChangedEventArgs` the next time the project is loaded into the Editor.
-
-### Fixes
-- Fixed an issue which could cause the background camera texture to stop functioning correctly on certain devices running OpenGLES3.
-- Removed references to LWRP from the documentation.
-
 ### New
 - Added the new [AROcclusionManager](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.AROcclusionManager.html) with human segmentation functionality (on some iOS hardware).
 
 ## [3.0.1] - 2019-11-18
-- 2020.1 verified version
+### Breaking changes
+- Renaming the concept of `Reference Points` to `Anchors`. The Unity script updater should convert any references to `ARReferencePointManager`, `ARReferencePoint`, and `ARReferencePointsChangedEventArgs` the next time the project is loaded into the Editor.
+
+### Fixes
+- Removed references to LWRP from the documentation.
 
 ## [3.0.0-preview.6] - 2019-11-14
 

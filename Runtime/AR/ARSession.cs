@@ -215,7 +215,7 @@ namespace UnityEngine.XR.ARFoundation
 
             // Normally, the subsystem is created in OnEnable, but users may
             // want to check availability before enabling the session.
-            s_Instance.CreateSubsystemIfNecessary();
+            s_Instance.EnsureSubsystemInstanceSet();
 
             if (s_Instance.subsystem == null)
             {
@@ -312,7 +312,7 @@ namespace UnityEngine.XR.ARFoundation
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             WarnIfMultipleARSessions();
 #endif
-            CreateSubsystemIfNecessary();
+            EnsureSubsystemInstanceSet();
 
             if (subsystem != null)
             {
@@ -412,6 +412,9 @@ namespace UnityEngine.XR.ARFoundation
                 subsystem.OnApplicationResume();
         }
 
+        /// <summary>
+        /// Invoked when this `MonoBehaviour` is disabled. Used to affect the <see cref="state"/>. 
+        /// </summary>
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -421,6 +424,9 @@ namespace UnityEngine.XR.ARFoundation
                 state = ARSessionState.Ready;
         }
 
+        /// <summary>
+        /// Invoked when this `MonoBehaviour` is destroyed. Used to affect the <see cref="state"/>.
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
