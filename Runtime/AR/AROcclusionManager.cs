@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.Rendering;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -12,7 +13,12 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_OcclusionManager)]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.AROcclusionManager.html")]
-    public sealed class AROcclusionManager : SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor>
+    public sealed class AROcclusionManager :
+#if UNITY_2020_2_OR_NEWER
+        SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
+#else
+        SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor>
+#endif
     {
         /// <summary>
         /// The list of occlusion texture infos.
@@ -23,18 +29,18 @@ namespace UnityEngine.XR.ARFoundation
         readonly List<ARTextureInfo> m_TextureInfos = new List<ARTextureInfo>();
 
         /// <summary>
-        /// The list of occlustion textures.
+        /// The list of occlusion textures.
         /// </summary>
         /// <value>
-        /// The list of occlustion textures.
+        /// The list of occlusion textures.
         /// </value>
         readonly List<Texture2D> m_Textures = new List<Texture2D>();
 
         /// <summary>
-        /// The list of occlustion texture property IDs.
+        /// The list of occlusion texture property IDs.
         /// </summary>
         /// <value>
-        /// The list of occlustion texture property IDs.
+        /// The list of occlusion texture property IDs.
         /// </value>
         readonly List<int> m_TexturePropertyIds = new List<int>();
 
@@ -55,7 +61,7 @@ namespace UnityEngine.XR.ARFoundation
         ARTextureInfo m_HumanDepthTextureInfo;
 
         /// <summary>
-        /// An event which fires each time a occlusioncamera frame is received.
+        /// An event which fires each time an occlusion camera frame is received.
         /// </summary>
         public event Action<AROcclusionFrameEventArgs> frameReceived;
 
@@ -156,10 +162,30 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     m_HumanStencilTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanStencilTextureInfo,
                                                                                     humanStencilDescriptor);
-                    return m_HumanStencilTextureInfo.texture;
+                    Debug.Assert(m_HumanStencilTextureInfo.descriptor.dimension == TextureDimension.Tex2D, $"Human Stencil Texture needs to be a Texture 2D, but instead is {m_HumanStencilTextureInfo.descriptor.dimension.ToString()}.");
+                    return (Texture2D) m_HumanStencilTextureInfo.texture;
                 }
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Attempt to get the latest human stencil CPU image. This provides directly access to the raw pixel data.
+        /// </summary>
+        /// <remarks>
+        /// The `XRCpuImage` must be disposed to avoid resource leaks.
+        /// </remarks>
+        /// <param name="cpuImage">If this method returns `true`, an acquired `XRCpuImage`.</param>
+        /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
+        public bool TryAcquireHumanStencilCpuImage(out XRCpuImage cpuImage)
+        {
+            if (subsystem == null)
+            {
+                cpuImage = default;
+                return false;
+            }
+
+            return subsystem.TryAcquireHumanStencilCpuImage(out cpuImage);
         }
 
         /// <summary>
@@ -176,10 +202,30 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     m_HumanDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanDepthTextureInfo,
                                                                                   humanDepthDescriptor);
-                    return m_HumanDepthTextureInfo.texture;
+                    Debug.Assert(m_HumanDepthTextureInfo.descriptor.dimension == TextureDimension.Tex2D, $"Human Depth Texture needs to be a Texture 2D, but instead is {m_HumanDepthTextureInfo.descriptor.dimension.ToString()}.");
+                    return (Texture2D) m_HumanDepthTextureInfo.texture;
                 }
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Attempt to get the latest human depth CPU image. This provides directly access to the raw pixel data.
+        /// </summary>
+        /// <remarks>
+        /// The `XRCpuImage` must be disposed to avoid resource leaks.
+        /// </remarks>
+        /// <param name="cpuImage">If this method returns `true`, an acquired `XRCpuImage`.</param>
+        /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
+        public bool TryAcquireHumanDepthCpuImage(out XRCpuImage cpuImage)
+        {
+            if (subsystem == null)
+            {
+                cpuImage = default;
+                return false;
+            }
+
+            return subsystem.TryAcquireHumanDepthCpuImage(out cpuImage);
         }
 
         /// <summary>
@@ -195,7 +241,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 subsystem.requestedHumanDepthMode = m_HumanSegmentationDepthMode;
             }
-            
+
             m_HumanStencilTextureInfo.Reset();
             m_HumanDepthTextureInfo.Reset();
         }
@@ -286,7 +332,8 @@ namespace UnityEngine.XR.ARFoundation
 
                 for (int i = 0; i < numTextureInfos; ++i)
                 {
-                    m_Textures.Add(m_TextureInfos[i].texture);
+                    Debug.Assert(m_TextureInfos[i].descriptor.dimension == TextureDimension.Tex2D, $"Texture needs to be a Texture 2D, but instead is {m_TextureInfos[i].descriptor.dimension.ToString()}.");
+                    m_Textures.Add((Texture2D)m_TextureInfos[i].texture);
                     m_TexturePropertyIds.Add(m_TextureInfos[i].descriptor.propertyNameId);
                 }
 

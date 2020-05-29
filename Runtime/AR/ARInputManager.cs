@@ -14,7 +14,8 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARInputManager : MonoBehaviour
     {
         /// <summary>
-        /// Get the <c>XRInputSubsystem</c> whose lifetime this component manages.
+        /// Get the [`XRInputSubsystem`](https://docs.unity3d.com/ScriptReference/XR.XRInputSubsystem.html)
+        /// whose lifetime this component manages.
         /// </summary>
         public XRInputSubsystem subsystem { get; private set; }
 
@@ -28,7 +29,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDisable()
         {
-            if (subsystem != null)
+            if (subsystem != null && subsystem.running)
                 subsystem.Stop();
         }
 
@@ -46,13 +47,16 @@ namespace UnityEngine.XR.ARFoundation
             {
                 XRLoader loader = XRGeneralSettings.Instance.Manager.activeLoader;
                 if (loader != null)
+                {
                     activeSubsystem = loader.GetLoadedSubsystem<XRInputSubsystem>();
+                }
             }
 
             if (activeSubsystem == null)
-                Debug.LogWarningFormat("No active {0} is available. Please ensure that a " +
-                                       "valid loader configuration exists in the XR project settings.",
-                                       typeof(XRInputSubsystem).FullName);
+            {
+                Debug.LogWarning($"No active {typeof(XRInputSubsystem).FullName} is available. Please ensure that a " +
+                    "valid loader configuration exists in the XR project settings.");
+            }
 
             return activeSubsystem;
         }

@@ -15,6 +15,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARTrackedObjectManager : ARTrackableManager<
         XRObjectTrackingSubsystem,
         XRObjectTrackingSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRObjectTrackingSubsystem.Provider,
+#endif
         XRTrackedObject,
         ARTrackedObject>
     {

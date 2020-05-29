@@ -169,7 +169,7 @@ namespace UnityEngine.XR.ARFoundation
                 var cmd = CommandBufferPool.Get(k_CustomRenderPassName);
                 cmd.BeginSample(k_CustomRenderPassName);
 
-                ARCameraBackground.AddOpenGLES3ResetStateCommand(cmd);
+                ARCameraBackground.AddBeforeBackgroundRenderHandler(cmd);
                 cmd.SetInvertCulling(m_InvertCulling);
 
                 cmd.SetViewProjectionMatrices(Matrix4x4.identity, k_BackgroundOrthoProjection);

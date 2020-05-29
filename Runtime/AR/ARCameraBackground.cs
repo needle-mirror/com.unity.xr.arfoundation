@@ -197,27 +197,33 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// A function that can be invoked by
         /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
-        /// This function does nothing, but Unity requires a valid function pointer in order to add IssuePluginEvent to a command
-        /// buffer. Doing so has the side effect of resetting the OpenGL state.
+        /// This function calls the XRCameraSubsystem method that should be called immediately before background rendering.
         /// </summary>
         /// <param name="eventId">The id of the event</param>
-        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
         [MonoPInvokeCallback(typeof(Action<int>))]
-        static void ResetGlState(int eventId) {}
+        static void BeforeBackgroundRenderHandler(int eventId)
+        {
+            if (s_CameraSubsystem != null)
+                s_CameraSubsystem.OnBeforeBackgroundRender(eventId);
+        }
 
         /// <summary>
-        /// A delegate representation of <see cref="ResetGlState(int)"/>. This maintains a strong
-        /// reference to the delegate, which is converted to an IntPtr by <see cref="s_ResetGlStateFuncPtr"/>.
+        /// A delegate representation of <see cref="BeforeBackgroundRenderHandler(int)"/>. This maintains a strong
+        /// reference to the delegate, which is converted to an IntPtr by <see cref="s_BeforeBackgroundRenderHandlerFuncPtr"/>.
         /// </summary>
-        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
-        static Action<int> s_ResetGlStateDelegate = ResetGlState;
+        /// <seealso cref="AddBeforeBackgroundRenderHandler(CommandBuffer)"/>
+        static Action<int> s_BeforeBackgroundRenderHandler = BeforeBackgroundRenderHandler;
 
         /// <summary>
-        /// A pointer to <see cref="ResetGlState(int)"/> that can be passed to
-        /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
+        /// A pointer to a function to be called immediately before rendering that is implemented in the XRCameraSubsystem implementation.
+        /// It is called via [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
         /// </summary>
-        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
-        static readonly IntPtr s_ResetGlStateFuncPtr = Marshal.GetFunctionPointerForDelegate(s_ResetGlStateDelegate);
+        static readonly IntPtr s_BeforeBackgroundRenderHandlerFuncPtr = Marshal.GetFunctionPointerForDelegate(s_BeforeBackgroundRenderHandler);
+
+        /// <summary>
+        /// Static reference to the active XRCameraSubsystem. Necessary here for access from a static delegate.
+        /// </summary>
+        static UnityEngine.XR.ARSubsystems.XRCameraSubsystem s_CameraSubsystem;
 
         /// <summary>
         /// Whether culling should be inverted. Used during command buffer configuration,
@@ -266,6 +272,13 @@ namespace UnityEngine.XR.ARFoundation
         {
             m_BackgroundRenderingEnabled = true;
 
+            // We must hold a static reference to the camera subsystem so that it is accessible to the
+            // static callback needed for calling OnBeforeBackgroundRender() from the render thread
+            if (m_CameraManager)
+                s_CameraSubsystem = m_CameraManager.subsystem;
+            else
+                s_CameraSubsystem = null;
+
             DisableBackgroundClearFlags();
 
             Material material = defaultMaterial;
@@ -286,6 +299,8 @@ namespace UnityEngine.XR.ARFoundation
             DisableLegacyRenderPipelineBackgroundRendering();
 
             RestoreBackgroundClearFlags();
+
+            s_CameraSubsystem = null;
         }
 
         /// <summary>
@@ -339,7 +354,7 @@ namespace UnityEngine.XR.ARFoundation
             Texture texture = !material.HasProperty(k_MainTexName) ? null : material.GetTexture(k_MainTexName);
 
             commandBuffer.Clear();
-            AddOpenGLES3ResetStateCommand(commandBuffer);
+            AddBeforeBackgroundRenderHandler(commandBuffer);
             m_CommandBufferCullingState = shouldInvertCulling;
             commandBuffer.SetInvertCulling(m_CommandBufferCullingState);
             commandBuffer.ClearRenderTarget(true, false, Color.clear);
@@ -381,19 +396,15 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// When using OpenGLES3, this adds a command to the <paramref name="commandBuffer"/>
-        /// which will force Unity to reset the OpenGL state. This is necessary on devices using OpenGLES3.
-        /// If OpenGLES3 is not the current graphics device type, this method does nothing. This should be
-        /// the first command in the command buffer.
+        /// This adds a command to the <paramref name="commandBuffer"/> to make call from the render thread
+        /// to a callback on the `XRCameraSubsystem` implementation. The callback handles any implementation-specific
+        /// functionality needed immediately before the background is rendered.
         /// </summary>
         /// <param name="commandBuffer">The [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
         /// to add the command to.</param>
-        internal protected static void AddOpenGLES3ResetStateCommand(CommandBuffer commandBuffer)
+        internal static void AddBeforeBackgroundRenderHandler(CommandBuffer commandBuffer)
         {
-            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.OpenGLES3)
-            {
-                commandBuffer.IssuePluginEvent(s_ResetGlStateFuncPtr, 0);
-            }
+            commandBuffer.IssuePluginEvent(s_BeforeBackgroundRenderHandlerFuncPtr, 0);
         }
 
         /// <summary>

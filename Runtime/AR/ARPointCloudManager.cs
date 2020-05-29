@@ -17,6 +17,9 @@ namespace UnityEngine.XR.ARFoundation
     public class ARPointCloudManager : ARTrackableManager<
         XRDepthSubsystem,
         XRDepthSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRDepthSubsystem.Provider,
+#endif
         XRPointCloud,
         ARPointCloud>, IRaycaster
     {

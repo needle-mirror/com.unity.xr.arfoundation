@@ -122,7 +122,11 @@ namespace UnityEngine.XR.ARFoundation
         internal void UpdateBoundary(XRPlaneSubsystem subsystem)
         {
             // subsystem cannot be null here
+#if UNITY_2020_2_OR_NEWER
+            if (subsystem.subsystemDescriptor.supportsBoundaryVertices)
+#else
             if (subsystem.SubsystemDescriptor.supportsBoundaryVertices)
+#endif
             {
                 subsystem.GetBoundary(trackableId, Allocator.Persistent, ref m_Boundary);
             }

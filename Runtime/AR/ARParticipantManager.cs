@@ -15,6 +15,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARParticipantManager : ARTrackableManager<
         XRParticipantSubsystem,
         XRParticipantSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRParticipantSubsystem.Provider,
+#endif
         XRParticipant,
         ARParticipant>
     {

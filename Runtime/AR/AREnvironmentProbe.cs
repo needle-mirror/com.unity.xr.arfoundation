@@ -32,6 +32,14 @@ namespace UnityEngine.XR.ARFoundation
         XRTextureDescriptor m_CurrentTextureDescriptor;
 
         /// <summary>
+        /// The texture info of the custom baked texture from the reflection probe.
+        /// </summary>
+        /// <value>
+        /// The texture info of the custom baked texture from the reflection probe.
+        /// </value>
+        ARTextureInfo m_CustomBakedTextureInfo;
+
+        /// <summary>
         /// Specifies the texture filter mode to be used with the environment texture.
         /// </summary>
         /// <value>
@@ -120,62 +128,20 @@ namespace UnityEngine.XR.ARFoundation
         /// texture.</param>
         void UpdateEnvironmentTexture(XRTextureDescriptor textureDescriptor)
         {
-            // If the current environment texture equals the given environment texture, the texture does not need to be
-            // updated.
-            if (m_CurrentTextureDescriptor.Equals(textureDescriptor))
+            if(m_ReflectionProbe.customBakedTexture == null)
             {
-                return;
-            }
-
-            // Get the current baked texture as a cubemap, if any.
-            Cubemap cubemapTexture = m_ReflectionProbe.customBakedTexture as Cubemap;
-
-            // If there is no current reflection probe texture or if the current environment texture data is not
-            // identical to the given environment texture metadata, then we need to create a new environment texture
-            // object.
-            if ((cubemapTexture == null) ||
-                !m_CurrentTextureDescriptor.hasIdenticalTextureMetadata(textureDescriptor))
-            {
-                // Destroy any previous texture object.
-                if (m_ReflectionProbe.customBakedTexture != null)
-                {
-                    Object.Destroy(m_ReflectionProbe.customBakedTexture);
-                }
-
-                // Create a new environment texture object.
-                m_ReflectionProbe.customBakedTexture = CreateEnvironmentTexture(textureDescriptor);
+                m_CustomBakedTextureInfo = new ARTextureInfo(textureDescriptor);
             }
             else
             {
-                // Else, we have a current texture object with identical metadata, we simply update the external
-                // texture with the native texture.
-                cubemapTexture.UpdateExternalTexture(textureDescriptor.nativeTexture);
+                m_CustomBakedTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CustomBakedTextureInfo, textureDescriptor);
             }
+
+            m_CustomBakedTextureInfo.texture.filterMode = m_EnvironmentTextureFilterMode;
+            m_ReflectionProbe.customBakedTexture = m_CustomBakedTextureInfo.texture as Cubemap;
 
             // Update the current environment texture metadata.
             m_CurrentTextureDescriptor = textureDescriptor;
-        }
-
-        /// <summary>
-        /// Create a new <c>Cubemap</c> texture object with the given native texture object.
-        /// </summary>
-        /// <param name="textureDescriptor">The <c>XRTextureDescriptor</c> wrapping a native texture object.
-        /// </param>
-        /// <returns>
-        /// The <c>Cubemap</c> object created from the given native texture object.
-        /// </returns>
-        Cubemap CreateEnvironmentTexture(XRTextureDescriptor textureDescriptor)
-        {
-            Debug.Assert(textureDescriptor.valid,
-                         "cannot create a cubemap with an invalid native texture object");
-
-            Cubemap cubemap = Cubemap.CreateExternalTexture(textureDescriptor.width,
-                                                            textureDescriptor.format,
-                                                            (textureDescriptor.mipmapCount != 0),
-                                                            textureDescriptor.nativeTexture);
-            cubemap.filterMode = m_EnvironmentTextureFilterMode;
-
-            return cubemap;
         }
 
         /// <summary>

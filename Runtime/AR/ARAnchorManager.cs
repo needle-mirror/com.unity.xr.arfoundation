@@ -24,6 +24,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARAnchorManager : ARTrackableManager<
         XRAnchorSubsystem,
         XRAnchorSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRAnchorSubsystem.Provider,
+#endif
         XRAnchor,
         ARAnchor>
     {

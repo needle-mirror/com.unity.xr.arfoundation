@@ -20,7 +20,7 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - 3D object tracking: detect 3D objects.
 - Meshing: generate triangle meshes that correspond to the physical space.
 - Body tracking: 2D and 3D representations of humans recognized in physical space.
-- Colaborative participants: track the position and orientation of other devices in a shared AR experience. 
+- Colaborative participants: track the position and orientation of other devices in a shared AR experience.
 - Human segmentation and occlusion: apply distance to objects in the physical world to rendered 3D content, which achieves a realistic blending of physical and virtual objects.
 - Raycast: queries physical surroundings for detected planes and feature points.
 - Pass-through video: optimized rendering of mobile camera image onto touch screen as the background for AR content.
@@ -45,7 +45,7 @@ You can refer to this table to understand which parts of AR Foundation are relev
 |Face tracking                   |  ✓   |  ✓  |          |        |
 |2D Image tracking               |  ✓   |  ✓  |    ✓     |        |
 |3D Object tracking              |      |  ✓  |          |        |
-|Meshing                         |      |     |    ✓     |   ✓    |
+|Meshing                         |      |  ✓  |    ✓     |   ✓    |
 |2D & 3D body tracking           |      |  ✓  |          |        |
 |Collaborative participants      |      |  ✓  |          |        |
 |Human segmentation and occlusion|      |  ✓  |          |        |
@@ -54,15 +54,15 @@ You can refer to this table to understand which parts of AR Foundation are relev
 |Session management              |  ✓   |  ✓  |    ✓     |   ✓    |
 
 ### Supported Platform Packages
-The following platform packages and later imnplement the AR Foundation features indicated above:
+The following platform packages and later implement the AR Foundation features indicated above:
 
 |Package Name|Version|
 |:---|:---|
-|ARCore XR Plugin|4.0.0-preview.1|
-|ARKit XR Plugin|4.0.0-preview.1|
-|ARKit Face Tracking|4.0.0-preview.1|
-|Magic Leap XR Plugin|5.0.0|
-|Windows XR Plugin|3.0.0|
+|ARCore XR Plugin|4.0|
+|ARKit XR Plugin|4.0|
+|ARKit Face Tracking|4.0|
+|Magic Leap XR Plugin|6.0|
+|Windows XR Plugin|4.0|
 
 ## Subsystems
 
@@ -103,7 +103,13 @@ Subsystems are implemented in other packages. To use AR Foundation, you must als
 
 For examples, see the [ARFoundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository.
 
-## Basic setup
+## Provider plugin setup
+
+Provider plugins must be enabled before AR Foundation can use them. [XR Plugin Management](https://docs.unity3d.com/2020.2/Documentation/Manual/configuring-project-for-xr.html) provides a UI to enable specific plug-in providers for each target platform.
+
+![XR Plug-in Management](images/enable-arcore-plugin.png "XR Plug-in Management")
+
+## Scene setup
 
 A basic AR scene hierarchy looks like this:
 

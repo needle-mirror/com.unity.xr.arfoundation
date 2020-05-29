@@ -18,6 +18,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class AREnvironmentProbeManager : ARTrackableManager<
         XREnvironmentProbeSubsystem,
         XREnvironmentProbeSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XREnvironmentProbeSubsystem.Provider,
+#endif
         XREnvironmentProbe,
         AREnvironmentProbe>
     {
@@ -183,7 +186,11 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem == null)
                 throw new InvalidOperationException("Environment probe manager has no subsystem. Enable the manager first.");
 
+#if UNITY_2020_2_OR_NEWER
+            if (!subsystem.subsystemDescriptor.supportsManualPlacement)
+#else
             if (!subsystem.SubsystemDescriptor.supportsManualPlacement)
+#endif
                 throw new NotSupportedException("Manual environment probe placement is not supported by this subsystem.");
 
             var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
@@ -229,10 +236,17 @@ namespace UnityEngine.XR.ARFoundation
             if (probe == null)
                 throw new ArgumentNullException("probe");
 
-            if ((probe.placementType == AREnvironmentProbePlacementType.Manual) && !subsystem.SubsystemDescriptor.supportsRemovalOfManual)
+            var desc =
+#if UNITY_2020_2_OR_NEWER
+                subsystem.subsystemDescriptor;
+#else
+                subsystem.SubsystemDescriptor;
+#endif
+
+            if ((probe.placementType == AREnvironmentProbePlacementType.Manual) && !desc.supportsRemovalOfManual)
                 throw new InvalidOperationException("Removal of manually placed environment probes are not supported by this subsystem.");
 
-            if ((probe.placementType == AREnvironmentProbePlacementType.Automatic) && !subsystem.SubsystemDescriptor.supportsRemovalOfAutomatic)
+            if ((probe.placementType == AREnvironmentProbePlacementType.Automatic) && !desc.supportsRemovalOfAutomatic)
                 throw new InvalidOperationException("Removal of automatically placed environment probes are not supported by this subsystem.");
 
             if (subsystem.RemoveEnvironmentProbe(probe.trackableId))

@@ -21,6 +21,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARFaceManager : ARTrackableManager<
         XRFaceSubsystem,
         XRFaceSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRFaceSubsystem.Provider,
+#endif
         XRFace,
         ARFace>
     {
@@ -115,7 +118,11 @@ namespace UnityEngine.XR.ARFoundation
         {
             face.UpdateMesh(subsystem);
 
+#if UNITY_2020_2_OR_NEWER
+            if (subsystem.subsystemDescriptor.supportsEyeTracking)
+#else
             if (subsystem.SubsystemDescriptor.supportsEyeTracking)
+#endif
                 face.UpdateEyes();
         }
 

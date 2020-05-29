@@ -17,7 +17,12 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARSession.html")]
-    public sealed class ARSession : SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor>
+    public sealed class ARSession :
+#if UNITY_2020_2_OR_NEWER
+        SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
+#else
+        SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor>
+#endif
     {
         [SerializeField]
         [Tooltip("If enabled, the session will attempt to update a supported device if its AR software is out of date.")]
@@ -235,7 +240,13 @@ namespace UnityEngine.XR.ARFoundation
                 }
                 else if (s_Availability.IsSupported() && !s_Availability.IsInstalled())
                 {
-                    state = s_Instance.subsystem.SubsystemDescriptor.supportsInstall ? ARSessionState.NeedsInstall : ARSessionState.Unsupported;
+                    bool supportsInstall =
+#if UNITY_2020_2_OR_NEWER
+                        s_Instance.subsystem.subsystemDescriptor.supportsInstall;
+#else
+                        s_Instance.subsystem.SubsystemDescriptor.supportsInstall;
+#endif
+                    state = supportsInstall ? ARSessionState.NeedsInstall : ARSessionState.Unsupported;
                 }
                 else
                 {

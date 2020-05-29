@@ -16,6 +16,9 @@ namespace UnityEngine.XR.ARFoundation
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARRaycastManager.html")]
     public sealed class ARRaycastManager : ARTrackableManager<
         XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRRaycastSubsystem.Provider,
+#endif
         XRRaycast, ARRaycast>
     {
         [SerializeField]
@@ -167,7 +170,13 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnAfterStart()
         {
-            if (subsystem.SubsystemDescriptor.supportsViewportBasedRaycast)
+            var desc =
+#if UNITY_2020_2_OR_NEWER
+                subsystem.subsystemDescriptor;
+#else
+                subsystem.SubsystemDescriptor;
+#endif
+            if (desc.supportsViewportBasedRaycast)
             {
                 m_RaycastViewportDelegate = RaycastViewport;
             }
@@ -176,7 +185,7 @@ namespace UnityEngine.XR.ARFoundation
                 m_RaycastViewportDelegate = RaycastViewportAsRay;
             }
 
-            if (subsystem.SubsystemDescriptor.supportsWorldBasedRaycast)
+            if (desc.supportsWorldBasedRaycast)
             {
                 m_RaycastRayDelegate = RaycastRay;
             }

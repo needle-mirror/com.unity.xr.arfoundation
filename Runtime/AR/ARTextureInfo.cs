@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.Rendering;
 
 using Object = UnityEngine.Object;
 
@@ -8,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// Container that pairs a <see cref="Unity.XR.ARSubsystems.XRTextureDescriptor"/> that wraps a native texture
-    /// object and a <c>Texture2D</c> that is created for the native texture object.
+    /// object and a <c>Texture</c> that is created for the native texture object.
     /// </summary>
     internal struct ARTextureInfo : IEquatable<ARTextureInfo>, IDisposable
     {
@@ -33,16 +34,16 @@ namespace UnityEngine.XR.ARFoundation
         XRTextureDescriptor m_Descriptor;
 
         /// <summary>
-        /// The Unity <c>Texture2D</c> object for the native texture.
+        /// The Unity <c>Texture</c> object for the native texture.
         /// </summary>
         /// <value>
-        /// The Unity <c>Texture2D</c> object for the native texture.
+        /// The Unity <c>Texture</c> object for the native texture.
         /// </value>
-        public Texture2D texture
+        public Texture texture
         {
             get { return m_Texture; }
         }
-        Texture2D m_Texture;
+        Texture m_Texture;
 
         /// <summary>
         /// Constructs the texture info with the given descriptor and material.
@@ -99,6 +100,7 @@ namespace UnityEngine.XR.ARFoundation
                 return default(ARTextureInfo);
             }
 
+            Debug.Assert(textureInfo.m_Descriptor.dimension == descriptor.dimension, $"Texture descriptor dimension should not change from {textureInfo.m_Descriptor.dimension} to {descriptor.dimension}.");
             // If there is a texture already and if the descriptors have identical texture metadata, we only need
             // to update the existing texture with the given native texture object.
             if ((textureInfo.m_Texture != null) && textureInfo.m_Descriptor.hasIdenticalTextureMetadata(descriptor))
@@ -107,7 +109,22 @@ namespace UnityEngine.XR.ARFoundation
                 textureInfo.m_Descriptor = descriptor;
 
                 // Update the current texture with the native texture object.
-                textureInfo.m_Texture.UpdateExternalTexture(textureInfo.m_Descriptor.nativeTexture);
+                switch(descriptor.dimension)
+                {
+#if UNITY_2020_2_OR_NEWER
+                    case TextureDimension.Tex3D:
+                        ((Texture3D)textureInfo.m_Texture).UpdateExternalTexture(textureInfo.m_Descriptor.nativeTexture);
+                        break;
+#endif
+                    case TextureDimension.Tex2D:
+                        ((Texture2D)textureInfo.m_Texture).UpdateExternalTexture(textureInfo.m_Descriptor.nativeTexture);
+                        break;
+                    case TextureDimension.Cube:
+                        ((Cubemap)textureInfo.m_Texture).UpdateExternalTexture(textureInfo.m_Descriptor.nativeTexture);
+                        break;
+                    default:
+                        throw new NotSupportedException($"'{descriptor.dimension.ToString()}' is not a supported texture type.");
+                }
             }
             // Else, we need to destroy the existing texture object and create a new texture object.
             else
@@ -128,37 +145,76 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="descriptor">The texture descriptor wrapping a native texture object.</param>
         /// <returns>
-        /// If the descriptor is valid, the <c>Texture2D</c> object created from the texture descriptor. Otherwise,
+        /// If the descriptor is valid, the <c>Texture</c> object created from the texture descriptor. Otherwise,
         /// <c>null</c>.
         /// </returns>
-        static Texture2D CreateTexture(XRTextureDescriptor descriptor)
+        static Texture CreateTexture(XRTextureDescriptor descriptor)
         {
             if (!descriptor.valid)
             {
                 return null;
             }
 
-            Texture2D texture = Texture2D.CreateExternalTexture(descriptor.width, descriptor.height,
-                                                                descriptor.format, (descriptor.mipmapCount != 0),
-                                                                k_TextureHasLinearColorSpace,
-                                                                descriptor.nativeTexture);
+            switch(descriptor.dimension)
+            {
+#if UNITY_2020_2_OR_NEWER
+                case TextureDimension.Tex3D:
+                    return Texture3D.CreateExternalTexture(descriptor.width, descriptor.height,
+                                                        descriptor.depth, descriptor.format,
+                                                        (descriptor.mipmapCount != 0), descriptor.nativeTexture);
+#endif
+                case TextureDimension.Tex2D:
+                    var texture = Texture2D.CreateExternalTexture(descriptor.width, descriptor.height,
+                                                        descriptor.format, (descriptor.mipmapCount != 0),
+                                                        k_TextureHasLinearColorSpace,
+                                                        descriptor.nativeTexture);
+                    // NB: SetWrapMode needs to be the first call here, and the value passed
+                    //     needs to be kTexWrapClamp - this is due to limitations of what
+                    //     wrap modes are allowed for external textures in OpenGL (which are
+                    //     used for ARCore), as Texture::ApplySettings will eventually hit
+                    //     an assert about an invalid enum (see calls to glTexParameteri
+                    //     towards the top of ApiGLES::TextureSampler)
+                    // reference: "3.7.14 External Textures" section of
+                    // https://www.khronos.org/registry/OpenGL/extensions/OES/OES_EGL_image_external.txt
+                    // (it shouldn't ever matter what the wrap mode is set to normally, since
+                    // this is for a pass-through video texture, so we shouldn't ever need to
+                    // worry about the wrap mode as textures should never "wrap")
+                    texture.wrapMode = TextureWrapMode.Clamp;
+                    texture.filterMode = FilterMode.Bilinear;
+                    texture.hideFlags = HideFlags.HideAndDontSave;
+                    return texture;
+                case TextureDimension.Cube:
+                    return Cubemap.CreateExternalTexture(descriptor.width,
+                                                            descriptor.format,
+                                                            (descriptor.mipmapCount != 0),
+                                                            descriptor.nativeTexture);
+                default:
+                    return null;
+            }
+        }
 
-            // NB: SetWrapMode needs to be the first call here, and the value passed
-            //     needs to be kTexWrapClamp - this is due to limitations of what
-            //     wrap modes are allowed for external textures in OpenGL (which are
-            //     used for ARCore), as Texture::ApplySettings will eventually hit
-            //     an assert about an invalid enum (see calls to glTexParameteri
-            //     towards the top of ApiGLES::TextureSampler)
-            // reference: "3.7.14 External Textures" section of
-            // https://www.khronos.org/registry/OpenGL/extensions/OES/OES_EGL_image_external.txt
-            // (it shouldn't ever matter what the wrap mode is set to normally, since
-            // this is for a pass-through video texture, so we shouldn't ever need to
-            // worry about the wrap mode as textures should never "wrap")
-            texture.wrapMode = TextureWrapMode.Clamp;
-            texture.filterMode = FilterMode.Bilinear;
-            texture.hideFlags = HideFlags.HideAndDontSave;
-
-            return texture;
+        public static bool IsSupported(XRTextureDescriptor descriptor)
+        {
+            if(descriptor.dimension == TextureDimension.Tex3D)
+            {
+#if UNITY_2020_2_OR_NEWER
+                return true;
+#else
+                return false;
+#endif
+            }
+            else if(descriptor.dimension == TextureDimension.Tex2D)
+            {
+                return true;
+            }
+            else if(descriptor.dimension == TextureDimension.Cube)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void Dispose()

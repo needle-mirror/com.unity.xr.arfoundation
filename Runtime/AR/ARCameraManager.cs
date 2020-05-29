@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.Rendering;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -14,7 +15,13 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
-    public sealed class ARCameraManager : SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>, ISerializationCallbackReceiver
+    public sealed class ARCameraManager :
+#if UNITY_2020_2_OR_NEWER
+        SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>,
+#else
+        SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>,
+#endif
+        ISerializationCallbackReceiver
     {
         [SerializeField]
         [HideInInspector]
@@ -234,25 +241,38 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Attempt to get the latest camera image. This provides directly access to the raw pixel data, as well as
-        /// utilities to convert to RGB and Grayscale formats.
+        /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
+        /// to utilities to convert to RGB and Grayscale formats. This method is deprecated. Use
+        /// <see cref="TryAcquireLatestCpuImage"/> instead.
         /// </summary>
         /// <remarks>
-        /// The <c>XRCameraImage</c> must be disposed to avoid resource leaks.
+        /// The `XRCpuImage` must be disposed to avoid resource leaks.
         /// </remarks>
-        /// <param name="cameraImage">A valid <c>XRCameraImage</c> if this method returns <c>true</c>.</param>
-        /// <returns>
-        /// <c>true</c> if the image was acquired. Otherwise, <c>false</c>.
-        /// </returns>
-        public bool TryGetLatestImage(out XRCameraImage cameraImage)
+        /// <param name="cpuImage">A valid `XRCpuImage` if this method returns `true`.</param>
+        /// <returns>Returns `true` if the latest camera image was successfully acquired.
+        ///     Returns `false` otherwise.</returns>
+        [Obsolete("Use TryAcquireLatestCpuImage instead. (2020-05-19")]
+        public bool TryGetLatestImage(out XRCpuImage cpuImage) => TryAcquireLatestCpuImage(out cpuImage);
+
+        /// <summary>
+        /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
+        /// to utilities to convert to RGB and Grayscale formats.
+        /// </summary>
+        /// <remarks>
+        /// The `XRCpuImage` must be disposed to avoid resource leaks.
+        /// </remarks>
+        /// <param name="cpuImage">A valid `XRCpuImage` if this method returns `true`.</param>
+        /// <returns>Returns `true` if the latest camera image was successfully acquired.
+        ///     Returns `false` otherwise.</returns>
+        public bool TryAcquireLatestCpuImage(out XRCpuImage cpuImage)
         {
             if (subsystem == null)
             {
-                cameraImage = default(XRCameraImage);
+                cpuImage = default;
                 return false;
             }
 
-            return subsystem.TryGetLatestImage(out cameraImage);
+            return subsystem.TryAcquireLatestCpuImage(out cpuImage);
         }
 
         void Awake()
@@ -408,11 +428,29 @@ namespace UnityEngine.XR.ARFoundation
             if (frame.hasExposureOffset)
                 eventArgs.exposureOffset = frame.exposureOffset;
 
+            if (frame.hasCameraGrain)
+            {
+                if(m_CameraGrainInfo.texture == null && ARTextureInfo.IsSupported(frame.cameraGrain))
+                {
+                    m_CameraGrainInfo = new ARTextureInfo(frame.cameraGrain);
+                }
+                else if(m_CameraGrainInfo.texture != null && ARTextureInfo.IsSupported(frame.cameraGrain))
+                {
+                    m_CameraGrainInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CameraGrainInfo, frame.cameraGrain);
+                }
+
+                eventArgs.cameraGrainTexture = m_CameraGrainInfo.texture;
+            }
+
+            if(frame.hasNoiseIntensity)
+                 eventArgs.noiseIntensity = frame.noiseIntensity;
+
             s_Textures.Clear();
             s_PropertyIds.Clear();
             foreach (var textureInfo in m_TextureInfos)
             {
-                s_Textures.Add(textureInfo.texture);
+                Debug.Assert(textureInfo.descriptor.dimension == TextureDimension.Tex2D, $"Camera Texture needs to be a Texture 2D, but instead is {textureInfo.descriptor.dimension.ToString()}.");
+                s_Textures.Add((Texture2D)textureInfo.texture);
                 s_PropertyIds.Add(textureInfo.descriptor.propertyNameId);
             }
 
@@ -435,5 +473,7 @@ namespace UnityEngine.XR.ARFoundation
         Camera m_Camera;
 
         bool m_PreRenderInvertCullingValue;
+
+        ARTextureInfo m_CameraGrainInfo;
     }
 }

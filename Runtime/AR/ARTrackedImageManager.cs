@@ -15,6 +15,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARTrackedImageManager : ARTrackableManager<
         XRImageTrackingSubsystem,
         XRImageTrackingSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRImageTrackingSubsystem.Provider,
+#endif
         XRTrackedImage,
         ARTrackedImage>
     {

@@ -23,6 +23,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARReferencePointManager : ARTrackableManager<
         XRReferencePointSubsystem,
         XRReferencePointSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRReferencePointSubsystem.Provider,
+#endif
         XRReferencePoint,
         ARReferencePoint>
     {

@@ -12,7 +12,12 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBodyManager)]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARHumanBodyManager.html")]
-    public sealed class ARHumanBodyManager : ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBody, ARHumanBody>
+    public sealed class ARHumanBodyManager :
+#if UNITY_2020_2_OR_NEWER
+        ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider, XRHumanBody, ARHumanBody>
+#else
+        ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBody, ARHumanBody>
+#endif
     {
         /// <summary>
         /// Whether 2D body pose tracking is enabled. This method is obsolete.

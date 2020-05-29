@@ -74,6 +74,16 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public List<string> disabledMaterialKeywords { get; internal set; }
 
+       /// <summary>
+        /// The camera grain texture effect.
+        /// </summary>
+        public Texture cameraGrainTexture { get; internal set; }
+
+        /// <summary>
+        /// The camera grain noise intensity.
+        /// </summary>
+        public float noiseIntensity { get; internal set; }
+
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
@@ -90,6 +100,8 @@ namespace UnityEngine.XR.ARFoundation
                 hash = hash * 486187739 + HashCode.ReferenceHash(propertyNameIds);
                 hash = hash * 486187739 + exposureDuration.GetHashCode();
                 hash = hash * 486187739 + exposureOffset.GetHashCode();
+                hash = hash * 486187739 + cameraGrainTexture.GetHashCode();
+                hash = hash * 486187739 + noiseIntensity.GetHashCode();
                 hash = hash * 486187739 + (enabledMaterialKeywords == null ? 0 : enabledMaterialKeywords.GetHashCode());
                 hash = hash * 486187739 + (disabledMaterialKeywords == null ? 0 : disabledMaterialKeywords.GetHashCode());
                 return hash;
@@ -143,6 +155,8 @@ namespace UnityEngine.XR.ARFoundation
                     : propertyNameIds.Equals(other.propertyNameIds))
                 && (exposureDuration == other.exposureDuration)
                 && (exposureOffset == other.exposureOffset)
+                && (cameraGrainTexture == other.cameraGrainTexture)
+                && (noiseIntensity == other.noiseIntensity)
                 && ((enabledMaterialKeywords == null) ? (other.enabledMaterialKeywords == null)
                     : enabledMaterialKeywords.Equals(other.enabledMaterialKeywords))
                 && ((disabledMaterialKeywords == null) ? (other.disabledMaterialKeywords == null)

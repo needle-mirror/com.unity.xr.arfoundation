@@ -18,6 +18,9 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARPlaneManager : ARTrackableManager<
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
+#if UNITY_2020_2_OR_NEWER
+        XRPlaneSubsystem.Provider,
+#endif
         BoundedPlane,
         ARPlane>, IRaycaster
     {
