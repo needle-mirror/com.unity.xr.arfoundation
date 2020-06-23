@@ -1,8 +1,8 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "4.0.2",
-  "unity": "2019.3",
+  "version": "4.1.0-preview.1",
+  "unity": "2019.4",
   "description": "A collection of MonoBehaviours and C# utilities for working with AR Subsystems. \n\nIncludes: \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
     "xr",
@@ -15,15 +15,15 @@
     "core"
   ],
   "dependencies": {
-    "com.unity.xr.arsubsystems": "4.0.1",
+    "com.unity.xr.arsubsystems": "4.1.0-preview.1",
     "com.unity.xr.management": "3.2.10"
   },
   "upmCi": {
-    "footprint": "3c7c30374364ca272b2777b570b7a9ee75c7e770"
+    "footprint": "e4ace3f2e27449f2571084e7fc1aecc054be78e2"
   },
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/com.unity.xr.arfoundation.git",
     "type": "git",
-    "revision": "83c16d795d1f6106a38cda34a0b28c92175d4b84"
+    "revision": "a1096e061e41cd3d1edf2c0a88bbbdb6f68849d6"
   }
 }

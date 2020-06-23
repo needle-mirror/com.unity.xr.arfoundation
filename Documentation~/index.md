@@ -20,7 +20,7 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - 3D object tracking: detect 3D objects.
 - Meshing: generate triangle meshes that correspond to the physical space.
 - Body tracking: 2D and 3D representations of humans recognized in physical space.
-- Colaborative participants: track the position and orientation of other devices in a shared AR experience.
+- Colaborative participants: track the position and orientation of other devices in a shared AR experience. 
 - Human segmentation and occlusion: apply distance to objects in the physical world to rendered 3D content, which achieves a realistic blending of physical and virtual objects.
 - Raycast: queries physical surroundings for detected planes and feature points.
 - Pass-through video: optimized rendering of mobile camera image onto touch screen as the background for AR content.
@@ -58,11 +58,11 @@ The following platform packages and later implement the AR Foundation features i
 
 |Package Name|Version|
 |:---|:---|
-|ARCore XR Plugin|4.0|
-|ARKit XR Plugin|4.0|
-|ARKit Face Tracking|4.0|
-|Magic Leap XR Plugin|6.0|
-|Windows XR Plugin|4.0|
+|ARCore XR Plugin|4.0.0-preview.3|
+|ARKit XR Plugin|4.0.0-preview.3|
+|ARKit Face Tracking|4.0.0-preview.3|
+|Magic Leap XR Plugin|5.0.0|
+|Windows XR Plugin|3.0.0|
 
 ## Subsystems
 

@@ -4,13 +4,19 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0-preview.1] - 2020-06-23
+### New
+- Add support for environment depth through the AROcclusionManager/XROcclusionSubsystem.
+
+### Changes
+- Minimum Unity version for this package is now 2019.4.
+
 ## [4.0.2] - 2020-05-29
 ### New
 - The `ARCameraManager` now invokes `XRCameraSubsystem.OnBeforeBackgroundRender` immediately before rendering the camera background.
 - Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the [migration guide](../manual/migration-guide-3.html#xr-plug-in-management) explaining how to use it.
 
 ### Changes
-- Updating dependency on AR Subsystyems to 4.0.0.
 - Changed `XRCameraImage` to `XRCpuImage` along with APIs that used this type (e.g., `ARCameraManager.TryGetLatestImage`). See the [migration guide](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/migration-guide-3.html#xrcameraimage-is-now-xrcpuimage) for more details.
 - The `ARMeshManager` no longer creates and destroys an [`XRMeshSubsystem`](https://docs.unity3d.com/ScriptReference/XR.XRMeshSubsystem.html). Instead, it relies on [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html) to create and destroy the subsystem. The `ARMeshManager` still starts and stops it.
 
