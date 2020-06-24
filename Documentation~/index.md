@@ -2,8 +2,8 @@
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
 
-* [`ARCore XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.0/manual/index.html) on Android
-* [`ARKit XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.0/manual/index.html) on iOS
+* [`ARCore XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.1/manual/index.html) on Android
+* [`ARKit XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.1/manual/index.html) on iOS
 * [`Magic Leap XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@3.0/manual/index.html) on Magic Leap
 * [`Windows XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@3.0/manual/index.html) on HoloLens
 
@@ -25,6 +25,7 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - Raycast: queries physical surroundings for detected planes and feature points.
 - Pass-through video: optimized rendering of mobile camera image onto touch screen as the background for AR content.
 - Session management: manipulation of the platform-level configuration automatically when AR Features are enable or disabled.
+- Occlusion: 
 
 ## Platform Support
 
@@ -48,19 +49,20 @@ You can refer to this table to understand which parts of AR Foundation are relev
 |Meshing                         |      |  ✓  |    ✓     |   ✓    |
 |2D & 3D body tracking           |      |  ✓  |          |        |
 |Collaborative participants      |      |  ✓  |          |        |
-|Human segmentation and occlusion|      |  ✓  |          |        |
+|Human segmentation              |      |  ✓  |          |        |
 |Raycast                         |  ✓   |  ✓  |    ✓     |        |
 |Pass-through video              |  ✓   |  ✓  |          |        |
 |Session management              |  ✓   |  ✓  |    ✓     |   ✓    |
+|Occlusion                       |  ✓   |  ✓  |          |        |
 
 ### Supported Platform Packages
 The following platform packages and later implement the AR Foundation features indicated above:
 
 |Package Name|Version|
 |:---|:---|
-|ARCore XR Plugin|4.0.0-preview.3|
-|ARKit XR Plugin|4.0.0-preview.3|
-|ARKit Face Tracking|4.0.0-preview.3|
+|ARCore XR Plugin|4.1.0-preview.2|
+|ARKit XR Plugin|4.1.0-preview.2|
+|ARKit Face Tracking|4.1.0-preview.2|
 |Magic Leap XR Plugin|5.0.0|
 |Windows XR Plugin|3.0.0|
 
@@ -86,6 +88,8 @@ Subsystems are implemented in other packages. To use AR Foundation, you must als
 
  - ARKit XR Plugin
  - ARCore XR Plugin
+ - Magic Leap XR Plugin
+ - Windows XR Plugin
 
 # Glossary
 
@@ -234,7 +238,7 @@ Please refer to [this additional documentation to configure an AR Foundation pro
 
 #### Automatic occlusion
 
-Some devices offer depth information about the real world. For instance, with a feature known as person occlusion, iOS devices with the A12 Bionic chip (and newer) provide depth information for humans detected in the AR Camera frame. In the future, more devices are expected to produce real-world depth information.
+Some devices offer depth information about the real world. For instance, with a feature known as person occlusion, iOS devices with the A12 Bionic chip (and newer) provide depth information for humans detected in the AR Camera frame. Newer Android phones and iOS devices equipped with a LiDAR scanner can provide an environment depth image where each pixel contains a depth estimate between the device and physical surroundings.
 
 Adding the `AROcclusionManager` component to the Camera with the `ARCameraBackground` component automatically enables the background rendering pass to incorporate any available depth information when rendering the depth buffer. This allows for rendered geometry to be occluded by detected geometry from the real world. For example, in the case of iOS devices that support person occlusion, detected humans occlude rendered content that exists behind them.
 

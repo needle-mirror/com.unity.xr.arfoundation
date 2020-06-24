@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// asynchronously, without blocking the main thread.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_MeshManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARMeshManager.html")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARMeshManager.html")]
     [DisallowMultipleComponent]
     public class ARMeshManager : MonoBehaviour
     {

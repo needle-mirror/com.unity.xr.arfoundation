@@ -38,7 +38,7 @@ To solve this problem, we've added methods to enumerate each discrete mode of op
 
 ARFoundation 4 also introduces the concept of a "configuration chooser", which uses the current set of requested features (e.g., "auto focus", "plane detection", and "face detection") and selects the best available configuration descriptor. This also allows you to query what would happen if you were to enable a particular set of features before enabling them.
 
-The default configuration chooser simply chooses the configuration that supports the most number of requested features, but you can also implement a custom configuration chooser to perform your own logic. See [`XRSessionSubsystem.configurationChooser`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.0/api/UnityEngine.XR.ARSubsystems.XRSessionSubsystem.html#UnityEngine_XR_ARSubsystems_XRSessionSubsystem_configurationChooser) in the ARSubsystems package.
+The default configuration chooser simply chooses the configuration that supports the most number of requested features, but you can also implement a custom configuration chooser to perform your own logic. See [`XRSessionSubsystem.configurationChooser`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.1/api/UnityEngine.XR.ARSubsystems.XRSessionSubsystem.html#UnityEngine_XR_ARSubsystems_XRSessionSubsystem_configurationChooser) in the ARSubsystems package.
 
 ### Adapting an existing project
 
