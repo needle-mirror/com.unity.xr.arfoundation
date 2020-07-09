@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     {
         /// <summary>
         /// The AR system has not been initialized. Availability is unknown.
-        /// <see cref="ARSubsystemManager.CheckAvailability"/>.
+        /// <see cref="ARSession.CheckAvailability"/>.
         /// </summary>
         None,
 
@@ -18,18 +18,18 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The system is checking for the availability of AR.
-        /// <see cref="ARSubsystemManager.CheckAvailability"/>.
+        /// <see cref="ARSession.CheckAvailability"/>.
         /// </summary>
         CheckingAvailability,
 
         /// <summary>
         /// AR is supported, but requires an additional install.
-        /// <see cref="ARSubsystemManager.Install"/>.
+        /// <see cref="ARSession.Install"/>.
         /// </summary>
         NeedsInstall,
 
         /// <summary>
-        /// AR software is being installed. <see cref="ARSubsystemManager.Install"/>.
+        /// AR software is being installed. <see cref="ARSession.Install"/>.
         /// </summary>
         Installing,
 

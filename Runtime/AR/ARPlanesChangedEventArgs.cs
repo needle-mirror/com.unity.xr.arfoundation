@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARPlane> removed { get; private set; }
 
         /// <summary>
-        /// Constructs an <see cref="ARPlaneChangedEventArgs"/>.
+        /// Constructs an <see cref="ARPlanesChangedEventArgs"/>.
         /// </summary>
         /// <param name="added">The list of <see cref="ARPlane"/>s added since the last event.</param>
         /// <param name="updated">The list of <see cref="ARPlane"/>s updated since the last event.</param>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Container for the changed <c>ARHumanBody</c> of the event.
+    /// Container for the changed <see cref="ARHumanBodyManager.humanBodiesChanged"/> of the event.
     /// </summary>
     public struct ARHumanBodiesChangedEventArgs : IEquatable<ARHumanBodiesChangedEventArgs>
     {
@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARHumanBody> removed { get; private set; }
 
         /// <summary>
-        /// Constructs an <see cref="ARPlaneChangedEventArgs"/>.
+        /// Constructs an <see cref="ARHumanBodiesChangedEventArgs"/>.
         /// </summary>
         /// <param name="added">The list of <see cref="ARHumanBody"/>s added since the last event.</param>
         /// <param name="updated">The list of <see cref="ARHumanBody"/>s updated since the last event.</param>

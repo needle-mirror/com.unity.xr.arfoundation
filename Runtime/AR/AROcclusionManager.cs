@@ -228,7 +228,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((subsystem != null) && (descriptor?.supportsHumanSegmentationStencilImage == true)
+                if ((descriptor?.supportsHumanSegmentationStencilImage == true)
                     && subsystem.TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor))
                 {
                     m_HumanStencilTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanStencilTextureInfo,
@@ -237,9 +237,7 @@ namespace UnityEngine.XR.ARFoundation
                                   || (m_HumanStencilTextureInfo.descriptor.dimension == TextureDimension.None)),
                                  "Human Stencil Texture needs to be a Texture 2D, but instead is "
                                  + $"{m_HumanStencilTextureInfo.descriptor.dimension.ToString()}.");
-                    return ((m_HumanStencilTextureInfo.descriptor.dimension != TextureDimension.Tex2D)
-                            ? null
-                            : (Texture2D)m_HumanStencilTextureInfo.texture);
+                    return m_HumanStencilTextureInfo.texture as Texture2D;
                 }
                 return null;
             }
@@ -255,7 +253,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireHumanStencilCpuImage(out XRCpuImage cpuImage)
         {
-            if ((subsystem != null) && (descriptor?.supportsHumanSegmentationStencilImage == true))
+            if (descriptor?.supportsHumanSegmentationStencilImage == true)
             {
                 return subsystem.TryAcquireHumanStencilCpuImage(out cpuImage);
             }
@@ -274,7 +272,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((subsystem != null) && (descriptor?.supportsHumanSegmentationDepthImage == true)
+                if ((descriptor?.supportsHumanSegmentationDepthImage == true)
                     && subsystem.TryGetHumanDepth(out XRTextureDescriptor humanDepthDescriptor))
                 {
                     m_HumanDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanDepthTextureInfo,
@@ -283,9 +281,7 @@ namespace UnityEngine.XR.ARFoundation
                                   || (m_HumanDepthTextureInfo.descriptor.dimension == TextureDimension.None)),
                                  "Human Depth Texture needs to be a Texture 2D, but instead is "
                                  + $"{m_HumanDepthTextureInfo.descriptor.dimension.ToString()}.");
-                    return ((m_HumanDepthTextureInfo.descriptor.dimension != TextureDimension.Tex2D)
-                            ? null
-                            : (Texture2D)m_HumanDepthTextureInfo.texture);
+                    return m_HumanDepthTextureInfo.texture as Texture2D;
                 }
                 return null;
             }
@@ -302,7 +298,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireEnvironmentDepthConfidenceCpuImage(out XRCpuImage cpuImage)
         {
-            if ((subsystem != null) && (descriptor?.supportsEnvironmentDepthConfidenceImage == true))
+            if (descriptor?.supportsEnvironmentDepthConfidenceImage == true)
             {
                 return subsystem.TryAcquireEnvironmentDepthConfidenceCpuImage(out cpuImage);
             }
@@ -321,7 +317,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((subsystem != null) && (descriptor?.supportsEnvironmentDepthConfidenceImage == true)
+                if ((descriptor?.supportsEnvironmentDepthConfidenceImage == true)
                     && subsystem.TryGetEnvironmentDepthConfidence(out XRTextureDescriptor environmentDepthConfidenceDescriptor))
                 {
                     m_EnvironmentDepthConfidenceTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_EnvironmentDepthConfidenceTextureInfo,
@@ -330,9 +326,7 @@ namespace UnityEngine.XR.ARFoundation
                                   || (m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension == TextureDimension.None)),
                                  "Environment depth confidence texture needs to be a Texture 2D, but instead is "
                                  + $"{m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension.ToString()}.");
-                    return ((m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension != TextureDimension.Tex2D)
-                            ? null
-                            : (Texture2D)m_EnvironmentDepthConfidenceTextureInfo.texture);
+                    return m_EnvironmentDepthConfidenceTextureInfo.texture as Texture2D;
                 }
                 return null;
             }
@@ -349,7 +343,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireHumanDepthCpuImage(out XRCpuImage cpuImage)
         {
-            if ((subsystem != null) && (descriptor?.supportsHumanSegmentationDepthImage == true))
+            if (descriptor?.supportsHumanSegmentationDepthImage == true)
             {
                 return subsystem.TryAcquireHumanDepthCpuImage(out cpuImage);
             }
@@ -368,7 +362,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((subsystem != null) && (descriptor?.supportsEnvironmentDepthImage == true)
+                if ((descriptor?.supportsEnvironmentDepthImage == true)
                     && subsystem.TryGetEnvironmentDepth(out XRTextureDescriptor environmentDepthDescriptor))
                 {
                     m_EnvironmentDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_EnvironmentDepthTextureInfo,
@@ -377,9 +371,7 @@ namespace UnityEngine.XR.ARFoundation
                                   || (m_EnvironmentDepthTextureInfo.descriptor.dimension == TextureDimension.None)),
                                  "Environment depth texture needs to be a Texture 2D, but instead is "
                                  + $"{m_EnvironmentDepthTextureInfo.descriptor.dimension.ToString()}.");
-                    return ((m_EnvironmentDepthTextureInfo.descriptor.dimension != TextureDimension.Tex2D)
-                            ? null
-                            : (Texture2D)m_EnvironmentDepthTextureInfo.texture);
+                    return m_EnvironmentDepthTextureInfo.texture as Texture2D;
                 }
                 return null;
             }
@@ -395,7 +387,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireEnvironmentDepthCpuImage(out XRCpuImage cpuImage)
         {
-            if ((subsystem != null) && (descriptor?.supportsEnvironmentDepthImage == true))
+            if (descriptor?.supportsEnvironmentDepthImage == true)
             {
                 return subsystem.TryAcquireEnvironmentDepthCpuImage(out cpuImage);
             }

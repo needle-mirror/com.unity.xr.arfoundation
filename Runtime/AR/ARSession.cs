@@ -117,7 +117,7 @@ namespace UnityEngine.XR.ARFoundation
         public int? frameRate => (descriptor?.supportsMatchFrameRate ?? false) ? new Nullable<int>(subsystem.frameRate) : null;
 
         /// <summary>
-        /// This event is invoked whenever the <see cref="systemState"/> changes.
+        /// This event is invoked whenever the <see cref="state"/> changes.
         /// </summary>
         public static event Action<ARSessionStateChangedEventArgs> stateChanged;
 
@@ -263,8 +263,8 @@ namespace UnityEngine.XR.ARFoundation
         /// Installation may be asynchronous, so this is implemented as a coroutine.
         /// It is safe to call this multiple times, but you must first call <see cref="CheckAvailability"/>.
         /// </para><para>
-        /// You must call <see cref="CheckAvailability"/> before tring to Install
-        /// and the <see cref="systemState"/> must not be <see cref="ARSystemState.Unsupported"/>
+        /// You must call <see cref="CheckAvailability"/> before trying to Install
+        /// and the <see cref="state"/> must not be <see cref="ARSessionState.Unsupported"/>
         /// or this method will throw.
         /// </para>
         /// </remarks>
@@ -424,7 +424,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Invoked when this `MonoBehaviour` is disabled. Used to affect the <see cref="state"/>. 
+        /// Invoked when this `MonoBehaviour` is disabled. Used to affect the <see cref="state"/>.
         /// </summary>
         protected override void OnDisable()
         {

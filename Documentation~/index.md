@@ -2,10 +2,10 @@
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
 
-* [`ARCore XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.1/manual/index.html) on Android
-* [`ARKit XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.1/manual/index.html) on iOS
-* [`Magic Leap XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@3.0/manual/index.html) on Magic Leap
-* [`Windows XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@3.0/manual/index.html) on HoloLens
+* [ARCore XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.1/manual/index.html) on Android
+* [ARKit XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.1/manual/index.html) on iOS
+* [Magic Leap XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@6.0/manual/index.html) on Magic Leap
+* [Windows XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@4.0/manual/index.html) on HoloLens
 
 AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support the following concepts:
 
@@ -20,12 +20,12 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - 3D object tracking: detect 3D objects.
 - Meshing: generate triangle meshes that correspond to the physical space.
 - Body tracking: 2D and 3D representations of humans recognized in physical space.
-- Colaborative participants: track the position and orientation of other devices in a shared AR experience. 
+- Colaborative participants: track the position and orientation of other devices in a shared AR experience.
 - Human segmentation and occlusion: apply distance to objects in the physical world to rendered 3D content, which achieves a realistic blending of physical and virtual objects.
 - Raycast: queries physical surroundings for detected planes and feature points.
 - Pass-through video: optimized rendering of mobile camera image onto touch screen as the background for AR content.
 - Session management: manipulation of the platform-level configuration automatically when AR Features are enable or disabled.
-- Occlusion: 
+- Occlusion:
 
 ## Platform Support
 
@@ -58,13 +58,13 @@ You can refer to this table to understand which parts of AR Foundation are relev
 ### Supported Platform Packages
 The following platform packages and later implement the AR Foundation features indicated above:
 
-|Package Name|Version|
-|:---|:---|
-|ARCore XR Plugin|4.1.0-preview.2|
-|ARKit XR Plugin|4.1.0-preview.2|
-|ARKit Face Tracking|4.1.0-preview.2|
-|Magic Leap XR Plugin|5.0.0|
-|Windows XR Plugin|3.0.0|
+|Package Name           |Version            |
+|:---                   |:---               |
+|ARCore XR Plugin       |   4.1.0-preview.3 |
+|ARKit XR Plugin        |   4.1.0-preview.3 |
+|ARKit Face Tracking    |   4.1.0-preview.3 |
+|Magic Leap XR Plugin   |   6.0             |
+|Windows XR Plugin      |   4.0             |
 
 ## Subsystems
 

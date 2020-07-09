@@ -55,7 +55,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Attempts to add an <see cref="ARReferencePoint"/> with the given <c>Pose</c>.
         /// </summary>
         /// <remarks>
-        /// If <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}.prefab"/>
+        /// If <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}.GetPrefab()"/>
         /// is not null, a new instance of that prefab will be instantiated. Otherwise, a
         /// new <c>GameObject</c> will be created. In either case, the resulting
         /// <c>GameObject</c> will have an <see cref="ARReferencePoint"/> component on it.

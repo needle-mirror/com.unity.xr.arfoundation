@@ -6,11 +6,11 @@ using UnityEngine.Serialization;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Creates, updates, and removes <c>GameObject</c>s with <see cref="ARFace"/> components under the <see cref="ARSessionOrigin"/>'s <see cref="ARSessionOrigin.trackablesParent"/>.
+    /// Creates, updates, and removes <c>GameObject</c>s with <see cref="ARFace"/> components under the
+    /// <see cref="ARSessionOrigin"/>'s <see cref="ARSessionOrigin.trackablesParent"/>.
     /// </summary>
     /// <remarks>
-    /// When enabled, this component subscribes to <see cref="ARSubsystemManager.faceAdded"/>,
-    /// <see cref="ARSubsystemManager.faceUpdated"/>, and <see cref="ARSubsystemManager.faceRemoved"/>.
+    /// When enabled, this component subscribes to <see cref="ARFaceManager.facesChanged"/> event to update face data.
     /// If this component is disabled, and there are no other subscribers to those events,
     /// face detection will be disabled on the device.
     /// </remarks>
