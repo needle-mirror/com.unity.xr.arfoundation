@@ -4,6 +4,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0-preview.5] - 2020-07-16
+### Changes
+- Updated ["Configuring the AR Camera background using a Scriptable Render Pipeline"](../manual/ar-camera-background-with-scriptable-render-pipeline.html) documentation for further clarity on setup steps.
+- Added documentation for the `ARMeshManager`.
+
+### Fixes
+- The choice of whether to use the legacy or Universal render pipeline was based on an incorrect GraphicsSettings parameter (`renderPipelineAsset` instead of `currentRenderPipeline`). This meant that certain quality settings may not have been respected properly.
+- Fixed a bug where it was possible for the ARSession component to set the [Application.targetFrameRate](https://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html) even when [`matchFrameRateRequested`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARSession.html#UnityEngine_XR_ARFoundation_ARSession_matchFrameRateRequested) was `false`.
+
 ## [4.1.0-preview.3] - 2020-07-09
 ### Fixes
 - Minor documentation fixes.

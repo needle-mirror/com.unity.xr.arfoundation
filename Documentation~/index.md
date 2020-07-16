@@ -60,9 +60,9 @@ The following platform packages and later implement the AR Foundation features i
 
 |Package Name           |Version            |
 |:---                   |:---               |
-|ARCore XR Plugin       |   4.1.0-preview.3 |
-|ARKit XR Plugin        |   4.1.0-preview.3 |
-|ARKit Face Tracking    |   4.1.0-preview.3 |
+|ARCore XR Plugin       |   4.1.0-preview.5 |
+|ARKit XR Plugin        |   4.1.0-preview.5 |
+|ARKit Face Tracking    |   4.1.0-preview.5 |
 |Magic Leap XR Plugin   |   6.0             |
 |Windows XR Plugin      |   4.0             |
 
@@ -302,11 +302,16 @@ The following table summarizes the other parameters:
 | `hitResults` | The results for both methods are stored in this `List`, which must not be `null`. This lets you reuse the same `List` object to avoid garbage-collected allocations. |
 | `trackableTypeMask` | The type(s) of trackable(s) to hit test against. This is a flag, so multiple types can be bitwise OR'd together, for example, `TrackableType.PlaneWithinPolygon` &#124; `FeaturePoint` |
 
+## Meshing
+
+See documentation on the [mesh manager](mesh-manager.md).
+
 # Technical details
 
 ## Requirements
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.2
-* 2019.3
+* 2019.4
+* 2020.1
+* 2020.2

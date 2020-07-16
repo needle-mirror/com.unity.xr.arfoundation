@@ -184,9 +184,9 @@ namespace UnityEngine.XR.ARFoundation
         /// Whether to use the legacy rendering pipeline.
         /// </summary>
         /// <value>
-        /// <c>true</c> fi the legacy render pipeline is in use. Otherwise, <c>false</c>.
+        /// <c>true</c> if the legacy render pipeline is in use. Otherwise, <c>false</c>.
         /// </value>
-        bool useLegacyRenderPipeline => GraphicsSettings.renderPipelineAsset == null;
+        bool useLegacyRenderPipeline => GraphicsSettings.currentRenderPipeline == null;
 
         /// <summary>
         /// Stores the previous culling state (XRCameraSubsystem.invertCulling).

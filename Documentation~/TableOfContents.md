@@ -11,6 +11,7 @@
     * [Point Clouds](point-cloud-manager)
     * [Environment Probes](environment-probe-manager)
     * [Participants](participant-manager)
+    * [Meshing](mesh-manager)
 * [Raycasting](index#ray-casting)
 * [Camera Image](cpu-camera-image)
 * [Migration From 1.0](migration-guide)

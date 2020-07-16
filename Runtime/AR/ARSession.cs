@@ -387,7 +387,7 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem?.running == true)
             {
                 m_TrackingMode = subsystem.requestedTrackingMode.ToTrackingMode();
-                if (subsystem.matchFrameRateEnabled)
+                if (subsystem.matchFrameRateEnabled && m_MatchFrameRate)
                 {
                     Application.targetFrameRate = subsystem.frameRate;
                     QualitySettings.vSyncCount = 0;

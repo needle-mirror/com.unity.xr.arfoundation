@@ -38,7 +38,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("The density of the generated mesh [0..1]. 1 will be highly tessellated while 0 will be very low.")]
+        [Tooltip("The density of the generated mesh [0..1]. 1 will be highly tessellated while 0 will be very low.\n\nThis feature may not be implemented on all platforms. See the platform-specific package documentation for your platform.")]
         [Range(0, 1)]
         float m_Density = 0.5f;
 
@@ -61,7 +61,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("If enabled, a normal is requested for each vertex.")]
+        [Tooltip("If enabled, a normal is requested for each vertex.\n\nThis feature may not be implemented on all platforms. See the platform-specific package documentation for your platform.")]
         bool m_Normals = true;
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("If enabled, a tangent is requested for each vertex.")]
+        [Tooltip("If enabled, a tangent is requested for each vertex.\n\nThis feature may not be implemented on all platforms. See the platform-specific package documentation for your platform.")]
         bool m_Tangents;
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("If enabled, a UV texture coordinate is requested for each vertex.")]
+        [Tooltip("If enabled, a UV texture coordinate is requested for each vertex.\n\nThis feature may not be implemented on all platforms. See the platform-specific package documentation for your platform.")]
         bool m_TextureCoordinates;
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("If enabled, a color value is requested for each vertex.")]
+        [Tooltip("If enabled, a color value is requested for each vertex.\n\nThis feature may not be implemented on all platforms. See the platform-specific package documentation for your platform.")]
         bool m_Colors;
 
         /// <summary>
