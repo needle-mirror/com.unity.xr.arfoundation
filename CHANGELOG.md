@@ -4,6 +4,8 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0-preview.6] - 2020-07-27
+
 ## [4.1.0-preview.5] - 2020-07-16
 ### Changes
 - Updated ["Configuring the AR Camera background using a Scriptable Render Pipeline"](../manual/ar-camera-background-with-scriptable-render-pipeline.html) documentation for further clarity on setup steps.

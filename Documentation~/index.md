@@ -60,9 +60,9 @@ The following platform packages and later implement the AR Foundation features i
 
 |Package Name           |Version            |
 |:---                   |:---               |
-|ARCore XR Plugin       |   4.1.0-preview.5 |
-|ARKit XR Plugin        |   4.1.0-preview.5 |
-|ARKit Face Tracking    |   4.1.0-preview.5 |
+|ARCore XR Plugin       |   4.1.0-preview.6 |
+|ARKit XR Plugin        |   4.1.0-preview.6 |
+|ARKit Face Tracking    |   4.1.0-preview.6 |
 |Magic Leap XR Plugin   |   6.0             |
 |Windows XR Plugin      |   4.0             |
 
@@ -217,7 +217,7 @@ The `ARCameraManager` enables features for the AR Camera, including the manageme
 
 | **Setting** | **Function** |
 |-|-|
-| **Focus Mode** | Can be *Auto* or *Fixed*. *Auto* enables the hardware Camera's automatic focus mode, while *Fixed* disables it (the focus is fixed and doesn't change automatically). |
+| **Focus Mode** | Can be *Auto* or *Fixed*. *Auto* enables the hardware Camera's automatic focus mode, while *Fixed* disables it (the focus is fixed and doesn't change automatically). _Note:_ The availability of *Auto* depends on camera hardware so it is possible that this preference will be ignored at runtime. |
 | **Light Estimation** | Can be *Disabled* or *Ambient intensity*. If not disabled, this instructs the platform to produce light estimation information. This estimates the average light intensity and color in the physical environment and can affect performance, so disable it if your application doesn't use it.|
 
 ### AR Camera background
