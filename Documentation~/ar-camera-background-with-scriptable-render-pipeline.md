@@ -6,7 +6,11 @@ AR Foundation supports the Universal Render Pipeline (URP) versions 7.0.0 or lat
 
 ## Basic URP configuration for AR Foundation
 
-To configure URP for use with AR Foundation, follow these steps:
+### Set up URP Render Pipeline Asset
+
+**Note:** The following basic steps for URP setup are not specific to AR Foundation and are included to indicate how to convert a legacy AR Foundation Project into a URP AR Foundation Project. If your Project was created from the [URP Project Template](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/creating-a-new-project-with-urp.html) or already you have a `UniversalRenderPipelineAsset` and `Pipeline Asset (Forward Renderer)` in your Project, [skip to the next section](#configuring-urp-to-work-with-arfoundation).
+
+To use the Universal Rendering Pipeline, you must create a `Pipeline Asset`. Follow these steps:
 
 1. In the Project's `Assets` folder, create a new folder named `Rendering`.
    ![`Rendering` folder in the Project's `Assets` folder](images/srp/rendering-folder.png "Rendering Folder")
@@ -16,7 +20,13 @@ To configure URP for use with AR Foundation, follow these steps:
     * An [UniversalRenderPipelineAsset](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest?subfolder=/api/UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset.html)
     * A [ForwardRenderer](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest?subfolder=/api/UnityEngine.Rendering.Universal.ForwardRenderer.html)
    ![Creating a Pipeline Asset](images/srp/create-pipeline-asset.png "Create Pipeline Asset")
-3. Select the `Forward Renderer`. In its Inspector, add an `ARBackgroundRendererFeature` to the list of Renderer Features.
+
+### Configuring URP to work with ARFoundation
+
+After you created a `Pipeline Asset`, you can configure the asset to work with AR Foundation. Follow these steps:
+
+1. Locate your `Forward Renderer` asset. If you created your Project from the [URP Project Template](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/creating-a-new-project-with-urp.html) then this will be located in the `Settings` folder in your Project's `Assets` folder.
+2. Select your `Forward Renderer` asset. In its Inspector, add an `ARBackgroundRendererFeature` to the list of Renderer Features.
    ![Adding an `ARBackgroundRendererFeature`](images/srp/add-renderer-feature.png "Adding an ARBackgroundRendererFeature")
-4. Access the Graphics section of the Project Settings window (menu: **Edit &gt; Project Settings**, then select **Graphics**), and select the `UniversalRenderPipelineAsset` for the **Scriptable Render Pipeline Settings** field.
+3. Access the Graphics section of the Project Settings window (menu: **Edit &gt; Project Settings**, then select **Graphics**), and select the `UniversalRenderPipelineAsset` for the **Scriptable Render Pipeline Settings** field.
    ![Setting the Pipeline Asset](images/srp/set-pipeline-asset.png "Set Pipeline Asset")

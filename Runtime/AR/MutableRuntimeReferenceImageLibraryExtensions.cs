@@ -36,8 +36,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="inputDeps">Input job dependencies (optional).</param>
         /// <returns>A [JobHandle](https://docs.unity3d.com/ScriptReference/Unity.Jobs.JobHandle.html) which can be used
         /// to chain together multiple tasks or to query for completion. May be safely discarded.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="library"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is <c>null</c>.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if <paramref cref="library"/> is `null`.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
         public static JobHandle ScheduleAddImageJob(
             this MutableRuntimeReferenceImageLibrary library,

@@ -2,10 +2,10 @@
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
 
-* [`ARCore XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.0/manual/index.html) on Android
-* [`ARKit XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.0/manual/index.html) on iOS
-* [`Magic Leap XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@3.0/manual/index.html) on Magic Leap
-* [`Windows XR Plugin`](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@3.0/manual/index.html) on HoloLens
+* [ARCore XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.0/manual/index.html) on Android
+* [ARKit XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.0/manual/index.html) on iOS
+* [Magic Leap XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@6.0/manual/index.html) on Magic Leap
+* [Windows XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@4.0/manual/index.html) on HoloLens
 
 AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support the following concepts:
 
@@ -86,6 +86,8 @@ Subsystems are implemented in other packages. To use AR Foundation, you must als
 
  - ARKit XR Plugin
  - ARCore XR Plugin
+ - Magic Leap XR Plugin
+ - Windows XR Plugin
 
 # Glossary
 
@@ -240,12 +242,19 @@ Adding the `AROcclusionManager` component to the Camera with the `ARCameraBackgr
 
 #### Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU
 
-Camera Textures are likely [external Textures](https://docs.unity3d.com/ScriptReference/Texture2D.CreateExternalTexture.html) and might not last beyond a frame boundary. It can be useful to copy the Camera image to a [Render Texture](https://docs.unity3d.com/Manual/class-RenderTexture.html) to persist it or process it further. The following code blits the Camera image to a Render Texture of your choice:
+Camera Textures are likely [external Textures](https://docs.unity3d.com/ScriptReference/Texture2D.CreateExternalTexture.html) and might not last beyond a frame boundary. It can be useful to copy the Camera image to a [Render Texture](https://docs.unity3d.com/Manual/class-RenderTexture.html) to persist it or process it further. The following code sets up a [command buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html) that will [clear the render target](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.ClearRenderTarget.html) and then perform a GPU copy or ["blit"](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.Blit.html) to a Render Texture of your choice immediately:
 
 ```csharp
-Graphics.Blit(null, m_MyRenderTexture, m_ARBackgroundCamera.material);
+var commandBuffer = new CommandBuffer();
+commandBuffer.name = "AR Camera Background Blit Pass";
+var texture = !m_ArCameraBackground.material.HasProperty("_MainTex") ? null : m_ArCameraBackground.material.GetTexture("_MainTex");
+Graphics.SetRenderTarget(renderTexture.colorBuffer, renderTexture.depthBuffer);
+commandBuffer.ClearRenderTarget(true, false, Color.clear);
+commandBuffer.Blit(texture, BuiltinRenderTextureType.CurrentActive, m_ArCameraBackground.material);
+Graphics.ExecuteCommandBuffer(commandBuffer);
 ```
 
+Note: `Graphics.SetRenderTarget` will overwrite the current render target after executing the command buffer.
 
 ### Accessing the Camera Image on the CPU
 
@@ -298,11 +307,16 @@ The following table summarizes the other parameters:
 | `hitResults` | The results for both methods are stored in this `List`, which must not be `null`. This lets you reuse the same `List` object to avoid garbage-collected allocations. |
 | `trackableTypeMask` | The type(s) of trackable(s) to hit test against. This is a flag, so multiple types can be bitwise OR'd together, for example, `TrackableType.PlaneWithinPolygon` &#124; `FeaturePoint` |
 
+## Meshing
+
+See documentation on the [mesh manager](mesh-manager.md).
+
 # Technical details
 
 ## Requirements
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.2
-* 2019.3
+* 2019.4
+* 2020.1
+* 2020.2

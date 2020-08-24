@@ -117,7 +117,8 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The requested maximum number of moving images to track in realtime. Support may vary between devices and providers. Check
-        /// for support at runtime with <see cref="subsystem"/><c>.SubsystemDescriptor.supportsMovingImages</c>.
+        /// for support at runtime with <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor}.descriptor"/>'s
+        /// `supportsMovingImages` property.
         /// </summary>
         public int requestedMaxNumberOfMovingImages
         {

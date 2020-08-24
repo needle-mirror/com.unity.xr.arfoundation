@@ -9,7 +9,8 @@ namespace UnityEngine.XR.ARFoundation
     public struct ARRaycastHit : IEquatable<ARRaycastHit>, IComparable<ARRaycastHit>
     {
         /// <summary>
-        /// Constructor invoked by the <see cref="ARSessionOrigin.Raycast"/> methods.
+        /// Constructor invoked by <see cref="ARRaycastManager.Raycast(Vector2, System.Collections.Generic.List{ARRaycastHit}, TrackableType)"/>
+        /// and <see cref="ARRaycastManager.Raycast(Ray, System.Collections.Generic.List{ARRaycastHit}, TrackableType)"/>.
         /// </summary>
         /// <param name="hit">Session-relative raycast hit data.</param>
         /// <param name="distance">The distance, in Unity world space, of the hit.</param>

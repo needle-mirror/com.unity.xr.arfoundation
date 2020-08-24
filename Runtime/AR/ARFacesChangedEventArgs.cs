@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Event arguments for the <see cref="ARPlaneManager.FacesChanged"/> event.
+    /// Event arguments for the <see cref="ARFaceManager.facesChanged"/> event.
     /// </summary>
     public struct ARFacesChangedEventArgs : IEquatable<ARFacesChangedEventArgs>
     {
@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARFace> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="ARFace"/>s udpated since the last event.
+        /// The list of <see cref="ARFace"/>s updated since the last event.
         /// </summary>
         public List<ARFace> updated { get; private set; }
 
@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARFace> removed { get; private set; }
 
         /// <summary>
-        /// Constructs an <see cref="ARPlaneChangedEventArgs"/>.
+        /// Constructs an <see cref="ARFacesChangedEventArgs"/>.
         /// </summary>
         /// <param name="added">The list of <see cref="ARFace"/>s added since the last event.</param>
         /// <param name="updated">The list of <see cref="ARFace"/>s updated since the last event.</param>

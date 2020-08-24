@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Event arguments for the <see cref="ARPointCloudManager.PointCloudChanged"/> event.
+    /// Event arguments for the <see cref="ARPointCloudManager.pointCloudsChanged"/> event.
     /// </summary>
     public struct ARPointCloudChangedEventArgs : IEquatable<ARPointCloudChangedEventArgs>
     {

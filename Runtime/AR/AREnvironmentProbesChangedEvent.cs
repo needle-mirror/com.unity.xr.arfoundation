@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<AREnvironmentProbe> removed { get; private set; }
 
         /// <summary>
-        /// Constructs an <see cref="ARPlaneChangedEventArgs"/>.
+        /// Constructs an <see cref="AREnvironmentProbesChangedEvent"/>.
         /// </summary>
         /// <param name="added">The list of <see cref="AREnvironmentProbe"/>s added since the last event.</param>
         /// <param name="updated">The list of <see cref="AREnvironmentProbe"/>s updated since the last event.</param>

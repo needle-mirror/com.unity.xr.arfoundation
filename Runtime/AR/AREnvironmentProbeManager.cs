@@ -163,12 +163,12 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Creates a new environment probe at <paramref name="pose"/> with <paramref name="scale"/> and <paramref name="size"/>
-        /// if supported by the subsystem. Use <see cref="subsystem"/><c>.SubsystemDescriptor.supportsManualPlacement</c> to determine
-        /// support for this feature. If successful, a new <c>GameObject</c> with an <see cref="AREnvironmentProbe"/> will be created
+        /// if supported by the subsystem. Use the <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.descriptor"/>'s
+        /// `supportsManualPlacement` property to determine support for this feature. If successful, a new
+        /// <c>GameObject</c> with an <see cref="AREnvironmentProbe"/> will be created
         /// immediately; however, the provider may not report the environment probe as added until a future frame. Check the
         /// status of the probe by inspecting its
-        /// <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}.pending"/>
-        /// property.
+        /// <see cref="ARTrackable{TSessionRelativeData,TTrackable}.pending"/> property.
         /// </summary>
         /// <param name="pose">The position and rotation at which to create the new environment probe.</param>
         /// <param name="scale">The scale of the new environment probe.</param>
@@ -177,7 +177,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <exception cref="System.InvalidOperationException">Thrown if this manager is not enabled</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if this manager has no subsystem.</exception>
         /// <exception cref="System.NotSupportedException">Thrown if manual placement is not supported by this subsystem.
-        /// Check for support with <see cref="subsystem"/><c>.SubsystemDescriptor.supportsManualPlacement</c></exception>
+        /// Check for support on the <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.descriptor"/>'s
+        ///     `supportsManualPlacement` property.</exception>
         public AREnvironmentProbe AddEnvironmentProbe(Pose pose, Vector3 scale, Vector3 size)
         {
             if (!enabled)
@@ -207,23 +208,26 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Remove an existing environment probe. Support for this feature is provider-specific. Check for support with
-        /// <see cref="subsystem"/><c>.SubsystemDescriptor.supportsRemovalOfManual</c> and
-        /// <see cref="subsystem"/><c>.SubsystemDescriptor.supportsRemovalOfAutomatic</c>.
+        /// the <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.descriptor"/>'s
+        /// `supportsRemovalOfManual` and `supportsRemovalOfAutomatic` properties.
         /// </summary>
         /// <param name="probe">The environment probe to remove</param>
         /// <returns><c>true</c> if the environment probe was removed, otherwise <c>false</c>.</returns>
         /// <exception cref="System.InvalidOperationException">Thrown if this manager is not enabled.</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="subsystem"/> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="probe"/> is <c>null</c>.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if
+        ///     <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.subsystem"/> is `null`.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="probe"/> is `null`.</exception>
         /// <exception cref="System.InvalidOperationException">
         /// Thrown if the environment probe was manually placed, but removal of manually placed probes is not supported.
-        /// You can check for this case with <see cref="AREnvironmentProbe.placementType"/> and
-        /// <see cref="subsystem"/><c>.SubsystemDescriptor.supportsRemovalOfManual</c>
+        /// You can check for this case with <see cref="AREnvironmentProbe.placementType"/> and the
+        /// <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.descriptor"/>'s
+        /// 'supportsRemovalOfManual` property.
         /// </exception>
         /// <exception cref="System.InvalidOperationException">
         /// Thrown if the environment probe was automatically placed, but removal of automatically placed probes is not supported.
-        /// You can check for this case with <see cref="AREnvironmentProbe.placementType"/> and
-        /// <see cref="subsystem"/><c>.SubsystemDescriptor.supportsRemovalOfAutomatic</c>
+        /// You can check for this case with <see cref="AREnvironmentProbe.placementType"/> and the
+        /// <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.descriptor"/>'s
+        /// `supportsRemovalOfAutomatic` property.
         /// </exception>
         public bool RemoveEnvironmentProbe(AREnvironmentProbe probe)
         {

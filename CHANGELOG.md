@@ -4,13 +4,28 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.8] - 2020-08-24
+
+### Fixes
+- Updated "[Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU](../manual/index.html#copying-the-camera-texture-to-a-render-texture-when-accessing-the-camera-image-on-the-gpu)" documentation to use a '[Command Buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)' instead of a '[Graphics.Blit()](https://docs.unity3d.com/ScriptReference/Graphics.Blit.html)' to fix an issue where blit would not work on certain devices.
+- Fixed a `NullReferenceException` which would happen if you invoked [`ARSession.CheckAvailability()`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARSession.html#UnityEngine_XR_ARFoundation_ARSession_CheckAvailability) when the ARSession's GameObject was disabled and had never been enabled.
+
+## [4.0.6] - 2020-07-27
+### Fixes
+- The choice of whether to use the legacy or Universal render pipeline was based on an incorrect GraphicsSettings parameter (`renderPipelineAsset` instead of `currentRenderPipeline`). This meant that certain quality settings may not have been respected properly.
+- Fixed a bug where it was possible for the ARSession component to set the [Application.targetFrameRate](https://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html) even when [`matchFrameRateRequested`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARSession.html#UnityEngine_XR_ARFoundation_ARSession_matchFrameRateRequested) was `false`.
+- Updated ["Configuring the AR Camera background using a Scriptable Render Pipeline"](../manual/ar-camera-background-with-scriptable-render-pipeline.html) documentation for further clarity on setup steps.
+
+### Changes
+- Update [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2) to 3.2.13.
+
 ## [4.0.2] - 2020-05-29
 ### New
 - The `ARCameraManager` now invokes `XRCameraSubsystem.OnBeforeBackgroundRender` immediately before rendering the camera background.
 - Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the [migration guide](../manual/migration-guide-3.html#xr-plug-in-management) explaining how to use it.
 
 ### Changes
-- Updating dependency on AR Subsystyems to 4.0.0.
+- Updating dependency on AR Subsystyems to 4.0.1.
 - Changed `XRCameraImage` to `XRCpuImage` along with APIs that used this type (e.g., `ARCameraManager.TryGetLatestImage`). See the [migration guide](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/migration-guide-3.html#xrcameraimage-is-now-xrcpuimage) for more details.
 - The `ARMeshManager` no longer creates and destroys an [`XRMeshSubsystem`](https://docs.unity3d.com/ScriptReference/XR.XRMeshSubsystem.html). Instead, it relies on [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html) to create and destroy the subsystem. The `ARMeshManager` still starts and stops it.
 

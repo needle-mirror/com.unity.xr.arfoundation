@@ -22,7 +22,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Constructs a <see cref="TrackableCollection{TSessionRelativeData, TTrackable}"/>.
+        /// Constructs a <see cref="TrackableCollection{TTrackable}"/>.
         /// </summary>
         /// <param name="trackables"></param>
         public TrackableCollection(Dictionary<TrackableId, TTrackable> trackables)
@@ -113,7 +113,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="lhs">The <see cref="TrackableCollection{TTrackable}"/> on the left hand side of the operator.</param>
         /// <param name="rhs">The <see cref="TrackableCollection{TTrackable}"/> on the right hand side of the operator.</param>
         /// <returns><c>true</c> if the two <see cref="TrackableCollection{TTrackable}"/>s are considered equivalent and <c>false</c> otherwise.</returns>
-        /// <seealso cref="TrackableCollection.Equals(TrackableCollection{TTrackable})"/>
+        /// <seealso cref="TrackableCollection{TTrackable}.Equals(TrackableCollection{TTrackable})"/>
         public static bool operator ==(TrackableCollection<TTrackable> lhs, TrackableCollection<TTrackable> rhs)
         {
             return lhs.Equals(rhs);
@@ -126,7 +126,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="lhs">The <see cref="TrackableCollection{TTrackable}"/> on the left hand side of the operator.</param>
         /// <param name="rhs">The <see cref="TrackableCollection{TTrackable}"/> on the right hand side of the operator.</param>
         /// <returns><c>true</c> if the two <see cref="TrackableCollection{TTrackable}"/>s are not considered equivalent and <c>false</c> otherwise.</returns>
-        /// <seealso cref="TrackableCollection.Equals(TrackableCollection{TTrackable})"/>
+        /// <seealso cref="TrackableCollection{TTrackable}.Equals(TrackableCollection{TTrackable})"/>
         public static bool operator !=(TrackableCollection<TTrackable> lhs, TrackableCollection<TTrackable> rhs)
         {
             return !lhs.Equals(rhs);

@@ -3,7 +3,7 @@
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Container for SystemState event arguments. Used by the <see cref="ARSubsystemManager"/>.
+    /// Event arguments for <see cref="ARSession.stateChanged"/>.
     /// </summary>
     public struct ARSessionStateChangedEventArgs : IEquatable<ARSessionStateChangedEventArgs>
     {

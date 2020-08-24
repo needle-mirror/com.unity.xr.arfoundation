@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARFoundation
         public TrackableCollection<TTrackable> trackables => new TrackableCollection<TTrackable>(m_Trackables);
 
         /// <summary>
-        /// Iterates over every instantiated <see cref="ARTrackable"/> and
+        /// Iterates over every instantiated <see cref="ARTrackable{TSessionRelativeData,TTrackable}"/>
         /// activates or deactivates its <c>GameObject</c> based on the value of
         /// <paramref name="active"/>.
         /// This calls
@@ -101,7 +101,8 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Update is called once per frame. This component's internal state
-        /// is first updated, and then the <see cref="trackablesChanged"/> event is invoked.
+        /// is first updated, and then an event notifying whether any trackables have been added, removed, or updated
+        /// is invoked by the derived manager.
         /// </summary>
         protected virtual void Update()
         {
@@ -195,7 +196,7 @@ namespace UnityEngine.XR.ARFoundation
         { }
 
         /// <summary>
-        /// Creates a <see cref="TTrackable"/> immediately, leaving it in a "pending" state.
+        /// Creates a <typeparamref name="TTrackable"/> immediately, leaving it in a "pending" state.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -206,8 +207,6 @@ namespace UnityEngine.XR.ARFoundation
         /// </para><para>
         /// This method does not invoke <see cref="OnTrackablesChanged(List{TTrackable}, List{TTrackable}, List{TTrackable})"/>,
         /// so no "added" notifications will occur until the next call to <see cref="Update"/>.
-        /// However, this method does invoke <see cref="ARTrackable{TSessionRelativeData, TTrackable}.updated"/>
-        /// on the new trackable.
         /// </para><para>
         /// The trackable will appear in the <see cref="trackables"/> collection immediately.
         /// </para>
@@ -224,11 +223,8 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// If in a "pending" state, the trackable with <paramref name="trackableId"/>'s
-        /// <see cref="ARTrackable{TSessionRelativeData, TTrackable}.removed"/>
-        /// event is invoked, and the trackable's <c>GameObject</c> destroyed if
-        /// <see cref="ARTrackable{TSessionRelativeData, TTrackable}.destroyOnRemoval"/> is true.
-        /// Otherwise, this method has no effect.
+        /// If in a "pending" state and <see cref="ARTrackable{TSessionRelativeData, TTrackable}.destroyOnRemoval"/> is
+        /// `true`, this method destroys the trackable's <c>GameObject</c>. Otherwise, this method has no effect.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -252,8 +248,6 @@ namespace UnityEngine.XR.ARFoundation
         /// This method does not invoke <see cref="OnTrackablesChanged(List{TTrackable}, List{TTrackable}, List{TTrackable})"/>,
         /// so no "removed" notifications will occur until the next call to <see cref="Update"/> (and only if it was
         /// previously reported as "added").
-        /// However, this method does invoke <see cref="ARTrackable{TSessionRelativeData, TTrackable}.removed"/>
-        /// on the trackable.
         /// </para>
         /// </remarks>
         /// <param name="trackableId">The id of the trackable to destroy.</param>

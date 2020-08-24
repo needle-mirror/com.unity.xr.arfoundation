@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     public struct ARCameraFrameEventArgs : IEquatable<ARCameraFrameEventArgs>
     {
         /// <summary>
-        /// The <see cref="LightEstimationData" /> associated with this frame.
+        /// The <see cref="ARLightEstimationData" /> associated with this frame.
         /// </summary>
         public ARLightEstimationData lightEstimation { get; set; }
 
@@ -29,7 +29,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Gets or sets the display matrix for use in the shader used
-        /// by the <see cref="ARFoundationBackgroundRenderer"/>.
+        /// by the <see cref="ARCameraBackground"/>.
         /// Use <c>displayMatrix.HasValue</c> to determine if this data is available.
         /// </summary>
         public Matrix4x4? displayMatrix { get; set; }
