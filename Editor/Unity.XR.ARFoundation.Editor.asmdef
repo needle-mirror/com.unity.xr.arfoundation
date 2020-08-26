@@ -3,7 +3,9 @@
     "references": [
         "Unity.XR.ARFoundation",
         "Unity.XR.ARSubsystems",
-        "UnityEngine.SpatialTracking"
+        "UnityEngine.SpatialTracking",
+        "Unity.XR.Management",
+        "Unity.XR.Management.Editor"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [

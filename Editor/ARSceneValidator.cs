@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEditor.Callbacks;
 using UnityEngine.XR.ARFoundation;
+using UnityEditor.XR.Management;
 
 namespace UnityEditor.XR.ARFoundation
 {
@@ -23,6 +24,17 @@ namespace UnityEditor.XR.ARFoundation
                 Debug.LogWarningFormat(
                     "The following scenes contain AR components but no ARSession. The ARSession component controls the AR lifecycle, so these components will not do anything at runtime. Was this intended?{0}",
                     scenes);
+            }
+
+            var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            if(generalSettings != null && generalSettings.Manager != null &&  generalSettings.Manager.loaders != null)
+            {
+                 int loaderCount = generalSettings.Manager.loaders.Count;
+                 if(loaderCount <= 0 && s_SessionCount > 0)
+                 {
+                      Debug.LogWarning(
+                    "There are scenes that contain an ARSession, but no XR plug-in providers have been selected for the current platform. To make a plug-in provider available at runtime go to Project Settings > XR Plug-in Management and enable at least one for the target platform.");
+                 }
             }
 
             s_ScenesWithARTypes.Clear();

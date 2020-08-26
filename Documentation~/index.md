@@ -60,9 +60,9 @@ The following platform packages and later implement the AR Foundation features i
 
 |Package Name           |Version            |
 |:---                   |:---               |
-|ARCore XR Plugin       |   4.1.0-preview.6 |
-|ARKit XR Plugin        |   4.1.0-preview.6 |
-|ARKit Face Tracking    |   4.1.0-preview.6 |
+|ARCore XR Plugin       |   4.1.0-preview.7 |
+|ARKit XR Plugin        |   4.1.0-preview.7 |
+|ARKit Face Tracking    |   4.1.0-preview.7 |
 |Magic Leap XR Plugin   |   6.0             |
 |Windows XR Plugin      |   4.0             |
 
@@ -244,12 +244,19 @@ Adding the `AROcclusionManager` component to the Camera with the `ARCameraBackgr
 
 #### Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU
 
-Camera Textures are likely [external Textures](https://docs.unity3d.com/ScriptReference/Texture2D.CreateExternalTexture.html) and might not last beyond a frame boundary. It can be useful to copy the Camera image to a [Render Texture](https://docs.unity3d.com/Manual/class-RenderTexture.html) to persist it or process it further. The following code blits the Camera image to a Render Texture of your choice:
+Camera Textures are likely [external Textures](https://docs.unity3d.com/ScriptReference/Texture2D.CreateExternalTexture.html) and might not last beyond a frame boundary. It can be useful to copy the Camera image to a [Render Texture](https://docs.unity3d.com/Manual/class-RenderTexture.html) to persist it or process it further. The following code sets up a [command buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html) that will [clear the render target](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.ClearRenderTarget.html) and then perform a GPU copy or ["blit"](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.Blit.html) to a Render Texture of your choice immediately:
 
 ```csharp
-Graphics.Blit(null, m_MyRenderTexture, m_ARBackgroundCamera.material);
+var commandBuffer = new CommandBuffer();
+commandBuffer.name = "AR Camera Background Blit Pass";
+var texture = !m_ArCameraBackground.material.HasProperty("_MainTex") ? null : m_ArCameraBackground.material.GetTexture("_MainTex");
+Graphics.SetRenderTarget(renderTexture.colorBuffer, renderTexture.depthBuffer);
+commandBuffer.ClearRenderTarget(true, false, Color.clear);
+commandBuffer.Blit(texture, BuiltinRenderTextureType.CurrentActive, m_ArCameraBackground.material);
+Graphics.ExecuteCommandBuffer(commandBuffer);
 ```
 
+Note: `Graphics.SetRenderTarget` will overwrite the current render target after executing the command buffer.
 
 ### Accessing the Camera Image on the CPU
 

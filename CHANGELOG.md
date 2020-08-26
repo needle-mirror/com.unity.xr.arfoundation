@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0-preview.7] - 2020-08-26
+### Changes
+- Added a warning when an `ARSession` is used in a scene (or scenes), but no providers are selected in [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2) for the current build platform.
+
+### Fixes
+- Updated "[Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU](../manual/index.html#copying-the-camera-texture-to-a-render-texture-when-accessing-the-camera-image-on-the-gpu)" documentation to use a '[Command Buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)' instead of a '[Graphics.Blit()](https://docs.unity3d.com/ScriptReference/Graphics.Blit.html)' to fix an issue where blit would not work on certain devices.
+- Fixed a `NullReferenceException` which would happen if you invoked [`ARSession.CheckAvailability()`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARSession.html#UnityEngine_XR_ARFoundation_ARSession_CheckAvailability) when the ARSession's GameObject was disabled and had never been enabled.
+
 ## [4.1.0-preview.6] - 2020-07-27
 
 ## [4.1.0-preview.5] - 2020-07-16

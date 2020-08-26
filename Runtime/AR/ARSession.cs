@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.Management;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -197,6 +198,20 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        static XRSessionSubsystem GetSubsystem()
+        {
+            if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
+            {
+                var loader = XRGeneralSettings.Instance.Manager.activeLoader;
+                if (loader != null)
+                {
+                    return loader.GetLoadedSubsystem<XRSessionSubsystem>();
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Start checking the availability of XR on the current device.
         /// </summary>
@@ -220,9 +235,8 @@ namespace UnityEngine.XR.ARFoundation
 
             // Normally, the subsystem is created in OnEnable, but users may
             // want to check availability before enabling the session.
-            s_Instance.EnsureSubsystemInstanceSet();
-
-            if (s_Instance.subsystem == null)
+            var subsystem = GetSubsystem();
+            if (subsystem == null)
             {
                 // No subsystem means there is no support on this platform.
                 state = ARSessionState.Unsupported;
@@ -230,7 +244,7 @@ namespace UnityEngine.XR.ARFoundation
             else if (state == ARSessionState.None)
             {
                 state = ARSessionState.CheckingAvailability;
-                var availabilityPromise = s_Instance.subsystem.GetAvailabilityAsync();
+                var availabilityPromise = subsystem.GetAvailabilityAsync();
                 yield return availabilityPromise;
                 s_Availability = availabilityPromise.result;
 
@@ -242,9 +256,9 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     bool supportsInstall =
 #if UNITY_2020_2_OR_NEWER
-                        s_Instance.subsystem.subsystemDescriptor.supportsInstall;
+                        subsystem.subsystemDescriptor.supportsInstall;
 #else
-                        s_Instance.subsystem.SubsystemDescriptor.supportsInstall;
+                        subsystem.SubsystemDescriptor.supportsInstall;
 #endif
                     state = supportsInstall ? ARSessionState.NeedsInstall : ARSessionState.Unsupported;
                 }
@@ -292,11 +306,12 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             // We can't get this far without having had a valid subsystem at one point.
-            if (s_Instance.subsystem == null)
+            var subsystem = GetSubsystem();
+            if (subsystem == null)
                 throw new InvalidOperationException("The subsystem was destroyed while attempting to install AR software.");
 
             state = ARSessionState.Installing;
-            var installPromise = s_Instance.subsystem.InstallAsync();
+            var installPromise = subsystem.InstallAsync();
             yield return installPromise;
             var installStatus = installPromise.result;
 
@@ -378,7 +393,6 @@ namespace UnityEngine.XR.ARFoundation
 
         void Awake()
         {
-            s_Instance = this;
             s_NotTrackingReason = NotTrackingReason.None;
         }
 
@@ -445,8 +459,6 @@ namespace UnityEngine.XR.ARFoundation
             // Only set back to ready if we were previously running
             if (state > ARSessionState.Ready)
                 state = ARSessionState.Ready;
-
-            s_Instance = null;
         }
 
         static void UpdateNotTrackingReason()
@@ -455,8 +467,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 case ARSessionState.None:
                 case ARSessionState.SessionInitializing:
-                    s_NotTrackingReason = (s_Instance == null || s_Instance.subsystem == null) ?
-                        NotTrackingReason.Unsupported : s_Instance.subsystem.notTrackingReason;
+                    s_NotTrackingReason = GetSubsystem()?.notTrackingReason ?? NotTrackingReason.Unsupported;
                     break;
                 case ARSessionState.Unsupported:
                     s_NotTrackingReason = NotTrackingReason.Unsupported;
@@ -471,12 +482,11 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        static ARSessionState s_State;
+        // Internal for tests
+        internal static ARSessionState s_State;
 
         static NotTrackingReason s_NotTrackingReason;
 
         static SessionAvailability s_Availability;
-
-        static ARSession s_Instance;
     }
 }
