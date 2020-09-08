@@ -4,6 +4,11 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.1.5] - 2020-09-08
+### Fixes
+- Updated ["Configuring the AR Camera background using a Scriptable Render Pipeline"](../manual/ar-camera-background-with-scriptable-render-pipeline.html) documentation for further clarity on setup steps.
+- Updated ["Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU"](../manual/index.html#copying-the-camera-texture-to-a-render-texture-when-accessing-the-camera-image-on-the-gpu) documentation to use a '[Command Buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)' instead of a '[Graphics.Blit()](https://docs.unity3d.com/ScriptReference/Graphics.Blit.html)' to fix an issue where blit would not work on certain devices.
+
 ## [3.1.3] - 2020-04-13
 ### Fixes
 - Fixed issue that broke the camera background rendering when URP post-processing was enabled on the AR camera.
