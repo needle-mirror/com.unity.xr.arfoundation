@@ -1,3 +1,6 @@
+---
+uid: arfoundation-tracked-object-manager
+---
 # AR tracked object manager
 
 The tracked object manager is a type of [trackable manager](trackable-managers.md).

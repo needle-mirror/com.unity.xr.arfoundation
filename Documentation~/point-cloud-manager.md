@@ -1,3 +1,6 @@
+---
+uid: arfoundation-point-cloud-manager
+---
 # AR point cloud manager
 
 The point cloud manager is a type of [trackable manager](trackable-managers.md).
@@ -12,20 +15,20 @@ A point cloud is considered a trackable, while individual feature points are not
 
 ## Feature point properties
 
-Each feature point has a position, and optionally an identifier and confidence value. These are stored as parallel arrays of `Vector3`, `ulong`, and `float`, respectively.
+Each feature point has a position, and optionally an identifier and confidence value. These are stored as parallel arrays of [Vector3](xref:UnityEngine.Vector3), `ulong`, and `float`, respectively.
 
 ### Position
 
-Each feature point has a 3D position, reported in session space. You can access positions via [`ARPointCloud.positions`](../api/UnityEngine.XR.ARFoundation.ARPointCloud.html##UnityEngine_XR_ARFoundation_ARPointCloudManager_positions).
+Each feature point has a 3D position, reported in session space. You can access positions via [`ARPointCloud.positions`](xref:UnityEngine.XR.ARFoundation.ARPointCloud.positions).
 
 ### Identifier
 
-Each feature point can have a unique identifier, represented as a `ulong`. You can access identifiers via [`ARPointCloud.identifiers`](../api/UnityEngine.XR.ARFoundation.ARPointCloud.html##UnityEngine_XR_ARFoundation_ARPointCloudManager_identifiers).
+Each feature point can have a unique identifier, represented as a `ulong`. You can access identifiers via [`ARPointCloud.identifiers`](xref:UnityEngine.XR.ARFoundation.ARPointCloud.identifiers).
 
 This array is parallel to `positions`. This feature varies by provider. Check the `ARPointCloudManager.descriptor`.
 
 ### Confidence value
 
-Feature points can also have confidence values, represented as `float`s in the 0..1 range. You can access confidence values via [`ARPointCloud.confidenceValues`](../api/UnityEngine.XR.ARFoundation.ARPointCloud.html##UnityEngine_XR_ARFoundation_ARPointCloudManager_confidenceValues).
+Feature points can also have confidence values, represented as `float`s in the 0..1 range. You can access confidence values via [`ARPointCloud.confidenceValues`](xref:UnityEngine.XR.ARFoundation.ARPointCloud.confidenceValues).
 
 This array is parallel to `positions`. This feature varies by provider. Check the `SubsystemDescriptor` (`ARPointCloud.descriptor`).

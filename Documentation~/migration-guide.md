@@ -1,3 +1,6 @@
+---
+uid: arfoundation-migration-guide-1
+---
 # Migration Guide
 
 This guide covers the differences between AR Foundation 1.0 and 2.x.

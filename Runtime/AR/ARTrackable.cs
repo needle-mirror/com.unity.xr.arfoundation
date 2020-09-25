@@ -4,12 +4,30 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
+    /// The base class for all <see cref="ARTrackable{TSessionRelativeData,TTrackable}"/> types.
+    /// </summary>
+    /// <remarks>
+    /// A "trackable" is something that is tracked in the physical environment. These include:
+    /// - <see cref="ARAnchor"/>
+    /// - <see cref="AREnvironmentProbe"/>
+    /// - <see cref="ARFace"/>
+    /// - <see cref="ARHumanBody"/>
+    /// - <see cref="ARParticipant"/>
+    /// - <see cref="ARPlane"/>
+    /// - <see cref="ARPointCloud"/>
+    /// - <see cref="ARRaycast"/>
+    /// - <see cref="ARTrackedImage"/>
+    /// - <see cref="ARTrackedObject"/>
+    /// </remarks>
+    public abstract class ARTrackable : MonoBehaviour { }
+
+    /// <summary>
     /// A generic component for trackables. A "trackable" is a feature in the physical
     /// environment that can be detected and tracked by an XR device.
     /// </summary>
     /// <typeparam name="TSessionRelativeData">The raw, session relative data type used to update this trackable.</typeparam>
     /// <typeparam name="TTrackable">The concrete class which derives from <see cref="ARTrackable{TSessionRelativeData, TTrackable}"/>.</typeparam>
-    public class ARTrackable<TSessionRelativeData, TTrackable> : MonoBehaviour
+    public class ARTrackable<TSessionRelativeData, TTrackable> : ARTrackable
         where TSessionRelativeData : struct, ITrackable
         where TTrackable : ARTrackable<TSessionRelativeData, TTrackable>
     {
@@ -26,26 +44,20 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         public bool destroyOnRemoval
         {
-            get { return m_DestroyOnRemoval; }
-            set { m_DestroyOnRemoval = value; }
+            get => m_DestroyOnRemoval;
+            set => m_DestroyOnRemoval = value;
         }
 
         /// <summary>
         /// The <c>TrackableId</c> associated with this trackable. <c>TrackableId</c>s
         /// are typically unique to a particular session.
         /// </summary>
-        public TrackableId trackableId
-        {
-            get { return sessionRelativeData.trackableId; }
-        }
+        public TrackableId trackableId => sessionRelativeData.trackableId;
 
         /// <summary>
         /// The tracking state associated with this trackable.
         /// </summary>
-        public TrackingState trackingState
-        {
-            get { return sessionRelativeData.trackingState; }
-        }
+        public TrackingState trackingState => sessionRelativeData.trackingState;
 
         /// <summary>
         /// Pending means the trackable was added manually (usually via an <c>AddTrackable</c>-style method

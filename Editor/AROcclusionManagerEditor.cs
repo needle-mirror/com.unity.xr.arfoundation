@@ -21,44 +21,38 @@ namespace UnityEditor.XR.ARFoundation
             bool isHumanSegmentationDepthEnabled = ((HumanSegmentationDepthMode)m_HumanSegmentationDepthMode.enumValueIndex).Enabled();
             bool isHumanDepthEnabled = isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled;
 
+            if (!isEnvDepthEnabled && !isHumanDepthEnabled)
+            {
+                EditorGUILayout.HelpBox("Automatic occlusion is disabled.",
+                                        MessageType.Warning);
+            }
+
             EditorGUILayout.LabelField("Environment Depth", EditorStyles.boldLabel);
             using (new EditorGUI.IndentLevelScope(1))
             {
                 EditorGUILayout.PropertyField(m_EnvironmentDepthMode);
-
-                if (!isEnvDepthEnabled && !isHumanDepthEnabled)
-                {
-                    EditorGUILayout.HelpBox("Automatic occlusion during runtime rendering will be disabled with "
-                                            + $"{m_EnvironmentDepthMode.displayName} set to "
-                                            + $"{m_EnvironmentDepthMode.enumDisplayNames[m_EnvironmentDepthMode.enumValueIndex]}.",
-                                            MessageType.Warning);
-                }
             }
 
             EditorGUILayout.LabelField("Human Segmentation", EditorStyles.boldLabel);
             using (new EditorGUI.IndentLevelScope(1))
             {
                 EditorGUILayout.PropertyField(m_HumanSegmentationStencilMode);
-                if (!isEnvDepthEnabled && !isHumanSegmentationStencilEnabled)
+                if (!isHumanSegmentationDepthEnabled && isHumanSegmentationStencilEnabled)
                 {
                     using (new EditorGUI.IndentLevelScope(1))
                     {
-                        EditorGUILayout.HelpBox("Automatic occlusion during runtime rendering will be disabled with "
-                                                + $"{m_HumanSegmentationStencilMode.displayName} set to "
-                                                + $"{m_HumanSegmentationStencilMode.enumDisplayNames[m_HumanSegmentationStencilMode.enumValueIndex]}.",
-                            MessageType.Warning);
+                        EditorGUILayout.HelpBox($"Human occlusion also requires {m_HumanSegmentationDepthMode.displayName} to be enabled.",
+                                                MessageType.Warning);
                     }
                 }
 
                 EditorGUILayout.PropertyField(m_HumanSegmentationDepthMode);
-                if (!isEnvDepthEnabled && !isHumanSegmentationDepthEnabled)
+                if (!isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled)
                 {
                     using (new EditorGUI.IndentLevelScope(1))
                     {
-                        EditorGUILayout.HelpBox("Automatic occlusion during runtime rendering will be disabled with "
-                                                + $"{m_HumanSegmentationDepthMode.displayName} set to "
-                                                + $"{m_HumanSegmentationDepthMode.enumDisplayNames[m_HumanSegmentationDepthMode.enumValueIndex]}.",
-                            MessageType.Warning);
+                        EditorGUILayout.HelpBox($"Human occlusion also requires {m_HumanSegmentationStencilMode.displayName} to be enabled.",
+                                                MessageType.Warning);
                     }
                 }
             }

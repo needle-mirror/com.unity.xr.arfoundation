@@ -10,6 +10,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// The ARPoseDriver component applies the current Pose value of an AR device to the transform of the GameObject.
     /// </summary>
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPoseDriver) + ".html")]
     public class ARPoseDriver : MonoBehaviour
     {
         internal struct NullablePose

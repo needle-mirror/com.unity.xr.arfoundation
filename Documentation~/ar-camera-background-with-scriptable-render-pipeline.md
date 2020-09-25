@@ -1,3 +1,6 @@
+---
+uid: arfoundation-ar-camera-background-with-scriptable-render-pipeline
+---
 # Configuring the AR Camera background using a Scriptable Render Pipeline
 
 AR Foundation supports the Universal Render Pipeline (URP) versions 7.0.0 or later. See the [URP Install and Configure documentation](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest?subfolder=/manual/InstallingAndConfiguringURP.html) for more details on switching to URP.

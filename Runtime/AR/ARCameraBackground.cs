@@ -41,7 +41,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(ARCameraManager))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARCameraBackground) + ".html")]
     public class ARCameraBackground : MonoBehaviour
     {
         /// <summary>
@@ -68,6 +68,11 @@ namespace UnityEngine.XR.ARFoundation
         /// Property ID for the shader parameter for the display transform matrix.
         /// </summary>
         static readonly int k_DisplayTransformId = Shader.PropertyToID(k_DisplayTransformName);
+
+        /// <summary>
+        /// The Property ID for the shader parameter for the forward vector's scaled length.
+        /// </summary>
+        static readonly int k_CameraForwardScaleId = Shader.PropertyToID("_UnityCameraForwardScale");
 
         /// <summary>
         /// The camera to which the projection matrix is set on each frame event.
@@ -416,10 +421,10 @@ namespace UnityEngine.XR.ARFoundation
             // Enable background rendering when first frame is received.
             if (m_BackgroundRenderingEnabled)
             {
-            	if (eventArgs.textures.Count == 0)
-            	{
-            		DisableBackgroundRendering();
-            	}
+                if (eventArgs.textures.Count == 0)
+                {
+                    DisableBackgroundRendering();
+                }
                 else if (m_CommandBuffer != null && m_CommandBufferCullingState != shouldInvertCulling)
                 {
                     ConfigureLegacyCommandBuffer(m_CommandBuffer);
@@ -469,6 +474,12 @@ namespace UnityEngine.XR.ARFoundation
                 }
 
                 SetMaterialKeywords(material, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
+
+                // Set scale: this computes the affect the camera's localToWorld has on the the length of the
+                // forward vector, i.e., how much farther from the camera are things than with unit scale.
+                var forward = transform.localToWorldMatrix.GetColumn(2);
+                var scale = forward.magnitude;
+                material.SetFloat(k_CameraForwardScaleId, scale);
             }
         }
 

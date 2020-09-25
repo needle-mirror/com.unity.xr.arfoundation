@@ -20,7 +20,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARAnchorManager.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARAnchorManager) + ".html")]
     public sealed class ARAnchorManager : ARTrackableManager<
         XRAnchorSubsystem,
         XRAnchorSubsystemDescriptor,
@@ -38,6 +38,11 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// This prefab will be instantiated for each <see cref="ARAnchor"/>. May be `null`.
         /// </summary>
+        /// <remarks>
+        /// The purpose of this property is to extend the functionality of <see cref="ARAnchor"/>s.
+        /// It is not the recommended way to instantiate content associated with an <see cref="ARAnchor"/>.
+        /// See [Anchoring content](xref:arfoundation-anchor-manager#anchoring-content) for more details.
+        /// </remarks>
         public GameObject anchorPrefab
         {
             get => m_AnchorPrefab;

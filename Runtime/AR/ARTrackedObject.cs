@@ -8,7 +8,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedObject)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARTrackedObject.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARTrackedObject) + ".html")]
     public class ARTrackedObject : ARTrackable<XRTrackedObject, ARTrackedObject>
     {
         /// <summary>

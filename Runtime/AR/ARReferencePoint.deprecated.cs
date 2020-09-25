@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_Anchor)]
     [DisallowMultipleComponent]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARReferencePoint.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARReferencePoint) + ".html")]
     [Obsolete("ARReferencePoint has been deprecated. Use ARAnchor instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchor", true)]
     public sealed class ARReferencePoint : ARTrackable<XRReferencePoint, ARReferencePoint>
     {

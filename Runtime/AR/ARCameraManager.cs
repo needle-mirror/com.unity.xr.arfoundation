@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.1/api/UnityEngine.XR.ARFoundation.ARCameraManager.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARCameraManager) + ".html")]
     public sealed class ARCameraManager :
 #if UNITY_2020_2_OR_NEWER
         SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>,

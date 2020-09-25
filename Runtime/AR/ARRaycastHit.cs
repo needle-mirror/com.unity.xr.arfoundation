@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="distance">The distance, in Unity world space, of the hit.</param>
         /// <param name="transform">The <c>Transform</c> that transforms from session space to world space.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="transform"/> is `null`.</exception>
-        public ARRaycastHit(XRRaycastHit hit, float distance, Transform transform)
+        public ARRaycastHit(XRRaycastHit hit, float distance, Transform transform, ARTrackable trackable = null)
         {
             if (transform == null)
                 throw new ArgumentNullException(nameof(transform));
@@ -24,12 +24,13 @@ namespace UnityEngine.XR.ARFoundation
             m_Hit = hit;
             this.distance = distance;
             m_Transform = transform;
+            this.trackable = trackable;
         }
 
         /// <summary>
         /// The distance, in Unity world space, from the ray origin to the intersection point.
         /// </summary>
-        public float distance { get; private set; }
+        public float distance { get; }
 
         /// <summary>
         /// The type of trackable hit by the raycast.
@@ -57,19 +58,20 @@ namespace UnityEngine.XR.ARFoundation
         public float sessionRelativeDistance => m_Hit.distance;
 
         /// <summary>
+        /// The <see cref="ARTrackable"/> that this raycast hit, or `null` if no <see cref="ARTrackable"/> was hit.
+        /// See <see cref="hitType"/> to determine what type of trackable, if any, was hit.
+        /// </summary>
+        public ARTrackable trackable { get; }
+
+        /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
         /// <returns>A hash code generated from this object's fields.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hash = m_Hit.GetHashCode();
-                hash = hash * 486187739 + distance.GetHashCode();
-                hash = hash * 486187739 + HashCode.ReferenceHash(m_Transform);
-                return hash;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(
+            m_Hit.GetHashCode(),
+            distance.GetHashCode(),
+            HashCode.ReferenceHash(m_Transform),
+            HashCode.ReferenceHash(trackable));
 
         /// <summary>
         /// Tests for equality.
@@ -77,13 +79,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="obj">The `object` to compare against.</param>
         /// <returns>`True` if <paramref name="obj"/> is of type <see cref="ARRaycastHit"/> and
         /// <see cref="Equals(ARRaycastHit)"/> also returns `true`; otherwise `false`.</returns>
-        public override bool Equals(object obj)
-        {
-            if (!(obj is ARRaycastHit))
-                return false;
-
-            return Equals((ARRaycastHit)obj);
-        }
+        public override bool Equals(object obj) => obj is ARRaycastHit other && Equals(other);
 
         /// <summary>
         /// Tests for equality.
@@ -93,9 +89,10 @@ namespace UnityEngine.XR.ARFoundation
         public bool Equals(ARRaycastHit other)
         {
             return
-                (m_Hit.Equals(other.m_Hit)) &&
-                (distance.Equals(other.distance)) &&
-                (m_Transform.Equals(other.m_Transform));
+                m_Hit.Equals(other.m_Hit) &&
+                distance.Equals(other.distance) &&
+                m_Transform == other.m_Transform &&
+                trackable == other.trackable;
         }
 
         /// <summary>

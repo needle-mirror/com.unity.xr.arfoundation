@@ -1,3 +1,6 @@
+---
+uid: arfoundation-extensions
+---
 # Extending AR Foundation
 
 In many cases, AR Foundation or its subsystems wrap some platform-specific SDK, such as ARCore or ARKit. If you know you're on a particular platform, you might want to access specific features of that SDK that aren't accessible via AR Foundation.

@@ -1,3 +1,6 @@
+---
+uid: arfoundation-participant-manager
+---
 # AR participant manager
 
 The participant manager is a type of [trackable manager](trackable-managers.md).
