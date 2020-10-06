@@ -4,17 +4,25 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.9] - 2020-10-06
+### New
+- Added new sections in the manual documentation for [image tracking](xref:arfoundation-tracked-image-manager) and [anchors](xref:arfoundation-anchor-manager).
+
+### Fixes
+- Fix several documentation links and clarify language.
+- Fix [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager)'s handling of depth when non-unit scale is applied.
+
 ## [4.0.8] - 2020-08-24
 
 ### Fixes
-- Updated "[Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU](../manual/index.html#copying-the-camera-texture-to-a-render-texture-when-accessing-the-camera-image-on-the-gpu)" documentation to use a '[Command Buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)' instead of a '[Graphics.Blit()](https://docs.unity3d.com/ScriptReference/Graphics.Blit.html)' to fix an issue where blit would not work on certain devices.
-- Fixed a `NullReferenceException` which would happen if you invoked [`ARSession.CheckAvailability()`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARSession.html#UnityEngine_XR_ARFoundation_ARSession_CheckAvailability) when the ARSession's GameObject was disabled and had never been enabled.
+- Updated "[Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU](xref:arfoundation-manual#copying-the-camera-texture-to-a-render-texture-when-accessing-the-camera-image-on-the-gpu)" documentation to use a '[Command Buffer](xref:UnityEngine.Rendering.CommandBuffer)' instead of a '[Graphics.Blit()](xref:uid: UnityEngine.Graphics.Blit(UnityEngine.Texture,UnityEngine.RenderTexture))' to fix an issue where blit would not work on certain devices.
+- Fixed a `NullReferenceException` which would happen if you invoked [`ARSession.CheckAvailability()`](xref:UnityEngine.XR.ARFoundation.ARSession.CheckAvailability) when the ARSession's GameObject was disabled and had never been enabled.
 
 ## [4.0.6] - 2020-07-27
 ### Fixes
 - The choice of whether to use the legacy or Universal render pipeline was based on an incorrect GraphicsSettings parameter (`renderPipelineAsset` instead of `currentRenderPipeline`). This meant that certain quality settings may not have been respected properly.
-- Fixed a bug where it was possible for the ARSession component to set the [Application.targetFrameRate](https://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html) even when [`matchFrameRateRequested`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARSession.html#UnityEngine_XR_ARFoundation_ARSession_matchFrameRateRequested) was `false`.
-- Updated ["Configuring the AR Camera background using a Scriptable Render Pipeline"](../manual/ar-camera-background-with-scriptable-render-pipeline.html) documentation for further clarity on setup steps.
+- Fixed a bug where it was possible for the ARSession component to set the [Application.targetFrameRate](xref:UnityEngine.Application.targetFrameRate) even when [`matchFrameRateRequested`](xref:UnityEngine.XR.ARFoundation.ARSession.matchFrameRateRequested) was `false`.
+- Updated ["Configuring the AR Camera background using a Scriptable Render Pipeline"](xref:arfoundation-ar-camera-background-with-scriptable-render-pipeline) documentation for further clarity on setup steps.
 
 ### Changes
 - Update [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2) to 3.2.13.
@@ -22,7 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [4.0.2] - 2020-05-29
 ### New
 - The `ARCameraManager` now invokes `XRCameraSubsystem.OnBeforeBackgroundRender` immediately before rendering the camera background.
-- Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the [migration guide](../manual/migration-guide-3.html#xr-plug-in-management) explaining how to use it.
+- Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the [migration guide](xref:arfoundation-migration-guide-3#xr-plug-in-management) explaining how to use it.
 
 ### Changes
 - Updating dependency on AR Subsystyems to 4.0.1.
@@ -38,7 +46,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [4.0.0-preview.3] - 2020-05-04
 ### New
-- Add support for tracked raycasts. A tracked raycast is repeated and updated automatically. See [ARRaycastManager.AddRaycast](../api/UnityEngine.XR.ARFoundation.ARRaycastManager.html#UnityEngine_XR_ARFoundation_ARRaycastManager_AddRaycast).
+- Add support for tracked raycasts. A tracked raycast is repeated and updated automatically. See [ARRaycastManager.AddRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.AddRaycast*).
 - `ARCameraFrameReceivedEventArgs` now provides a camera grain texture along with an associated intensity value which can be used to add image noise characteristics to virtual content. The usage of these properties may vary by platform, so please consult the documentation of the specific provider plugin when using this feature.
 
 ### Fixes
@@ -49,15 +57,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [4.0.0-preview.1] - 2020-02-26
 ### Improvements
-- Improved performance of face mesh updates by using the [new mesh APIs in 2019.3 which accept NativeArrays](https://docs.unity3d.com/ScriptReference/Mesh.SetVertices.html). This avoids a copy of the `NativeArray` to `List`.
+- Improved performance of face mesh updates by using the [new mesh APIs in 2019.3 which accept NativeArrays](xref:UnityEngine.Mesh.SetVertices(Unity.Collections.NativeArray`1<T>,System.Int32,System.Int32)). This avoids a copy of the `NativeArray` to `List`.
 
 ### Breaking Changes
-- See the [Migration Guide](../manual/migration-guide-3.md).
+- See the [Migration Guide](xref:arfoundation-migration-guide-3).
 - AR Foundation now relies on [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html) to initialize subsystems. If your project's configuration does not enable an XR Loader appropriate for your target platforms then the underlying subsystems AR Foundation depends on will not be available. Previously AR Foundation would attempt to initialize subsystems itself in the absence of a valid XR Management configuration.
 
 ## [3.1.3] - 2020-04-13
 ### Fixes
-- The documentation for the `ARFace` scripting API for accessing left eye, right eye, and fixation point incorrectly referred to a nullable value type, when in fact the returned type is a [Transform](https://docs.unity3d.com/ScriptReference/Transform.html). This has been fixed.
+- The documentation for the `ARFace` scripting API for accessing left eye, right eye, and fixation point incorrectly referred to a nullable value type, when in fact the returned type is a [Transform](xref:UnityEngine.Transform). This has been fixed.
 - Eliminating shader compiler errors that started with Unity 2020.1 and that originate from the ARKit package.
 
 ## [3.1.0-preview.8] - 2020-03-12
@@ -125,11 +133,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - If ["match frame rate"](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@3.1/api/UnityEngine.XR.ARFoundation.ARSession.html#UnityEngine_XR_ARFoundation_ARSession_matchFrameRate) is enabled, the `ARSession` now checks for changes to the recommended frame rate each frame.
 
 ### Breaking changes
-- Some properties on `ARPointCloud` changed from `NativeArray`s to nullable `NativeSlice`s. See the [migration guide](../manual/migration-guide-2.md#point-clouds) for more details.
+- Some properties on `ARPointCloud` changed from `NativeArray`s to nullable `NativeSlice`s. See the [migration guide](xref:arfoundation-migration-guide-2#point-clouds) for more details.
 - The `ARFaceManager.supported` property has been removed. If face tracking is not supported, the manager's subsystem will be null. This was done for consistency as no other manager has this property. If a manager's subsystem is null after enabling the manager, that generally means the subsystem is not supported.
 
 ### Fixes
-- Fixed a typo in [Face Tracking](../manual/face-manager.html) documentation which incorrectly referred to planes instead of faces. Also updated the screenshot of the ARFaceManager to reflect the "Maximum Face Count" field.
+- Fixed a typo in [Face Tracking](xref:arfoundation-face-manager) documentation which incorrectly referred to planes instead of faces. Also updated the screenshot of the ARFaceManager to reflect the "Maximum Face Count" field.
 
 ## [3.0.0-preview.2] - 2019-09-05
 ### Fixes
@@ -187,7 +195,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.0.1] - 2019-03-05
 ## Changes
-- See the [Migration Guide](Documentation~/migration-guide.md).
+- See the [Migration Guide](xref:arfoundation-migration-guide-1).
 
 ## [1.1.0-preview.1] - 2019-01-16
 ### Fixes

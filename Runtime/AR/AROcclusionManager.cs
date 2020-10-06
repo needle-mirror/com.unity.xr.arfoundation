@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_OcclusionManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.AROcclusionManager.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(AROcclusionManager) + ".html")]
     public sealed class AROcclusionManager :
 #if UNITY_2020_2_OR_NEWER
         SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>

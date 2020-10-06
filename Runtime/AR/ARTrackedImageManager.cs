@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImageManager)]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARTrackedImageManager.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARTrackedImageManager) + ".html")]
     public sealed class ARTrackedImageManager : ARTrackableManager<
         XRImageTrackingSubsystem,
         XRImageTrackingSubsystemDescriptor,
@@ -145,6 +145,11 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// If not null, instantiates this prefab for each detected image.
         /// </summary>
+        /// <remarks>
+        /// The purpose of this property is to _extend_ the functionality of <see cref="ARTrackedImage"/>s.
+        /// It is not the recommended way to instantiate _content_ associated with an <see cref="ARTrackedImage"/>.
+        /// See [Tracked Image Prefab](xref:arfoundation-tracked-image-manager#tracked-image-prefab) for more details.
+        /// </remarks>
         public GameObject trackedImagePrefab
         {
             get => m_TrackedImagePrefab;

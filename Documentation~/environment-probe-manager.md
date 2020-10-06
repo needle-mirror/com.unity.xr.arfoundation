@@ -1,3 +1,6 @@
+---
+uid: arfoundation-environment-probe-manager
+---
 # AR environment probe manager
 
 The environment probe manager is a type of [trackable manager](trackable-managers.md).

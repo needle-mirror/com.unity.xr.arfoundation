@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <remarks>
     /// When the manager is informed that a trackable has been added, a new <c>GameObject</c>
     /// is created with an <c>ARTrackable</c> component on it. If
-    /// <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}.prefab"/>
+    /// <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}.GetPrefab"/>
     /// is not null, then that prefab will be instantiated.
     /// </remarks>
     /// <typeparam name="TSubsystem">The <c>Subsystem</c> which provides this manager data.</typeparam>

@@ -1,3 +1,6 @@
+---
+uid: arfoundation-trackable-managers
+---
 # Trackable managers
 
 In AR Foundation, a "trackable" is anything that can be detected and tracked in the real world. Planes, point clouds, anchors, environment probes, faces, images, and 3D objects are all examples of trackables.

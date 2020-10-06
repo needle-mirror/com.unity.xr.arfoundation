@@ -1,3 +1,6 @@
+---
+uid: arfoundation-migration-guide-3
+---
 # Migration Guide
 
 This will guide you through the changes coming from AR Foundation 3.x to 4.x.
@@ -38,7 +41,7 @@ To solve this problem, we've added methods to enumerate each discrete mode of op
 
 ARFoundation 4 also introduces the concept of a "configuration chooser", which uses the current set of requested features (e.g., "auto focus", "plane detection", and "face detection") and selects the best available configuration descriptor. This also allows you to query what would happen if you were to enable a particular set of features before enabling them.
 
-The default configuration chooser simply chooses the configuration that supports the most number of requested features, but you can also implement a custom configuration chooser to perform your own logic. See [`XRSessionSubsystem.configurationChooser`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.0/api/UnityEngine.XR.ARSubsystems.XRSessionSubsystem.html#UnityEngine_XR_ARSubsystems_XRSessionSubsystem_configurationChooser) in the ARSubsystems package.
+The default configuration chooser simply chooses the configuration that supports the most number of requested features, but you can also implement a custom configuration chooser to perform your own logic. See [`XRSessionSubsystem.configurationChooser`](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.configurationChooser) in the ARSubsystems package.
 
 ### Adapting an existing project
 
@@ -74,18 +77,18 @@ ARFoundation 4 makes this explicit. Parameters now have "requested" and "current
 
 ## `XRCameraImage` is now `XRCpuImage`
 
-The [`Texture2D`](https://docs.unity3d.com/ScriptReference/Texture2D.html)(s) that represent the pass-through video are typically GPU textures. Computer vision or other CPU-side processing applications require access to the raw pixels on the CPU; however, the normal [`Texture2D`](https://docs.unity3d.com/ScriptReference/Texture2D.html) APIs for reading pixels do not work unless the data is first transferred back from the GPU, which can be costly. Fortunately, AR frameworks like ARCore and ARKit provide a way to access the raw pixel data on the CPU without the costly GPU readback, and ARFoundation provided this data as an `XRCameraImage`.
+The [Texture2D](xref:UnityEngine.Texture2D)(s) that represent the pass-through video are typically GPU textures. Computer vision or other CPU-side processing applications require access to the raw pixels on the CPU; however, the normal `Texture2D` APIs for reading pixels do not work unless the data is first transferred back from the GPU, which can be costly. Fortunately, AR frameworks like ARCore and ARKit provide a way to access the raw pixel data on the CPU without the costly GPU readback, and ARFoundation provided this data as an `XRCameraImage`.
 
-This "camera image" API still exists, but it has been generalized and renamed from `XRCameraImage` to `XRCpuImage`. The API is very similar, but it can now be used to read other types of image data, such as the human depth and human stencil buffers provided by the `AROcclusionManager`.
+This "camera image" API still exists, but it has been generalized and renamed from `XRCameraImage` to [XRCpuImage](xref:UnityEngine.XR.ARSubsystems.XRCpuImage). The API is very similar, but it can now be used to read other types of image data, such as the human depth and human stencil buffers provided by the [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
 
 ### Changes
 
-* `XRCameraImage` is now `XRCpuImage`
-* `XRCameraImage.FormatSupported` was a static method which determined whether the camera image could be converted to a given [`TextureFormat`](https://docs.unity3d.com/ScriptReference/TextureFormat.html). Since `XRCpuImage` can handle different types of images, that method is now an instance method on the `XRCpuImage`.
-* `ARCameraManager.TryGetLatestImage(out XRCameraImage)` is now `ARCameraManager.TryAcquireLatestCpuImage(out XRCpuImage)`. Note the parameter change from `XRCameraImage` to `XRCpuImage` and the method name more accurately describes the lifetime and caller responsibility of the `XRCpuImage` resource (though its behavior remains unchanged).
-* The `AROcclusionManager` has two new methods:
-    * `TryAcquireHumanStencilCpuImage(out XRCpuImage)`
-    * `TryAcquireHumanDepthCpuImage(out XRCpuImage)`
+* `XRCameraImage` is now [XRCpuImage](xref:UnityEngine.XR.ARSubsystems.XRCpuImage)
+* `XRCameraImage.FormatSupported` was a static method which determined whether the camera image could be converted to a given [TextureFormat](xref:UnityEngine.TextureFormat). Since `XRCpuImage` can handle different types of images, that method is now an instance method on the `XRCpuImage`.
+* `ARCameraManager.TryGetLatestImage(out XRCameraImage)` is now [TryAcquireLatestCpuImage(out XRCpuImage)](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.Provider.TryAcquireLatestCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage.Cinfo@)). Note the parameter change from `XRCameraImage` to `XRCpuImage` and the method name more accurately describes the lifetime and caller responsibility of the `XRCpuImage` resource (though its behavior remains unchanged).
+* The [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager) has two new methods:
+    * [TryAcquireHumanStencilCpuImage(out XRCpuImage)](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.Provider.TryAcquireHumanStencilCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage.Cinfo@))
+    * [TryAcquireHumanDepthCpuImage(out XRCpuImage)](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.Provider.TryAcquireHumanDepthCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage.Cinfo@))
 
 ### Sample
 
@@ -114,9 +117,10 @@ In ARFoundation 4, XR Plug-in Management controls the creation and destruction o
 
 This means, for instance, destroying an `ARSession` component _pauses_ but does not _destroy_ the session. This can be desirable when, for example, switching between two AR scenes. However, it is a change from the previous behavior. Destroying an `ARSession` and recreating it will _pause_ and then _resume_ the _same_ session.
 
-If you want to completely destroy the session, you need to destroy the subsystem. This means calling [`Deinitialize`](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/api/UnityEngine.XR.Management.XRLoader.html#UnityEngine_XR_Management_XRLoader_Deinitialize) on an [`XRLoader`](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/api/UnityEngine.XR.Management.XRLoader.html) from XR Plug-in Management.
+If you want to completely destroy the session, you need to destroy the subsystem. This means calling [Deinitialize](xref:UnityEngine.XR.Management.XRLoader.Deinitialize) on an [XRLoader](xref:UnityEngine.XR.Management.XRLoader) from XR Plug-in Management.
 
-There is a new utility in ARFoundation to facilitate this: `LoaderUtility`. Simply call
+There is a new utility in ARFoundation to facilitate this: [LoaderUtility](xref:UnityEngine.XR.ARFoundation.LoaderUtility). Simply call
+
 ```csharp
 LoaderUtility.Initialize();
 ```

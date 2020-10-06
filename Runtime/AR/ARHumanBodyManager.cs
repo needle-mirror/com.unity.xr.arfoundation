@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBodyManager)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARHumanBodyManager.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARHumanBodyManager) + ".html")]
     public sealed class ARHumanBodyManager :
 #if UNITY_2020_2_OR_NEWER
         ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider, XRHumanBody, ARHumanBody>

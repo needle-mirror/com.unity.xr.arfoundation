@@ -1,3 +1,6 @@
+---
+uid: arfoundation-plane-manager
+---
 # AR plane manager
 
 The plane manager is a type of [trackable manager](trackable-managers.md).

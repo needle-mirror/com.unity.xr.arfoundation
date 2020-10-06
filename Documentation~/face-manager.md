@@ -1,3 +1,6 @@
+---
+uid: arfoundation-face-manager
+---
 # AR face manager
 
 The face manager is a type of [trackable manager](trackable-managers.md).

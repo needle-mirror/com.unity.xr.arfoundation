@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <seealso cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}"/>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARReferencePointManager.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARReferencePointManager) + ".html")]
     [Obsolete("ARReferencePointManager has been deprecated. Use ARAnchorManager instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager", true)]
     public sealed class ARReferencePointManager : ARTrackableManager<
         XRReferencePointSubsystem,

@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARSession.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARSession) + ".html")]
     public sealed class ARSession :
 #if UNITY_2020_2_OR_NEWER
         SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
@@ -148,9 +148,12 @@ namespace UnityEngine.XR.ARFoundation
         public static NotTrackingReason notTrackingReason => s_NotTrackingReason;
 
         /// <summary>
-        /// Resets the AR Session. This destroys the current session, including all trackables, and
-        /// then establishes a new session.
+        /// Resets the AR Session.
         /// </summary>
+        /// <remarks>
+        /// Resetting the session destroys all trackables and resets device tracking (e.g., the position of the session
+        /// is reset to the origin).
+        /// </remarks>
         public void Reset()
         {
             if (subsystem != null)

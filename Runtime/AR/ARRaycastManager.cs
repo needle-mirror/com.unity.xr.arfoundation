@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_RaycastManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
-    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARRaycastManager.html")]
+    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARRaycastManager) + ".html")]
     public sealed class ARRaycastManager : ARTrackableManager<
         XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
 #if UNITY_2020_2_OR_NEWER
@@ -41,10 +41,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="hitResults">Contents are replaced with the raycast results, if successful.</param>
         /// <param name="trackableTypes">(Optional) The types of trackables to cast against.</param>
         /// <returns>True if the raycast hit a trackable in the <paramref name="trackableTypes"/></returns>
+        #region ARRaycastManager_Raycast_screenPoint
         public bool Raycast(
             Vector2 screenPoint,
             List<ARRaycastHit> hitResults,
             TrackableType trackableTypes = TrackableType.All)
+        #endregion
         {
             if (subsystem == null)
                 return false;
@@ -64,10 +66,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="hitResults">Contents are replaced with the raycast results, if successful.</param>
         /// <param name="trackableTypes">(Optional) The types of trackables to cast against.</param>
         /// <returns>True if the raycast hit a trackable in the <paramref name="trackableTypes"/></returns>
+        #region ARRaycastManager_Raycast_ray
         public bool Raycast(
             Ray ray,
             List<ARRaycastHit> hitResults,
             TrackableType trackableTypes = TrackableType.All)
+        #endregion
         {
             if (subsystem == null)
                 return false;
@@ -89,7 +93,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="estimatedDistance">The estimated distance to the intersection point.
         /// This can be used to determine a potential intersection before the environment has been fully mapped.</param>
         /// <returns>A new <see cref="ARRaycast"/> if successful; otherwise `null`.</returns>
+        #region ARRaycastManager_AddRaycast_screenPoint
         public ARRaycast AddRaycast(Vector2 screenPoint, float estimatedDistance)
+        #endregion
         {
             if (subsystem == null)
                 return null;

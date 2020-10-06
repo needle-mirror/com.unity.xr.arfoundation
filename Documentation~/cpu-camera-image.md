@@ -1,7 +1,9 @@
+---
+uid: arfoundation-cpu-camera-image
+---
 # Accessing the device camera image on the CPU
 
-
-You can access the device camera image on the CPU by using [`ARCameraManager.TryAcquireLatestCpuImage`](../api/UnityEngine.XR.ARFoundation.ARCameraManager.html#UnityEngine_XR_ARFoundation_ARCameraManager_TryAcquireLatestCpuImage_UnityEngine_XR_ARSubsystems_XRCpuImage__).
+You can access the device camera image on the CPU by using [ARCameraManager.TryAcquireLatestCpuImage](xref:UnityEngine.XR.ARFoundation.ARCameraManager.TryAcquireLatestCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)).
 
 When you call `ARCameraManager.TryAcquireLatestCpuImage`, Unity transfers textures from the GPU to the CPU. This is a resource-intensive process that impacts performance, so this method should be used only when you need to access the pixel data from the device camera to be used by code that runs on the CPU. For example, most computer vision code requires this data to be accessible on the CPU.
 

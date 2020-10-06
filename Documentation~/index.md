@@ -1,3 +1,6 @@
+---
+uid: arfoundation-manual
+---
 # About AR Foundation
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
@@ -203,6 +206,7 @@ The `AR Pose Driver` drives the local position and orientation of the parent Gam
 ![AR Pose Driver](images/ar-pose-driver.png "AR Pose Driver")
 
 #### Legacy Input Helpers and the Tracked Pose Driver component
+
 The `ARPoseDriver` provides a similar functionality to the `TrackedPoseDriver` from the `com.unity.xr.legacyinputhelpers` package and was implemented to remove the dependency on that package. Projects are able to use either the `ARPoseDriver` component or the `TrackedPoseDriver` component to drive a GameObjects transform. It is not recommended to use both as the behaviour is undefined. `Use Relative Transform` option is unavailable for the `ARPoseDriver` because it introduces additional unnecesary transformations.
 
 ![Tracked Pose Driver](images/tracked-pose-driver.png "Tracked Pose Driver")
@@ -215,8 +219,9 @@ The `ARCameraManager` enables features for the AR Camera, including the manageme
 
 | **Setting** | **Function** |
 |-|-|
-| **Focus Mode** | Can be *Auto* or *Fixed*. *Auto* enables the hardware Camera's automatic focus mode, while *Fixed* disables it (the focus is fixed and doesn't change automatically). |
-| **Light Estimation** | Can be *Disabled* or *Ambient intensity*. If not disabled, this instructs the platform to produce light estimation information. This estimates the average light intensity and color in the physical environment and can affect performance, so disable it if your application doesn't use it.|
+| **Auto Focus** | Enables or disables the hardware camera's automatic focus mode. When disabled, the focus is fixed and doesn't change automatically. _Note:_ Availability of *Auto Focus* depends on camera hardware so it is possible that this preference will be ignored at runtime. |
+| **Light Estimation** | Estimates lighting properties of the environment. There are 5 options: <ul><li><b>Ambient Intensity:</b> Estimates the overall average brightness</li><li><b>Ambient Color:</b> Estimates the overall average color</li><li><b>Ambient Spherical Harmonics:</b> Estimates the [spherical harmonics](https://en.wikipedia.org/wiki/Spherical_harmonic_lighting) describing the scene. Spherical harmonics are used to produce more realistic lighting calculations.</li><li><b>Main Light Direction:</b> Estimates the direction of the primary light source. The direction points away from the light (so that it matches the light's direction).</li><li><b>Main Light Intensity:</b> Estimates the brightness of the primary light source.</li></ul>While you can request any of these simultaneously, support for each of these varies greatly among devices. Some platforms may not be able to be simultaneously provide all options, or it may depend on other features (e.g., camera facing direction).|
+| **Facing Direction** | Controls which camera is used for pass through video. This can be *World* or *User*. On handheld mobile devices like phones and tablets, *World* refers to the rear camera and *User* refers to the front-facing (i.e., "selfie") camera.|
 
 ### AR Camera background
 
@@ -254,7 +259,7 @@ commandBuffer.Blit(texture, BuiltinRenderTextureType.CurrentActive, m_ArCameraBa
 Graphics.ExecuteCommandBuffer(commandBuffer);
 ```
 
-Note: `Graphics.SetRenderTarget` will overwrite the current render target after executing the command buffer.
+Note: [`Graphics.SetRenderTarget`](https://docs.unity3d.com/ScriptReference/Graphics.SetRenderTarget.html) will overwrite the current render target after executing the command buffer.
 
 ### Accessing the Camera Image on the CPU
 
@@ -278,38 +283,11 @@ Trackable components don't do anything on their own; they just contain data asso
 
 ## Ray casting
 
-Also known as hit testing, ray casting allows you to determine where a ray (defined by an origin and direction) intersects with a trackable. The current ray cast interface only tests against planes and points in the point cloud. The ray casting interface is similar to the one in the Unity Physics module, but since AR trackables can't necessarily have a presence in the physics world, AR Foundation provides a separate interface.
-
-To perform a ray cast, add an `ARRaycastManager` to the same `GameObject` as the `ARSessionOrigin`.
-
-![AR Raycast Manager](images/ar-raycast-manager.png "AR Raycast Manager")
-
-There are two ray casting methods on the `ARRaycastManager`:
-
-```csharp
-public bool Raycast(Vector2 screenPoint, List<ARRaycastHit> hitResults, TrackableType trackableTypeMask = TrackableType.All);
-public bool Raycast(Ray ray, List<ARRaycastHit> hitResults, TrackableType trackableTypeMask = TrackableType.All, float pointCloudRaycastAngleInDegrees = 5f);
-```
-
-The first method takes a two-dimensional position on the screen. You can, for example, pass a touch position directly:
-
-```csharp
-var raycastManager = GetComponent<ARRaycastManager>();
-raycastManager.Raycast(Input.GetTouch(0).position, ...);
-```
-
-The second method takes an arbitrary `Ray` (a position and direction).
-
-The following table summarizes the other parameters:
-
-| **Parameter** | **Description** |
-|-|-|
-| `hitResults` | The results for both methods are stored in this `List`, which must not be `null`. This lets you reuse the same `List` object to avoid garbage-collected allocations. |
-| `trackableTypeMask` | The type(s) of trackable(s) to hit test against. This is a flag, so multiple types can be bitwise OR'd together, for example, `TrackableType.PlaneWithinPolygon` &#124; `FeaturePoint` |
+See [ARRaycastManager](raycast-manager.md)
 
 ## Meshing
 
-See documentation on the [mesh manager](mesh-manager.md).
+See [ARMeshManager](mesh-manager.md).
 
 # Technical details
 
