@@ -14,9 +14,53 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 
 If you are migrating from AR Foundation 1.0, see the [Migration Guide](migration-guide.md).
 
+## Platform Support
+
+AR Foundation does not implement any AR features itself but, instead, defines a multi-platform API that allows you to work with functionality common to multiple platforms.
+
+### Feature Support Per Platform
+
+You can refer to this table to understand which parts of AR Foundation are relevant on specific platforms:
+
+|                                |ARCore|ARKit|Magic Leap|HoloLens|
+|--------------------------------|:----:|:---:|:--------:|:------:|
+|Device tracking                 |  ✓   |  ✓  |    ✓     |   ✓    |
+|Plane tracking                  |  ✓   |  ✓  |    ✓     |        |
+|Point clouds                    |  ✓   |  ✓  |          |        |
+|Anchors                         |  ✓   |  ✓  |    ✓     |   ✓    |
+|Light estimation                |  ✓   |  ✓  |          |        |
+|Environment probes              |  ✓   |  ✓  |          |        |
+|Face tracking                   |  ✓   |  ✓  |          |        |
+|Meshing                         |      |     |    ✓     |   ✓    |
+|2D Image tracking               |  ✓   |  ✓  |          |        |
+|Raycast                         |  ✓   |  ✓  |    ✓     |        |
+|Pass-through video              |  ✓   |  ✓  |          |        |
+|Session management              |  ✓   |  ✓  |    ✓     |   ✓    |
+
+### Supported Platform Packages
+The following platform packages and later imnplement the AR Foundation features indicated above:
+
+|Package Name|Version|
+|:---|:---|
+|ARCore XR Plugin|2.1.2|
+|ARKit XR Plugin|2.1.2|
+|ARKit Face Tracking|1.0.2|
+|Magic Leap XR Plugin|4.0.5|
+|Windows XR Plugin|2.0.3|
+
 ## Subsystems
 
-AR Foundation is built on subsystems. A "subsystem" is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@2.1/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
+AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
+
+Each subsystem handles specific functionality. For example, `XRPlaneSubsystem` provides the plane detection interface.
+
+### Providers
+
+A **provider** is a concrete implementation of a subsystem. For example, the `ARCore XR Plugin` package contains the ARCore implementation for many of the AR subsystems.
+
+Because different providers have varying support for specific features, each subsystem also has a descriptor that indicates which specific subsystem features it supports. For example, the `XRPlaneSubsystemDescriptor` contains properties indicating whether it supports horizontal or vertical plane detection.
+
+Each individual provider determines how to implement each subsystem. In general, they wrap that platform's native SDK (for example, ARKit on iOS and ARCore on Android).
 
 # Installing AR Foundation
 
@@ -26,6 +70,8 @@ Subsystems are implemented in other packages, so to use AR Foundation, you will 
 
  - ARKit XR Plugin
  - ARCore XR Plugin
+ - Magic Leap XR Plugin
+ - Windows XR Plugin
 
 # Glossary
 

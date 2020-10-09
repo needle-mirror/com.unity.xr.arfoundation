@@ -1,5 +1,8 @@
+using AOT;
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -24,6 +27,31 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     public partial class ARFoundationBackgroundRenderer
     {
+        /// <summary>
+        /// A function that can be invoked by
+        /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
+        /// This function does nothing, but Unity requires a valid function pointer in order to add IssuePluginEvent to a command
+        /// buffer. Doing so has the side effect of resetting the OpenGL state.
+        /// </summary>
+        /// <param name="eventId">The id of the event</param>
+        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
+        [MonoPInvokeCallback(typeof(Action<int>))]
+        static void ResetGlState(int eventId) {}
+
+        /// <summary>
+        /// A delegate representation of <see cref="ResetGlState(int)"/>. This maintains a strong
+        /// reference to the delegate, which is converted to an IntPtr by <see cref="s_ResetGlStateFuncPtr"/>.
+        /// </summary>
+        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
+        static Action<int> s_ResetGlStateDelegate = ResetGlState;
+
+        /// <summary>
+        /// A pointer to <see cref="ResetGlState(int)"/> that can be passed to
+        /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
+        /// </summary>
+        /// <seealso cref="AddOpenGLES3ResetStateCommand(CommandBuffer)"/>
+        static readonly IntPtr s_ResetGlStateFuncPtr = Marshal.GetFunctionPointerForDelegate(s_ResetGlStateDelegate);
+
         /// <summary>
         /// The <c>Camera</c> to render the background to.
         /// </summary>
@@ -153,6 +181,22 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// When using OpenGLES3, this adds a command to the <paramref name="commandBuffer"/>
+        /// which will force Unity to reset the OpenGL state. This is necessary on devices using OpenGLES3.
+        /// If OpenGLES3 is not the current graphics device type, this method does nothing. This should be
+        /// the first command in the command buffer.
+        /// </summary>
+        /// <param name="commandBuffer">The [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
+        /// to add the command to.</param>
+        static void AddOpenGLES3ResetStateCommand(CommandBuffer commandBuffer)
+        {
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.OpenGLES3)
+            {
+                commandBuffer.IssuePluginEvent(s_ResetGlStateFuncPtr, 0);
+            }
+        }
+
+        /// <summary>
         /// Invoked to indicate background rendering should begin. Use this to setup
         /// the <see cref="camera"/>'s properties and the command buffers used for background rendering.
         /// </summary>
@@ -190,6 +234,8 @@ namespace UnityEngine.XR.ARFoundation
                 if (m_BackgroundMaterial.HasProperty(kMainTexName))
                     backgroundTexture = m_BackgroundMaterial.GetTexture(kMainTexName);
             }
+
+            AddOpenGLES3ResetStateCommand(m_CommandBuffer);
 
             m_CommandBuffer.Blit(backgroundTexture, BuiltinRenderTextureType.CameraTarget, m_BackgroundMaterial);
             camera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_CommandBuffer);

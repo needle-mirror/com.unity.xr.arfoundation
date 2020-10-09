@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.10] - 2020-10-09
+### Fixes
+- Fixed an issue which could cause the background camera texture to stop functioning correctly on certain devices running OpenGLES3.
+
+## [2.1.9] - 2020-10-06
+### Changes
+- Update depedency on AR Subsystems package to version 2.1.3.
+
 ## [2.1.8] - 2020-04-02
 ### Updated
 - Add support for XR Management
