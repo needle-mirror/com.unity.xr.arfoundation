@@ -449,7 +449,9 @@ namespace UnityEngine.XR.ARFoundation
             s_PropertyIds.Clear();
             foreach (var textureInfo in m_TextureInfos)
             {
-                Debug.Assert(textureInfo.descriptor.dimension == TextureDimension.Tex2D, $"Camera Texture needs to be a Texture 2D, but instead is {textureInfo.descriptor.dimension.ToString()}.");
+                DebugAssert.That(textureInfo.descriptor.dimension == TextureDimension.Tex2D)?.
+                    WithMessage($"Camera Texture needs to be a Texture 2D, but instead is {textureInfo.descriptor.dimension.ToString()}.");
+
                 s_Textures.Add((Texture2D)textureInfo.texture);
                 s_PropertyIds.Add(textureInfo.descriptor.propertyNameId);
             }

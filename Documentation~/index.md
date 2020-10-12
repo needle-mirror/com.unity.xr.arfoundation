@@ -61,13 +61,13 @@ You can refer to this table to understand which parts of AR Foundation are relev
 ### Supported Platform Packages
 The following platform packages and later implement the AR Foundation features indicated above:
 
-|Package Name           |Version            |
-|:---                   |:---               |
-|ARCore XR Plugin       |   4.1.0-preview.9 |
-|ARKit XR Plugin        |   4.1.0-preview.9 |
-|ARKit Face Tracking    |   4.1.0-preview.9 |
-|Magic Leap XR Plugin   |   6.0             |
-|Windows XR Plugin      |   4.0             |
+|Package Name           |Version             |
+|:---                   |:---                |
+|ARCore XR Plugin       |   4.1.0-preview.10 |
+|ARKit XR Plugin        |   4.1.0-preview.10 |
+|ARKit Face Tracking    |   4.1.0-preview.10 |
+|Magic Leap XR Plugin   |   6.0              |
+|Windows XR Plugin      |   4.0              |
 
 ## Subsystems
 
@@ -300,3 +300,4 @@ This version of AR Foundation is compatible with the following versions of the U
 * 2019.4
 * 2020.1
 * 2020.2
+* 2021.1

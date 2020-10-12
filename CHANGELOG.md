@@ -4,6 +4,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0-preview.10] - 2020-10-12
+### Changes
+- Changed internal uses of [Debug.Assert](xref:UnityEngine.Debug.Assert(System.Boolean,System.Object)) to a custom version that does not allocate the message string unless the assert fails. This reduces per-frame GC allocations when `UNITY_ASSERTIONS` are enabled (typically in development builds).
+- Update [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2) to 3.2.16.
+
+### Fixes
+- Minor documentation fixes.
+- Fix an issue with background rendering with URP 10+ rendering with a Final Blit pass.
+
 ## [4.1.0-preview.9] - 2020-09-25
 ### New
 - Added new sections in the manual documentation for [image tracking](xref:arfoundation-tracked-image-manager) and [anchors](xref:arfoundation-anchor-manager).

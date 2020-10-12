@@ -233,10 +233,10 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     m_HumanStencilTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanStencilTextureInfo,
                                                                                     humanStencilDescriptor);
-                    Debug.Assert(((m_HumanStencilTextureInfo.descriptor.dimension == TextureDimension.Tex2D)
-                                  || (m_HumanStencilTextureInfo.descriptor.dimension == TextureDimension.None)),
-                                 "Human Stencil Texture needs to be a Texture 2D, but instead is "
-                                 + $"{m_HumanStencilTextureInfo.descriptor.dimension.ToString()}.");
+                    DebugAssert.That(((m_HumanStencilTextureInfo.descriptor.dimension == TextureDimension.Tex2D)
+                                  || (m_HumanStencilTextureInfo.descriptor.dimension == TextureDimension.None)))?.
+                        WithMessage("Human Stencil Texture needs to be a Texture 2D, but instead is "
+                                    + $"{m_HumanStencilTextureInfo.descriptor.dimension.ToString()}.");
                     return m_HumanStencilTextureInfo.texture as Texture2D;
                 }
                 return null;
@@ -277,10 +277,10 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     m_HumanDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanDepthTextureInfo,
                                                                                   humanDepthDescriptor);
-                    Debug.Assert(((m_HumanDepthTextureInfo.descriptor.dimension == TextureDimension.Tex2D)
-                                  || (m_HumanDepthTextureInfo.descriptor.dimension == TextureDimension.None)),
-                                 "Human Depth Texture needs to be a Texture 2D, but instead is "
-                                 + $"{m_HumanDepthTextureInfo.descriptor.dimension.ToString()}.");
+                    DebugAssert.That(m_HumanDepthTextureInfo.descriptor.dimension == TextureDimension.Tex2D
+                                  || m_HumanDepthTextureInfo.descriptor.dimension == TextureDimension.None)?.
+                        WithMessage("Human Depth Texture needs to be a Texture 2D, but instead is "
+                                    + $"{m_HumanDepthTextureInfo.descriptor.dimension.ToString()}.");
                     return m_HumanDepthTextureInfo.texture as Texture2D;
                 }
                 return null;
@@ -322,10 +322,10 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     m_EnvironmentDepthConfidenceTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_EnvironmentDepthConfidenceTextureInfo,
                                                                                                   environmentDepthConfidenceDescriptor);
-                    Debug.Assert(((m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension == TextureDimension.Tex2D)
-                                  || (m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension == TextureDimension.None)),
-                                 "Environment depth confidence texture needs to be a Texture 2D, but instead is "
-                                 + $"{m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension.ToString()}.");
+                    DebugAssert.That(m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension == TextureDimension.Tex2D
+                                  || m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension == TextureDimension.None)?.
+                        WithMessage("Environment depth confidence texture needs to be a Texture 2D, but instead is "
+                                    + $"{m_EnvironmentDepthConfidenceTextureInfo.descriptor.dimension.ToString()}.");
                     return m_EnvironmentDepthConfidenceTextureInfo.texture as Texture2D;
                 }
                 return null;
@@ -367,10 +367,10 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     m_EnvironmentDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_EnvironmentDepthTextureInfo,
                                                                                         environmentDepthDescriptor);
-                    Debug.Assert(((m_EnvironmentDepthTextureInfo.descriptor.dimension == TextureDimension.Tex2D)
-                                  || (m_EnvironmentDepthTextureInfo.descriptor.dimension == TextureDimension.None)),
-                                 "Environment depth texture needs to be a Texture 2D, but instead is "
-                                 + $"{m_EnvironmentDepthTextureInfo.descriptor.dimension.ToString()}.");
+                    DebugAssert.That(m_EnvironmentDepthTextureInfo.descriptor.dimension == TextureDimension.Tex2D
+                                  || m_EnvironmentDepthTextureInfo.descriptor.dimension == TextureDimension.None)?.
+                        WithMessage("Environment depth texture needs to be a Texture 2D, but instead is "
+                                    + $"{m_EnvironmentDepthTextureInfo.descriptor.dimension.ToString()}.");
                     return m_EnvironmentDepthTextureInfo.texture as Texture2D;
                 }
                 return null;
@@ -510,7 +510,9 @@ namespace UnityEngine.XR.ARFoundation
 
                 for (int i = 0; i < numTextureInfos; ++i)
                 {
-                    Debug.Assert(m_TextureInfos[i].descriptor.dimension == TextureDimension.Tex2D, $"Texture needs to be a Texture 2D, but instead is {m_TextureInfos[i].descriptor.dimension.ToString()}.");
+                    DebugAssert.That(m_TextureInfos[i].descriptor.dimension == TextureDimension.Tex2D)?.
+                        WithMessage($"Texture needs to be a Texture 2D, but instead is {m_TextureInfos[i].descriptor.dimension.ToString()}.");
+
                     m_Textures.Add((Texture2D)m_TextureInfos[i].texture);
                     m_TexturePropertyIds.Add(m_TextureInfos[i].descriptor.propertyNameId);
                 }
