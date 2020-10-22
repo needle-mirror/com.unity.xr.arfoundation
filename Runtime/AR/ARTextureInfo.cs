@@ -100,7 +100,7 @@ namespace UnityEngine.XR.ARFoundation
                 return default(ARTextureInfo);
             }
 
-            DebugAssert.That(textureInfo.m_Descriptor.dimension == descriptor.dimension)?.
+            DebugWarn.WhenFalse(textureInfo.m_Descriptor.dimension == TextureDimension.None || textureInfo.m_Descriptor.dimension == descriptor.dimension)?.
                 WithMessage($"Texture descriptor dimension should not change from {textureInfo.m_Descriptor.dimension} to {descriptor.dimension}.");
 
             // If there is a texture already and if the descriptors have identical texture metadata, we only need

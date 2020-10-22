@@ -81,6 +81,13 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public Transform trackablesParent { get; private set; }
 
+        /// <summary>
+        /// Invoked during
+        /// [Application.onBeforeRender](xref:UnityEngine.Application.onBeforeRender(UnityEngine.Events.UnityAction))
+        /// whenever the <see cref="trackablesParent"/> [transform](xref:UnityEngine.Transform) changes.
+        /// </summary>
+        public event Action<ARTrackablesParentTransformChangedEventArgs> trackablesParentTransformChanged;
+
         GameObject m_ContentOffsetGameObject;
 
         Transform contentOffsetTransform
@@ -256,16 +263,29 @@ namespace UnityEngine.XR.ARFoundation
             }
 #endif // USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
 
-            return parent?.TransformPose(localOriginPose) ?? localOriginPose;
+            return parent
+                ? parent.TransformPose(localOriginPose)
+                : localOriginPose;
         }
 
-        void Update()
+        void OnEnable() => Application.onBeforeRender += OnBeforeRender;
+
+        void OnDisable() => Application.onBeforeRender -= OnBeforeRender;
+
+        void OnBeforeRender()
         {
             if (camera)
             {
                 var pose = GetCameraOriginPose();
                 trackablesParent.position = pose.position;
                 trackablesParent.rotation = pose.rotation;
+            }
+
+            if (trackablesParent.hasChanged)
+            {
+                trackablesParentTransformChanged?.Invoke(
+                    new ARTrackablesParentTransformChangedEventArgs(this, trackablesParent));
+                trackablesParent.hasChanged = false;
             }
         }
 

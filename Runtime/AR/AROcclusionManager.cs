@@ -173,7 +173,7 @@ namespace UnityEngine.XR.ARFoundation
             set
             {
                 m_EnvironmentDepthMode = value;
-                if (enabled)
+                if (enabled && descriptor?.supportsEnvironmentDepthImage == true)
                 {
                     subsystem.requestedEnvironmentDepthMode = value;
                 }
@@ -202,7 +202,7 @@ namespace UnityEngine.XR.ARFoundation
             set
             {
                 m_OcclusionPreferenceMode = value;
-                if (enabled)
+                if (enabled && (subsystem != null))
                 {
                     subsystem.requestedOcclusionPreferenceMode = value;
                 }

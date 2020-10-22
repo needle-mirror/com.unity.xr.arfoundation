@@ -30,5 +30,33 @@ namespace UnityEngine.XR.ARFoundation
         /// Get the session identifier from which this anchor originated.
         /// </summary>
         public Guid sessionId => sessionRelativeData.sessionId;
+
+        void OnEnable()
+        {
+            if (ARAnchorManager.instance is ARAnchorManager manager)
+            {
+                manager.TryAddAnchor(this);
+            }
+            else
+            {
+                pending = true;
+            }
+        }
+
+        void Update()
+        {
+            if (trackableId.Equals(TrackableId.invalidId) && ARAnchorManager.instance is ARAnchorManager manager)
+            {
+                manager.TryAddAnchor(this);
+            }
+        }
+
+        void OnDisable()
+        {
+            if (ARAnchorManager.instance is ARAnchorManager manager)
+            {
+                manager.TryRemoveAnchor(this);
+            }
+        }
     }
 }

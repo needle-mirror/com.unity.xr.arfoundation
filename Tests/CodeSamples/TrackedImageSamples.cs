@@ -72,7 +72,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 if (m_TrackedImageManager.referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
                 {
-                    mutableLibrary.ScheduleAddImageJob(
+                    mutableLibrary.ScheduleAddImageWithValidationJob(
                         imageToAdd,
                         "my new image",
                         0.5f /* 50 cm */);
@@ -104,7 +104,7 @@ namespace UnityEngine.XR.ARFoundation
                         SerializableGuid.empty,
                         sizeInMeters, "My Image", null);
 
-                    var jobHandle = mutableLibrary.ScheduleAddImageJob(
+                    var jobState = mutableLibrary.ScheduleAddImageWithValidationJob(
                         grayscaleImageBytes,
                         new Vector2Int(widthInPixels, heightInPixels),
                         TextureFormat.R8,
@@ -112,7 +112,7 @@ namespace UnityEngine.XR.ARFoundation
 
                     // Schedule a job that deallocates the image bytes after the image
                     // is added to the reference image library.
-                    new DeallocateJob { data = grayscaleImageBytes }.Schedule(jobHandle);
+                    new DeallocateJob { data = grayscaleImageBytes }.Schedule(jobState.jobHandle);
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace UnityEngine.XR.ARFoundation
                 var library = m_TrackedImageManager.CreateRuntimeLibrary();
                 if (library is MutableRuntimeReferenceImageLibrary mutableLibrary)
                 {
-                    mutableLibrary.ScheduleAddImageJob(
+                    mutableLibrary.ScheduleAddImageWithValidationJob(
                         imageToAdd,
                         "my new image",
                         0.5f /* 50 cm */);

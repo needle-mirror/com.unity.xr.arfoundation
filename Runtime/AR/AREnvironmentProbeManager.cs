@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
 
@@ -154,8 +155,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </returns>
         public AREnvironmentProbe GetEnvironmentProbe(TrackableId trackableId)
         {
-            AREnvironmentProbe environmentProbe;
-            if (m_Trackables.TryGetValue(trackableId, out environmentProbe))
+            if (m_Trackables.TryGetValue(trackableId, out var environmentProbe))
                 return environmentProbe;
 
             return null;
@@ -179,6 +179,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <exception cref="System.NotSupportedException">Thrown if manual placement is not supported by this subsystem.
         /// Check for support on the <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.descriptor"/>'s
         ///     `supportsManualPlacement` property.</exception>
+        [Obsolete("Add an environment probe using AddComponent<" + nameof(AREnvironmentProbe) + ">(). (2020-10-06)")]
         public AREnvironmentProbe AddEnvironmentProbe(Pose pose, Vector3 scale, Vector3 size)
         {
             if (!enabled)
@@ -187,16 +188,11 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem == null)
                 throw new InvalidOperationException("Environment probe manager has no subsystem. Enable the manager first.");
 
-#if UNITY_2020_2_OR_NEWER
-            if (!subsystem.subsystemDescriptor.supportsManualPlacement)
-#else
-            if (!subsystem.SubsystemDescriptor.supportsManualPlacement)
-#endif
+            if (!descriptor.supportsManualPlacement)
                 throw new NotSupportedException("Manual environment probe placement is not supported by this subsystem.");
 
             var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
-            XREnvironmentProbe sessionRelativeData;
-            if (subsystem.TryAddEnvironmentProbe(pose, scale, size, out sessionRelativeData))
+            if (subsystem.TryAddEnvironmentProbe(sessionRelativePose, scale, size, out var sessionRelativeData))
             {
                 var probe = CreateTrackableImmediate(sessionRelativeData);
                 probe.placementType = AREnvironmentProbePlacementType.Manual;
@@ -204,6 +200,41 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             return null;
+        }
+
+        internal bool TryAddEnvironmentProbe(AREnvironmentProbe probe)
+        {
+            if (!CanBeAddedToSubsystem(probe))
+                return false;
+
+            var reflectionProbe = probe.GetComponent<ReflectionProbe>();
+            if (reflectionProbe == null)
+                throw new InvalidOperationException($"Each {nameof(AREnvironmentProbe)} requires a {nameof(ReflectionProbe)} component.");
+
+            if (!descriptor.supportsManualPlacement)
+                throw new NotSupportedException("Manual environment probe placement is not supported by this subsystem.");
+
+            var probeTransform = probe.transform;
+            var trackablesParent = sessionOrigin.trackablesParent;
+            var poseInSessionSpace = trackablesParent.InverseTransformPose(new Pose(probeTransform.position, probeTransform.rotation));
+
+            var worldToLocalSession = trackablesParent.worldToLocalMatrix;
+            var localToWorldProbe = probeTransform.localToWorldMatrix;
+
+            // We want to calculate the "local-to-parent" of the probe if the session origin were its parent.
+            //     LTW_session * LTP_probe = LTW_probe
+            // =>  LTP_probe = inverse(LTW_session) * LTW_probe
+            var localToParentProbe = worldToLocalSession * localToWorldProbe;
+            var sessionSpaceScale = localToParentProbe.lossyScale;
+
+            if (subsystem.TryAddEnvironmentProbe(poseInSessionSpace, sessionSpaceScale, reflectionProbe.size, out var sessionRelativeData))
+            {
+                CreateTrackableFromExisting(probe, sessionRelativeData);
+                probe.placementType = AREnvironmentProbePlacementType.Manual;
+                return probe;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -229,6 +260,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <see cref="SubsystemLifecycleManager{TSubsystem, TSubsystemDescriptor}.descriptor"/>'s
         /// `supportsRemovalOfAutomatic` property.
         /// </exception>
+        [Obsolete("Call Destroy() on the " + nameof(AREnvironmentProbe) + " component to remove it. (2020-10-06)")]
         public bool RemoveEnvironmentProbe(AREnvironmentProbe probe)
         {
             if (!enabled)
@@ -238,14 +270,9 @@ namespace UnityEngine.XR.ARFoundation
                 throw new InvalidOperationException("Environment probe manager has no subsystem. Enable the manager first.");
 
             if (probe == null)
-                throw new ArgumentNullException("probe");
+                throw new ArgumentNullException(nameof(probe));
 
-            var desc =
-#if UNITY_2020_2_OR_NEWER
-                subsystem.subsystemDescriptor;
-#else
-                subsystem.SubsystemDescriptor;
-#endif
+            var desc = descriptor;
 
             if ((probe.placementType == AREnvironmentProbePlacementType.Manual) && !desc.supportsRemovalOfManual)
                 throw new InvalidOperationException("Removal of manually placed environment probes are not supported by this subsystem.");
@@ -262,10 +289,41 @@ namespace UnityEngine.XR.ARFoundation
             return false;
         }
 
+        internal bool TryRemoveEnvironmentProbe(AREnvironmentProbe probe)
+        {
+            if (probe == null)
+                throw new ArgumentNullException(nameof(probe));
+
+            if (subsystem == null)
+                return false;
+
+            var desc = descriptor;
+
+            if ((probe.placementType == AREnvironmentProbePlacementType.Manual) && !desc.supportsRemovalOfManual)
+                throw new InvalidOperationException("Removal of manually placed environment probes are not supported by this subsystem.");
+
+            if ((probe.placementType == AREnvironmentProbePlacementType.Automatic) && !desc.supportsRemovalOfAutomatic)
+                throw new InvalidOperationException("Removal of automatically placed environment probes are not supported by this subsystem.");
+
+            if (subsystem.RemoveEnvironmentProbe(probe.trackableId))
+            {
+                if (m_PendingAdds.ContainsKey(probe.trackableId))
+                {
+                    m_PendingAdds.Remove(probe.trackableId);
+                    m_Trackables.Remove(probe.trackableId);
+                }
+
+                probe.pending = false;
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// The name of the `GameObject` for each instantiated <see cref="AREnvironmentProbe"/>.
         /// </summary>
-        protected override string gameObjectName => "AREnvironmentProbe";
+        protected override string gameObjectName => nameof(AREnvironmentProbe);
 
         /// <summary>
         /// Gets the prefab that should be instantiated for each <see cref="AREnvironmentProbe"/>. May be `null`.
@@ -311,7 +369,9 @@ namespace UnityEngine.XR.ARFoundation
             if (environmentProbesChanged != null)
             {
                 using (new ScopedProfiler("OnEnvironmentProbesChanged"))
-                environmentProbesChanged(new AREnvironmentProbesChangedEvent(added, updated, removed));
+                {
+                    environmentProbesChanged(new AREnvironmentProbesChangedEvent(added, updated, removed));
+                }
             }
         }
 

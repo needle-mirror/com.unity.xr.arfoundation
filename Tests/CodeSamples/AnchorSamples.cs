@@ -10,15 +10,11 @@ namespace UnityEngine.XR.ARFoundation
         class ExistingContent
         {
             #region anchor_existing_content
-            ARAnchorManager m_AnchorManager;
 
-            void AnchorContent(Vector3 position, Transform content)
+            void AnchorContent(Vector3 position, GameObject content)
             {
-                // Create a new anchor.
-                var anchor = m_AnchorManager.AddAnchor(new Pose(position, Quaternion.identity));
-
-                // Parent 'content' to it.
-                content.parent = anchor.transform;
+                // Add an anchor to your content
+                content.AddComponent<ARAnchor>();
             }
             #endregion
         }
@@ -26,15 +22,17 @@ namespace UnityEngine.XR.ARFoundation
         class Prefab : MonoBehaviour
         {
             #region anchor_prefab_content
-            ARAnchorManager m_AnchorManager;
 
             void AnchorContent(Vector3 position, GameObject prefab)
             {
-                // Create a new anchor.
-                var anchor = m_AnchorManager.AddAnchor(new Pose(position, Quaternion.identity));
+                // Create an instance of the prefab
+                var instance = Instantiate(prefab, position, Quaternion.identity);
 
-                // Instantiate 'prefab' as a child of the new anchor.
-                Instantiate(prefab, anchor.transform);
+                // Add an ARAnchor component if it doesn't have one already.
+                if (instance.GetComponent<ARAnchor>() == null)
+                {
+                    instance.AddComponent<ARAnchor>();
+                }
             }
             #endregion
         }

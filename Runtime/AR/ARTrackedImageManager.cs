@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Jobs;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 
@@ -172,7 +173,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new image is detected.
         /// </summary>
-        protected override string gameObjectName => "ARTrackedImage";
+        protected override string gameObjectName => nameof(ARTrackedImage);
 
         /// <summary>
         /// Sets the image library on the subsystem before Start() is called on the <c>XRImageTrackingSubsystem</c>.

@@ -16,7 +16,28 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="distance">The distance, in Unity world space, of the hit.</param>
         /// <param name="transform">The <c>Transform</c> that transforms from session space to world space.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="transform"/> is `null`.</exception>
-        public ARRaycastHit(XRRaycastHit hit, float distance, Transform transform, ARTrackable trackable = null)
+        [Obsolete("Use ARRaycastHit(XRRaycastHit, float, Transform, ARTrackable) instead. (2020-10-09)")]
+        public ARRaycastHit(XRRaycastHit hit, float distance, Transform transform)
+        {
+            if (transform == null)
+                throw new ArgumentNullException(nameof(transform));
+
+            m_Hit = hit;
+            this.distance = distance;
+            m_Transform = transform;
+            trackable = null;
+        }
+
+        /// <summary>
+        /// Constructor invoked by <see cref="ARRaycastManager.Raycast(Vector2, System.Collections.Generic.List{ARRaycastHit}, TrackableType)"/>
+        /// and <see cref="ARRaycastManager.Raycast(Ray, System.Collections.Generic.List{ARRaycastHit}, TrackableType)"/>.
+        /// </summary>
+        /// <param name="hit">Session-relative raycast hit data.</param>
+        /// <param name="distance">The distance, in Unity world space, of the hit.</param>
+        /// <param name="transform">The <c>Transform</c> that transforms from session space to world space.</param>
+        /// <param name="trackable">The trackable that was hit by this raycast, or `null` if no trackable was hit.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="transform"/> is `null`.</exception>
+        public ARRaycastHit(XRRaycastHit hit, float distance, Transform transform, ARTrackable trackable)
         {
             if (transform == null)
                 throw new ArgumentNullException(nameof(transform));

@@ -69,6 +69,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>A new <see cref="ARAnchor"/> if successful, otherwise <c>null</c>.</returns>
         /// <exception cref="System.InvalidOperationException">Thrown if this `MonoBehaviour` is not enabled.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if the underlying subsystem is `null`.</exception>
+        [Obsolete("Add an anchor using AddComponent<" + nameof(ARAnchor) + ">(). (2020-10-06)")]
         public ARAnchor AddAnchor(Pose pose)
         {
             if (!enabled)
@@ -80,11 +81,30 @@ namespace UnityEngine.XR.ARFoundation
             var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
 
             // Add the anchor to the XRAnchorSubsystem
-            XRAnchor sessionRelativeData;
-            if (subsystem.TryAddAnchor(sessionRelativePose, out sessionRelativeData))
+            if (subsystem.TryAddAnchor(sessionRelativePose, out var sessionRelativeData))
+            {
                 return CreateTrackableImmediate(sessionRelativeData);
+            }
 
             return null;
+        }
+
+        internal bool TryAddAnchor(ARAnchor anchor)
+        {
+            if (!CanBeAddedToSubsystem(anchor))
+                return false;
+
+            var t = anchor.transform;
+            var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(new Pose(t.position, t.rotation));
+
+            // Add the anchor to the XRAnchorSubsystem
+            if (subsystem.TryAddAnchor(sessionRelativePose, out var sessionRelativeData))
+            {
+                CreateTrackableFromExisting(anchor, sessionRelativeData);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -102,12 +122,13 @@ namespace UnityEngine.XR.ARFoundation
                 throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");
 
             if (plane == null)
-                throw new ArgumentNullException("plane");
+                throw new ArgumentNullException(nameof(plane));
 
             var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
-            XRAnchor sessionRelativeData;
-            if (subsystem.TryAttachAnchor(plane.trackableId, sessionRelativePose, out sessionRelativeData))
+            if (subsystem.TryAttachAnchor(plane.trackableId, sessionRelativePose, out var sessionRelativeData))
+            {
                 return CreateTrackableImmediate(sessionRelativeData);
+            }
 
             return null;
         }
@@ -120,6 +141,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <c>True</c> if the anchor was successfully removed.
         /// <c>False</c> usually means the anchor is not longer tracked by the system.
         /// </returns>
+        [Obsolete("Call Destroy() on the " + nameof(ARAnchor) + " component to remove it. (2020-10-06)")]
         public bool RemoveAnchor(ARAnchor anchor)
         {
             if (!enabled)
@@ -129,11 +151,34 @@ namespace UnityEngine.XR.ARFoundation
                 throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");
 
             if (anchor == null)
-                throw new ArgumentNullException("anchor");
+                throw new ArgumentNullException(nameof(anchor));
 
             if (subsystem.TryRemoveAnchor(anchor.trackableId))
             {
                 DestroyPendingTrackable(anchor.trackableId);
+                return true;
+            }
+
+            return false;
+        }
+
+        internal bool TryRemoveAnchor(ARAnchor anchor)
+        {
+            if (anchor == null)
+                throw new ArgumentNullException(nameof(anchor));
+
+            if (subsystem == null)
+                return false;
+
+            if (subsystem.TryRemoveAnchor(anchor.trackableId))
+            {
+                if (m_PendingAdds.ContainsKey(anchor.trackableId))
+                {
+                    m_PendingAdds.Remove(anchor.trackableId);
+                    m_Trackables.Remove(anchor.trackableId);
+                }
+
+                anchor.pending = false;
                 return true;
             }
 
@@ -148,8 +193,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>The <see cref="ARAnchor"/> with <paramref name="trackableId"/> or <c>null</c> if it does not exist.</returns>
         public ARAnchor GetAnchor(TrackableId trackableId)
         {
-            ARAnchor anchor;
-            if (m_Trackables.TryGetValue(trackableId, out anchor))
+            if (m_Trackables.TryGetValue(trackableId, out var anchor))
                 return anchor;
 
             return null;
@@ -180,10 +224,12 @@ namespace UnityEngine.XR.ARFoundation
             if (anchorsChanged != null)
             {
                 using (new ScopedProfiler("OnAnchorsChanged"))
-                anchorsChanged(new ARAnchorsChangedEventArgs(
-                    added,
-                    updated,
-                    removed));
+                {
+                    anchorsChanged(new ARAnchorsChangedEventArgs(
+                        added,
+                        updated,
+                        removed));
+                }
             }
         }
     }

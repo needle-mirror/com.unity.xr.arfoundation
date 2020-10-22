@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -18,7 +17,7 @@ namespace UnityEngine.XR.ARFoundation
         public static Ray TransformRay(this Transform transform, Ray ray)
         {
             if (transform == null)
-                throw new ArgumentNullException("transform");
+                throw new ArgumentNullException(nameof(transform));
 
             return new Ray(
                 transform.TransformPoint(ray.origin),
@@ -34,7 +33,7 @@ namespace UnityEngine.XR.ARFoundation
         public static Ray InverseTransformRay(this Transform transform, Ray ray)
         {
             if (transform == null)
-                throw new ArgumentNullException("transform");
+                throw new ArgumentNullException(nameof(transform));
 
             return new Ray(
                 transform.InverseTransformPoint(ray.origin),
@@ -61,7 +60,7 @@ namespace UnityEngine.XR.ARFoundation
         public static Pose InverseTransformPose(this Transform transform, Pose pose)
         {
             if (transform == null)
-                throw new ArgumentNullException("transform");
+                throw new ArgumentNullException(nameof(transform));
 
             return new Pose
             {
@@ -78,10 +77,10 @@ namespace UnityEngine.XR.ARFoundation
         public static void TransformPointList(this Transform transform, List<Vector3> points)
         {
             if (transform == null)
-                throw new ArgumentNullException("transform");
+                throw new ArgumentNullException(nameof(transform));
 
             if (points == null)
-                throw new ArgumentNullException("points");
+                throw new ArgumentNullException(nameof(points));
 
             for (int i = 0; i < points.Count; ++i)
             {
@@ -97,10 +96,10 @@ namespace UnityEngine.XR.ARFoundation
         public static void InverseTransformPointList(this Transform transform, List<Vector3> points)
         {
             if (transform == null)
-                throw new ArgumentNullException("transform");
+                throw new ArgumentNullException(nameof(transform));
 
             if (points == null)
-                throw new ArgumentNullException("points");
+                throw new ArgumentNullException(nameof(points));
 
             for (int i = 0; i < points.Count; ++i)
             {
@@ -116,7 +115,7 @@ namespace UnityEngine.XR.ARFoundation
         public static void SetLayerRecursively(this Transform transform, int layer)
         {
             if (transform == null)
-                throw new ArgumentNullException("transform");
+                throw new ArgumentNullException(nameof(transform));
 
             // Set self
             transform.gameObject.layer = layer;

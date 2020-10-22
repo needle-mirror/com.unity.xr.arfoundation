@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
@@ -42,6 +43,12 @@ namespace UnityEngine.XR.ARFoundation
         where TSessionRelativeData : struct, ITrackable
         where TTrackable : ARTrackable<TSessionRelativeData, TTrackable>
     {
+#if UNITY_2020_2_OR_NEWER
+        internal static ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable> instance { get; private set; }
+#else
+        internal static ARTrackableManager<TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable> instance { get; private set; }
+#endif
+
         /// <summary>
         /// A collection of all trackables managed by this component.
         /// </summary>
@@ -99,6 +106,73 @@ namespace UnityEngine.XR.ARFoundation
             sessionOrigin = GetComponent<ARSessionOrigin>();
         }
 
+        /// <inheritdoc />
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            instance = this;
+            sessionOrigin.trackablesParentTransformChanged += OnTrackablesParentTransformChanged;
+        }
+
+        /// <inheritdoc />
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            sessionOrigin.trackablesParentTransformChanged -= OnTrackablesParentTransformChanged;
+        }
+
+        /// <summary>
+        /// Determines whether an existing <see cref="ARTrackable{TSessionRelativeData,TTrackable}"/> can be added
+        /// to the underlying subsystem.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="trackable"/> has not been added yet (i.e., it is not tracked by this manager) and the
+        /// manager is either disabled or does not have a valid subsystem, then the <paramref name="trackable"/>'s
+        /// <see cref="ARTrackable{TSessionRelativeData,TTrackable}.pending"/> state is set to `true`.
+        /// </remarks>
+        /// <param name="trackable">An existing <see cref="ARTrackable{TSessionRelativeData,TTrackable}"/> to add to
+        ///     the underlying subsystem.</param>
+        /// <returns>Returns `true` if this manager is enabled, has a valid subsystem, and <paramref name="trackable"/>
+        ///     is not already being tracked by this manager. Returns `false` otherwise.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="trackable"/> is `null`.</exception>
+        protected bool CanBeAddedToSubsystem(TTrackable trackable)
+        {
+            if (trackable == null)
+                throw new ArgumentNullException(nameof(trackable));
+
+            // If it already has a valid trackableId, then don't re-add it
+            if (!trackable.trackableId.Equals(TrackableId.invalidId))
+                return false;
+
+            // If we already know about it, then early out
+            if (m_Trackables.ContainsKey(trackable.trackableId))
+                return false;
+
+            if (!enabled || subsystem == null)
+            {
+                // If the manager is disabled or there is no subsystem, and we don't already know about
+                // this trackable, then it must be pending.
+                trackable.pending = true;
+                return false;
+            }
+
+            // Finally, we can only add it if we have a session origin.
+            return sessionOrigin && sessionOrigin.trackablesParent;
+        }
+
+        void OnTrackablesParentTransformChanged(ARTrackablesParentTransformChangedEventArgs eventArgs)
+        {
+            foreach (var trackable in trackables)
+            {
+                var transform = trackable.transform;
+                if (transform.parent != eventArgs.trackablesParent)
+                {
+                    var desiredPose = eventArgs.trackablesParent.TransformPose(trackable.sessionRelativePose);
+                    transform.SetPositionAndRotation(desiredPose.position, desiredPose.rotation);
+                }
+            }
+        }
+
         /// <summary>
         /// Update is called once per frame. This component's internal state
         /// is first updated, and then an event notifying whether any trackables have been added, removed, or updated
@@ -135,11 +209,13 @@ namespace UnityEngine.XR.ARFoundation
                     ClearAndSetCapacity(s_Removed, changes.removed.Length);
                     foreach (var trackableId in changes.removed)
                     {
-                        TTrackable trackable;
-                        if (m_Trackables.TryGetValue(trackableId, out trackable))
+                        if (m_Trackables.TryGetValue(trackableId, out var trackable))
                         {
                             m_Trackables.Remove(trackableId);
-                            s_Removed.Add(trackable);
+                            if (trackable)
+                            {
+                                s_Removed.Add(trackable);
+                            }
                         }
                     }
                 }
@@ -254,8 +330,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns><c>True</c> if the trackable is "pending" (i.e., not yet reported as "added").</returns>
         protected bool DestroyPendingTrackable(TrackableId trackableId)
         {
-            TTrackable trackable;
-            if (m_PendingAdds.TryGetValue(trackableId, out trackable))
+            if (m_PendingAdds.TryGetValue(trackableId, out var trackable))
             {
                 m_PendingAdds.Remove(trackableId);
                 m_Trackables.Remove(trackableId);
@@ -278,57 +353,98 @@ namespace UnityEngine.XR.ARFoundation
             return gameObjectName + " " + trackableId.ToString();
         }
 
-        GameObject CreateGameObject()
+        (GameObject gameObject, bool shouldBeActive) CreateGameObjectDeactivated()
         {
             var prefab = GetPrefab();
             if (prefab == null)
             {
-                var go = new GameObject();
-                go.transform.parent = sessionOrigin.trackablesParent;
-                return go;
+                var gameObject = new GameObject();
+                gameObject.SetActive(false);
+                gameObject.transform.parent = sessionOrigin.trackablesParent;
+                return (gameObject, true);
             }
-
-            return Instantiate(prefab, sessionOrigin.trackablesParent);
+            else
+            {
+                var active = prefab.activeSelf;
+                prefab.SetActive(false);
+                var gameObject = Instantiate(prefab, sessionOrigin.trackablesParent);
+                prefab.SetActive(active);
+                return (gameObject, active);
+            }
         }
 
-        GameObject CreateGameObject(string name)
+        (GameObject gameObject, bool shouldBeActive) CreateGameObjectDeactivated(string name)
         {
-            var go = CreateGameObject();
-            go.name = name;
-            return go;
+            var tuple = CreateGameObjectDeactivated();
+            tuple.gameObject.name = name;
+            return tuple;
         }
 
-        GameObject CreateGameObject(TrackableId trackableId)
+        (GameObject gameObject, bool shouldBeActive) CreateGameObjectDeactivated(TrackableId trackableId)
         {
             using (new ScopedProfiler("CreateGameObject"))
-            return CreateGameObject(GetTrackableName(trackableId));
+            {
+                return CreateGameObjectDeactivated(GetTrackableName(trackableId));
+            }
         }
 
-        TTrackable CreateTrackable(TrackableId trackableId)
+        TTrackable CreateTrackable(TSessionRelativeData sessionRelativeData)
         {
-            var go = CreateGameObject(trackableId);
-            var trackable = go.GetComponent<TTrackable>();
+            var (gameObject, shouldBeActive) = CreateGameObjectDeactivated(sessionRelativeData.trackableId);
+            var trackable = gameObject.GetComponent<TTrackable>();
             if (trackable == null)
-                trackable = go.AddComponent<TTrackable>();
+            {
+                trackable = gameObject.AddComponent<TTrackable>();
+            }
+
+            m_Trackables.Add(sessionRelativeData.trackableId, trackable);
+            SetSessionRelativeData(trackable, sessionRelativeData);
+            trackable.gameObject.SetActive(shouldBeActive);
 
             return trackable;
+        }
+
+        void SetSessionRelativeData(TTrackable trackable, TSessionRelativeData data)
+        {
+            trackable.SetSessionRelativeData(data);
+            var worldSpacePose = sessionOrigin.trackablesParent.TransformPose(data.pose);
+            trackable.transform.SetPositionAndRotation(worldSpacePose.position, worldSpacePose.rotation);
+        }
+
+        /// <summary>
+        /// Creates the native counterpart for an existing <see cref="ARTrackable{TSessionRelativeData,TTrackable}"/>
+        /// e.g., added with a call to [AddComponent](xref:UnityEngine.GameObject.AddComponent).
+        /// </summary>
+        /// <param name="existingTrackable">The existing trackable component.</param>
+        /// <param name="sessionRelativeData">The AR data associated with the trackable. This usually comes from the
+        ///     trackable's associated [subsystem](xref:UnityEngine.Subsystem)</param>
+        protected void CreateTrackableFromExisting(TTrackable existingTrackable, TSessionRelativeData sessionRelativeData)
+        {
+            // Same as CreateOrUpdateTrackable
+            var trackableId = sessionRelativeData.trackableId;
+            m_Trackables.Add(trackableId, existingTrackable);
+            SetSessionRelativeData(existingTrackable, sessionRelativeData);
+            OnCreateTrackable(existingTrackable);
+            OnAfterSetSessionRelativeData(existingTrackable, sessionRelativeData);
+            existingTrackable.OnAfterSetSessionRelativeData();
+
+            // Remaining logic from CreateTrackableImmediate
+            m_PendingAdds.Add(trackableId, existingTrackable);
+            existingTrackable.pending = true;
         }
 
         TTrackable CreateOrUpdateTrackable(TSessionRelativeData sessionRelativeData)
         {
             var trackableId = sessionRelativeData.trackableId;
-            TTrackable trackable;
-            if (m_Trackables.TryGetValue(trackableId, out trackable))
+            if (m_Trackables.TryGetValue(trackableId, out var trackable))
             {
                 m_PendingAdds.Remove(trackableId);
                 trackable.pending = false;
-                trackable.SetSessionRelativeData(sessionRelativeData);
+                SetSessionRelativeData(trackable, sessionRelativeData);
             }
             else
             {
-                trackable = CreateTrackable(trackableId);
-                m_Trackables.Add(trackableId, trackable);
-                trackable.SetSessionRelativeData(sessionRelativeData);
+                trackable = CreateTrackable(sessionRelativeData);
                 OnCreateTrackable(trackable);
             }
 
@@ -340,7 +456,9 @@ namespace UnityEngine.XR.ARFoundation
         void DestroyTrackable(TTrackable trackable)
         {
             if (trackable.destroyOnRemoval)
+            {
                 Destroy(trackable.gameObject);
+            }
         }
 
         static List<TTrackable> s_Added = new List<TTrackable>();

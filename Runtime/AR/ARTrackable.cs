@@ -79,11 +79,8 @@ namespace UnityEngine.XR.ARFoundation
         protected internal virtual void OnAfterSetSessionRelativeData()
         { }
 
-        internal void SetSessionRelativeData(TSessionRelativeData sessionRelativeData)
-        {
-            this.sessionRelativeData = sessionRelativeData;
-            transform.localPosition = sessionRelativeData.pose.position;
-            transform.localRotation = sessionRelativeData.pose.rotation;
-        }
+        internal void SetSessionRelativeData(TSessionRelativeData data) => sessionRelativeData = data;
+
+        internal Pose sessionRelativePose => sessionRelativeData.pose;
     }
 }

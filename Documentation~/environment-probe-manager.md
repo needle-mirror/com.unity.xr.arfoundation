@@ -9,15 +9,17 @@ The environment probe manager is a type of [trackable manager](trackable-manager
 
 Environment probes are a technique of capturing real-world imagery from the device’s camera and organizing that information into an environment texture, such as a cube map, that contains the view in all directions from a certain point in the scene. Rendering 3D objects using this environment texture allows for real-world imagery to be reflected in the rendered objects, which creates realistic reflections and lighting of virtual objects as influenced by the real-world views.
 
-For more details, see the [Environment Probe Subsystem](http://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/environment-probe-subsystem.html) documentation.
+For more details, see the [Environment Probe Subsystem](xref:arsubsystems-environment-probe-subsystem) documentation.
 
 Environment probes can be placed manually, automatically, or using both methods.
 
 ## Manual placement
 
-To create an environment probe, call `AREnvironmentProbeManager.AddEnvironmentProbe`. Like [anchors](anchor-manager.md), the resulting `AREnvironmentProbe` might be in a "pending" state for a few frames.
+**Note:** Support for manual placement and removal of environment probes depends on the underlying AR framework's capabilities. Check the [subsystem's descriptor](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor) before attempting to add or destroy an environment probe.
 
-To remove an environment probe, call `AREnvironmentProbeManager.RemoveEnvironmentProbe`. **Note:** Do not `Destroy` an `AREnvironmentProbe` unless its manager has already been destroyed.
+To create an environment probe, add an `AREnvironmentProbe` component to a GameObject using [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). Like [anchors](anchor-manager.md), the `AREnvironmentProbe` might be in a "pending" state for a few frames.
+
+To remove an environment probe, [Destroy](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) it as you would any component or GameObject.
 
 ## Automatic placement
 

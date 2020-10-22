@@ -99,9 +99,43 @@ namespace UnityEngine.XR.ARFoundation
             m_ReflectionProbe.mode = ReflectionProbeMode.Custom;
         }
 
+        Transform GetTrackablesParent()
+        {
+            if (AREnvironmentProbeManager.instance is AREnvironmentProbeManager manager)
+            {
+                return manager.GetComponent<ARSessionOrigin>().trackablesParent;
+            }
+
+            return null;
+        }
+
         internal protected override void OnAfterSetSessionRelativeData()
         {
-            transform.localScale = sessionRelativeData.scale;
+            var trackablesParent = GetTrackablesParent();
+            if (trackablesParent && transform.parent != trackablesParent)
+            {
+                var pose = sessionRelativeData.pose;
+
+                // Compute the desired world-space transform matrix for the environment probe
+                var desiredLocalToWorld = trackablesParent.localToWorldMatrix * Matrix4x4.TRS(pose.position, pose.rotation, sessionRelativeData.scale);
+                if (transform.parent)
+                {
+                    // If the probe has a parent (i.e., it is not at the root), then we need to compute
+                    // its localScale such that its final world-space scale will match what it would be
+                    // if it were under the ARSessionOrigin.
+                    var localToParent = transform.parent.worldToLocalMatrix * desiredLocalToWorld;
+                    transform.localScale = localToParent.lossyScale;
+                }
+                else
+                {
+                    // Otherwise, it is at the scene root, so just set its localScale is its world-space scale.
+                    transform.localScale = desiredLocalToWorld.lossyScale;
+                }
+            }
+            else
+            {
+                transform.localScale = sessionRelativeData.scale;
+            }
 
             // Update the environment texture if the environment texture is valid.
             if (sessionRelativeData.textureDescriptor.valid)
@@ -112,7 +146,7 @@ namespace UnityEngine.XR.ARFoundation
             // Update the reflection probe box.
             m_ReflectionProbe.center = Vector3.zero;
             m_ReflectionProbe.size = sessionRelativeData.size;
-            m_ReflectionProbe.boxProjection = !Single.IsInfinity(m_ReflectionProbe.size.x);
+            m_ReflectionProbe.boxProjection = !float.IsInfinity(m_ReflectionProbe.size.x);
 
             // Manual placement is set by the manager. Unknown means it must have been added automatically.
             if (placementType == AREnvironmentProbePlacementType.Unknown)
@@ -148,9 +182,34 @@ namespace UnityEngine.XR.ARFoundation
         /// Generates a string representation of this <see cref="AREnvironmentProbe"/>.
         /// </summary>
         /// <returns>A string representation of this <see cref="AREnvironmentProbe"/>.</returns>
-        public override string ToString()
+        public override string ToString() => $"{name} [trackableId:{trackableId.ToString()}]";
+
+        void OnEnable()
         {
-            return string.Format("{0} [trackableId:{1}]", name, trackableId.ToString());
+            if (AREnvironmentProbeManager.instance is AREnvironmentProbeManager manager)
+            {
+                manager.TryAddEnvironmentProbe(this);
+            }
+            else
+            {
+                pending = true;
+            }
+        }
+
+        void Update()
+        {
+            if (trackableId.Equals(TrackableId.invalidId) && AREnvironmentProbeManager.instance is AREnvironmentProbeManager manager)
+            {
+                manager.TryAddEnvironmentProbe(this);
+            }
+        }
+
+        void OnDisable()
+        {
+            if (AREnvironmentProbeManager.instance is AREnvironmentProbeManager manager)
+            {
+                manager.TryRemoveEnvironmentProbe(this);
+            }
         }
     }
 }

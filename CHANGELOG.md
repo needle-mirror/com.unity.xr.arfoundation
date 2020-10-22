@@ -4,6 +4,21 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0-preview.11] - 2020-10-22
+### New
+- Added a new extension method [ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageWithValidationJob(UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary,UnityEngine.Texture2D,System.String,System.Nullable{System.Single},Unity.Jobs.JobHandle)) for the [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary) which adds new reference images to a reference library only after validating that the new reference image is suitable for image tracking. The new method returns a new type [AddReferenceImageJobState](xref:UnityEngine.XR.ARSubsystems.AddReferenceImageJobState) which you can use to determine whether the image was successfully added.
+
+### Changes
+- **Anchors:** Previously, [ARAnchors](xref:UnityEngine.XR.ARFoundation.ARAnchor) were added and removed by calling [AddAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.AddAnchor(UnityEngine.Pose)) and [RemoveAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.RemoveAnchor(UnityEngine.XR.ARFoundation.ARAnchor)), respectively. Now, you can add an anchor by simply adding an `ARAnchor` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an anchor by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `ARAnchor` component (or its GameObject). See the [manual entry for anchors](xref:arfoundation-anchor-manager) for more details.
+- **Environment Probes:** Previously, [environment probes](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) were added and removed by calling [AddEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.AddEnvironmentProbe(UnityEngine.Pose,UnityEngine.Vector3,UnityEngine.Vector3)) and [RemoveEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.RemoveEnvironmentProbe(UnityEngine.XR.ARFoundation.AREnvironmentProbe)), respectively. Now, you can add an anchor by simply adding an `AREnvironmentProbe` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an environment probe by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `AREnvironmentProbe` component (or its GameObject). See the [manual entry for environment probes](xref:arfoundation-environment-probe-manager) for more details.
+
+### Fixes
+- Fixed in an incorrect `Debug.Assert` regarding a texture descriptor changing from `None` to something other than `None`. A typical error message (only seen in Development Builds) was
+<pre>
+Texture descriptor dimension should not change from None to Tex2D.
+</pre>
+- Fix a null reference exception in the occlusion manager when setting the environment depth mode or occlusion preference mode when the device does not support the occlusion subsystem.
+
 ## [4.1.0-preview.10] - 2020-10-12
 ### Changes
 - Changed internal uses of [Debug.Assert](xref:UnityEngine.Debug.Assert(System.Boolean,System.Object)) to a custom version that does not allocate the message string unless the assert fails. This reduces per-frame GC allocations when `UNITY_ASSERTIONS` are enabled (typically in development builds).
