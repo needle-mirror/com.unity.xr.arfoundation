@@ -63,9 +63,9 @@ The following platform packages and later implement the AR Foundation features i
 
 |Package Name           |Version             |
 |:---                   |:---                |
-|ARCore XR Plugin       |   4.1.0-preview.10 |
-|ARKit XR Plugin        |   4.1.0-preview.10 |
-|ARKit Face Tracking    |   4.1.0-preview.10 |
+|ARCore XR Plugin       |   4.1.0-preview.12 |
+|ARKit XR Plugin        |   4.1.0-preview.12 |
+|ARKit Face Tracking    |   4.1.0-preview.12 |
 |Magic Leap XR Plugin   |   6.0              |
 |Windows XR Plugin      |   4.0              |
 

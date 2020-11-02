@@ -180,7 +180,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected virtual void Update()
         {
-            if (subsystem == null)
+            if (subsystem == null || !subsystem.running)
                 return;
 
             using (new ScopedProfiler("GetChanges"))
