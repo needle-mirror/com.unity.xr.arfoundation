@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0-preview.13] - 2020-11-09
+### Fixes
+- Remove fix made in 4.1.0-preview.10 for URP 10+ rendering. URP 10 now has a proper fix for this issue.
+
 ## [4.1.0-preview.12] - 2020-11-02
 ### Fixes
 - Trackable managers no longer attempt to query subsystems for trackable changes when the subsystems are stopped. This fixes the console error that will occur with MagicLeap:
