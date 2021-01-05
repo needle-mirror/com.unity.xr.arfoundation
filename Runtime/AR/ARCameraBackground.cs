@@ -117,6 +117,11 @@ namespace UnityEngine.XR.ARFoundation
         CameraClearFlags? m_PreviousCameraClearFlags;
 
         /// <summary>
+        /// The original field of view of the camera, before enabling background rendering.
+        /// </summary>
+        float? m_PreviousCameraFieldOfView;
+
+        /// <summary>
         /// Whether background rendering is enabled.
         /// </summary>
         bool m_BackgroundRenderingEnabled;
@@ -209,7 +214,9 @@ namespace UnityEngine.XR.ARFoundation
         static void BeforeBackgroundRenderHandler(int eventId)
         {
             if (s_CameraSubsystem != null)
+            {
                 s_CameraSubsystem.OnBeforeBackgroundRender(eventId);
+            }
         }
 
         /// <summary>
@@ -228,7 +235,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Static reference to the active XRCameraSubsystem. Necessary here for access from a static delegate.
         /// </summary>
-        static UnityEngine.XR.ARSubsystems.XRCameraSubsystem s_CameraSubsystem;
+        static ARSubsystems.XRCameraSubsystem s_CameraSubsystem;
 
         /// <summary>
         /// Whether culling should be inverted. Used during command buffer configuration,
@@ -280,11 +287,17 @@ namespace UnityEngine.XR.ARFoundation
             // We must hold a static reference to the camera subsystem so that it is accessible to the
             // static callback needed for calling OnBeforeBackgroundRender() from the render thread
             if (m_CameraManager)
+            {
                 s_CameraSubsystem = m_CameraManager.subsystem;
+            }
             else
+            {
                 s_CameraSubsystem = null;
+            }
 
             DisableBackgroundClearFlags();
+
+            m_PreviousCameraFieldOfView = m_Camera.fieldOfView;
 
             Material material = defaultMaterial;
             if (useLegacyRenderPipeline && (material != null))
@@ -304,6 +317,12 @@ namespace UnityEngine.XR.ARFoundation
             DisableLegacyRenderPipelineBackgroundRendering();
 
             RestoreBackgroundClearFlags();
+
+            if (m_PreviousCameraFieldOfView.HasValue)
+            {
+                m_Camera.fieldOfView = m_PreviousCameraFieldOfView.Value;
+                m_PreviousCameraFieldOfView = null;
+            }
 
             s_CameraSubsystem = null;
         }
@@ -455,6 +474,9 @@ namespace UnityEngine.XR.ARFoundation
             if (eventArgs.projectionMatrix.HasValue)
             {
                 camera.projectionMatrix = eventArgs.projectionMatrix.Value;
+                const float twiceRad2Deg = 2 * Mathf.Rad2Deg;
+                var halfHeightOverNear = 1 / camera.projectionMatrix[1, 1];
+                camera.fieldOfView = Mathf.Atan(halfHeightOverNear) * twiceRad2Deg;
             }
         }
 

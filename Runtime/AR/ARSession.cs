@@ -26,7 +26,6 @@ namespace UnityEngine.XR.ARFoundation
 #endif
     {
         [SerializeField]
-        [Tooltip("If enabled, the session will attempt to update a supported device if its AR software is out of date.")]
         bool m_AttemptUpdate = true;
 
         /// <summary>
@@ -42,7 +41,6 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("If enabled, the Unity frame will be synchronized with the AR session. Otherwise, the AR session will be updated independently of the Unity frame.")]
         bool m_MatchFrameRate = true;
 
         /// <summary>
@@ -63,23 +61,23 @@ namespace UnityEngine.XR.ARFoundation
         public bool matchFrameRateEnabled => descriptor?.supportsMatchFrameRate == true ? subsystem.matchFrameRateEnabled : false;
 
         /// <summary>
-        /// If <c>True</c>, the session will block execution until a new AR frame is available and set
-        /// [Application.targetFrameRate](https://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html)
+        /// If `true`, the session will block execution until a new AR frame is available and set
+        /// [Application.targetFrameRate](xref:UnityEngine.Application.targetFrameRate)
         /// to match the native update frequency of the AR session.
         /// Otherwise, the AR session is updated indpendently of the Unity frame.
         /// </summary>
         /// <remarks>
-        /// <para>
-        /// If enabled with a simple scene, the <c>ARSession.Update</c> may appear to take a long time.
-        /// This is simply waiting for the next AR frame, similar to the way Unity will <c>WaitForTargetFPS</c> at the
-        /// end of a frame. If the rest of the Unity frame takes non-trivial time, then the next <c>ARSession.Update</c>
+        /// If enabled with a simple scene, the `ARSession.Update` may appear to take a long time.
+        /// This is simply waiting for the next AR frame, similar to the way Unity will `WaitForTargetFPS` at the
+        /// end of a frame. If the rest of the Unity frame takes non-trivial time, then the next `ARSession.Update`
         /// will take a proportionally less amount of time.
-        /// </para><para>
+        ///
         /// This option does three things:
-        /// - Enables a setting on the <c>XRSessionSubsystem</c> which causes the update to block until the next AR frame is ready.
-        /// - Sets <c>Application.targetFrameRate</c> to the session's preferred update rate.
-        /// - Sets [QualitySettings.vSyncCount](https://docs.unity3d.com/ScriptReference/QualitySettings-vSyncCount.html) to zero
-        /// </para>
+        /// - Enables a [setting on the XRSessionSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.matchFrameRateRequested) which causes the update to block until the next AR frame is ready
+        /// - Sets [Application.targetFrameRate](xref:UnityEngine.Application.targetFrameRate) to the session's preferred update rate
+        /// - Sets [QualitySettings.vSyncCount](xref:UnityEngine.QualitySettings.vSyncCount) to zero
+        ///
+        /// These settings are not reverted when the ARSession is disabled.
         /// </remarks>
         public bool matchFrameRateRequested
         {
@@ -88,7 +86,6 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("The requested tracking mode.")]
         TrackingMode m_TrackingMode = TrackingMode.PositionAndRotation;
 
         /// <summary>
