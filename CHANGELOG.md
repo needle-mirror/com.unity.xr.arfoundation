@@ -4,6 +4,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.14] - 2021-01-05
+
+### Fixes
+
+- Fixed an error thrown on shutdown when a subsystem was already destroyed.
+- Previously, when [adding](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.AddEnvironmentProbe(UnityEngine.Pose,UnityEngine.Vector3,UnityEngine.Vector3)) an [environment probes](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe), the world space position of the new probe was passed to the underlying AR framework instead of the session-relative pose. This would place the environment probe in the incorrect position and/or orientation if the [session origin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin) was not at the origin.
+
 ## [2.1.10] - 2020-10-09
 ### Fixes
 - Fixed an issue which could cause the background camera texture to stop functioning correctly on certain devices running OpenGLES3.

@@ -32,7 +32,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDisable()
         {
-            if (subsystem != null)
+            if (subsystem != null && subsystem.running)
                 subsystem.Stop();
         }
 
