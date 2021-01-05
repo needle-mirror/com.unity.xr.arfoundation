@@ -195,8 +195,7 @@ namespace UnityEngine.XR.ARFoundation
                 throw new NotSupportedException("Manual environment probe placement is not supported by this subsystem.");
 
             var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
-            XREnvironmentProbe sessionRelativeData;
-            if (subsystem.TryAddEnvironmentProbe(pose, scale, size, out sessionRelativeData))
+            if (subsystem.TryAddEnvironmentProbe(sessionRelativePose, scale, size, out var sessionRelativeData))
             {
                 var probe = CreateTrackableImmediate(sessionRelativeData);
                 probe.placementType = AREnvironmentProbePlacementType.Manual;
