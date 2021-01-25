@@ -27,9 +27,9 @@ namespace UnityEditor.XR.ARFoundation
             }
 
             var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
-            if(generalSettings != null && generalSettings.Manager != null &&  generalSettings.Manager.loaders != null)
+            if(generalSettings != null && generalSettings.Manager != null && generalSettings.Manager.activeLoaders != null)
             {
-                 int loaderCount = generalSettings.Manager.loaders.Count;
+                 int loaderCount = generalSettings.Manager.activeLoaders.Count;
                  if(loaderCount <= 0 && s_SessionCount > 0)
                  {
                       Debug.LogWarning(

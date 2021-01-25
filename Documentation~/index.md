@@ -24,11 +24,11 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - Meshing: generate triangle meshes that correspond to the physical space.
 - Body tracking: 2D and 3D representations of humans recognized in physical space.
 - Colaborative participants: track the position and orientation of other devices in a shared AR experience.
-- Human segmentation and occlusion: apply distance to objects in the physical world to rendered 3D content, which achieves a realistic blending of physical and virtual objects.
+- Human segmentation: determines a stencil texture and depth map of humans detected in the camera image.
 - Raycast: queries physical surroundings for detected planes and feature points.
 - Pass-through video: optimized rendering of mobile camera image onto touch screen as the background for AR content.
 - Session management: manipulation of the platform-level configuration automatically when AR Features are enable or disabled.
-- Occlusion:
+- Occlusion: allows for occlusion of virtual content by detected environmental depth (environment occlusion) or by detected human depth (human occlusion).
 
 ## Platform Support
 
