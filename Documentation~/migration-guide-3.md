@@ -96,7 +96,7 @@ The ["CpuImages" sample](https://github.com/Unity-Technologies/arfoundation-samp
 
 ## XR Plug-in Management
 
-ARFoundation now depends on [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html). This affects both edit and runtime:
+ARFoundation now depends on [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@4.0/manual/index.html). This affects both edit and runtime:
 
 ### Edit time setup
 

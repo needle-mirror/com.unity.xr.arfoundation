@@ -4,7 +4,7 @@ namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// A utility for interacting with an `XRLoader` from
-    /// [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html).
+    /// [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@4.0/manual/index.html).
     /// </summary>
     /// <remarks>
     /// XR Management controls the lifecycle of subsystems. Components in ARFoundation, such as `ARSession` or

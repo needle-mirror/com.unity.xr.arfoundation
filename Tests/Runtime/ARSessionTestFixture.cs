@@ -89,8 +89,9 @@ namespace UnityEngine.XR.ARFoundation
             MockLoader.supportsInstall = supportsInstall;
             MockProvider.availability = availability;
             var xrManager = ScriptableObject.CreateInstance<XRManagerSettings>();
-            xrManager.loaders.Clear();
+#pragma warning disable CS0618
             xrManager.loaders.Add(ScriptableObject.CreateInstance<MockLoader>());
+#pragma warning restore CS0618
             xrManager.InitializeLoaderSync();
             XRGeneralSettings.Instance = ScriptableObject.CreateInstance<XRGeneralSettings>();
             XRGeneralSettings.Instance.Manager = xrManager;
@@ -100,8 +101,9 @@ namespace UnityEngine.XR.ARFoundation
         {
             var xrManager = XRGeneralSettings.Instance.Manager;
             xrManager.DeinitializeLoader();
+#pragma warning disable CS0618
             xrManager.loaders.Clear();
-
+#pragma warning restore CS0618
             ScriptableObject.Destroy(xrManager);
             ScriptableObject.Destroy(XRGeneralSettings.Instance);
             XRGeneralSettings.Instance = null;
