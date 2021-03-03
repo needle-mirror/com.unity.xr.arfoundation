@@ -21,9 +21,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARFaceManager : ARTrackableManager<
         XRFaceSubsystem,
         XRFaceSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRFaceSubsystem.Provider,
-#endif
         XRFace,
         ARFace>
     {
@@ -78,7 +76,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Get the supported number of faces that can be tracked simultaneously. This value
-        /// may change when the configuration changes.
+        /// might change when the configuration changes.
         /// </summary>
         public int supportedFaceCount => subsystem?.supportedFaceCount ?? 0;
 
@@ -118,11 +116,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             face.UpdateMesh(subsystem);
 
-#if UNITY_2020_2_OR_NEWER
             if (subsystem.subsystemDescriptor.supportsEyeTracking)
-#else
-            if (subsystem.SubsystemDescriptor.supportsEyeTracking)
-#endif
                 face.UpdateEyes();
         }
 
@@ -145,7 +139,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get the prefab that will be instantiated for each <see cref="ARFace"/>. May be `null`.
+        /// Get the Prefab that will be instantiated for each <see cref="ARFace"/>. Can be `null`.
         /// </summary>
         /// <returns>The prefab that will be instantiated for each <see cref="ARFace"/>.</returns>
         protected override GameObject GetPrefab() => m_FacePrefab;

@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// A game object component to manage the reflection probe settings as the environment probe changes are applied.
+    /// A GameObject component to manage the reflection probe settings as the environment probe changes are applied.
     /// </summary>
     [RequireComponent(typeof(ReflectionProbe))]
     [DisallowMultipleComponent]
@@ -16,10 +16,10 @@ namespace UnityEngine.XR.ARFoundation
     public class AREnvironmentProbe : ARTrackable<XREnvironmentProbe, AREnvironmentProbe>
     {
         /// <summary>
-        /// The reflection probe component attached to the game object.
+        /// The reflection probe component attached to the GameObject.
         /// </summary>
         /// <value>
-        /// The reflection probe component attached to the game object.
+        /// The reflection probe component attached to the GameObject.
         /// </value>
         ReflectionProbe m_ReflectionProbe;
 
@@ -89,7 +89,7 @@ namespace UnityEngine.XR.ARFoundation
         public XRTextureDescriptor textureDescriptor => m_CurrentTextureDescriptor;
 
         /// <summary>
-        /// Initializes the game object transform and reflection probe component from the scene.
+        /// Initializes the GameObject transform and reflection probe component from the scene.
         /// </summary>
         void Awake()
         {
@@ -116,7 +116,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 var pose = sessionRelativeData.pose;
 
-                // Compute the desired world-space transform matrix for the environment probe
+                // Compute the desired world space transform matrix for the environment probe
                 var desiredLocalToWorld = trackablesParent.localToWorldMatrix * Matrix4x4.TRS(pose.position, pose.rotation, sessionRelativeData.scale);
                 if (transform.parent)
                 {

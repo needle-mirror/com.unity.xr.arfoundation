@@ -14,11 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_OcclusionManager)]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(AROcclusionManager) + ".html")]
     public sealed class AROcclusionManager :
-#if UNITY_2020_2_OR_NEWER
         SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
-#else
-        SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor>
-#endif
     {
         /// <summary>
         /// The list of occlusion texture infos.
@@ -103,7 +99,7 @@ namespace UnityEngine.XR.ARFoundation
             set
             {
                 m_HumanSegmentationStencilMode = value;
-                if (enabled && descriptor?.supportsHumanSegmentationStencilImage == true)
+                if (enabled && descriptor?.humanSegmentationStencilImageSupported == Supported.Supported)
                 {
                     subsystem.requestedHumanStencilMode = value;
                 }
@@ -145,7 +141,7 @@ namespace UnityEngine.XR.ARFoundation
             set
             {
                 m_HumanSegmentationDepthMode = value;
-                if (enabled && descriptor?.supportsHumanSegmentationDepthImage == true)
+                if (enabled && descriptor?.humanSegmentationDepthImageSupported == Supported.Supported)
                 {
                     subsystem.requestedHumanDepthMode = value;
                 }
@@ -173,7 +169,7 @@ namespace UnityEngine.XR.ARFoundation
             set
             {
                 m_EnvironmentDepthMode = value;
-                if (enabled && descriptor?.supportsEnvironmentDepthImage == true)
+                if (enabled && descriptor?.environmentDepthImageSupported == Supported.Supported)
                 {
                     subsystem.requestedEnvironmentDepthMode = value;
                 }
@@ -202,7 +198,7 @@ namespace UnityEngine.XR.ARFoundation
             set
             {
                 m_OcclusionPreferenceMode = value;
-                if (enabled && (subsystem != null))
+                if (enabled && subsystem != null)
                 {
                     subsystem.requestedOcclusionPreferenceMode = value;
                 }
@@ -228,8 +224,8 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((descriptor?.supportsHumanSegmentationStencilImage == true)
-                    && subsystem.TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor))
+                if (descriptor?.humanSegmentationStencilImageSupported == Supported.Supported &&
+                    subsystem.TryGetHumanStencil(out var humanStencilDescriptor))
                 {
                     m_HumanStencilTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanStencilTextureInfo,
                                                                                     humanStencilDescriptor);
@@ -253,7 +249,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireHumanStencilCpuImage(out XRCpuImage cpuImage)
         {
-            if (descriptor?.supportsHumanSegmentationStencilImage == true)
+            if (descriptor?.humanSegmentationStencilImageSupported == Supported.Supported)
             {
                 return subsystem.TryAcquireHumanStencilCpuImage(out cpuImage);
             }
@@ -272,8 +268,8 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((descriptor?.supportsHumanSegmentationDepthImage == true)
-                    && subsystem.TryGetHumanDepth(out XRTextureDescriptor humanDepthDescriptor))
+                if (descriptor?.humanSegmentationDepthImageSupported == Supported.Supported &&
+                    subsystem.TryGetHumanDepth(out var humanDepthDescriptor))
                 {
                     m_HumanDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_HumanDepthTextureInfo,
                                                                                   humanDepthDescriptor);
@@ -288,8 +284,8 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Attempt to get the latest environment depth confidence CPU image. This provides directly access to the
-        ///     raw pixel data.
+        /// Attempt to get the latest environment depth confidence CPU image. This provides direct access to the
+        /// raw pixel data.
         /// </summary>
         /// <remarks>
         /// The `XRCpuImage` must be disposed to avoid resource leaks.
@@ -298,7 +294,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireEnvironmentDepthConfidenceCpuImage(out XRCpuImage cpuImage)
         {
-            if (descriptor?.supportsEnvironmentDepthConfidenceImage == true)
+            if (descriptor?.environmentDepthConfidenceImageSupported == Supported.Supported)
             {
                 return subsystem.TryAcquireEnvironmentDepthConfidenceCpuImage(out cpuImage);
             }
@@ -317,8 +313,8 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((descriptor?.supportsEnvironmentDepthConfidenceImage == true)
-                    && subsystem.TryGetEnvironmentDepthConfidence(out XRTextureDescriptor environmentDepthConfidenceDescriptor))
+                if (descriptor?.environmentDepthConfidenceImageSupported == Supported.Supported
+                    && subsystem.TryGetEnvironmentDepthConfidence(out var environmentDepthConfidenceDescriptor))
                 {
                     m_EnvironmentDepthConfidenceTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_EnvironmentDepthConfidenceTextureInfo,
                                                                                                   environmentDepthConfidenceDescriptor);
@@ -334,7 +330,7 @@ namespace UnityEngine.XR.ARFoundation
 
 
         /// <summary>
-        /// Attempt to get the latest human depth CPU image. This provides directly access to the raw pixel data.
+        /// Attempt to get the latest human depth CPU image. This provides direct access to the raw pixel data.
         /// </summary>
         /// <remarks>
         /// The `XRCpuImage` must be disposed to avoid resource leaks.
@@ -343,7 +339,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireHumanDepthCpuImage(out XRCpuImage cpuImage)
         {
-            if (descriptor?.supportsHumanSegmentationDepthImage == true)
+            if (descriptor?.humanSegmentationDepthImageSupported == Supported.Supported)
             {
                 return subsystem.TryAcquireHumanDepthCpuImage(out cpuImage);
             }
@@ -362,8 +358,8 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                if ((descriptor?.supportsEnvironmentDepthImage == true)
-                    && subsystem.TryGetEnvironmentDepth(out XRTextureDescriptor environmentDepthDescriptor))
+                if (descriptor?.environmentDepthImageSupported == Supported.Supported
+                    && subsystem.TryGetEnvironmentDepth(out var environmentDepthDescriptor))
                 {
                     m_EnvironmentDepthTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_EnvironmentDepthTextureInfo,
                                                                                         environmentDepthDescriptor);
@@ -378,7 +374,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Attempt to get the latest environment depth CPU image. This provides directly access to the raw pixel data.
+        /// Attempt to get the latest environment depth CPU image. This provides direct access to the raw pixel data.
         /// </summary>
         /// <remarks>
         /// The `XRCpuImage` must be disposed to avoid resource leaks.
@@ -387,7 +383,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
         public bool TryAcquireEnvironmentDepthCpuImage(out XRCpuImage cpuImage)
         {
-            if (descriptor?.supportsEnvironmentDepthImage == true)
+            if (descriptor?.environmentDepthImageSupported == Supported.Supported)
             {
                 return subsystem.TryAcquireEnvironmentDepthCpuImage(out cpuImage);
             }
@@ -401,18 +397,10 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnBeforeStart()
         {
-            if (descriptor.supportsHumanSegmentationStencilImage)
-            {
-                subsystem.requestedHumanStencilMode = m_HumanSegmentationStencilMode;
-            }
-
-            if (descriptor.supportsHumanSegmentationDepthImage)
-            {
-                subsystem.requestedHumanDepthMode = m_HumanSegmentationDepthMode;
-            }
-
-            subsystem.requestedEnvironmentDepthMode = m_EnvironmentDepthMode;
-            subsystem.requestedOcclusionPreferenceMode = m_OcclusionPreferenceMode;
+            requestedHumanStencilMode = m_HumanSegmentationStencilMode;
+            requestedHumanDepthMode = m_HumanSegmentationDepthMode;
+            requestedEnvironmentDepthMode = m_EnvironmentDepthMode;
+            requestedOcclusionPreferenceMode = m_OcclusionPreferenceMode;
 
             ResetTextureInfos();
         }
@@ -436,6 +424,11 @@ namespace UnityEngine.XR.ARFoundation
             {
                 UpdateTexturesInfos();
                 InvokeFrameReceived();
+
+                requestedEnvironmentDepthMode = m_EnvironmentDepthMode;
+                requestedHumanDepthMode = m_HumanSegmentationDepthMode;
+                requestedHumanStencilMode = m_HumanSegmentationStencilMode;
+                requestedOcclusionPreferenceMode = m_OcclusionPreferenceMode;
             }
         }
 

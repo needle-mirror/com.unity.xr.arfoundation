@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEditor.Callbacks;
@@ -8,7 +10,7 @@ using UnityEditor.XR.Management;
 
 namespace UnityEditor.XR.ARFoundation
 {
-    internal class ARSceneValidator
+    class ARSceneValidator : IProcessSceneWithReport
     {
         [PostProcessBuild]
         static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
@@ -16,7 +18,7 @@ namespace UnityEditor.XR.ARFoundation
             if (s_ScenesWithARTypes.Count > 0 && s_SessionCount == 0)
             {
                 var scenes = "";
-                foreach(var sceneName in s_ScenesWithARTypes)
+                foreach (var sceneName in s_ScenesWithARTypes)
                 {
                     scenes += string.Format("\n\t{0}", sceneName);
                 }
@@ -41,11 +43,14 @@ namespace UnityEditor.XR.ARFoundation
             s_SessionCount = 0;
         }
 
-        [PostProcessScene]
-        static void OnPostProcessScene()
+        int IOrderedCallback.callbackOrder => 0;
+
+        void IProcessSceneWithReport.OnProcessScene(Scene scene, BuildReport report)
         {
             if (sceneContainsARTypes)
+            {
                 s_ScenesWithARTypes.Add(SceneManager.GetActiveScene().name);
+            }
 
             s_SessionCount += UnityEngine.Object.FindObjectsOfType<ARSession>().Length;
         }

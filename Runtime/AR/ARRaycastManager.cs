@@ -6,8 +6,8 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Manages an <c>XRRaycastSubsystem</c>, exposing raycast functionality in ARFoundation. Use this component
-    /// to raycast against trackables (i.e., detected features in the physical environment) when they do not have
+    /// Manages an <c>XRRaycastSubsystem</c>, exposing raycast functionality in AR Foundation. Use this component
+    /// to raycast against trackables (that is, detected features in the physical environment) when they do not have
     /// a presence in the Physics world.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_RaycastManager)]
@@ -16,9 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARRaycastManager) + ".html")]
     public sealed class ARRaycastManager : ARTrackableManager<
         XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRRaycastSubsystem.Provider,
-#endif
         XRRaycast, ARRaycast>
     {
         [SerializeField]
@@ -35,7 +33,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Cast a ray from a point in screen space against trackables, i.e., detected features such as planes.
+        /// Cast a ray from a point in screen space against trackables, that is, detected features such as planes.
         /// </summary>
         /// <param name="screenPoint">The point, in device screen pixels, from which to cast.</param>
         /// <param name="hitResults">Contents are replaced with the raycast results, if successful.</param>
@@ -60,7 +58,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Cast a <c>Ray</c> against trackables, i.e., detected features such as planes.
+        /// Cast a <c>Ray</c> against trackables, that is, detected features such as planes.
         /// </summary>
         /// <param name="ray">The <c>Ray</c>, in Unity world space, to cast.</param>
         /// <param name="hitResults">Contents are replaced with the raycast results, if successful.</param>
@@ -121,7 +119,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Removes an existing <see cref="ARRaycast"/>.
         /// </summary>
         /// <param name="raycast">The <see cref="ARRaycast"/> to remove.</param>
-        /// <exception cref="ArgumentNullException">Thrown is <paramref name="raycast"/> is `null`.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="raycast"/> is `null`.</exception>
         public void RemoveRaycast(ARRaycast raycast)
         {
             if (raycast == null)
@@ -131,14 +129,14 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Gets the prefab that should be instantiated for each <see cref="ARRaycast"/>. May be `null`.
+        /// Gets the Prefab that should be instantiated for each <see cref="ARRaycast"/>. Can be `null`.
         /// </summary>
-        /// <returns>The prefab that should be instantiated for each <see cref="ARRaycast"/>.</returns>
+        /// <returns>The Prefab that should be instantiated for each <see cref="ARRaycast"/>.</returns>
         protected override GameObject GetPrefab() => m_RaycastPrefab;
 
         /// <summary>
         /// Allows AR managers to register themselves as a raycaster.
-        /// Raycasters be used as a fallback method if the AR platform does
+        /// Raycasters can be used as a fallback method if the AR platform does
         /// not support raycasting using arbitrary <c>Ray</c>s.
         /// </summary>
         /// <param name="raycaster">A raycaster implementing the IRaycast interface.</param>
@@ -151,7 +149,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Unregisters a raycaster previously registered with <see cref="RegisterRaycaster(IRaycaster)"/>.
         /// </summary>
-        /// <param name="raycaster">A raycaster to use in the fallback case.</param>
+        /// <param name="raycaster">A raycaster to use as a fallback, if needed.</param>
         internal void UnregisterRaycaster(IRaycaster raycaster)
         {
             if (m_Raycasters != null)
@@ -163,12 +161,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnAfterStart()
         {
-            var desc =
-#if UNITY_2020_2_OR_NEWER
-                subsystem.subsystemDescriptor;
-#else
-                subsystem.SubsystemDescriptor;
-#endif
+            var desc = subsystem.subsystemDescriptor;
             if (desc.supportsViewportBasedRaycast)
             {
                 m_RaycastViewportDelegate = RaycastViewport;

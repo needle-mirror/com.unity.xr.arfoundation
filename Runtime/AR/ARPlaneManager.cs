@@ -18,9 +18,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARPlaneManager : ARTrackableManager<
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRPlaneSubsystem.Provider,
-#endif
         BoundedPlane,
         ARPlane>, IRaycaster
     {
@@ -29,7 +27,7 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_PlanePrefab;
 
         /// <summary>
-        /// Getter/setter for the Plane Prefab.
+        /// Getter or setter for the Plane Prefab.
         /// </summary>
         public GameObject planePrefab
         {
@@ -216,9 +214,9 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get the prefab which will be instantiated for each <see cref="ARPlane"/>. May be `null`.
+        /// Get the Prefab which will be instantiated for each <see cref="ARPlane"/>. Can be `null`.
         /// </summary>
-        /// <returns>The prefab which will be instantiated for each <see cref="ARPlane"/>.</returns>
+        /// <returns>The Prefab which will be instantiated for each <see cref="ARPlane"/>.</returns>
         protected override GameObject GetPrefab() => m_PlanePrefab;
 
         /// <summary>

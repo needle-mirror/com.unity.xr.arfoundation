@@ -29,6 +29,6 @@ manager.referenceLibrary = myLibrary;
 manager.enabled = true;
 ```
 
-## Tracked object prefab
+## Tracked object Prefab
 
-This prefab is instantiated whenever an object from the reference object library is detected. The manager ensures the instantiated `GameObject` includes an `ARTrackedObject` component. You can get the reference object that was used to detect the `ARTrackedObject` with the `ARTrackedObject.referenceObject` property.
+This Prefab is instantiated whenever an object from the reference object library is detected. The manager ensures the instantiated `GameObject` includes an `ARTrackedObject` component. You can get the reference object that was used to detect the `ARTrackedObject` with the `ARTrackedObject.referenceObject` property.

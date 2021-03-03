@@ -5,11 +5,11 @@ using Unity.Collections;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Generator functions for <see cref="ARPlane"/> mesh geometery.
+    /// Generator methods for <see cref="ARPlane"/> mesh geometery.
     /// </summary>
     /// <remarks>
-    /// These static class provides ways to generate different parts of plane geometry, such as vertices, indices, normals and UVs.
-    /// You can use these functions to build an ARPlane Mesh object.
+    /// These static class provides ways to generate different parts of plane geometry, such as vertices, indices, normals, and UVs.
+    /// You can use these methods to build an ARPlane Mesh object.
     /// </remarks>
     public static class ARPlaneMeshGenerators
     {
@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="convexPolygon">The vertices of the plane's boundary, in plane-space.</param>
         /// <param name="areaTolerance">If any triangle in the generated mesh is less than this, then the entire mesh is ignored.
         /// This handles an edge case which prevents degenerate or very small triangles. Units are meters-squared.</param>
-        /// <returns><c>True</c> if the <paramref name="mesh"/> was generated, <c>False</c> otherwise. The <paramref name="mesh"/> may
+        /// <returns><c>True</c> if the <paramref name="mesh"/> was generated, <c>False</c> otherwise. The <paramref name="mesh"/> might
         /// fail to generate if it is not a valid polygon (too few vertices) or if it contains degenerate triangles (area smaller than <paramref name="areaTolerance"/>).</returns>
         public static bool GenerateMesh(Mesh mesh, Pose pose, NativeArray<Vector2> convexPolygon, float areaTolerance = 1e-6f)
         {

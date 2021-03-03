@@ -78,7 +78,7 @@ namespace UnityEngine.XR.ARFoundation
         public Transform rightEye { get; private set; }
 
         /// <summary>
-        /// The [transform](https://docs.unity3d.com/ScriptReference/Transform.html) representing the point at which the eyes are fixated upon or `null` if there is no fixation data.
+        /// The [transform](https://docs.unity3d.com/ScriptReference/Transform.html) representing the point where the eyes are fixated or `null` if there is no fixation data.
         /// </summary>
         public Transform fixationPoint { get; private set; }
 

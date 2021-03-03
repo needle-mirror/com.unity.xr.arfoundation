@@ -15,7 +15,8 @@ Environment probes can be placed manually, automatically, or using both methods.
 
 ## Manual placement
 
-**Note:** Support for manual placement and removal of environment probes depends on the underlying AR framework's capabilities. Check the [subsystem's descriptor](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor) before attempting to add or destroy an environment probe.
+> [!NOTE]
+> Support for manual placement and removal of environment probes depends on the underlying AR framework's capabilities. Check the [subsystem's descriptor](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor) before attempting to add or destroy an environment probe.
 
 To create an environment probe, add an `AREnvironmentProbe` component to a GameObject using [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). Like [anchors](anchor-manager.md), the `AREnvironmentProbe` might be in a "pending" state for a few frames.
 
@@ -31,6 +32,6 @@ Environment probes can be created in any orientation. However, Unity's reflectio
 
 This corresponds to the [UnityEngine.FilterMode](https://docs.unity3d.com/ScriptReference/FilterMode.html) for the cubemap that the environment probe generates.
 
-## Debug prefab
+## Debug Prefab
 
-This prefab will be instantiated for each manually or automatically placed environment probe. This is not required, but Unity provides it for debugging purposes.
+This Prefab will be instantiated for each manually or automatically placed environment probe. This is not required, but Unity provides it for debugging purposes.

@@ -42,7 +42,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Invoked whenever this raycast is updated. The event is fired during this `MonoBehaviour`'s
         /// [Update](https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html) callback. This event is not
         /// invoked if this component is [disabled](https://docs.unity3d.com/ScriptReference/Behaviour-enabled.html),
-        /// although it may continue to receive positional updates.
+        /// although it might continue to receive positional updates.
         /// </summary>
         public event Action<ARRaycastUpdatedEventArgs> updated;
 

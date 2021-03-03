@@ -25,7 +25,7 @@ namespace UnityEngine.XR.ARFoundation
     /// A generic component for trackables. A "trackable" is a feature in the physical
     /// environment that can be detected and tracked by an XR device.
     /// </summary>
-    /// <typeparam name="TSessionRelativeData">The raw, session relative data type used to update this trackable.</typeparam>
+    /// <typeparam name="TSessionRelativeData">The raw, session-relative data type used to update this trackable.</typeparam>
     /// <typeparam name="TTrackable">The concrete class which derives from <see cref="ARTrackable{TSessionRelativeData, TTrackable}"/>.</typeparam>
     public class ARTrackable<TSessionRelativeData, TTrackable> : ARTrackable
         where TSessionRelativeData : struct, ITrackable
@@ -39,7 +39,7 @@ namespace UnityEngine.XR.ARFoundation
         /// If true, this component's <c>GameObject</c> will be removed immediately when the XR device reports this trackable is no longer tracked.
         /// </summary>
         /// <remarks>
-        /// Setting this to false will keep the <c>GameObject</c> around. You may want to do this, for example,
+        /// Setting this to false will keep the <c>GameObject</c> around. You might want to do this, for example,
         /// if you have custom removal logic, such as a fade out.
         /// </remarks>
         public bool destroyOnRemoval

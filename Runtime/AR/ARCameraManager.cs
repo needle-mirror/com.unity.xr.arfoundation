@@ -16,11 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(Camera))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARCameraManager) + ".html")]
     public sealed class ARCameraManager :
-#if UNITY_2020_2_OR_NEWER
         SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>,
-#else
-        SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor>,
-#endif
         ISerializationCallbackReceiver
     {
         [SerializeField]
@@ -61,7 +57,7 @@ namespace UnityEngine.XR.ARFoundation
         bool m_AutoFocus = true;
 
         /// <summary>
-        /// Get or set whether auto focus is requested
+        /// Get or set whether auto focus is requested.
         /// </summary>
         public bool autoFocusRequested
         {
@@ -156,7 +152,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The current camera facing direction. This should usually match <see cref="requestedFacingDirection"/>
-        /// but may be different if the platform cannot service the requested camera facing direction, or it may
+        /// but might be different if the platform cannot service the requested camera facing direction, or it might
         /// take a few frames for the requested facing direction to become active.
         /// </summary>
         public CameraFacingDirection currentFacingDirection => subsystem?.currentCamera.ToCameraFacingDirection() ?? CameraFacingDirection.None;
@@ -184,10 +180,10 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Tries to get camera intrinsics. Camera intrinsics refers to properties
-        /// of a physical camera which may be useful when performing additional
+        /// of a physical camera which might be useful when performing additional
         /// computer vision processing on the camera image.
         /// </summary>
-        /// <param name="cameraIntrinsics">The camera intrinsics to be populated if the camera supports intrinsics
+        /// <param name="cameraIntrinsics">The camera intrinsics to be populated if the camera supports intrinsics.
         /// </param>
         /// <returns>
         /// <c>true</c> if <paramref name="cameraIntrinsics"/> was populated. Otherwise, <c>false</c>.

@@ -1,33 +1,20 @@
 using System;
 using System.Collections.Generic;
-
 using UnityEngine.XR.Management;
-
-#if UNITY_2020_2_OR_NEWER
 using UnityEngine.SubsystemsImplementation;
-#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// A base class for subsystems whose lifetime is managed by a <c>MonoBehaviour</c>.
     /// </summary>
-    /// <typeparam name="TSubsystem">The <c>Subsystem</c> which provides this manager data.</typeparam>
+    /// <typeparam name="TSubsystem">The [Subsystem](xref:UnityEngine.Subsystem) which provides this manager data.</typeparam>
+    /// <typeparam name="TProvider">The [provider](xref:UnityEngine.SubsystemsImplementation.SubsystemProvider) associated with this subsystem.</typeparam>
     /// <typeparam name="TSubsystemDescriptor">The <c>SubsystemDescriptor</c> required to create the Subsystem.</typeparam>
-    public class SubsystemLifecycleManager<
-        TSubsystem, TSubsystemDescriptor
-#if UNITY_2020_2_OR_NEWER
-        , TProvider
-#endif
-        > : MonoBehaviour
-#if UNITY_2020_2_OR_NEWER
+    public class SubsystemLifecycleManager<TSubsystem, TSubsystemDescriptor, TProvider> : MonoBehaviour
         where TSubsystem : SubsystemWithProvider<TSubsystem, TSubsystemDescriptor, TProvider>, new()
         where TSubsystemDescriptor : SubsystemDescriptorWithProvider<TSubsystem, TProvider>
         where TProvider : SubsystemProvider<TSubsystem>
-#else
-        where TSubsystem : Subsystem<TSubsystemDescriptor>
-        where TSubsystemDescriptor : SubsystemDescriptor<TSubsystem>
-#endif
     {
         /// <summary>
         /// Get the <c>TSubsystem</c> whose lifetime this component manages.
@@ -40,13 +27,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The descriptor for the subsystem.
         /// </value>
-        public TSubsystemDescriptor descriptor =>
-
-#if UNITY_2020_2_OR_NEWER
-            subsystem?.subsystemDescriptor;
-#else
-            subsystem?.SubsystemDescriptor;
-#endif
+        public TSubsystemDescriptor descriptor => subsystem?.subsystemDescriptor;
 
         /// <summary>
         /// Returns the active <c>TSubsystem</c> instance if present, otherwise returns null.

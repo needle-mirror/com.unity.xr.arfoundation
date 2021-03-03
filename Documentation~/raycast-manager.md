@@ -36,13 +36,13 @@ The following table summarizes the other parameters:
 | **Parameter**       | **Description** |
 |:-                  |:-|
 | `hitResults`        | The results for both methods are stored in this `List`, which must not be `null`. This lets you reuse the same `List` object to avoid garbage-collected allocations. |
-| `trackableTypeMask` | The type(s) of trackable(s) to hit test against. This is a flag, so multiple types can be bitwise OR'd together, for example, [TrackableType.PlaneWithinPolygon](xref:UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon) &#124; [TrackableType.FeaturePoint](xref:UnityEngine.XR.ARSubsystems.TrackableType.FeaturePoint) |
+| `trackableTypeMask` | The type, or types, of trackables to hit test against. This is a flag, so multiple types can be bitwise OR'd together, for example, [TrackableType.PlaneWithinPolygon](xref:UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon) &#124; [TrackableType.FeaturePoint](xref:UnityEngine.XR.ARSubsystems.TrackableType.FeaturePoint) |
 
 ### Determining what the raycast hit
 
 If the raycast hits something, `hitResults` will be populated with a `List` of [ARRaycastHits](xref:UnityEngine.XR.ARFoundation.ARRaycastHit).
 
-Use the [hitType](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.hitType) to determine what kind of thing the raycast hit. If it hit a [trackable](xref:UnityEngine.XR.ARFoundation.ARTrackable), e.g., a [plane](xref:UnityEngine.XR.ARFoundation.ARPlane), then the [ARRaycastHit.trackable](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.trackable) property can be cast to that type of trackable:
+Use the [hitType](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.hitType) to determine what kind of thing the raycast hit. If it hit a [trackable](xref:UnityEngine.XR.ARFoundation.ARTrackable), such as a [plane](xref:UnityEngine.XR.ARFoundation.ARPlane), then the [ARRaycastHit.trackable](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.trackable) property can be cast to that type of trackable:
 
 [!code-cs[raycasthit_trackable](../Tests/CodeSamples/RaycastSamples.cs#raycasthit_trackable)]
 
@@ -56,4 +56,4 @@ Persistent raycasts must be created from a screen point:
 
 [!code-cs[ARRaycastManager_AddRaycast_screenPoint](../Runtime/AR/ARRaycastManager.cs#ARRaycastManager_AddRaycast_screenPoint)]
 
-When you create a new `ARRaycast`, ARFoundation creates a new GameObject with an `ARRaycast` component on it. You can optionally provide a prefab in the "Raycast Prefab" field that will be instantiated for each `ARRaycast`, which allows you to extend the default behavior of each `ARRaycast`.
+When you create a new `ARRaycast`, ARFoundation creates a new GameObject with an `ARRaycast` component on it. You can optionally provide a Prefab in the "Raycast Prefab" field that will be instantiated for each `ARRaycast`, which allows you to extend the default behavior of each `ARRaycast`.

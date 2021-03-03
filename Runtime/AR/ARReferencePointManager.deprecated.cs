@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <para>Subscribe to changes (added, updated, and removed) via the
     /// <see cref="ARReferencePointManager.referencePointsChanged"/> event.</para>
     /// </remarks>
-    /// <seealso cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}"/>
+    /// <seealso cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}"/>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARReferencePointManager) + ".html")]
@@ -23,9 +23,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARReferencePointManager : ARTrackableManager<
         XRReferencePointSubsystem,
         XRReferencePointSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRReferencePointSubsystem.Provider,
-#endif
         XRReferencePoint,
         ARReferencePoint>
     {
@@ -34,7 +32,7 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_ReferencePointPrefab;
 
         /// <summary>
-        /// This prefab will be instantiated for each <see cref="ARReferencePoint"/>. May be `null`.
+        /// This Prefab will be instantiated for each <see cref="ARReferencePoint"/>. Can be `null`.
         /// </summary>
         [Obsolete("ARReferencePointManger.referencePointPrefab has been renamed. Use ARAnchorManager.anchorPrefab instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.anchorPrefab", true)]
         public GameObject referencePointPrefab
@@ -55,8 +53,8 @@ namespace UnityEngine.XR.ARFoundation
         /// Attempts to add an <see cref="ARReferencePoint"/> with the given <c>Pose</c>.
         /// </summary>
         /// <remarks>
-        /// If <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}.GetPrefab()"/>
-        /// is not null, a new instance of that prefab will be instantiated. Otherwise, a
+        /// If <see cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}.GetPrefab()"/>
+        /// is not null, a new instance of that Prefab will be instantiated. Otherwise, a
         /// new <c>GameObject</c> will be created. In either case, the resulting
         /// <c>GameObject</c> will have an <see cref="ARReferencePoint"/> component on it.
         /// </remarks>
@@ -84,7 +82,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Attempts to create a new reference point that is attached to an existing <see cref="ARPlane"/>.
         /// </summary>
-        /// <param name="plane">The <see cref="ARPlane"/> to which to attach.</param>
+        /// <param name="plane">The <see cref="ARPlane"/> to attach to.</param>
         /// <param name="pose">The initial <c>Pose</c>, in Unity world space, of the reference point.</param>
         /// <returns>A new <see cref="ARReferencePoint"/> if successful, otherwise <c>null</c>.</returns>
         [Obsolete("ARReferencePointManger.AttachReferencePoint() has been deprecated. Use ARAnchorManager.AttachAnchor() instead (UnityUpgradable) -> UnityEngine.XR.ARFoundation.ARAnchorManager.AttachAnchor(*)", true)]
@@ -153,9 +151,9 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Gets the prefab that will be instantiated for each <see cref="ARReferencePoint"/>.
+        /// Gets the Prefab that will be instantiated for each <see cref="ARReferencePoint"/>.
         /// </summary>
-        /// <returns>The prefab that will be instantiated for each <see cref="ARReferencePoint"/>.</returns>
+        /// <returns>The Prefab that will be instantiated for each <see cref="ARReferencePoint"/>.</returns>
         protected override GameObject GetPrefab() => m_ReferencePointPrefab;
 
         /// <summary>

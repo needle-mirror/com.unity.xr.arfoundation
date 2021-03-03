@@ -108,6 +108,6 @@ foreach (var plane in planeManager.trackables)
 
 ## Controlling a trackable's `GameObject`
 
-When a new trackable is detected, its manager instantiates a prefab configurable on the manager. The instantiated `GameObject` must have an `ARTrackable` component for that type of trackable. If the prefab is `null`, the system creates a `GameObject` with only the relevant `ARTrackable`. If your prefab doesn't have the relevant `ARTrackable`, the system adds one.
+When a new trackable is detected, its manager instantiates a Prefab configurable on the manager. The instantiated `GameObject` must have an `ARTrackable` component for that type of trackable. If the Prefab is `null`, the system creates a `GameObject` with only the relevant `ARTrackable`. If your Prefab doesn't have the relevant `ARTrackable`, the system adds one.
 
 For example, when the plane manager detects a plane, it creates a `GameObject` using the "Plane Prefab" if specified, or an empty `GameObject` otherwise, then ensures that the `GameObject` has an `ARPlane` component on it.

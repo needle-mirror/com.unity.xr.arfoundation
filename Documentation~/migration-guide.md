@@ -1,11 +1,11 @@
 ---
 uid: arfoundation-migration-guide-1
 ---
-# Migration Guide
+# Migration guide
 
 This guide covers the differences between AR Foundation 1.0 and 2.x.
 
-## TL;DR
+## Summary
 
 * Add an `ARInputManager` anywhere in your scene.
 * Add an `ARCameraManager` to your AR Camera (this replaces the `ARCameraOptions`).

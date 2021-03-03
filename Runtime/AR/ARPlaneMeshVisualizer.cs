@@ -8,19 +8,82 @@ namespace UnityEngine.XR.ARFoundation
     /// Generates a mesh for an <see cref="ARPlane"/>.
     /// </summary>
     /// <remarks>
-    /// If this <c>GameObject</c> has a <c>MeshFilter</c> and/or <c>MeshCollider</c>,
-    /// this component will generate a mesh from the underlying <c>BoundedPlane</c>.
+    /// If this component's [GameObject](xref:UnityEngine.GameObject) has a [MeshFilter](xref:UnityEngine.MeshFilter)
+    /// and/or a [MeshCollider](xref:UnityEngine.MeshCollider), this component will generate a mesh from the
+    /// [BoundedPlane](xref:UnityEngine.XR.ARSubsystems.BoundedPlane) associated with the <see cref="ARPlane"/>.
     ///
-    /// It will also update a <c>LineRenderer</c> with the boundary points, if present.
+    /// It will also update a [LineRenderer](xref:UnityEngine.LineRenderer) with the boundary points, if present.
+    ///
+    /// [MeshRenderer](xref:UnityEngine.MeshRenderer) and [LineRenderer](xref:UnityEngine.LineRenderer) components will only be
+    /// enabled if:
+    /// - This component is enabled.
+    /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
+    ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
+    /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
+    /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
     /// </remarks>
     [RequireComponent(typeof(ARPlane))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPlaneMeshVisualizer) + ".html")]
     public sealed class ARPlaneMeshVisualizer : MonoBehaviour
     {
         /// <summary>
-        /// Get the <c>Mesh</c> that this visualizer creates and manages.
+        /// Get the [Mesh](xref:UnityEngine.Mesh) that this visualizer creates and manages.
         /// </summary>
         public Mesh mesh { get; private set; }
+
+        [SerializeField]
+        [Tooltip("A plane whose tracking state is less than this threshold will have its render mesh and line renderer components disabled.")]
+        TrackingState m_TrackingStateVisibilityThreshold = TrackingState.Limited;
+
+        /// <summary>
+        /// The threshold [TrackingState](xref:UnityEngine.XR.ARSubsystems.TrackingState) that affects the visibility of
+        /// the [MeshRenderer](xref:UnityEngine.MeshRenderer) and [LineRenderer](xref:UnityEngine.LineRenderer) components.
+        /// </summary>
+        /// <remarks>
+        /// [MeshRenderer](xref:UnityEngine.MeshRenderer) and [LineRenderer](xref:UnityEngine.LineRenderer) components will only be
+        /// enabled if:
+        /// - This component is enabled.
+        /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
+        ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
+        /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
+        /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
+        /// </remarks>
+        public TrackingState trackingStateVisibilityThreshold
+        {
+            get => m_TrackingStateVisibilityThreshold;
+            set
+            {
+                m_TrackingStateVisibilityThreshold = value;
+                Debug.Log($"Setting visibility threshold of {GetComponent<ARPlane>().trackableId} to {m_TrackingStateVisibilityThreshold}. Tracking state is {GetComponent<ARPlane>().trackingState}.");
+                UpdateVisibility();
+            }
+        }
+
+        [SerializeField]
+        [Tooltip("When enabled, a plane that has been subsumed by (i.e., merged into) another plane will have its render mesh and line renderer disabled.")]
+        bool m_HideSubsumed = true;
+
+        /// <summary>
+        /// Indicates whether subsumed planes should be rendered. (See <see cref="ARPlane.subsumedBy"/>.)
+        /// </summary>
+        /// <remarks>
+        /// [MeshRenderer](xref:UnityEngine.MeshRenderer) and [LineRenderer](xref:UnityEngine.LineRenderer) components will only be
+        /// enabled if:
+        /// - This component is enabled.
+        /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
+        ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
+        /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
+        /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
+        /// </remarks>
+        public bool hideSubsumed
+        {
+            get => m_HideSubsumed;
+            set
+            {
+                m_HideSubsumed = value;
+                UpdateVisibility();
+            }
+        }
 
         void OnBoundaryChanged(ARPlaneBoundaryChangedEventArgs eventArgs)
         {
@@ -59,23 +122,27 @@ namespace UnityEngine.XR.ARFoundation
             UpdateVisibility();
         }
 
+        void SetRendererEnabled<T>(bool visible) where T : Renderer
+        {
+            var component = GetComponent<T>();
+            if (component)
+            {
+                component.enabled = visible;
+            }
+        }
+
         void SetVisible(bool visible)
         {
-            var meshRenderer = GetComponent<MeshRenderer>();
-            if (meshRenderer != null)
-                meshRenderer.enabled = visible;
-
-            var lineRenderer = GetComponent<LineRenderer>();
-            if (lineRenderer != null)
-                lineRenderer.enabled = visible;
+            SetRendererEnabled<MeshRenderer>(visible);
+            SetRendererEnabled<LineRenderer>(visible);
         }
 
         void UpdateVisibility()
         {
             var visible = enabled &&
-                (m_Plane.trackingState != TrackingState.None) &&
-                (ARSession.state > ARSessionState.Ready) &&
-                (m_Plane.subsumedBy == null);
+                m_Plane.trackingState >= m_TrackingStateVisibilityThreshold &&
+                ARSession.state > ARSessionState.Ready &&
+                (!m_HideSubsumed || m_Plane.subsumedBy == null);
 
             SetVisible(visible);
         }

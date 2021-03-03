@@ -1,5 +1,5 @@
 using System;
-#if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
+#if USE_LEGACY_INPUT_HELPERS
 using UnityEngine.SpatialTracking;
 #endif
 
@@ -10,17 +10,17 @@ namespace UnityEngine.XR.ARFoundation
     /// any <c>GameObject</c>s created from detected features, such as planes or point clouds.
     /// </summary>
     /// <remarks>
-    /// Session space vs Unity space
+    /// Session space vs. Unity space
     ///
-    /// Since an AR device will be used to drive the <c>Camera</c>'s position and rotation,
+    /// Because an AR device will be used to drive the <c>Camera</c>'s position and rotation,
     /// you cannot directly place the <c>Camera</c> at an arbitrary position in the Unity scene.
-    /// Instead, you should position the <c>ARSessionOrigin</c>. This will make the <c>Camera</c>
+    /// Instead, you should position the <c>ARSessionOrigin</c>. This makes the <c>Camera</c>
     /// (and any detected features) relative to that as a result.
     ///
     /// It is important to keep the <c>Camera</c> and detected features in the same space relative to
     /// each other (otherwise, detected features like planes won't appear in the correct place relative
-    /// to the <c>Camera</c>). We call the space relative to the AR device's starting position
-    /// "session space" or "device space". For example, when the AR session begins, the device may
+    /// to the <c>Camera</c>). The space relative to the AR device's starting position is called 
+    /// "session space" or "device space". For example, when the AR session begins, the device might
     /// report its position as (0, 0, 0). Detected features, such as planes, will be reported relative
     /// to this starting position. The purpose of the <c>ARSessionOrigin</c> is to convert the session space
     /// to Unity world space.
@@ -47,7 +47,7 @@ namespace UnityEngine.XR.ARFoundation
     ///
     /// If you want to scale the content rendered by the <c>ARSessionOrigin</c> you should apply
     /// the scale to the <c>ARSessionOrigin</c>'s transform. This is preferrable to scaling
-    /// the content directly as that can have undesirable side-effects. Physics and NavMeshes,
+    /// the content directly, which can have undesirable side effects. Physics and NavMeshes,
     /// for example, do not perform well when scaled very small.
     /// </remarks>
     [DisallowMultipleComponent]
@@ -77,7 +77,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The parent <c>Transform</c> for all "trackables", e.g., planes and feature points.
+        /// The parent <c>Transform</c> for all "trackables" (for example, planes and feature points).
         /// </summary>
         public Transform trackablesParent { get; private set; }
 
@@ -126,10 +126,10 @@ namespace UnityEngine.XR.ARFoundation
         /// to the <c>Camera</c>.</param>
         /// <remarks>
         /// This method does not actually change the <c>Transform</c> of content; instead,
-        /// it updates the <c>ARSessionOrigin</c>'s <c>Transform</c> such that it appears the content
-        /// is now at the given position and rotation. This is useful for placing AR
+        /// it updates the <c>ARSessionOrigin</c>'s <c>Transform</c> so the content
+        /// appears to be at the given position and rotation. This is useful for placing AR
         /// content onto surfaces when the content itself cannot be moved at runtime.
-        /// For example, if your content includes terrain or a nav mesh, then it cannot
+        /// For example, if your content includes terrain or a NavMesh, it cannot
         /// be moved or rotated dynamically.
         /// </remarks>
         public void MakeContentAppearAt(Transform content, Vector3 position, Quaternion rotation)
@@ -146,8 +146,8 @@ namespace UnityEngine.XR.ARFoundation
         /// a position on a detected plane, for example.</param>
         /// <remarks>
         /// This method does not actually change the <c>Transform</c> of content; instead,
-        /// it updates the <c>ARSessionOrigin</c>'s <c>Transform</c> such that it appears the content
-        /// is now at the given position.
+        /// it updates the <c>ARSessionOrigin</c>'s <c>Transform</c> so the content
+        /// appears to be at the given position.
         /// </remarks>
         public void MakeContentAppearAt(Transform content, Vector3 position)
         {
@@ -172,8 +172,8 @@ namespace UnityEngine.XR.ARFoundation
         /// to the <c>Camera</c>.</param>
         /// <remarks>
         /// This method does not actually change the <c>Transform</c> of content; instead,
-        /// it updates the <c>ARSessionOrigin</c>'s <c>Transform</c> such that it appears the content
-        /// is in the requested orientation.
+        /// it updates the <c>ARSessionOrigin</c>'s <c>Transform</c> so that the content
+        /// appears to be in the requested orientation.
         /// </remarks>
         public void MakeContentAppearAt(Transform content, Quaternion rotation)
         {
@@ -200,7 +200,7 @@ namespace UnityEngine.XR.ARFoundation
             if (camera)
             {
                 var arPoseDriver = camera.GetComponent<ARPoseDriver>();
-#if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
+#if USE_LEGACY_INPUT_HELPERS
                 var trackedPoseDriver = camera.GetComponent<TrackedPoseDriver>();
 
                 // Warn if not using a ARPoseDriver or a TrackedPoseDriver
@@ -239,14 +239,14 @@ namespace UnityEngine.XR.ARFoundation
                             "The camera's local position and rotation will be overwritten by the XR device.");
                     }
                 }
-#else // !(USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
+#else // !(USE_LEGACY_INPUT_HELPERS
                 if (arPoseDriver == null)
                 {
                     Debug.LogWarning(
                         $"Camera \"{camera.name}\" does not use a AR Pose Driver, so its transform will not be updated by " +
                         "an XR device.  In order for this to be updated, please add an AR Pose Driver component.");
                 }
-#endif // USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
+#endif // USE_LEGACY_INPUT_HELPERS
             }
         }
 
@@ -255,13 +255,13 @@ namespace UnityEngine.XR.ARFoundation
             var localOriginPose = Pose.identity;
             var parent = camera.transform.parent;
 
-#if USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
+#if USE_LEGACY_INPUT_HELPERS
             var trackedPoseDriver = camera.GetComponent<TrackedPoseDriver>();
             if (trackedPoseDriver)
             {
                 localOriginPose = trackedPoseDriver.originPose;
             }
-#endif // USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER
+#endif // USE_LEGACY_INPUT_HELPERS
 
             return parent
                 ? parent.TransformPose(localOriginPose)
@@ -289,7 +289,7 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-#if UNITY_EDITOR && (USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
+#if UNITY_EDITOR && USE_LEGACY_INPUT_HELPERS
         void OnValidate()
         {
             if (camera)
@@ -304,6 +304,6 @@ namespace UnityEngine.XR.ARFoundation
                 }
             }
         }
-#endif // UNITY_EDITOR && (USE_LEGACY_INPUT_HELPERS || !UNITY_2019_1_OR_NEWER)
+#endif // UNITY_EDITOR && USE_LEGACY_INPUT_HELPERS
     }
 }

@@ -108,7 +108,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Overloads the <c>==</c> operator to utilize the equals method for equality checking.
+        /// Overloads the <c>==</c> operator to use the equals method for equality checking.
         /// </summary>
         /// <param name="lhs">The <see cref="TrackableCollection{TTrackable}"/> on the left hand side of the operator.</param>
         /// <param name="rhs">The <see cref="TrackableCollection{TTrackable}"/> on the right hand side of the operator.</param>
@@ -121,7 +121,7 @@ namespace UnityEngine.XR.ARFoundation
 
 
         /// <summary>
-        /// Overloads the <c>!=</c> operator to utilize the equals method for equality checking.
+        /// Overloads the <c>!=</c> operator to use the equals method for equality checking.
         /// </summary>
         /// <param name="lhs">The <see cref="TrackableCollection{TTrackable}"/> on the left hand side of the operator.</param>
         /// <param name="rhs">The <see cref="TrackableCollection{TTrackable}"/> on the right hand side of the operator.</param>

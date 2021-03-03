@@ -23,7 +23,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Provide the video feed from the user-facing camera. On a phone,
-        /// this is usually the front (i.e., "selfie") camera.
+        /// this is usually the front ("selfie") camera.
         /// </summary>
         [Description("Textures from the user-facing camera will be available.")]
         User,

@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Use <c>averageBrightness.HasValue</c> to determine if this information is available.
         /// </summary>
         /// <remarks>
-        /// <see cref="averageBrightness"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>,
+        /// <see cref="averageBrightness"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>,
         /// or if a platform-specific error has occurred.
         /// </remarks>
         public float? averageBrightness
@@ -37,7 +37,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Use <c>averageColorTemperature.HasValue</c> to determine if this information is available.
         /// </summary>
         /// <remarks>
-        /// <see cref="averageColorTemperature"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>,
+        /// <see cref="averageColorTemperature"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>,
         /// if the platform does not support it, or if a platform-specific error has occurred.
         /// </remarks>
         public float? averageColorTemperature { get; set; }
@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARFoundation
         /// in the scene. The alpha channel value is platform-specific.
         /// </summary>
         /// <remarks>
-        /// <see cref="colorCorrection"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>,
+        /// <see cref="colorCorrection"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>,
         /// if the platform does not support it, or if a platform-specific error has occurred.
         /// </remarks>
         public Color? colorCorrection { get; set; }
@@ -58,7 +58,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Use <c>averageIntensityInLumens.HasValue</c> to determine if this information is available.
         /// </summary>
         /// <remarks>
-        /// <see cref="averageIntensityInLumens"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>,
+        /// <see cref="averageIntensityInLumens"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>,
         ///  or if a platform-specific error has occurred.
         /// </remarks>
         public float? averageIntensityInLumens
@@ -79,7 +79,7 @@ namespace UnityEngine.XR.ARFoundation
         /// An estimate of the intensity of the main light in lumens.
         /// </summary>
         /// <remarks>
-        /// <see cref="mainLightIntensityLumens"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// <see cref="mainLightIntensityLumens"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>
         /// or a platform-specific error has occurred.
         /// </remarks>
         public float? mainLightIntensityLumens { get; set; }
@@ -89,7 +89,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Use <c>averageMainLightBrightness.HasValue</c> to determine if this information is available.
         /// </summary>
         /// <remarks>
-        /// <see cref="averageMainLightBrightness"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>,
+        /// <see cref="averageMainLightBrightness"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>,
         /// or if a platform-specific error has occurred.
         /// </remarks>
         public float? averageMainLightBrightness
@@ -110,7 +110,7 @@ namespace UnityEngine.XR.ARFoundation
         /// The estimated color of the main light.
         /// </summary>
         /// <remarks>
-        /// <see cref="mainLightColor"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// <see cref="mainLightColor"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>
         /// or a platform-specific error has occurred.
         /// </remarks>
         public Color? mainLightColor { get; set; }
@@ -119,7 +119,7 @@ namespace UnityEngine.XR.ARFoundation
         /// An estimate of where the main light of the scene is coming from.
         /// </summary>
         /// <remarks>
-        /// <see cref="mainLightDirection"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// <see cref="mainLightDirection"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>
         /// or a platform-specific error has occurred.
         /// </remarks>
         public Vector3? mainLightDirection { get; set; }
@@ -128,7 +128,7 @@ namespace UnityEngine.XR.ARFoundation
         /// An estimation of the ambient scene lighting using spherical harmonics at the Level 2.
         /// </summary>
         /// <remarks>
-        /// <see cref="ambientSphericalHarmonics"/> may be null when light estimation is not enabled in the <see cref="ARSession"/>
+        /// <see cref="ambientSphericalHarmonics"/> can be null when light estimation is not enabled in the <see cref="ARSession"/>
         /// or a platform-specific error has occurred.
         /// </remarks>
         public SphericalHarmonicsL2? ambientSphericalHarmonics { get; set; }

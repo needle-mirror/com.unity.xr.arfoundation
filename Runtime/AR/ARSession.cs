@@ -9,9 +9,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <para>
     /// Controls the lifecycle and configuration options for an AR session. There
     /// is only one active session. If you have multiple <see cref="ARSession"/> components,
-    /// they all talk to the same session and will conflict with each other.
+    /// they all communicate to the same session and will conflict with each other.
     /// </para><para>
-    /// Enabling or disabling the <see cref="ARSession"/> will start or stop the session,
+    /// Enabling or disabling the <see cref="ARSession"/> starts or stops the session,
     /// respectively.
     /// </para>
     /// </summary>
@@ -19,11 +19,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARSession) + ".html")]
     public sealed class ARSession :
-#if UNITY_2020_2_OR_NEWER
         SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
-#else
-        SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor>
-#endif
     {
         [SerializeField]
         bool m_AttemptUpdate = true;
@@ -44,7 +40,7 @@ namespace UnityEngine.XR.ARFoundation
         bool m_MatchFrameRate = true;
 
         /// <summary>
-        /// If <c>True</c>, the session will block execution until a new AR frame is available.
+        /// If <c>true</c>, the session will block execution until a new AR frame is available.
         /// This property is obsolete. Use <see cref="matchFrameRateRequested"/> or <see cref="matchFrameRateEnabled"/> instead.
         /// </summary>
         [Obsolete("Use matchFrameRateRequested or matchFrameRateEnabled instead. (2020-01-28)")]
@@ -55,29 +51,29 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Whether the underlying subsystem will attempt to synchronize the AR frame rate with Unity's.
+        /// If <c>true</c>, the underlying subsystem will attempt to synchronize the AR frame rate with Unity's.
         /// </summary>
         /// <seealso cref="matchFrameRateRequested"/>
         public bool matchFrameRateEnabled => descriptor?.supportsMatchFrameRate == true ? subsystem.matchFrameRateEnabled : false;
 
         /// <summary>
-        /// If `true`, the session will block execution until a new AR frame is available and set
+        /// If <c>true</c>, the session will block execution until a new AR frame is available and set
         /// [Application.targetFrameRate](xref:UnityEngine.Application.targetFrameRate)
         /// to match the native update frequency of the AR session.
-        /// Otherwise, the AR session is updated indpendently of the Unity frame.
+        /// Otherwise, the AR session is updated independently of the Unity frame.
         /// </summary>
         /// <remarks>
-        /// If enabled with a simple scene, the `ARSession.Update` may appear to take a long time.
-        /// This is simply waiting for the next AR frame, similar to the way Unity will `WaitForTargetFPS` at the
+        /// If enabled with a simple scene, the `ARSession.Update` might appear to take a long time.
+        /// This is because your application is waiting for the next AR frame, similar to the way Unity will `WaitForTargetFPS` at the
         /// end of a frame. If the rest of the Unity frame takes non-trivial time, then the next `ARSession.Update`
-        /// will take a proportionally less amount of time.
+        /// will take a proportionally smaller amount of time.
         ///
         /// This option does three things:
-        /// - Enables a [setting on the XRSessionSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.matchFrameRateRequested) which causes the update to block until the next AR frame is ready
-        /// - Sets [Application.targetFrameRate](xref:UnityEngine.Application.targetFrameRate) to the session's preferred update rate
-        /// - Sets [QualitySettings.vSyncCount](xref:UnityEngine.QualitySettings.vSyncCount) to zero
+        /// - Enables a [setting on the XRSessionSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.matchFrameRateRequested) which causes the update to block until the next AR frame is ready.
+        /// - Sets [Application.targetFrameRate](xref:UnityEngine.Application.targetFrameRate) to the session's preferred update rate.
+        /// - Sets [QualitySettings.vSyncCount](xref:UnityEngine.QualitySettings.vSyncCount) to zero.
         ///
-        /// These settings are not reverted when the ARSession is disabled.
+        /// These settings are not reverted when the AR Session is disabled.
         /// </remarks>
         public bool matchFrameRateRequested
         {
@@ -144,11 +140,17 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public static NotTrackingReason notTrackingReason => s_NotTrackingReason;
 
+        int m_VSyncCount;
+
+        int m_TargetFrameRate;
+
+        bool m_WasFrameRateSet;
+
         /// <summary>
         /// Resets the AR Session.
         /// </summary>
         /// <remarks>
-        /// Resetting the session destroys all trackables and resets device tracking (e.g., the position of the session
+        /// Resetting the session destroys all trackables and resets device tracking (for example, the position of the session
         /// is reset to the origin).
         /// </remarks>
         public void Reset()
@@ -170,13 +172,13 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Emits a warning in the console if more than one active <see cref="ARSession"/>
+        /// Prints a warning to the console if more than one <see cref="ARSession"/>
         /// component is active. There is only a single, global AR Session; this
         /// component controls that session. If two or more <see cref="ARSession"/>s are
         /// simultaneously active, then they both issue commands to the same session.
         /// Although this can cause unintended behavior, it is not expressly forbidden.
         ///
-        /// This method is expensive and should not be called frequently.
+        /// This method is resource-intensive and should not be called frequently.
         /// </summary>
         void WarnIfMultipleARSessions()
         {
@@ -216,7 +218,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Start checking the availability of XR on the current device.
         /// </summary>
         /// <remarks>
-        /// The availability check may be asynchronous, so this is implemented as a coroutine.
+        /// The availability check can be asynchronous, so this is implemented as a coroutine.
         /// It is safe to call this multiple times; if called a second time while an availability
         /// check is being made, it returns a new coroutine which waits on the first.
         /// </remarks>
@@ -255,11 +257,7 @@ namespace UnityEngine.XR.ARFoundation
                 else if (s_Availability.IsSupported() && !s_Availability.IsInstalled())
                 {
                     bool supportsInstall =
-#if UNITY_2020_2_OR_NEWER
                         subsystem.subsystemDescriptor.supportsInstall;
-#else
-                        subsystem.SubsystemDescriptor.supportsInstall;
-#endif
                     state = supportsInstall ? ARSessionState.NeedsInstall : ARSessionState.Unsupported;
                 }
                 else
@@ -274,15 +272,17 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Installation may be asynchronous, so this is implemented as a coroutine.
+        /// Installation can be asynchronous, so this is implemented as a coroutine.
         /// It is safe to call this multiple times, but you must first call <see cref="CheckAvailability"/>.
         /// </para><para>
-        /// You must call <see cref="CheckAvailability"/> before trying to Install
+        /// You must call <see cref="CheckAvailability"/> before trying to start the installation,
         /// and the <see cref="state"/> must not be <see cref="ARSessionState.Unsupported"/>
-        /// or this method will throw.
+        /// or this method will throw <see cref="System.InvalidOperationException"/>.
         /// </para>
         /// </remarks>
         /// <returns>An <c>IEnumerator</c> used for a coroutine.</returns>
+        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="state"/> is
+        ///     <see cref="ARSessionState.None"/> or <see cref="ARSessionState.Unsupported"/>.</exception>
         public static IEnumerator Install()
         {
             while ((state == ARSessionState.Installing) || (state == ARSessionState.CheckingAvailability))
@@ -340,6 +340,11 @@ namespace UnityEngine.XR.ARFoundation
 #endif
             EnsureSubsystemInstanceSet();
 
+            // Cache these values and restore them in OnDisable
+            m_VSyncCount = QualitySettings.vSyncCount;
+            m_TargetFrameRate = Application.targetFrameRate;
+            m_WasFrameRateSet = false;
+
             if (subsystem != null)
             {
                 StartCoroutine(Initialize());
@@ -347,10 +352,9 @@ namespace UnityEngine.XR.ARFoundation
 #if DEVELOPMENT_BUILD
             else
             {
-                Debug.LogWarningFormat(
-                    "No ARSession available for the current platform. " +
-                    "Please ensure you have installed the relevant XR Plugin package " +
-                    "for this platform via the Package Manager."
+                Debug.LogWarning("No ARSession available for the current platform. " +
+                    "Please ensure you have installed the relevant XR Plug-in package " +
+                    "for this platform via XR Plug-in Management (Project Settings > XR Plug-in Management)."
                 );
             }
 #endif
@@ -403,6 +407,7 @@ namespace UnityEngine.XR.ARFoundation
                 m_TrackingMode = subsystem.requestedTrackingMode.ToTrackingMode();
                 if (subsystem.matchFrameRateEnabled && m_MatchFrameRate)
                 {
+                    m_WasFrameRateSet = true;
                     Application.targetFrameRate = subsystem.frameRate;
                     QualitySettings.vSyncCount = 0;
                 }
@@ -432,13 +437,17 @@ namespace UnityEngine.XR.ARFoundation
                 return;
 
             if (paused)
+            {
                 subsystem.OnApplicationPause();
+            }
             else
+            {
                 subsystem.OnApplicationResume();
+            }
         }
 
         /// <summary>
-        /// Invoked when this `MonoBehaviour` is disabled. Used to affect the <see cref="state"/>.
+        /// Invoked when this `MonoBehaviour` is disabled. Affects the <see cref="state"/>.
         /// </summary>
         protected override void OnDisable()
         {
@@ -446,11 +455,20 @@ namespace UnityEngine.XR.ARFoundation
 
             // Only set back to ready if we were previously running
             if (state > ARSessionState.Ready)
+            {
                 state = ARSessionState.Ready;
+            }
+
+            // Restore values cached in OnEnable
+            if (m_WasFrameRateSet)
+            {
+                QualitySettings.vSyncCount = m_VSyncCount;
+                Application.targetFrameRate = m_TargetFrameRate;
+            }
         }
 
         /// <summary>
-        /// Invoked when this `MonoBehaviour` is destroyed. Used to affect the <see cref="state"/>.
+        /// Invoked when this `MonoBehaviour` is destroyed. Affects the <see cref="state"/>.
         /// </summary>
         protected override void OnDestroy()
         {

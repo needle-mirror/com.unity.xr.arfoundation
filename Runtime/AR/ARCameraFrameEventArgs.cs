@@ -49,18 +49,18 @@ namespace UnityEngine.XR.ARFoundation
         public List<int> propertyNameIds { get; set; }
 
         /// <summary>
-        /// The exposure duration in seconds with sub-millisecond precision.  Utilized in calculating motion blur.
+        /// The exposure duration in seconds with sub-millisecond precision. Used in calculating motion blur.
         /// </summary>
         /// <remarks>
-        /// <see cref="exposureDuration"/> may be null if platform does not support exposure duration.
+        /// <see cref="exposureDuration"/> can be null if platform does not support exposure duration.
         /// </remarks>
         public double? exposureDuration { get; set; }
 
         /// <summary>
-        /// The offset of camera exposure.  Used to scale scene lighting in post-processed lighting stage.
+        /// The offset of camera exposure. Used to scale scene lighting in post-processed lighting stage.
         /// </summary>
         /// <remarks>
-        /// <see cref="exposureOffset"/> may be null if platform does not support exposure offset.
+        /// <see cref="exposureOffset"/> can be null if platform does not support exposure offset.
         /// </remarks>
         public float? exposureOffset { get; set; }
 

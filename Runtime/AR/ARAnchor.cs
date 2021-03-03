@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     /// Represents an Anchor tracked by an XR device.
     /// </summary>
     /// <remarks>
-    /// A anchor is a pose in the physical environment that is tracked by an XR device.
+    /// An anchor is a pose in the physical environment that is tracked by an XR device.
     /// As the device refines its understanding of the environment, anchors will be
     /// updated, helping you to keep virtual content connected to a real-world position and orientation.
     /// </remarks>

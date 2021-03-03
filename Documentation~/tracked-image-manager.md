@@ -31,7 +31,12 @@ XRReferenceImageLibrary serializedLibrary = ...
 RuntimeReferenceImageLibrary runtimeLibrary = trackedImageManager.CreateRuntimeLibrary(serializedLibrary);
 ```
 
-⚠️ **Note** The ordering of the [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage)s in the `RuntimeReferenceImageLibrary` is undefined; that is, it may not match the order in which the images appeared in the source `XRReferenceImageLibrary`. Each reference image does have a string name that you assign it, and a randomly assigned [Guid](xref:System.Guid). The `Guid` are the same between the source `XRReferenceImageLibrary` and its corresponding `RuntimeReferenceImageLibrary`.
+> [!NOTE]
+> The ordering of the [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage)s in the `RuntimeReferenceImageLibrary` is undefined; that is, it may not match the order in which the images appeared in the source `XRReferenceImageLibrary`. Each reference image does have a string name that you assign it, and a randomly assigned [Guid](xref:System.Guid). The `Guid` are the same between the source `XRReferenceImageLibrary` and its corresponding `RuntimeReferenceImageLibrary`.
+
+## Using reference image libraries with asset bundles
+
+Prior to AR Foundation 4.2, reference image libraries had to be built into the Player; that is, the `XRReferenceImageLibrary` served only as a means to look up data that was expected to be packaged in the app. This meant that you could not, for example, download a novel reference image library to an already released app. As of AR Foundation 4.2, platform-specifc data is attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:AssetBundlesIntro). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
 
 ## Responding to detected images
 
@@ -41,7 +46,7 @@ Subscribe to the ARTrackedImageManager's [trackedImagesChanged](xref:UnityEngine
 
 Note that images also have a [tracking state](#tracking-state) which can provide additional information about the tracking quality. An image that goes out of view, for example, may not be "removed", but its tracking state will likely change.
 
-You can also get all the currently tracked images with the ARTrackedImageManager's [trackables](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`4.trackables) property. This acts like an [IEnumerable](xref:System.Collections.IEnumerable) collection, so you can use it in a `foreach` statement:
+You can also get all the currently tracked images with the ARTrackedImageManager's [trackables](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackables) property. This acts like an [IEnumerable](xref:System.Collections.IEnumerable) collection, so you can use it in a `foreach` statement:
 
 [!code-cs[trackedimage_enumerate_trackables](../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_enumerate_trackables)]
 
@@ -53,7 +58,7 @@ Or access a specific image by its [TrackableId](xref:UnityEngine.XR.ARSubsystems
 
 The [ARTrackedImageManager](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager) has a ["Tracked Image Prefab"](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagePrefab) field; however, this is not intended for content. When an image is detected, ARFoundation will create a new [GameObject](xref:GameObjects) to represent it.
 
-If "Tracked Image Prefab" is `null`, then ARFoundation simply creates a GameObject with an [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) component on it. However, if you want _every tracked image_ to also include additional components, you can provide a prefab for ARFoundation to instantiate for each detected image. In other words, the purpose of the prefab field is to _extend_ the default behavior of tracked images; it is not the recommended way to _place content_ in the world.
+If "Tracked Image Prefab" is `null`, then AR Foundation simply creates a GameObject with an [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) component on it. However, if you want every tracked image to also include additional components, you can provide a Prefab for AR Foundation to instantiate for each detected image. In other words, the purpose of the Prefab field is to extend the default behavior of tracked images; it is not the recommended way to place content in the world.
 
 If you would like to [instantiate](xref:UnityEngine.Object.Instantiate(UnityEngine.Object)) content at the pose of the detected image and have its pose updated automatically, then you should parent your content to the `ARTrackedImage`.
 
@@ -77,7 +82,7 @@ To add an image to a [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.A
 
 If you use the [extension method](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob(UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary,UnityEngine.Texture2D,System.String,System.Nullable{System.Single},Unity.Jobs.JobHandle)) which accepts a [Texture2D](xref:UnityEngine.Texture2D), you do not need to manage any memory.
 
-If you use the version of [ScheduleAddImageJob](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary.ScheduleAddImageJob(Unity.Collections.NativeSlice{System.Byte},UnityEngine.Vector2Int,UnityEngine.TextureFormat,UnityEngine.XR.ARSubsystems.XRReferenceImage,Unity.Jobs.JobHandle)) that accepts a [NativeSlice](xref:Unity.Collections.NativeSlice`1) or pointer, you are responsible for managing the memory, i.e., freeing it when the job completes. You can do this by scheduling a dependent job that frees the memory:
+If you use the version of [ScheduleAddImageJob](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary.ScheduleAddImageJob(Unity.Collections.NativeSlice{System.Byte},UnityEngine.Vector2Int,UnityEngine.TextureFormat,UnityEngine.XR.ARSubsystems.XRReferenceImage,Unity.Jobs.JobHandle)) that accepts a [NativeSlice](xref:Unity.Collections.NativeSlice`1) or pointer, you are responsible for managing the memory, that is, freeing it when the job completes. You can do this by scheduling a dependent job that frees the memory:
 
 [!code-cs[trackedimage_DeallocateOnJobCompletion](../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_DeallocateOnJobCompletion)]
 
@@ -99,17 +104,18 @@ manager.enabled = true;
 
 Some providers can track moving images. This typically requires more CPU resources, so you can specify the number of moving images to track simultaneously. Check for support via the `SubsystemDescriptor` (`ARTrackedImageManager.descriptor`).
 
-## Tracked image prefab
+## Tracked Image Prefab
 
-This prefab is instantiated whenever an image from the reference image library is detected. The manager ensures the instantiated `GameObject` includes an `ARTrackedImage` component. You can get the reference image that was used to detect the `ARTrackedImage` with the `ARTrackedImage.referenceImage` property.
+This Prefab is instantiated whenever an image from the reference image library is detected. The manager ensures the instantiated `GameObject` includes an `ARTrackedImage` component. You can get the reference image that was used to detect the `ARTrackedImage` with the `ARTrackedImage.referenceImage` property.
 
 ## Tracking State
+
 There are three possible tracking states for `ARTrackedImages`:
 
 | TrackingState                                                     | Description                   |
 |:---------------:                                                  |:-------------                 |
 | [None](xref:UnityEngine.XR.ARSubsystems.TrackingState.None)       | The image is not being tracked. Note that this may be the initial state when the image is first detected. |
-| [Limited](xref:UnityEngine.XR.ARSubsystems.TrackingState.Limited) | The image is being tracked, but not as well. The situations in which an image is considered `Limited` instead of `Tracking` depend on the underlying AR framework. Examples that may cause `Limited` tracking include:  <ul><li>Obscuring the image so that it is not visible to the camera.</li><li>The image is not tracked as a moving image. This can happen, for example, if the `maxNumberOfMovingImages` is exceeded.</li></ul>
+| [Limited](xref:UnityEngine.XR.ARSubsystems.TrackingState.Limited) | The image is being tracked, but not as well. The situations in which an image is considered `Limited` instead of `Tracking` depend on the underlying AR framework. Examples that could cause `Limited` tracking include:  <ul><li>Obscuring the image so that it is not visible to the camera.</li><li>The image is not tracked as a moving image. This can happen, for example, if the `maxNumberOfMovingImages` is exceeded.</li></ul>
 | [Tracking](xref:UnityEngine.XR.ARSubsystems.TrackingState.Tracking) | The underlying AR SDK reports that it is actively tracking the image. |
 
 ### Determining when an image is visible

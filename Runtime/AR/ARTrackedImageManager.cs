@@ -16,9 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARTrackedImageManager : ARTrackableManager<
         XRImageTrackingSubsystem,
         XRImageTrackingSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRImageTrackingSubsystem.Provider,
-#endif
         XRTrackedImage,
         ARTrackedImage>
     {
@@ -28,13 +26,13 @@ namespace UnityEngine.XR.ARFoundation
         XRReferenceImageLibrary m_SerializedLibrary;
 
         /// <summary>
-        /// Get or set the reference image library, the set of images to search for in the physical environment.
+        /// Get or set the reference image library (that is, the set of images to search for in the physical environment).
         /// </summary>
         /// <remarks>
         /// An <c>IReferenceImageLibrary</c> can be either an <c>XRReferenceImageLibrary</c>
         /// or a <c>RuntimeReferenceImageLibrary</c>. <c>XRReferenceImageLibrary</c>s can only be
-        /// constructed at edit-time and are immutable at runtime. A <c>RuntimeReferenceImageLibrary</c>
-        /// is the runtime representation of a <c>XRReferenceImageLibrary</c> and may be mutable
+        /// constructed in the Editor and are immutable at runtime. A <c>RuntimeReferenceImageLibrary</c>
+        /// is the runtime representation of a <c>XRReferenceImageLibrary</c> and can be mutable
         /// at runtime (see <c>MutableRuntimeReferenceImageLibrary</c>).
         /// </remarks>
         /// <exception cref="System.InvalidOperationException">Thrown if the <see cref="referenceLibrary"/> is set to <c>null</c> while image tracking is enabled.</exception>
@@ -85,7 +83,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <c>MutableRuntimeReferenceImageLibrary</c>, it is modifiable at runtime.
         /// </summary>
         /// <param name="serializedLibrary">An existing <c>XRReferenceImageLibrary</c>, or <c>null</c> to create an empty mutable image library.</param>
-        /// <returns>A new <c>RuntimeReferenceImageLibrary</c> representing the deserialized version of <paramref name="serializedLibrary"/>or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
+        /// <returns>A new <c>RuntimeReferenceImageLibrary</c> representing the deserialized version of <paramref name="serializedLibrary"/> or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if there is no subsystem. This usually means image tracking is not supported.</exception>
         public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary = null)
         {
@@ -102,7 +100,7 @@ namespace UnityEngine.XR.ARFoundation
         int m_MaxNumberOfMovingImages;
 
         /// <summary>
-        /// The maximum number of moving images to track in realtime.
+        /// The maximum number of moving images to track in real time.
         /// This property is obsolete.
         /// Use <see cref="requestedMaxNumberOfMovingImages"/>
         /// or  <see cref="currentMaxNumberOfMovingImages"/> instead.
@@ -117,8 +115,8 @@ namespace UnityEngine.XR.ARFoundation
         bool supportsMovingImages => descriptor?.supportsMovingImages == true;
 
         /// <summary>
-        /// The requested maximum number of moving images to track in realtime. Support may vary between devices and providers. Check
-        /// for support at runtime with <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor}.descriptor"/>'s
+        /// The requested maximum number of moving images to track in real time. Support can vary between devices and providers. Check
+        /// for support at runtime with <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
         /// `supportsMovingImages` property.
         /// </summary>
         public int requestedMaxNumberOfMovingImages
@@ -135,7 +133,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get the maximum number of moving images to track in realtime currently in use by the subsystem.
+        /// Get the maximum number of moving images to track in real time that is currently in use by the subsystem.
         /// </summary>
         public int currentMaxNumberOfMovingImages => supportsMovingImages ? subsystem.currentMaxNumberOfMovingImages : 0;
 
@@ -144,11 +142,11 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_TrackedImagePrefab;
 
         /// <summary>
-        /// If not null, instantiates this prefab for each detected image.
+        /// If not null, instantiates this Prefab for each detected image.
         /// </summary>
         /// <remarks>
-        /// The purpose of this property is to _extend_ the functionality of <see cref="ARTrackedImage"/>s.
-        /// It is not the recommended way to instantiate _content_ associated with an <see cref="ARTrackedImage"/>.
+        /// The purpose of this property is to extend the functionality of <see cref="ARTrackedImage"/>s.
+        /// It is not the recommended way to instantiate content associated with an <see cref="ARTrackedImage"/>.
         /// See [Tracked Image Prefab](xref:arfoundation-tracked-image-manager#tracked-image-prefab) for more details.
         /// </remarks>
         public GameObject trackedImagePrefab
@@ -158,13 +156,13 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get the prefab that will be instantiated for each <see cref="ARTrackedImage"/>.
+        /// Get the Prefab that will be instantiated for each <see cref="ARTrackedImage"/>.
         /// </summary>
-        /// <returns>The prefab that will be instantiated for each <see cref="ARTrackedImage"/>.</returns>
+        /// <returns>The Prefab that will be instantiated for each <see cref="ARTrackedImage"/>.</returns>
         protected override GameObject GetPrefab() => m_TrackedImagePrefab;
 
         /// <summary>
-        /// Invoked once per frame with information about the <see cref="ARTrackedImage"/>s that have changed, i.e., been added, updated, or removed.
+        /// Invoked once per frame with information about the <see cref="ARTrackedImage"/>s that have changed (that is, been added, updated, or removed).
         /// This happens just before <see cref="ARTrackedImage"/>s are destroyed, so you can set <c>ARTrackedImage.destroyOnRemoval</c> to <c>false</c>
         /// from this event to suppress this behavior.
         /// </summary>
@@ -206,7 +204,7 @@ namespace UnityEngine.XR.ARFoundation
             if (m_ReferenceImages.TryGetValue(guid, out referenceImage))
                 return true;
 
-            // If we are using a mutable library, then its possible an image
+            // If we are using a mutable library, then it's possible an image
             // has been added that we don't yet know about, so search the library.
             if (referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
             {

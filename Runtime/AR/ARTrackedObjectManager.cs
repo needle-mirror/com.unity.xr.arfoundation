@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// A manager for <see cref="ARTrackedObject"/>s. Uses the <c>XRObjectTrackingSubsystem</c>
-    /// to recognize and track 3D Objects in the physical environment.
+    /// to recognize and track 3D objects in the physical environment.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedObjectManager)]
     [DisallowMultipleComponent]
@@ -15,9 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARTrackedObjectManager : ARTrackableManager<
         XRObjectTrackingSubsystem,
         XRObjectTrackingSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRObjectTrackingSubsystem.Provider,
-#endif
         XRTrackedObject,
         ARTrackedObject>
     {
@@ -26,8 +24,8 @@ namespace UnityEngine.XR.ARFoundation
         XRReferenceObjectLibrary m_ReferenceLibrary;
 
         /// <summary>
-        /// The <c>ARObjectLibrary</c> to use during Object detection. This is the
-        /// library of objects which will be detected and/or tracked in the physical environment.
+        /// The <c>ARObjectLibrary</c> to use during object detection. This is the
+        /// library of objects which will be detected and tracked in the physical environment.
         /// </summary>
         public XRReferenceObjectLibrary referenceLibrary
         {
@@ -49,7 +47,7 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_TrackedObjectPrefab;
 
         /// <summary>
-        /// If not null, instantiates this prefab for each detected object.
+        /// If not null, instantiates this Prefab for each detected object.
         /// </summary>
         public GameObject trackedObjectPrefab
         {
@@ -58,25 +56,25 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get the prefab to instantiate for each <see cref="ARTrackedObject"/>.
+        /// Get the Prefab to instantiate for each <see cref="ARTrackedObject"/>.
         /// </summary>
         /// <returns>The prefab to instantiate for each <see cref="ARTrackedObject"/>.</returns>
         protected override GameObject GetPrefab() => m_TrackedObjectPrefab;
 
         /// <summary>
-        /// Invoked once per frame with information about the <see cref="ARTrackedObject"/>s that have changed, i.e., been added, updated, or removed.
+        /// Invoked once per frame with information about the <see cref="ARTrackedObject"/>s that have changed (that is, been added, updated, or removed).
         /// This happens just before <see cref="ARTrackedObject"/>s are destroyed, so you can set <c>ARTrackedObject.destroyOnRemoval</c> to <c>false</c>
         /// from this event to suppress this behavior.
         /// </summary>
         public event Action<ARTrackedObjectsChangedEventArgs> trackedObjectsChanged;
 
         /// <summary>
-        /// The name to be used for the <c>GameObject</c> whenever a new Object is detected.
+        /// The name to be used for the <c>GameObject</c> whenever a new object is detected.
         /// </summary>
         protected override string gameObjectName => "ARTrackedObject";
 
         /// <summary>
-        /// Sets the Object library on the subsystem before Start() is called on the base class.
+        /// Sets the object library on the subsystem before Start() is called on the base class.
         /// </summary>
         protected override void OnBeforeStart()
         {
@@ -104,11 +102,17 @@ namespace UnityEngine.XR.ARFoundation
             ARTrackedObject trackedObject,
             XRTrackedObject sessionRelativeData)
         {
-            var guid = sessionRelativeData.referenceObjectGuid;
-            XRReferenceObject referenceObject;
-            if (!m_ReferenceObjects.TryGetValue(guid, out referenceObject))
+            if (m_ReferenceLibrary != null && m_ReferenceObjectCount != m_ReferenceLibrary.count)
             {
-                Debug.LogErrorFormat("Could not find reference object with guid {0}", guid);
+                // Since reference libraries can change, make sure
+                // our reference object dictionary is up to date.
+                UpdateReferenceObjects();
+            }
+
+            var guid = sessionRelativeData.referenceObjectGuid;
+            if (!m_ReferenceObjects.TryGetValue(guid, out var referenceObject))
+            {
+                Debug.LogError($"Could not find reference object with guid {guid}");
             }
 
             trackedObject.referenceObject = referenceObject;
@@ -139,12 +143,19 @@ namespace UnityEngine.XR.ARFoundation
         void UpdateReferenceObjects()
         {
             m_ReferenceObjects.Clear();
+            m_ReferenceObjectCount = 0;
             if (m_ReferenceLibrary == null)
                 return;
 
             foreach (var referenceObject in m_ReferenceLibrary)
+            {
                 m_ReferenceObjects[referenceObject.guid] = referenceObject;
+            }
+
+            m_ReferenceObjectCount = m_ReferenceObjects.Count;
         }
+
+        int m_ReferenceObjectCount;
 
         Dictionary<Guid, XRReferenceObject> m_ReferenceObjects = new Dictionary<Guid, XRReferenceObject>();
     }

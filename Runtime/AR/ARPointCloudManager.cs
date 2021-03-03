@@ -17,9 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     public class ARPointCloudManager : ARTrackableManager<
         XRDepthSubsystem,
         XRDepthSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRDepthSubsystem.Provider,
-#endif
         XRPointCloud,
         ARPointCloud>, IRaycaster
     {
@@ -28,7 +26,7 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_PointCloudPrefab;
 
         /// <summary>
-        /// Getter/setter for the Point Cloud Prefab.
+        /// Getter or setter for the Point Cloud Prefab.
         /// </summary>
         public GameObject pointCloudPrefab
         {
@@ -37,7 +35,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Invoked once per frame with information about the <see cref="ARTrackedObject"/>s that have changed, i.e., been added, updated, or removed.
+        /// Invoked once per frame with information about the <see cref="ARTrackedObject"/>s that have changed, that is, been added, updated, or removed.
         /// This happens just before <see cref="ARTrackedObject"/>s are destroyed, so you can set <c>ARTrackedObject.destroyOnRemoval</c> to <c>false</c>
         /// from this event to suppress this behavior.
         /// </summary>
@@ -71,9 +69,9 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The prefab that will be instantiated for each <see cref="ARPointCloud"/>. May be `null`.
+        /// The Prefab that will be instantiated for each <see cref="ARPointCloud"/>. Can be `null`.
         /// </summary>
-        /// <returns>The prefab that will be instantiated for each <see cref="ARPointCloud"/>.</returns>
+        /// <returns>The Prefab that will be instantiated for each <see cref="ARPointCloud"/>.</returns>
         protected override GameObject GetPrefab() => m_PointCloudPrefab;
 
         /// <summary>

@@ -15,9 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARParticipantManager : ARTrackableManager<
         XRParticipantSubsystem,
         XRParticipantSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRParticipantSubsystem.Provider,
-#endif
         XRParticipant,
         ARParticipant>
     {
@@ -26,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_ParticipantPrefab;
 
         /// <summary>
-        /// (Optional) Instantiates this prefab for each participant. If <c>null</c>, an empty <c>GameObject</c>
+        /// (Optional) Instantiates this Prefab for each participant. If <c>null</c>, an empty <c>GameObject</c>
         /// with a <see cref="ARParticipant"/> component is instantiated instead.
         /// </summary>
         public GameObject participantPrefab
@@ -54,9 +52,9 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The prefab which will be instantiated for each <see cref="ARParticipant"/>. May be `null`.
+        /// The Prefab which will be instantiated for each <see cref="ARParticipant"/>. Can be `null`.
         /// </summary>
-        /// <returns>A prefab to instantiate for each <see cref="ARParticipant"/>.</returns>
+        /// <returns>A Prefab to instantiate for each <see cref="ARParticipant"/>.</returns>
         protected override GameObject GetPrefab() => m_ParticipantPrefab;
 
         /// <summary>

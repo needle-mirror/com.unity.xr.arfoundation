@@ -24,14 +24,10 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        class MockSessionSubsystem : XRSessionSubsystem
-        {
-#if !UNITY_2020_2_OR_NEWER
-            protected override Provider CreateProvider() => new MockProvider();
-#endif
-        }
+        class MockSessionSubsystem : XRSessionSubsystem { }
 
         class SubsystemThatSupportsInstall : MockSessionSubsystem { }
+
         class SubsystemThatDoesNotSupportInstall : MockSessionSubsystem { }
 
         static string GetSubsystemName(SupportsInstall supportsInstall) => $"SessionThatSupportsInstall{supportsInstall.ToString()}";
@@ -46,12 +42,8 @@ namespace UnityEngine.XR.ARFoundation
             return new XRSessionSubsystemDescriptor.Cinfo
             {
                 id = GetSubsystemName(supportsInstall),
-#if UNITY_2020_2_OR_NEWER
                 providerType = typeof(MockProvider),
                 subsystemTypeOverride = type,
-#else
-                subsystemImplementationType = type,
-#endif
                 supportsInstall = canBeInstalled,
             };
         }

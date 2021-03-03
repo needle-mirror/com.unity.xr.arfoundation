@@ -11,13 +11,13 @@ The anchor manager creates `GameObject`s for each anchor. An anchor is a particu
 
 ## Anchor Prefab
 
-While the [ARAnchorManager](xref:UnityEngine.XR.ARFoundation.ARAnchorManager) has an ["Anchor Prefab"](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorPrefab) field, this is not intended for content. When an anchor is created in some way other than `AddComponent`, such as loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.1/api/UnityEngine.XR.ARKit.ARWorldMap.html) that contained anchors, ARFoundation will create a new [GameObject](xref:GameObjects) to represent it.
+While the [ARAnchorManager](xref:UnityEngine.XR.ARFoundation.ARAnchorManager) has an ["Anchor Prefab"](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorPrefab) field, this is not intended for content. When an anchor is created in some way other than `AddComponent`, such as loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.2/api/UnityEngine.XR.ARKit.ARWorldMap.html) that contained anchors, AR Foundation creates a new [GameObject](xref:GameObjects) to represent it.
 
-If "Anchor Prefab" is `null`, then ARFoundation simply creates a GameObject with an `ARAnchor` component on it. However, if you want the anchor to also include additional components, you can provide a prefab for ARFoundation to instantiate for the anchor. In other words, the purpose of the prefab field is to _extend_ the default behavior of anchors; it is not the recommended way to _place content_ in the world.
+If "Anchor Prefab" is `null`, AR Foundation creates a GameObject with an `ARAnchor` component on it. However, if you want the anchor to also include additional components, you can provide a Prefab for AR Foundation to instantiate for the anchor. In other words, the Prefab field extends the default behavior of anchors, but it is not the recommended way to place content in the world.
 
 ## Adding and removing anchors
 
-To add a new anchor, simply add the [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) component to any GameObject using [AddComponent&lt;ARAnchor&gt;](xref:UnityEngine.GameObject.AddComponent). Anchors can also be created indirectly, for example by loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.1/api/UnityEngine.XR.ARKit.ARWorldMap.html) which includes saved anchors.
+To add a new anchor, add the [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) component to any GameObject using [AddComponent&lt;ARAnchor&gt;](xref:UnityEngine.GameObject.AddComponent). Anchors can also be created indirectly, for example by loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.2/api/UnityEngine.XR.ARKit.ARWorldMap.html) which includes saved anchors.
 
 You should not change the [transform](xref:UnityEngine.Transform) of an anchor; its transform is updated automatically by ARFoundation.
 
@@ -25,7 +25,8 @@ When you add an anchor, it might take a frame or two before the anchor manager's
 
 To remove an anchor, [Destroy](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `ARAnchor` component (or its GameObject).
 
-**Note:** When you `Destroy` an `ARAnchor`, you will not receive an `anchorsChanged` event for it.
+> [!NOTE]
+> When you `Destroy` an `ARAnchor`, you will not receive an `anchorsChanged` event for it.
 
 ## Anchoring content
 
@@ -51,4 +52,4 @@ public ARAnchor AttachAnchor(ARPlane plane, Pose pose);
 
 Attaching an anchor to a plane affects the anchor update semantics. This type of anchor will only change its position along the normal of the plane to which it is attached, thus maintaining a constant distance from the plane.
 
-A typical use case for attaching an anchor to a plane is to place virtual content on the plane. We recommend creating the anchor with `AttachAnchor`, and then _parenting_ your content to the anchor.
+A typical use case for attaching an anchor to a plane is to place virtual content on the plane. Unity recommends creating the anchor with `AttachAnchor`, and then parenting your content to the anchor.

@@ -1,7 +1,7 @@
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// The update order for <c>MonoBehaviour</c>s in ARFoundation.
+    /// The update order for <c>MonoBehaviour</c>s in AR Foundation.
     /// </summary>
     public static class ARUpdateOrder
     {

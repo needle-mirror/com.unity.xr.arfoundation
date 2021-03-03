@@ -20,15 +20,15 @@ namespace UnityEngine.XR.ARFoundation
         /// Image addition can take some time (several frames) due to extra processing that must occur to insert the
         /// image into the library. This is done using the [Unity Job System](xref:JobSystem). The returned
         /// [JobHandle](xref:Unity.Jobs.JobHandle) can be used to chain together multiple tasks or to query for
-        /// completion, but may be safely discarded if you do not need it.
+        /// completion, but you can safely discarded if you do not need it.
         ///
         /// This job, like all Unity jobs, can have dependencies (using the <paramref name="inputDeps"/>). If you are
         /// adding multiple images to the library, it is not necessary to pass a previous
         /// <see cref="ScheduleAddImageJob"/> `JobHandle` as the input dependency to the next
         /// <see cref="ScheduleAddImageJob"/>; they can be processed concurrently.
         ///
-        /// The bytes of the <paramref name="texture"/> are copied, so the texture may be safely
-        /// destroyed after this method returns.
+        /// The bytes of the <paramref name="texture"/> are copied, so you can safely destroy the texture
+        /// after this method returns.
         /// </remarks>
         /// <param name="library">The <see cref="MutableRuntimeReferenceImageLibrary"/> being extended.</param>
         /// <param name="texture">The [Texture2D](xref:UnityEngine.Texture2D) to use as image target.</param>
@@ -36,7 +36,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="widthInMeters">The physical width of the image, in meters.</param>
         /// <param name="inputDeps">Input job dependencies (optional).</param>
         /// <returns>A [JobHandle](xref:Unity.Jobs.JobHandle) which can be used to chain together multiple tasks or to
-        ///     query for completion. May be safely discarded.</returns>
+        ///     query for completion. Can be safely discarded.</returns>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref cref="library"/> is `null`.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
@@ -67,9 +67,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="widthInMeters">The physical width of the image, in meters.</param>
         /// <param name="inputDeps">Input job dependencies (optional).</param>
         /// <returns>Returns an [AddReferenceImageJobState](xref:UnityEngine.XR.ARSubsystems.AddReferenceImageJobState)
-        ///     that can be used to query the status of the job. The `AddReferenceImageJobState` can be used to
-        ///     determine whether the image was successfully added. If image validity can be determined, invalid images
-        ///     will be not be added to the reference image library.</returns>
+        /// that can be used to query the status of the job. The `AddReferenceImageJobState` can be used to
+        /// determine whether the image was successfully added. If image validity can be determined, invalid images
+        /// will be not be added to the reference image library.</returns>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref cref="library"/> is `null`.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>

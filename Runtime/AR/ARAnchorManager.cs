@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <para>Subscribe to changes (added, updated, and removed) via the
     /// <see cref="ARAnchorManager.anchorsChanged"/> event.</para>
     /// </remarks>
-    /// <seealso cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}"/>
+    /// <seealso cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}"/>
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ARSessionOrigin))]
@@ -24,9 +24,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARAnchorManager : ARTrackableManager<
         XRAnchorSubsystem,
         XRAnchorSubsystemDescriptor,
-#if UNITY_2020_2_OR_NEWER
         XRAnchorSubsystem.Provider,
-#endif
         XRAnchor,
         ARAnchor>
     {
@@ -60,7 +58,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Attempts to add an <see cref="ARAnchor"/> with the given <c>Pose</c>.
         /// </summary>
         /// <remarks>
-        /// If <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TSessionRelativeData, TTrackable}.GetPrefab()"/>
+        /// If <see cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}.GetPrefab()"/>
         /// is not null, a new instance of that prefab will be instantiated. Otherwise, a
         /// new <c>GameObject</c> will be created. In either case, the resulting
         /// <c>GameObject</c> will have an <see cref="ARAnchor"/> component on it.
@@ -73,7 +71,7 @@ namespace UnityEngine.XR.ARFoundation
         public ARAnchor AddAnchor(Pose pose)
         {
             if (!enabled)
-                throw new InvalidOperationException("Cannot create a anchor from a disabled anchor manager.");
+                throw new InvalidOperationException("Cannot create an anchor from a disabled anchor manager.");
 
             if (subsystem == null)
                 throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");
@@ -116,7 +114,7 @@ namespace UnityEngine.XR.ARFoundation
         public ARAnchor AttachAnchor(ARPlane plane, Pose pose)
         {
             if (!enabled)
-                throw new InvalidOperationException("Cannot create a anchor from a disabled anchor manager.");
+                throw new InvalidOperationException("Cannot create an anchor from a disabled anchor manager.");
 
             if (subsystem == null)
                 throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");
@@ -145,7 +143,7 @@ namespace UnityEngine.XR.ARFoundation
         public bool RemoveAnchor(ARAnchor anchor)
         {
             if (!enabled)
-                throw new InvalidOperationException("Cannot create a anchor from a disabled anchor manager.");
+                throw new InvalidOperationException("Cannot create an anchor from a disabled anchor manager.");
 
             if (subsystem == null)
                 throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");

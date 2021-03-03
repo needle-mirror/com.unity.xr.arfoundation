@@ -4,7 +4,7 @@ namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// The arguments for the <see cref="ARPointCloud.updated"/>
-    /// event. This is currently empty, but may change in the future without the need to change the
+    /// event. This is currently empty, but it might change in the future without the need to change the
     /// subscribers' method signatures.
     /// </summary>
     public struct ARPointCloudUpdatedEventArgs : IEquatable<ARPointCloudUpdatedEventArgs>

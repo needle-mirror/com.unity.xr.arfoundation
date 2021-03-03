@@ -7,10 +7,10 @@ namespace UnityEngine.XR.ARFoundation
     internal class MeshInfoComparer : IComparer<MeshInfo>
     {
         /// <summary>
-        /// Mesh infos are stored last first so that the dequeue operation is fast
-        /// - < 0 <paramref name="infoA"/> will appear before infoB in the list
+        /// Mesh infos are stored last to first so that the dequeue operation is fast
+        /// - &lt; 0 <paramref name="infoA"/> will appear before infoB in the list
         /// - 0 <paramref name="infoA"/> has the same priority as <paramref name="infoB"/>
-        /// - > 0 <paramref name="infoB"/> will appear before infoA in the list
+        /// - &gt; 0 <paramref name="infoB"/> will appear before infoA in the list
         /// </summary>
         public int Compare(MeshInfo infoA, MeshInfo infoB)
         {

@@ -5,10 +5,10 @@ uid: arfoundation-manual
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
 
-* [ARCore XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.1/manual/index.html) on Android
-* [ARKit XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.1/manual/index.html) on iOS
-* [Magic Leap XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@6.0/manual/index.html) on Magic Leap
-* [Windows XR Plugin](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@4.0/manual/index.html) on HoloLens
+* [ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.2/manual/index.html) on Android
+* [ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.2/manual/index.html) on iOS
+* [Magic Leap XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@6.0/manual/index.html) on Magic Leap
+* [Windows XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@4.0/manual/index.html) on HoloLens
 
 AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support the following concepts:
 
@@ -58,16 +58,18 @@ You can refer to this table to understand which parts of AR Foundation are relev
 |Session management              |  ✓   |  ✓  |    ✓     |   ✓    |
 |Occlusion                       |  ✓   |  ✓  |          |        |
 
+**Note:** To use ARCore cloud anchors, download and install Google's [ARCore Extensions for Unity's AR Foundation](https://developers.google.com/ar/develop/unity-arf).
+
 ### Supported Platform Packages
 The following platform packages and later implement the AR Foundation features indicated above:
 
-|Package Name           |Version             |
-|:---                   |:---                |
-|ARCore XR Plugin       |   4.1              |
-|ARKit XR Plugin        |   4.1              |
-|ARKit Face Tracking    |   4.1              |
-|Magic Leap XR Plugin   |   6.0              |
-|Windows XR Plugin      |   5.0              |
+|Package Name            |Version             |
+|:---                    |:---                |
+|ARCore XR Plug-in       |   4.2              |
+|ARKit XR Plug-in        |   4.2              |
+|ARKit Face Tracking     |   4.2              |
+|Magic Leap XR Plug-in   |   6.0              |
+|Windows XR Plug-in      |   5.0              |
 
 ## Subsystems
 
@@ -89,10 +91,10 @@ To install this package, follow the instructions in the [Package Manager documen
 
 Subsystems are implemented in other packages. To use AR Foundation, you must also install at least one of these platform-specific AR packages from the Package Manager window (menu: **Window &gt; Package Manager**):
 
- - ARKit XR Plugin
- - ARCore XR Plugin
- - Magic Leap XR Plugin
- - Windows XR Plugin
+ - ARKit XR Plug-in
+ - ARCore XR Plug-in
+ - Magic Leap XR Plug-in
+ - Windows XR Plug-in
 
 # Glossary
 
@@ -110,9 +112,9 @@ Subsystems are implemented in other packages. To use AR Foundation, you must als
 
 For examples, see the [ARFoundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository.
 
-## Provider plugin setup
+## Provider plug-in setup
 
-Provider plugins must be enabled before AR Foundation can use them. [XR Plugin Management](https://docs.unity3d.com/2020.2/Documentation/Manual/configuring-project-for-xr.html) provides a UI to enable specific plug-in providers for each target platform.
+Provider plug-ins must be enabled before AR Foundation can use them. You can enable specific plug-in providers for each target platform from the [XR Plug-in Management](https://docs.unity3d.com/2020.2/Documentation/Manual/configuring-project-for-xr.html) window.
 
 ![XR Plug-in Management](images/enable-arcore-plugin.png "XR Plug-in Management")
 
@@ -138,7 +140,8 @@ When you disable the `ARSession`, the system no longer tracks features in its en
 
 If you enable the **Attempt Update** option, the device tries to install AR software if possible. Support for this feature is platform-dependent.
 
-**Note:** An AR session is a global construct. An `ARSession` component manages this global session, so multiple `ARSession` components will all try to manage the same global session.
+> [!NOTE]
+> An AR session is a global construct. An `ARSession` component manages this global session, so multiple `ARSession` components will all try to manage the same global session.
 
 #### Checking for device support
 
@@ -285,7 +288,7 @@ Trackable components don't do anything on their own; they just contain data asso
 
 ## Ray casting
 
-See [ARRaycastManager](raycast-manager.md)
+See [ARRaycastManager](raycast-manager.md).
 
 ## Meshing
 
@@ -297,7 +300,4 @@ See [ARMeshManager](mesh-manager.md).
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.4
-* 2020.1
-* 2020.2
-* 2021.1
+* 2021.2

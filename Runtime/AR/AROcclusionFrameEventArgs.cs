@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     {
         /// <summary>
         /// The occlusion textures associated with this frame. These are generally external textures, which exist only
-        /// on the GPU. To use them on the CPU, e.g., for computer vision processing, you will need to read them back
+        /// on the GPU. To use them on the CPU (for example, for computer vision processing), you must read them back
         /// from the GPU.
         /// </summary>
         public List<Texture2D> textures { get; internal set; }

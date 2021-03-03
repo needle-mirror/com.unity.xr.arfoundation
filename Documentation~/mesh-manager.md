@@ -23,7 +23,7 @@ You need to set the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.
 
 If you want to render the scanned meshes, you need to add a [MeshRenderer](xref:UnityEngine.MeshRenderer) component and a [Material](xref:UnityEngine.Material) component to the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject.
 
-If you want to have virtual content that interacts physically with the real-world scanned meshes, you will need to add [MeshCollider](xref:UnityEngine.MeshCollider) component to the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject.
+If you want to have virtual content that interacts physically with the real-world scanned meshes, you must add a [MeshCollider](xref:UnityEngine.MeshCollider) component to the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject.
 
 This image demonstrates a mesh Prefab configured with the required [MeshFilter](xref:UnityEngine.MeshFilter) component, an optional [MeshCollider](xref:UnityEngine.MeshCollider) component to allow for physics interactions, and optional [MeshRenderer](xref:UnityEngine.MeshRenderer) and [Material](xref:UnityEngine.Material) components to render the mesh.
 
@@ -59,6 +59,6 @@ When the device is constructing the mesh geometry, it might calculate the vertex
 
 Not all platforms support this feature.
 
-### Concurrent Queue Size
+### Concurrent queue size
 
 To avoid blocking the main thread, the tasks of converting the device mesh into a Unity mesh and creating the physics collision mesh (if the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject contains a [MeshCollider](xref:UnityEngine.MeshCollider) component) are moved into a job queue processed on a background thread. [concurrentQueueSize](xref:UnityEngine.XR.ARFoundation.ARMeshManager.concurrentQueueSize) specifies the number of meshes to be processed concurrently.

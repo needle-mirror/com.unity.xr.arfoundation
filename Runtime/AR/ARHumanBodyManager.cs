@@ -13,11 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBodyManager)]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARHumanBodyManager) + ".html")]
     public sealed class ARHumanBodyManager :
-#if UNITY_2020_2_OR_NEWER
         ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider, XRHumanBody, ARHumanBody>
-#else
-        ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBody, ARHumanBody>
-#endif
     {
         /// <summary>
         /// Whether 2D body pose tracking is enabled. This method is obsolete.
@@ -141,10 +137,10 @@ namespace UnityEngine.XR.ARFoundation
         public bool pose3DScaleEstimationEnabled => subsystem?.pose3DScaleEstimationEnabled ?? false;
 
         /// <summary>
-        /// The prefab object to instantiate at the location of the human body origin.
+        /// The Prefab object to instantiate at the location of the human body origin.
         /// </summary>
         /// <value>
-        /// The prefab object to instantiate at the location of the human body origin.
+        /// The Prefab object to instantiate at the location of the human body origin.
         /// </value>
         public GameObject humanBodyPrefab { get => m_HumanBodyPrefab; set => m_HumanBodyPrefab = value; }
 
@@ -153,10 +149,10 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_HumanBodyPrefab;
 
         /// <summary>
-        /// The name for any generated game objects.
+        /// The name for any generated GameObjects.
         /// </summary>
         /// <value>
-        /// The name for any generated game objects.
+        /// The name for any generated GameObjects.
         /// </value>
         protected override string gameObjectName => "ARHumanBody";
 
@@ -166,10 +162,10 @@ namespace UnityEngine.XR.ARFoundation
         public event Action<ARHumanBodiesChangedEventArgs> humanBodiesChanged;
 
         /// <summary>
-        /// Gets the prefab object to instantiate at the location of the trackable.
+        /// Gets the Prefab object to instantiate at the location of the trackable.
         /// </summary>
         /// <returns>
-        /// A game object to instantiate at the location of the trackable, or <c>null</c>.
+        /// A GameObject to instantiate at the location of the trackable, or <c>null</c>.
         /// </returns>
         protected override GameObject GetPrefab() => m_HumanBodyPrefab;
 
@@ -190,7 +186,7 @@ namespace UnityEngine.XR.ARFoundation
         /// The array of body pose 2D joints.
         /// </returns>
         /// <remarks>
-        /// The returned array may be empty if the system is not enabled for human body pose 2D or if the system
+        /// The returned array might be empty if the system is not enabled for human body pose 2D or if the system
         /// does not detect a human in the camera image.
         /// </remarks>
         /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human body

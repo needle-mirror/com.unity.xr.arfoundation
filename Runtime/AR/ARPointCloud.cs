@@ -6,7 +6,7 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Represents a detected point cloud, aka feature points.
+    /// Represents a detected point cloud. These are also known as feature points.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloud)]
     [DisallowMultipleComponent]

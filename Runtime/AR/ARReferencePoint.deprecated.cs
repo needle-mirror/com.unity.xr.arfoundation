@@ -4,7 +4,7 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Represents a Reference Point tracked by an XR device.
+    /// Represents a reference point tracked by an XR device.
     /// </summary>
     /// <remarks>
     /// A reference point is a pose in the physical environment that is tracked by an XR device.
@@ -21,7 +21,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Get the native pointer associated with this <see cref="ARReferencePoint"/>.
         /// </summary>
         /// <remarks>
-        /// The data pointed to by this pointer is implementation defined. While its
+        /// The data that this pointer points to is implementation defined. While its
         /// lifetime is also implementation defined, it should be valid until at least
         /// the next <see cref="ARSession"/> update.
         /// </remarks>

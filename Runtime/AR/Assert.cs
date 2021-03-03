@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// When both
-        /// - `UNITY_ASSERTIONS` is defined (e.g., in a development build) AND
+        /// - `UNITY_ASSERTIONS` is defined (for example, in a development build) AND
         /// - <paramref name="condition"/> is `false`
         /// a new <see cref="Message"/> object is returned. This allows you to write code like
         /// <code>
@@ -59,7 +59,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// When both
-        /// - `DEVELOPMENT_BUILD` is defined (e.g., in a development build) AND
+        /// - `DEVELOPMENT_BUILD` is defined (for example, in a development build) AND
         /// - <paramref name="condition"/> is `false`
         /// a new <see cref="Message"/> object is returned. This allows you to write code like
         /// <code>

@@ -18,21 +18,21 @@ namespace UnityEngine.XR.ARFoundation
     /// To add the <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable
     /// renderer:
     /// <list type="bullet">
-    /// <item><description>In Project Settings -> Graphics, select the render pipeline asset (either
+    /// <item><description>In Project Settings &gt; Graphics, select the render pipeline asset (either
     /// <c>LightweightRenderPipelineAsset</c> or <c>UniversalRenderPipelineAsset</c>) that is in the Scriptable Render
     /// Pipeline Settings field.</description></item>
-    /// <item><description>In the Inspector with the render pipeline asset selected, ensure that the Render Type is set
+    /// <item><description>In the render pipeline asset's Inspector window, make sure that the Render Type is set
     /// to Custom.</description></item>
-    /// <item><description>In the Inspector with the render pipeline asset selected, select the Render Type -> Data
+    /// <item><description>In render pipeline asset's Inspector window, select the Render Type &gt; Data
     /// asset which would be of type <c>ForwardRendererData</c>.</description></item>
-    /// <item><description>In the Inspector with the forward renderer data selected, ensure the Render Features list
+    /// <item><description>In forward renderer data's Inspector window, ensure the Render Features list
     /// contains a <see cref="ARBackgroundRendererFeature"/>.</description></item>
     /// </list>
     /// </para>
-    /// <para>To customize background rendering with the legacy render pipeline, you may override the
+    /// <para>To customize background rendering with the legacy render pipeline, you can override the
     /// <see cref="legacyCameraEvents"/> property and the
     /// <see cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/> method to modify the given
-    /// <c>CommandBuffer</c> with rendering commands and to inject the given <c>CommandBuffer</c> into the camera's
+    /// <c>CommandBuffer</c> with rendering commands and to inject the given <c>CommandBuffer</c> into the Camera's
     /// rendering.</para>
     /// <para>To customize background rendering with a scriptable render pipeline, create a
     /// <c>ScriptableRendererFeature</c> with the background rendering commands, and insert the
@@ -50,7 +50,7 @@ namespace UnityEngine.XR.ARFoundation
         const string k_CustomRenderPassName = "AR Background Pass (LegacyRP)";
 
         /// <summary>
-        /// Name of the main texture parameter for the material
+        /// Name of the main texture parameter for the material.
         /// </summary>
         const string k_MainTexName = "_MainTex";
 
@@ -85,7 +85,7 @@ namespace UnityEngine.XR.ARFoundation
         ARCameraManager m_CameraManager;
 
         /// <summary>
-        /// The occlusion manager, which may not exist, from which occlusion information is pulled.
+        /// The occlusion manager, which might not exist, from which occlusion information is pulled.
         /// </summary>
         AROcclusionManager m_OcclusionManager;
 
@@ -122,7 +122,7 @@ namespace UnityEngine.XR.ARFoundation
         float? m_PreviousCameraFieldOfView;
 
         /// <summary>
-        /// Whether background rendering is enabled.
+        /// True if background rendering is enabled, false otherwise.
         /// </summary>
         bool m_BackgroundRenderingEnabled;
 
@@ -147,7 +147,7 @@ namespace UnityEngine.XR.ARFoundation
         protected ARCameraManager cameraManager => m_CameraManager;
 
         /// <summary>
-        /// The occlusion manager, which may not exist, from which occlusion information is pulled.
+        /// The occlusion manager, which might not exist, from which occlusion information is pulled.
         /// </summary>
         protected AROcclusionManager occlusionManager => m_OcclusionManager;
 
@@ -227,7 +227,7 @@ namespace UnityEngine.XR.ARFoundation
         static Action<int> s_BeforeBackgroundRenderHandler = BeforeBackgroundRenderHandler;
 
         /// <summary>
-        /// A pointer to a function to be called immediately before rendering that is implemented in the XRCameraSubsystem implementation.
+        /// A pointer to a method to be called immediately before rendering that is implemented in the XRCameraSubsystem implementation.
         /// It is called via [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
         /// </summary>
         static readonly IntPtr s_BeforeBackgroundRenderHandlerFuncPtr = Marshal.GetFunctionPointerForDelegate(s_BeforeBackgroundRenderHandler);
@@ -278,7 +278,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Enable background rendering by disabling the camera's clear flags, and enabling the legacy RP background
-        /// rendering if we are in legacy RP mode.
+        /// rendering if your application is in legacy RP mode.
         /// </summary>
         void EnableBackgroundRendering()
         {
@@ -307,7 +307,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Disable background rendering by disabling the legacy RP background rendering if we are in legacy RP mode
+        /// Disable background rendering by disabling the legacy RP background rendering if your application is  in legacy RP mode
         /// and restoring the camera's clear flags.
         /// </summary>
         void DisableBackgroundRendering()

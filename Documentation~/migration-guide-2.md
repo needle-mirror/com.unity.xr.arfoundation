@@ -20,12 +20,7 @@ The `ARCameraBackground` has been updated to support the [Universal Render Pipel
 
 ## Point clouds
 
-The [ARPointCloud](point-cloud-manager.md) properties
-[positions](xref:UnityEngine.XR.ARFoundation.ARPointCloud.positions),
-[confidenceValues](xref:UnityEngine.XR.ARFoundation.ARPointCloud.confidenceValues),
-and
-[identifiers](xref:UnityEngine.XR.ARFoundation.ARPointCloud.identifiers)
-have changed from returning [NativeArray](xref:Unity.Collections.NativeArray`1)s to [nullabe](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/nullable-types/) [NativeSlice](xref:Unity.Collections.NativeSlice`1)s. The `ARPointCloud` manages the memory contained in these `NativeArray`s, so callers should only be able to see a `NativeSlice` (that is, you should not be able to [Dispose](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.Dispose.html) of the `NativeArray`).
+The [ARPointCloud](point-cloud-manager.md) properties [positions](xref:UnityEngine.XR.ARFoundation.ARPointCloud.positions), [confidenceValues](xref:UnityEngine.XR.ARFoundation.ARPointCloud.confidenceValues), and [identifiers](xref:UnityEngine.XR.ARFoundation.ARPointCloud.identifiers) have changed from returning [NativeArray](xref:Unity.Collections.NativeArray`1)s to [nullable](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/nullable-types/) [NativeSlice](xref:Unity.Collections.NativeSlice`1)s. The `ARPointCloud` manages the memory contained in these `NativeArray`s, so callers should only be able to see a `NativeSlice` (that is, you should not be able to [Dispose](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.Dispose.html) of the `NativeArray`).
 
 Additionally, these arrays aren't necessarily present. Previously, you could check for their existence with [`NativeArray<T>.IsCreated`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.IsCreated.html). `NativeSlice` doesn't have an `IsCreated` property, so these properties have been made nullable.
 

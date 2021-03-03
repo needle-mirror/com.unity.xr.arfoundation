@@ -13,12 +13,12 @@ namespace UnityEngine.XR.ARFoundation
         DontCare = 0,
 
         /// <summary>
-        /// 3 degrees of freedom for orientation only
+        /// 3 degrees of freedom for orientation only.
         /// </summary>
         RotationOnly = 1,
 
         /// <summary>
-        /// 6 degrees of freedom including both orientation and position
+        /// 6 degrees of freedom including both orientation and position.
         /// </summary>
         PositionAndRotation = 2,
     }

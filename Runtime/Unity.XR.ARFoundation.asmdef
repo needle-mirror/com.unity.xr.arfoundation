@@ -27,6 +27,11 @@
             "define": "MODULE_URP_ENABLED"
         },
         {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "10.0.0",
+            "define": "MODULE_URP_10_OR_NEWER"
+        },
+        {
             "name": "com.unity.xr.legacyinputhelpers",
             "expression": "1.0.0",
             "define": "USE_LEGACY_INPUT_HELPERS"

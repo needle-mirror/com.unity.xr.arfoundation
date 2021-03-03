@@ -22,7 +22,6 @@ namespace UnityEngine.XR.ARFoundation
         void OnEnable()
         {
             Application.onBeforeRender += OnBeforeRender;
-#if UNITY_2020_1_OR_NEWER
             List<InputDevice> devices = new List<InputDevice>();
             InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.TrackedDevice, devices);
             foreach (var device in devices)
@@ -34,15 +33,12 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             InputDevices.deviceConnected += OnInputDeviceConnected;
-#endif // UNITY_UNITY_2020_1_OR_NEWER
         }
 
         void OnDisable()
         {
             Application.onBeforeRender -= OnBeforeRender;
-#if UNITY_2020_1_OR_NEWER
             InputDevices.deviceConnected -= OnInputDeviceConnected;
-#endif // UNITY_UNITY_2020_1_OR_NEWER
         }
 
         void Update() => PerformUpdate();
@@ -62,7 +58,6 @@ namespace UnityEngine.XR.ARFoundation
                 transform.localRotation = updatedPose.rotation.Value;
         }
 
-#if UNITY_2020_1_OR_NEWER
         static internal InputDevice? s_InputTrackingDevice = null;
 
         void OnInputDeviceConnected(InputDevice device) => CheckConnectedDevice(device);
@@ -89,14 +84,10 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-#else
-        static internal List<XR.XRNodeState> nodeStates = new List<XR.XRNodeState>();
-#endif // UNITY_2020_1_OR_NEWER
         static internal NullablePose GetPoseData()
         {
             NullablePose resultPose = new NullablePose();
 
-#if UNITY_2020_1_OR_NEWER
             if (s_InputTrackingDevice != null)
             {
                 var pose = Pose.identity;
@@ -116,25 +107,7 @@ namespace UnityEngine.XR.ARFoundation
                 if (positionSuccess || rotationSuccess)
                     return resultPose;
             }
-#else
-            XR.InputTracking.GetNodeStates(nodeStates);
-            foreach (var nodeState in nodeStates)
-            {
-                if (nodeState.nodeType == XR.XRNode.CenterEye)
-                {
-                    var pose = Pose.identity;
-                    var positionSuccess = nodeState.TryGetPosition(out pose.position);
-                    var rotationSuccess = nodeState.TryGetRotation(out pose.rotation);
 
-                    if (positionSuccess)
-                        resultPose.position = pose.position;
-                    if (rotationSuccess)
-                        resultPose.rotation = pose.rotation;
-
-                    return resultPose;
-                }
-            }
-#endif // UNITY_2020_1_OR_NEWER
             return resultPose;
         }
     }

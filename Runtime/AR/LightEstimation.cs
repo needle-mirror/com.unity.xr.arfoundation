@@ -4,7 +4,7 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Defines types of light estimation
+    /// Defines types of light estimation.
     /// </summary>
     [Flags]
     public enum LightEstimation

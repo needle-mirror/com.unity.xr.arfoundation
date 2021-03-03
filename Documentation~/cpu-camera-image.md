@@ -5,7 +5,7 @@ uid: arfoundation-cpu-camera-image
 
 You can access the device camera image on the CPU by using [ARCameraManager.TryAcquireLatestCpuImage](xref:UnityEngine.XR.ARFoundation.ARCameraManager.TryAcquireLatestCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)).
 
-When you call `ARCameraManager.TryAcquireLatestCpuImage`, Unity transfers textures from the GPU to the CPU. This is a resource-intensive process that impacts performance, so this method should be used only when you need to access the pixel data from the device camera to be used by code that runs on the CPU. For example, most computer vision code requires this data to be accessible on the CPU.
+When you call `ARCameraManager.TryAcquireLatestCpuImage`, Unity transfers textures from the GPU to the CPU. This is a resource-intensive process that impacts performance, so you should only use this method when you need to access the pixel data from the device camera to be used by code that runs on the CPU. For example, most computer vision code requires this data to be accessible on the CPU.
 
 The number and format of textures varies by platform.
 
@@ -25,7 +25,8 @@ The `XRCpuImage` gives you access to three features:
 
 ## Raw image planes
 
-**Note:** An image "plane", in this context, refers to a channel used in the video format. It's not a planar surface and not related to an `ARPlane`.
+> [!NOTE]
+> An image "plane", in this context, refers to a channel used in the video format. It's not a planar surface and not related to an `ARPlane`.
 
 Most video formats use a YUV encoding variant, where Y is the luminance plane, and the UV plane(s) contain chromaticity information. U and V can be interleaved or separate planes, and there might be additional padding per pixel or per row.
 
@@ -82,7 +83,7 @@ public struct ConversionParams
 |`inputRect`|The portion of the `XRCpuImage` to convert. This can be the full image or a sub-rectangle of the image. The `inputRect` must fit completely inside the original image. It can be significantly faster to convert a sub-rectangle of the original image if you know which part of the image you need.|
 |`outputDimensions`|The dimensions of the output image. The `XRCpuImage` converter supports downsampling (using nearest neighbor), allowing you to specify a smaller output image than the `inputRect.width` and `inputRect.height` parameters. For example, you could supply `(inputRect.width / 2, inputRect.height / 2)` to get a half resolution image. This can decrease the time it takes to perform a color conversion. The `outputDimensions` must be less than or equal to the `inputRect`'s dimensions (no upsampling).|
 |`outputFormat`|The following formats are currently supported<ul><li>`TextureFormat.RGB24`</li><li>`TextureFormat.RGBA24`</li><li>`TextureFormat.ARGB32`</li><li>`TextureFormat.BGRA32`</li><li>`TextureFormat.Alpha8`</li><li>`TextureFormat.R8`</li></ul>You can also use `XRCpuImage.FormatSupported` to test a texture format before calling one of the conversion methods.|
-|`transformation`|Use this property to specify a transformation to apply during the conversion, such as mirroring the image across the X or Y axis, or both axes. This typically doesn't increase the processing time.|
+|`transformation`|Use this property to specify a transformation to apply during the conversion, such as mirroring the image across the X or Y axis, or across both axes. This typically doesn't increase the processing time.|
 
 Since you must supply the destination buffer, you also need to know how many bytes you'll need to store the converted image. To get the required number of bytes, use:
 
@@ -184,9 +185,11 @@ Use the `status` to determine whether the request is complete. If the status is 
 
 `GetData<T>` returns a `NativeArray<T>` which is a direct "view" into native memory and is valid until you call `Dispose` on the `XRCpuImage.AsyncConversion`. It's an error to access the `NativeArray<T>` after the `XRCpuImage.AsyncConversion` has been disposed. You don't need to dispose the `NativeArray<T>` that `GetData<T>` returns.
 
-**Important:** You must explicitly dispose `XRCpuImage.AsyncConversion`s. Failing to dispose an `XRCpuImage.AsyncConversion` will leak memory until the `XRCameraSubsystem` is destroyed. The `XRCameraSubsystem` will remove all async conversions when destroyed.
+> [!IMPORTANT]
+> You must explicitly dispose `XRCpuImage.AsyncConversion`s. Failing to dispose an `XRCpuImage.AsyncConversion` will leak memory until the `XRCameraSubsystem` is destroyed. The `XRCameraSubsystem` will remove all async conversions when destroyed.
 
-**Note:** You can dispose `XRCpuImage` before the asynchronous conversion completes. The data contained by the `XRCpuImage.AsyncConversion` isn't tied to the `XRCpuImage`.
+> [!NOTE]
+> You can dispose `XRCpuImage` before the asynchronous conversion completes. The data contained by the `XRCpuImage.AsyncConversion` isn't tied to the `XRCpuImage`.
 
 ### Example
 
@@ -310,4 +313,4 @@ void ProcessImage(XRCpuImage.AsyncConversionStatus status, XRCpuImage.Conversion
 }
 ```
 
-In this version, the `NativeArray<byte>` is again a "view" into the native memory associated with the request, and you don't need to dispose it. It's only valid for the duration of the delegate invocation and is destroyed immediately upon return. If you need the data to live beyond the lifetime of your delegate, make a copy (see [`NativeArray<T>.CopyTo`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyTo.html) and [`NativeArray<T>.CopyFrom`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyFrom.html)).
+In this version, the `NativeArray<byte>` is again a "view" into the native memory associated with the request, and you don't need to dispose it. It's only valid for the duration of the delegate invocation and is destroyed immediately upon return. If you need the data to persist beyond the lifetime of your delegate, make a copy (see [`NativeArray<T>.CopyTo`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyTo.html) and [`NativeArray<T>.CopyFrom`](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyFrom.html)).

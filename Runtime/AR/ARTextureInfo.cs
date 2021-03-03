@@ -8,8 +8,8 @@ using Object = UnityEngine.Object;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Container that pairs a <see cref="Unity.XR.ARSubsystems.XRTextureDescriptor"/> that wraps a native texture
-    /// object and a <c>Texture</c> that is created for the native texture object.
+    /// Container that pairs a <see cref="Unity.XR.ARSubsystems.XRTextureDescriptor"/> wrapping a native texture
+    /// object with a <c>Texture</c> that is created for the native texture object.
     /// </summary>
     internal struct ARTextureInfo : IEquatable<ARTextureInfo>, IDisposable
     {
@@ -56,7 +56,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Resets the texture info back to the default state destroying the texture game object, if one exists.
+        /// Resets the texture info back to the default state destroying the texture GameObject, if one exists.
         /// </summary>
         public void Reset()
         {
@@ -65,7 +65,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Destroys the texture, and sets the property to <c>null</c>.
+        /// Destroys the texture and sets the property to <c>null</c>.
         /// </summary>
         void DestroyTexture()
         {
@@ -77,7 +77,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Sets the current descriptor, and creates/updates the associated texture as appropriate.
+        /// Sets the current descriptor and creates/updates the associated texture as appropriate.
         /// </summary>
         /// <param name="textureInfo">The texture info to update.</param>
         /// <param name="descriptor">The texture descriptor wrapping a native texture object.</param>
@@ -113,11 +113,9 @@ namespace UnityEngine.XR.ARFoundation
                 // Update the current texture with the native texture object.
                 switch(descriptor.dimension)
                 {
-#if UNITY_2020_2_OR_NEWER
                     case TextureDimension.Tex3D:
                         ((Texture3D)textureInfo.m_Texture).UpdateExternalTexture(textureInfo.m_Descriptor.nativeTexture);
                         break;
-#endif
                     case TextureDimension.Tex2D:
                         ((Texture2D)textureInfo.m_Texture).UpdateExternalTexture(textureInfo.m_Descriptor.nativeTexture);
                         break;
@@ -159,12 +157,10 @@ namespace UnityEngine.XR.ARFoundation
 
             switch(descriptor.dimension)
             {
-#if UNITY_2020_2_OR_NEWER
                 case TextureDimension.Tex3D:
                     return Texture3D.CreateExternalTexture(descriptor.width, descriptor.height,
                                                         descriptor.depth, descriptor.format,
                                                         (descriptor.mipmapCount != 0), descriptor.nativeTexture);
-#endif
                 case TextureDimension.Tex2D:
                     var texture = Texture2D.CreateExternalTexture(descriptor.width, descriptor.height,
                                                         descriptor.format, (descriptor.mipmapCount != 0),
@@ -199,11 +195,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if(descriptor.dimension == TextureDimension.Tex3D)
             {
-#if UNITY_2020_2_OR_NEWER
                 return true;
-#else
-                return false;
-#endif
             }
             else if(descriptor.dimension == TextureDimension.Tex2D)
             {
