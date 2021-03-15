@@ -1,9 +1,14 @@
+---
+uid: arfoundation-changelog
+---
 # Changelog
 
 All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [4.2.0-pre.3] - 2021-03-15
 
 ## [4.2.0-pre.2] - 2021-03-03
 
@@ -15,15 +20,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changes
 
-- Add description for occlusion on the main AR Foundation manual page, and edit the human segmentations description.
+- Added description for occlusion on the main AR Foundation manual page, and edit the human segmentations description.
 - The [ARSession](xref:UnityEngine.XR.ARFoundation.ARSession) optionally sets the application's `vSyncCount` and `targetFrameRate` (see [matchFrameRateRequested](xref:UnityEngine.XR.ARFoundation.ARSession.matchFrameRateRequested)). In earlier versions, the original values were not restored when the ARSession was disabled. The behavior has changed so that the original values are restored when the ARSession disabled if the frame rate was set while the ARSession was enabled.
-- Update [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@4.0) dependency to 4.0.
+- Updated [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@4.0) dependency to 4.0.
+- The minimum Unity version for this package is now 2020.3.
 
 ### Fixes
 
-- Added missing icon to the [AROcclusionManager](xref:UnityEngine.XR.AROcclusionManager).
-- Replace uses of [PostProcessScene](xref:UnityEditor.Callbacks.PostProcessSceneAttribute) attribute with [IProcessSceneWithReport](xref:UnityEditor.Build.IProcessSceneWithReport) callback mechanism. This prevents scene hashes from changing when adding the AR Foundation package.
-- Added MODULE_URP_10_OR_NEWER and updated use of obsolete `ScriptableRenderer.cameraDepth` API to fix issues related to API upgrades that occur in builds with URP 10.0 and above
+- Added missing icon to the [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
+- Replaced uses of [PostProcessScene](xref:UnityEditor.Callbacks.PostProcessSceneAttribute) attribute with [IProcessSceneWithReport](xref:UnityEditor.Build.IProcessSceneWithReport) callback mechanism. This prevents scene hashes from changing when adding the AR Foundation package.
+- Added `MODULE_URP_10_OR_NEWER` and updated use of obsolete `ScriptableRenderer.cameraDepth` API to fix issues related to API upgrades that occur in builds with URP 10.0 and above
 
 ## [4.1.3] - 2021-01-05
 

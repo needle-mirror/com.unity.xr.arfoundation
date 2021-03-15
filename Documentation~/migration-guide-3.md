@@ -7,13 +7,13 @@ This guide covers the differences between AR Foundation 3.x and 4.x.
 
 ## Camera and tracking node selection
 
-In previous versions of AR Foundation, it was not possible to explicitly select which camera provided the camera texture used for pass-through video, nor was it possible to indicate the desired type of tracking (e.g., 3 or 6 degrees of freedom). With AR Foundation 4, you can now
+In previous versions of AR Foundation, you couldn't explicitly select which camera provided the camera texture used for pass-through video, and you couldn't indicate the desired type of tracking (for example, 3 or 6 degrees of freedom). With AR Foundation 4, you can now
 * Explicitly request a particular camera. AR Foundation distinguishes between "world-facing" and "user-facing" cameras. On a phone, this corresponds to the rear-facing and selfie cameras, respectively.
 * Explicitly request the type of tracking.
 
 In previous versions of AR Foundation, this was an implicit choice. For example, if you enabled face detection, you would likely get a 3dof (rotation only) session which used the user-facing camera.
 
-ARKit 3 added modes of operation that were not possible to express with previous versions of AR Foundation. In particular, ARKit 3 supports both 3dof and 6dof tracking when using the user-facing camera to perform face tracking, as well as a mode that uses the world-facing camera for the video feed but also uses the user-facing camera to perform face tracking.
+ARKit 3 added modes of operation that were not possible to express with previous versions of AR Foundation. In particular, ARKit 3 supports both 3 DOF (degrees of freedom) and 6 DOF tracking when using the user-facing camera to perform face tracking, as well as a mode that uses the world-facing camera for the video feed but also uses the user-facing camera to perform face tracking.
 
 This table represents the face tracking support AR Foundation 3 could provide:
 
@@ -45,7 +45,7 @@ The default configuration chooser selects the configuration that supports the mo
 
 ### Adapting an existing project
 
-The breaking change here is mostly behavioral. In previous versions, face tracking tended to trump other features, so enabling face tracking would give you a 3dof user-facing camera experience. Now, you must be explicit, and the default mode is 6 dof, world-facing. This means previous apps which used face tracking might not work the same as they did before. In addition to enabling face tracking, you might also need to specify the camera and tracking mode to achieve the same result. Note that there is a "don't care" mode, which means tracking will not be a consideration when choosing the configuration.
+The breaking change here is mostly behavioral. In previous versions, face tracking tended to trump other features, so enabling face tracking would give you a 3dof user-facing camera experience. Now, you must be explicit, and the default mode is 6 DOF, world-facing. This means previous apps which used face tracking might not work the same as they did before. In addition to enabling face tracking, you might also need to specify the camera and tracking mode to achieve the same result. Note that there is a "don't care" mode, which means tracking will not be a consideration when choosing the configuration.
 
 In AR Foundation 4, the `ARCameraManager` (a component on a Camera in your scene) controls which hardware camera is requested, and the `ARSession` component controls which tracking mode is requested. There is also a new scripting API for these modes.
 
@@ -77,7 +77,7 @@ AR Foundation 4 makes this explicit. Parameters now have "requested" and "curren
 
 ## `XRCameraImage` is now `XRCpuImage`
 
-The [Texture2D](xref:UnityEngine.Texture2D)s that represent the pass-through video are typically GPU textures. Computer vision or other CPU-side processing applications require access to the raw pixels on the CPU; however, the normal `Texture2D` APIs for reading pixels do not work unless the data is first transferred back from the GPU, which can be costly. Fortunately, AR frameworks like ARCore and ARKit provide a way to access the raw pixel data on the CPU without the costly GPU readback, and AR Foundation provided this data as an `XRCameraImage`.
+The [Texture2D](xref:UnityEngine.Texture2D)s that represent the pass-through video are typically GPU textures. Computer vision or other CPU-side processing applications require access to the raw pixels on the CPU; however, the normal `Texture2D` APIs for reading pixels do not work unless the data is first transferred back from the GPU, which can be inefficient. Fortunately, AR frameworks like ARCore and ARKit provide a way to access the raw pixel data on the CPU without the inefficient GPU readback, and AR Foundation provided this data as an `XRCameraImage`.
 
 This "camera image" API still exists, but it has been generalized and renamed from `XRCameraImage` to [XRCpuImage](xref:UnityEngine.XR.ARSubsystems.XRCpuImage). The API is very similar, but it can now be used to read other types of image data, such as the human depth and human stencil buffers provided by the [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
 
@@ -92,7 +92,7 @@ This "camera image" API still exists, but it has been generalized and renamed fr
 
 ### Sample
 
-The ["CpuImages" sample](https://github.com/Unity-Technologies/arfoundation-samples#cpuimages) from the AR Foundation Samples GitHub repo shows how to use the cpu image API and has been updated to include the color camera image and the human depth and human stencil images.
+The ["CpuImages" sample](https://github.com/Unity-Technologies/arfoundation-samples#cpuimages) from the AR Foundation Samples GitHub repo shows how to use the CPU image API and has been updated to include the color camera image and the human depth and human stencil images.
 
 ## XR Plug-in Management
 
@@ -100,13 +100,13 @@ AR Foundation now depends on [XR Plug-in Management](https://docs.unity3d.com/Pa
 
 ### Edit time setup
 
-Provider plug-ins must be enabled before AR Foundation can use them. You can enable specific plug-in providers for each target platform from the **XR Plug-in Management** window (menu: **Edit &gt; Project Settings &gt; XR Plug-in Management**).
+Provider plug-ins must be enabled before AR Foundation can use them. You can enable specific plug-in providers for each target platform from the **XR Plug-in Management** window (menu: **Edit** &gt; **Project Settings** &gt; **XR Plug-in Management**).
 
 ![XR Plug-in Management](images/enable-arcore-plugin.png "XR Plug-in Management")
 
 ### Runtime
 
-In previous versions of AR Foundation, each manager-component (for example, `ARSession`, `ARPlaneManager`, `ARPointCloudManager`, etc.) fully controlled the lifecycle of each subsystem (a subsystem is the platform agnostic interface implemented by each provider package).
+In previous versions of AR Foundation, each manager-component (for example, `ARSession`, `ARPlaneManager`, and`ARPointCloudManager`) fully controlled the lifecycle of each subsystem (a subsystem is the platform agnostic interface implemented by each provider package).
 
 In AR Foundation 4, XR Plug-in Management controls the creation and destruction of the subsystems. AR Foundation's components still start and stop the subsystems, but do not create or destroy them:
 
@@ -115,7 +115,7 @@ In AR Foundation 4, XR Plug-in Management controls the creation and destruction 
 | OnEnable              | Start     |
 | OnDisable             | Stop      |
 
-This means, for instance, that destroying an `ARSession` component pauses but does not destroy the session. This can be desirable when, for example, switching between two AR scenes. However, it is a change from the previous behavior. Destroying an `ARSession` and recreating it will pause and then resume the same session.
+This means, for instance, that destroying an `ARSession` component pauses but does not destroy the session. This can be desirable when, for example, switching between two AR scenes. However, it is a change from the previous behavior. Destroying an `ARSession` and recreating it pauses and then resume the same session.
 
 If you want to completely destroy the session, you need to destroy the subsystem. This means calling [Deinitialize](xref:UnityEngine.XR.Management.XRLoader.Deinitialize) on an [XRLoader](xref:UnityEngine.XR.Management.XRLoader) from XR Plug-in Management.
 

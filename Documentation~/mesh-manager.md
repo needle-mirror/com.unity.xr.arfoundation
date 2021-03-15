@@ -23,7 +23,7 @@ You need to set the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.
 
 If you want to render the scanned meshes, you need to add a [MeshRenderer](xref:UnityEngine.MeshRenderer) component and a [Material](xref:UnityEngine.Material) component to the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject.
 
-If you want to have virtual content that interacts physically with the real-world scanned meshes, you must add a [MeshCollider](xref:UnityEngine.MeshCollider) component to the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject.
+If you want to include virtual content that interacts physically with the real-world scanned meshes, you must add a [MeshCollider](xref:UnityEngine.MeshCollider) component to the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject.
 
 This image demonstrates a mesh Prefab configured with the required [MeshFilter](xref:UnityEngine.MeshFilter) component, an optional [MeshCollider](xref:UnityEngine.MeshCollider) component to allow for physics interactions, and optional [MeshRenderer](xref:UnityEngine.MeshRenderer) and [Material](xref:UnityEngine.Material) components to render the mesh.
 

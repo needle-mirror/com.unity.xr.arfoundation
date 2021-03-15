@@ -73,7 +73,7 @@ The following platform packages and later implement the AR Foundation features i
 
 ## Subsystems
 
-AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You will occasionally need to interact with the types in the AR Subsystems package.
+AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You occasionally need to interact with the types in the AR Subsystems package.
 
 Each subsystem handles specific functionality. For example, `XRPlaneSubsystem` provides the plane detection interface.
 
@@ -89,7 +89,7 @@ Each individual provider determines how to implement each subsystem. In general,
 
 To install this package, follow the instructions in the [Package Manager documentation](https://docs.unity3d.com/Packages/com.unity.package-manager-ui@latest/index.html).
 
-Subsystems are implemented in other packages. To use AR Foundation, you must also install at least one of these platform-specific AR packages from the Package Manager window (menu: **Window &gt; Package Manager**):
+Subsystems are implemented in other packages. To use AR Foundation, you must also install at least one of these platform-specific AR packages from the Package Manager window (menu: **Window** &gt; **Package Manager**):
 
  - ARKit XR Plug-in
  - ARCore XR Plug-in
@@ -124,7 +124,7 @@ A basic AR scene hierarchy looks like this:
 
 ![Scene graph](images/simple_scene_graph.png "Scene graph")
 
-To create these scenes automatically, right-click in the scene hierarchy, and select **XR &gt; AR Session** or **XR &gt; AR Session Origin** from the context menu.
+To create these scenes automatically, right-click in the scene Hierarchy window, and select **XR** &gt; **AR Session** or **XR** &gt; **AR Session Origin** from the context menu.
 
 ![Context menu](images/gameobject_context_menu.png "Context menu")
 
@@ -136,7 +136,7 @@ An AR scene should include an `ARSession` component. The AR Session controls the
 
 ![ARSession component](images/ar-session.png "ARSession component")
 
-When you disable the `ARSession`, the system no longer tracks features in its environment, but if you enable it at a later time, the system will attempt to recover and maintain previously-detected features.
+When you disable the `ARSession`, the system no longer tracks features in its environment, but if you enable it at a later time, the system attempts to recover and maintain previously-detected features.
 
 If you enable the **Attempt Update** option, the device tries to install AR software if possible. Support for this feature is platform-dependent.
 
@@ -192,9 +192,9 @@ To determine the current state of the session (for example, whether the device i
 
 ![AR session origin](images/ar-session-origin.png "AR Session Origin")
 
-The purpose of the `ARSessionOrigin` is to transform trackable features, such as planar surfaces and feature points, into their final position, orientation, and scale in the Unity Scene. Because AR devices provide their data in "session space", which is an unscaled space relative to the beginning of the AR session, the `ARSessionOrigin` performs the appropriate transformation into Unity space.
+The purpose of the `ARSessionOrigin` is to transform trackable features, such as planar surfaces and feature points, into their final position, orientation, and scale in the Unity scene. Because AR devices provide their data in "session space", which is an unscaled space relative to the beginning of the AR session, the `ARSessionOrigin` performs the appropriate transformation into Unity space.
 
-This concept is similar to the difference between "model" or "local" space and world space when working with other Assets in Unity. For instance, if you import a house Asset from a DCC tool, the door's position is relative to the modeler's origin. This is commonly called "model space" or "local space". When Unity instantiates it, it also has a world space that's relative to Unity's origin.
+This concept is similar to the difference between "model" or "local" space and world space when working with other Assets in Unity. For instance, if you import a house asset from a DCC tool, the door's position is relative to the modeler's origin. This is commonly called "model space" or "local space". When Unity instantiates it, it also has a world space that's relative to Unity's origin.
 
 Likewise, trackables that an AR device produces, such as planes, are provided in "session space", relative to the device's coordinate system. When instantiated in Unity as `GameObject`s, they also have a world space. In order to instantiate them in the correct place, AR Foundation needs to know where the session origin should be in the Unity scene.
 
@@ -206,13 +206,13 @@ To apply scale to the `ARSessionOrigin`, set its `transform`'s scale. This has t
 
 ### AR Pose Driver
 
-The `AR Pose Driver` drives the local position and orientation of the parent GameObject according to the device's tracking information.  The most common use-case for this would be attaching the `ARPoseDriver` to the AR Camera to drive the camera's position and orientation in an AR scene.
+The `AR Pose Driver` drives the local position and orientation of the parent GameObject according to the device's tracking information.  The most common use case for this would be attaching the `ARPoseDriver` to the AR Camera to drive the camera's position and orientation in an AR scene.
 
 ![AR Pose Driver](images/ar-pose-driver.png "AR Pose Driver")
 
 #### Legacy Input Helpers and the Tracked Pose Driver component
 
-The `ARPoseDriver` provides a similar functionality to the `TrackedPoseDriver` from the `com.unity.xr.legacyinputhelpers` package and was implemented to remove the dependency on that package. Projects are able to use either the `ARPoseDriver` component or the `TrackedPoseDriver` component to drive a GameObjects transform. It is not recommended to use both as the behaviour is undefined. `Use Relative Transform` option is unavailable for the `ARPoseDriver` because it introduces additional unnecesary transformations.
+The `ARPoseDriver` provides a similar functionality to the `TrackedPoseDriver` from the `com.unity.xr.legacyinputhelpers` package and was implemented to remove the dependency on that package. Projects are able to use either the `ARPoseDriver` component or the `TrackedPoseDriver` component to drive a GameObjects transform. It is not recommended to use both as the behaviour is undefined. `Use Relative Transform` option is unavailable for the `ARPoseDriver` because it introduces additional unnecessary transformations.
 
 ![Tracked Pose Driver](images/tracked-pose-driver.png "Tracked Pose Driver")
 
@@ -224,13 +224,13 @@ The `ARCameraManager` enables features for the AR Camera, including the manageme
 
 | **Setting** | **Function** |
 |-|-|
-| **Auto Focus** | Enables or disables the hardware camera's automatic focus mode. When disabled, the focus is fixed and doesn't change automatically. _Note:_ Availability of *Auto Focus* depends on camera hardware so it is possible that this preference will be ignored at runtime. |
-| **Light Estimation** | Estimates lighting properties of the environment. There are 5 options: <ul><li><b>Ambient Intensity:</b> Estimates the overall average brightness</li><li><b>Ambient Color:</b> Estimates the overall average color</li><li><b>Ambient Spherical Harmonics:</b> Estimates the [spherical harmonics](https://en.wikipedia.org/wiki/Spherical_harmonic_lighting) describing the scene. Spherical harmonics are used to produce more realistic lighting calculations.</li><li><b>Main Light Direction:</b> Estimates the direction of the primary light source. The direction points away from the light (so that it matches the light's direction).</li><li><b>Main Light Intensity:</b> Estimates the brightness of the primary light source.</li></ul>While you can request any of these simultaneously, support for each of these varies greatly among devices. Some platforms may not be able to be simultaneously provide all options, or it may depend on other features (e.g., camera facing direction).|
-| **Facing Direction** | Controls which camera is used for pass through video. This can be *World* or *User*. On handheld mobile devices like phones and tablets, *World* refers to the rear camera and *User* refers to the front-facing (i.e., "selfie") camera.|
+| **Auto Focus** | Enables or disables the hardware camera's automatic focus mode. When disabled, the focus is fixed and doesn't change automatically. _Note:_ Availability of *Auto Focus* depends on camera hardware so this preference might be ignored at runtime. |
+| **Light Estimation** | Estimates lighting properties of the environment. There are five options: <ul><li><b>Ambient Intensity:</b> Estimates the overall average brightness</li><li><b>Ambient Color:</b> Estimates the overall average color</li><li><b>Ambient Spherical Harmonics:</b> Estimates the [spherical harmonics](https://en.wikipedia.org/wiki/Spherical_harmonic_lighting) describing the scene. Spherical harmonics are used to produce more realistic lighting calculations.</li><li><b>Main Light Direction:</b> Estimates the direction of the primary light source. The direction points away from the light (so that it matches the light's direction).</li><li><b>Main Light Intensity:</b> Estimates the brightness of the primary light source.</li></ul>While you can request any of these simultaneously, support for each of these varies greatly among devices. Some platforms may not be able to be simultaneously provide all options, or it may depend on other features (for example, camera facing direction). |
+| **Facing Direction** | Controls which camera is used for pass through video. This can be World or User. On handheld mobile devices like phones and tablets, World refers to the rear camera and User refers to the front-facing (that is, "selfie") camera. |
 
 ### AR Camera background
 
-If you want the video feed from the device camera to show up as the rendered background of the scene at runtime, you need to add an `ARCameraBackground` component to a Camera. Otherwise, the background at runtime will come from the `Camera.clearFlags` setting. The `ARCameraBackground` component subscribes to AR Camera events and renders the AR Camera texture to the screen (that is, the background texture from the device camera must be rendered for each frame). This is not required, but common for AR apps.
+If you want the video feed from the device camera to show up as the rendered background of the scene at runtime, you need to add an `ARCameraBackground` component to a Camera. Otherwise, the background at runtime comes from the `Camera.clearFlags` setting. The `ARCameraBackground` component subscribes to AR Camera events and renders the AR Camera texture to the screen (that is, the background texture from the device camera must be rendered for each frame). This is not required, but common for AR apps.
 
 ![AR Camera Background](images/ar-camera-background.png "AR Camera Background")
 
@@ -242,7 +242,7 @@ If you have exactly one `ARSessionOrigin`, you only need to add the `ARCameraBac
 
 #### Configuring ARCameraBackground with the Universal Render Pipeline (URP)
 
-Please refer to [this additional documentation to configure an AR Foundation project with a URP](ar-camera-background-with-scriptable-render-pipeline.md).
+See [this additional documentation to configure an AR Foundation project with a URP](ar-camera-background-with-scriptable-render-pipeline.md).
 
 #### Automatic occlusion
 
@@ -284,7 +284,7 @@ See documentation on [trackable managers](trackable-managers.md).
 
 ### Visualizing trackables
 
-Trackable components don't do anything on their own; they just contain data associated with each trackable. There are many ways to visualize trackables, so AR Foundation includes some visualizers that you can use for debugging or as a starting point to create a visualizer suitable for your application.
+Trackable components don't do anything on their own; they contain data associated with each trackable. There are many ways to visualize trackables, so AR Foundation includes some visualizers that you can use for debugging or as a starting point to create a visualizer suitable for your application.
 
 ## Ray casting
 
@@ -300,4 +300,6 @@ See [ARMeshManager](mesh-manager.md).
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
+* 2020.3
+* 2021.1
 * 2021.2

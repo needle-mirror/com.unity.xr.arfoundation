@@ -26,7 +26,7 @@ In AR Foundation 1.0, each trackable manager provided added, updated, and remove
 
 ## Session-relative data
 
-Many of the trackables in AR Foundation 1.0 had "session relative data" (for example, `BoundedPlane` and `XRReferencePoint`). These are no longer directly accessible. All their memebers are now properties of an AR Foundation trackable.
+Many of the trackables in AR Foundation 1.0 had "session relative data" (for example, `BoundedPlane` and `XRReferencePoint`). These are no longer directly accessible. All their members are now properties of an AR Foundation trackable.
 
 **Example:**
 
@@ -36,7 +36,7 @@ Many of the trackables in AR Foundation 1.0 had "session relative data" (for exa
 
 ## Removed Try
 
-Several APIs used a `TryGet` or `TryAdd` style of API. Such methods that dealt with reference types have dropped the `Try` prefix.
+Several APIs used a `TryGet` or `TryAdd` style of API. The methods that dealt with reference types have dropped the `Try` prefix.
 
 **Examples:**
 
@@ -92,7 +92,7 @@ The options that were previously on the `ARCameraOptions` component, like focus 
 
 ## ARPointCloudManager
 
-In 1.0, the `ARPointCloudManager` managed a single point cloud. Now, it can manage a collection of them, similar to the way other trackable managers work. Some AR platforms, like ARCore and ARKit, still only have a single point cloud. However, other platforms (supported in the future) will generate multiple point clouds.
+In 1.0, the `ARPointCloudManager` managed a single point cloud. Now, it can manage a collection of them, similar to the way other trackable managers work. Some AR platforms, like ARCore and ARKit, still only have a single point cloud. However, other platforms (supported in the future) generate multiple point clouds.
 
 As a result, the `ARPointCloudManager.pointCloud` property no longer exists. You can enumerate the point clouds like any other trackable manager, by iterating over its `trackables` property.
 

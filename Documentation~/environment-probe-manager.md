@@ -7,7 +7,7 @@ The environment probe manager is a type of [trackable manager](trackable-manager
 
 ![AR environment probe manager](images/ar-environment-probe-manager.png "AR Environment Probe Manager")
 
-Environment probes are a technique of capturing real-world imagery from the device’s camera and organizing that information into an environment texture, such as a cube map, that contains the view in all directions from a certain point in the scene. Rendering 3D objects using this environment texture allows for real-world imagery to be reflected in the rendered objects, which creates realistic reflections and lighting of virtual objects as influenced by the real-world views.
+Environment probes are a technique for capturing real-world imagery from the device’s camera and organizing that information into an environment texture, such as a cube map, that contains the view in all directions from a certain point in the scene. Rendering 3D objects using this environment texture allows for real-world imagery to be reflected in the rendered objects, which creates realistic reflections and lighting of virtual objects as influenced by the real-world views.
 
 For more details, see the [Environment Probe Subsystem](xref:arsubsystems-environment-probe-subsystem) documentation.
 
@@ -34,4 +34,4 @@ This corresponds to the [UnityEngine.FilterMode](https://docs.unity3d.com/Script
 
 ## Debug Prefab
 
-This Prefab will be instantiated for each manually or automatically placed environment probe. This is not required, but Unity provides it for debugging purposes.
+This Prefab is instantiated for each manually or automatically placed environment probe. This is not required, but Unity provides it for debugging purposes.

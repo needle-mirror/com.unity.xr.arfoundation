@@ -60,15 +60,15 @@ Each trackable can be added, updated, and removed. Each frame, the managers quer
 | `ARTrackedObjectManager`      | `trackedObjectsChanged` |
 | `ARParticipantManager`        | `participantsChanged` |
 
-A trackable will always be added before it is updated or removed. Likewise, a trackable can't be removed unless it was added first. Updates depend on the trackable's semantics and the provider-specific implementation.
+A trackable is always added before it is updated or removed. Likewise, a trackable can't be removed unless it was added first. Updates depend on the trackable's semantics and the provider-specific implementation.
 
 ### Adding and removing trackables
 
-Some trackables, like anchors and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be added manually or created automatically. Where supported, the relevant managers provide methods for addtion and removal.
+Some trackables, like anchors and environment probes, can be added and removed manually. Other trackables, like planes, are automatically detected and removed. Some trackables can be added manually or created automatically. Where supported, the relevant managers provide methods for addition and removal.
 
 You should never `Destroy` a trackable component or its `GameObject` directly. For trackables that support manual removal, their manager provides a method to remove it. For example, to remove an anchor, you need to call `RemoveAnchor` on the `ARAnchorManager`.
 
-When you manually add a trackable, the underlying subsystem might not track it immediately. You won't get an added event for that trackable until the subsystem reports that it has been added (typically on the next frame). During the time between manual addition and the added event, the trackable will be in a "pending" state. You can check this with the `pending` property on every trackable.
+When you manually add a trackable, the underlying subsystem might not track it immediately. You won't get an added event for that trackable until the subsystem reports that it has been added (typically on the next frame). During the time between manual addition and the added event, the trackable is in a "pending" state. You can check this with the `pending` property on every trackable.
 
 For example, if you add an anchor, it will likely be pending until the next frame:
 

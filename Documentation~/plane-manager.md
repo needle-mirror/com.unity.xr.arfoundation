@@ -25,9 +25,9 @@ When a plane is updated, it's likely that its boundary vertices have also change
 
 ## Visualizing planes
 
-To visualize planes, you need to create a prefab or GameObject which includes a component that subscribes to `ARPlane`'s `boundaryChanged` event. `ARFoundation` provides an `ARPlaneMeshVisualizer`. This component generates a `Mesh` from the boundary vertices and assigns it to a `MeshCollider`, `MeshFilter`, and `LineRenderer`, if present.
+To visualize planes, you need to create a Prefab or GameObject which includes a component that subscribes to `ARPlane`'s `boundaryChanged` event. `ARFoundation` provides an `ARPlaneMeshVisualizer`. This component generates a `Mesh` from the boundary vertices and assigns it to a `MeshCollider`, `MeshFilter`, and `LineRenderer`, if present.
 
-To create a new GameObject which you can then use to create your Prefab, right-click in your Scene view and select **GameObject &gt; XR &gt; AR Default Plane** from the context menu that appears.
+To create a new GameObject which you can then use to create your Prefab, right-click in your Scene view and select **GameObject** &gt; **XR** &gt; **AR Default Plane** from the context menu that appears.
 
 ![Creating a new AR Default Plane GameObject](images/ar_default_plane.png "AR Default Plane")
 
@@ -35,15 +35,15 @@ After you create the GameObject, assign it to the `ARPlaneManager`'s `Plane Pref
 
 ![Default AR plane](images/ar-default-plane.png "AR Default Plane")
 
-It is recommended to save the `AR Default Plane` as a Prefab first, delete the `AR Default Plane` GameObject, and then use that in the Orefab field, because leaving the plane in your scene will leave a zero scale plane artifact in the scene.
+It is recommended to save the `AR Default Plane` as a Prefab first, delete the `AR Default Plane` GameObject, and then use that in the Orefab field, because leaving the plane in your scene leaves a zero scale plane artifact in the scene.
 
 ![Default AR Plane prefab](images/ar_default_plane_as_prefab.png "AR Default Plane Prefab")
 
-The AR Foundation package includes these components for ease of use, but you can create your own visualizers (or other logic) as you see fit.
+The AR Foundation package includes these components for ease of use, but you can create your own visualizers (or other logic) as you want.
 
 ## Disabling planes
 
-As long as the AR Plane Manager is enabled, it will continue to create, update, and remove planes. To stop rendering existing planes, deactivate their GameObjects like this:
+As long as the AR Plane Manager is enabled, it continues to create, update, and remove planes. To stop rendering existing planes, deactivate their GameObjects like this:
 
 ```csharp
 foreach (var plane in planeManager.trackables)

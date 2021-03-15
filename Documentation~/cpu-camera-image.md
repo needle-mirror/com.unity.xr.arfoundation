@@ -85,7 +85,7 @@ public struct ConversionParams
 |`outputFormat`|The following formats are currently supported<ul><li>`TextureFormat.RGB24`</li><li>`TextureFormat.RGBA24`</li><li>`TextureFormat.ARGB32`</li><li>`TextureFormat.BGRA32`</li><li>`TextureFormat.Alpha8`</li><li>`TextureFormat.R8`</li></ul>You can also use `XRCpuImage.FormatSupported` to test a texture format before calling one of the conversion methods.|
 |`transformation`|Use this property to specify a transformation to apply during the conversion, such as mirroring the image across the X or Y axis, or across both axes. This typically doesn't increase the processing time.|
 
-Since you must supply the destination buffer, you also need to know how many bytes you'll need to store the converted image. To get the required number of bytes, use:
+Because you must supply the destination buffer, you also need to know how many bytes you'll need to store the converted image. To get the required number of bytes, use:
 
 ```csharp
 public int GetConvertedDataSize(Vector2Int dimensions, TextureFormat format)

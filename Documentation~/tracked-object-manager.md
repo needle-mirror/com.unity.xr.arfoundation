@@ -19,7 +19,7 @@ The reference object library is an instance of the `ScriptableObject` `XRReferen
 
 ## Creating a manager at runtime
 
-When you add a component to an active `GameObject` at runtime, Unity immediately invokes its `OnEnable` method. However, the `ARTrackedObjectManager` requires a non-null reference object library. If the reference object library is null when the `ARTrackedObjectManager` is enabled, it will automatically disable itself.
+When you add a component to an active `GameObject` at runtime, Unity immediately invokes its `OnEnable` method. However, the `ARTrackedObjectManager` requires a non-null reference object library. If the reference object library is null when the `ARTrackedObjectManager` is enabled, it automatically disables itself.
 
 To add an `ARTrackedObjectManager` at runtime, set its reference object library and then re-enable it:
 

@@ -21,7 +21,7 @@ To add a new anchor, add the [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAncho
 
 You should not change the [transform](xref:UnityEngine.Transform) of an anchor; its transform is updated automatically by ARFoundation.
 
-When you add an anchor, it might take a frame or two before the anchor manager's [anchorsChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorsChanged) event reports it as added. During the time between being added and being reported as added, the anchor will be in a "pending" state. You can query for this with the [ARAnchor.pending](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.pending) property.
+When you add an anchor, it might take a frame or two before the anchor manager's [anchorsChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorsChanged) event reports it as added. During the time between being added and being reported as added, the anchor is in a "pending" state. You can query for this with the [ARAnchor.pending](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.pending) property.
 
 To remove an anchor, [Destroy](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `ARAnchor` component (or its GameObject).
 
@@ -50,6 +50,7 @@ You can also create anchors that are attached to a plane. The [AttachAnchor meth
 public ARAnchor AttachAnchor(ARPlane plane, Pose pose);
 ```
 
-Attaching an anchor to a plane affects the anchor update semantics. This type of anchor will only change its position along the normal of the plane to which it is attached, thus maintaining a constant distance from the plane.
+Attaching an anchor to a plane affects the anchor update semantics. This type of anchor only changes its position along the normal of the plane to which it is attached, thus maintaining a constant distance from the plane.
 
 A typical use case for attaching an anchor to a plane is to place virtual content on the plane. Unity recommends creating the anchor with `AttachAnchor`, and then parenting your content to the anchor.
+
