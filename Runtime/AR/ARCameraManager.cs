@@ -187,7 +187,12 @@ namespace UnityEngine.XR.ARFoundation
         /// of a physical camera which may be useful when performing additional
         /// computer vision processing on the camera image.
         /// </summary>
-        /// <param name="cameraIntrinsics">The camera intrinsics to be populated if the camera supports intrinsics
+        /// <remarks>
+        /// > [!NOTE]
+        /// > The intrinsics may change each frame. You should call this each frame that you need intrinsics
+        /// > in order to ensure you are using the intrinsics for the current frame.
+        /// </remarks>
+        /// <param name="cameraIntrinsics">The camera intrinsics to be populated if the camera supports intrinsics.
         /// </param>
         /// <returns>
         /// <c>true</c> if <paramref name="cameraIntrinsics"/> was populated. Otherwise, <c>false</c>.

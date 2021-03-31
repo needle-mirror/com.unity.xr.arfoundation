@@ -64,7 +64,7 @@ namespace UnityEngine.XR.ARFoundation
         /// If `true`, the session will block execution until a new AR frame is available and set
         /// [Application.targetFrameRate](xref:UnityEngine.Application.targetFrameRate)
         /// to match the native update frequency of the AR session.
-        /// Otherwise, the AR session is updated indpendently of the Unity frame.
+        /// Otherwise, the AR session is updated independently of the Unity frame.
         /// </summary>
         /// <remarks>
         /// If enabled with a simple scene, the `ARSession.Update` may appear to take a long time.

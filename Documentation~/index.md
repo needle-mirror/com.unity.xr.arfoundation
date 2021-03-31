@@ -297,7 +297,7 @@ See [ARMeshManager](mesh-manager.md).
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2019.4
-* 2020.1
-* 2020.2
+* 2019.4.15f1
+* 2020.3
 * 2021.1
+* 2021.2

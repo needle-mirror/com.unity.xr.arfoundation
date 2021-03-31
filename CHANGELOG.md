@@ -1,8 +1,21 @@
 # Changelog
+
 All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [4.1.7] - 2021-03-31
+
+### Fixes
+
+- Added missing icon to the [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
+- Fixed an issue which caused meshes produced by the [ARMeshManager](xref:UnityEngine.XR.ARFoundation.ARMeshManager) to be incorrectly transformed after a call to [ARSessionOrigin.MakeContentAppearAt](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin.MakeContentAppearAt(UnityEngine.Transform,UnityEngine.Vector3,UnityEngine.Quaternion)).
+- Added `MODULE_URP_10_OR_NEWER` and updated use of obsolete `ScriptableRenderer.cameraDepth` API to fix issues related to API upgrades that occur in builds with URP 10.0 and above.
+- Fixed [warning messages regarding cameraDepthTarget when using URP rendering](https://issuetracker.unity3d.com/issues/urp-ar-foundation-warning-message-regarding-cameradepthtarget-with-urp-slash-ar-foundation-projects) issue.
+- Fixed [camera background doesn't work when stacking cameras with URP rendering](https://issuetracker.unity3d.com/issues/arfoundation-arkit-ios-urp-arbackgroundrenderreature-doesnt-work-correctly-when-stacking-overlay-cameras) issue.
+- Fixed [enabling depth texture causes the camera to render black](https://issuetracker.unity3d.com/issues/ios-ar-foundation-urp-enabling-depth-texture-causes-the-camera-to-render-black) issue.
+- Fixed an issue which caused [black reflections on iOS when using AREnvironmentProbeManager](https://github.com/Unity-Technologies/arfoundation-samples/issues/749).
 
 ## [4.1.5] - 2021-01-25
 
@@ -18,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - The [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) component now sets the camera's [field of view](xref:UnityEngine.Camera.fieldOfView). Because the `ARCameraBackground` already overrides the camera's [projection matrix](xref:UnityEngine.Camera.projectionMatrix), this has no effect on ARFoundation. However, any code that reads the camera's [fieldOfView](xref:UnityEngine.Camera.fieldOfView) property will now read the correct value.
 - Minor documentation formatting fixes.
 - Update the inspector for the ARSession component to include a help box describing the function of the [Match Frame Rate](xref:UnityEngine.XR.ARFoundation.ARSession.matchFrameRateRequested) option.
+- This package now requires Unity 2019.4.15f1 or later.
 
 ## [4.1.1] - 2020-11-11
 ### Changes
