@@ -181,13 +181,7 @@ namespace UnityEngine.XR.ARFoundation
             m_Meshes.Clear();
         }
 
-        ARSessionOrigin GetSessionOrigin()
-        {
-            if (transform.parent == null)
-                return null;
-
-            return transform.parent.GetComponent<ARSessionOrigin>();
-        }
+        internal ARSessionOrigin GetSessionOrigin() => transform.GetComponentInParent<ARSessionOrigin>();
 
 #if UNITY_EDITOR
         void Reset()

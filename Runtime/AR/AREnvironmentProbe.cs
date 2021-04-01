@@ -108,6 +108,7 @@ namespace UnityEngine.XR.ARFoundation
             transform.localScale = sessionRelativeData.scale;
 
             // Update the environment texture if the environment texture is valid.
+            m_ReflectionProbe.enabled = sessionRelativeData.textureDescriptor.valid;
             if (sessionRelativeData.textureDescriptor.valid)
             {
                 UpdateEnvironmentTexture(sessionRelativeData.textureDescriptor);
