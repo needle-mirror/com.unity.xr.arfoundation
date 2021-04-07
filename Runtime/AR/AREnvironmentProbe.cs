@@ -138,6 +138,7 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             // Update the environment texture if the environment texture is valid.
+            m_ReflectionProbe.enabled = sessionRelativeData.textureDescriptor.valid;
             if (sessionRelativeData.textureDescriptor.valid)
             {
                 UpdateEnvironmentTexture(sessionRelativeData.textureDescriptor);
