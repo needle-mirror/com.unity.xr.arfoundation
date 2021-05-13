@@ -8,6 +8,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.2.0-pre.7] - 2021-05-13
+
+### Added
+
+- Add support for temporal smoothing of the environment depth image. See [AROcclusionManager.environmentDepthTemporalSmoothingRequested](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.environmentDepthTemporalSmoothingRequested).
+
+### Fixed
+
+- Fixed incorrect validation in [ARMeshManager](xref:UnityEngine.XR.ARFoundation.ARMeshManager) which prevented its use in a prefab.
+
 ## [4.2.0-pre.5] - 2021-04-07
 
 ### Fixed
@@ -24,6 +34,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Clarified documentation for [ARCameraManager.TryGetInstrincis](xref:UnityEngine.XR.ARFoundation.ARCameraManager.TryGetIntrinsics(UnityEngine.XR.ARSubsystems.XRCameraIntrinsics@)).
 
 ## [4.2.0-pre.3] - 2021-03-15
+
+No changes
 
 ## [4.2.0-pre.2] - 2021-03-03
 
@@ -131,6 +143,8 @@ Texture descriptor dimension should not change from None to Tex2D.
 
 ## [4.1.0-preview.6] - 2020-07-27
 
+No changes
+
 ## [4.1.0-preview.5] - 2020-07-16
 
 ### Changed
@@ -223,6 +237,8 @@ Texture descriptor dimension should not change from None to Tex2D.
 - Eliminating shader compiler errors that started with Unity 2020.1 and that originate from the ARKit package.
 
 ## [3.1.0-preview.8] - 2020-03-12
+
+No changes
 
 ## [3.1.0-preview.7] - 2020-03-03
 

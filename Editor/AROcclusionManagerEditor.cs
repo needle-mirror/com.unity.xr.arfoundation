@@ -8,9 +8,18 @@ namespace UnityEditor.XR.ARFoundation
     class AROcclusionManagerEditor : Editor
     {
         SerializedProperty m_EnvironmentDepthMode;
+        SerializedProperty m_EnvironmentDepthTemporalSmoothing;
         SerializedProperty m_OcclusionPreferenceMode;
         SerializedProperty m_HumanSegmentationStencilMode;
         SerializedProperty m_HumanSegmentationDepthMode;
+
+        static class Styles
+        {
+            public static readonly GUIContent environmentDepthTemporalSmoothing =
+                new GUIContent(
+                    text: "Temporal Smoothing",
+                    tooltip: "Whether temporal smoothing should be applied to the environment depth image.");
+        }
 
         public override void OnInspectorGUI()
         {
@@ -31,6 +40,7 @@ namespace UnityEditor.XR.ARFoundation
             using (new EditorGUI.IndentLevelScope(1))
             {
                 EditorGUILayout.PropertyField(m_EnvironmentDepthMode);
+                EditorGUILayout.PropertyField(m_EnvironmentDepthTemporalSmoothing, Styles.environmentDepthTemporalSmoothing);
             }
 
             EditorGUILayout.LabelField("Human Segmentation", EditorStyles.boldLabel);
@@ -65,6 +75,7 @@ namespace UnityEditor.XR.ARFoundation
         void OnEnable()
         {
             m_EnvironmentDepthMode = serializedObject.FindProperty("m_EnvironmentDepthMode");
+            m_EnvironmentDepthTemporalSmoothing = serializedObject.FindProperty("m_EnvironmentDepthTemporalSmoothing");
             m_HumanSegmentationStencilMode = serializedObject.FindProperty("m_HumanSegmentationStencilMode");
             m_HumanSegmentationDepthMode = serializedObject.FindProperty("m_HumanSegmentationDepthMode");
             m_OcclusionPreferenceMode = serializedObject.FindProperty("m_OcclusionPreferenceMode");

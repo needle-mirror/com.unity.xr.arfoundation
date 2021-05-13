@@ -9,6 +9,7 @@ The main updates in this release include:
 
 **Added**
 
+- Add support for temporal smoothing of the environment depth image. This allows you to request that the environment depth image be smoothed over time. Not all providers support this feature. You can query for support with [XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported).
 - Added options to the [ARPlaneMeshVisualizer component](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer) to control when MeshRenderer and LineRenderer components should be enabled. See
   - [ARPlaneMeshVisualizer.trackingStateVisibilityThreshold](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer.trackingStateVisibilityThreshold)
   - [ARPlaneMeshVisualizer.hideSubsumed](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer.hideSubsumed)

@@ -189,6 +189,34 @@ namespace UnityEngine.XR.ARFoundation
                  + "Best -- Best rendering quality. Increased frame computation.")]
         EnvironmentDepthMode m_EnvironmentDepthMode = EnvironmentDepthMode.Fastest;
 
+        [SerializeField]
+        bool m_EnvironmentDepthTemporalSmoothing;
+
+        /// <summary>
+        /// Whether temporal smoothing should be applied to the environment depth image. Query for support with
+        /// [environmentDepthTemporalSmoothingSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported).
+        /// </summary>
+        /// <value>When `true`, temporal smoothing is applied to the environment depth image. Otherwise, no temporal smoothing is applied.</value>
+        public bool environmentDepthTemporalSmoothingRequested
+        {
+            get => subsystem?.environmentDepthTemporalSmoothingRequested ?? m_EnvironmentDepthTemporalSmoothing;
+            set
+            {
+                m_EnvironmentDepthTemporalSmoothing = value;
+                if (enabled && descriptor?.environmentDepthTemporalSmoothingSupported == Supported.Supported)
+                {
+                    subsystem.environmentDepthTemporalSmoothingRequested = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether temporal smoothing is applied to the environment depth image. Query for support with
+        /// [environmentDepthTemporalSmoothingSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported).
+        /// </summary>
+        /// <value>Read Only.</value>
+        public bool environmentDepthTemporalSmoothingEnabled => subsystem?.environmentDepthTemporalSmoothingEnabled ?? false;
+
         /// <summary>
         /// Get or set the requested occlusion preference mode.
         /// </summary>
@@ -401,6 +429,7 @@ namespace UnityEngine.XR.ARFoundation
             requestedHumanDepthMode = m_HumanSegmentationDepthMode;
             requestedEnvironmentDepthMode = m_EnvironmentDepthMode;
             requestedOcclusionPreferenceMode = m_OcclusionPreferenceMode;
+            environmentDepthTemporalSmoothingRequested = m_EnvironmentDepthTemporalSmoothing;
 
             ResetTextureInfos();
         }
@@ -429,6 +458,7 @@ namespace UnityEngine.XR.ARFoundation
                 requestedHumanDepthMode = m_HumanSegmentationDepthMode;
                 requestedHumanStencilMode = m_HumanSegmentationStencilMode;
                 requestedOcclusionPreferenceMode = m_OcclusionPreferenceMode;
+                environmentDepthTemporalSmoothingRequested = m_EnvironmentDepthTemporalSmoothing;
             }
         }
 

@@ -43,7 +43,7 @@ namespace UnityEngine.XR.ARFoundation
         public bool Raycast(
             Vector2 screenPoint,
             List<ARRaycastHit> hitResults,
-            TrackableType trackableTypes = TrackableType.All)
+            TrackableType trackableTypes = TrackableType.AllTypes)
         #endregion
         {
             if (subsystem == null)
@@ -68,7 +68,7 @@ namespace UnityEngine.XR.ARFoundation
         public bool Raycast(
             Ray ray,
             List<ARRaycastHit> hitResults,
-            TrackableType trackableTypes = TrackableType.All)
+            TrackableType trackableTypes = TrackableType.AllTypes)
         #endregion
         {
             if (subsystem == null)
