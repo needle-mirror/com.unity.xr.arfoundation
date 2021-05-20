@@ -190,7 +190,7 @@ namespace UnityEngine.XR.ARFoundation
         EnvironmentDepthMode m_EnvironmentDepthMode = EnvironmentDepthMode.Fastest;
 
         [SerializeField]
-        bool m_EnvironmentDepthTemporalSmoothing;
+        bool m_EnvironmentDepthTemporalSmoothing = true;
 
         /// <summary>
         /// Whether temporal smoothing should be applied to the environment depth image. Query for support with

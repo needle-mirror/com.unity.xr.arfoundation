@@ -8,6 +8,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.2.0-pre.8] - 2021-05-20
+
+### Changed
+
+- [Environment depth temporal smoothing](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.environmentDepthTemporalSmoothingRequested) now defaults to true, which is more consistent with the behavior prior to the introduction of this option.
+
 ## [4.2.0-pre.7] - 2021-05-13
 
 ### Added
