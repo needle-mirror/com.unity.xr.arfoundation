@@ -29,7 +29,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
         /// <returns>A hash code generated from this object's fields.</returns>
-        public override int GetHashCode() => HashCode.ReferenceHash(face);
+        public override int GetHashCode() => HashCodeUtil.ReferenceHash(face);
 
         /// <summary>
         /// Tests for equality.

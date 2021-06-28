@@ -96,8 +96,8 @@ namespace UnityEngine.XR.ARFoundation
                 hash = hash * 486187739 + timestampNs.GetHashCode();
                 hash = hash * 486187739 + projectionMatrix.GetHashCode();
                 hash = hash * 486187739 + displayMatrix.GetHashCode();
-                hash = hash * 486187739 + HashCode.ReferenceHash(textures);
-                hash = hash * 486187739 + HashCode.ReferenceHash(propertyNameIds);
+                hash = hash * 486187739 + HashCodeUtil.ReferenceHash(textures);
+                hash = hash * 486187739 + HashCodeUtil.ReferenceHash(propertyNameIds);
                 hash = hash * 486187739 + exposureDuration.GetHashCode();
                 hash = hash * 486187739 + exposureOffset.GetHashCode();
                 hash = hash * 486187739 + cameraGrainTexture.GetHashCode();

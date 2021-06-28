@@ -36,11 +36,11 @@ namespace UnityEngine.XR.ARFoundation
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
         /// <returns>A hash code generated from this object's fields.</returns>
-        public override int GetHashCode() => HashCode.Combine(
-            HashCode.ReferenceHash(textures),
-            HashCode.ReferenceHash(propertyNameIds),
-            HashCode.ReferenceHash(enabledMaterialKeywords),
-            HashCode.ReferenceHash(disabledMaterialKeywords));
+        public override int GetHashCode() => HashCodeUtil.Combine(
+            HashCodeUtil.ReferenceHash(textures),
+            HashCodeUtil.ReferenceHash(propertyNameIds),
+            HashCodeUtil.ReferenceHash(enabledMaterialKeywords),
+            HashCodeUtil.ReferenceHash(disabledMaterialKeywords));
 
         /// <summary>
         /// Tests for equality.

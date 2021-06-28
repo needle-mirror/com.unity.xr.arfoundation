@@ -88,11 +88,11 @@ namespace UnityEngine.XR.ARFoundation
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
         /// <returns>A hash code generated from this object's fields.</returns>
-        public override int GetHashCode() => HashCode.Combine(
+        public override int GetHashCode() => HashCodeUtil.Combine(
             m_Hit.GetHashCode(),
             distance.GetHashCode(),
-            HashCode.ReferenceHash(m_Transform),
-            HashCode.ReferenceHash(trackable));
+            HashCodeUtil.ReferenceHash(m_Transform),
+            HashCodeUtil.ReferenceHash(trackable));
 
         /// <summary>
         /// Tests for equality.

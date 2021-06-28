@@ -1,6 +1,6 @@
 namespace UnityEngine.XR.ARFoundation
 {
-    internal static class HashCode
+    static class HashCodeUtil
     {
         public static int Combine(int hash1, int hash2)
         {

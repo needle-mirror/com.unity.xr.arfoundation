@@ -45,10 +45,10 @@ namespace UnityEngine.XR.ARFoundation
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
         /// <returns>A hash code generated from this object's fields.</returns>
-        public override int GetHashCode() => HashCode.Combine(
-            HashCode.ReferenceHash(added),
-            HashCode.ReferenceHash(updated),
-            HashCode.ReferenceHash(removed));
+        public override int GetHashCode() => HashCodeUtil.Combine(
+            HashCodeUtil.ReferenceHash(added),
+            HashCodeUtil.ReferenceHash(updated),
+            HashCodeUtil.ReferenceHash(removed));
 
         /// <summary>
         /// Tests for equality.

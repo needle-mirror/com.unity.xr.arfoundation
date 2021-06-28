@@ -64,9 +64,9 @@ namespace UnityEngine.XR.ARFoundation
         /// Generates a hash code suitable for using in a `HashSet` or `Dictionary`.
         /// </summary>
         /// <returns>Returns a hash code suitable for using in a `HashSet` or `Dictionary`.</returns>
-        public override int GetHashCode() => HashCode.Combine(
-            HashCode.ReferenceHash(sessionOrigin),
-            HashCode.ReferenceHash(trackablesParent));
+        public override int GetHashCode() => HashCodeUtil.Combine(
+            HashCodeUtil.ReferenceHash(sessionOrigin),
+            HashCodeUtil.ReferenceHash(trackablesParent));
 
         /// <summary>
         /// Compares for equality. Same as
