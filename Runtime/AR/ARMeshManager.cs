@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 using LegacyMeshId = UnityEngine.XR.MeshId;
@@ -324,7 +325,11 @@ namespace UnityEngine.XR.ARFoundation
                     mesh,
                     meshCollider,
                     vertexAttributes,
-                    m_OnMeshGeneratedDelegate);
+                    m_OnMeshGeneratedDelegate
+#if UNITY_2021_2_OR_NEWER
+                    , MeshGenerationOptions.ConsumeTransform
+#endif
+                    );
             }
         }
 
@@ -338,8 +343,16 @@ namespace UnityEngine.XR.ARFoundation
             if (result.Status != MeshGenerationStatus.Success)
                 return;
 
+#if UNITY_2021_2_OR_NEWER
+            var meshTransform = GetOrUpdateMeshTransform(new MeshTransform(result.MeshId, result.Timestamp, result.Position, result.Rotation, result.Scale));
+#endif
+
             if (!m_Meshes.TryGetValue(GetTrackableId(result.MeshId), out MeshFilter meshFilter) || (meshFilter == null))
                 return;
+
+#if UNITY_2021_2_OR_NEWER
+            SetMeshTransform(meshFilter.transform, meshTransform);
+#endif
 
             meshFilter.gameObject.SetActive(true);
 
@@ -358,6 +371,24 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+#if UNITY_2021_2_OR_NEWER
+        MeshTransform GetOrUpdateMeshTransform(MeshTransform meshTransform)
+        {
+            if (m_Transforms.TryGetValue(meshTransform.MeshId, out var currentTransform) && currentTransform.Timestamp > meshTransform.Timestamp)
+                return currentTransform;
+
+            m_Transforms[currentTransform.MeshId] = meshTransform;
+            return meshTransform;
+        }
+
+        static void SetMeshTransform(Transform transform, in MeshTransform meshTransform)
+        {
+            transform.localPosition = meshTransform.Position;
+            transform.localRotation = meshTransform.Rotation;
+            transform.localScale = meshTransform.Scale;
+        }
+#endif
+
         void UpdateMeshInfos()
         {
             if (m_Subsystem.TryGetMeshInfos(s_MeshInfos))
@@ -375,6 +406,9 @@ namespace UnityEngine.XR.ARFoundation
                             // Remove from processing queues
                             m_Pending.Remove(meshInfo.MeshId);
                             m_Generating.Remove(meshInfo.MeshId);
+#if UNITY_2021_2_OR_NEWER
+                            m_Transforms.Remove(meshInfo.MeshId);
+#endif
 
                             // Add to list of removed meshes
                             var trackableId = GetTrackableId(meshInfo.MeshId);
@@ -382,7 +416,9 @@ namespace UnityEngine.XR.ARFoundation
                             {
                                 m_Meshes.Remove(trackableId);
                                 if (meshFilter != null)
+                                {
                                     m_Removed.Add(meshFilter);
+                                }
                             }
 
                             break;
@@ -392,18 +428,23 @@ namespace UnityEngine.XR.ARFoundation
                     }
                 }
             }
+
+#if UNITY_2021_2_OR_NEWER
+            using var meshTransforms = m_Subsystem.GetUpdatedMeshTransforms(Allocator.Temp);
+            foreach (var newMeshTransform in meshTransforms)
+            {
+                var meshTransform = GetOrUpdateMeshTransform(newMeshTransform);
+                if (m_Meshes.TryGetValue(GetTrackableId(meshTransform.MeshId), out var filter) && filter != null)
+                {
+                    SetMeshTransform(filter.transform, meshTransform);
+                }
+            }
+#endif
         }
 
-        void OnDisable()
-        {
-            if (m_Subsystem != null)
-                m_Subsystem.Stop();
-        }
+        void OnDisable() => m_Subsystem?.Stop();
 
-        void OnDestroy()
-        {
-            m_Subsystem = null;
-        }
+        void OnDestroy() => m_Subsystem = null;
 
         MeshFilter GetOrCreateMeshFilter(TrackableId trackableId)
         {
@@ -445,22 +486,14 @@ namespace UnityEngine.XR.ARFoundation
             m_Pending = new MeshQueue();
             m_Generating = new Dictionary<LegacyMeshId, MeshInfo>();
             m_Meshes = new SortedList<TrackableId, MeshFilter>(s_TrackableIdComparer);
-            m_OnMeshGeneratedDelegate = new Action<MeshGenerationResult>(OnMeshGenerated);
+            m_OnMeshGeneratedDelegate = OnMeshGenerated;
         }
 
         class TrackableIdComparer : IComparer<TrackableId>
         {
-            public int Compare(TrackableId trackableIdA, TrackableId trackableIdB)
-            {
-                if (trackableIdA.subId1 == trackableIdB.subId1)
-                {
-                    return trackableIdA.subId2.CompareTo(trackableIdB.subId2);
-                }
-                else
-                {
-                    return trackableIdA.subId1.CompareTo(trackableIdB.subId1);
-                }
-            }
+            public int Compare(TrackableId trackableIdA, TrackableId trackableIdB) => trackableIdA.subId1 == trackableIdB.subId1
+                ? trackableIdA.subId2.CompareTo(trackableIdB.subId2)
+                : trackableIdA.subId1.CompareTo(trackableIdB.subId1);
         }
 
         List<MeshFilter> m_Added;
@@ -475,6 +508,10 @@ namespace UnityEngine.XR.ARFoundation
 
         SortedList<TrackableId, MeshFilter> m_Meshes;
 
+#if UNITY_2021_2_OR_NEWER
+        Dictionary<MeshId, MeshTransform> m_Transforms = new Dictionary<MeshId, MeshTransform>();
+#endif
+
         Action<MeshGenerationResult> m_OnMeshGeneratedDelegate;
 
         XRMeshSubsystem m_Subsystem;
@@ -482,8 +519,5 @@ namespace UnityEngine.XR.ARFoundation
         static TrackableIdComparer s_TrackableIdComparer = new TrackableIdComparer();
 
         static List<MeshInfo> s_MeshInfos = new List<MeshInfo>();
-
-        static List<XRMeshSubsystemDescriptor> s_SubsystemDescriptors =
-            new List<XRMeshSubsystemDescriptor>();
     }
 }

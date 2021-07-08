@@ -421,6 +421,53 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Attempt to get the latest raw environment depth CPU image. This provides direct access to the raw pixel data.
+        /// </summary>
+        /// <remarks>
+        /// > [!NOTE]
+        /// > The `XRCpuImage` must be disposed to avoid resource leaks.
+        /// This differs from <see cref="TryAcquireEnvironmentDepthCpuImage"/> in that it always tries to acquire the
+        /// raw environment depth image, whereas <see cref="TryAcquireEnvironmentDepthCpuImage"/> depends on the value
+        /// of <see cref="environmentDepthTemporalSmoothingEnabled"/>.
+        /// </remarks>
+        /// <param name="cpuImage">If this method returns `true`, an acquired `XRCpuImage`.</param>
+        /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
+        public bool TryAcquireRawEnvironmentDepthCpuImage(out XRCpuImage cpuImage)
+        {
+            if (subsystem == null)
+            {
+                cpuImage = default;
+                return false;
+            }
+
+            return subsystem.TryAcquireRawEnvironmentDepthCpuImage(out cpuImage);
+        }
+
+        /// <summary>
+        /// Attempt to get the latest smoothed environment depth CPU image. This provides direct access to
+        /// the raw pixel data.
+        /// </summary>
+        /// <remarks>
+        /// > [!NOTE]
+        /// > The `XRCpuImage` must be disposed to avoid resource leaks.
+        /// This differs from <see cref="TryAcquireEnvironmentDepthCpuImage"/> in that it always tries to acquire the
+        /// smoothed environment depth image, whereas <see cref="TryAcquireEnvironmentDepthCpuImage"/>
+        /// depends on the value of <see cref="environmentDepthTemporalSmoothingEnabled"/>.
+        /// </remarks>
+        /// <param name="cpuImage">If this method returns `true`, an acquired `XRCpuImage`.</param>
+        /// <returns>Returns `true` if the CPU image was acquired. Returns `false` otherwise.</returns>
+        public bool TryAcquireSmoothedEnvironmentDepthCpuImage(out XRCpuImage cpuImage)
+        {
+            if (subsystem == null)
+            {
+                cpuImage = default;
+                return false;
+            }
+
+            return subsystem.TryAcquireSmoothedEnvironmentDepthCpuImage(out cpuImage);
+        }
+
+        /// <summary>
         /// Callback before the subsystem is started (but after it is created).
         /// </summary>
         protected override void OnBeforeStart()

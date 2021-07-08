@@ -30,13 +30,7 @@ namespace UnityEngine.XR.ARFoundation
         /// provided in face space, that is, relative to this <see cref="ARFace"/>'s local
         /// position and rotation.
         /// </summary>
-        public unsafe NativeArray<Vector3> vertices
-        {
-            get
-            {
-                return GetUndisposable(m_FaceMesh.vertices);
-            }
-        }
+        public NativeArray<Vector3> vertices => GetUndisposable(m_FaceMesh.vertices);
 
         /// <summary>
         /// The normals representing the face mesh. Check for existence with <c>normals.IsCreated</c>.
@@ -97,15 +91,23 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         // Creates an alias to the same array, but the caller cannot Dispose it.
-        unsafe NativeArray<T> GetUndisposable<T>(NativeArray<T> disposable) where T : struct
+        internal static unsafe NativeArray<T> GetUndisposable<T>(NativeArray<T> disposable) where T : struct
         {
             if (!disposable.IsCreated)
-                return default(NativeArray<T>);
+                return default;
 
-            return NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<T>(
+            var undisposable = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<T>(
                 disposable.GetUnsafePtr(),
                 disposable.Length,
                 Allocator.None);
+
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
+            NativeArrayUnsafeUtility.SetAtomicSafetyHandle(
+                ref undisposable,
+                NativeArrayUnsafeUtility.GetAtomicSafetyHandle(disposable));
+#endif
+
+            return undisposable;
         }
 
         internal void UpdateMesh(XRFaceSubsystem subsystem)
@@ -128,7 +130,7 @@ namespace UnityEngine.XR.ARFoundation
             fixationPoint.localPosition = sessionRelativeData.fixationPoint;
         }
 
-        private void UpdateTransformFromPose(Transform eyeTransform, Pose eyePose)
+        static void UpdateTransformFromPose(Transform eyeTransform, Pose eyePose)
         {
             eyeTransform.localPosition = eyePose.position;
             eyeTransform.localRotation = eyePose.rotation;

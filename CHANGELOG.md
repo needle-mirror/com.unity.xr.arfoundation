@@ -8,6 +8,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.2.0-pre.12] - 2021-07-08
+
+### Added
+
+- Added support new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
+- Added methods to get the [raw](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.TryAcquireRawEnvironmentDepthCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) and [smoothed](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.TryAcquireSmoothedEnvironmentDepthCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) depth images independently.
+
+### Fixed
+
+- Fixed a `NullReferenceException` when accessing mesh information from an [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) in the Editor. The exception was thrown from ``Unity.Collections.NativeArray`1[T].CheckElementReadAccess``.
+
 ## [4.2.0-pre.10] - 2021-06-28
 
 No changes
