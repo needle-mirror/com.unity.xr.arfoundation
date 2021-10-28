@@ -1,28 +1,29 @@
 ---
 uid: arfoundation-whats-new
 ---
-# What's new in version 4.2
+# What's new in version 5.0
 
-Summary of changes in AR Foundation package version 4.2.
+Summary of changes in AR Foundation package version 5.0.
 
 The main updates in this release include:
 
 **Added**
 
-- Add support for temporal smoothing of the environment depth image. This allows you to request that the environment depth image be smoothed over time. Not all providers support this feature. You can query for support with [XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported).
-- Added options to the [ARPlaneMeshVisualizer component](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer) to control when MeshRenderer and LineRenderer components should be enabled. See
-  - [ARPlaneMeshVisualizer.trackingStateVisibilityThreshold](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer.trackingStateVisibilityThreshold)
-  - [ARPlaneMeshVisualizer.hideSubsumed](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer.hideSubsumed)
+- Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the ARSessionOrigin and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added plane visualization to [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu). See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added support new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
 
 **Updated**
 
-- Add description for occlusion on the main AR Foundation manual page, and edit the human segmentations description.
-- The [ARSession](xref:UnityEngine.XR.ARFoundation.ARSession) optionally sets the application's `vSyncCount` and `targetFrameRate` (see [matchFrameRateRequested](xref:UnityEngine.XR.ARFoundation.ARSession.matchFrameRateRequested)). In earlier versions, the original values were not restored when the ARSession was disabled. The behavior has changed so that the original values are restored when the ARSession was disabled if the frame rate was set while the ARSession was enabled.
-- Update [XR Plug-in Management](https://docs.unity3d.com/Packages/com.unity.xr.management@4.0) dependency to 4.0.
+- `com.unity.xr.arsubsystems` has been merged into `com.unity.xr.arfoundation`. All the subsystems that were part of `com.unity.xr.arsubsystems` package are now available with this package (See the [old AR Subsystems Package changelog](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.2/changelog/CHANGELOG.html) for more details).
+- The minimum Unity version for this package is now 2021.2.
+
+**Deprecated**
+
+- Deprecated the [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem%601). Use [SubsystemWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemWithProvider) base class instead with an implementation of [SubsystemDescriptorWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) and [SubsystemProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemProvider).
 
 **Fixed**
 
-- Added missing icon to the [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
-- Replace uses of [PostProcessScene](xref:UnityEditor.Callbacks.PostProcessSceneAttribute) attribute with [IProcessSceneWithReport](xref:UnityEditor.Build.IProcessSceneWithReport) callback mechanism. This prevents scene hashes from changing when adding the AR Foundation package.
+- Fixed a missing dependency on built-in particle system module.
 
 For a full list of changes and updates in this version, see the [AR Foundation package changelog](xref:arfoundation-changelog).

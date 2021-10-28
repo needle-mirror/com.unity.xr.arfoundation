@@ -7,7 +7,7 @@ The tracked image manager is a type of [trackable manager](trackable-managers.md
 
 ![AR tracked image manager](images/ar-tracked-image-manager.png "AR tracked image manager")
 
-The tracked image manager creates [GameObjects](xref:GameObjects) for each detected image in the environment. Before an image can be detected, the manager must be instructed to look for a set of reference images compiled into a reference image library. It only detects images in this library.
+The tracked image manager creates [GameObjects](xref:UnityEngine.GameObject) for each detected image in the environment. Before an image can be detected, the manager must be instructed to look for a set of reference images compiled into a reference image library. It only detects images in this library.
 
 ## Reference library
 
@@ -36,7 +36,7 @@ RuntimeReferenceImageLibrary runtimeLibrary = trackedImageManager.CreateRuntimeL
 
 ## Using reference image libraries with asset bundles
 
-Prior to AR Foundation 4.2, reference image libraries had to be built into the Player; that is, the `XRReferenceImageLibrary` served only as a means to look up data that was expected to be packaged in the app. This meant that you could not, for example, download a novel reference image library to an already released app. As of AR Foundation 4.2, platform-specifc data is attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:AssetBundlesIntro). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
+Prior to AR Foundation 4.2, reference image libraries had to be built into the Player; that is, the `XRReferenceImageLibrary` served only as a means to look up data that was expected to be packaged in the app. This meant that you could not, for example, download a novel reference image library to an already released app. As of AR Foundation 4.2, platform-specifc data is attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:UnityEngine.AssetBundle). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
 
 ## Responding to detected images
 
@@ -56,7 +56,7 @@ Or access a specific image by its [TrackableId](xref:UnityEngine.XR.ARSubsystems
 
 ## Tracked Image Prefab
 
-The [ARTrackedImageManager](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager) has a ["Tracked Image Prefab"](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagePrefab) field; however, this is not intended for content. When an image is detected, ARFoundation creates a new [GameObject](xref:GameObjects) to represent it.
+The [ARTrackedImageManager](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager) has a ["Tracked Image Prefab"](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagePrefab) field; however, this is not intended for content. When an image is detected, ARFoundation creates a new [GameObject](xref:UnityEngine.GameObject) to represent it.
 
 If "Tracked Image Prefab" is `null`, then AR Foundation creates a GameObject with an [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) component on it. However, if you want every tracked image to also include additional components, you can provide a Prefab for AR Foundation to instantiate for each detected image. In other words, the purpose of the Prefab field is to extend the default behavior of tracked images; it is not the recommended way to place content in the world.
 
@@ -76,7 +76,7 @@ You can check whether a particular tracked image manager supports mutable librar
 
 [!code-cs[trackedimage_supportsMutableLibrary](../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_supportsMutableLibrary)]
 
-You can add images to mutable libraries allow images at any time. Adding an image can be computationally resource-intensive, and might take a few frames to complete. The [Unity Job System](xref:JobSystem) is used to process images asynchronously.
+You can add images to mutable libraries allow images at any time. Adding an image can be computationally resource-intensive, and might take a few frames to complete. The [Unity Job System](https://docs.unity3d.com/Manual/JobSystem.html) is used to process images asynchronously.
 
 To add an image to a [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary), use the [ScheduleAddImageJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob(UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary,UnityEngine.Texture2D,System.String,System.Nullable{System.Single},Unity.Jobs.JobHandle)) method. This returns a [JobHandle](xref:Unity.Jobs.JobHandle) that you can use to determine when the job is complete. You can safely discard this handle if you don't need to do this.
 

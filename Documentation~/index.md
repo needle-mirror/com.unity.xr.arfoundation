@@ -5,10 +5,9 @@ uid: arfoundation-manual
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
 
-* [ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@4.2/manual/index.html) on Android
-* [ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@4.2/manual/index.html) on iOS
-* [Magic Leap XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.magicleap@6.0/manual/index.html) on Magic Leap
-* [Windows XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.windowsmr@4.0/manual/index.html) on HoloLens
+* [ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/manual/index.html) on Android
+* [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.0/manual/index.html) on iOS
+* [Open XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.2/manual/index.html) on HoloLens
 
 AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support the following concepts:
 
@@ -38,48 +37,46 @@ AR Foundation does not implement any AR features itself but, instead, defines a 
 
 You can refer to this table to understand which parts of AR Foundation are relevant on specific platforms:
 
-|                                |ARCore|ARKit|Magic Leap|HoloLens|
-|--------------------------------|:----:|:---:|:--------:|:------:|
-|Device tracking                 |  ✓   |  ✓  |    ✓     |   ✓    |
-|Plane tracking                  |  ✓   |  ✓  |    ✓     |        |
-|Point clouds                    |  ✓   |  ✓  |          |        |
-|Anchors                         |  ✓   |  ✓  |    ✓     |   ✓    |
-|Light estimation                |  ✓   |  ✓  |          |        |
-|Environment probes              |  ✓   |  ✓  |          |        |
-|Face tracking                   |  ✓   |  ✓  |          |        |
-|2D Image tracking               |  ✓   |  ✓  |    ✓     |        |
-|3D Object tracking              |      |  ✓  |          |        |
-|Meshing                         |      |  ✓  |    ✓     |   ✓    |
-|2D & 3D body tracking           |      |  ✓  |          |        |
-|Collaborative participants      |      |  ✓  |          |        |
-|Human segmentation              |      |  ✓  |          |        |
-|Raycast                         |  ✓   |  ✓  |    ✓     |        |
-|Pass-through video              |  ✓   |  ✓  |          |        |
-|Session management              |  ✓   |  ✓  |    ✓     |   ✓    |
-|Occlusion                       |  ✓   |  ✓  |          |        |
+|                                |ARCore|ARKit| OpenXR |
+|--------------------------------|:----:|:---:|:------:|
+|Device tracking                 |  ✓   |  ✓  |   ✓    |
+|Plane tracking                  |  ✓   |  ✓  |        |
+|Point clouds                    |  ✓   |  ✓  |        |
+|Anchors                         |  ✓   |  ✓  |   ✓    |
+|Light estimation                |  ✓   |  ✓  |        |
+|Environment probes              |  ✓   |  ✓  |        |
+|Face tracking                   |  ✓   |  ✓  |        |
+|2D Image tracking               |  ✓   |  ✓  |        |
+|3D Object tracking              |      |  ✓  |        |
+|Meshing                         |      |  ✓  |   ✓    |
+|2D & 3D body tracking           |      |  ✓  |        |
+|Collaborative participants      |      |  ✓  |        |
+|Human segmentation              |      |  ✓  |        |
+|Raycast                         |  ✓   |  ✓  |        |
+|Pass-through video              |  ✓   |  ✓  |        |
+|Session management              |  ✓   |  ✓  |   ✓    |
+|Occlusion                       |  ✓   |  ✓  |        |
 
 **Note:** To use ARCore cloud anchors, download and install Google's [ARCore Extensions for Unity's AR Foundation](https://developers.google.com/ar/develop/unity-arf).
 
 ### Supported Platform Packages
 The following platform packages and later implement the AR Foundation features indicated above:
 
-|Package Name            |Version             |
-|:---                    |:---                |
-|ARCore XR Plug-in       |   4.2              |
-|ARKit XR Plug-in        |   4.2              |
-|ARKit Face Tracking     |   4.2              |
-|Magic Leap XR Plug-in   |   6.0              |
-|Windows XR Plug-in      |   5.0              |
+|Package Name               |Version             |
+|:---                       |:---                |
+|Google ARCore XR Plug-in   |   5.0              |
+|Apple ARKit XR Plug-in     |   5.0              |
+|Open XR Plug-in            |   1.2              |
 
 ## Subsystems
 
-AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You occasionally need to interact with the types in the AR Subsystems package.
+AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems in this package uses the namespace `UnityEngine.XR.ARSubsystems`. You occasionally need to interact with the types in the `UnityEngine.XR.ARSubsystems` namespace. For more details, see [Subsystems](arsubsystems/arsubsystems.md).
 
 Each subsystem handles specific functionality. For example, `XRPlaneSubsystem` provides the plane detection interface.
 
 ### Providers
 
-A **provider** is a concrete implementation of a subsystem. For example, the `ARCore XR Plugin` package contains the ARCore implementation for many of the AR subsystems.
+A **provider** is a concrete implementation of a subsystem. For example, the `ARCore XR Plugin` package contains the ARCore implementation for many of the AR-related subsystems.
 
 Because different providers have varying support for specific features, each subsystem also has a descriptor that indicates which specific subsystem features it supports. For example, the `XRPlaneSubsystemDescriptor` contains properties indicating whether it supports horizontal or vertical plane detection.
 
@@ -91,10 +88,9 @@ To install this package, follow the instructions in the [Package Manager documen
 
 Subsystems are implemented in other packages. To use AR Foundation, you must also install at least one of these platform-specific AR packages from the Package Manager window (menu: **Window** &gt; **Package Manager**):
 
- - ARKit XR Plug-in
+ - Apple ARKit XR Plug-in
  - ARCore XR Plug-in
- - Magic Leap XR Plug-in
- - Windows XR Plug-in
+ - Open XR Plug-in
 
 # Glossary
 
@@ -300,6 +296,7 @@ See [ARMeshManager](mesh-manager.md).
 
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
-* 2020.3
-* 2021.1
 * 2021.2
+* 2022.1
+
+[!include[](snippets/apple-arkit-trademark.md)]

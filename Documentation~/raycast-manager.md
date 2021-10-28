@@ -21,7 +21,7 @@ There are two ray casting methods on the `ARRaycastManager` that perform single 
 
 The first method takes a two-dimensional pixel position on the screen.
 
-[!code-cs[ARRaycastManager_Raycast_screenPoint](../Runtime/AR/ARRaycastManager.cs#ARRaycastManager_Raycast_screenPoint)]
+[!code-cs[ARRaycastManager_Raycast_screenPoint](../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_Raycast_screenPoint)]
 
 You can, for example, pass a touch position directly:
 
@@ -29,7 +29,7 @@ You can, for example, pass a touch position directly:
 
 The second method takes an arbitrary [Ray](xref:UnityEngine.Ray) (a position and direction):
 
-[!code-cs[ARRaycastManager_Raycast_ray](../Runtime/AR/ARRaycastManager.cs#ARRaycastManager_Raycast_ray)]
+[!code-cs[ARRaycastManager_Raycast_ray](../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_Raycast_ray)]
 
 The following table summarizes the other parameters:
 
@@ -54,6 +54,6 @@ To add or remove a persistent raycast, call [AddRaycast](xref:UnityEngine.XR.ARF
 
 Persistent raycasts must be created from a screen point:
 
-[!code-cs[ARRaycastManager_AddRaycast_screenPoint](../Runtime/AR/ARRaycastManager.cs#ARRaycastManager_AddRaycast_screenPoint)]
+[!code-cs[ARRaycastManager_AddRaycast_screenPoint](../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_AddRaycast_screenPoint)]
 
 When you create a new `ARRaycast`, ARFoundation creates a new GameObject with an `ARRaycast` component on it. You can optionally provide a Prefab in the "Raycast Prefab" field that is instantiated for each `ARRaycast`, which allows you to extend the default behavior of each `ARRaycast`.

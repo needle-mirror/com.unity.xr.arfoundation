@@ -4,7 +4,7 @@ using Unity.Collections;
 namespace UnityEngine.XR.ARFoundation
 {
     [TestFixture]
-    public class PoseExtensionsTestFixture
+    class PoseExtensionsTestFixture
     {
         [Test]
         public void InverseTransformPositionTest()

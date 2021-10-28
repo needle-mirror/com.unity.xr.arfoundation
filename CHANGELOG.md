@@ -8,11 +8,34 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [4.2.1] - 2021-10-06
+## [5.0.0-pre.5] - 2021-10-28
+
+### Added
+
+- Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the ARSessionOrigin and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added plane visualization to [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu). See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added support for new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
+
+### Changed
+
+- `com.unity.xr.arsubsystems` has been merged into `com.unity.xr.arfoundation`. All the subsystems that were part of `com.unity.xr.arsubsystems` package are now available with this package (See the [old AR Subsystems Package changelog](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.2/changelog/CHANGELOG.html) for more details).
+- The minimum Unity version for this package is now 2021.2.
+
+### Deprecated
+
+- Deprecated the [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem%601). Use [SubsystemWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemWithProvider) base class instead with an implementation of [SubsystemDescriptorWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) and [SubsystemProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemProvider).
+
+### Removed
+
+- Removed deprecated APIs: `UnityEditor.XR.ARSubsystems.InternalBridge`, `ARReferencePoint`, `ARReferencePointManager`, `ARReferencePointsChangedEventArgs`, `XRReferencePoint`, `XRReferencePointSubsystem`, and `XRReferencePointSubsystemDescriptor`.
+- Removed conditional dependency on the deprecated Lightweight Renderpipeline (LWRP) package.
 
 ### Fixed
 
-- Fixed a missing dependency on built-in [particle system](https://docs.unity3d.com/2021.2/Documentation/ScriptReference/UnityEngine.ParticleSystemModule.html) module.
+- [ARMeshManager](xref:UnityEngine.XR.ARFoundation.ARMeshManager) no longer throws `ArgumentNullException`s ("Value cannot be null") when exiting play mode in the editor.
+- Fixed a missing dependency on built-in particle system module.
+- Fixed a missing dependency on built-in UI module and UGUI pacakge.
+- Fixed issue where `XROcclusionSubsystem` would use `Provider.environmentDepthCpuImageApi` instead of `Provider.environmentDepthConfidenceCpuImageApi` when acquiring the Environment Depth Confidence CPU Image.
 
 ## [4.2.0] - 2021-08-11
 
@@ -24,6 +47,7 @@ No changes
 
 - Added support new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
 - Added methods to get the [raw](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.TryAcquireRawEnvironmentDepthCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) and [smoothed](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.TryAcquireSmoothedEnvironmentDepthCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) depth images independently.
+- Added a [depthSensorSupported](xref:UnityEngine.XR.ARSubsystems.XRCameraConfiguration.depthSensorSupported) flag to the `XRCameraConfiguration` to indicate whether or not a depth sensor is supported by the camera configuration.
 
 ### Fixed
 
@@ -223,7 +247,7 @@ No changes
 ### Added
 
 - The `ARCameraManager` now invokes `XRCameraSubsystem.OnBeforeBackgroundRender` immediately before rendering the camera background.
-- Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the [migration guide](xref:arfoundation-migration-guide-3#xr-plug-in-management) explaining how to use it.
+- Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the [migration guide](xref:arfoundation-migration-guide-4-x#xr-plug-in-management) explaining how to use it.
 
 ### Changed
 
@@ -261,7 +285,7 @@ No changes
 
 ### Changed
 
-- See the [Migration Guide](xref:arfoundation-migration-guide-3).
+- See the [Migration Guide](xref:arfoundation-migration-guide-4-x).
 - AR Foundation now relies on [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html) to initialize subsystems. If your project's configuration does not enable an XR Loader appropriate for your target platforms then the underlying subsystems AR Foundation depends on will not be available. Previously AR Foundation would attempt to initialize subsystems itself in the absence of a valid XR Management configuration.
 
 ## [3.1.3] - 2020-04-13
@@ -269,7 +293,7 @@ No changes
 ### Fixed
 
 - The documentation for the `ARFace` scripting API for accessing left eye, right eye, and fixation point incorrectly referred to a nullable value type, when in fact the returned type is a [Transform](xref:UnityEngine.Transform). This has been fixed.
-- Eliminating shader compiler errors that started with Unity 2020.1 and that originate from the ARKit package.
+- Eliminating shader compiler errors that started with Unity 2020.1 and that originate from the Apple ARKit package.
 
 ## [3.1.0-preview.8] - 2020-03-12
 
@@ -360,7 +384,7 @@ No changes
 
 ### Changed
 
-- Some properties on `ARPointCloud` changed from `NativeArray`s to nullable `NativeSlice`s. See the [migration guide](xref:arfoundation-migration-guide-2#point-clouds) for more details.
+- Some properties on `ARPointCloud` changed from `NativeArray`s to nullable `NativeSlice`s. See the [migration guide](xref:arfoundation-migration-guide-3-x#point-clouds) for more details.
 - The `ARFaceManager.supported` property has been removed. If face tracking is not supported, the manager's subsystem will be null. This was done for consistency as no other manager has this property. If a manager's subsystem is null after enabling the manager, that generally means the subsystem is not supported.
 
 ### Fixed
@@ -444,7 +468,7 @@ No changes
 
 ### Changed
 
-- See the [Migration Guide](xref:arfoundation-migration-guide-1).
+- See the [Migration Guide](xref:arfoundation-migration-guide-2-x).
 
 ### Fixed
 
@@ -588,4 +612,8 @@ No changes
 - Removed `ARPlaceOnPlane`, `ARMakeAppearOnPlane`, `ARPlaneMeshVisualizer`, and `ARPointCloudParticleVisualizer` as these were deemed sample content.
 - Removed setup wizard.
 - Renamed `ARRig` to `ARSessionOrigin`.
+
+
+<hr>
+\* *Apple and ARKit are trademarks of Apple Inc., registered in the U.S. and other countries and regions.*
 
