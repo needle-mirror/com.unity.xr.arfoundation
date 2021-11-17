@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -15,14 +17,14 @@ namespace UnityEngine.XR.ARFoundation
     {
 
         [SerializeField]
-        [Tooltip("A debug prefab that visualizes the position of the ARSessionOrigin.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        [Tooltip("A debug prefab that visualizes the position of the XROrigin.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
         GameObject m_OriginAxisPrefab;
 
         /// <summary>
-        /// Specifies a debug prefab that will be attached to the <see cref="ARSessionOrigin"/>.
+        /// Specifies a debug prefab that will be attached to the <see cref="XROrigin"/>.
         /// </summary>
         /// <value>
-        /// A debug prefab that will be attached to the session origin.
+        /// A debug prefab that will be attached to the XR origin.
         /// </value>
         public GameObject originAxisPrefab
         {
@@ -78,20 +80,20 @@ namespace UnityEngine.XR.ARFoundation
             set => m_DisplayMenuButton = value;
         }
 
-        [SerializeField]
-        [Tooltip("The button that displays the session origin prefab.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
-        Button m_ShowSessionOriginButton;
+        [SerializeField, FormerlySerializedAs("m_ShowSessionOriginButton")]
+        [Tooltip("The button that displays the XR origin prefab.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        Button m_ShowOriginButton;
 
         /// <summary>
-        /// The button that displays the session origin prefab.
+        /// The button that displays the XR origin prefab.
         /// </summary>
         /// <value>
-        /// A button that will be used to display the session origin prefab.
+        /// A button that will be used to display the XR origin prefab.
         /// </value>
-        public Button showSessionOriginButton
+        public Button showOriginButton
         {
-            get => m_ShowSessionOriginButton;
-            set => m_ShowSessionOriginButton = value;
+            get => m_ShowOriginButton;
+            set => m_ShowOriginButton = value;
         }
 
         [SerializeField]
@@ -189,7 +191,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 return false;
             }
-            else if(m_ShowSessionOriginButton == null || m_ShowPlanesButton == null || m_ShowAnchorsButton == null ||
+            else if(m_ShowOriginButton == null || m_ShowPlanesButton == null || m_ShowAnchorsButton == null ||
                 m_ShowPointCloudsButton == null || m_FpsLabel == null || m_TrackingModeLabel == null || m_OriginAxisPrefab == null || m_LineRendererPrefab == null)
             {
                 Debug.LogWarning("The menu has not been fully configured so some functionality will be disabled. For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu");
@@ -206,9 +208,9 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDisable()
         {
-            if(m_SessionOrigin)
+            if(m_Origin)
             {
-                var planeManager = m_SessionOrigin.GetComponent<ARPlaneManager>();
+                var planeManager = m_Origin.GetComponent<ARPlaneManager>();
                 if(planeManager)
                 {
                     planeManager.planesChanged -= OnPlaneChanged;
@@ -257,20 +259,20 @@ namespace UnityEngine.XR.ARFoundation
             }
             m_Session = sessions[0];
 
-            var origins = FindObjectsOfType<ARSessionOrigin>();
+            var origins = FindObjectsOfType<XROrigin>();
             if(origins.Length == 0)
             {
-                Debug.LogError($"Failed to find ARSessionOrigin in current scene. As a result, this component will be disabled.");
+                Debug.LogError($"Failed to find XROrigin in current scene. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }
-            m_SessionOrigin = origins[0];
+            m_Origin = origins[0];
 
-            m_CameraAR = m_SessionOrigin.camera;
+            m_CameraAR = m_Origin.Camera;
 #if !UNITY_IOS && !UNITY_ANDROID
             if(m_CameraAR == null)
             {
-                Debug.LogError($"Failed to find camera attached to ARSessionOrigin. As a result, this component will be disabled.");
+                Debug.LogError($"Failed to find camera attached to XROrigin. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }
@@ -292,13 +294,13 @@ namespace UnityEngine.XR.ARFoundation
 
         void ConfigureButtons()
         {
-            if(m_ShowSessionOriginButton && m_OriginAxisPrefab)
+            if(m_ShowOriginButton && m_OriginAxisPrefab)
             {
-                m_ShowSessionOriginButton.interactable = true;
-                m_ShowSessionOriginButton.onClick.AddListener(ShowSessionOrigin);
+                m_ShowOriginButton.interactable = true;
+                m_ShowOriginButton.onClick.AddListener(ShowOrigin);
             }
 
-            var planeManager = m_SessionOrigin.GetComponent<ARPlaneManager>();
+            var planeManager = m_Origin.GetComponent<ARPlaneManager>();
             if(m_ShowPlanesButton && m_LineRendererPrefab && planeManager)
             {
                 m_PlaneVisualizers = new GameObject("PlaneVisualizers");
@@ -323,22 +325,22 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void ShowSessionOrigin()
+        void ShowOrigin()
         {
             if(m_OriginAxis == null)
             {
-                m_OriginAxis = Instantiate(m_OriginAxisPrefab, m_SessionOrigin.transform);
-                m_ShowSessionOriginButton.GetComponentInChildren<Text>().text = "Hide Session Origin";
+                m_OriginAxis = Instantiate(m_OriginAxisPrefab, m_Origin.transform);
+                m_ShowOriginButton.GetComponentInChildren<Text>().text = "Hide XR Origin";
             }
             else if(m_OriginAxis.activeSelf)
             {
                m_OriginAxis.SetActive(false);
-               m_ShowSessionOriginButton.GetComponentInChildren<Text>().text = "Show Session Origin";
+               m_ShowOriginButton.GetComponentInChildren<Text>().text = "Show XR Origin";
             }
             else
             {
                m_OriginAxis.SetActive(true);
-               m_ShowSessionOriginButton.GetComponentInChildren<Text>().text = "Hide Session Origin";
+               m_ShowOriginButton.GetComponentInChildren<Text>().text = "Hide XR Origin";
             }
         }
 
@@ -456,7 +458,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         //Managers
-        ARSessionOrigin m_SessionOrigin;
+        XROrigin m_Origin;
 
         ARSession m_Session;
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -12,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_RaycastManager)]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARRaycastManager) + ".html")]
     public sealed class ARRaycastManager : ARTrackableManager<
         XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
@@ -53,7 +54,7 @@ namespace UnityEngine.XR.ARFoundation
                 throw new ArgumentNullException("hitResults");
 
             var nativeHits = m_RaycastViewportDelegate(screenPoint, trackableTypes, Allocator.Temp);
-            var originTransform = sessionOrigin.camera != null ? sessionOrigin.camera.transform : sessionOrigin.trackablesParent;
+            var originTransform = origin.Camera != null ? origin.Camera.transform : origin.TrackablesParent;
             return TransformAndDisposeNativeHitResults(nativeHits, hitResults, originTransform.position);
         }
 
@@ -77,7 +78,7 @@ namespace UnityEngine.XR.ARFoundation
             if (hitResults == null)
                 throw new ArgumentNullException(nameof(hitResults));
 
-            var sessionSpaceRay = sessionOrigin.trackablesParent.InverseTransformRay(ray);
+            var sessionSpaceRay = origin.TrackablesParent.InverseTransformRay(ray);
             var nativeHits = m_RaycastRayDelegate(sessionSpaceRay, trackableTypes, Allocator.Temp);
             return TransformAndDisposeNativeHitResults(nativeHits, hitResults, ray.origin);
         }
@@ -107,7 +108,7 @@ namespace UnityEngine.XR.ARFoundation
                 return CreateTrackableImmediate(sessionRelativeData);
             }
 
-            if (sessionOrigin.camera && subsystem.TryAddRaycast(ScreenPointToSessionSpaceRay(screenPoint), estimatedDistance, out sessionRelativeData))
+            if (origin.Camera && subsystem.TryAddRaycast(ScreenPointToSessionSpaceRay(screenPoint), estimatedDistance, out sessionRelativeData))
             {
                 return CreateTrackableImmediate(sessionRelativeData);
             }
@@ -187,8 +188,8 @@ namespace UnityEngine.XR.ARFoundation
 
         Ray ScreenPointToSessionSpaceRay(Vector2 screenPoint)
         {
-            var worldSpaceRay = sessionOrigin.camera.ScreenPointToRay(screenPoint);
-            return sessionOrigin.trackablesParent.InverseTransformRay(worldSpaceRay);
+            var worldSpaceRay = origin.Camera.ScreenPointToRay(screenPoint);
+            return origin.TrackablesParent.InverseTransformRay(worldSpaceRay);
         }
 
         NativeArray<XRRaycastHit> RaycastViewportAsRay(
@@ -196,7 +197,7 @@ namespace UnityEngine.XR.ARFoundation
             TrackableType trackableTypeMask,
             Allocator allocator)
         {
-            if (sessionOrigin.camera == null)
+            if (origin.Camera == null)
                 return new NativeArray<XRRaycastHit>(0, allocator);
 
             return m_RaycastRayDelegate(ScreenPointToSessionSpaceRay(screenPoint), trackableTypeMask, allocator);
@@ -284,7 +285,7 @@ namespace UnityEngine.XR.ARFoundation
                         }
                     }
 
-                    managedHits.Add(new ARRaycastHit(nativeHit, distanceInWorldSpace, sessionOrigin.trackablesParent, trackable));
+                    managedHits.Add(new ARRaycastHit(nativeHit, distanceInWorldSpace, origin.TrackablesParent, trackable));
                 }
 
                 managedHits.Sort(s_RaycastHitComparer);

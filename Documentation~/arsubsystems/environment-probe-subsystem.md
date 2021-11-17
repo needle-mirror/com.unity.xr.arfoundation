@@ -15,7 +15,7 @@ The following image illustrates the use of the environment texture from an envir
 
 Environment probes can be placed at a real-world location to capture environment texturing information. Each environment probe has a scale, orientation, position, and bounding volume size.
 
-The scale, orientation, and position properties define the environment probe's transformation relative to the AR session origin.
+The scale, orientation, and position properties define the environment probe's transformation relative to the XR origin.
 
 The bounding size defines the volume around the environment probe's position. An infinite bounding size indicates that the environment texture can be used for global lighting. A finite bounding size indicates that the environment texture captures the local lighting conditions in a specific area surrounding the probe.
 

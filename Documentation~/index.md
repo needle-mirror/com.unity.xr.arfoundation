@@ -100,7 +100,7 @@ Subsystems are implemented in other packages. To use AR Foundation, you must als
 | **Trackable** | A real-world feature, such as a planar surface, that the AR device tracks and/or detects. |
 | **Feature Point** | A specific point in a point cloud. An AR device uses the device’s camera and image analysis to track specific points in the world, and uses these points to build a map of its environment. These are usually high-frequency elements, such as a knot in a wood-grain surface.|
 | **Session** | An AR instance. |
-| **Session Space** | The coordinate system relative to the beginning of the AR session. For example, session space (0, 0, 0) refers to the position at which the AR session was created. An AR device typically reports trackables and tracking information relative to its session origin.|
+| **Session Space** | The coordinate system relative to the beginning of the AR session. For example, session space (0, 0, 0) refers to the position at which the AR session was created. An AR device typically reports trackables and tracking information relative to its XR origin.|
 
 # Using AR Foundation
 
@@ -120,7 +120,7 @@ A basic AR scene hierarchy looks like this:
 
 ![Scene graph](images/simple_scene_graph.png "Scene graph")
 
-To create these scenes automatically, right-click in the scene Hierarchy window, and select **XR** &gt; **AR Session** or **XR** &gt; **AR Session Origin** from the context menu.
+To create these scenes automatically, right-click in the scene Hierarchy window, and select **XR** &gt; **AR Session** or **XR** &gt; **XR Origin** from the context menu.
 
 ![Context menu](images/gameobject_context_menu.png "Context menu")
 
@@ -184,33 +184,21 @@ To determine the current state of the session (for example, whether the device i
 |`SessionInitialized`|An AR session is initializing (that is, starting up). This usually means AR is working, but hasn't gathered enough information about the environment.|
 |`SessionTracking`|An AR session is running and is tracking (that is, the device is able to determine its position and orientation in the world).|
 
-### AR Session Origin
+### XR Origin
 
-![AR session origin](images/ar-session-origin.png "AR Session Origin")
+![XR origin](images/ar-session-origin.png "XR Origin")
 
-The purpose of the `ARSessionOrigin` is to transform trackable features, such as planar surfaces and feature points, into their final position, orientation, and scale in the Unity scene. Because AR devices provide their data in "session space", which is an unscaled space relative to the beginning of the AR session, the `ARSessionOrigin` performs the appropriate transformation into Unity space.
+The purpose of the `XROrigin` is to transform trackable features, such as planar surfaces and feature points, into their final position, orientation, and scale in the Unity scene. Because AR devices provide their data in "session space", which is an unscaled space relative to the beginning of the AR session, the `XROrigin` performs the appropriate transformation into Unity space.
 
 This concept is similar to the difference between "model" or "local" space and world space when working with other Assets in Unity. For instance, if you import a house asset from a DCC tool, the door's position is relative to the modeler's origin. This is commonly called "model space" or "local space". When Unity instantiates it, it also has a world space that's relative to Unity's origin.
 
-Likewise, trackables that an AR device produces, such as planes, are provided in "session space", relative to the device's coordinate system. When instantiated in Unity as `GameObject`s, they also have a world space. In order to instantiate them in the correct place, AR Foundation needs to know where the session origin should be in the Unity scene.
+Likewise, trackables that an AR device produces, such as planes, are provided in "session space", relative to the device's coordinate system. When instantiated in Unity as `GameObject`s, they also have a world space. In order to instantiate them in the correct place, AR Foundation needs to know where the XR origin should be in the Unity scene.
 
-`ARSessionOrigin` also allows you to scale virtual content and apply an offset to the AR Camera. If you're scaling or offsetting the `ARSessionOrigin`, then its AR Camera should be a child of the `ARSessionOrigin`. Because the AR Camera is session-driven, this setup allows the AR Camera and detected trackables to move together.
+`XROrigin` also allows you to scale virtual content and apply an offset to the AR Camera. If you're scaling or offsetting the `XROrigin`, then its AR Camera should be a child of the `XROrigin`. Because the AR Camera is session-driven, this setup allows the AR Camera and detected trackables to move together.
 
 #### Scale
 
-To apply scale to the `ARSessionOrigin`, set its `transform`'s scale. This has the effect of scaling all the data coming from the device, including the AR Camera's position and any detected trackables. Larger values make AR content appear smaller. For example, a scale of 10 would make your content appear 10 times smaller, while 0.1 would make your content appear 10 times larger.
-
-### AR Pose Driver
-
-The `AR Pose Driver` drives the local position and orientation of the parent GameObject according to the device's tracking information.  The most common use case for this would be attaching the `ARPoseDriver` to the AR Camera to drive the camera's position and orientation in an AR scene.
-
-![AR Pose Driver](images/ar-pose-driver.png "AR Pose Driver")
-
-#### Legacy Input Helpers and the Tracked Pose Driver component
-
-The `ARPoseDriver` provides a similar functionality to the `TrackedPoseDriver` from the `com.unity.xr.legacyinputhelpers` package and was implemented to remove the dependency on that package. Projects are able to use either the `ARPoseDriver` component or the `TrackedPoseDriver` component to drive a GameObjects transform. It is not recommended to use both as the behaviour is undefined. `Use Relative Transform` option is unavailable for the `ARPoseDriver` because it introduces additional unnecessary transformations.
-
-![Tracked Pose Driver](images/tracked-pose-driver.png "Tracked Pose Driver")
+To apply scale to the `XROrigin`, set its `transform`'s scale. This has the effect of scaling all the data coming from the device, including the AR Camera's position and any detected trackables. Larger values make AR content appear smaller. For example, a scale of 10 would make your content appear 10 times smaller, while 0.1 would make your content appear 10 times larger.
 
 ### AR Camera manager
 
@@ -234,7 +222,7 @@ The `Custom Material` property is optional, and typically you don't need to set 
 
 If `Use Custom Material` is `true`, the `ARCameraBackground` uses the `Material` you specify for background rendering.
 
-If you have exactly one `ARSessionOrigin`, you only need to add the `ARCameraBackground` to that Camera. If you have multiple `ARSessionOrigin`s (for example, to selectively render different content at different scales), you should use separate Cameras for each `ARSessionOrigin` and a separate, single AR Camera for the `ARCameraBackground`.
+If you have exactly one `XROrigin`, you only need to add the `ARCameraBackground` to that Camera. If you have multiple `XROrigin`s (for example, to selectively render different content at different scales), you should use separate Cameras for each `XROrigin` and a separate, single AR Camera for the `ARCameraBackground`.
 
 #### Configuring ARCameraBackground with the Universal Render Pipeline (URP)
 

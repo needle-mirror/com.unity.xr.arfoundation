@@ -9,7 +9,7 @@ The main updates in this release include:
 
 **Added**
 
-- Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the ARSessionOrigin and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the [XROrigin](xref:Unity.XR.CoreUtils.XROrigin) and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
 - Added plane visualization to [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu). See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
 - Added support new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
 
@@ -21,6 +21,8 @@ The main updates in this release include:
 **Deprecated**
 
 - Deprecated the [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem%601). Use [SubsystemWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemWithProvider) base class instead with an implementation of [SubsystemDescriptorWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) and [SubsystemProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemProvider).
+- `ARSessionOrigin` is now deprecated. Use [XROrigin](xref:Unity.XR.CoreUtils.XROrigin) from the XR Core Utilities package instead.
+- `ARPoseDriver` is now deprecated. Use [TrackedPoseDriver](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.1/api/UnityEngine.InputSystem.XR.TrackedPoseDriver.html) from the Input System package instead.
 
 **Fixed**
 

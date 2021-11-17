@@ -2,7 +2,8 @@
   "name": "Unity.XR.ARFoundation.Editor.Tests",
     "references": [
         "Unity.XR.ARFoundation",
-        "Unity.Coding.Editor"
+        "Unity.Coding.Editor",
+        "Unity.XR.CoreUtils"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

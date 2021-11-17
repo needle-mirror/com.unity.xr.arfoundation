@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "5.0.0-pre.5",
+  "version": "5.0.0-pre.6",
   "unity": "2021.2",
   "description": "A collection of Subsystems as well as MonoBehaviours and C# utilities for working with the Subsystems. \n\nIncludes: \n▪ Definitions of Subsystems \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
@@ -16,17 +16,18 @@
     "subsystem"
   ],
   "dependencies": {
+    "com.unity.xr.core-utils": "2.0.0-pre.5",
     "com.unity.xr.management": "4.0.1",
-    "com.unity.modules.particlesystem": "1.0.0",
     "com.unity.ugui": "1.0.0",
+    "com.unity.modules.particlesystem": "1.0.0",
     "com.unity.modules.ui": "1.0.0"
   },
   "upmCi": {
-    "footprint": "383021b03afd1497701c6fb7535660f994d089b8"
+    "footprint": "1a6496f2cc9b00600b8d5d0cd39b1d082fda5e3e"
   },
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "a01ef23198cb249c5a70515fbcbf87dc5541f3d8"
+    "revision": "52e6e8dcfff00cddabaaba0e8eb1f6a58b86a432"
   }
 }

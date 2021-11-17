@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -11,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     /// to recognize and track 2D images in the physical environment.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImageManager)]
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARTrackedImageManager) + ".html")]
     public sealed class ARTrackedImageManager : ARTrackableManager<
         XRImageTrackingSubsystem,
@@ -227,7 +228,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="image">The tracked image being updated.</param>
         /// <param name="sessionRelativeData">New data associated with the tracked image. Spatial data is
-        /// relative to the <see cref="ARSessionOrigin"/>.</param>
+        /// relative to the <see cref="XROrigin"/>.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARTrackedImage image,
             XRTrackedImage sessionRelativeData)

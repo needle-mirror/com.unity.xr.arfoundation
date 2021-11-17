@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 using UnityEngine.Serialization;
 
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// Creates, updates, and removes <c>GameObject</c>s with <see cref="ARFace"/> components under the
-    /// <see cref="ARSessionOrigin"/>'s <see cref="ARSessionOrigin.trackablesParent"/>.
+    /// <see cref="XROrigin"/>'s <see cref="XROrigin.TrackablesParent"/>.
     /// </summary>
     /// <remarks>
     /// When enabled, this component subscribes to <see cref="ARFaceManager.facesChanged"/> event to update face data.
     /// If this component is disabled, and there are no other subscribers to those events,
     /// face detection will be disabled on the device.
     /// </remarks>
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_FaceManager)]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARFaceManager) + ".html")]

@@ -5,11 +5,11 @@ uid: arfoundation-trackable-managers
 
 In AR Foundation, a "trackable" is anything that can be detected and tracked in the real world. Planes, point clouds, anchors, environment probes, faces, images, and 3D objects are all examples of trackables.
 
-Each trackable has a trackable manager. All the trackable managers must be on the same `GameObject` as the AR Session Origin. This is because the session origin defines the transform to which all the detected trackables are relative. The trackable managers use the session origin to place the detected trackables in the correct place in the Unity scene graph.
+Each trackable has a trackable manager. All the trackable managers must be on the same `GameObject` as the XR Origin. This is because the XR origin defines the transform to which all the detected trackables are relative. The trackable managers use the XR origin to place the detected trackables in the correct place in the Unity scene graph.
 
-This image shows the session origin with all the trackable managers:
+This image shows the XR origin with all the trackable managers:
 
-![AR session origin with trackable managers](images/ar-session-origin-with-managers.png "AR session origin with trackable managers")
+![XR origin with trackable managers](images/ar-session-origin-with-managers.png "XR  origin with trackable managers")
 
 This table summarizes the trackable managers and their trackables.
 

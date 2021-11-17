@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
+using Unity.XR.CoreUtils;
 using LegacyMeshId = UnityEngine.XR.MeshId;
 
 namespace UnityEngine.XR.ARFoundation
@@ -176,17 +177,17 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
-        internal ARSessionOrigin GetSessionOrigin() => GetComponentInParentIncludingInactive<ARSessionOrigin>();
+        internal XROrigin GetXROrigin() => GetComponentInParentIncludingInactive<XROrigin>();
 
 #if UNITY_EDITOR
         void Reset()
         {
-            if (GetSessionOrigin() != null)
+            if (GetXROrigin() != null)
                 transform.localScale = Vector3.one * 10f;
         }
 
         // Invoked by tests
-        internal bool IsValid() => GetSessionOrigin() != null;
+        internal bool IsValid() => GetXROrigin() != null;
 
         void OnValidate()
         {
@@ -194,7 +195,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 UnityEditor.EditorUtility.DisplayDialog(
                     "Hierarchy not allowed",
-                    $"An {nameof(ARMeshManager)} must be a child of an {nameof(ARSessionOrigin)}.",
+                    $"An {nameof(ARMeshManager)} must be a child of an {nameof(XROrigin)}.",
                     "Remove Component");
                 UnityEditor.EditorApplication.delayCall += ()=>
                 {
@@ -212,10 +213,10 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnEnable()
         {
-            if (GetSessionOrigin() == null)
+            if (GetXROrigin() == null)
             {
                 enabled = false;
-                throw new InvalidOperationException($"An {nameof(ARMeshManager)} must be a child of an {nameof(ARSessionOrigin)}.");
+                throw new InvalidOperationException($"An {nameof(ARMeshManager)} must be a child of an {nameof(XROrigin)}.");
             }
 
             if (m_Subsystem == null)
@@ -457,10 +458,10 @@ namespace UnityEngine.XR.ARFoundation
             if (m_Meshes.TryGetValue(trackableId, out MeshFilter meshFilter) && (meshFilter != null))
                 return meshFilter;
 
-            var sessionOrigin = GetSessionOrigin();
-            meshFilter = (sessionOrigin == null) ?
+            var origin = GetXROrigin();
+            meshFilter = (origin == null) ?
                 Instantiate(m_MeshPrefab) :
-                Instantiate(m_MeshPrefab, sessionOrigin.trackablesParent);
+                Instantiate(m_MeshPrefab, origin.TrackablesParent);
 
             meshFilter.gameObject.name = $"Mesh {trackableId.ToString()}";
 

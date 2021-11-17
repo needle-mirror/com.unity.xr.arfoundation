@@ -606,7 +606,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Show Session Origin
+  m_Text: Show XR Origin
 --- !u!1 &8591204919846095592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,7 +1054,7 @@ MonoBehaviour:
   m_LineRendererPrefab: {fileID: 5509465693020577672, guid: 6a8d857d8706540509e4fcd02ea92f74, type: 3}
   m_ButtonsMenu: {fileID: 4196859650306070558}
   m_DisplayMenuButton: {fileID: 8591204919897443523}
-  m_ShowSessionOriginButton: {fileID: 8591204920195328202}
+  m_ShowOriginButton: {fileID: 8591204920195328202}
   m_ShowPlanesButton: {fileID: 8591204919971942163}
   m_ShowAnchorsButton: {fileID: 8591204919394418375}
   m_ShowPointCloudsButton: {fileID: 8591204919846095596}
@@ -1352,7 +1352,7 @@ GameObject:
   - component: {fileID: 8591204920195328200}
   - component: {fileID: 8591204920195328202}
   m_Layer: 5
-  m_Name: ShowSessionOrigin
+  m_Name: ShowOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

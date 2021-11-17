@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -13,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_PlaneManager)]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPlaneManager) + ".html")]
     public sealed class ARPlaneManager : ARTrackableManager<
         XRPlaneSubsystem,

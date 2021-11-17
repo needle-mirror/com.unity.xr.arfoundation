@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -10,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_ParticipantManager)]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARParticipantManager) + ".html")]
     public sealed class ARParticipantManager : ARTrackableManager<
         XRParticipantSubsystem,

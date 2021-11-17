@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 using UnityEngine.SubsystemsImplementation;
+
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -20,7 +22,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <typeparam name="TProvider">The [provider](xref:UnityEngine.SubsystemsImplementation.SubsystemProvider) associated with the <typeparamref name="TSubsystem"/>.</typeparam>
     /// <typeparam name="TSessionRelativeData">A concrete struct used to hold data provided by the Subsystem.</typeparam>
     /// <typeparam name="TTrackable">The type of component that this component will manage (that is, create, update, and destroy).</typeparam>
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
     public abstract class ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>
         : SubsystemLifecycleManager<TSubsystem, TSubsystemDescriptor, TProvider>
@@ -56,9 +58,16 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The <c>ARSessionOrigin</c> which will be used to instantiate detected trackables.
+        /// The <c>XROrigin</c> which will be used to instantiate detected trackables.
         /// </summary>
-        protected ARSessionOrigin sessionOrigin { get; private set; }
+        protected XROrigin origin { get; private set; }
+
+        /// <summary>
+        /// (Deprecated) The <c>XROrigin</c> which will be used to instantiate detected trackables.
+        /// </summary>
+
+        [Obsolete("'sessionOrigin' has been obsoleted; use 'origin' instead. (UnityUpgradable) -> origin", false)]
+        protected XROrigin sessionOrigin { get; private set; }
 
         /// <summary>
         /// The name prefix that should be used when instantiating new <c>GameObject</c>s.
@@ -86,7 +95,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected virtual void Awake()
         {
-            sessionOrigin = GetComponent<ARSessionOrigin>();
+            origin = GetComponent<XROrigin>();
         }
 
         /// <inheritdoc />
@@ -94,14 +103,14 @@ namespace UnityEngine.XR.ARFoundation
         {
             base.OnEnable();
             instance = this;
-            sessionOrigin.trackablesParentTransformChanged += OnTrackablesParentTransformChanged;
+            origin.TrackablesParentTransformChanged += OnTrackablesParentTransformChanged;
         }
 
         /// <inheritdoc />
         protected override void OnDisable()
         {
             base.OnDisable();
-            sessionOrigin.trackablesParentTransformChanged -= OnTrackablesParentTransformChanged;
+            origin.TrackablesParentTransformChanged -= OnTrackablesParentTransformChanged;
         }
 
         /// <summary>
@@ -139,8 +148,8 @@ namespace UnityEngine.XR.ARFoundation
                 return false;
             }
 
-            // Finally, we can only add it if we have a session origin.
-            return sessionOrigin && sessionOrigin.trackablesParent;
+            // Finally, we can only add it if we have a XR origin.
+            return origin && origin.TrackablesParent;
         }
 
         void OnTrackablesParentTransformChanged(ARTrackablesParentTransformChangedEventArgs eventArgs)
@@ -148,9 +157,9 @@ namespace UnityEngine.XR.ARFoundation
             foreach (var trackable in trackables)
             {
                 var transform = trackable.transform;
-                if (transform.parent != eventArgs.trackablesParent)
+                if (transform.parent != eventArgs.TrackablesParent)
                 {
-                    var desiredPose = eventArgs.trackablesParent.TransformPose(trackable.sessionRelativePose);
+                    var desiredPose = eventArgs.TrackablesParent.TransformPose(trackable.sessionRelativePose);
                     transform.SetPositionAndRotation(desiredPose.position, desiredPose.rotation);
                 }
             }
@@ -271,7 +280,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </para>
         /// </remarks>
         /// <param name="sessionRelativeData">The data associated with the trackable. All spatial data should
-        /// be relative to the <see cref="ARSessionOrigin"/>.</param>
+        /// be relative to the <see cref="XROrigin"/>.</param>
         /// <returns>A new <c>TTrackable</c></returns>
         protected TTrackable CreateTrackableImmediate(TSessionRelativeData sessionRelativeData)
         {
@@ -343,14 +352,14 @@ namespace UnityEngine.XR.ARFoundation
             {
                 var gameObject = new GameObject();
                 gameObject.SetActive(false);
-                gameObject.transform.parent = sessionOrigin.trackablesParent;
+                gameObject.transform.parent = origin.TrackablesParent;
                 return (gameObject, true);
             }
             else
             {
                 var active = prefab.activeSelf;
                 prefab.SetActive(false);
-                var gameObject = Instantiate(prefab, sessionOrigin.trackablesParent);
+                var gameObject = Instantiate(prefab, origin.TrackablesParent);
                 prefab.SetActive(active);
                 return (gameObject, active);
             }
@@ -390,7 +399,7 @@ namespace UnityEngine.XR.ARFoundation
         void SetSessionRelativeData(TTrackable trackable, TSessionRelativeData data)
         {
             trackable.SetSessionRelativeData(data);
-            var worldSpacePose = sessionOrigin.trackablesParent.TransformPose(data.pose);
+            var worldSpacePose = origin.TrackablesParent.TransformPose(data.pose);
             trackable.transform.SetPositionAndRotation(worldSpacePose.position, worldSpacePose.rotation);
         }
 

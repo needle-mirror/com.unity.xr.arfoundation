@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -19,7 +20,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <seealso cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}"/>
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARAnchorManager) + ".html")]
     public sealed class ARAnchorManager : ARTrackableManager<
         XRAnchorSubsystem,
@@ -76,7 +77,7 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem == null)
                 throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");
 
-            var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
+            var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
 
             // Add the anchor to the XRAnchorSubsystem
             if (subsystem.TryAddAnchor(sessionRelativePose, out var sessionRelativeData))
@@ -93,7 +94,7 @@ namespace UnityEngine.XR.ARFoundation
                 return false;
 
             var t = anchor.transform;
-            var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(new Pose(t.position, t.rotation));
+            var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(new Pose(t.position, t.rotation));
 
             // Add the anchor to the XRAnchorSubsystem
             if (subsystem.TryAddAnchor(sessionRelativePose, out var sessionRelativeData))
@@ -122,7 +123,7 @@ namespace UnityEngine.XR.ARFoundation
             if (plane == null)
                 throw new ArgumentNullException(nameof(plane));
 
-            var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
+            var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
             if (subsystem.TryAttachAnchor(plane.trackableId, sessionRelativePose, out var sessionRelativeData))
             {
                 return CreateTrackableImmediate(sessionRelativeData);

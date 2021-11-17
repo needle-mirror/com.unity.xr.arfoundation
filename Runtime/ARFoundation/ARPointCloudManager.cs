@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
+
+using ReadOnly = Unity.Collections.ReadOnlyAttribute;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -11,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     /// to recognize and track depth data in the physical environment.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloudManager)]
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPointCloudManager) + ".html")]
     public class ARPointCloudManager : ARTrackableManager<
@@ -84,7 +87,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="pointCloud">The <see cref="ARPointCloud"/> being updated.</param>
         /// <param name="sessionRelativeData">The new data associated with the point cloud.
-        /// All spatial data is relative to the <see cref="ARSessionOrigin"/>.</param>
+        /// All spatial data is relative to the <see cref="XROrigin"/>.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARPointCloud pointCloud,
             XRPointCloud sessionRelativeData)

@@ -46,7 +46,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="screenPoint">A point on the screen, in normalized screen coorindates (0, 0)..(1, 1).</param>
         /// <param name="estimatedDistance">The estimated distance to the raycast target. For example, an average
         /// human height might be used to estimate the distance to the floor.</param>
-        /// <param name="raycast">The newly added raycast. All spatial data is relative to the session origin.</param>
+        /// <param name="raycast">The newly added raycast. All spatial data is relative to the XR origin.</param>
         /// <returns>`True` if the raycast was successfully added, or `false` otherwise.</returns>
         public bool TryAddRaycast(Vector2 screenPoint, float estimatedDistance, out XRRaycast raycast) => provider.TryAddRaycast(screenPoint, estimatedDistance, out raycast);
 
@@ -55,10 +55,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// this subsystem is stopped or destroyed, or the the raycast is removed with
         /// <see cref="RemoveRaycast(TrackableId)"/>.
         /// </summary>
-        /// <param name="ray">A [ray](https://docs.unity3d.com/ScriptReference/Ray.html) relative to the session origin defining the raycast.</param>
+        /// <param name="ray">A [ray](https://docs.unity3d.com/ScriptReference/Ray.html) relative to the XR origin defining the raycast.</param>
         /// <param name="estimatedDistance">The estimated distance to the raycast target. For example, an average
         /// human height might be used to estimate the distance to the floor.</param>
-        /// <param name="raycast">The newly added raycast. All spatial data is relative to the session origin.</param>
+        /// <param name="raycast">The newly added raycast. All spatial data is relative to the XR origin.</param>
         /// <returns>`True` if the raycast was successfully added, or `false` otherwise.</returns>
         public bool TryAddRaycast(Ray ray, float estimatedDistance, out XRRaycast raycast) => provider.TryAddRaycast(ray, estimatedDistance, out raycast);
 
@@ -125,7 +125,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="screenPoint">A position on the screen in normalized screen coordinates (0, 0)..(1, 1).</param>
             /// <param name="estimatedDistance">The estimated distance to the raycast target.</param>
-            /// <param name="raycast">The newly added raycast. All spatial data should be reported relative to the session origin.</param>
+            /// <param name="raycast">The newly added raycast. All spatial data should be reported relative to the XR origin.</param>
             /// <returns>`True` if the raycast was added; otherwise `false`.</returns>
             public virtual bool TryAddRaycast(Vector2 screenPoint, float estimatedDistance, out XRRaycast raycast)
             {
@@ -140,7 +140,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="ray">A ray in session space defining the raycast.</param>
             /// <param name="estimatedDistance">The estimated distance to the raycast target.</param>
-            /// <param name="raycast">The newly added raycast. All spatial data should be reported relative to the session origin.</param>
+            /// <param name="raycast">The newly added raycast. All spatial data should be reported relative to the XR origin.</param>
             /// <returns>`True` if the raycast was added; otherwise `false`.</returns>
             public virtual bool TryAddRaycast(Ray ray, float estimatedDistance, out XRRaycast raycast)
             {

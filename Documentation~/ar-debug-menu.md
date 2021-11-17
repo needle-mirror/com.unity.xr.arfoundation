@@ -4,10 +4,10 @@ uid: arfoundation-debug-menu
 
 # AR Foundation Debug Menu
 
-The AR Foundation Debug Menu is a menu used to surface tracking information and visualize trackables. Menu functionality can be attached to any scene with an `ARSession`, `ARSessionOrigin`, and `Camera` using the `ARDebugMenu` script.
+The AR Foundation Debug Menu is a menu used to surface tracking information and visualize trackables. Menu functionality can be attached to any scene with an `ARSession`, `XROrigin`, and `Camera` using the `ARDebugMenu` script.
 
 Currently, the menu provides information about the following:
-- AR Session Origin
+- XR Origin
 - FPS
 - Tracking Mode
 - Planes

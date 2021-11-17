@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -10,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedObjectManager)]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ARSessionOrigin))]
+    [RequireComponent(typeof(XROrigin))]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARTrackedObjectManager) + ".html")]
     public sealed class ARTrackedObjectManager : ARTrackableManager<
         XRObjectTrackingSubsystem,
@@ -97,7 +98,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="trackedObject">The <see cref="ARTrackedObject"/> being updated.</param>
         /// <param name="sessionRelativeData">New data associated with <paramref name="trackedObject"/>.
-        /// All spatial data is relative to the <see cref="ARSessionOrigin"/>.</param>
+        /// All spatial data is relative to the <see cref="XROrigin"/>.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARTrackedObject trackedObject,
             XRTrackedObject sessionRelativeData)

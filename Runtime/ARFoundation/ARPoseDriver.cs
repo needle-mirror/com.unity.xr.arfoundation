@@ -10,6 +10,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// The ARPoseDriver component applies the current Pose value of an AR device to the transform of the GameObject.
     /// </summary>
+    [Obsolete("ARPoseDriver is now deprecated, please use the InputSystem TrackedPoseDriver component instead.")]
     [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPoseDriver) + ".html")]
     public class ARPoseDriver : MonoBehaviour
     {

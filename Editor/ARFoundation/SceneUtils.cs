@@ -20,31 +20,6 @@ namespace UnityEditor.XR.ARFoundation
 
         static readonly string k_DebugMenuPrefab = "Packages/com.unity.xr.arfoundation/Prefabs/DebugMenu.prefab";
 
-        [MenuItem("GameObject/XR/AR Session Origin", false, 10)]
-        static void CreateARSessionOrigin()
-        {
-            var originGo = ObjectFactory.CreateGameObject("AR Session Origin", typeof(ARSessionOrigin));
-            var cameraGo = ObjectFactory.CreateGameObject("AR Camera",
-                typeof(Camera),
-                typeof(ARPoseDriver),
-                typeof(ARCameraManager),
-                typeof(ARCameraBackground));
-
-            Undo.SetTransformParent(cameraGo.transform, originGo.transform, "Parent camera to session origin");
-
-            var camera = cameraGo.GetComponent<Camera>();
-            // Enforce local transform as identity for new ARSessionOrigins
-            camera.transform.localPosition = Vector3.zero;
-            camera.transform.localRotation = Quaternion.identity;
-            camera.clearFlags = CameraClearFlags.Color;
-            camera.backgroundColor = Color.black;
-            camera.nearClipPlane = 0.1f;
-            camera.farClipPlane = 20f;
-
-            var origin = originGo.GetComponent<ARSessionOrigin>();
-            origin.camera = camera;
-        }
-
         [MenuItem("GameObject/XR/AR Session", false, 10)]
         static void CreateARSession()
         {

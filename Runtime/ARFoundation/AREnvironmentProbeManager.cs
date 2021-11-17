@@ -189,7 +189,7 @@ namespace UnityEngine.XR.ARFoundation
             if (!descriptor.supportsManualPlacement)
                 throw new NotSupportedException("Manual environment probe placement is not supported by this subsystem.");
 
-            var sessionRelativePose = sessionOrigin.trackablesParent.InverseTransformPose(pose);
+            var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
             if (subsystem.TryAddEnvironmentProbe(sessionRelativePose, scale, size, out var sessionRelativeData))
             {
                 var probe = CreateTrackableImmediate(sessionRelativeData);
@@ -213,13 +213,13 @@ namespace UnityEngine.XR.ARFoundation
                 throw new NotSupportedException("Manual environment probe placement is not supported by this subsystem.");
 
             var probeTransform = probe.transform;
-            var trackablesParent = sessionOrigin.trackablesParent;
+            var trackablesParent = origin.TrackablesParent;
             var poseInSessionSpace = trackablesParent.InverseTransformPose(new Pose(probeTransform.position, probeTransform.rotation));
 
             var worldToLocalSession = trackablesParent.worldToLocalMatrix;
             var localToWorldProbe = probeTransform.localToWorldMatrix;
 
-            // We want to calculate the "local-to-parent" of the probe if the session origin were its parent.
+            // We want to calculate the "local-to-parent" of the probe if the XR origin were its parent.
             //     LTW_session * LTP_probe = LTW_probe
             // =>  LTP_probe = inverse(LTW_session) * LTW_probe
             var localToParentProbe = worldToLocalSession * localToWorldProbe;

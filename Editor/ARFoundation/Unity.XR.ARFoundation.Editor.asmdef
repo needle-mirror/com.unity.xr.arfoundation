@@ -5,7 +5,8 @@
         "Unity.XR.ARSubsystems",
         "UnityEngine.SpatialTracking",
         "Unity.XR.Management",
-        "Unity.XR.Management.Editor"
+        "Unity.XR.Management.Editor",
+        "Unity.XR.CoreUtils"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [

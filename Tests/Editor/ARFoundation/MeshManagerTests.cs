@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using UnityEngine.XR.ARFoundation;
+using Unity.XR.CoreUtils;
 
 namespace UnityEditor.XR.ARFoundation
 {
@@ -10,7 +11,7 @@ namespace UnityEditor.XR.ARFoundation
         public void CanBeUsedInPrefab()
         {
             var arSessionGameObject =
-                ObjectFactory.CreateGameObject("AR Session Origin", typeof(ARSessionOrigin));
+                ObjectFactory.CreateGameObject("XR Origin", typeof(XROrigin));
             var arMeshManagerGameObject = ObjectFactory.CreateGameObject("Meshing");
             arMeshManagerGameObject.transform.SetParent(arSessionGameObject.transform);
             arMeshManagerGameObject.AddComponent<ARMeshManager>();

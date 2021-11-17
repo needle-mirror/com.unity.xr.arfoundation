@@ -1,6 +1,7 @@
 using System;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 
 using Object = UnityEngine.Object;
 
@@ -103,7 +104,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (AREnvironmentProbeManager.instance is AREnvironmentProbeManager manager)
             {
-                return manager.GetComponent<ARSessionOrigin>().trackablesParent;
+                return manager.GetComponent<XROrigin>().TrackablesParent;
             }
 
             return null;
@@ -122,7 +123,7 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     // If the probe has a parent (i.e., it is not at the root), then we need to compute
                     // its localScale such that its final world-space scale will match what it would be
-                    // if it were under the ARSessionOrigin.
+                    // if it were under the XROrigin.
                     var localToParent = transform.parent.worldToLocalMatrix * desiredLocalToWorld;
                     transform.localScale = localToParent.lossyScale;
                 }

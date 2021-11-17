@@ -5,7 +5,8 @@
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.XR.ARSubsystems",
         "Unity.XR.Management",
-        "UnityEngine.SpatialTracking"
+        "UnityEngine.SpatialTracking",
+        "Unity.XR.CoreUtils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
