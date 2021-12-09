@@ -118,11 +118,18 @@ namespace UnityEngine.XR.ARFoundation
 
         internal void UpdateEyes()
         {
+            Transform CreateGameObject(string nameOfNewGameObject)
+            {
+                var newTransform = new GameObject(nameOfNewGameObject).transform;
+                newTransform.SetParent(transform, worldPositionStays: false);
+                return newTransform;
+            }
+
             if (leftEye == null && rightEye == null && fixationPoint == null)
             {
-                leftEye = Instantiate(new GameObject(), transform).transform;
-                rightEye = Instantiate(new GameObject(), transform).transform;
-                fixationPoint = Instantiate(new GameObject(), transform).transform;
+                leftEye = CreateGameObject("Left eye");
+                rightEye = CreateGameObject("Right eye");
+                fixationPoint = CreateGameObject("Fixation point");
             }
 
             UpdateTransformFromPose(leftEye, sessionRelativeData.leftEyePose);

@@ -264,7 +264,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void Update()
         {
-            if (m_Subsystem != null)
+            if (m_Subsystem != null && m_Subsystem.running)
             {
                 if (transform.hasChanged)
                     SetBoundingVolume();
@@ -442,7 +442,11 @@ namespace UnityEngine.XR.ARFoundation
 #endif
         }
 
-        void OnDisable() => m_Subsystem?.Stop();
+        void OnDisable()
+        {
+            if (m_Subsystem != null && m_Subsystem.running)
+                m_Subsystem.Stop();
+        }
 
         void OnDestroy() => m_Subsystem = null;
 
