@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImageManager)]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARTrackedImageManager) + ".html")]
+    [HelpURL(typeof(ARTrackedImageManager))]
     public sealed class ARTrackedImageManager : ARTrackableManager<
         XRImageTrackingSubsystem,
         XRImageTrackingSubsystemDescriptor,

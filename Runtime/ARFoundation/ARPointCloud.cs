@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloud)]
     [DisallowMultipleComponent]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPointCloud) + ".html")]
+    [HelpURL(typeof(ARPointCloud))]
     public class ARPointCloud : ARTrackable<XRPointCloud, ARPointCloud>
     {
         /// <summary>

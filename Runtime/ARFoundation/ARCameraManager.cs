@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARCameraManager) + ".html")]
+    [HelpURL(typeof(ARCameraManager))]
     public sealed class ARCameraManager :
         SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>,
         ISerializationCallbackReceiver

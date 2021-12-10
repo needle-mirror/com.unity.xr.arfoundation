@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_RaycastManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARRaycastManager) + ".html")]
+    [HelpURL(typeof(ARRaycastManager))]
     public sealed class ARRaycastManager : ARTrackableManager<
         XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
         XRRaycastSubsystem.Provider,

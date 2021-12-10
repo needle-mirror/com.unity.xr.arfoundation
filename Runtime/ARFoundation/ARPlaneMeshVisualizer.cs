@@ -23,7 +23,7 @@ namespace UnityEngine.XR.ARFoundation
     /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
     /// </remarks>
     [RequireComponent(typeof(ARPlane))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPlaneMeshVisualizer) + ".html")]
+    [HelpURL(typeof(ARPlaneMeshVisualizer))]
     public sealed class ARPlaneMeshVisualizer : MonoBehaviour
     {
         /// <summary>

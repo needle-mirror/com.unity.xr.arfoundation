@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(ReflectionProbe))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbe)]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(AREnvironmentProbe) + ".html")]
+    [HelpURL(typeof(AREnvironmentProbe))]
     public class AREnvironmentProbe : ARTrackable<XREnvironmentProbe, AREnvironmentProbe>
     {
         /// <summary>

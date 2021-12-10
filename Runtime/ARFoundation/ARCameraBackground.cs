@@ -40,7 +40,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(ARCameraManager))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARCameraBackground) + ".html")]
+    [HelpURL(typeof(ARCameraBackground))]
     public class ARCameraBackground : MonoBehaviour
     {
         /// <summary>

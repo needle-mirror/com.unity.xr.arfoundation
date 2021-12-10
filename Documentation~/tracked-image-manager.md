@@ -36,7 +36,7 @@ RuntimeReferenceImageLibrary runtimeLibrary = trackedImageManager.CreateRuntimeL
 
 ## Using reference image libraries with asset bundles
 
-Prior to AR Foundation 4.2, reference image libraries had to be built into the Player; that is, the `XRReferenceImageLibrary` served only as a means to look up data that was expected to be packaged in the app. This meant that you could not, for example, download a novel reference image library to an already released app. As of AR Foundation 4.2, platform-specifc data is attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:UnityEngine.AssetBundle). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
+Prior to AR Foundation 4.2, reference image libraries had to be built into the Player; that is, the `XRReferenceImageLibrary` served only as a means to look up data that was expected to be packaged in the app. This meant that you could not, for example, download a novel reference image library to an already released app. As of AR Foundation 4.2, platform-specifc data is attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:AssetBundlesIntro). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
 
 ## Responding to detected images
 

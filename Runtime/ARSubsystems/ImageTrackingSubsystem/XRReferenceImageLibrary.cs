@@ -20,7 +20,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// If you need to mutate the library at runtime, see <see cref="MutableRuntimeReferenceImageLibrary"/>.
     /// </remarks>
     [CreateAssetMenu(fileName="ReferenceImageLibrary", menuName="XR/Reference Image Library", order=1001)]
-    [HelpURL(HelpUrls.Manual + "image-tracking.html")]
+    [HelpURL("arsubsystems/image-tracking")]
     public class XRReferenceImageLibrary
         : ScriptableObject
         , IReferenceImageLibrary

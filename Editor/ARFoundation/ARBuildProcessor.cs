@@ -17,15 +17,16 @@ namespace UnityEditor.XR.ARFoundation
             var origin = (XROrigin) BuildReport.FindObjectOfType(typeof(XROrigin));
             if(origin)
             {
-                var cameraManager = origin.GetComponentInChildren<ARCameraManager>();
-                if(!cameraManager)
-                {
-                    Debug.LogWarning($"AR Foundation is installed, but there is an XROrigin and no ARCameraManager in {scene.name}. AR functionality will be disabled without this component.");
-                }
                 var cameraBackground = origin.GetComponentInChildren<ARCameraBackground>();
                 if(!cameraBackground)
                 {
-                    Debug.LogWarning($"AR Foundation is installed, but there is an XROrigin and no ARCameraBackground in {scene.name}. AR functionality will be disabled without this component.");
+                    Debug.LogWarning($"AR Foundation is installed, but there is an XROrigin and no ARCameraBackground component in {scene.name} attached to the camera. Video pass-through will be disabled without this component.");
+
+                    var cameraManager = origin.GetComponentInChildren<ARCameraManager>();
+                    if(!cameraManager)
+                    {
+                        Debug.LogWarning($"AR Foundation is installed, but there is an XROrigin and no ARCameraManager component in {scene.name} attached to the camera. Video pass-through will be disabled without this component.");
+                    }
                 }
             }
         }

@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARSession) + ".html")]
+    [HelpURL(typeof(ARSession))]
     public sealed class ARSession :
         SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {

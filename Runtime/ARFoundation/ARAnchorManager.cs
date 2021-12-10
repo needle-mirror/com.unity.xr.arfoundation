@@ -21,7 +21,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARAnchorManager) + ".html")]
+    [HelpURL(typeof(ARAnchorManager))]
     public sealed class ARAnchorManager : ARTrackableManager<
         XRAnchorSubsystem,
         XRAnchorSubsystemDescriptor,

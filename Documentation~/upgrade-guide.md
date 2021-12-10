@@ -7,6 +7,7 @@ To upgrade to AR Foundation package version 5.0, you need to do the following:
 
 - Use Unity 2021.2 or newer.
 - Be aware of the change in package structure.
+- Upgrade from AR Session Origin to XR Origin.
 
 **Use Unity 2021.2 or newer**
 
@@ -22,3 +23,9 @@ The `com.unity.xr.arsubsystems` package has been merged into ARFoundation. In mo
 
 - New package Structure in `v5.0`
 ![Package Structure in 5.0](images/package-structure-5.0.jpg "Package Structure in 5.0")
+
+**Upgrade from AR Session Origin to XR Origin**
+
+As of 5.0, `ARSessionOrigin` is deprecated and will be replaced with `XROrigin`. Make sure to replace all references to `ARSessionOrigin` in your project with `XROrigin`.
+
+The `XROrigin` represents the center of worldspace in both AR and VR, and thus can be used across all XR scenes as opposed to `ARSessionOrigin` which was AR specific. For more about XR Origin, see the [XR Core Utilities Package documentation](https://docs.unity3d.com/Packages/com.unity.xr.core-utils@latest/index.html), and for steps on how to migrate see the [5.0 migration guide](migration-guide-5-x.md).

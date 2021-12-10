@@ -1,18 +1,16 @@
+using System;
+
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
     /// Helper for compile-time constant strings for the [HelpURL](xref:UnityEngine.HelpURLAttribute) attribute.
     /// </summary>
-    static class HelpUrls
+    class HelpURLAttribute : UnityEngine.HelpURLAttribute
     {
-        const string Version = "5.0";
+        const string k_Version = "5.0";
 
-        const string BaseUrl = "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@" + Version;
-
-        public const string Manual = BaseUrl + "/manual/";
-
-        public const string Api = BaseUrl + "/api/";
-
-        public const string ApiWithNamespace = BaseUrl + "/api/UnityEngine.XR.ARFoundation.";
+        public HelpURLAttribute(Type type)
+            : base($"https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@{k_Version}/api/{type.FullName}.html")
+        { }
     }
 }

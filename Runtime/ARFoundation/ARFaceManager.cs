@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_FaceManager)]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARFaceManager) + ".html")]
+    [HelpURL(typeof(ARFaceManager))]
     public sealed class ARFaceManager : ARTrackableManager<
         XRFaceSubsystem,
         XRFaceSubsystemDescriptor,

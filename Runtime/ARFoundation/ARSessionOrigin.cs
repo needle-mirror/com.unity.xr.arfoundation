@@ -53,7 +53,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DisallowMultipleComponent]
     [Obsolete("ARSessionOrigin has been deprecated. Use XROrigin instead.")]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARSessionOrigin) + ".html")]
+    [HelpURL(typeof(ARSessionOrigin))]
     public class ARSessionOrigin : XROrigin
     {
         /// <summary>

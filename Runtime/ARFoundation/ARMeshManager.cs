@@ -19,7 +19,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_MeshManager)]
     [DisallowMultipleComponent]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARMeshManager) + ".html")]
+    [HelpURL(typeof(ARMeshManager))]
     public class ARMeshManager : MonoBehaviour
     {
         [SerializeField]

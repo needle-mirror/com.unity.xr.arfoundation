@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     // [DefaultExecutionOrder(ARUpdateOrder.k_Plane)]
     [DisallowMultipleComponent]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARParticipant) + ".html")]
+    [HelpURL(typeof(ARParticipant))]
     public sealed class ARParticipant : ARTrackable<XRParticipant, ARParticipant>
     {
         /// <summary>

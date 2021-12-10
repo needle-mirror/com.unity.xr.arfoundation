@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_Raycast)]
     [DisallowMultipleComponent]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARRaycast) + ".html")]
+    [HelpURL(typeof(ARRaycast))]
     public sealed class ARRaycast : ARTrackable<XRRaycast, ARRaycast>
     {
         bool m_Updated;

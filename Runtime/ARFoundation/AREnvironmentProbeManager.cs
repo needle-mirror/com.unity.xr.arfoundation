@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbeManager)]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(AREnvironmentProbeManager) + ".html")]
+    [HelpURL(typeof(AREnvironmentProbeManager))]
     public sealed class AREnvironmentProbeManager : ARTrackableManager<
         XREnvironmentProbeSubsystem,
         XREnvironmentProbeSubsystemDescriptor,

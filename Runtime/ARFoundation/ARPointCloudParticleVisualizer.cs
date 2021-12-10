@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [RequireComponent(typeof(ARPointCloud))]
     [RequireComponent(typeof(ParticleSystem))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPointCloudParticleVisualizer) + ".html")]
+    [HelpURL(typeof(ARPointCloudParticleVisualizer))]
     public sealed class ARPointCloudParticleVisualizer : MonoBehaviour
     {
         void OnPointCloudChanged(ARPointCloudUpdatedEventArgs eventArgs)

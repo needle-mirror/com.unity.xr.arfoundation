@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedObjectManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARTrackedObjectManager) + ".html")]
+    [HelpURL(typeof(ARTrackedObjectManager))]
     public sealed class ARTrackedObjectManager : ARTrackableManager<
         XRObjectTrackingSubsystem,
         XRObjectTrackingSubsystemDescriptor,

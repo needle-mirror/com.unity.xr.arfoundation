@@ -8,6 +8,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-pre.7] - 2021-12-10
+
+### Fixed
+
+- Fixed [issue 1353859](https://issuetracker.unity3d.com/issues/ar-each-time-an-arface-is-added-three-new-gameobjects-are-created-in-the-scene-and-never-destroyed): During face tracking, each `ARFace` may create three additional GameObjects to represent the left eye, right eye, and fixation point. Previously, this would also incorrectly create three additional, superfluous GameObjects at the origin. These additional GameObjects are no longer created.
+
 ## [5.0.0-pre.6] - 2021-11-17
 
 ### Deprecated
@@ -19,30 +25,37 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the [XROrigin](xref:Unity.XR.CoreUtils.XROrigin) and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
-- Added plane visualization to [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu). See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the [XROrigin](xref:Unity.XR.CoreUtils.XROrigin), the current FPS, tracking state, and some trackables. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
 - Added support for new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
 
 ### Changed
 
-- `com.unity.xr.arsubsystems` has been merged into `com.unity.xr.arfoundation`. All the subsystems that were part of `com.unity.xr.arsubsystems` package are now available with this package (See the [old AR Subsystems Package changelog](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.2/changelog/CHANGELOG.html) for more details).
+- The AR Subsystems package (`com.unity.xr.arsubsystems`) has been combined with this package (`com.unity.xr.arfoundation`). The AR Subsystems package has been deprecated, and you should not use or depend on it.
 - The minimum Unity version for this package is now 2021.2.
 
 ### Deprecated
 
-- Deprecated the [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem%601). Use [SubsystemWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemWithProvider) base class instead with an implementation of [SubsystemDescriptorWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) and [SubsystemProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemProvider).
+- Deprecated the [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem%601). If you implement a custom subsystem by extending `XRSubsystem` then update it to use [SubsystemWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemWithProvider) instead. This is the new Subsystem base class in Unity core. See the [migration guide](xref:arfoundation-migration-guide-5-x#xrsubsystem) for details.
 
 ### Removed
 
-- Removed deprecated APIs: `UnityEditor.XR.ARSubsystems.InternalBridge`, `ARReferencePoint`, `ARReferencePointManager`, `ARReferencePointsChangedEventArgs`, `XRReferencePoint`, `XRReferencePointSubsystem`, and `XRReferencePointSubsystemDescriptor`.
-- Removed conditional dependency on the deprecated Lightweight Renderpipeline (LWRP) package.
+- Removed deprecated APIs:
+  - `UnityEditor.XR.ARSubsystems.InternalBridge` - this was used to get a texture's original source dimensions. There is now a built-in function [TextureImporter.GetSourceTextureWidthAndHeight](xref:UnityEditor.TextureImporter.GetSourceTextureWidthAndHeight) that provides the same functionality.
+  - "AR Reference Point" APIs were deprecated and renamed to "AR Anchor" several releases ago. In this release, the following classes have been removed:
+    - `ARReferencePoint`
+    - `ARReferencePointManager`
+    - `ARReferencePointsChangedEventArgs`
+    - `XRReferencePoint`
+    - `XRReferencePointSubsystem`
+    - `XRReferencePointSubsystemDescriptor`
+- Removed conditional dependency on the deprecated Lightweight Render Pipeline (LWRP) package. Any dependency on LWRP package should be replaced with URP package.
 
 ### Fixed
 
 - [ARMeshManager](xref:UnityEngine.XR.ARFoundation.ARMeshManager) no longer throws `ArgumentNullException`s ("Value cannot be null") when exiting play mode in the editor.
-- Fixed a missing dependency on built-in particle system module.
-- Fixed a missing dependency on built-in UI module and UGUI pacakge.
-- Fixed issue where `XROcclusionSubsystem` would use `Provider.environmentDepthCpuImageApi` instead of `Provider.environmentDepthConfidenceCpuImageApi` when acquiring the Environment Depth Confidence CPU Image.
+- Fixed [issue 1346735](https://issuetracker.unity3d.com/issues/arfoundation-error-cs0246-is-thrown-when-particle-system-built-in-package-is-removed): Removing the built-in particle system module results in a compilation error due to a hard dependency. Now the dependency is explicitly defined in the package which ensures that the built-in particle system module is enabled in the project.
+- Fixed an issue where the built-in UI module and the UGUI package can be removed which results in a compilation error due to hard dependencies. Now the dependencies are explicitly defined in the package which ensures that the UI built-in module and the UGUI package are enabled in the project.
+- Fixed [issue 878](https://github.com/Unity-Technologies/arfoundation-samples/issues/878) where `XROcclusionSubsystem` would use `Provider.environmentDepthCpuImageApi` instead of `Provider.environmentDepthConfidenceCpuImageApi` when acquiring the Environment Depth Confidence CPU Image. This did not affect the provider implementations of Google ARCore and Apple ARKit packages because these providers use singleton `XRCpuImage.Api` for all CPU image types. However, it could be an issue for a custom AR provider that uses different instances of `XRCpuImage.Api` for different CPU image types. 
 
 ## [4.2.0] - 2021-08-11
 

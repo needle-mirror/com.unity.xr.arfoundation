@@ -48,4 +48,4 @@ Query for changes to tracked images with `XRImageTrackingSubsystem.GetChanges`. 
 
 ## Using reference image libraries with asset bundles
 
-Platform-specifc data can be attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:UnityEngine.AssetBundle). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
+Platform-specifc data can be attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:AssetBundlesIntro). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.

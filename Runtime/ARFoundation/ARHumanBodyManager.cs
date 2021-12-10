@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBodyManager)]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARHumanBodyManager) + ".html")]
+    [HelpURL(typeof(ARHumanBodyManager))]
     public sealed class ARHumanBodyManager :
         ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider, XRHumanBody, ARHumanBody>
     {

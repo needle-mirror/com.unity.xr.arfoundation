@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_ParticipantManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARParticipantManager) + ".html")]
+    [HelpURL(typeof(ARParticipantManager))]
     public sealed class ARParticipantManager : ARTrackableManager<
         XRParticipantSubsystem,
         XRParticipantSubsystemDescriptor,

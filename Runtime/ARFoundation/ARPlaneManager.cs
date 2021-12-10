@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_PlaneManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(HelpUrls.ApiWithNamespace + nameof(ARPlaneManager) + ".html")]
+    [HelpURL(typeof(ARPlaneManager))]
     public sealed class ARPlaneManager : ARTrackableManager<
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
