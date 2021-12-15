@@ -163,6 +163,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Attempt to get the latest camera image. This provides directly access to the raw pixel data, as well as
         /// utilities to convert to RGB and Grayscale formats.
+        /// > [!NOTE]
+        /// > Starting November 2022, this method will always return <c>false</c> and not acquire a camera image on
+        /// > Android platforms due to API deprecation in ARCore SDK. Update to package version 4.x or higher to use
+        /// > supported version of the API. See https://developers.google.com/ar/develop/unity-arf/ndk-camera-deprecation.
+        /// > 
+        /// > This methods will not be affected on iOS platforms and will continue to work same as before.
         /// </summary>
         /// <remarks>
         /// The <c>XRCameraImage</c> must be disposed to avoid resource leaks.
