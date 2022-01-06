@@ -158,7 +158,24 @@ namespace UnityEngine.XR.ARFoundation
             m_Meshes.Clear();
         }
 
-        internal ARSessionOrigin GetSessionOrigin() => transform.GetComponentInParent<ARSessionOrigin>();
+        // This is similar to GetComponentInParent but also considers inactive GameObjects, while GetComponentInParent
+        // ignores GameObjects that are not activeInHierarchy.
+        T GetComponentInParentIncludingInactive<T>() where T : Component
+        {
+            var parent = transform.parent;
+            while (parent)
+            {
+                var component = parent.GetComponent<T>();
+                if (component)
+                    return component;
+
+                parent = parent.parent;
+            }
+
+            return null;
+        }
+
+        internal ARSessionOrigin GetSessionOrigin() => GetComponentInParentIncludingInactive<ARSessionOrigin>();
 
 #if UNITY_EDITOR
         void Reset()
@@ -167,9 +184,12 @@ namespace UnityEngine.XR.ARFoundation
                 transform.localScale = Vector3.one * 10f;
         }
 
+        // Invoked by tests
+        internal bool IsValid() => GetSessionOrigin() != null;
+
         void OnValidate()
         {
-            if (GetSessionOrigin() == null)
+            if (!IsValid())
             {
                 UnityEditor.EditorUtility.DisplayDialog(
                     "Hierarchy not allowed",
@@ -243,7 +263,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void Update()
         {
-            if (m_Subsystem != null)
+            if (m_Subsystem != null && m_Subsystem.running)
             {
                 if (transform.hasChanged)
                     SetBoundingVolume();
@@ -376,7 +396,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDisable()
         {
-            if (m_Subsystem != null)
+            if (m_Subsystem != null && m_Subsystem.running)
                 m_Subsystem.Stop();
         }
 

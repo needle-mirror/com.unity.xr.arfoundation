@@ -1,6 +1,7 @@
 {
   "name": "Unity.XR.ARFoundation.Editor.Tests",
     "references": [
+        "Unity.XR.ARFoundation",
         "Unity.Coding.Editor"
     ],
     "optionalUnityReferences": [
