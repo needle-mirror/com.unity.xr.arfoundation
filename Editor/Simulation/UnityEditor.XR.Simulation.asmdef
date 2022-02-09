@@ -1,0 +1,19 @@
+{
+    "name": "UnityEditor.XR.Simulation",
+    "rootNamespace": "",
+    "references": [
+        "Unity.XR.Management.Editor",
+        "UnityEngine.XR.Simulation"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

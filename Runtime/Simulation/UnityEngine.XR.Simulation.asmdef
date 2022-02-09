@@ -1,0 +1,19 @@
+{
+    "name": "UnityEngine.XR.Simulation",
+    "rootNamespace": "",
+    "references": [
+        "Unity.XR.ARSubsystems",
+        "Unity.XR.Management",
+        "Unity.XR.CoreUtils",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-pre.8] - 2022-02-09
+
+### Added
+
+- Added a configuration menu to the [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the currently active [Configuration](xref:UnityEngine.XR.ARSubsystems.Configuration) for the session and other available configurations for the current device. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Work in progress: AR Simulation in XR Plug-in Management; initial support for camera movement and simulation environment.
+
 ## [5.0.0-pre.7] - 2021-12-10
 
 ### Fixed
@@ -40,7 +47,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 - Removed deprecated APIs:
-  - `UnityEditor.XR.ARSubsystems.InternalBridge` - this was used to get a texture's original source dimensions. There is now a built-in function [TextureImporter.GetSourceTextureWidthAndHeight](xref:UnityEditor.TextureImporter.GetSourceTextureWidthAndHeight) that provides the same functionality.
+  - `UnityEditor.XR.ARSubsystems.InternalBridge` - this was used to get a texture's original source dimensions. There is now a built-in function [TextureImporter.GetSourceTextureWidthAndHeight](xref:UnityEditor.TextureImporter.GetSourceTextureWidthAndHeight(System.Int32&,System.Int32&)) that provides the same functionality.
   - "AR Reference Point" APIs were deprecated and renamed to "AR Anchor" several releases ago. In this release, the following classes have been removed:
     - `ARReferencePoint`
     - `ARReferencePointManager`
@@ -55,7 +62,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - [ARMeshManager](xref:UnityEngine.XR.ARFoundation.ARMeshManager) no longer throws `ArgumentNullException`s ("Value cannot be null") when exiting play mode in the editor.
 - Fixed [issue 1346735](https://issuetracker.unity3d.com/issues/arfoundation-error-cs0246-is-thrown-when-particle-system-built-in-package-is-removed): Removing the built-in particle system module results in a compilation error due to a hard dependency. Now the dependency is explicitly defined in the package which ensures that the built-in particle system module is enabled in the project.
 - Fixed an issue where the built-in UI module and the UGUI package can be removed which results in a compilation error due to hard dependencies. Now the dependencies are explicitly defined in the package which ensures that the UI built-in module and the UGUI package are enabled in the project.
-- Fixed [issue 878](https://github.com/Unity-Technologies/arfoundation-samples/issues/878) where `XROcclusionSubsystem` would use `Provider.environmentDepthCpuImageApi` instead of `Provider.environmentDepthConfidenceCpuImageApi` when acquiring the Environment Depth Confidence CPU Image. This did not affect the provider implementations of Google ARCore and Apple ARKit packages because these providers use singleton `XRCpuImage.Api` for all CPU image types. However, it could be an issue for a custom AR provider that uses different instances of `XRCpuImage.Api` for different CPU image types. 
+- Fixed [issue 878](https://github.com/Unity-Technologies/arfoundation-samples/issues/878) where `XROcclusionSubsystem` would use `Provider.environmentDepthCpuImageApi` instead of `Provider.environmentDepthConfidenceCpuImageApi` when acquiring the Environment Depth Confidence CPU Image. This did not affect the provider implementations of Google ARCore and Apple ARKit packages because these providers use singleton `XRCpuImage.Api` for all CPU image types. However, it could be an issue for a custom AR provider that uses different instances of `XRCpuImage.Api` for different CPU image types.
 
 ## [4.2.0] - 2021-08-11
 
@@ -287,7 +294,7 @@ No changes
 ### Added
 
 - Add support for tracked raycasts. A tracked raycast is repeated and updated automatically. See [ARRaycastManager.AddRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.AddRaycast*).
-- `ARCameraFrameReceivedEventArgs` now provides a camera grain texture along with an associated intensity value which can be used to add image noise characteristics to virtual content. The usage of these properties may vary by platform, so please consult the documentation of the specific provider plugin when using this feature.
+- `ARCameraFrameReceivedEventArgs` now provides a camera grain texture along with an associated intensity value which can be used to add image noise characteristics to virtual content. The usage of these properties may vary by platform, so please consult the documentation of the specific provider plug-in when using this feature.
 
 ### Changed
 
@@ -450,7 +457,7 @@ No changes
 - Added support for [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@2.0/manual/index.html).
 - Add support for `ARSession.notTrackingReason`.
 - Add an option to synchronize the Unity frame with the AR session's update. See `ARSession.matchFrameRate`.
-- Add an `ARMeshManager` to interface with the [`XRMeshSubsystem`](https://docs.unity3d.com/ScriptReference/Experimental.XR.XRMeshSubsystem.html). This is useful for XR Plugins that can generate meshes at runtime.
+- Add an `ARMeshManager` to interface with the [`XRMeshSubsystem`](https://docs.unity3d.com/ScriptReference/Experimental.XR.XRMeshSubsystem.html). This is useful for XR Plug-ins that can generate meshes at runtime.
 
 ### Changed
 

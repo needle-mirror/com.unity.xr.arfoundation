@@ -5,9 +5,9 @@ uid: arfoundation-manual
 
 AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
 
-* [ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/manual/index.html) on Android
+* [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/manual/index.html) on Android
 * [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.0/manual/index.html) on iOS
-* [Open XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.2/manual/index.html) on HoloLens
+* [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.2/manual/index.html) on HoloLens
 
 AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices that support the following concepts:
 
@@ -66,7 +66,7 @@ The following platform packages and later implement the AR Foundation features i
 |:---                       |:---                |
 |Google ARCore XR Plug-in   |   5.0              |
 |Apple ARKit XR Plug-in     |   5.0              |
-|Open XR Plug-in            |   1.2              |
+|OpenXR Plug-in             |   1.2              |
 
 ## Subsystems
 
@@ -76,7 +76,7 @@ Each subsystem handles specific functionality. For example, `XRPlaneSubsystem` p
 
 ### Providers
 
-A **provider** is a concrete implementation of a subsystem. For example, the `ARCore XR Plugin` package contains the ARCore implementation for many of the AR-related subsystems.
+A **provider** is a concrete implementation of a subsystem. For example, the `Google ARCore XR Plug-in` package contains the ARCore implementation for many of the AR-related subsystems.
 
 Because different providers have varying support for specific features, each subsystem also has a descriptor that indicates which specific subsystem features it supports. For example, the `XRPlaneSubsystemDescriptor` contains properties indicating whether it supports horizontal or vertical plane detection.
 
@@ -89,8 +89,8 @@ To install this package, follow the instructions in the [Package Manager documen
 Subsystems are implemented in other packages. To use AR Foundation, you must also install at least one of these platform-specific AR packages from the Package Manager window (menu: **Window** &gt; **Package Manager**):
 
  - Apple ARKit XR Plug-in
- - ARCore XR Plug-in
- - Open XR Plug-in
+ - Google ARCore XR Plug-in
+ - OpenXR Plug-in
 
 # Glossary
 

@@ -11,6 +11,7 @@ Currently, the menu provides information about the following:
 - FPS
 - Tracking Mode
 - Planes
+- Configurations
 
 # Setting up the Menu
 
