@@ -24,6 +24,7 @@ namespace UnityEditor.XR.ARFoundation
             var originGo = ObjectFactory.CreateGameObject("AR Session Origin", typeof(ARSessionOrigin));
             var cameraGo = ObjectFactory.CreateGameObject("AR Camera",
                 typeof(Camera),
+                typeof(AudioListener),
                 typeof(ARPoseDriver),
                 typeof(ARCameraManager),
                 typeof(ARCameraBackground));
@@ -39,6 +40,18 @@ namespace UnityEditor.XR.ARFoundation
             camera.nearClipPlane = 0.1f;
             camera.farClipPlane = 20f;
 
+            var mainCam = Camera.main;
+
+            if (mainCam != null)
+            {
+                Debug.LogWarningFormat(
+                    mainCam.gameObject,
+                    "AR Camera requires the \"MainCamera\" Tag, but the current scene contains another Camera tagged \"MainCamera\". For AR to function properly, remove the \"MainCamera\" Tag from \'{0}\'.",
+                    mainCam.name);
+            }
+            
+            cameraGo.tag = "MainCamera";
+            
             var origin = originGo.GetComponent<ARSessionOrigin>();
             origin.camera = camera;
         }

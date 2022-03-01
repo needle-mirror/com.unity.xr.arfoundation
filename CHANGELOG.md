@@ -5,6 +5,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.10] - 2022-03-01
+
+### Fixes
+
+- Fixed [issue 1392753](https://issuetracker.unity3d.com/issues/flickering-slash-frozen-textures-when-ar-occlusion-manager-is-disabled) where occlusion texture would remain frozen instead of being cleared when the occlusion manager is disabled.
+- Fixed an issue where creating an [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin) would not tag the newly created camera as "MainCamera".
+
 ## [4.1.9] - 2022-01-06
 
 ### Fixes
