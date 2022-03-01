@@ -1,3 +1,5 @@
+using System;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
@@ -19,28 +21,103 @@ namespace UnityEditor.XR.ARFoundation
         static readonly float k_ParticleSize = 0.02f;
 
         [MenuItem("GameObject/XR/AR Session Origin", false, 10)]
-        static void CreateARSessionOrigin()
+        static void CreateARSessionOrigin(MenuCommand menuCommand)
         {
-            var originGo = ObjectFactory.CreateGameObject("AR Session Origin", typeof(ARSessionOrigin));
-            var cameraGo = ObjectFactory.CreateGameObject("AR Camera",
+            var parent = (menuCommand.context as GameObject)?.transform;
+            var arSessionOrigin = CreateARSessionOriginWithParent(parent);
+            Selection.activeGameObject = arSessionOrigin.gameObject;
+        }
+
+        static ARSessionOrigin CreateARSessionOriginWithParent(Transform parent)
+        {
+            var originGo = ObjectFactory.CreateGameObject(
+                "AR Session Origin",
+                typeof(ARSessionOrigin));
+            Place(originGo, parent);
+            
+            var arCamera = CreateARMainCamera();
+            Place(arCamera.gameObject, originGo.transform);
+
+            var origin = originGo.GetComponent<ARSessionOrigin>();
+            origin.camera = arCamera;
+            
+            Undo.RegisterCreatedObjectUndo(originGo, "Create AR Session Origin");
+            return origin;
+        }
+
+        static void Place(GameObject go, Transform parent)
+        {
+            var transform = go.transform;
+
+            if (parent != null)
+            {
+                go.transform.parent = parent;
+                ResetTransform(transform);
+                go.layer = parent.gameObject.layer;
+            }
+            else
+            {
+                // Puts it at the scene pivot, and otherwise world origin if there is no Scene view
+                var view = SceneView.lastActiveSceneView;
+                if (view != null)
+                    view.MoveToView(transform);
+                else
+                    transform.position = Vector3.zero;
+
+                StageUtility.PlaceGameObjectInCurrentStage(go);
+            }
+
+            GameObjectUtility.EnsureUniqueNameForSibling(go);
+        }
+        
+        static void ResetTransform(Transform transform)
+        {
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
+
+            if (transform.parent is RectTransform)
+            {
+                var rectTransform = transform as RectTransform;
+                if (rectTransform != null)
+                {
+                    rectTransform.anchorMin = Vector2.zero;
+                    rectTransform.anchorMax = Vector2.one;
+                    rectTransform.anchoredPosition = Vector2.zero;
+                    rectTransform.sizeDelta = Vector2.zero;
+                }
+            }
+        }
+        
+        static Camera CreateARMainCamera()
+        {
+            var cameraGo = ObjectFactory.CreateGameObject(
+                "AR Camera",
                 typeof(Camera),
+                typeof(AudioListener),
                 typeof(ARPoseDriver),
                 typeof(ARCameraManager),
                 typeof(ARCameraBackground));
 
-            Undo.SetTransformParent(cameraGo.transform, originGo.transform, "Parent camera to session origin");
+            var mainCam = Camera.main;
+
+            if (mainCam != null)
+            {
+                Debug.LogWarningFormat(
+                    mainCam.gameObject,
+                    "AR Camera requires the \"MainCamera\" Tag, but the current scene contains another Camera tagged \"MainCamera\". For AR to function properly, remove the \"MainCamera\" Tag from \'{0}\'.",
+                    mainCam.name);
+            }
+            
+            cameraGo.tag = "MainCamera";
 
             var camera = cameraGo.GetComponent<Camera>();
-            // Enforce local transform as identity for new ARSessionOrigins
-            camera.transform.localPosition = Vector3.zero;
-            camera.transform.localRotation = Quaternion.identity;
             camera.clearFlags = CameraClearFlags.Color;
             camera.backgroundColor = Color.black;
             camera.nearClipPlane = 0.1f;
             camera.farClipPlane = 20f;
-
-            var origin = originGo.GetComponent<ARSessionOrigin>();
-            origin.camera = camera;
+            
+            return camera;
         }
 
         [MenuItem("GameObject/XR/AR Session", false, 10)]

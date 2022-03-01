@@ -489,6 +489,7 @@ namespace UnityEngine.XR.ARFoundation
             base.OnDisable();
 
             ResetTextureInfos();
+            InvokeFrameReceived();
         }
 
         /// <summary>
