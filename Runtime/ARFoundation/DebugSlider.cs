@@ -12,13 +12,9 @@ namespace UnityEngine.XR.ARFoundation
         public override void OnPointerDown(PointerEventData eventData)
         {
             base.OnPointerDown(eventData);
-            if(value == 1)
+            if(interactable)
             {
-                value = 0;
-            }
-            else
-            {
-                value = 1;
+                value = (value == 1) ? 0 : 1;
             }
         }
     }

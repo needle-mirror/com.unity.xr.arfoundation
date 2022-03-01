@@ -9,7 +9,7 @@ The [ARRaycastManager](xref:UnityEngine.XR.ARFoundation.ARRaycastManager) is a t
 
 ## Ray casting
 
-Ray casting (also known as hit testing) allows you to determine where a [ray](xref:UnityEngine.Ray) (defined by an origin and direction) intersects with a [trackable](xref:UnityEngine.XR.ARFoundation.ARTrackable). The current ray cast interface only tests against planes and points in the point cloud. The ray cast interface is similar to the one in the Unity Physics module, but since AR trackables don't necessarily have a presence in the physics world, AR Foundation provides a separate interface.
+Ray casting (also known as hit testing) allows you to determine where a [ray](xref:UnityEngine.Ray) (defined by an origin and direction) intersects with a [trackable](xref:UnityEngine.XR.ARFoundation.ARTrackable). The ray cast interface is similar to the one in the Unity Physics module, but since AR trackables don't necessarily have a presence in the physics world, AR Foundation provides a separate interface.
 
 The Raycast Manager serves two purposes:
 1. Provides an API to perform single raycasts.
@@ -57,3 +57,19 @@ Persistent raycasts must be created from a screen point:
 [!code-cs[ARRaycastManager_AddRaycast_screenPoint](../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_AddRaycast_screenPoint)]
 
 When you create a new `ARRaycast`, ARFoundation creates a new GameObject with an `ARRaycast` component on it. You can optionally provide a Prefab in the "Raycast Prefab" field that is instantiated for each `ARRaycast`, which allows you to extend the default behavior of each `ARRaycast`.
+
+## Supported trackables
+
+`ARRaycastManager` supports ray casting against most [TrackableType](xref:UnityEngine.XR.ARSubsystems.TrackableType)s; however, not all platforms support all trackables. For a list of supported [TrackableType](xref:UnityEngine.XR.ARSubsystems.TrackableType)s per platform, see below.
+
+| **TrackableType**     | **ARCore** | **ARKit** |
+|:-                     |:-          |:-         |
+| `Depth`               | &check;    |           |
+| `Face`                |            |           |
+| `FeaturePoint`        | &check;    | &check;   |
+| `Image`               | &check;    |           |
+| `Planes`              | &check;    | &check;   |
+| `PlaneEstimated`      | &check;    | &check;   |
+| `PlaneWithinBounds`   | &check;    | &check;   |
+| `PlaneWithinInfinity` |            | &check;   |
+| `PlaneWithinPolygon`  | &check;    | &check;   |

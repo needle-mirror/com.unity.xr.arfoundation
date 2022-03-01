@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "5.0.0-pre.8",
+  "version": "5.0.0-pre.9",
   "unity": "2021.2",
   "description": "A collection of Subsystems as well as MonoBehaviours and C# utilities for working with the Subsystems. \n\nIncludes: \n▪ Definitions of Subsystems \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
@@ -25,12 +25,15 @@
     "com.unity.modules.particlesystem": "1.0.0",
     "com.unity.modules.ui": "1.0.0"
   },
+  "upm": {
+    "changelog": "### Added,- Simulation loads an environment prefab from Simulation Settings.,- Added support for a new [OcclusionPreferenceMode.NoOcclusion](xref:UnityEngine.XR.ARSubsystems.Configuration.OcclusionPreferenceMode) mode that, when set, disables occlusion rendering on the camera background when using [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) and [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).,### Changed,- Changed the string \"People Occlusion\" to \"Human Occlusion\" in [Feature](xref:UnityEngine.XR.ARSubsystems.Feature) so that it matches the documentation.,### Fixed,- Fixed [issue 1392753](https://issuetracker.unity3d.com/issues/flickering-slash-frozen-textures-when-ar-occlusion-manager-is-disabled) where occlusion texture would remain frozen instead of being cleared when the occlusion manager is disabled.,- Fixed issue where sliders would slide even when not `interactable` in the [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu)."
+  },
   "upmCi": {
-    "footprint": "eb03e31ff796ee2eb4fd08132c897e362a7e3f88"
+    "footprint": "92ab8b550c1e54be1d7a82f6a48e107107acd10f"
   },
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "e119669b1d882a469dfaa01f37c6f806f2c56355"
+    "revision": "4f50d482f45e77dc73e4c6ae898578c60efc7c8c"
   }
 }

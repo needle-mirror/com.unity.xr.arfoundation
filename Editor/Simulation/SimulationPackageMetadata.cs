@@ -43,6 +43,14 @@ namespace UnityEditor.XR.Simulation
 
         public IXRPackageMetadata metadata => s_Metadata;
 
-        public bool PopulateNewSettingsInstance(ScriptableObject obj) { return true; }
+        public bool PopulateNewSettingsInstance(ScriptableObject obj)
+        {
+            // On future Editor launches it will find them itself, but first time around we
+            // need to explicitly add it
+            if (obj is SimulationSettings settings)
+                EditorBuildSettings.AddConfigObject(SimulationSettings.k_SettingsKey, settings, true);
+
+            return true;
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace UnityEngine.XR.Simulation
         class SimulationProvider : Provider
         {
             CameraPoseProvider m_CameraPoseProvider;
-            GameObject m_SimulationEnvironment;
+            EnvironmentManager m_EnvironmentManager = new EnvironmentManager();
 
             public override TrackingState trackingState => TrackingState.Tracking;
 
@@ -37,22 +37,12 @@ namespace UnityEngine.XR.Simulation
 
             void SetupSimulation()
             {
-                m_SimulationEnvironment = new GameObject("Simulation Environment Root");
-                m_SimulationEnvironment.layer = 30; // TODO: Use settings
-
-                // Couple of dummy objects to be our simulation environment
-                var cap1 = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                cap1.transform.SetParent(m_SimulationEnvironment.transform);
-                cap1.transform.localPosition = new Vector3(5, 0, 10);
-                var cap2 = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                cap2.transform.SetParent(m_SimulationEnvironment.transform);
-                cap2.transform.localPosition = new Vector3(-5, 0, 10);
+                m_EnvironmentManager.SetupEnvironment();
             }
 
             void ShutdownSimulation()
             {
-                Object.Destroy(m_SimulationEnvironment);
-                m_SimulationEnvironment = null;
+                m_EnvironmentManager.TearDownEnvironment();
             }
         }
 

@@ -8,6 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-pre.9] - 2022-03-01
+
+### Added
+
+- Simulation loads an environment prefab from Simulation Settings.
+- Added support for a new [OcclusionPreferenceMode.NoOcclusion](xref:UnityEngine.XR.ARSubsystems.Configuration.OcclusionPreferenceMode) mode that, when set, disables occlusion rendering on the camera background when using [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) and [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
+
+### Changed
+
+- Changed the string "People Occlusion" to "Human Occlusion" in [Feature](xref:UnityEngine.XR.ARSubsystems.Feature) so that it matches the documentation.
+
+### Fixed
+
+- Fixed [issue 1392753](https://issuetracker.unity3d.com/issues/flickering-slash-frozen-textures-when-ar-occlusion-manager-is-disabled) where occlusion texture would remain frozen instead of being cleared when the occlusion manager is disabled.
+- Fixed issue where sliders would slide even when not `interactable` in the [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu).
+
 ## [5.0.0-pre.8] - 2022-02-09
 
 ### Added

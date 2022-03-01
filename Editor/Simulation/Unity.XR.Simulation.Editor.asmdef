@@ -1,9 +1,11 @@
 {
-    "name": "UnityEditor.XR.Simulation",
+    "name": "Unity.XR.Simulation.Editor",
     "rootNamespace": "",
     "references": [
         "Unity.XR.Management.Editor",
-        "UnityEngine.XR.Simulation"
+        "Unity.XR.Simulation",
+        "Unity.XR.CoreUtils",
+        "Unity.XR.CoreUtils.Editor"
     ],
     "includePlatforms": [
         "Editor"

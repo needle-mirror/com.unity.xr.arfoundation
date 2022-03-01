@@ -12,6 +12,7 @@ The main updates in this release include:
 - Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the [XROrigin](xref:Unity.XR.CoreUtils.XROrigin) and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
 - Added plane visualization to [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu). See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
 - Added support new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
+- Added support for a new [OcclusionPreferenceMode.NoOcclusion](xref:UnityEngine.XR.ARSubsystems.Configuration.OcclusionPreferenceMode) mode that, when set, disables occlusion rendering on the camera background when using [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) and [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
 
 **Updated**
 

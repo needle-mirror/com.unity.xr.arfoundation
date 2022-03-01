@@ -25,12 +25,13 @@ namespace UnityEditor.XR.ARFoundation
         {
             serializedObject.Update();
 
+            OcclusionPreferenceMode occlusionPreferenceMode = (OcclusionPreferenceMode)m_OcclusionPreferenceMode.enumValueIndex;
             bool isEnvDepthEnabled = ((EnvironmentDepthMode)m_EnvironmentDepthMode.enumValueIndex).Enabled();
             bool isHumanSegmentationStencilEnabled = ((HumanSegmentationStencilMode)m_HumanSegmentationStencilMode.enumValueIndex).Enabled();
             bool isHumanSegmentationDepthEnabled = ((HumanSegmentationDepthMode)m_HumanSegmentationDepthMode.enumValueIndex).Enabled();
             bool isHumanDepthEnabled = isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled;
 
-            if (!isEnvDepthEnabled && !isHumanDepthEnabled)
+            if (!isEnvDepthEnabled && !isHumanDepthEnabled && (occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion))
             {
                 EditorGUILayout.HelpBox("Automatic occlusion is disabled.",
                                         MessageType.Warning);
@@ -47,7 +48,7 @@ namespace UnityEditor.XR.ARFoundation
             using (new EditorGUI.IndentLevelScope(1))
             {
                 EditorGUILayout.PropertyField(m_HumanSegmentationStencilMode);
-                if (!isHumanSegmentationDepthEnabled && isHumanSegmentationStencilEnabled)
+                if (!isHumanSegmentationDepthEnabled && isHumanSegmentationStencilEnabled && (occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion))
                 {
                     using (new EditorGUI.IndentLevelScope(1))
                     {
@@ -57,7 +58,7 @@ namespace UnityEditor.XR.ARFoundation
                 }
 
                 EditorGUILayout.PropertyField(m_HumanSegmentationDepthMode);
-                if (!isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled)
+                if (!isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled && (occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion))
                 {
                     using (new EditorGUI.IndentLevelScope(1))
                     {

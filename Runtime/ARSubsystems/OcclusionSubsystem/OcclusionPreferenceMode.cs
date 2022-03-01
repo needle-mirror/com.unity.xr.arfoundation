@@ -18,5 +18,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         [Description("PreferHumanOcclusion")]
         PreferHumanOcclusion = 1,
+
+        /// <summary>
+        /// The preference is to not occlude.
+        /// </summary>
+        [Description("NoOcclusion")]
+        NoOcclusion = 2,
     }
 }

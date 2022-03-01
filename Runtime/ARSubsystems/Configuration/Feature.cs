@@ -339,10 +339,10 @@ namespace UnityEngine.XR.ARSubsystems
                         names.Add("3D Body Scale Estimation");
                         break;
                     case Feature.PeopleOcclusionStencil:
-                        names.Add("People Occlusion Stencil");
+                        names.Add("Human Occlusion Stencil");
                         break;
                     case Feature.PeopleOcclusionDepth:
-                        names.Add("People Occlusion Depth");
+                        names.Add("Human Occlusion Depth");
                         break;
                     case Feature.Collaboration:
                         names.Add("Collaboration");

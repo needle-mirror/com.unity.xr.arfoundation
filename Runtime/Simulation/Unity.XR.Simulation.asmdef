@@ -1,5 +1,5 @@
 {
-    "name": "UnityEngine.XR.Simulation",
+    "name": "Unity.XR.Simulation",
     "rootNamespace": "",
     "references": [
         "Unity.XR.ARSubsystems",
