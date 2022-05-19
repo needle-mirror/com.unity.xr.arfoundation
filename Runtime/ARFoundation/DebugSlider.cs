@@ -8,7 +8,10 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     public class DebugSlider: Slider
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Use this callback to detect pointer down events.
+        /// </summary>
+        /// <param name="eventData">The pointer down event data.</param>
         public override void OnPointerDown(PointerEventData eventData)
         {
             base.OnPointerDown(eventData);

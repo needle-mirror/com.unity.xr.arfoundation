@@ -5,7 +5,9 @@
         "Unity.XR.Management.Editor",
         "Unity.XR.Simulation",
         "Unity.XR.CoreUtils",
-        "Unity.XR.CoreUtils.Editor"
+        "Unity.XR.CoreUtils.Editor",
+        "Unity.XR.Management",
+        "Unity.XR.ARAnalytics.Editor"
     ],
     "includePlatforms": [
         "Editor"

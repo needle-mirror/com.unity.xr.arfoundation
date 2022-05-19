@@ -37,6 +37,22 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
+        [Tooltip("A particle system to represent ARPointClouds.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        ParticleSystem m_PointCloudParticleSystem;
+
+        /// <summary>
+        /// Specifies a particle system to visualize an <see cref="ARPointCloud"/>.
+        /// </summary>
+        /// <value>
+        /// A particle system that will visualize point clouds.
+        /// </value>
+        public ParticleSystem pointCloudParticleSystem
+        {
+            get => m_PointCloudParticleSystem;
+            set => m_PointCloudParticleSystem = value;
+        }
+
+        [SerializeField]
         [Tooltip("A line renderer used to outline the ARPlanes in a scene.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
         LineRenderer m_LineRendererPrefab;
 
@@ -50,6 +66,22 @@ namespace UnityEngine.XR.ARFoundation
         {
             get => m_LineRendererPrefab;
             set => m_LineRendererPrefab = value;
+        }
+
+        [SerializeField]
+        [Tooltip("A debug prefab that visualizes the position of ARAnchors in a scene.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        GameObject m_AnchorPrefab;
+
+        /// <summary>
+        /// Specifies a debug prefab that will be attached to an <see cref="ARAnchor"/>.
+        /// </summary>
+        /// <value>
+        /// A debug prefab that will be attached to the AR anchors in a scene.
+        /// </value>
+        public GameObject anchorPrefab
+        {
+            get => m_AnchorPrefab;
+            set => m_AnchorPrefab = value;
         }
 
         [SerializeField]
@@ -164,6 +196,22 @@ namespace UnityEngine.XR.ARFoundation
             set => m_DebugOptionsMenu = value;
         }
 
+        [SerializeField]
+        [Tooltip("A menu that displays an informative warning messages.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        GameObject m_DebugOptionsToastMenu;
+
+        /// <summary>
+        /// The menu that displays informative warning messages.
+        /// </summary>
+        /// <value>
+        /// A menu that displays an informative warning messages.
+        /// </value>
+        public GameObject debugOptionsToastMenu
+        {
+            get => m_DebugOptionsToastMenu;
+            set => m_DebugOptionsToastMenu = value;
+        }
+
         [SerializeField, FormerlySerializedAs("m_ShowSessionOriginButton")]
         [Tooltip("The button that displays the XR origin prefab.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
         DebugSlider m_ShowOriginButton;
@@ -197,7 +245,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("The button that displays anchors in the scene.\n This will be implemented in a future release.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        [Tooltip("The button that displays anchors in the scene.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
         DebugSlider m_ShowAnchorsButton;
 
         /// <summary>
@@ -213,7 +261,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("The button that displays detected point clouds in the scene.\n This will be implemented in a future release.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        [Tooltip("The button that displays detected point clouds in the scene.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
         DebugSlider m_ShowPointCloudsButton;
 
         /// <summary>
@@ -307,6 +355,55 @@ namespace UnityEngine.XR.ARFoundation
             set => m_MenuFont = value;
         }
 
+
+        //Managers
+        XROrigin m_Origin;
+
+        ARSession m_Session;
+
+        //Visuals
+        GameObject m_OriginAxis;
+
+        GameObject m_PlaneVisualizers;
+
+        GameObject m_PointCloudVisualizerGO;
+
+        GameObject m_AnchorVisualizers;
+
+        //Labels
+        int m_PreviousFps;
+
+        int m_PreviousTrackingMode = -1;
+
+        //Dictionaries
+        Dictionary<ARPlane, LineRenderer> m_PlaneLineRenderers = new Dictionary<ARPlane, LineRenderer>();
+
+        Dictionary<ARAnchor, GameObject> m_AnchorPrefabs = new Dictionary<ARAnchor, GameObject>();
+
+        Dictionary<ulong, Vector3> m_Points = new Dictionary<ulong, Vector3>();
+
+        ParticleSystem.Particle[] m_Particles;
+
+        //Misc
+        Camera m_CameraAR;
+
+        bool m_CameraFollow;
+
+        int m_NumParticles;
+
+        //Configuration
+        XRSessionSubsystem m_SessionSubsystem;
+
+        bool m_ConfigMenuSetup;
+
+        Configuration m_CurrentConfiguration;
+
+        int m_PreviousConfigCol = -1;
+
+        List<List<Image>> m_ConfigurationUI = new List<List<Image>>();
+
+        List<Text> m_ColumnLabels = new List<Text>();
+
         void Start()
         {
             if(!CheckMenuConfigured())
@@ -328,8 +425,8 @@ namespace UnityEngine.XR.ARFoundation
             }
             else if(m_DisplayInfoMenuButton == null || m_DisplayConfigurationsMenuButton == null || m_DisplayDebugOptionsMenuButton == null || m_ShowOriginButton == null ||
                 m_ShowPlanesButton == null || m_ShowAnchorsButton == null || m_ShowPointCloudsButton == null || m_FpsLabel == null || m_ConfigurationMenu == null ||
-                m_TrackingModeLabel == null || m_OriginAxisPrefab == null || m_LineRendererPrefab == null || m_InfoMenu == null || m_DebugOptionsMenu == null || m_ConfigurationMenuRoot == null ||
-                m_MenuFont == null || m_Toolbar == null)
+                m_TrackingModeLabel == null || m_OriginAxisPrefab == null || m_AnchorPrefab == null || m_LineRendererPrefab == null || m_InfoMenu == null || m_DebugOptionsMenu == null || m_ConfigurationMenuRoot == null ||
+                m_MenuFont == null || m_Toolbar == null || m_DebugOptionsToastMenu == null || m_PointCloudParticleSystem == null)
             {
                 Debug.LogWarning("The menu has not been fully configured so some functionality will be disabled. For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu");
             }
@@ -384,6 +481,7 @@ namespace UnityEngine.XR.ARFoundation
                 SetupConfigurationMenu();
                 m_ConfigMenuSetup = true;
             }
+
             if(m_SessionSubsystem != null)
             {
                 if(m_SessionSubsystem.currentConfiguration.HasValue && m_SessionSubsystem.currentConfiguration.Value != m_CurrentConfiguration)
@@ -490,7 +588,7 @@ namespace UnityEngine.XR.ARFoundation
             if(m_ShowOriginButton && m_OriginAxisPrefab)
             {
                 m_ShowOriginButton.interactable = true;
-                m_ShowOriginButton.onValueChanged.AddListener(delegate {ShowOrigin();});
+                m_ShowOriginButton.onValueChanged.AddListener(delegate {ToggleOriginVisibility();});
             }
 
             var planeManager = m_Origin.GetComponent<ARPlaneManager>();
@@ -499,8 +597,29 @@ namespace UnityEngine.XR.ARFoundation
                 m_PlaneVisualizers = new GameObject("PlaneVisualizers");
                 m_PlaneVisualizers.SetActive(false);
                 m_ShowPlanesButton.interactable = true;
-                m_ShowPlanesButton.onValueChanged.AddListener(delegate {ShowPlanes();});
+                m_ShowPlanesButton.onValueChanged.AddListener(delegate {TogglePlanesVisibility();});
                 planeManager.planesChanged += OnPlaneChanged;
+            }
+
+            var anchorManager = m_Origin.GetComponent<ARAnchorManager>();
+            if(m_ShowAnchorsButton && m_AnchorPrefab && anchorManager)
+            {
+                m_AnchorVisualizers = new GameObject("AnchorVisualizers");
+                m_AnchorVisualizers.SetActive(false);
+                m_ShowAnchorsButton.interactable = true;
+                m_ShowAnchorsButton.onValueChanged.AddListener(delegate {ToggleAnchorsVisibility();});
+                anchorManager.anchorsChanged += OnAnchorChanged;
+            }
+
+            var pointCloudManager = m_Origin.GetComponent<ARPointCloudManager>();
+            if(m_ShowPointCloudsButton && m_PointCloudParticleSystem && pointCloudManager)
+            {
+                m_PointCloudParticleSystem = Instantiate(m_PointCloudParticleSystem, m_Origin.TrackablesParent);
+                var renderer = m_PointCloudParticleSystem.GetComponent<Renderer>();
+                renderer.enabled = false;
+                pointCloudManager.pointCloudsChanged += OnPointCloudChanged;
+                m_ShowPointCloudsButton.interactable = true;
+                m_ShowPointCloudsButton.onValueChanged.AddListener(delegate {TogglePointCloudVisibility(renderer);});
             }
         }
 
@@ -521,7 +640,7 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void ShowOrigin()
+        void ToggleOriginVisibility()
         {
             if(m_OriginAxis == null)
             {
@@ -537,7 +656,7 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void ShowPlanes()
+        void TogglePlanesVisibility()
         {
             if(m_PlaneVisualizers.activeSelf)
             {
@@ -547,6 +666,42 @@ namespace UnityEngine.XR.ARFoundation
             {
                m_PlaneVisualizers.SetActive(true);
             }
+        }
+
+        void TogglePointCloudVisibility(Renderer renderer)
+        {
+            if(m_ShowPointCloudsButton.value == 0)
+            {
+                renderer.enabled = false;
+            }
+            else if(m_ShowPointCloudsButton.value == 1)
+            {
+                renderer.enabled = true;
+            }
+        }
+
+        void ToggleAnchorsVisibility()
+        {
+            if(m_AnchorVisualizers.activeSelf)
+            {
+               m_AnchorVisualizers.SetActive(false);
+            }
+            else
+            {
+               m_AnchorVisualizers.SetActive(true);
+               if(m_AnchorVisualizers.transform.childCount == 0 && m_DebugOptionsToastMenu)
+               {
+                   StartCoroutine(FadeToastDialog());
+               }
+            }
+        }
+
+        IEnumerator FadeToastDialog()
+        {
+            int seconds = 2;
+            m_DebugOptionsToastMenu.SetActive(true);
+            yield return new WaitForSeconds(seconds);
+            m_DebugOptionsToastMenu.SetActive(false);
         }
 
         void SetupConfigurationMenu()
@@ -784,11 +939,13 @@ namespace UnityEngine.XR.ARFoundation
                 var lineRenderer = GetOrCreateLineRenderer(plane);
                 UpdateLine(plane, lineRenderer);
             }
+
             foreach(var plane in eventArgs.updated)
             {
                 var lineRenderer = GetOrCreateLineRenderer(plane);
                 UpdateLine(plane, lineRenderer);
             }
+
             foreach(var plane in eventArgs.removed)
             {
                 if(m_PlaneLineRenderers.TryGetValue(plane, out var lineRenderer))
@@ -800,6 +957,53 @@ namespace UnityEngine.XR.ARFoundation
                     }
                 }
             }
+        }
+
+        void OnAnchorChanged(ARAnchorsChangedEventArgs eventArgs)
+        {
+            foreach(var anchor in eventArgs.added)
+            {
+                var anchorPrefab = GetOrCreateAnchorPrefab(anchor);
+                anchorPrefab.transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
+            }
+
+            foreach(var anchor in eventArgs.updated)
+            {
+                var anchorPrefab = GetOrCreateAnchorPrefab(anchor);
+                anchorPrefab.transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
+            }
+
+            foreach(var anchor in eventArgs.removed)
+            {
+                if(m_AnchorPrefabs.TryGetValue(anchor, out var anchorPrefab))
+                {
+                    m_AnchorPrefabs.Remove(anchor);
+                    if(anchorPrefab)
+                    {
+                        Destroy(anchorPrefab);
+                    }
+                }
+            }
+        }
+
+        void OnPointCloudChanged(ARPointCloudChangedEventArgs eventArgs)
+        {
+            foreach(var pointCloud in eventArgs.added)
+            {
+                CreateOrUpdatePoints(pointCloud);
+            }
+
+            foreach(var pointCloud in eventArgs.updated)
+            {
+                CreateOrUpdatePoints(pointCloud);
+            }
+
+            foreach(var pointCloud in eventArgs.removed)
+            {
+                RemovePoints(pointCloud);
+            }
+
+            RenderPoints();
         }
 
         LineRenderer GetOrCreateLineRenderer(ARPlane plane)
@@ -814,6 +1018,84 @@ namespace UnityEngine.XR.ARFoundation
             m_PlaneLineRenderers[plane] = lineRenderer;
 
             return lineRenderer;
+        }
+
+        GameObject GetOrCreateAnchorPrefab(ARAnchor anchor)
+        {
+            if(m_AnchorPrefabs.TryGetValue(anchor, out var foundAnchorPrefab) && foundAnchorPrefab)
+            {
+                return foundAnchorPrefab;
+            }
+
+            var go = Instantiate(m_AnchorPrefab, m_AnchorVisualizers.transform);
+            m_AnchorPrefabs[anchor] = go;
+
+            return go;
+        }
+
+        void CreateOrUpdatePoints(ARPointCloud pointCloud)
+        {
+            if (!pointCloud.positions.HasValue)
+                return;
+
+            var positions = pointCloud.positions.Value;
+
+            // Store all the positions over time associated with their unique identifiers
+            if (pointCloud.identifiers.HasValue)
+            {
+                var identifiers = pointCloud.identifiers.Value;
+                for (int i = 0; i < positions.Length; ++i)
+                {
+                    m_Points[identifiers[i]] = positions[i];
+                }
+            }
+        }
+
+        void RemovePoints(ARPointCloud pointCloud)
+        {
+            if (!pointCloud.positions.HasValue)
+                return;
+
+            var positions = pointCloud.positions.Value;
+
+            if (pointCloud.identifiers.HasValue)
+            {
+                var identifiers = pointCloud.identifiers.Value;
+                for (int i = 0; i < positions.Length; ++i)
+                {
+                    m_Points.Remove(identifiers[i]);
+                }
+            }
+        }
+
+        void RenderPoints()
+        {
+            if (m_Particles == null || m_Particles.Length < m_Points.Count)
+            {
+                m_Particles = new ParticleSystem.Particle[m_Points.Count];
+            }
+
+            int particleIndex = 0;
+            foreach (var kvp in m_Points)
+            {
+                SetParticlePosition(particleIndex++, kvp.Value);
+            }
+
+            for (int i = m_Points.Count; i < m_NumParticles; ++i)
+            {
+                m_Particles[i].remainingLifetime = -1f;
+            }
+
+            m_PointCloudParticleSystem.SetParticles(m_Particles, Math.Max(m_Points.Count, m_NumParticles));
+            m_NumParticles = m_Points.Count;
+        }
+
+        void SetParticlePosition(int index, Vector3 position)
+        {
+            m_Particles[index].startColor = m_PointCloudParticleSystem.main.startColor.color;
+            m_Particles[index].startSize = m_PointCloudParticleSystem.main.startSize.constant;
+            m_Particles[index].position = position;
+            m_Particles[index].remainingLifetime = 1f;
         }
 
         void UpdateLine(ARPlane plane, LineRenderer lineRenderer)
@@ -846,40 +1128,5 @@ namespace UnityEngine.XR.ARFoundation
                 }
             }
         }
-
-        //Managers
-        XROrigin m_Origin;
-
-        ARSession m_Session;
-
-        //Visuals
-        GameObject m_OriginAxis;
-
-        GameObject m_PlaneVisualizers;
-
-        //Labels
-        int m_PreviousFps;
-
-        int m_PreviousTrackingMode = -1;
-
-        //Misc
-        Camera m_CameraAR;
-
-        bool m_CameraFollow;
-
-        Dictionary<ARPlane, LineRenderer> m_PlaneLineRenderers = new Dictionary<ARPlane, LineRenderer>();
-
-        //Configuration
-        XRSessionSubsystem m_SessionSubsystem;
-
-        bool m_ConfigMenuSetup;
-
-        Configuration m_CurrentConfiguration;
-
-        int m_PreviousConfigCol = -1;
-
-        List<List<Image>> m_ConfigurationUI = new List<List<Image>>();
-
-        List<Text> m_ColumnLabels = new List<Text>();
     }
 }

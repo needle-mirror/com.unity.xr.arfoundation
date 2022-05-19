@@ -3,17 +3,17 @@
 
 static const half _FloorEdgeFadeScale = 10;
 static const half _CeilingPeelbackScale = 5;
-static const half _FadeThickness = 0.025;
+static const half _SimulationFadeThickness = 0.025;
 
-half3 _RoomCenter = half3(0,0,0);
-half _FloorHeight = 0.0;
-half _CeilingHeight = 2.5;
-half _RoomClipOffset = .5;
-half _XRayScale = 1.0;
+half3 _SimulationRoomCenter = half3(0,0,0);
+half _SimulationFloorHeight = 0.0;
+half _SimulationCeilingHeight = 2.5;
+half _SimulationRoomClipOffset = .5;
+half _SimulationXRayScale = 1.0;
 
 float GetCameraPositionWSHeight()
 {
-#if defined(XRAY_ENABLED)
+#if defined(SIMULATION_XRAY_ENABLED)
     #if defined(INCLUDE_RENDER_PIPELINES_UNIVERSAL) && !defined(LEGACY_IN_SRP)
         return GetCameraPositionWS().y;
     #else
@@ -29,7 +29,7 @@ float2 GetWorldSpaceXZPlaneIntersection()
 #if defined(USING_STEREO_MATRICES) || defined(LEGACY_IN_SRP)
     return float2(unity_CameraToWorld._m02, unity_CameraToWorld._m22);
 #else
-    #if defined(INCLUDE_RENDER_PIPELINES_UNIVERSAL) && defined(XRAY_FLIP_DEPTH)
+    #if defined(INCLUDE_RENDER_PIPELINES_UNIVERSAL) && defined(SIMULATION_XRAY_FLIP_DEPTH)
         return float2(-unity_CameraToWorld._m02, -unity_CameraToWorld._m22);
     #else
         return float2(unity_CameraToWorld._m02, unity_CameraToWorld._m22);
@@ -39,19 +39,19 @@ float2 GetWorldSpaceXZPlaneIntersection()
 
 half getXRayFade(half3 coords)
 {
-    coords = (coords - _RoomCenter) / _XRayScale;
-    half cameraY = (GetCameraPositionWSHeight() - _RoomCenter.y) / _XRayScale;
+    coords = (coords - _SimulationRoomCenter) / _SimulationXRayScale;
+    half cameraY = (GetCameraPositionWSHeight() - _SimulationRoomCenter.y) / _SimulationXRayScale;
 
     // Get where the clip plane should cut off at, further adjusted by camera height
-    half intersectionPlaneThickness = _RoomClipOffset - _CeilingPeelbackScale * max(cameraY - _CeilingHeight, 0) * saturate(coords.y - _CeilingHeight);
+    half intersectionPlaneThickness = _SimulationRoomClipOffset - _CeilingPeelbackScale * max(cameraY - _SimulationCeilingHeight, 0) * saturate(coords.y - _SimulationCeilingHeight);
 
     // Get the current pixel's distance from the clip plane
     half2 intersectionLine = -normalize(GetWorldSpaceXZPlaneIntersection());
     half2x2 intersectionPlaneSpace = half2x2(half2(intersectionLine.x, intersectionLine.y), half2(-intersectionLine.y, intersectionLine.x));
     half intersectionPlaneDistance = mul(intersectionPlaneSpace, coords.xz).x;
 
-    half inFrontOfClipPlaneIntersectionPlane = saturate(coords.y - _FloorHeight) * saturate(intersectionPlaneDistance - intersectionPlaneThickness);
-    half cameraAndPixelBelowFloorPlane = saturate(_FloorHeight - GetCameraPositionWSHeight()) * saturate(_FloorHeight - coords.y);
+    half inFrontOfClipPlaneIntersectionPlane = saturate(coords.y - _SimulationFloorHeight) * saturate(intersectionPlaneDistance - intersectionPlaneThickness);
+    half cameraAndPixelBelowFloorPlane = saturate(_SimulationFloorHeight - GetCameraPositionWSHeight()) * saturate(_SimulationFloorHeight - coords.y);
 
     // Stop drawing if we are outside any of the drawing regions
     clip(-1 * (inFrontOfClipPlaneIntersectionPlane + cameraAndPixelBelowFloorPlane)
@@ -60,29 +60,29 @@ half getXRayFade(half3 coords)
         #endif
      );
 
-    return  1 - saturate((intersectionPlaneDistance + _FadeThickness - intersectionPlaneThickness) / _FadeThickness) * saturate((coords.y - _FloorHeight) * _FloorEdgeFadeScale);
+    return  1 - saturate((intersectionPlaneDistance + _SimulationFadeThickness - intersectionPlaneThickness) / _SimulationFadeThickness) * saturate((coords.y - _SimulationFloorHeight) * _FloorEdgeFadeScale);
 }
 
 half getXRayEdgeFade(half3 coords)
 {
-    coords = (coords - _RoomCenter) / _XRayScale;
-    half cameraY = (GetCameraPositionWSHeight() - _RoomCenter.y) / _XRayScale;
+    coords = (coords - _SimulationRoomCenter) / _SimulationXRayScale;
+    half cameraY = (GetCameraPositionWSHeight() - _SimulationRoomCenter.y) / _SimulationXRayScale;
 
     // Get where the clip plane should cut off at, further adjusted by camera height
-    half intersectionPlaneThickness = _RoomClipOffset - _CeilingPeelbackScale * max(cameraY - _CeilingHeight, 0) * saturate(coords.y - _CeilingHeight);
+    half intersectionPlaneThickness = _SimulationRoomClipOffset - _CeilingPeelbackScale * max(cameraY - _SimulationCeilingHeight, 0) * saturate(coords.y - _SimulationCeilingHeight);
 
     // Get the current pixel's distance from the clip plane
     half2 intersectionLine = -normalize(GetWorldSpaceXZPlaneIntersection());
     half2x2 intersectionPlaneSpace = half2x2(half2(intersectionLine.x, intersectionLine.y), half2(-intersectionLine.y, intersectionLine.x));
     half intersectionPlaneDistance = mul(intersectionPlaneSpace, coords.xz).x;
 
-    half betweenFadePlanes = saturate(coords.y - _FloorHeight) * (saturate(intersectionPlaneDistance - _FadeThickness - intersectionPlaneThickness) + saturate(-intersectionPlaneDistance + intersectionPlaneThickness));
-    half pixelBelowFloorPlane = saturate(_FloorHeight - coords.y);
+    half betweenFadePlanes = saturate(coords.y - _SimulationFloorHeight) * (saturate(intersectionPlaneDistance - _SimulationFadeThickness - intersectionPlaneThickness) + saturate(-intersectionPlaneDistance + intersectionPlaneThickness));
+    half pixelBelowFloorPlane = saturate(_SimulationFloorHeight - coords.y);
 
     // Stop drawing if we are outside any of the drawing regions
     clip(-1 * (betweenFadePlanes + pixelBelowFloorPlane));
 
-    return 1 - saturate((intersectionPlaneDistance - intersectionPlaneThickness) / _FadeThickness)*saturate((coords.y - _FloorHeight) * _FloorEdgeFadeScale);
+    return 1 - saturate((intersectionPlaneDistance - intersectionPlaneThickness) / _SimulationFadeThickness)*saturate((coords.y - _SimulationFloorHeight) * _FloorEdgeFadeScale);
 }
 
 #endif

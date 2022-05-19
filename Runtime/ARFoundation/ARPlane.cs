@@ -1,8 +1,10 @@
 using System;
-using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine.XR.ARSubsystems;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -21,6 +23,10 @@ namespace UnityEngine.XR.ARFoundation
         [SerializeField]
         [Tooltip("The largest value by which a plane's vertex may change before the boundaryChanged event is invoked. Units are in meters.")]
         float m_VertexChangedThreshold = 0.01f;
+
+        NativeArray<Vector2> m_Boundary;
+        NativeArray<Vector2> m_OldBoundary;
+        bool m_HasBoundaryChanged;
 
         /// <summary>
         /// The largest value by which a plane's vertex could change before the mesh is regenerated. Units are in meters.
@@ -154,7 +160,22 @@ namespace UnityEngine.XR.ARFoundation
             vertexChangedThreshold = Mathf.Max(0f, vertexChangedThreshold);
         }
 
+#if UNITY_EDITOR
+        void Awake()
+        {
+            AssemblyReloadEvents.beforeAssemblyReload += DisposeNativeContainers;
+        }
+#endif
+
         void OnDestroy()
+        {
+            DisposeNativeContainers();
+#if UNITY_EDITOR
+            AssemblyReloadEvents.beforeAssemblyReload -= DisposeNativeContainers;
+#endif
+        }
+
+        void DisposeNativeContainers()
         {
             if (m_OldBoundary.IsCreated)
                 m_OldBoundary.Dispose();
@@ -214,17 +235,11 @@ namespace UnityEngine.XR.ARFoundation
 
         void Update()
         {
-            if (m_HasBoundaryChanged && (boundaryChanged != null))
+            if (m_HasBoundaryChanged && boundaryChanged != null)
             {
                 m_HasBoundaryChanged = false;
                 boundaryChanged(new ARPlaneBoundaryChangedEventArgs(this));
             }
         }
-
-        NativeArray<Vector2> m_Boundary;
-
-        NativeArray<Vector2> m_OldBoundary;
-
-        bool m_HasBoundaryChanged;
     }
 }

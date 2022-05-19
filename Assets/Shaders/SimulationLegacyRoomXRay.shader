@@ -69,7 +69,7 @@
         #pragma target 3.0
 
         #include "XRayCommon.cginc"
-        #pragma multi_compile _ XRAY_ENABLED
+        #pragma multi_compile _ SIMULATION_XRAY_ENABLED
         #define LEGACY_IN_SRP
 
         sampler2D _MainTex;
@@ -88,7 +88,7 @@
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-#if XRAY_ENABLED
+#if SIMULATION_XRAY_ENABLED
             half lightValue = getXRayFade(IN.worldPos);
 #else
             half lightValue = 1;
@@ -118,7 +118,7 @@
         #pragma target 3.0
 
         #include "XRayCommon.cginc"
-        #pragma multi_compile _ XRAY_ENABLED
+        #pragma multi_compile _ SIMULATION_XRAY_ENABLED
 
         struct Input
         {
@@ -127,7 +127,7 @@
 
         void surf (Input IN, inout SurfaceOutput o)
         {
-#if XRAY_ENABLED
+#if SIMULATION_XRAY_ENABLED
             half lightValue = getXRayEdgeFade(IN.worldPos);
 #else
             half lightValue = 0;

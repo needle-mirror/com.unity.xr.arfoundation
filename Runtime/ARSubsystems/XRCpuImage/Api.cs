@@ -66,7 +66,7 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Method to be implemented by the provider to convert the image with handle
-            /// <paramref name="nativeHandle"/> using the provided <paramref cref="conversionParams"/>.
+            /// <paramref name="nativeHandle"/> using the provided <paramref name="conversionParams"/>.
             /// </summary>
             /// <param name="nativeHandle">A unique identifier for the camera image to convert.</param>
             /// <param name="conversionParams">The parameters to use during the conversion.</param>

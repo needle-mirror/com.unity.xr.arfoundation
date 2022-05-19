@@ -14,29 +14,43 @@ namespace UnityEngine.XR.Simulation
         void OnEnable()
         {
             if (Application.isPlaying)
-            {
                 m_FPSModeHandler = new CameraFPSModeHandler();
-            }
         }
 
         void Update()
         {
             if (Application.isPlaying)
-            {
                 m_FPSModeHandler.HandleGameInput();
-            }
+
+            if (!m_FPSModeHandler.moveActive)
+                return;
 
             var pose = m_FPSModeHandler.CalculateMovement(transform.GetWorldPose(), true);
+            UpdatePose(pose);
+        }
+
+        void UpdatePose(Pose pose)
+        {
             transform.SetWorldPose(pose);
 
-            var newPose = transform.GetLocalPose();
-            SetCameraPose(newPose.position.x, newPose.position.y, newPose.position.z,
-                newPose.rotation.x, newPose.rotation.y, newPose.rotation.z, newPose.rotation.w);
+            var localPose = transform.GetLocalPose();
+            SetCameraPose(localPose.position.x, localPose.position.y, localPose.position.z,
+                localPose.rotation.x, localPose.rotation.y, localPose.rotation.z, localPose.rotation.w);
+        }
+
+        public void SetSimulationEnvironment(SimulationEnvironment simulationEnvironment)
+        {
+            if (simulationEnvironment != null)
+            {
+                m_FPSModeHandler.movementBounds = simulationEnvironment.cameraMovementBounds;
+                m_FPSModeHandler.useMovementBounds = true;
+
+                UpdatePose(simulationEnvironment.cameraStartingPose);
+            }
         }
 
         internal static CameraPoseProvider AddPoseProviderToScene()
         {
-            // TODO: Centralize management of playmode game objects somewhere
             var go = GameObjectUtils.Create("CameraPoseProvider");
             var cameraPoseProvider = go.AddComponent<CameraPoseProvider>();
 

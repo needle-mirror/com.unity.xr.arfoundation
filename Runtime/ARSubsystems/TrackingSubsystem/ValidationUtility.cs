@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// A utility to validate data from certain types of <c>Subsystem</c>s.
     /// </summary>
     /// <typeparam name="T">The <see cref="ITrackable"/> managed by the subsystem.</typeparam>
-    /// <seealso cref="XRDepthSubsystem"/>
+    /// <seealso cref="XRPointCloudSubsystem"/>
     /// <seealso cref="XRPlaneSubsystem"/>
     /// <seealso cref="XRAnchorSubsystem"/>
     public class ValidationUtility<T>

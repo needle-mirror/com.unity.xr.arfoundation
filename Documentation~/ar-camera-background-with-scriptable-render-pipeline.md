@@ -26,6 +26,9 @@ To use the Universal Rendering Pipeline, you must create a `Pipeline Asset`. Fol
 
 ### Configuring URP to work with ARFoundation
 
+> [!NOTE]
+> URP provides a pipeline conversion tool that builds a series of assets and pipelines to mimic the built-in Legacy rendered. If you wish to use this tool you must either do it before assigning the `ARBackgroundRenderFeature` to a renderer or make sure you go back and set the proper URP Render Pipeline Asset as your Render Pipeline Asset.
+
 After you created a `Pipeline Asset`, you can configure the asset to work with AR Foundation. Follow these steps:
 
 1. Locate your `Forward Renderer` asset. If you created your project from the [URP Project Template](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/creating-a-new-project-with-urp.html), this is located in the `Settings` folder in your project's `Assets` folder.

@@ -116,8 +116,8 @@
 
             //--------------------------------------
             // Unity Simulation keywords
-            #pragma multi_compile _ XRAY_ENABLED
-            #pragma multi_compile _ XRAY_FLIP_DEPTH
+            #pragma multi_compile _ SIMULATION_XRAY_ENABLED
+            #pragma multi_compile _ SIMULATION_XRAY_FLIP_DEPTH
             #define INCLUDE_RENDER_PIPELINES_UNIVERSAL
 
             #pragma vertex LitPassVertex
@@ -182,8 +182,8 @@
 
             //--------------------------------------
             // Unity Simulation keywords
-            #pragma multi_compile _ XRAY_ENABLED
-            #pragma multi_compile _ XRAY_FLIP_DEPTH
+            #pragma multi_compile _ SIMULATION_XRAY_ENABLED
+            #pragma multi_compile _ SIMULATION_XRAY_FLIP_DEPTH
             #define INCLUDE_RENDER_PIPELINES_UNIVERSAL
 
             #pragma vertex LitPassVertex

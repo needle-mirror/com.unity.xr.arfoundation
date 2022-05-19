@@ -91,7 +91,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         [Description("AmbientSphericalHarmonics")]
         AmbientSphericalHarmonics = (1 << 12),
-        
+
         /// <summary>
         /// The camera grain texture is included.
         /// </summary>
@@ -258,7 +258,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </remarks>
         public SphericalHarmonicsL2 ambientSphericalHarmonics => m_AmbientSphericalHarmonics;
         SphericalHarmonicsL2 m_AmbientSphericalHarmonics;
-        
+
         /// <summary>
         /// A texture that simulates the camera's noise.
         /// </summary>
@@ -396,6 +396,66 @@ namespace UnityEngine.XR.ARSubsystems
         /// <c>True</c> if the frame has a camera grain noise.
         /// </value>
         public bool hasNoiseIntensity => (m_Properties & XRCameraFrameProperties.NoiseIntensity) != 0;
+
+        /// <summary>
+        /// Creates a <see cref="XRCameraFrame"/>.
+        /// </summary>
+        /// <param name="timestamp">The timestamp, in nanoseconds, associated with this frame.</param>
+        /// <param name="averageBrightness">The estimated brightness of the scene.</param>
+        /// <param name="averageColorTemperature">The estimated color temperature of the scene.</param>
+        /// <param name="colorCorrection">The estimated color correction value of the scene.</param>
+        /// <param name="projectionMatrix">The 4x4 projection matrix for the camera frame.</param>
+        /// <param name="displayMatrix">The 4x4 display matrix for the camera frame.</param>
+        /// <param name="trackingState">The <see cref="TrackingState"/> associated with the camera.</param>
+        /// <param name="nativePtr">A native pointer associated with this frame.</param>
+        /// <param name="properties">The set of all flags indicating which properties are included in the frame.</param>
+        /// <param name="averageIntensityInLumens">The estimated intensity, in lumens, of the scene.</param>
+        /// <param name="exposureDuration">The camera exposure duration, in seconds with sub-millisecond precision, of the scene.</param>
+        /// <param name="exposureOffset">The camera exposure offset of the scene for lighting scaling.</param>
+        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of the most influential real-world light in the scene.</param>
+        /// <param name="mainLightColor">The estimated color of the most influential real-world light in the scene.</param>
+        /// <param name="mainLightDirection">The estimated direction of the most influential real-world light in the scene.</param>
+        /// <param name="ambientSphericalHarmonics">The ambient spherical harmonic coefficients that represent lighting in the real-world.</param>
+        /// <param name="cameraGrain">A texture that simulates the camera's noise.</param>
+        /// <param name="noiseIntensity">The level of intensity of camera grain noise in a scene.</param>
+        public XRCameraFrame(long timestamp,
+            float averageBrightness,
+            float averageColorTemperature,
+            Color colorCorrection,
+            Matrix4x4 projectionMatrix,
+            Matrix4x4 displayMatrix,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            XRCameraFrameProperties properties,
+            float averageIntensityInLumens,
+            double exposureDuration,
+            float exposureOffset,
+            float mainLightIntensityInLumens,
+            Color mainLightColor,
+            Vector3 mainLightDirection,
+            SphericalHarmonicsL2 ambientSphericalHarmonics,
+            XRTextureDescriptor cameraGrain,
+            float noiseIntensity)
+        {
+            m_TimestampNs = timestamp;
+            m_AverageBrightness = averageBrightness;
+            m_AverageColorTemperature = averageColorTemperature;
+            m_ColorCorrection = colorCorrection;
+            m_ProjectionMatrix = projectionMatrix;
+            m_DisplayMatrix = displayMatrix;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_Properties = properties;
+            m_AverageIntensityInLumens = averageIntensityInLumens;
+            m_ExposureDuration = exposureDuration;
+            m_ExposureOffset = exposureOffset;
+            m_MainLightIntensityLumens = mainLightIntensityInLumens;
+            m_MainLightColor = mainLightColor;
+            m_MainLightDirection = mainLightDirection;
+            m_AmbientSphericalHarmonics = ambientSphericalHarmonics;
+            m_CameraGrain = cameraGrain;
+            m_NoiseIntensity = noiseIntensity;
+        }
 
         /// <summary>
         /// Provides a timestamp of the camera frame.

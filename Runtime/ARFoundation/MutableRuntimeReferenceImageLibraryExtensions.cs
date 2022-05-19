@@ -38,7 +38,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="inputDeps">Input job dependencies (optional).</param>
         /// <returns>A [JobHandle](xref:Unity.Jobs.JobHandle) which can be used to chain together multiple tasks or to
         ///     query for completion. Can be safely discarded.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if <paramref cref="library"/> is `null`.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="library"/> is `null`.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
         [Obsolete("Use " + nameof(ScheduleAddImageWithValidationJob) + " instead. (2020-10-20)")]
@@ -72,7 +72,7 @@ namespace UnityEngine.XR.ARFoundation
         /// that can be used to query the status of the job. The `AddReferenceImageJobState` can be used to
         /// determine whether the image was successfully added. If image validity can be determined, invalid images
         /// will be not be added to the reference image library.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if <paramref cref="library"/> is `null`.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="library"/> is `null`.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
         public static AddReferenceImageJobState ScheduleAddImageWithValidationJob(

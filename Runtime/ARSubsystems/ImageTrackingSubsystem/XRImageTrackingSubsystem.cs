@@ -46,7 +46,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// A <see cref="RuntimeReferenceImageLibrary"/> is created at runtime and can be modifiable
         /// (see <see cref="MutableRuntimeReferenceImageLibrary"/>). You can create a <see cref="RuntimeReferenceImageLibrary"/>
         /// from an <see cref="XRReferenceImageLibrary"/> using
-        /// <see cref="CreateRuntimeLibrary(XRReferenceImageLibrary"/>.
+        /// <see cref="CreateRuntimeLibrary(XRReferenceImageLibrary)"/>.
         /// </remarks>
         /// <exception cref="System.ArgumentNullException">Thrown if the subsystem has been started, and you attempt to set the image library to null.</exception>
         /// <seealso cref="OnStart()"/>

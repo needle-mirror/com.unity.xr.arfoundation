@@ -12,6 +12,8 @@ Currently, the menu provides information about the following:
 - Tracking Mode
 - Planes
 - Configurations
+- Anchors
+- Point Clouds
 
 # Setting up the Menu
 
@@ -20,3 +22,5 @@ In order to create an out-of-the-box fully configured debug menu, you should rig
 Right-click to open Scene Inspector Menu       |  Select XR
 :-------------------------:|:-------------------------:
 ![Scene Inspector Menu](images/ar-debug-menu-xr.png "Select XR")  |  ![XR Submenu](images/ar-debug-menu-scene-inspector.png "Select ARDebugMenu")
+
+The AR Debug Menu appears as a toolbar that is anchored either to the left or bottom side of the screen.

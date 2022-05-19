@@ -28,7 +28,7 @@ half4 XRayLitPassFragment(Varyings input) : SV_Target
 
     half4 color = UniversalFragmentPBR(inputData, surfaceData.albedo, surfaceData.metallic, surfaceData.specular, surfaceData.smoothness, surfaceData.occlusion, surfaceData.emission, surfaceData.alpha);
 
-#if XRAY_ENABLED
+#if SIMULATION_XRAY_ENABLED
     half lightValue = getXRayFade(input.positionWS);
 #else
     half lightValue = 1.0h;
@@ -52,7 +52,7 @@ half4 XRayUnLitPassFragment(Varyings input) : SV_Target
 
     half4 color = half4(0.0h, 0.0h, 0.0h, 1.0h);
 
-#if XRAY_ENABLED
+#if SIMULATION_XRAY_ENABLED
     half lightValue = getXRayEdgeFade(input.positionWS);
 #else
     half lightValue = 0.0h;

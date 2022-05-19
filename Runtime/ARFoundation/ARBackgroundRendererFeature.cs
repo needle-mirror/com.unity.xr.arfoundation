@@ -9,7 +9,7 @@ using ScriptableRendererFeature = UnityEngine.ScriptableObject;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// A render feature for rendering the camera background for AR devies.
+    /// A render feature for rendering the camera background for AR devices.
     /// </summary>
     public class ARBackgroundRendererFeature : ScriptableRendererFeature
     {
@@ -17,38 +17,17 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The scriptable render pass to be added to the renderer when the camera background is to be rendered.
         /// </summary>
-        CustomRenderPass m_ScriptablePass;
-
+        ARCameraBeforeOpaquesRenderPass m_BeforeOpaquesScriptablePass;
         /// <summary>
-        /// The mesh for rendering the background shader.
+        /// The scriptable render pass to be added to the renderer when the camera background is to be rendered.
         /// </summary>
-        Mesh m_BackgroundMesh;
+        ARCameraAfterOpaquesRenderPass m_AfterOpaquesScriptablePass;
 
         /// <summary>
         /// Create the scriptable render pass.
         /// </summary>
         public override void Create()
         {
-#if !UNITY_EDITOR
-            m_ScriptablePass = new CustomRenderPass(RenderPassEvent.BeforeRenderingOpaques);
-
-            m_BackgroundMesh = new Mesh();
-            m_BackgroundMesh.vertices =  new Vector3[]
-            {
-                new Vector3(0f, 0f, 0.1f),
-                new Vector3(0f, 1f, 0.1f),
-                new Vector3(1f, 1f, 0.1f),
-                new Vector3(1f, 0f, 0.1f),
-            };
-            m_BackgroundMesh.uv = new Vector2[]
-            {
-                new Vector2(0f, 0f),
-                new Vector2(0f, 1f),
-                new Vector2(1f, 1f),
-                new Vector2(1f, 0f),
-            };
-            m_BackgroundMesh.triangles = new int[] {0, 1, 2, 0, 2, 3};
-#endif // !UNITY_EDITOR
         }
 
         /// <summary>
@@ -58,7 +37,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-#if !UNITY_EDITOR
             Camera currentCamera = renderingData.cameraData.camera;
             if ((currentCamera != null) && (currentCamera.cameraType == CameraType.Game))
             {
@@ -67,17 +45,31 @@ namespace UnityEngine.XR.ARFoundation
                     && (cameraBackground.material != null))
                 {
                     bool invertCulling = cameraBackground.GetComponent<ARCameraManager>()?.subsystem?.invertCulling ?? false;
-                    m_ScriptablePass.Setup(m_BackgroundMesh, cameraBackground.material, invertCulling);
-                    renderer.EnqueuePass(m_ScriptablePass);
+
+                    ARCameraBackgroundRenderPass renderPass;
+                    switch (cameraBackground.currentRenderingMode)
+                    {
+                        case XRCameraBackgroundRenderingMode.AfterOpaques:
+                            m_AfterOpaquesScriptablePass ??= new ARCameraAfterOpaquesRenderPass();
+                            renderPass = m_AfterOpaquesScriptablePass;
+                            break;
+
+                        case XRCameraBackgroundRenderingMode.BeforeOpaques:
+                            m_BeforeOpaquesScriptablePass ??= new ARCameraBeforeOpaquesRenderPass();
+                            renderPass = m_BeforeOpaquesScriptablePass;
+                            break;
+
+                        default:
+                            return;
+                    }
+
+                    renderPass.Setup(cameraBackground.material, invertCulling);
+                    renderer.EnqueuePass(renderPass);
                 }
             }
-#endif // !UNITY_EDITOR
         }
 
-        /// <summary>
-        /// The custom render pass to render the camera background.
-        /// </summary>
-        class CustomRenderPass : ScriptableRenderPass
+        abstract class ARCameraBackgroundRenderPass : ScriptableRenderPass
         {
             /// <summary>
             /// The name for the custom render pass which will display in graphics debugging tools.
@@ -85,14 +77,9 @@ namespace UnityEngine.XR.ARFoundation
             const string k_CustomRenderPassName = "AR Background Pass (URP)";
 
             /// <summary>
-            /// The orthogonal projection matrix for the background rendering.
-            /// </summary>
-            static readonly Matrix4x4 k_BackgroundOrthoProjection = Matrix4x4.Ortho(0f, 1f, 0f, 1f, -0.1f, 9.9f);
-
-            /// <summary>
             /// The mesh for rendering the background material.
             /// </summary>
-            Mesh m_BackgroundMesh;
+            protected Mesh m_BackgroundMesh;
 
             /// <summary>
             /// The material used for rendering the device background using the camera video texture and potentially
@@ -105,15 +92,16 @@ namespace UnityEngine.XR.ARFoundation
             /// ([CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html)).
             /// </summary>
             bool m_InvertCulling;
+            
+            /// <summary>
+            /// The projection matrix used to render the <see cref="mesh"/>.
+            /// </summary>
+            protected abstract Matrix4x4 projectionMatrix { get; }
 
             /// <summary>
-            /// Constructs the background render pass.
+            /// The (xref: UnityEngine.Mesh) used in this custom render pass.
             /// </summary>
-            /// <param name="renderPassEvent">The render pass event when this pass should be rendered.</param>
-            public CustomRenderPass(RenderPassEvent renderPassEvent)
-            {
-                this.renderPassEvent = renderPassEvent;
-            }
+            protected abstract Mesh mesh { get; }
 
             /// <summary>
             /// Set up the background render pass.
@@ -121,21 +109,10 @@ namespace UnityEngine.XR.ARFoundation
             /// <param name="backgroundMesh">The mesh used for rendering the device background.</param>
             /// <param name="backgroundMaterial">The material used for rendering the device background.</param>
             /// <param name="invertCulling">Whether the culling mode should be inverted.</param>
-            public void Setup(Mesh backgroundMesh, Material backgroundMaterial, bool invertCulling)
+            public void Setup(Material backgroundMaterial, bool invertCulling)
             {
-                m_BackgroundMesh = backgroundMesh;
                 m_BackgroundMaterial = backgroundMaterial;
                 m_InvertCulling = invertCulling;
-            }
-
-            /// <summary>
-            /// Configure the render pass by configuring the render target and clear values.
-            /// </summary>
-            /// <param name="commandBuffer">The command buffer for configuration.</param>
-            /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
-            public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
-            {
-                ConfigureClear(ClearFlag.Depth, Color.clear);
             }
 
             /// <summary>
@@ -151,8 +128,10 @@ namespace UnityEngine.XR.ARFoundation
                 ARCameraBackground.AddBeforeBackgroundRenderHandler(cmd);
                 cmd.SetInvertCulling(m_InvertCulling);
 
-                cmd.SetViewProjectionMatrices(Matrix4x4.identity, k_BackgroundOrthoProjection);
-                cmd.DrawMesh(m_BackgroundMesh, Matrix4x4.identity, m_BackgroundMaterial);
+                cmd.SetViewProjectionMatrices(Matrix4x4.identity, projectionMatrix);
+
+                cmd.DrawMesh(mesh, Matrix4x4.identity, m_BackgroundMaterial);
+
                 cmd.SetViewProjectionMatrices(renderingData.cameraData.camera.worldToCameraMatrix,
                                               renderingData.cameraData.camera.projectionMatrix);
 
@@ -169,6 +148,66 @@ namespace UnityEngine.XR.ARFoundation
             public override void FrameCleanup(CommandBuffer commandBuffer)
             {
             }
+        }
+
+        /// <summary>
+        /// The custom render pass to render the camera background before rendering opaques.
+        /// </summary>
+        class ARCameraBeforeOpaquesRenderPass : ARCameraBackgroundRenderPass
+        {
+            /// <summary>
+            /// Constructs the background render pass.
+            /// </summary>
+            public ARCameraBeforeOpaquesRenderPass()
+            {
+                renderPassEvent = RenderPassEvent.BeforeRenderingOpaques;
+            }
+
+            /// <summary>
+            /// Configure the render pass by setting the render target and clear values.
+            /// </summary>
+            /// <param name="commandBuffer">The command buffer for configuration.</param>
+            /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
+            public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
+            {
+                ConfigureClear(ClearFlag.Depth, Color.clear);
+            }
+
+            /// <inheritdoc />
+            protected override Matrix4x4 projectionMatrix => ARCameraBackgroundRenderingUtils.beforeOpaquesOrthoProjection;
+
+            /// <inheritdoc />
+            protected override Mesh mesh => ARCameraBackgroundRenderingUtils.fullScreenNearClipMesh;
+        }
+
+        /// <summary>
+        /// The custom render pass to render the camera background after rendering opaques.
+        /// </summary>
+        class ARCameraAfterOpaquesRenderPass : ARCameraBackgroundRenderPass
+        {
+            /// <summary>
+            /// Constructs the background render pass.
+            /// </summary>
+            public ARCameraAfterOpaquesRenderPass()
+            {
+                renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+            }
+
+            /// <summary>
+            /// Configure the render pass by setting the render target and clear values.
+            /// </summary>
+            /// <param name="commandBuffer">The command buffer for configuration.</param>
+            /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
+            public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
+            {
+                ConfigureClear(ClearFlag.None, Color.clear);
+            }
+
+            /// <inheritdoc />
+            protected override Matrix4x4 projectionMatrix => ARCameraBackgroundRenderingUtils.afterOpaquesOrthoProjection;
+
+            /// <inheritdoc />
+            protected override Mesh mesh => ARCameraBackgroundRenderingUtils.fullScreenFarClipMesh;
         }
 #endif // MODULE_URP_ENABLED
     }

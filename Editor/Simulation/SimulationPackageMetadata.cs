@@ -26,7 +26,7 @@ namespace UnityEditor.XR.Simulation
         {
             packageName = "AR Foundation",
             packageId = "com.unity.xr.arfoundation",
-            settingsType = typeof(SimulationSettings).FullName,
+            settingsType = typeof(XRSimulationSettings).FullName,
             loaderMetadata = new List<IXRLoaderMetadata>()
             {
                 new SimulationLoaderMetadata()
@@ -47,8 +47,8 @@ namespace UnityEditor.XR.Simulation
         {
             // On future Editor launches it will find them itself, but first time around we
             // need to explicitly add it
-            if (obj is SimulationSettings settings)
-                EditorBuildSettings.AddConfigObject(SimulationSettings.k_SettingsKey, settings, true);
+            if (obj is XRSimulationSettings settings)
+                EditorBuildSettings.AddConfigObject(XRSimulationSettings.k_SettingsKey, settings, true);
 
             return true;
         }

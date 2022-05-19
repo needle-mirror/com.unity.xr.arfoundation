@@ -29,7 +29,7 @@ namespace UnityEngine.XR.ARSubsystems
         ///
         /// The default implementation takes no action and has no effect.
         /// </remarks>
-        /// <param name="library">The library to which <param name="referenceObject"> is being added.</param></param>
+        /// <param name="library">The library to which <paramref name="referenceObject"/> is being added.</param>
         /// <param name="referenceObject">The reference object being added to <paramref name="library"/>.</param>
         protected internal virtual void OnAddToLibrary(XRReferenceObjectLibrary library, XRReferenceObject referenceObject) { }
     }

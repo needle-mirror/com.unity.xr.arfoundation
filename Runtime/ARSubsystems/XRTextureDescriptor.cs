@@ -132,6 +132,30 @@ namespace UnityEngine.XR.ARSubsystems
         TextureDimension m_Dimension;
 
         /// <summary>
+        /// Creates a <see cref="XRTextureDescriptor"/>.
+        /// </summary>
+        /// <param name="nativeTexture">Pointer to the native texture.</param>
+        /// <param name="width">Width of the native texture.</param>
+        /// <param name="height">Height of the native texture.</param>
+        /// <param name="mipmapCount">Number of mipmaps in the native texture.</param>
+        /// <param name="format">Format of the native texture.</param>
+        /// <param name="propertyNameId">The unique shader property name ID for the material shader texture.</param>
+        /// <param name="depth">Depth dimension of the native texture.  Should be one for all except 3D textures.</param>
+        /// <param name="dimension">[Texture dimension](https://docs.unity3d.com/ScriptReference/Rendering.TextureDimension.html) of the native texture object.</param>
+        public XRTextureDescriptor(IntPtr nativeTexture, int width, int height, int mipmapCount, TextureFormat format,
+            int propertyNameId, int depth, TextureDimension dimension)
+        {
+            m_NativeTexture = nativeTexture;
+            m_Width = width;
+            m_Height = height;
+            m_MipmapCount = mipmapCount;
+            m_Format = format;
+            m_PropertyNameId = propertyNameId;
+            m_Depth = depth;
+            m_Dimension = dimension;
+        }
+
+        /// <summary>
         /// Determines whether the given texture descriptor has identical texture metadata (dimension, mipmap count,
         /// and format).
         /// </summary>

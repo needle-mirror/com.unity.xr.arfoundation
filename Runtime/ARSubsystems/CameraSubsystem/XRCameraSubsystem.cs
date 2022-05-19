@@ -35,6 +35,27 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Get the current <see cref="XRCameraBackgroundRenderingMode"/>.
+        /// </summary>
+        public XRCameraBackgroundRenderingMode currentCameraBackgroundRenderingMode => permissionGranted
+                ? provider.currentBackgroundRenderingMode
+                : XRCameraBackgroundRenderingMode.None;
+
+        /// <summary>
+        /// Get or set the requested <see cref="XRSupportedCameraBackgroundRenderingMode"/>.
+        /// </summary>
+        public XRSupportedCameraBackgroundRenderingMode requestedCameraBackgroundRenderingMode
+        {
+            get => provider.requestedBackgroundRenderingMode;
+            set => provider.requestedBackgroundRenderingMode = value;
+        }
+
+        /// <summary>
+        /// Get the supported <see cref="XRSupportedCameraBackgroundRenderingMode"/>s. Indicates which <see cref="XRCameraBackgroundRenderingMode"/> are supported.
+        /// </summary>
+        public XRSupportedCameraBackgroundRenderingMode supportedCameraBackgroundRenderingMode => provider.supportedBackgroundRenderingMode;
+
+        /// <summary>
         /// Interface for providing camera functionality for the implementation.
         /// </summary>
         public class Provider : SubsystemProvider<XRCameraSubsystem>
@@ -187,6 +208,26 @@ namespace UnityEngine.XR.ARSubsystems
                 get => null;
                 set => throw new NotSupportedException("setting current camera configuration is not supported by this implementation");
             }
+
+            /// <summary>
+            /// Property implemented by the provider to query the current <see cref="XRCameraBackgroundRenderingMode"/>.
+            /// </summary>
+            public virtual XRCameraBackgroundRenderingMode currentBackgroundRenderingMode => XRCameraBackgroundRenderingMode.None;
+
+            /// <summary>
+            /// Property implemented by the provider to query or set the requested <see cref="XRCameraBackgroundRenderingMode"/>.
+            /// </summary>
+            public virtual XRSupportedCameraBackgroundRenderingMode requestedBackgroundRenderingMode
+            {
+                get => XRSupportedCameraBackgroundRenderingMode.Any;
+                set { }
+            }
+
+            /// <summary>
+            /// Property implemented by the provider to query the supported <see cref="XRCameraBackgroundRenderingMode"/>s
+            /// defined as <see cref="XRSupportedCameraBackgroundRenderingMode"/>s.
+            /// </summary>
+            public virtual XRSupportedCameraBackgroundRenderingMode supportedBackgroundRenderingMode => XRSupportedCameraBackgroundRenderingMode.None;
 
             /// <summary>
             /// Get the <see cref="XRTextureDescriptor"/>s associated with the current

@@ -3,7 +3,7 @@ uid: arfoundation-manual
 ---
 # About AR Foundation
 
-AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate packages for the target platforms officially supported by Unity:
+AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate provider plug-in packages for the target platforms officially supported by Unity:
 
 * [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/manual/index.html) on Android
 * [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.0/manual/index.html) on iOS
@@ -29,11 +29,11 @@ AR Foundation is a set of `MonoBehaviour`s and APIs for dealing with devices tha
 - Session management: manipulation of the platform-level configuration automatically when AR Features are enable or disabled.
 - Occlusion: allows for occlusion of virtual content by detected environmental depth (environment occlusion) or by detected human depth (human occlusion).
 
-## Platform Support
+## Platform support
 
 AR Foundation does not implement any AR features itself but, instead, defines a multi-platform API that allows you to work with functionality common to multiple platforms.
 
-### Feature Support Per Platform
+### Feature support per platform
 
 You can refer to this table to understand which parts of AR Foundation are relevant on specific platforms:
 
@@ -59,7 +59,7 @@ You can refer to this table to understand which parts of AR Foundation are relev
 
 **Note:** To use ARCore cloud anchors, download and install Google's [ARCore Extensions for Unity's AR Foundation](https://developers.google.com/ar/develop/unity-arf).
 
-### Supported Platform Packages
+### Supported platform packages
 The following platform packages and later implement the AR Foundation features indicated above:
 
 |Package Name               |Version             |
@@ -70,13 +70,13 @@ The following platform packages and later implement the AR Foundation features i
 
 ## Subsystems
 
-AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems in this package uses the namespace `UnityEngine.XR.ARSubsystems`. You occasionally need to interact with the types in the `UnityEngine.XR.ARSubsystems` namespace. For more details, see [Subsystems](arsubsystems/arsubsystems.md).
+AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems in this package uses the namespace `UnityEngine.XR.ARSubsystems`. For more details, see [Subsystems](arsubsystems/arsubsystems.md).
 
-Each subsystem handles specific functionality. For example, `XRPlaneSubsystem` provides the plane detection interface.
+Each subsystem handles specific functionality and is independent from other subsystems. For example, `XRPlaneSubsystem` provides the plane detection interface.
 
 ### Providers
 
-A **provider** is a concrete implementation of a subsystem. For example, the `Google ARCore XR Plug-in` package contains the ARCore implementation for many of the AR-related subsystems.
+A **provider** is a concrete implementation of a subsystem. For example, the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/) package contains the ARCore implementation for many of the AR-related subsystems.
 
 Because different providers have varying support for specific features, each subsystem also has a descriptor that indicates which specific subsystem features it supports. For example, the `XRPlaneSubsystemDescriptor` contains properties indicating whether it supports horizontal or vertical plane detection.
 
@@ -86,11 +86,11 @@ Each individual provider determines how to implement each subsystem. In general,
 
 To install this package, follow the instructions in the [Package Manager documentation](https://docs.unity3d.com/Packages/com.unity.package-manager-ui@latest/index.html).
 
-Subsystems are implemented in other packages. To use AR Foundation, you must also install at least one of these platform-specific AR packages from the Package Manager window (menu: **Window** &gt; **Package Manager**):
+## Provider plug-in setup
 
- - Apple ARKit XR Plug-in
- - Google ARCore XR Plug-in
- - OpenXR Plug-in
+A provider plug-in is a separate package containing AR Foundation providers for a given platform. To use AR Foundation, you must also install at least one provider plug-in, either from the Package Manager or the [XR Plug-in Management](https://docs.unity3d.com/2020.2/Documentation/Manual/configuring-project-for-xr.html) window as shown below.
+
+![XR Plug-in Management window](images/enable-arcore-plugin.png "XR Plug-in Management window")<br/>*XR Plug-in Management window*
 
 # Glossary
 
@@ -108,42 +108,38 @@ Subsystems are implemented in other packages. To use AR Foundation, you must als
 
 For examples, see the [ARFoundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository.
 
-## Provider plug-in setup
-
-Provider plug-ins must be enabled before AR Foundation can use them. You can enable specific plug-in providers for each target platform from the [XR Plug-in Management](https://docs.unity3d.com/2020.2/Documentation/Manual/configuring-project-for-xr.html) window.
-
-![XR Plug-in Management](images/enable-arcore-plugin.png "XR Plug-in Management")
-
 ## Scene setup
 
-A basic AR scene hierarchy looks like this:
+To create an AR experience using AR Foundation, there are two necessary components to have in your Scene: an `ARSession` and an `XROrigin`. To create an `ARSession` or an `XROrigin`, right-click in the scene Hierarchy window, and select one of the following options from the context menu.
+* **XR** &gt; **AR Session**
+* **XR** &gt; **XR Origin (Mobile AR)**
 
-![Scene graph](images/simple_scene_graph.png "Scene graph")
+![Create XR Origin and AR Session](images/gameobject_context_menu.png "Create XR Origin and AR Session")<br/>*Create XR Origin and AR Session*
 
-To create these scenes automatically, right-click in the scene Hierarchy window, and select **XR** &gt; **AR Session** or **XR** &gt; **XR Origin** from the context menu.
+After adding both an `ARSession` and `XROrigin` to the Scene, the hierarchy will look like the one below.
 
-![Context menu](images/gameobject_context_menu.png "Context menu")
+![Scene graph containing AR Session and XR Origin](images/simple_scene_graph.png "Scene graph containing AR Session and XR Origin")<br/>*Scene graph containing AR Session and XR Origin*
 
-The required components are explained in more detail below.
+This is the default Scene setup, but you can move, reparent, or further configure the components according to your project needs. These components and their configuration are explained in more detail below.
 
 ### ARSession
 
-An AR scene should include an `ARSession` component. The AR Session controls the lifecycle of an AR experience by enabling or disabling AR on the target platform. The `ARSession` can be on any `GameObject`.
+The `ARSession` component controls the lifecycle of an AR experience by enabling or disabling AR on the target platform.
 
-![ARSession component](images/ar-session.png "ARSession component")
+![AR Session](images/ar-session.png "AR Session")<br/>*AR Session*
 
-When you disable the `ARSession`, the system no longer tracks features in its environment, but if you enable it at a later time, the system attempts to recover and maintain previously-detected features.
+When you disable the `ARSession`, the system no longer tracks features in its environment. Then if you enable it at a later time, the system attempts to recover and maintain previously-detected features.
 
-If you enable the **Attempt Update** option, the device tries to install AR software if possible. Support for this feature is platform-dependent.
+If you set **Attempt Update** to **true**, the device tries to install AR software if possible. Support for this feature is platform-dependent.
 
 > [!NOTE]
-> An AR session is a global construct. An `ARSession` component manages this global session, so multiple `ARSession` components will all try to manage the same global session.
+> Multiple `ARSession` components in the same Scene can conflict with each other, therefore Unity recommends that you only put one `ARSession` component in each Scene.
 
 #### Checking for device support
 
 Some platforms might support a limited subset of devices. On these platforms, your application needs to be able to detect support for AR Foundation so it can provide an alternative experience when AR is not supported.
 
-The `ARSession` component has a static coroutine that you can use to determine whether AR is supported at runtime:
+The `ARSession` component has a static coroutine that you can use to determine whether AR is supported at runtime, as shown below.
 
 ```csharp
 public class MyComponent {
@@ -171,7 +167,7 @@ public class MyComponent {
 
 #### Session state
 
-To determine the current state of the session (for example, whether the device is supported, if AR software is being installed, and whether the session is working), use `ARSession.state`. You can also subscribe to an event when the session state changes: `ARSession.stateChanged`.
+To determine the current state of the session (for example, whether the device is supported, if AR software is being installed, and whether the session is working), use `ARSession.state`. You can also subscribe to the `ARSession.stateChanged` event to receive a callback when the session state changes.
 
 |`ARSessionState`|**Description**|
 |-|-|
@@ -186,25 +182,31 @@ To determine the current state of the session (for example, whether the device i
 
 ### XR Origin
 
-![XR origin](images/ar-session-origin.png "XR Origin")
+The `XROrigin` component transforms trackable features, such as planar surfaces and feature points, into their final position, rotation, and scale in the Unity scene.
 
-The purpose of the `XROrigin` is to transform trackable features, such as planar surfaces and feature points, into their final position, orientation, and scale in the Unity scene. Because AR devices provide their data in "session space", which is an unscaled space relative to the beginning of the AR session, the `XROrigin` performs the appropriate transformation into Unity space.
+![XR Origin](images/xr-origin.png "XR Origin")<br/>*XR Origin*
+
+More specifically, the `XROrigin` transforms trackables from an AR device's "session space", which is an unscaled space relative to the beginning of the AR session, into Unity world space.
 
 This concept is similar to the difference between "model" or "local" space and world space when working with other Assets in Unity. For instance, if you import a house asset from a DCC tool, the door's position is relative to the modeler's origin. This is commonly called "model space" or "local space". When Unity instantiates it, it also has a world space that's relative to Unity's origin.
 
-Likewise, trackables that an AR device produces, such as planes, are provided in "session space", relative to the device's coordinate system. When instantiated in Unity as `GameObject`s, they also have a world space. In order to instantiate them in the correct place, AR Foundation needs to know where the XR origin should be in the Unity scene.
-
-`XROrigin` also allows you to scale virtual content and apply an offset to the AR Camera. If you're scaling or offsetting the `XROrigin`, then its AR Camera should be a child of the `XROrigin`. Because the AR Camera is session-driven, this setup allows the AR Camera and detected trackables to move together.
+Likewise, trackables that an AR device produces, such as planes, are produced in the platform's session space, relative to the device's coordinate system. The `XROrigin` provides a mapping from the platform's session space to Unity world space, allowing trackables to appear in the correct location in the Scene.
 
 #### Scale
 
-To apply scale to the `XROrigin`, set its `transform`'s scale. This has the effect of scaling all the data coming from the device, including the AR Camera's position and any detected trackables. Larger values make AR content appear smaller. For example, a scale of 10 would make your content appear 10 times smaller, while 0.1 would make your content appear 10 times larger.
+`XROrigin` also allows you to scale virtual content. To apply scale to the XR Origin, set its `transform`'s scale. This has the effect of scaling all the data coming from the device, including the AR Camera's position and any detected trackables. Larger values make AR content appear smaller. For example, a scale of 10 would make your content appear 10 times smaller, while 0.1 would make your content appear 10 times larger.
 
-### AR Camera manager
+#### Device targets
 
-The `ARCameraManager` enables features for the AR Camera, including the management of the device camera textures and the properties that set the light estimation modes.
+`XROrigin` is a shared class between AR Foundation and the [XR Interaction Toolkit](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.1/manual/index.html) package. XR Interaction Toolkit is an optional additional package that can used to build AR experiences with Unity.
 
-![AR Camera Manager](images/ar-camera-manager.png "AR Camera Manager")
+The default `XROrigin` in AR Foundation is pre-configured for mobile AR experiences; however, if you wish to target AR HMD's with handheld controller inputs, you can [install XR Interaction Toolkit](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.1/manual/installation.html) for additional `XROrigin` configurations. For more information on `XROrigin` configurations, see the full [XROrigin documentation](https://docs.unity3d.com/Packages/com.unity.xr.core-utils@2.1/manual/xr-origin.html).
+
+### AR Camera Manager
+
+The `ARCameraManager` component enables features for the AR Camera, including the management of the device camera textures and properties that set the light estimation modes. By default, there is an `AR Camera Manager` component on 'Main Camera', a child GameObject of `XROrigin`.
+
+![AR Camera Manager](images/ar-camera-manager.png "AR Camera Manager")<br/>*AR Camera Manager*
 
 | **Setting** | **Function** |
 |-|-|
@@ -212,17 +214,15 @@ The `ARCameraManager` enables features for the AR Camera, including the manageme
 | **Light Estimation** | Estimates lighting properties of the environment. There are five options: <ul><li><b>Ambient Intensity:</b> Estimates the overall average brightness</li><li><b>Ambient Color:</b> Estimates the overall average color</li><li><b>Ambient Spherical Harmonics:</b> Estimates the [spherical harmonics](https://en.wikipedia.org/wiki/Spherical_harmonic_lighting) describing the scene. Spherical harmonics are used to produce more realistic lighting calculations.</li><li><b>Main Light Direction:</b> Estimates the direction of the primary light source. The direction points away from the light (so that it matches the light's direction).</li><li><b>Main Light Intensity:</b> Estimates the brightness of the primary light source.</li></ul>While you can request any of these simultaneously, support for each of these varies greatly among devices. Some platforms may not be able to be simultaneously provide all options, or it may depend on other features (for example, camera facing direction). |
 | **Facing Direction** | Controls which camera is used for pass through video. This can be World or User. On handheld mobile devices like phones and tablets, World refers to the rear camera and User refers to the front-facing (that is, "selfie") camera. |
 
-### AR Camera background
+### AR Camera Background
 
-If you want the video feed from the device camera to show up as the rendered background of the scene at runtime, you need to add an `ARCameraBackground` component to a Camera. Otherwise, the background at runtime comes from the `Camera.clearFlags` setting. The `ARCameraBackground` component subscribes to AR Camera events and renders the AR Camera texture to the screen (that is, the background texture from the device camera must be rendered for each frame). This is not required, but common for AR apps.
+The `ARCameraBackground` component renders video feed from the device camera as the background of the Scene at runtime. This is not required, but common for AR apps. By default, there is an `ARCameraBackground` component on 'Main Camera', a child GameObject of `XROrigin`.
 
-![AR Camera Background](images/ar-camera-background.png "AR Camera Background")
+![AR Camera Background](images/ar-camera-background.png "AR Camera Background")<br/>*AR Camera Background*
 
-The `Custom Material` property is optional, and typically you don't need to set it. The platform-specific packages that Unity provides, such as ARCore and ARKit, contain their own shaders for background rendering.
+If set **Use Custom Material** to **true**, `ARCameraBackground` uses the Custom Material you specify for background rendering. The Custom Material property is optional, and typically you don't need to set it. The provider plug-in packages contain their own shaders for background rendering.
 
-If `Use Custom Material` is `true`, the `ARCameraBackground` uses the `Material` you specify for background rendering.
-
-If you have exactly one `XROrigin`, you only need to add the `ARCameraBackground` to that Camera. If you have multiple `XROrigin`s (for example, to selectively render different content at different scales), you should use separate Cameras for each `XROrigin` and a separate, single AR Camera for the `ARCameraBackground`.
+If you have multiple `XROrigin`s (for example, to selectively render different content at different scales), you should use separate Cameras for each `XROrigin` and a separate, single AR Camera for the `ARCameraBackground`.
 
 #### Configuring ARCameraBackground with the Universal Render Pipeline (URP)
 
@@ -250,17 +250,17 @@ Graphics.ExecuteCommandBuffer(commandBuffer);
 
 Note: [`Graphics.SetRenderTarget`](https://docs.unity3d.com/ScriptReference/Graphics.SetRenderTarget.html) will overwrite the current render target after executing the command buffer.
 
-### Accessing the Camera Image on the CPU
+#### Accessing the Camera Image on the CPU
 
 See documentation on [camera images](cpu-camera-image.md).
 
-### AR input manager
+### AR Input Manager
 
-This component is required to enable world tracking. Without it, the Tracked Pose Driver can't acquire a pose for the device.
+The `ARInputManager` component enables world tracking; without it, the `XROrigin` can't acquire a world-space pose for the device. By default, an `ARInputManager` component is included on the `ARSession` GameObject.
 
-This component can be anywhere in your Scene, but you shouldn't have more than one.
+![AR Input Manager](images/ar-input-manager.png "AR Input Manager")<br/>*AR Input Manager*
 
-![AR Input Manager](images/ar-input-manager.png "AR Input Manager")
+You can move the `ARInputManager` anywhere in your Scene hierarchy, but you shouldn't have more than one per Scene.
 
 ### Trackable managers
 
@@ -285,6 +285,7 @@ See [ARMeshManager](mesh-manager.md).
 This version of AR Foundation is compatible with the following versions of the Unity Editor:
 
 * 2021.2
+* 2021.3
 * 2022.1
 
 [!include[](snippets/apple-arkit-trademark.md)]

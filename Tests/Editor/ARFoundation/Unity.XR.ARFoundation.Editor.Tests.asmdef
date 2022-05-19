@@ -1,22 +1,33 @@
 {
-  "name": "Unity.XR.ARFoundation.Editor.Tests",
+    "name": "Unity.XR.ARFoundation.Editor.Tests",
+    "rootNamespace": "",
     "references": [
         "Unity.XR.ARFoundation",
         "Unity.Coding.Editor",
-        "Unity.XR.CoreUtils"
-    ],
-    "optionalUnityReferences": [
-        "TestAssemblies"
+        "Unity.XR.CoreUtils",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.XR.ARFoundation.Editor"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [
         {
             "name": "com.unity.coding",
-            "define": "UNITY_CODING_ENABLED",
-            "expression": ""
+            "expression": "",
+            "define": "UNITY_CODING_ENABLED"
         }
-    ]
+    ],
+    "noEngineReferences": false
 }

@@ -8,10 +8,6 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     class CameraFPSModeHandler
     {
-        /// <summary>
-        /// The active camera fps mode handler.
-        /// </summary>
-        public static CameraFPSModeHandler activeHandler;
         const float k_MoveSpeed = 1f;
         const float k_PitchClamp = 85f;
 
@@ -77,9 +73,6 @@ namespace UnityEngine.XR.Simulation
         /// <param name="mousePosition">The current mose position.</param>
         public void StopMoveInput(Vector2 mousePosition)
         {
-            if (activeHandler == this)
-                activeHandler = null;
-
             moveActive = false;
             m_CurrentMousePosition = mousePosition;
             m_MouseDelta = Vector2.zero;

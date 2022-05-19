@@ -1,14 +1,14 @@
 using System;
-using UnityEngine;
+using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.Rendering;
 
-using Object = UnityEngine.Object;
+using UnityObject = UnityEngine.Object;
 
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Container that pairs a <see cref="Unity.XR.ARSubsystems.XRTextureDescriptor"/> wrapping a native texture
+    /// Container that pairs a <see cref="UnityEngine.XR.ARSubsystems.XRTextureDescriptor"/> wrapping a native texture
     /// object with a <c>Texture</c> that is created for the native texture object.
     /// </summary>
     internal struct ARTextureInfo : IEquatable<ARTextureInfo>, IDisposable
@@ -71,7 +71,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (m_Texture != null)
             {
-                UnityEngine.Object.Destroy(m_Texture);
+                UnityObjectUtils.Destroy(m_Texture);
                 m_Texture = null;
             }
         }
@@ -160,10 +160,10 @@ namespace UnityEngine.XR.ARFoundation
                 case TextureDimension.Tex3D:
                     return Texture3D.CreateExternalTexture(descriptor.width, descriptor.height,
                                                         descriptor.depth, descriptor.format,
-                                                        (descriptor.mipmapCount != 0), descriptor.nativeTexture);
+                                                        descriptor.mipmapCount > 1, descriptor.nativeTexture);
                 case TextureDimension.Tex2D:
                     var texture = Texture2D.CreateExternalTexture(descriptor.width, descriptor.height,
-                                                        descriptor.format, (descriptor.mipmapCount != 0),
+                                                        descriptor.format, (descriptor.mipmapCount > 1),
                                                         k_TextureHasLinearColorSpace,
                                                         descriptor.nativeTexture);
                     // NB: SetWrapMode needs to be the first call here, and the value passed
@@ -184,7 +184,7 @@ namespace UnityEngine.XR.ARFoundation
                 case TextureDimension.Cube:
                     return Cubemap.CreateExternalTexture(descriptor.width,
                                                             descriptor.format,
-                                                            (descriptor.mipmapCount != 0),
+                                                            descriptor.mipmapCount > 1,
                                                             descriptor.nativeTexture);
                 default:
                     return null;
@@ -193,21 +193,14 @@ namespace UnityEngine.XR.ARFoundation
 
         public static bool IsSupported(XRTextureDescriptor descriptor)
         {
-            if(descriptor.dimension == TextureDimension.Tex3D)
+            switch (descriptor.dimension)
             {
-                return true;
-            }
-            else if(descriptor.dimension == TextureDimension.Tex2D)
-            {
-                return true;
-            }
-            else if(descriptor.dimension == TextureDimension.Cube)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
+                case TextureDimension.Tex3D:
+                case TextureDimension.Tex2D:
+                case TextureDimension.Cube:
+                    return true;
+                default:
+                    return false;
             }
         }
 
@@ -218,7 +211,7 @@ namespace UnityEngine.XR.ARFoundation
 
         public override int GetHashCode()
         {
-            int hash = 486187739;
+            var hash = 486187739;
             unchecked
             {
                 hash = hash * 486187739 + m_Descriptor.GetHashCode();
@@ -229,12 +222,12 @@ namespace UnityEngine.XR.ARFoundation
 
         public bool Equals(ARTextureInfo other)
         {
-            return m_Descriptor.Equals(other) && (m_Texture == other.m_Texture);
+            return m_Descriptor.Equals(other.descriptor) && (m_Texture == other.m_Texture);
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
-            return ((obj is ARTextureInfo) && Equals((ARTextureInfo)obj));
+            return (obj is ARTextureInfo) && Equals((ARTextureInfo)obj);
         }
 
         public static bool operator ==(ARTextureInfo lhs, ARTextureInfo rhs)

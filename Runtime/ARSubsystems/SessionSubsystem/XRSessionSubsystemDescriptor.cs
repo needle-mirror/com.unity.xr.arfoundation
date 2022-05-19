@@ -107,7 +107,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
-            /// <returns><c>true</c> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>. Same as <see cref="Equals(Cinfo"/>.</returns>
+            /// <returns><c>true</c> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>. Same as <see cref="Equals(Cinfo)"/>.</returns>
             public static bool operator ==(Cinfo lhs, Cinfo rhs) => lhs.Equals(rhs);
 
             /// <summary>
@@ -115,7 +115,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
-            /// <returns><c>true</c> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>. Same as !<see cref="Equals(Cinfo"/>.</returns>
+            /// <returns><c>true</c> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>. Same as !<see cref="Equals(Cinfo)"/>.</returns>
             public static bool operator !=(Cinfo lhs, Cinfo rhs) => !lhs.Equals(rhs);
         }
 

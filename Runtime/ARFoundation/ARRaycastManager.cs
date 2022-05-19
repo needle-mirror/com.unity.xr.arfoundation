@@ -24,6 +24,21 @@ namespace UnityEngine.XR.ARFoundation
         [Tooltip("If not null, instantiates this prefab for each raycast.")]
         GameObject m_RaycastPrefab;
 
+        static Comparison<ARRaycastHit> s_RaycastHitComparer = RaycastHitComparer;
+
+        static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new List<NativeArray<XRRaycastHit>>();
+
+        Func<Vector2, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastViewportDelegate;
+
+        Func<Ray, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastRayDelegate;
+
+        List<IRaycaster> m_Raycasters = new List<IRaycaster>();
+
+        /// <summary>
+        /// The name of the `GameObject` for each instantiated <see cref="ARRaycast"/>.
+        /// </summary>
+        protected override string gameObjectName => "ARRaycast";
+        
         /// <summary>
         /// If not null, this prefab will be instantiated for each <see cref="ARRaycast"/>.
         /// </summary>
@@ -248,8 +263,8 @@ namespace UnityEngine.XR.ARFoundation
             foreach (var hitArray in s_NativeRaycastHits)
             {
                 NativeArray<XRRaycastHit>.Copy(hitArray, 0, allHits, dstIndex, hitArray.Length);
-                hitArray.Dispose();
                 dstIndex += hitArray.Length;
+                hitArray.Dispose();
             }
 
             return allHits;
@@ -304,20 +319,5 @@ namespace UnityEngine.XR.ARFoundation
             var planeManager = GetComponent<ARPlaneManager>();
             raycast.plane = planeManager ? planeManager.GetPlane(sessionRelativeData.hitTrackableId) : null;
         }
-
-        /// <summary>
-        /// The name of the `GameObject` for each instantiated <see cref="ARRaycast"/>.
-        /// </summary>
-        protected override string gameObjectName => "ARRaycast";
-
-        static Comparison<ARRaycastHit> s_RaycastHitComparer = RaycastHitComparer;
-
-        static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new List<NativeArray<XRRaycastHit>>();
-
-        Func<Vector2, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastViewportDelegate;
-
-        Func<Ray, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastRayDelegate;
-
-        List<IRaycaster> m_Raycasters = new List<IRaycaster>();
     }
 }

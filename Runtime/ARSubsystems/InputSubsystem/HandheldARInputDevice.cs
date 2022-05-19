@@ -26,6 +26,9 @@ namespace UnityEngine.XR.ARSubsystems
         [InputControl]
         public QuaternionControl deviceRotation { get; private set; }
 
+        /// <summary>
+        /// Finishes setting up the device by storing the child controls.
+        /// </summary>
         protected override void FinishSetup()
         {
             base.FinishSetup();

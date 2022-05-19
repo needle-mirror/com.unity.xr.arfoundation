@@ -89,9 +89,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// This ensures that the addition of new fields to <typeparamref name="T"/> will have
         /// appropriate default values.
         /// </remarks>
-        /// <param name="addedPtr">A pointer to a block of memory continaing <paramref name="addedCount"/> elements each of size <paramref name="stride"/>.</param>
+        /// <param name="addedPtr">A pointer to a block of memory containing <paramref name="addedCount"/> elements each of size <paramref name="stride"/>.</param>
         /// <param name="addedCount">The number of added elements.</param>
-        /// <param name="updatedPtr">A pointer to a block of memory continaing <paramref name="updatedCount"/> elements each of size <paramref name="stride"/>.</param>
+        /// <param name="updatedPtr">A pointer to a block of memory containing <paramref name="updatedCount"/> elements each of size <paramref name="stride"/>.</param>
         /// <param name="updatedCount">The number of updated elements.</param>
         /// <param name="removedPtr">A pointer to a block of memory containing <paramref name="removedCount"/> <see cref="TrackableId"/>s.</param>
         /// <param name="removedCount">The number of removed elements.</param>

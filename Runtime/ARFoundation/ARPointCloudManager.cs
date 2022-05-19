@@ -10,17 +10,17 @@ using ReadOnly = Unity.Collections.ReadOnlyAttribute;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// A manager for <see cref="ARTrackedObject"/>s. Uses the <c>XRDepthSubsystem</c>
-    /// to recognize and track depth data in the physical environment.
+    /// A manager for <see cref="ARTrackedObject"/>s. Uses the <c>XRPointCloudSubsystem</c>
+    /// to recognize and track point cloud data in the physical environment.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloudManager)]
     [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
     [HelpURL(typeof(ARPointCloudManager))]
     public class ARPointCloudManager : ARTrackableManager<
-        XRDepthSubsystem,
-        XRDepthSubsystemDescriptor,
-        XRDepthSubsystem.Provider,
+        XRPointCloudSubsystem,
+        XRPointCloudSubsystemDescriptor,
+        XRPointCloudSubsystem.Provider,
         XRPointCloud,
         ARPointCloud>, IRaycaster
     {
@@ -205,7 +205,7 @@ namespace UnityEngine.XR.ARFoundation
             Allocator allocator) where T : struct
         {
             var dstArray = new NativeArray<T>(currentArray.Length + lengthToCopy, allocator);
-            NativeArray<T>.Copy(currentArray, dstArray);
+            NativeArray<T>.Copy(currentArray, dstArray, currentArray.Length);
             NativeArray<T>.Copy(arrayToAppend, 0, dstArray, currentArray.Length, lengthToCopy);
             currentArray.Dispose();
             currentArray = dstArray;
@@ -225,12 +225,13 @@ namespace UnityEngine.XR.ARFoundation
             [WriteOnly]
             public NativeArray<PointCloudRaycastInfo> infoOut;
 
+            [ReadOnly]
             public Ray ray;
 
             public void Execute(int i)
             {
                 var originToPoint = points[i] - ray.origin;
-                float distance = originToPoint.magnitude;
+                var distance = originToPoint.magnitude;
                 var info = new PointCloudRaycastInfo
                 {
                     distance = distance,
@@ -264,7 +265,7 @@ namespace UnityEngine.XR.ARFoundation
             public void Execute()
             {
                 var hitIndex = 0;
-                for (int i = 0; i < points.Length; ++i)
+                for (var i = 0; i < points.Length; ++i)
                 {
                     if (infos[i].cosineAngleWithRay >= cosineThreshold)
                     {

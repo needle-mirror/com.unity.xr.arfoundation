@@ -9,15 +9,19 @@ The main updates in this release include:
 
 **Added**
 
-- Added [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the location of the [XROrigin](xref:Unity.XR.CoreUtils.XROrigin) and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
-- Added plane visualization to [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu). See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added `ARDebugMenu` that will help in visualizing the location of the [XROrigin](xref:Unity.XR.CoreUtils.XROrigin), planes, anchors and the current FPS and tracking state. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added a configuration sub-menu to `ARDebugMenu`. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
 - Added support new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
-- Added support for a new [OcclusionPreferenceMode.NoOcclusion](xref:UnityEngine.XR.ARSubsystems.Configuration.OcclusionPreferenceMode) mode that, when set, disables occlusion rendering on the camera background when using [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) and [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
+- Added support for a new [OcclusionPreferenceMode.NoOcclusion](xref:UnityEngine.XR.ARSubsystems.OcclusionPreferenceMode) mode that, when set, disables occlusion rendering on the camera background when using [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) and [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
+- Added [simulation](xref:arfoundation-simulation) of environments that allows testing of AR scenes in the editor.
 
 **Updated**
 
 - `com.unity.xr.arsubsystems` has been merged into `com.unity.xr.arfoundation`. All the subsystems that were part of `com.unity.xr.arsubsystems` package are now available with this package (See the [old AR Subsystems Package changelog](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.2/changelog/CHANGELOG.html) for more details).
 - The minimum Unity version for this package is now 2021.2.
+- Depth subsystem has been renamed to point cloud subsystem: 
+  - `XRDepthSubsystem` renamed to `XRPointCloudSubsystem`
+  - `XRDepthSubsystemDescriptor` renamed to `XRPointCloudSubsystemDescriptor`
 
 **Deprecated**
 

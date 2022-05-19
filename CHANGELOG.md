@@ -8,12 +8,70 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-pre.12] - 2022-05-19
+
+### Added
+
+- Added automatic refresh of AR environment list upon importing or deleting a prefab with the `SimulationEnvironment` component.
+- Added analytics to anonymously collect usage data of some AR Foundation features. These analytics are captured only in the Unity Editor and not added to the player builds. See [Unity manual on Editor Analytics](https://docs.unity3d.com/Manual/EditorAnalytics.html) for more details.
+- Added support for changing the Camera Background rendering order so that the background can be rendered either `BeforeOpaques` or `AfterOpaques` by setting the `ARCameraManager.requestedRenderingMode` in the editor or at runtime and then checking `ARCameraManager.currentRenderingMode` at runtime for the real rendering mode. See [migration guide](xref:arfoundation-migration-guide-5-x) for more information.
+- Added support for changing the Camera Background rendering order in simulation so that the background can be rendered either `BeforeOpaques` or `AfterOpaques` by setting the `SimulationCameraSubsystem.requestedRenderingMode`.
+- Added support for the following subsystems in simulation.
+  - Point cloud subsystem
+  - Plane subsystem
+  - Image tracking subsystem
+  - Raycast subystem
+  - Mesh subsystem
+  - Camera subsystem
+- Added AR Environment Toolbar Overlay for Scene view. The toolbar supports selecting the active Simulation environment, installing sample Simulation environments, refreshing the list of environments, creating a new environment, duplicating the active environment, and opening the active environment for editing.
+- AR Environment Toolbar Overlay will change the Scene View to an AR Environment View, where you can preview the environment that will be used for Simulation.
+- Added manager to enable X-Ray visualization of simulation environments and options to the Simulation Runtime Settings for enabling or disabling the X-Ray Visuals.
+- Added a **GameObject** &gt; **XR** &gt; **XR Origin (Mobile AR)** menu item, giving users a one-click option to create an [XR Origin](xref:Unity.XR.CoreUtils.XROrigin) which is fully configured for mobile AR.
+- Added `SimulatedMeshClassification` and `SimulatedBoundedPlane` components to default environment prefab to support mesh and plane subsystems in simulation.
+- Added support for `ARBackgroundRenderer` in simulation.
+- Added public constructors for `XRTextureDescriptor` and `XRCameraFrame`.
+- Added point cloud visualization to the [ARDebugMenu](xref:arfoundation-debug-menu).
+- Added `SimulationPreferences` to user preferences in **Edit > Preferences > XR Simulation**.
+- Project wide simulation parameters can be modified in **Edit > Project Settings > XR Plug-in Management > XR Simulation**.
+
+### Changed
+
+- Moved menu item for refreshing the AR environment list from the AR Environment toolbar to the Assets menu.
+- `ARBackgroundRendererFeature` contains an abstract base class for custom render passes to use when defining an ARBackgroundRendererFeature custom pass and defines 2 custom render passes. A `BeforeOpaques` pass and an `AfterOpaques` pass.
+- Moved `UnitySubsystemsManifest.json` from Editor to Runtime since the integrated subsystems for simulation are in the Runtime assembly.
+- Removed `#if UNITY_EDITOR` guards from `ARBackgroundRendererFeature` so that the render feature can now be used in the editor.
+- Changed render settings in default simulation environment so that it uses trilight ambient mode and brighter ambient colors.
+- Updated simulation input subsystem to use `HandheldARInputDevice` instead of `XR HMD`.
+- The unused Post Processing settings field is now hidden in the inspector for `SimulationEnvironment`.
+
+### Deprecated
+
+- Deprecated the depth subsystem abstraction, `XRDepthSubsystem` and `XRDepthSubsystemDescriptor`, in favor of `XRPointCloudSubsystem` and `XRPointCloudSubsystemDescriptor` respectively. This is just a rename of the subsystem without any significant changes to the APIs. Unity's API Updater should automatically convert any deprecated depth subsystem API references to the point cloud subsystem APIs when the project is loaded into the Editor again. See [migration guide](xref:arfoundation-migration-guide-5-x) for more details.
+  - `XRDepthSubsystem` renamed to `XRPointCloudSubsystem`
+  - `XRDepthSubsystemDescriptor` renamed to `XRPointCloudSubsystemDescriptor`
+
+### Fixed
+
+- Fixed error loading AR Environment view icon on first domain load.
+- Fixed issue with simulated image tracking using the wrong vector for checking image direction.
+- Fixed a bug when the vertex count in `SimulationMeshSubsystem` could overflow beyond the limit of 16-bit indexing for large simulation environments. The index format now always uses 32-bit indexing to avoid the issue.
+- Fixed `MissingReferenceException` accessing camera when stopping simulation session subsystem.
+- Fixed error importing sample environments after downloading environments package through AR Environment toolbar.
+- Fixed navigation keys working in simulation even when right mouse button wasn't pressed.
+- Fixed an issue in simulation where the camera starts at the `XROrigin` instead of the simulation environment's specified starting pose.
+- Fixed [issue 960](https://github.com/Unity-Technologies/arfoundation-samples/issues/960) where `ARPointCloudManager.Append` could incorrectly throw an `ArgumentException`. For developers with custom implementations of `XRRaycastSubsystem.Provider` which do not support raycasting with an arbitrary ray, fallback raycasts including hits from point clouds will now correctly return all values.
+- Fixed [issue 963](https://github.com/Unity-Technologies/arfoundation-samples/issues/963) where `ARRaycastManager.RaycastFallback` would sometimes return incomplete results. Developers with custom implementations of `XRRaycastSubsystem.Provider` which do not support raycasting with an arbitrary ray will now see correct results from `ARRaycastManager.Raycast(Ray, TrackableType, Allocator)`.
+- Fixed graphics library error caused when binding a Unity texture object to a native texture object when their mipmap settings do not match.
+- Fixed an issue where recompiling scripts during Play Mode could cause memory leaks if `ARPlaneManager` or `ARPointCloudManager` were present in the scene. XR Simulation does not support script recompilation while playing, but now if a recompilation occurs in Play Mode, AR Foundation will not leak any memory.
+
 ## [5.0.0-pre.9] - 2022-03-01
 
 ### Added
 
 - Simulation loads an environment prefab from Simulation Settings.
-- Added support for a new [OcclusionPreferenceMode.NoOcclusion](xref:UnityEngine.XR.ARSubsystems.Configuration.OcclusionPreferenceMode) mode that, when set, disables occlusion rendering on the camera background when using [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) and [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
+- Added support for a new [OcclusionPreferenceMode.NoOcclusion](xref:UnityEngine.XR.ARSubsystems.OcclusionPreferenceMode) mode that, when set, disables occlusion rendering on the camera background when using [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) and [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager).
+- Added simulation setting to turn the navigation off.
+- Added anchor visualization to the [ARDebugMenu](xref:arfoundation-debug-menu).
 
 ### Changed
 
@@ -22,13 +80,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Fixed [issue 1392753](https://issuetracker.unity3d.com/issues/flickering-slash-frozen-textures-when-ar-occlusion-manager-is-disabled) where occlusion texture would remain frozen instead of being cleared when the occlusion manager is disabled.
-- Fixed issue where sliders would slide even when not `interactable` in the [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu).
+- Fixed issue where sliders would slide even when not `interactable` in the [ARDebugMenu](xref:arfoundation-debug-menu).
 
 ## [5.0.0-pre.8] - 2022-02-09
 
 ### Added
 
-- Added a configuration menu to the [ARDebugMenu](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) that will help in visualizing the currently active [Configuration](xref:UnityEngine.XR.ARSubsystems.Configuration) for the session and other available configurations for the current device. See the [manual entry for AR Debug Menu](xref:arfoundation-debug-menu) for more information.
+- Added a configuration menu to the [ARDebugMenu](xref:arfoundation-debug-menu) that will help in visualizing the currently active [Configuration](xref:UnityEngine.XR.ARSubsystems.Configuration) for the session and other available configurations for the current device.
 - Work in progress: AR Simulation in XR Plug-in Management; initial support for camera movement and simulation environment.
 
 ## [5.0.0-pre.7] - 2021-12-10

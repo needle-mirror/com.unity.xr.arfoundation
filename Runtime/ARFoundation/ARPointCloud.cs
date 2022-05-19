@@ -1,7 +1,9 @@
 using System;
 using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine.XR.ARSubsystems;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -13,6 +15,9 @@ namespace UnityEngine.XR.ARFoundation
     [HelpURL(typeof(ARPointCloud))]
     public class ARPointCloud : ARTrackable<XRPointCloud, ARPointCloud>
     {
+        XRPointCloudData m_Data;
+        bool m_PointsUpdated;
+
         /// <summary>
         /// Invoked whenever the point cloud is updated.
         /// </summary>
@@ -85,20 +90,31 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+#if UNITY_EDITOR
+        void Awake()
+        {
+            AssemblyReloadEvents.beforeAssemblyReload += DisposeNativeContainers;
+        }
+#endif
+
         void OnDestroy()
+        {
+            DisposeNativeContainers();
+#if UNITY_EDITOR
+            AssemblyReloadEvents.beforeAssemblyReload -= DisposeNativeContainers;
+#endif
+        }
+
+        void DisposeNativeContainers()
         {
             m_Data.Dispose();
         }
 
-        internal void UpdateData(XRDepthSubsystem subsystem)
+        internal void UpdateData(XRPointCloudSubsystem subsystem)
         {
             m_Data.Dispose();
             m_Data = subsystem.GetPointCloudData(trackableId, Allocator.Persistent);
             m_PointsUpdated = m_Data.positions.IsCreated;
         }
-
-        XRPointCloudData m_Data;
-
-        bool m_PointsUpdated = false;
     }
 }

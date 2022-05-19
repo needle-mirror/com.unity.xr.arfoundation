@@ -12,7 +12,7 @@ This package provides interfaces for the following subsystems:
 - [Raycasting](raycasting-subsystem.md)
 - [Camera](camera-subsystem.md)
 - [Plane Detection](plane-subsystem.md)
-- [Depth](depth-subsystem.md)
+- [Point Cloud](point-cloud-subsystem.md)
 - [Image Tracking](image-tracking.md)
 - [Face Tracking](face-tracking.md)
 - [Environment Probes](environment-probe-subsystem.md)

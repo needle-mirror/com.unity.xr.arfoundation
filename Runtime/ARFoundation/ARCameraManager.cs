@@ -157,13 +157,47 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public CameraFacingDirection currentFacingDirection => subsystem?.currentCamera.ToCameraFacingDirection() ?? CameraFacingDirection.None;
 
+        [SerializeField]
+        [Tooltip("The requested background rendering mode. Using mode 'Any' allows the platform provider to determine the rendering mode.")]
+        CameraBackgroundRenderingMode m_RenderMode = CameraBackgroundRenderingMode.Any;
+
+        /// <summary>
+        /// The current requested <see cref="CameraBackgroundRenderingMode"/>.
+        /// </summary>
+        /// <remarks>
+        /// When set, this value is converted to an (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) and passed to the underlying
+        /// subsystem if it is available.
+        /// </remarks>
+        public CameraBackgroundRenderingMode requestedBackgroundRenderingMode
+        {
+            get => subsystem?.requestedCameraBackgroundRenderingMode.ToBackgroundRenderingMode() ?? m_RenderMode;
+            set
+            {
+                m_RenderMode = value;
+                if (enabled && subsystem != null)
+                {
+                    subsystem.requestedCameraBackgroundRenderingMode = value.ToXRSupportedCameraBackgroundRenderingMode();
+                }
+            }
+        }
+
+        /// <summary>
+        /// The current (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) of the underlying
+        /// (xref: UnityEngine.XR.ARSubsystems.XRCameraSubsystem).
+        /// </summary>
+        /// <value>
+        /// Will be (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode.None)
+        /// if the underlying subsystem does not exist.
+        /// </value>
+        public XRCameraBackgroundRenderingMode currentRenderingMode => subsystem?.currentCameraBackgroundRenderingMode ?? XRCameraBackgroundRenderingMode.None;
+
         /// <summary>
         /// Determines whether camera permission has been granted.
         /// </summary>
         /// <value>
         /// <c>true</c> if permission has been granted. Otherwise, <c>false</c>.
         /// </value>
-        public bool permissionGranted => (subsystem != null) && subsystem.permissionGranted;
+        public bool permissionGranted => subsystem is { permissionGranted: true };
 
         /// <summary>
         /// An event which fires each time a new camera frame is received.
@@ -176,7 +210,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The material used in background rendering.
         /// </value>
-        public Material cameraMaterial => (subsystem == null) ? null : subsystem.cameraMaterial;
+        public Material cameraMaterial => subsystem?.cameraMaterial;
 
         /// <summary>
         /// Tries to get camera intrinsics. Camera intrinsics refers to properties
@@ -212,8 +246,7 @@ namespace UnityEngine.XR.ARFoundation
         /// The supported camera configurations.
         /// </returns>
         public NativeArray<XRCameraConfiguration> GetConfigurations(Allocator allocator)
-            => ((subsystem == null) ? new NativeArray<XRCameraConfiguration>(0, allocator)
-                : subsystem.GetConfigurations(allocator));
+            => subsystem?.GetConfigurations(allocator) ?? new NativeArray<XRCameraConfiguration>(0, allocator);
 
         /// <summary>
         /// The current camera configuration.
@@ -231,7 +264,7 @@ namespace UnityEngine.XR.ARFoundation
         /// implementation is unable to set the current camera configuration.</exception>
         public XRCameraConfiguration? currentConfiguration
         {
-            get => (subsystem == null) ? null : subsystem.currentConfiguration;
+            get => subsystem?.currentConfiguration;
             set
             {
                 if (subsystem != null)
@@ -286,6 +319,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnBeforeStart()
         {
+            subsystem.requestedCameraBackgroundRenderingMode = m_RenderMode.ToXRSupportedCameraBackgroundRenderingMode();
             subsystem.autoFocusRequested = m_AutoFocus;
             subsystem.requestedLightEstimation = m_LightEstimation.ToFeature();
             subsystem.requestedCamera = m_FacingDirection.ToFeature();
@@ -311,6 +345,7 @@ namespace UnityEngine.XR.ARFoundation
             if (subsystem == null)
                 return;
 
+            m_RenderMode = subsystem.requestedCameraBackgroundRenderingMode.ToBackgroundRenderingMode();
             m_FacingDirection = subsystem.requestedCamera.ToCameraFacingDirection();
             m_LightEstimation = subsystem.requestedLightEstimation.ToLightEstimation();
             m_AutoFocus = subsystem.autoFocusRequested;
@@ -380,7 +415,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Invoke the camera frame received event packing the frame information into the event argument.
-        /// <summary>
+        /// </summary>
         /// <param name="frame">The camera frame raising the event.</param>
         void InvokeFrameReceivedEvent(XRCameraFrame frame)
         {
