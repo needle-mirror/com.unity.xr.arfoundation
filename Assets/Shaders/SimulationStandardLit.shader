@@ -75,5 +75,5 @@
     }
 
     Fallback "Simulation/Legacy/Standard"
-    //CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
+    CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

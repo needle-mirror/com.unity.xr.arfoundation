@@ -13,9 +13,9 @@ Additionally, not all devices provide support for all the features in the mesh m
 
 ## Using meshing in a scene
 
-To use meshing with AR Foundation, you need to add the [ARMeshManager](xref:UnityEngine.XR.ARFoundation.ARMeshManager) component to your scene.
+To use meshing with AR Foundation, add the [ARMeshManager](xref:UnityEngine.XR.ARFoundation.ARMeshManager) component to a child GameObject of your Scene's XR Origin.
 
-![ARFoundation ARMeshManager component](images/arfoundation-mesh-manager.png)
+![AR Mesh Manager](images/arfoundation-mesh-manager.png "AR Mesh Manager")<br/>*AR Mesh Manager*
 
 ### Mesh Prefab
 

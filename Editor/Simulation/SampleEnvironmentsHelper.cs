@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor.PackageManager;
@@ -12,7 +13,7 @@ namespace UnityEditor.XR.Simulation
     static class SampleEnvironmentsHelper
     {
         static readonly string k_ContentPackageName = "com.unity.xr-content.xr-sim-environments";
-        static readonly string k_ContentPackageVersion = "1.0.0-pre.1";
+        static readonly string k_ContentPackageVersion = "1.0.0-pre.2";
         static readonly string k_ContentPackageFileName = $"{k_ContentPackageName}-{k_ContentPackageVersion}{k_TgzExtension}";
         static readonly string k_ContentPackageUrl =
             $"https://github.com/Unity-Technologies/{k_ContentPackageName}/releases/download/{k_ContentPackageVersion}/{k_ContentPackageFileName}";
@@ -26,8 +27,14 @@ namespace UnityEditor.XR.Simulation
 
         public static bool processingInstallRequest =>
             s_WebRequest is { isDone: false } ||
+            processingPackageRequest;
+
+        public static bool processingPackageRequest =>
             s_AddRequest is { IsCompleted: false } ||
             s_ListRequest is { IsCompleted: false };
+
+        public static event Action packageRequestStarted;
+        public static event Action packageRequestCompleted;
 
         /// <summary>
         /// Try to find samples for the environments package. If the returned collection is empty, then that indicates the package
@@ -72,6 +79,7 @@ namespace UnityEditor.XR.Simulation
 
                 s_AddRequest = Client.Add($"file:../{fileName}");
                 EditorApplication.update += ProcessAddRequest;
+                packageRequestStarted?.Invoke();
             };
         }
 
@@ -86,6 +94,7 @@ namespace UnityEditor.XR.Simulation
             {
                 var errorMessage = s_AddRequest.Error?.message;
                 Debug.LogError($"Adding package {k_ContentPackageName} failed: {errorMessage}");
+                packageRequestCompleted?.Invoke();
                 return;
             }
 
@@ -109,9 +118,11 @@ namespace UnityEditor.XR.Simulation
             {
                 var errorMessage = s_ListRequest.Error?.message;
                 Debug.LogError($"Listing packages failed: {errorMessage}");
+                packageRequestCompleted?.Invoke();
                 return;
             }
 
+            packageRequestCompleted?.Invoke();
             TryImportContentPackageSample(true);
         }
 
@@ -121,7 +132,10 @@ namespace UnityEditor.XR.Simulation
             if (!samples.Any())
             {
                 if (required)
-                    Debug.LogError($"Can't install content from package {k_ContentPackageName} - no sample available.");
+                {
+                    Debug.LogWarning($"Could not find sample for package {k_ContentPackageName}. " +
+                                     $"Try selecting '{EnvironmentDropdown.k_ImportEnvironmentsText}' from the environment dropdown in the AR Environment toolbar.");
+                }
 
                 return false;
             }

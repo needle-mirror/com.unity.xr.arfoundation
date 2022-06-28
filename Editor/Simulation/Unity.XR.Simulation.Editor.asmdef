@@ -7,7 +7,8 @@
         "Unity.XR.CoreUtils",
         "Unity.XR.CoreUtils.Editor",
         "Unity.XR.Management",
-        "Unity.XR.ARAnalytics.Editor"
+        "Unity.XR.ARAnalytics.Editor",
+        "Unity.RenderPipelines.Universal.Editor"
     ],
     "includePlatforms": [
         "Editor"
@@ -18,6 +19,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "7.0.0",
+            "define": "INCLUDE_RENDER_PIPELINES_UNIVERSAL"
+        }
+    ],
     "noEngineReferences": false
 }

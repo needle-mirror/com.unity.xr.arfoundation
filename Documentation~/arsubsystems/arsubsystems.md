@@ -1,11 +1,11 @@
 ---
 uid: arsubsystems-manual
 ---
-# About Subsystems
+# Subsystems
 
-A [subsystem](xref:UnityEngine.Subsystem) is a platform-agnostic interface for surfacing different types of functionality and data. The AR-related subsystems use the namespace `UnityEngine.XR.ARSubsystems`. This package only provides the interface for various subsystems. Implementations for these subsystems (called "providers") are typically provided as separate packages or plug-ins. These are called "provider implementations".
+A [subsystem](xref:UnityEngine.Subsystem) is a platform-agnostic interface for surfacing different types of functionality and data within Unity. The subsystems in this package use the namespace `UnityEngine.XR.ARSubsystems`, but this namespace only contains the interfaces for these subsystems. Subsystem implementations are called *providers*, and are typically made available in separate packages called *provider plug-ins*.
 
-This package provides interfaces for the following subsystems:
+This package contains interfaces for the following subsystems:
 
 - [Session](session-subsystem.md)
 - [Anchors](anchor-subsystem.md)
@@ -21,72 +21,84 @@ This package provides interfaces for the following subsystems:
 - [Occlusion](occlusion-subsystem.md)
 - [Meshes](mesh-subsystem.md)
 
-## Using Subsystems
+## Subsystem life cycle
 
-All subsystems have the same lifecycle: they can be created, started, stopped, and destroyed. Each subsystem has a corresponding `SubsystemDescriptor`, which describes the capabilities of a particular provider. Use the `SubsystemManager` to enumerate the available subsystems of a particular type. When you have a valid subsystem descriptor, you can `Create()` the subsystem. This is the only way to construct a valid subsystem.
+All subsystems have the same life cycle: they can be created, started, stopped, and destroyed. You don't typically need to create or destroy a subsystem instance yourself, as this is the responsibility of Unity's active `XRLoader`. Each provider plug-in contains an `XRLoader` implementation (or simply, a loader).  Most commonly, a loader creates an instance of all applicable subsystems when your application initializes and destroys them when your application quits, although this behavior is configurable. When a trackable manager goes to `Start` a subsystem, it gets the subsystem instance from the project's active loader based on the settings found in **Project Settings** > **XR Plug-in Management**. For more information about loaders and their configuration, see the [XR Plug-in Management end-user documentation](https://docs.unity3d.com/Packages/com.unity.xr.management@latest?subfolder=/manual/EndUser.html).
 
-### Example: picking a plane subsystem
+In a typical AR Foundation Scene, any [trackable managers](../trackable-managers.md) present in the scene will `Start` and `Stop` their subsystems when the manager is enabled or disabled, respectively. The exact behavior of `Start` and `Stop` varies by subsystem, but generally corresponds to "start doing work" and "stop doing work", respectively. You can start or stop a subystem at any time based on the needs of your application.
 
-This example iterates through all the `XRPlaneSubsystemDescriptor`s to look for one which supports a particular feature, then creates it. You can only have one subsystem per platform.
+## Subsystem descriptors
+
+Each subsystem has a corresponding `SubsystemDescriptor` whose properties describe the range of the subystem's capabilities. Providers might assign different values to these properties at runtime based on different platform or device limitations. Whenever you use a capability described in a `SubsystemDescriptor`, you should check the corresponding property value on device to confirm whether that capability is present, as shown in the example below.
 
 ```csharp
-XRPlaneSubsystem CreatePlaneSubsystem()
+var trackedImageManager = FindObjectOfType(typeof(ARTrackedImageManager));
+var imageTrackingSubystem = trackedImageManager.subsystem;
+
+// Query whether the image tracking provider supports runtime modification
+// of reference image libraries
+if (imageTrackingSubsystem.subsystemDescriptor.supportsMutableLibrary)
 {
-    // Get all available plane subsystems
-    var descriptors = new List<XRPlaneSubsystemDescriptor>();
-    SubsystemManager.GetSubsystemDescriptors(descriptors);
+    // take some action
+}
 
-    // Find one that supports boundary vertices
-    foreach (var descriptor in descriptors)
-    {
-        if (descriptor.supportsBoundaryVertices)
-        {
-            // Create this plane subsystem
-            return descriptor.Create();
-        }
-    }
-
-    return null;
+// Equivalently:
+if (trackedImageManager.descriptor.supportsMutableLibrary)
+{
+    // take some action
 }
 ```
 
-When created, you can `Start` and `Stop` the subsystem. The exact behavior of `Start` and `Stop` varies by subsystem, but generally corresponds to "start doing work" and "stop doing work". A subsystem can be started and stopped multiple times. To completely destroy the subsystem instance, call `Destroy` on the subsystem. It is not valid to access a subsystem after it has been destroyed.
+## Implementing a provider
 
-```csharp
-var planeSubsystem = CreatePlaneSubsystem();
-if (planeSubsystem != null)
-{
-    // Start plane detection
-    planeSubsystem.Start();
-}
-
-// Some time later...
-if (planeSubsystem != null)
-{
-    // Stop plane detection. This doesn't discard already detected planes.
-    planeSubsystem.Stop();
-}
-
-// When shutting down the AR portion of the app:
-if (planeSubsystem != null)
-{
-    planeSubsystem.Destroy();
-    planeSubsystem = null;
-}
-```
-
-Refer to the subsystem-specific documentation list above for more details about each subsystem this package provides.
-
-## Implementing a subsystem
-
-If you are implementing one of the Subsystems in this package (for example, you are a hardware manufacturer for a new AR device), you need to implement a concrete instance of the relevant abstract base class this package provides. Those types are typically named `XR<feature>Subsystem`.
-
-Each subsystem has a nested class called `IProvider`. This is the primary interface you must implement for each subsystem you plan to support.
+To implement a provider for one or more of the subsystems in this package (for example, say you are a hardware manufacturer for a new AR device), Unity recommends that your implementation inherit from that subsystem's base class. These base class types follow a naming convention of `XR<Feature>Subsystem`, and they are found in the `UnityEngine.XR.ARSubsystems` namespace. Each subsystem base class has a nested abstract class called `Provider`, which is the primary interface you must implement for each subsystem you plan to support.
 
 ### Tracking subsystems
 
-A "tracking" subsystem is any subsystem that detects and tracks something in the physical environment (for example, plane tracking and image tracking). The thing that the tracking subsystem tracks is called a "trackable". For example, the plane subsystem detects planes, so a plane is a trackable.
+A **tracking subsystem** is a subsystem that detects and tracks one or more objects in the physical environment. Each tracking subsystem defines a method called `GetChanges`, which reports all added, updated, and removed trackables since the previous call to `GetChanges`. You are required to implement the `GetChanges` method, and you should expect it to be called once per frame.
 
-Each tracking subsystem requires you to implement a method called `GetChanges`. This method retrieves data about the trackables it manages. Each trackable can be uniquely identified by a `TrackableId`, a 128-bit GUID (Globally Unique Identifier). A trackable can be added, updated, or removed. It's an error to update or remove a trackable that hasn't been added yet. Likewise, a trackable can't be removed without having been added, nor updated if it hasn't been added or was already removed.
+A **trackable** represents anything that can be detected and tracked in the physical environment. Each trackable can be uniquely identified by a `TrackableId`, a 128-bit GUID (Globally Unique Identifier) which can be used to identify trackables across multiple frames as they are added, updated, or removed. Your provider must not update or remove a trackable without adding it first, nor update a trackable after it has been removed.
 
-`GetChanges` should report all added, updated, and removed trackables since the previous call to `GetChanges`. You should expect `GetChanges` to be called once per frame.
+### Registering a subsystem descriptor
+
+Each subsystem type has a corresponding subsystem descriptor type. Your provider should create and register a subsystem descriptor instance with Unity's [SubsystemManager](https://docs.unity3d.com/ScriptReference/SubsystemManager.html) to enable runtime discovery and activation of subsystems. To register your subsystem descriptor, include a static void method with the `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]` attribute as shown in the example below, and in it call the type-appropriate registration method for the type of subsystem descriptor you are registering.
+
+```csharp
+// This class defines a Raycast subsystem provider
+class MyRaycastSubsystem : XRRaycastSubsystem
+{
+    class MyProvider : Provider
+    {
+        // ...
+        // XRRaycastSubsystem.Provider is a nested abstract class for you 
+        // to implement
+        // ... 
+    }
+
+    // This method registers the subsystem descriptor with the SubsystemManager
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void RegisterDescriptor()
+    {
+        // In this case XRRaycastSubsystemDescriptor provides a registration 
+        // helper method. See each subsystem descriptor's API documentation 
+        // for more information.
+        XRRaycastSubsystemDescriptor.RegisterDescriptor(new XRImageTrackingSubsystemDescriptor.Cinfo
+        {
+            providerType = typeof(MyProvider),
+            subsystemTypeOverride = typeof(MyRaycastSubsystem),
+            // ...
+            // You populate all required fields based on the details of 
+            // your provider implementation
+            // ...
+        });
+    }
+}
+```
+
+#### Native plug-ins
+
+Some XR subsystems, notably including the mesh subsystem, are not defined in the `ARSubsystems` namespace. These subsystems conform to Unity's **native plug-in interface**, and their descriptors cannot be registered via C#. For more information about native plug-ins see the [Unity XR SDK documentation](https://docs.unity3d.com/Manual/xr-sdk.html).
+
+### Implementing an XR Loader
+
+An `XRLoader` is responsible for creating and destroying subsystem instances based on the settings found in **Project Settings** > **XR Plug-in Management**. All provider plug-ins must implement an `XRLoader`. For more information on authoring an `XRLoader`, see the [XR Plug-in Management provider documentation](https://docs.unity3d.com/Packages/com.unity.xr.management@latest?subfolder=/manual/Provider.html). Example `XRLoader` implementations can be found in existing provider plug-ins.

@@ -20,5 +20,10 @@ namespace UnityEditor.XR.Simulation
         /// Get the instance of the <see cref="XRSimulationSettings"/>.
         /// </summary>
         public static XRSimulationSettings currentSettings => EditorBuildSettings.TryGetConfigObject(k_SettingsKey, out XRSimulationSettings settings) ? settings : null;
+
+        void Awake()
+        {
+            EditorApplication.delayCall += AREnvironmentViewUtilities.ToggleAREnvironmentOverlays;
+        }
     }
 }

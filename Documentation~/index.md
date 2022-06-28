@@ -3,7 +3,7 @@ uid: arfoundation-manual
 ---
 # About AR Foundation
 
-AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need separate provider plug-in packages for the target platforms officially supported by Unity:
+AR Foundation allows you to work with augmented reality platforms in a multi-platform way within Unity. This package presents an interface for Unity developers to use, but doesn't implement any AR features itself. To use AR Foundation on a target device, you also need a separate provider plug-in package for the target platform. Unity officially supports the following provider plug-ins:
 
 * [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/manual/index.html) on Android
 * [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.0/manual/index.html) on iOS
@@ -70,13 +70,13 @@ The following platform packages and later implement the AR Foundation features i
 
 ## Subsystems
 
-AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems in this package uses the namespace `UnityEngine.XR.ARSubsystems`. For more details, see [Subsystems](arsubsystems/arsubsystems.md).
+AR Foundation is built on subsystems. A *subsystem* is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems in this package uses the namespace `UnityEngine.XR.ARSubsystems`. For more details, see [Subsystems](arsubsystems/arsubsystems.md).
 
-Each subsystem handles specific functionality and is independent from other subsystems. For example, `XRPlaneSubsystem` provides the plane detection interface.
+Each subsystem handles specific functionality and is independent from other subsystems. For example, the `XRPlaneSubsystem` is AR Foundation's plane detection interface.
 
 ### Providers
 
-A **provider** is a concrete implementation of a subsystem. For example, the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/) package contains the ARCore implementation for many of the AR-related subsystems.
+A *provider* is a concrete implementation of a subsystem. Providers are typically distributed via separate packages called *provider plug-ins*. For example, the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/) package contains the ARCore implementation for many AR-related subsystems.
 
 Because different providers have varying support for specific features, each subsystem also has a descriptor that indicates which specific subsystem features it supports. For example, the `XRPlaneSubsystemDescriptor` contains properties indicating whether it supports horizontal or vertical plane detection.
 
@@ -88,7 +88,7 @@ To install this package, follow the instructions in the [Package Manager documen
 
 ## Provider plug-in setup
 
-A provider plug-in is a separate package containing AR Foundation providers for a given platform. To use AR Foundation, you must also install at least one provider plug-in, either from the Package Manager or the [XR Plug-in Management](https://docs.unity3d.com/2020.2/Documentation/Manual/configuring-project-for-xr.html) window as shown below.
+A *provider plug-in* is a separate package containing AR Foundation providers for a given platform. To use AR Foundation, you must also install at least one provider plug-in, either from the Package Manager or the [XR Plug-in Management](https://docs.unity3d.com/Manual/configuring-project-for-xr.html) window as shown below.
 
 ![XR Plug-in Management window](images/enable-arcore-plugin.png "XR Plug-in Management window")<br/>*XR Plug-in Management window*
 
@@ -287,5 +287,6 @@ This version of AR Foundation is compatible with the following versions of the U
 * 2021.2
 * 2021.3
 * 2022.1
+* 2022.2
 
 [!include[](snippets/apple-arkit-trademark.md)]

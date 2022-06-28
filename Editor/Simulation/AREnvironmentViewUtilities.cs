@@ -31,27 +31,16 @@ namespace UnityEditor.XR.Simulation
         static AREnvironmentViewUtilities()
         {
             s_SimulationRenderSettings = new SimulationRenderSettings();
-            s_SimulationRenderSettings.UseSceneRenderSettings();
 
             EditorApplication.playModeStateChanged += PlayModeStateChanged;
             CameraTextureProvider.preRenderCamera += PreRenderCameraTextureProvider;
             CameraTextureProvider.postRenderCamera += PostRenderCameraTextureProvider;
-#if !UNITY_2022_1_OR_NEWER
             AREnvironmentViewCamera.preRender += PreRenderEnvironmentViewCamera;
             AREnvironmentViewCamera.postRender += PostRenderEnvironmentViewCamera;
-#endif
-            // Environment View Overlay state can be shared between all scene views after a domain reload.
-            // Need to make sure to cache what views are using the overlay before a domain reload so the overlay
-            // usage can be restored after the reload.
-            AssemblyReloadEvents.beforeAssemblyReload += BeforeAssemblyReload;
-            AssemblyReloadEvents.afterAssemblyReload += AfterAssemblyReload;
-            SimulationEditorUtilities.CheckIsSimulationSubsystemEnabled();
 
-            EditorApplication.delayCall += () =>
-            {
-                // Need to delay a frame since overlays are not fully re-initialized when opening the editor
-                AREnvironmentView.instance.FindAllSceneAndEnvironmentViews();
-            };
+            // Turn off rendering while assembly reloading
+            AssemblyReloadEvents.beforeAssemblyReload += BeforeAssemblyReload;
+            SimulationEditorUtilities.CheckIsSimulationSubsystemEnabled();
 
             BaseSimulationSceneManager.environmentTeardownStarted += StartTearDownEnvironment;
             // Do this last since attaching to the event also calls it if initialized
@@ -60,23 +49,17 @@ namespace UnityEditor.XR.Simulation
 
         static void PlayModeStateChanged(PlayModeStateChange mode)
         {
-            var environmentView = AREnvironmentView.instance;
+            var environmentView = AREnvironmentViewManager.instance;
             switch (mode)
             {
                 case PlayModeStateChange.EnteredEditMode:
                     environmentView.OnEnable();
-                    environmentView.SetUpOrChangeEnvironment();
-                    break;
-                case PlayModeStateChange.ExitingEditMode:
-                    environmentView.CleanUpEnvironment();
-                    environmentView.OnDisable();
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
                     s_SimulationRenderSettings.UseSceneRenderSettings();
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
                     PostRenderCameraTextureProvider(null);
-                    environmentView.OverrideCameraSceneMask(EditorSceneManager.DefaultSceneCullingMask);
                     break;
             }
         }
@@ -85,7 +68,7 @@ namespace UnityEditor.XR.Simulation
         {
             s_SimulationSceneManager = Application.isPlaying ?
                 SimulationSessionSubsystem.simulationSceneManager :
-                AREnvironmentView.instance.activeSceneManager;
+                AREnvironmentViewManager.instance.activeSceneManager;
             s_HasEnvironmentSettings = s_SimulationSceneManager.simulationEnvironment != null;
 
             s_RenderingOverrideEnabled = true;
@@ -119,40 +102,48 @@ namespace UnityEditor.XR.Simulation
 
         static void PreRenderEnvironmentViewCamera(Camera camera)
         {
-#if !UNITY_2022_1_OR_NEWER
-            if (!s_LightingOverrideActive)
-                s_SimulationRenderSettings.UseSceneRenderSettings();
+            if (!s_RenderingOverrideEnabled)
+                return;
 
             // Due to the way AREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
             // But scene view camera is already the current camera when we reach this step.
-            if (!AREnvironmentView.instance.environmentCameras.Contains(Camera.current))
+            if (!AREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
                 return;
 
             if (!s_HasEnvironmentSettings || s_SimulationRenderSettings == null)
                 return;
 
             SetOverrideLighting();
-#endif
         }
 
         static void PostRenderEnvironmentViewCamera(Camera camera)
         {
-#if !UNITY_2022_1_OR_NEWER
+            if (!s_RenderingOverrideEnabled)
+                return;
+            
             // Due to the way AREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
             // But scene view camera is already the current camera when we reach this step.
-            if (!AREnvironmentView.instance.environmentCameras.Contains(Camera.current))
+            if (!AREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
                 return;
 
             RestoreBaseLighting();
-#endif
         }
 
         static void SetOverrideLighting()
         {
+
             if (!s_RenderingOverrideEnabled || s_SimulationSceneManager == null)
                 return;
 
-            if (s_SimulationSceneManager.environmentScene.IsValid())
+            if (!s_SimulationSceneManager.environmentScene.IsValid())
+                return;
+
+            if (!s_LightingOverrideActive)
+                s_SimulationRenderSettings.UseSceneRenderSettings();
+
+            // Do not set scene manager override lighting in prefab stage
+            if (s_SimulationSceneManager.environmentScene.IsValid()
+                && PrefabStageUtility.GetCurrentPrefabStage() == null)
             {
                 Unsupported.SetOverrideLightingSettings(s_SimulationSceneManager.environmentScene);
 
@@ -166,9 +157,6 @@ namespace UnityEditor.XR.Simulation
 
         internal static void RestoreBaseLighting()
         {
-            if (!s_RenderingOverrideEnabled && s_LightingOverrideActive)
-                Debug.Break();
-
             if (!s_RenderingOverrideEnabled)
                 return;
 
@@ -176,7 +164,7 @@ namespace UnityEditor.XR.Simulation
             {
                 s_LightingOverrideActive = false;
                 Unsupported.RestoreOverrideLightingSettings();
-                s_SimulationRenderSettings?.ApplyTempRenderSettings();
+                s_SimulationRenderSettings.ApplyTempRenderSettings();
             }
         }
 
@@ -188,10 +176,9 @@ namespace UnityEditor.XR.Simulation
         {
             var trackerElement = new VisualElement();
 
-            var standAloneSettingsSerializedObject = new SerializedObject(XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Standalone));
-            var managerInstanceProp = standAloneSettingsSerializedObject.FindProperty("m_LoaderManagerInstance");
-            var managerInstanceSerializedObject = new SerializedObject(managerInstanceProp.objectReferenceValue);
-            var property = managerInstanceSerializedObject.FindProperty("m_Loaders.Array");
+            var property = GetLoadersArrayProperty();
+            if (property == null)
+                return null;
 
             property.Next(true);
             trackerElement.TrackPropertyValue(property, _ => SetupListTracker(trackerElement) );
@@ -205,10 +192,9 @@ namespace UnityEditor.XR.Simulation
         /// <param name="trackerElement">Parent tracker visual element.</param>
         static void SetupListTracker(VisualElement trackerElement)
         {
-            var standAloneSettingsSerializedObject = new SerializedObject(XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Standalone));
-            var managerInstanceProp = standAloneSettingsSerializedObject.FindProperty("m_LoaderManagerInstance");
-            var managerInstanceSerializedObject = new SerializedObject(managerInstanceProp.objectReferenceValue);
-            var property = managerInstanceSerializedObject.FindProperty("m_Loaders.Array");
+            var property = GetLoadersArrayProperty();
+            if (property == null)
+                return;
 
             var endProperty = property.GetEndProperty();
 
@@ -230,6 +216,7 @@ namespace UnityEditor.XR.Simulation
                 if (childIndex < trackerElement.childCount)
                 {
                     element = trackerElement[childIndex];
+                    element.Unbind();
                 }
                 else
                 {
@@ -252,6 +239,18 @@ namespace UnityEditor.XR.Simulation
             SimulationEditorUtilities.CheckIsSimulationSubsystemEnabled();
         }
 
+        static SerializedProperty GetLoadersArrayProperty()
+        {
+            var standaloneSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Standalone);
+            if (standaloneSettings == null)
+                return null;
+            
+            var standAloneSettingsSerializedObject = new SerializedObject(standaloneSettings);
+            var managerInstanceProp = standAloneSettingsSerializedObject.FindProperty("m_LoaderManagerInstance");
+            var managerInstanceSerializedObject = new SerializedObject(managerInstanceProp.objectReferenceValue);
+            return managerInstanceSerializedObject.FindProperty("m_Loaders.Array");
+        }
+
          internal static bool IsBaseSceneView(object obj)
          {
              if (obj is SceneView sceneView)
@@ -262,16 +261,33 @@ namespace UnityEditor.XR.Simulation
 
          static void BeforeAssemblyReload()
          {
+             RestoreBaseLighting();
+             
              s_RenderingOverrideEnabled = false;
              s_SimulationSceneManager = null;
              s_HasEnvironmentSettings = false;
-             AREnvironmentView.instance.CacheEnvironmentViewsBeforeReload();
          }
 
-         static void AfterAssemblyReload()
+         /// <summary>
+         /// Used to toggle all the AR Environment Overlays to create the hidden settings tracking element if the
+         /// XR Manager Settings were not created before opening the Overlay.
+         /// </summary>
+         internal static void ToggleAREnvironmentOverlays()
          {
-             s_RenderingOverrideEnabled = false;
-             AREnvironmentView.instance.RestoreEnvironmentViewsAfterReload();
+             foreach (var sceneViewObj in SceneView.sceneViews)
+             {
+                 if (sceneViewObj is SceneView sceneView)
+                 {
+                     if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
+                     {
+                         if (environmentOverlay.displayed)
+                         {
+                             environmentOverlay.displayed = false;
+                             EditorApplication.delayCall += () => environmentOverlay.displayed = true;
+                         }
+                     }
+                 }
+             }
          }
     }
 }

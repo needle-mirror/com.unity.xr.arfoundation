@@ -71,6 +71,11 @@ public class TestSubsystemProvider : SubsystemProvider<TestSubsystem>
 
 For more about XR Origin, see the [XR Core Utilities Package documentation](xref:xr-core-utils-xr-origin).
 
+### Removal of [`ARSessionOrigin.MakeContentAppearAt`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.2/api/UnityEngine.XR.ARFoundation.ARSessionOrigin.html#UnityEngine_XR_ARFoundation_ARSessionOrigin_MakeContentAppearAt_UnityEngine_Transform_UnityEngine_Quaternion_)
+To ensure compatibility across Unity XR packages such as [XR Interaction Toolkit](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@latest), [`ARSessionOrigin`](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin) has been reimplemented as well as deprecated, and is now derived from [`XROrigin`](xref:Unity.XR.CoreUtils.XROrigin).
+
+[`XROrigin`](xref:Unity.XR.CoreUtils.XROrigin) does not contain equivalent methods to [`ARSessionOrigin.MakeContentAppearAt`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.2/api/UnityEngine.XR.ARFoundation.ARSessionOrigin.html#UnityEngine_XR_ARFoundation_ARSessionOrigin_MakeContentAppearAt_UnityEngine_Transform_UnityEngine_Quaternion_) which appeared in older versions of AR Foundation. If you are migrating a project which uses [`MakeContentAppearAt`](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.2/api/UnityEngine.XR.ARFoundation.ARSessionOrigin.html#UnityEngine_XR_ARFoundation_ARSessionOrigin_MakeContentAppearAt_UnityEngine_Transform_UnityEngine_Quaternion_), you can add extension methods to your project to continue supporting this API with [`XROrigin`](xref:Unity.XR.CoreUtils.XROrigin). Example extension method implementations are provided in the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) project at [`arfoundation-samples/Assets/Scripts/XROriginExtensions.cs`](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scripts/XROriginExtensions.cs).
+
 ## `XRDepthSubsystem` is now `XRPointCloudSubsystem`
 
 The depth information is represented by features points which can be correlated between multiple frames. A point cloud is a set of these feature points. The `XRDepthSubsystem` was the [tracking subsystem]((xref:arsubsystems-manual#tracking-subsystems)) interface to access this data using `XRPointCloud` as its trackable.
@@ -161,6 +166,8 @@ SubShader
 }
 ```
 
-### URP
+### URP Version 14.0.2 Incompatibility
 
-When using URP, make sure to check [Camera Depth Texture](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@14.0/manual/camera-component-reference.html#rendering) on your Camera Component **Camera > Rendering > Camera Depth Texture** if you wish to use `AfterOpaques` rendering mode with Occlusion.
+When using URP version 14.0.2 there is a bug that causes URP to not respect `RendererFeature` input requests. This means that even though the `ARCameraBackground` might request for a Camera Depth Texture, URP will not respect this request and the camera background will overwrite geometry.
+
+To workaround this, make sure you are using URP version 14.0.3 or greater.

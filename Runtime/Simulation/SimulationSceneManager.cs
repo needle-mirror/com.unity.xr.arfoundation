@@ -12,7 +12,7 @@ namespace UnityEngine.XR.Simulation
 
         protected override Scene CreateEnvironmentScene()
         {
-            var scene = SceneManager.CreateScene(k_EnvironmentSceneName, k_EnvironmentSceneParameters);
+            var scene = SceneManager.CreateScene(GenerateUniqueSceneName(), k_EnvironmentSceneParameters);
             if (!scene.IsValid())
                 throw new InvalidOperationException("Environment scene could not be created.");
 

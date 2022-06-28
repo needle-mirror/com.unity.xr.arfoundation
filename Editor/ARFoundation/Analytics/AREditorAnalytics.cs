@@ -5,8 +5,9 @@ namespace UnityEditor.XR.ARFoundation
     static class AREditorAnalytics
     {
         const string k_UsageTableName = "arfoundation_usage";
+        const int k_UsageVersion = 2;
 
-        public static readonly AREditorAnalyticsEvent<ARUsageAnalyticsArgs> arUsageAnalyticEvent = new(k_UsageTableName);
+        public static readonly AREditorAnalyticsEvent<ARUsageAnalyticsArgs> arUsageAnalyticEvent = new(k_UsageTableName, k_UsageVersion);
 
         [InitializeOnLoadMethod]
         static void SetupAndRegister()

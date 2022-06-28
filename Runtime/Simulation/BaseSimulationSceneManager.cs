@@ -8,7 +8,7 @@ namespace UnityEngine.XR.Simulation
     [Serializable]
     abstract class BaseSimulationSceneManager
     {
-        internal const string k_EnvironmentSceneName = "Simulated Environment Scene";
+        const string k_EnvironmentSceneName = "Simulated Environment Scene";
 
         [SerializeField]
         Scene m_EnvironmentScene;
@@ -21,6 +21,9 @@ namespace UnityEngine.XR.Simulation
 
         static bool s_Initialized;
         static event Action s_EnvironmentSetupFinished;
+        static string s_ActiveSceneName;
+
+        internal static string activeSceneName => s_ActiveSceneName;
 
         public static event Action environmentSetupFinished
         {
@@ -54,6 +57,8 @@ namespace UnityEngine.XR.Simulation
         // Reference type collections must also be cleared after use
         static readonly List<Light> k_SimulationLights = new List<Light>();
 
+        protected static string GenerateUniqueSceneName() => $"{k_EnvironmentSceneName} {Guid.NewGuid().ToString()}";
+
         /// <summary>
         /// Setup a simulation environment based on the current Simulation Settings.
         /// </summary>
@@ -78,6 +83,7 @@ namespace UnityEngine.XR.Simulation
             m_EnvironmentRoot.SetHideFlagsRecursively(HideFlags.HideInHierarchy);
 
             s_Initialized = true;
+            s_ActiveSceneName = m_EnvironmentScene.name;
             s_EnvironmentSetupFinished?.Invoke();
         }
 
@@ -98,6 +104,7 @@ namespace UnityEngine.XR.Simulation
             DestroyEnvironmentScene();
 
             m_EnvironmentScene = default;
+            s_ActiveSceneName = null;
         }
 
         protected abstract Scene CreateEnvironmentScene();

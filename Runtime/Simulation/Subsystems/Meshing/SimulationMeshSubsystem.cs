@@ -136,7 +136,14 @@ namespace UnityEngine.XR.Simulation
             // always be accessed from Editor code. So in Editor play mode we combine meshes in a delayCall.
 #if UNITY_EDITOR
             if (Application.isPlaying)
-                EditorApplication.delayCall += () => AddMeshes(environmentRoot);
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    var activeSubsystem = GetActiveSubsystemInstance();
+                    if (activeSubsystem is { running: true })
+                        AddMeshes(environmentRoot);
+                };
+            }
             else
                 AddMeshes(environmentRoot);
 #else

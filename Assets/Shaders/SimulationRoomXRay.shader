@@ -80,5 +80,5 @@
     }
 
     Fallback "Simulation/Legacy/Room X-Ray"
-    //CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
+    CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

@@ -14,6 +14,11 @@ namespace UnityEditor.XR.ARAnalytics
         /// </summary>
         protected readonly string k_TableName;
 
+        /// <summary>
+        /// The version of the schema table for an event.
+        /// </summary>
+        protected readonly int k_Version;
+
         protected int m_MaxEventsPerHour;
         protected int m_MaxElementCount;
 
@@ -22,9 +27,10 @@ namespace UnityEditor.XR.ARAnalytics
         /// </summary>
         bool m_Registered;
 
-        protected ARAnalyticsEvent(string tableName, int maxEventsPerHour = k_DefaultMaxEventsPerHour, int maxElementCount = k_DefaultMaxElementCount)
+        protected ARAnalyticsEvent(string tableName, int version = ARAnalyticsConstants.defaultVersion, int maxEventsPerHour = k_DefaultMaxEventsPerHour, int maxElementCount = k_DefaultMaxElementCount)
         {
             k_TableName = tableName;
+            k_Version = version;
             m_MaxEventsPerHour = maxEventsPerHour;
             m_MaxElementCount = maxElementCount;
         }

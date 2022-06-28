@@ -118,10 +118,16 @@ namespace UnityEngine.XR.Simulation
 #if UNITY_EDITOR
             void OnBeforeAssemblyReload()
             {
+#if UNITY_2022_2_OR_NEWER
+                const string domainReloadOptions = "<b>Stop Playing and Recompile</b>";
+#else
+                const string domainReloadOptions = 
+                    "either <b>Recompile After Finished Playing</b> or <b>Stop Playing and Recompile</b>";
+#endif
                 Debug.LogError(
-                    "XR Simulation does not support script recompilation while playing. To disable script compilation" +
+                    "XR Simulation does not support script recompilation while playing. To disable script compilation"+
                     " while playing, in the Preferences window under <b>General > Script Changes While Playing</b>,"+
-                    " select either <b>Recompile After Finished Playing</b> or <b>Stop Playing and Recompile</b>.");
+                    $" select {domainReloadOptions}.");
             }
 #endif
         }

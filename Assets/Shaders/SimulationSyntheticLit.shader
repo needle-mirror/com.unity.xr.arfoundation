@@ -75,5 +75,5 @@
     }
 
     Fallback "Hidden/Simulation/Legacy/Synthetic"
-    //CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
+    CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

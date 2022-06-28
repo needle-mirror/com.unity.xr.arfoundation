@@ -237,5 +237,5 @@
     }
 
     Fallback "Unlit/Transparent"
-    //CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
+    CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

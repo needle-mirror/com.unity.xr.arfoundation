@@ -7,18 +7,12 @@ namespace UnityEngine.XR.Simulation.Tests
     class SimulationEnvironmentTestFixture : SimulationSessionTestSetup
     {
         [OneTimeSetUp]
-        public void Setup()
-        {
-            SetupSession();
-        }
+        public void Setup() => SetupSession();
 
         [OneTimeTearDown]
-        public void TearDown()
-        {
-            TearDownSession();
-        }
+        public void TearDown() => TearDownSession();
 
-        Scene FindSimulationScene(string sceneName)
+        static Scene FindSimulationScene(string sceneName)
         {
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
@@ -30,17 +24,24 @@ namespace UnityEngine.XR.Simulation.Tests
             return default;
         }
 
+        static (string sceneName, Scene environmentScene) FindSimulationSceneAndAssertLoaded()
+        {
+            var activeSceneName = SimulationSceneManager.activeSceneName;
+            var environmentScene = FindSimulationScene(activeSceneName);
+            
+            // Check simulation scene is initialized
+            Assert.AreEqual(environmentScene.name, activeSceneName);
+            Assert.AreEqual(1, environmentScene.rootCount, $"{activeSceneName} should only have one root GameObject.");
+
+            return (activeSceneName, environmentScene);
+        }
+
         [Test]
         [Order(1)]
         public void EnvironmentLoaded()
         {
-            const string sceneName = SimulationSceneManager.k_EnvironmentSceneName;
-            var environmentScene = FindSimulationScene(sceneName);
-
-            // Check simulation scene is initialized
-            Assert.AreEqual(sceneName, environmentScene.name);
-            Assert.AreEqual(1, environmentScene.rootCount, $"{sceneName} should only have one root GameObject.");
-
+            (var sceneName, var environmentScene) = FindSimulationSceneAndAssertLoaded();
+            
             // Check the environment root is valid
             var rootGO = environmentScene.GetRootGameObjects()[0];
             var simulationEnvironment = rootGO.GetComponent<SimulationEnvironment>();
@@ -51,11 +52,7 @@ namespace UnityEngine.XR.Simulation.Tests
         [Order(2)]
         public void CorrectEnvironmentPrefab()
         {
-            const string sceneName = SimulationSceneManager.k_EnvironmentSceneName;
-            var environmentScene = FindSimulationScene(sceneName);
-
-            Assert.AreEqual(sceneName, environmentScene.name);
-            Assert.AreEqual(1, environmentScene.rootCount, $"{sceneName} should only have one root GameObject.");
+            (var _, var environmentScene) = FindSimulationSceneAndAssertLoaded();
 
             // Check if the environment was created from the right prefab
             // When instantiating a prefab the resulting GameObject will

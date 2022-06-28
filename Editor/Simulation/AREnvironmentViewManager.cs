@@ -1,23 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.XR.CoreUtils;
+using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.XR.Simulation;
 
 namespace UnityEditor.XR.Simulation
 {
-    [Serializable]
-    [ExecuteAlways]
-    class AREnvironmentView : ScriptableObject
+    class AREnvironmentViewManager : ScriptableSingleton<AREnvironmentViewManager>
     {
         const string k_ViewName = "AR Environment";
         static GUIContent s_SimulationSubsystemNotLoadedContent = new GUIContent($"{k_ViewName} is not Available.\nEnable XR Simulation in Project Settings > XR Plug-in Management.");
         static GUIContent s_BaseSceneViewContent = new GUIContent($"{k_ViewName} is not Available.\nUse a Scene View window.");
         static GUIContent s_AREnvironmentViewTitleContent;
-
-        static AREnvironmentView s_Instance;
 
         [SerializeField]
         GUIContent m_SceneViewTitleContent;
@@ -31,16 +27,23 @@ namespace UnityEditor.XR.Simulation
         [SerializeField]
         SceneView[] m_ActiveEnvironmentViewsAtReload;
 
-        [SerializeField]
         bool m_Initialized;
-
         ulong m_CurrentSceneMask;
 
         SimulationXRayManager m_XRayManager;
 
-        HashSet<SceneView> m_AllSceneViews = new HashSet<SceneView>();
         HashSet<SceneView> m_EnvironmentViews = new HashSet<SceneView>();
         HashSet<Camera> m_EnvironmentCameras = new HashSet<Camera>();
+
+        public bool IsEnvironmentViewEnabled(EditorWindow window)
+        {
+            if (window is SceneView sceneView)
+            {
+                return m_EnvironmentViews.TryGetValue(sceneView, out var enabled) && enabled;
+            }
+
+            return false;
+        }
 
         static GUIContent arEnvironmentViewTitleContent
         {
@@ -65,56 +68,59 @@ namespace UnityEditor.XR.Simulation
 
         internal HashSet<Camera> environmentCameras => m_EnvironmentCameras;
 
-        internal static AREnvironmentView instance
-        {
-            get
-            {
-                if (s_Instance == null)
-                {
-                    s_Instance = FindObjectOfType<AREnvironmentView>(true);
-                    if (s_Instance == null)
-                    {
-                        s_Instance = CreateInstance<AREnvironmentView>();
-                        s_Instance.hideFlags = HideFlags.HideAndDontSave;
-                    }
-                }
-
-                return s_Instance;
-            }
-        }
-
         [MenuItem("Window/XR/AR Foundation/" + k_ViewName)]
         static void GetAREnvironmentView()
         {
-            var environmentView = instance;
+            var environmentViewManager = instance;
             SceneView sceneView = null;
-            if (environmentView.m_EnvironmentViews.Count > 0)
+            if (environmentViewManager.m_EnvironmentViews.Count > 0)
             {
                 var lastActiveView = SceneView.lastActiveSceneView;
-                sceneView = environmentView.m_EnvironmentViews.Contains(lastActiveView) ? lastActiveView : instance.m_EnvironmentViews.First();
+                if (environmentViewManager.m_EnvironmentViews.TryGetValue(lastActiveView, out var enabled) && enabled)
+                {
+                    sceneView = lastActiveView;
+                }
+                else
+                {
+                    foreach (var viewCandidate in environmentViewManager.m_EnvironmentViews)
+                    {
+                        sceneView = viewCandidate; 
+                        break;
+                    }
+                }
             }
 
             if (sceneView == null)
-            {
                 sceneView = EditorWindow.CreateWindow<SceneView>();
-                environmentView.m_AllSceneViews.Add(sceneView);
-                if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
-                    environmentOverlay.displayed = true;
-            }
+            
+            environmentViewManager.CacheTitleContent(sceneView);
 
+            var environmentOverlay = ShowEnvironmentOverlay(sceneView);
+            if (environmentOverlay != null)
+            {
+                // Place toolbar with enough space for toolbars docked on top and side with another toolbar in top left corner
+                environmentOverlay.Undock();
+                environmentOverlay.floatingPosition = new Vector2(90f, 26f);
+            }
+            
+            environmentViewManager.EnableEnvironmentView(sceneView);
+            
+            var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
+            AREditorAnalytics.simulationUIAnalyticsEvent.Send(
+                new SimulationUIAnalyticsArgs(
+                    eventName: SimulationUIAnalyticsArgs.EventName.WindowUsed,
+                    environmentGuid: assetGuid,
+                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = AREnvironmentToolbarOverlay.toolbarDisplayName, isActive = true }));
+            
             sceneView.Show();
             sceneView.Focus();
         }
 
         internal void OnEnable()
         {
-            if (s_Instance == null)
+            if (m_Initialized)
             {
-                s_Instance = this;
-            }
-            else if (s_Instance != this)
-            {
-                UnityObjectUtils.Destroy(this);
+                RestoreEnvironmentViewsAfterReload();
                 return;
             }
 
@@ -122,8 +128,6 @@ namespace UnityEditor.XR.Simulation
             SceneView.duringSceneGui += DuringSceneGui;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved += SetUpOrChangeEnvironment;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved += SimulationSubsystemDisabledMessage;
-            PrefabStage.prefabStageOpened += PrefabStageOpened;
-            PrefabStage.prefabStageClosing += PrefabStageClosing;
 
             if (useEditorSceneManager)
                 m_EditorSimulationSceneManager = new EditorSimulationSceneManager();
@@ -133,31 +137,22 @@ namespace UnityEditor.XR.Simulation
             var environmentAssetsManager = SimulationEnvironmentAssetsManager.Instance;
             environmentAssetsManager.activeEnvironmentChanged += SetUpOrChangeEnvironment;
 
-            foreach (var sceneViewObj in SceneView.sceneViews)
-            {
-                var setView = useEditorSceneManager && m_EnvironmentViews.Count > 0;
-
-                if (sceneViewObj is SceneView sceneView)
-                {
-                    CacheTitleContent(sceneView);
-                    m_CurrentSceneMask = useEditorSceneManager
-                        ? EditorSceneManager.GetSceneCullingMask(m_EditorSimulationSceneManager.environmentScene)
-                        : EditorSceneManager.DefaultSceneCullingMask;
-
-                    if (setView && m_EnvironmentViews.Contains(sceneView))
-                        SetViewToEnvironment(sceneView);
-                }
-            }
+            RestoreEnvironmentViewsAfterReload();
+            m_Initialized = true;
         }
 
         internal void OnDisable()
         {
+            if (!m_Initialized)
+                return;
+
+            m_Initialized = false;
+
+            CacheEnvironmentViewsBeforeReload();
             SceneView.beforeSceneGui -= BeforeSceneGui;
             SceneView.duringSceneGui -= DuringSceneGui;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved -= SetUpOrChangeEnvironment;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved -= SimulationSubsystemDisabledMessage;
-            PrefabStage.prefabStageOpened -= PrefabStageOpened;
-            PrefabStage.prefabStageClosing -= PrefabStageClosing;
 
             var environmentAssetsManager = SimulationEnvironmentAssetsManager.Instance;
             environmentAssetsManager.activeEnvironmentChanged -= SetUpOrChangeEnvironment;
@@ -165,87 +160,74 @@ namespace UnityEditor.XR.Simulation
             CleanUpEnvironmentViews();
             CleanUpEnvironment();
 
+            m_EnvironmentViews.Clear();
+            m_EnvironmentCameras.Clear();
             m_EditorSimulationSceneManager = null;
             m_XRayManager = null;
+
+            Save(true);
         }
 
-        internal void AddEnvironmentView(SceneView sceneView)
+        internal void EnableEnvironmentView(SceneView sceneView)
         {
             if (!AREnvironmentViewUtilities.IsBaseSceneView(sceneView))
             {
                 BaseSceneViewMessage(sceneView);
-                m_EnvironmentViews.Remove(sceneView);
-                m_EnvironmentCameras.Remove(sceneView.camera);
+                DisableEnvironmentView(sceneView);
                 return;
             }
-
-            // When a new scene view is opened from add tab when an AR Environment View is open or if an
-            // AR Environment View was the last Scene View open when opening a new scene view window, the new scene view
-            // can open with the AR Environment Overlay already open. This will catch that case but will not effect
-            // opening a new AR Environment View from the main toolbar Window > AR Foundation > AR Environment.
-            if (!m_AllSceneViews.Contains(sceneView))
-            {
-                if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
-                    environmentOverlay.displayed = false;
-
-                m_AllSceneViews.Add(sceneView);
-                return;
-            }
-
+            
             CacheTitleContent(sceneView);
 
-            if (PrefabStageUtility.GetCurrentPrefabStage() != null)
-                return;
-
-            var previousCount = m_EnvironmentViews.Count;
             m_EnvironmentViews.Add(sceneView);
             m_EnvironmentCameras.Add(sceneView.camera);
 
-            sceneView.titleContent = arEnvironmentViewTitleContent;
+            EditorApplication.delayCall += () => sceneView.titleContent = arEnvironmentViewTitleContent;
 
+            if (ShowEnvironmentOverlay(sceneView) == null)
+                EditorApplication.delayCall += () => ShowEnvironmentOverlay(sceneView);
+
+            if (CheckRemoveNotifications(sceneView))
+                sceneView.RemoveNotification();
+            
             if (!SimulationEditorUtilities.simulationSubsystemEnabled)
             {
                 sceneView.ShowNotification(s_SimulationSubsystemNotLoadedContent);
                 return;
             }
 
-            if (CheckRemoveNotifications(sceneView))
-                sceneView.RemoveNotification();
-
-            if (previousCount == 0)
+            if (!EnvironmentSceneLoaded())
                 SetUpOrChangeEnvironment();
 
-            if (activeSceneManager == null)
-                return;
-
-            var simulationEnvironment = activeSceneManager.simulationEnvironment;
-            if (simulationEnvironment != null)
-            {
-                var pivot = simulationEnvironment.defaultViewPivot;
-                var rotation = simulationEnvironment.defaultViewPose.rotation;
-                var size = simulationEnvironment.defaultViewSize;
-
-                sceneView.LookAt(pivot, rotation, size, sceneView.orthographic, true);
-            }
+            SetViewToEnvironment(sceneView);
         }
 
-        internal void RemoveEnvironmentView(SceneView sceneView)
+        internal void DisableEnvironmentView(SceneView sceneView)
         {
-            if (!AREnvironmentViewUtilities.IsBaseSceneView(sceneView))
+            if (!AREnvironmentViewUtilities.IsBaseSceneView(sceneView) || sceneView == null)
+            {
+                m_EnvironmentViews.Remove(sceneView);
+                return;
+            }
+
+            m_EnvironmentCameras.Remove(sceneView.camera);
+            if (m_EnvironmentViews.TryGetValue(sceneView, out var enabled))
+                m_EnvironmentViews.Remove(sceneView);
+            
+            if(!enabled)
                 return;
 
-            m_EnvironmentViews.Remove(sceneView);
-            m_EnvironmentCameras.Remove(sceneView.camera);
-
             if (sceneView == null || sceneView.camera == null)
+                return;
+            
+            sceneView.titleContent = m_SceneViewTitleContent;
+
+            if (PrefabStageUtility.GetCurrentPrefabStage() != null)
                 return;
 
             sceneView.camera.overrideSceneCullingMask = EditorSceneManager.DefaultSceneCullingMask;
 
-            if (sceneView.titleContent == arEnvironmentViewTitleContent)
-                sceneView.titleContent = m_SceneViewTitleContent;
-
-            if (useEditorSceneManager && m_EnvironmentViews.Count == 0)
+            if (useEditorSceneManager && EnabledEnvironmentViewsCount() == 0)
                 CleanUpEnvironment();
         }
 
@@ -255,7 +237,7 @@ namespace UnityEditor.XR.Simulation
                 return;
 
             // Cache the render settings in case they are being modified by the user.
-            if (!AREnvironmentViewUtilities.lightingOverrideActive)
+            if (AREnvironmentViewUtilities.renderingOverrideEnabled && !AREnvironmentViewUtilities.lightingOverrideActive)
                 AREnvironmentViewUtilities.simulationRenderSettings.UseSceneRenderSettings();
         }
 
@@ -264,59 +246,78 @@ namespace UnityEditor.XR.Simulation
             if (!m_Initialized)
                 return;
 
-            if (!m_AllSceneViews.Contains(sceneView))
+            if (!m_EnvironmentViews.TryGetValue(sceneView, out var enabled) || !enabled 
+                || activeSceneManager == null || PrefabStageUtility.GetCurrentPrefabStage() != null)
             {
-                var displayOverlay = m_EnvironmentViews.Contains(sceneView);
-                if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
-                    environmentOverlay.displayed = displayOverlay;
-
-                m_AllSceneViews.Add(sceneView);
-                DoSceneViewXRay();
-                return;
-            }
-
-            if (m_EnvironmentViews.Contains(sceneView))
-                sceneView.camera.overrideSceneCullingMask = m_CurrentSceneMask;
-
-            if (m_EnvironmentViews.Contains(sceneView) && activeSceneManager != null)
-            {
-                CheckARCamera();
-
-                var scene = activeSceneManager.environmentScene;
-                var hasXRayRegion = XRayRuntimeUtils.xRayRegions.TryGetValue(scene, out var xRayRegion);
-                m_XRayManager?.UpdateXRayShader(hasXRayRegion, xRayRegion);
-
-                var simEnv = activeSceneManager.simulationEnvironment;
-                if (simEnv != null)
+                // Check if overlay is displayed without without display change being called
+                if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay) 
+                    && environmentOverlay.displayed)
                 {
-                    Handles.color = Color.cyan;
-                    SimulationEnvironment.DrawWireCamera(Handles.DrawLine, simEnv.cameraStartingPose, sceneView.size * 0.06f);
+                    EnableEnvironmentView(sceneView);
+                    return;
+                }
+                else
+                {
+                    DoSceneViewXRay();
+                    if (sceneView.titleContent == arEnvironmentViewTitleContent)
+                        sceneView.titleContent = m_SceneViewTitleContent;
+                    
+                    return; 
                 }
             }
-            else
+
+            if (sceneView.titleContent != arEnvironmentViewTitleContent)
+                sceneView.titleContent = arEnvironmentViewTitleContent;
+
+            sceneView.camera.overrideSceneCullingMask = m_CurrentSceneMask;
+
+            CheckARCamera();
+
+            var scene = activeSceneManager.environmentScene;
+            var hasXRayRegion = XRayRuntimeUtils.xRayRegions.TryGetValue(scene, out var xRayRegion);
+            m_XRayManager?.UpdateXRayShader(hasXRayRegion, xRayRegion);
+
+            var simEnv = activeSceneManager.simulationEnvironment;
+            if (simEnv != null)
             {
-                DoSceneViewXRay();
+                Handles.color = Color.cyan;
+                SimulationEnvironment.DrawWireCamera(Handles.DrawLine, simEnv.cameraStartingPose, sceneView.size * 0.06f);
             }
+
+            AREnvironmentViewUtilities.RestoreBaseLighting();
         }
 
         internal void SetUpOrChangeEnvironment()
         {
+            if (Application.isPlaying)
+                return;
+
             CleanUpEnvironment();
 
             if (useEditorSceneManager && m_EnvironmentViews.Count > 0 && m_EditorSimulationSceneManager != null)
             {
                 m_EditorSimulationSceneManager.SetupEnvironment();
                 m_CurrentSceneMask = EditorSceneManager.GetSceneCullingMask(m_EditorSimulationSceneManager.environmentScene);
+                
+                if (PrefabStageUtility.GetCurrentPrefabStage() != null)
+                    return;
 
                 foreach (var sceneView in m_EnvironmentViews)
                 {
-                    SetViewToEnvironment(sceneView);
+                   SetViewToEnvironment(sceneView);
                 }
             }
         }
 
         void SetViewToEnvironment(SceneView sceneView)
         {
+            // When called from OnEnable the scene view may not be fully initialized
+            // Do not change the view if in prefab stage
+            if (sceneView == null || sceneView.camera == null 
+                || PrefabStageUtility.GetCurrentPrefabStage() != null
+                || activeSceneManager == null)
+                return;
+                
             sceneView.camera.overrideSceneCullingMask = m_CurrentSceneMask;
             var simulationEnvironment = activeSceneManager.simulationEnvironment;
             if (simulationEnvironment != null)
@@ -331,6 +332,9 @@ namespace UnityEditor.XR.Simulation
 
         internal void CleanUpEnvironment()
         {
+            if (Application.isPlaying)
+                return;
+
             m_CurrentSceneMask = EditorSceneManager.DefaultSceneCullingMask;
             AREnvironmentViewUtilities.RestoreBaseLighting();
             AREnvironmentViewUtilities.renderingOverrideEnabled = false;
@@ -400,6 +404,9 @@ namespace UnityEditor.XR.Simulation
         {
             m_CurrentSceneMask = sceneMask;
 
+            if (PrefabStageUtility.GetCurrentPrefabStage() != null)
+                return;
+            
             foreach (var sceneView in m_EnvironmentViews)
             {
                 if (sceneView.camera != null)
@@ -418,22 +425,6 @@ namespace UnityEditor.XR.Simulation
             }
         }
 
-        void PrefabStageOpened(PrefabStage stage)
-        {
-            foreach (var sceneViewObj in SceneView.sceneViews)
-            {
-                if (sceneViewObj is SceneView sceneView)
-                    RemoveEnvironmentView(sceneView);
-            }
-
-            m_EnvironmentViews.Clear();
-        }
-
-        void PrefabStageClosing(PrefabStage stage)
-        {
-            FindAllSceneAndEnvironmentViews();
-        }
-
         void BaseSceneViewMessage(SceneView sceneView)
         {
             if (!AREnvironmentViewUtilities.IsBaseSceneView(sceneView))
@@ -448,28 +439,17 @@ namespace UnityEditor.XR.Simulation
                 && AREnvironmentViewUtilities.IsBaseSceneView(sceneView);
         }
 
-        internal void FindAllSceneAndEnvironmentViews()
-        {
-            foreach (var sceneViewObj in SceneView.sceneViews)
-            {
-                if (sceneViewObj is SceneView sceneView)
-                {
-                    CacheTitleContent(sceneView);
-                    m_AllSceneViews.Add(sceneView);
-                    if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay) && environmentOverlay.displayed)
-                    {
-                        AddEnvironmentView(sceneView);
-                    }
-                }
-            }
-
-            m_Initialized = true;
-        }
-
         internal void CacheEnvironmentViewsBeforeReload()
         {
-            if (m_EnvironmentViews != null && m_EnvironmentViews.Count > 0)
-                m_ActiveEnvironmentViewsAtReload = m_EnvironmentViews.ToArray();
+            var enabledViews = new List<SceneView>();
+            foreach (var viewCandidate in m_EnvironmentViews)
+            {
+                if (viewCandidate != null)
+                    enabledViews.Add(viewCandidate);
+            }
+
+            if (m_EnvironmentViews != null && enabledViews.Count > 0)
+                m_ActiveEnvironmentViewsAtReload = enabledViews.ToArray();
             else
                 m_ActiveEnvironmentViewsAtReload = Array.Empty<SceneView>();
         }
@@ -480,36 +460,58 @@ namespace UnityEditor.XR.Simulation
                 return;
 
             m_EnvironmentViews.Clear();
-            m_EnvironmentViews = new HashSet<SceneView>(m_ActiveEnvironmentViewsAtReload);
-            SetUpOrChangeEnvironment();
-
-            foreach (var sceneViewObj in SceneView.sceneViews)
+            foreach (var environmentView in m_ActiveEnvironmentViewsAtReload)
             {
-                if (sceneViewObj is SceneView sceneView)
-                {
-                    CacheTitleContent(sceneView);
-                    m_AllSceneViews.Add(sceneView);
-                    var displayOverlay = m_EnvironmentViews.Contains(sceneView);
-                    if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
-                        environmentOverlay.displayed = displayOverlay;
-
-                    if (displayOverlay)
-                        AddEnvironmentView(sceneView);
-                    else
-                        RemoveEnvironmentView(sceneView);
-                }
+                EnableEnvironmentView(environmentView);
             }
         }
 
         void CacheTitleContent(SceneView sceneView)
         {
+            if (m_SceneViewTitleContent != null && m_SceneViewTitleContent.text == k_ViewName)
+                m_SceneViewTitleContent = null;
+
             // Only cache the title contents if we know the view is not a environment view.
-            if (m_SceneViewTitleContent == null
+            if (m_SceneViewTitleContent == null || m_SceneViewTitleContent.image == null
                 && AREnvironmentViewUtilities.IsBaseSceneView(sceneView)
-                && sceneView.titleContent != arEnvironmentViewTitleContent)
+                && (s_AREnvironmentViewTitleContent == null || sceneView.titleContent != s_AREnvironmentViewTitleContent))
             {
                 m_SceneViewTitleContent = sceneView.titleContent;
             }
         }
+        
+        int EnabledEnvironmentViewsCount()
+        {
+            var environmentViewsCount = 0;
+            foreach (var viewCandidate in m_EnvironmentViews)
+            {
+                if (viewCandidate != null)
+                    environmentViewsCount++;
+            }
+
+            return environmentViewsCount;
+        }
+        
+        bool EnvironmentSceneLoaded()
+        {
+            return activeSceneManager != null 
+                && activeSceneManager.environmentScene != default 
+                && activeSceneManager.environmentScene.isLoaded;
+        }
+
+        static Overlay ShowEnvironmentOverlay(SceneView sceneView)
+        {
+            if (sceneView == null)
+                return null;
+            
+            if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
+            {
+                if (!environmentOverlay.displayed)
+                    environmentOverlay.displayed = true;
+            }
+
+            return environmentOverlay;
+        }
     }
 }
+

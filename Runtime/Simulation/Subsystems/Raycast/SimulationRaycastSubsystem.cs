@@ -36,8 +36,15 @@ namespace UnityEngine.XR.Simulation
                     var hits = raycaster.Raycast(ray, trackableTypeMask, Allocator.Temp);
                     if (hits.IsCreated)
                     {
-                        m_RaycasterHitResults.Add(hits);
-                        count += hits.Length;
+                        if (hits.Length != 0)
+                        {
+                            m_RaycasterHitResults.Add(hits);
+                            count += hits.Length;
+                        }
+                        else if (hits.Length == 0)
+                        {
+                            hits.Dispose();
+                        }
                     }
                 }
 

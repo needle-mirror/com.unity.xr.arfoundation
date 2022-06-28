@@ -5,16 +5,15 @@ namespace UnityEditor.XR.ARAnalytics
     class AREditorAnalyticsEvent<T> : ARAnalyticsEvent<T>
         where T : struct
     {
-        internal AREditorAnalyticsEvent(string tableName, int maxEventsPerHour = k_DefaultMaxEventsPerHour,
-        int maxElementCount = k_DefaultMaxElementCount)
-        : base(tableName, maxEventsPerHour, maxElementCount) { }
+        internal AREditorAnalyticsEvent(string tableName, int version = ARAnalyticsConstants.defaultVersion, int maxEventsPerHour = k_DefaultMaxEventsPerHour, int maxElementCount = k_DefaultMaxElementCount)
+        : base(tableName, version, maxEventsPerHour, maxElementCount) { }
 
         protected override AnalyticsResult RegisterWithAnalyticsServer() => EditorAnalytics.RegisterEventWithLimit(
             k_TableName,
             m_MaxEventsPerHour,
             m_MaxElementCount,
             ARAnalyticsConstants.arFoundationVendorKey,
-            ARAnalyticsConstants.version
+            k_Version
         );
 
         protected override bool SendEvent(T eventArgs)
@@ -25,7 +24,7 @@ namespace UnityEditor.XR.ARAnalytics
             if (!EditorAnalytics.enabled)
                 return false;
 
-            var result = EditorAnalytics.SendEventWithLimit(k_TableName, eventArgs, ARAnalyticsConstants.version);
+            var result = EditorAnalytics.SendEventWithLimit(k_TableName, eventArgs, k_Version);
             return result == AnalyticsResult.Ok;
         }
     }

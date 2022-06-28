@@ -3,23 +3,23 @@ uid: arfoundation-tracked-object-manager
 ---
 # AR tracked object manager
 
-The tracked object manager is a type of [trackable manager](trackable-managers.md).
+The [ARTrackedObjectManager](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager) component is a type of [trackable manager](trackable-managers.md).
 
-![AR tracked object manager](images/ar-tracked-object-manager.png "AR tracked object manager")
+![AR Tracked Object Manager](images/ar-tracked-object-manager.png "AR Tracked Object Manager")<br/>*AR Tracked Object Manager*
 
-The tracked object manager creates `GameObject`s for each detected object in the environment. Before an object can be detected, the manager must be instructed to look for a set of reference objects compiled into a reference image library. It only detects objects in this library.
+The tracked object manager creates a GameObject for each object detected in the environment. Before a real-world object can be detected, you must scan it to create a reference object. You can then add the reference object to the tracked object manager's reference object library.
 
-## Reference library
+> [!NOTE]
+> * Currently, the [Apple ARKit XR Plug-in](xref:arkit-object-tracking) is the only Unity-supported provider plug-in that implements object tracking. 
+> * The [Scanning and Detecting 3D Objects](https://developer.apple.com/documentation/arkit/scanning_and_detecting_3d_objects) page on Apple's developer website allows you to download an app that you can use on an iOS device to produce such a scan. Note that this is a third-party application, and Unity is not involved in its development.
 
-For instructions on how to create a reference object library, see documentation on the [Tracked Object Subsystem](arsubsystems/object-tracking.md).
+## Reference object library
 
-The reference object library can be set at runtime, but as long as the tracked object manager component is enabled, the reference object library must be non-null.
-
-The reference object library is an instance of the `ScriptableObject` `XRReferenceImageLibrary`. This object contains mostly Editor data. The actual library data (containing the object data) is provider-specific. Refer to your provider's documentation for details.
+A reference object library is an asset in your project that contains a collection of reference objects. For more information about creating and using a reference object library, see the [object tracking subsystem](arsubsystems/object-tracking.md). 
 
 ## Creating a manager at runtime
 
-When you add a component to an active `GameObject` at runtime, Unity immediately invokes its `OnEnable` method. However, the `ARTrackedObjectManager` requires a non-null reference object library. If the reference object library is null when the `ARTrackedObjectManager` is enabled, it automatically disables itself.
+When you add a component to an active GameObject at runtime, Unity immediately invokes the component's `OnEnable` method. However, the `ARTrackedObjectManager` requires a non-null reference object library. If the reference object library is null when the `ARTrackedObjectManager` is enabled, it automatically disables itself.
 
 To add an `ARTrackedObjectManager` at runtime, set its reference object library and then re-enable it:
 
@@ -31,4 +31,4 @@ manager.enabled = true;
 
 ## Tracked object Prefab
 
-This Prefab is instantiated whenever an object from the reference object library is detected. The manager ensures the instantiated `GameObject` includes an `ARTrackedObject` component. You can get the reference object that was used to detect the `ARTrackedObject` with the `ARTrackedObject.referenceObject` property.
+This Prefab is instantiated whenever an object from the reference object library is detected. The manager ensures the instantiated GameObject includes an `ARTrackedObject` component. You can get the reference object that was used to detect the `ARTrackedObject` with the `ARTrackedObject.referenceObject` property.

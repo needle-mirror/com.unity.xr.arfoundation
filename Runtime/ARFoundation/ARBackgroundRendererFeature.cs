@@ -17,18 +17,19 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The scriptable render pass to be added to the renderer when the camera background is to be rendered.
         /// </summary>
+        ARCameraBeforeOpaquesRenderPass beforeOpaquesScriptablePass => m_BeforeOpaquesScriptablePass ??= new ARCameraBeforeOpaquesRenderPass();
         ARCameraBeforeOpaquesRenderPass m_BeforeOpaquesScriptablePass;
+
         /// <summary>
         /// The scriptable render pass to be added to the renderer when the camera background is to be rendered.
         /// </summary>
+        ARCameraAfterOpaquesRenderPass afterOpaquesScriptablePass => m_AfterOpaquesScriptablePass ??= new ARCameraAfterOpaquesRenderPass();
         ARCameraAfterOpaquesRenderPass m_AfterOpaquesScriptablePass;
 
         /// <summary>
         /// Create the scriptable render pass.
         /// </summary>
-        public override void Create()
-        {
-        }
+        public override void Create() {}
 
         /// <summary>
         /// Add the background rendering pass when rendering a game camera with an enabled AR camera background component.
@@ -37,38 +38,56 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            Camera currentCamera = renderingData.cameraData.camera;
+            var currentCamera = renderingData.cameraData.camera;
             if ((currentCamera != null) && (currentCamera.cameraType == CameraType.Game))
             {
                 ARCameraBackground cameraBackground = currentCamera.gameObject.GetComponent<ARCameraBackground>();
                 if ((cameraBackground != null) && cameraBackground.backgroundRenderingEnabled
-                    && (cameraBackground.material != null))
+                    && (cameraBackground.material != null)
+                    && TrySelectRenderPassForBackgroundRenderMode(cameraBackground.currentRenderingMode, out var renderPass))
                 {
-                    bool invertCulling = cameraBackground.GetComponent<ARCameraManager>()?.subsystem?.invertCulling ?? false;
-
-                    ARCameraBackgroundRenderPass renderPass;
-                    switch (cameraBackground.currentRenderingMode)
-                    {
-                        case XRCameraBackgroundRenderingMode.AfterOpaques:
-                            m_AfterOpaquesScriptablePass ??= new ARCameraAfterOpaquesRenderPass();
-                            renderPass = m_AfterOpaquesScriptablePass;
-                            break;
-
-                        case XRCameraBackgroundRenderingMode.BeforeOpaques:
-                            m_BeforeOpaquesScriptablePass ??= new ARCameraBeforeOpaquesRenderPass();
-                            renderPass = m_BeforeOpaquesScriptablePass;
-                            break;
-
-                        default:
-                            return;
-                    }
-
-                    renderPass.Setup(cameraBackground.material, invertCulling);
+                    var invertCulling = cameraBackground.GetComponent<ARCameraManager>()?.subsystem?.invertCulling ?? false;
+                    renderPass.Setup(cameraBackground, invertCulling);
                     renderer.EnqueuePass(renderPass);
                 }
             }
         }
 
+        /// <summary>
+        /// Selects the render pass for a given <see cref="UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode"/>
+        /// </summary>
+        /// <param name="renderingMode">The <see cref="UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode"/>
+        /// that indicates which render pass to use.
+        /// </param>
+        /// <param name="renderPass">The <see cref="ARCameraBackgroundRenderPass"/> that corresponds
+        /// to the given <paramref name="renderingMode">.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if <paramref name="renderPass"/> was populated. Otherwise, <c>false</c>.
+        /// </returns>
+        bool TrySelectRenderPassForBackgroundRenderMode(XRCameraBackgroundRenderingMode renderingMode, out ARCameraBackgroundRenderPass renderPass)
+        {
+            switch (renderingMode)
+            {
+                case XRCameraBackgroundRenderingMode.AfterOpaques:
+                    renderPass = afterOpaquesScriptablePass;
+                    return true;
+
+                case XRCameraBackgroundRenderingMode.BeforeOpaques:
+                    renderPass = beforeOpaquesScriptablePass;
+                    return true;
+
+                case XRCameraBackgroundRenderingMode.None:
+                default:
+                    renderPass = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// An abstract (xref: UnityEngine.Rendering.Universal.ScriptableRenderPass) that provides common
+        /// utilities for rendering an AR Camera Background.
+        /// </summary>
         abstract class ARCameraBackgroundRenderPass : ScriptableRenderPass
         {
             /// <summary>
@@ -92,7 +111,7 @@ namespace UnityEngine.XR.ARFoundation
             /// ([CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html)).
             /// </summary>
             bool m_InvertCulling;
-            
+
             /// <summary>
             /// The projection matrix used to render the <see cref="mesh"/>.
             /// </summary>
@@ -106,14 +125,27 @@ namespace UnityEngine.XR.ARFoundation
             /// <summary>
             /// Set up the background render pass.
             /// </summary>
-            /// <param name="backgroundMesh">The mesh used for rendering the device background.</param>
-            /// <param name="backgroundMaterial">The material used for rendering the device background.</param>
+            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/>
+            ///  component that provides the (xref: UnityEngine.Material)
+            /// and any additional rendering information required by the render pass.
+            /// </param>
             /// <param name="invertCulling">Whether the culling mode should be inverted.</param>
-            public void Setup(Material backgroundMaterial, bool invertCulling)
+            public void Setup(ARCameraBackground cameraBackground, bool invertCulling)
             {
-                m_BackgroundMaterial = backgroundMaterial;
+                SetupInternal(cameraBackground);
+                m_BackgroundMaterial = cameraBackground.material;
                 m_InvertCulling = invertCulling;
             }
+
+            /// <summary>
+            /// Provides inheritors an opportunity to perform any specialized setup during
+            /// (xref: UnityEngine.Rendering.Universal.ScriptableRenderPass.Setup).
+            /// </summary>
+            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/> component
+            /// that provides the (xref: UnityEngine.Material)
+            /// and any additional rendering information required by the render pass.
+            /// </param>
+            protected virtual void SetupInternal(ARCameraBackground cameraBackground) {}
 
             /// <summary>
             /// Execute the commands to render the camera background.
@@ -201,6 +233,17 @@ namespace UnityEngine.XR.ARFoundation
             public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
             {
                 ConfigureClear(ClearFlag.None, Color.clear);
+            }
+
+            /// <inheritdoc />
+            protected override void SetupInternal(ARCameraBackground cameraBackground)
+            {
+                if (cameraBackground.GetComponent<AROcclusionManager>()?.enabled ?? false)
+                {
+                    // If an occlusion texture is being provided, rendering will need
+                    // to compare it against the depth texture created by the camera.
+                    ConfigureInput(ScriptableRenderPassInput.Depth);
+                }
             }
 
             /// <inheritdoc />

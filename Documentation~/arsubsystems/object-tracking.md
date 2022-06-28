@@ -3,43 +3,55 @@ uid: arsubsystems-object-tracking-subsystem
 ---
 # XR object tracking subsystem
 
-The object tracking subsystem attempts to detect three-dimensional objects in the environment that have previously been scanned and stored in a reference objects library.
+The [XRObjectTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystem) is a [tracking subsystem](xref:arsubsystems-manual#tracking-subsystems) that detects three-dimensional objects in the environment which you have previously scanned and stored in a reference object library. Its trackable type is [XRTrackedObject](xref:UnityEngine.XR.ARSubsystems.XRTrackedObject).
+
+> [!NOTE]
+> Currently, the [Apple ARKit XR Plug-in](xref:arkit-object-tracking) is the only Unity-supported provider plug-in that implements object tracking. If you are using a 3rd party provider plug-in, refer to your provider's documentation for specific implementation and configuration requirements.
 
 ## Terminology
 
 |**Term**|**Description**|
 |--------|---------------|
-|**Reference object**|A reference object is a previously scanned object. The object tracking subsystem attempts to find instances of the object and report on their poses.|
-|**Reference object library**|A set of reference objects. When you start an object tracking subsystem, you must first provide it with a library of reference objects so it knows what to search for.|
-|**Provider**|The object tracking subsystem is an interface which is implemented in other packages. Each implementation is called a "provider". For example, you might have a different provider package for each AR platform.|
+|**Reference object**|A reference object is an object that you have previously scanned and stored in a reference object library. The object tracking subsystem detects and tracks instances of the object in the environment.|
+|**Reference object library**|A reference object library is an asset containing a collection of reference objects.|
+|**Provider**|The object tracking subsystem, like all AR Foundation subsystems, is an interface. Subsystem implementations are called *providers* and are typically made available in separate packages called *provider plug-ins*. See [Subsystems](xref:arsubsystems-manual) for more information.|
 
 ## Creating a reference object library
 
-You create reference object libraries in the Unity Editor, then fill it with reference objects. Each reference object requires a provider-specific representation for each provider package you have in your project.
+In a typical object tracking workflow, you create a reference object library in the Editor and then populate the library with reference objects. You must add a provider-specific entry for each provider plug-in your project that supports object tracking. 
 
-From Unity's main menu, go to **Assets** &gt; **Create** &gt; **XR** &gt; **Reference Object Library**.
+To create a reference object library, right click in the Project window and select **Assets** &gt; **Create** &gt; **XR** &gt; **Reference Object Library**.
 
-This creates a new asset in your project. To create reference objects, select this asset, then select **Add Entry**:
+This creates a new `ReferenceObjectLibrary` asset in your project. To add a reference object to the library, select this asset, then click **Add Reference Object**:
 
-![A reference object library](../images/reference-object-library-inspector.png "A reference object library")
+![A reference object library](../images/reference-object-library-inspector.png "A reference object library")<br/>*A reference object library*
 
-Reference objects have a **Name**, followed by a list of provider-specific entries. In the example above, the object only has one entry for ARKit.
+Each reference object has a **Name**, followed by a list of provider-specific entries, which are required in order for object detection to work on device. In the example above, each object has one entry for the ARKit provider. 
 
-You need to populate the reference object entries with provider-specific assets. For instructions on how to do this, refer to the provider's documentation.
+The asset format for a reference object entry depends on the provider implementation. The [Apple ARKit XR Plug-in](xref:arkit-object-tracking) uses the `.arobject` format defined by Apple. See the [Scanning and Detecting 3D Objects](https://developer.apple.com/documentation/arkit/scanning_and_detecting_3d_objects) page on Apple's developer website for more information.
 
-## Using the library at runtime
+## Using a reference object library at runtime
 
-To use the library at runtime, set it on the subsystem. For example:
+The simplest way to use a reference object library is to save its reference to the tracked object manager's **Reference Library** field via the Inspector. However, you can also create and use a new reference object library at runtime as shown below:
 
 ```csharp
-XRReferenceObjectLibrary myLibrary = ...
-XRObjectTrackingSubsystem subsystem = ...
-
-subsystem.library = myLibrary;
-subsystem.Start();
+XRReferenceObjectLibrary myLibrary = ScriptableObject.CreateInstance(typeof(XRReferenceObjectLibrary));
+GetComponent<ARTrackedObjectManager>().referenceLibrary = myLibrary;
 ```
 
-> [!NOTE]
-> You must set `imageLibrary` to a non-null reference before starting the subsystem.
+If your project uses the object tracking subsystem without an [ARTrackedObjectManager](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager), you can also set the reference object library directly via the subsystem's `library` property. In this case, make sure to assign the reference library to the subsystem's `library` property before you start the subsystem.
 
-Query for changes to tracked objects with `XRImageTrackingSubsystem.GetChanges`. This returns all changes to tracked objects (added, updated, and removed) since the last call to this method.
+### Adding a reference object at runtime
+
+To add a new reference object to a reference object library at runtime, follow the steps shown in the example below:
+
+```csharp
+// Create an XRReferenceObject
+var referenceObject = new XRReferenceObject("My reference object");
+
+// Add provider-specific entry data to the reference object
+referenceObject.AddEntry(arobject);
+
+// Add the reference object to the manager's reference object library
+GetComponent<ARTrackedObjectManager>().referenceLibrary.Add(referenceObject);
+```

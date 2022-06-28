@@ -8,6 +8,30 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-pre.13] - 2022-06-28
+
+### Changed
+
+- Removed error message for when XR Simulation Environments package sample is not found upon installing sample environments, and replaced it with a warning instructing how to import the sample.
+
+- Use version 1.0.0-pre.2 of *XR Simulation Environments* package installed through the AR Environment toolbar. This version adds documentation and an explicit dependency on AR Foundation.
+
+- Temporary scenes generated for XR Environment Simulation now have a uniquely generated hash appended to their names to prevent loading errors when restarting a simulated AR Session.
+
+### Fixed
+
+- Fixed an issue where `ARBackgroundRendererFeature` would overwrite rendered geometry when rendering in `AfterOpaques` mode while Occlusion was enabled.
+- Fixed an issue where the DefaultSimulationEnvironment would not render correctly when using the Universal Render Pipeline.
+- Fixed error in the AR Environment Overlay if the XR General Settings asset was not created before opening the overlay.
+- Fixed binding error in the AR Environment Overlay when enabling/disabling multiple Plug-in Providers in XR Plug-in Management.
+- Fixed issue in [Simulation Raycast Subsystem](xref:UnityEngine.XR.Simulation.SimulationRaycastSubsystem) where empty arrays were causing out of bounds exceptions.
+- Fixed simulation material inspectors so values correctly update from the inspector to the material.
+- Fixed hard crash from simulation mesh subsystem upon quickly entering and exiting play mode.
+- Fixed simulated image tracking subsystem checking for occlusion of images from the camera.
+- Fixed error loading AR Environment icon when AR Foundation is first added to a project.
+- Fixed crash in `RenderSettings` that was preventing the `SimulationRenderSettings` from being used in the AR Environment View in Unity 2022.1+.
+- Fixed issues where AR Environment Overlay would not be restored or display correctly in a Scene View.
+
 ## [5.0.0-pre.12] - 2022-05-19
 
 ### Added

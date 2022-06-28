@@ -33,7 +33,8 @@ namespace UnityEditor.XR.Simulation
             return AREnvironmentViewUtilities.IsBaseSceneView(window)
                 && !EditorApplication.isPlayingOrWillChangePlaymode
                 && SimulationEditorUtilities.simulationSubsystemEnabled
-                && PrefabStageUtility.GetCurrentPrefabStage() == null;
+                && PrefabStageUtility.GetCurrentPrefabStage() == null
+                && !SampleEnvironmentsHelper.processingPackageRequest;
         }
 
         static string[] GetElementIds()
@@ -58,9 +59,9 @@ namespace UnityEditor.XR.Simulation
             if (containerWindow is SceneView sceneView)
             {
                 if (value)
-                    AREnvironmentView.instance.AddEnvironmentView(sceneView);
+                    AREnvironmentViewManager.instance.EnableEnvironmentView(sceneView);
                 else
-                    AREnvironmentView.instance.RemoveEnvironmentView(sceneView);
+                    AREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
             }
         }
 
@@ -69,8 +70,9 @@ namespace UnityEditor.XR.Simulation
         public override void OnCreated()
         {
             base.OnCreated();
-
             displayedChanged += OnDisplayedChanged;
+            // ensure manager is started when overlay is created
+            var manager = AREnvironmentViewManager.instance;
 
             var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
 
@@ -84,7 +86,9 @@ namespace UnityEditor.XR.Simulation
         public override void OnWillBeDestroyed()
         {
             displayedChanged -= OnDisplayedChanged;
-            OnDisplayedChanged(false);
+
+            if (containerWindow is SceneView sceneView)
+                AREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
 
             base.OnWillBeDestroyed();
 
@@ -129,6 +133,8 @@ namespace UnityEditor.XR.Simulation
             PrefabStage.prefabStageOpened += OnPrefabStageChanged;
             PrefabStage.prefabStageClosing += OnPrefabStageChanged;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved += UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestStarted += UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestCompleted += UpdateEnabled;
         }
 
         protected virtual void OnDetachFromPanel(DetachFromPanelEvent evt)
@@ -137,6 +143,8 @@ namespace UnityEditor.XR.Simulation
             PrefabStage.prefabStageOpened -= OnPrefabStageChanged;
             PrefabStage.prefabStageClosing -= OnPrefabStageChanged;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved -= UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestStarted -= UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestCompleted -= UpdateEnabled;
         }
 
         void OnPlayModeStateChanged(PlayModeStateChange change)
@@ -164,7 +172,7 @@ namespace UnityEditor.XR.Simulation
         const string k_Tooltip = "Change the environment.";
         const string k_NoEnvironmentText = "No environment set";
         const string k_InstallEnvironmentsText = "Install sample environments";
-        const string k_ImportEnvironmentsText = "Import sample environments";
+        internal const string k_ImportEnvironmentsText = "Import sample environments";
         const int k_HorizontalLayoutWidth = 160;
 
         public const string id = AREnvironmentToolbarOverlay.overlayId + "/EnvironmentDropdown";
@@ -302,6 +310,8 @@ namespace UnityEditor.XR.Simulation
             PrefabStage.prefabStageOpened += OnPrefabStageChanged;
             PrefabStage.prefabStageClosing += OnPrefabStageChanged;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved += UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestStarted += UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestCompleted += UpdateEnabled;
         }
 
         void OnDetachFromPanel(DetachFromPanelEvent evt)
@@ -312,6 +322,8 @@ namespace UnityEditor.XR.Simulation
             PrefabStage.prefabStageOpened -= OnPrefabStageChanged;
             PrefabStage.prefabStageClosing -= OnPrefabStageChanged;
             SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved -= UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestStarted -= UpdateEnabled;
+            SampleEnvironmentsHelper.packageRequestCompleted -= UpdateEnabled;
         }
 
         void OnPlayModeStateChanged(PlayModeStateChange change)

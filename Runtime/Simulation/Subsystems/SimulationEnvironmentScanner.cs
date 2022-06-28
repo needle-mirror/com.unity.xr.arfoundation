@@ -20,6 +20,7 @@ namespace UnityEngine.XR.Simulation
 
         static readonly List<SubsystemWithProvider> s_TrackingSubsystems = new();
         static SimulationEnvironmentScanner s_Instance;
+        static bool s_MeshCollidersRequested;
 
         public static SimulationEnvironmentScanner instance => s_Instance ??= new SimulationEnvironmentScanner();
 
@@ -73,8 +74,11 @@ namespace UnityEngine.XR.Simulation
             m_Normals = new NativeArray<Vector3>(m_EnvironmentScanParams.raysPerCast, Allocator.Persistent);
             m_Points = new NativeArray<Vector3>(m_EnvironmentScanParams.raysPerCast, Allocator.Persistent);
 
-            if (s_TrackingSubsystems.Count > 0)
-                EnsureMeshColliders();
+            if (s_MeshCollidersRequested)
+            {
+                s_MeshCollidersRequested = false;
+                CreateMeshColliders();
+            }
 
             m_Initialized = true;
         }
@@ -245,7 +249,7 @@ namespace UnityEngine.XR.Simulation
                    Quaternion.Angle(m_PreviousCameraPose.rotation, m_CameraPose.rotation) > m_EnvironmentScanParams.deltaCameraAngleToRescan;
         }
 
-        void EnsureMeshColliders()
+        void CreateMeshColliders()
         {
             // k_EnvironmentMeshes is cleared by GetComponentsInChildren
             m_EnvironmentRoot.GetComponentsInChildren(k_EnvironmentMeshes);
@@ -274,15 +278,25 @@ namespace UnityEngine.XR.Simulation
                 return;
 
             s_TrackingSubsystems.Add(subsystem);
-
-            if ((s_Instance?.m_Initialized).GetValueOrDefault() && !s_Instance.m_MeshCollidersCreated)
-                s_Instance.EnsureMeshColliders();
+            EnsureMeshColliders();
         }
 
         public static void UnregisterSubsystem<TSubsystem>(TSubsystem subsystem)
             where TSubsystem : SubsystemWithProvider, new()
         {
             s_TrackingSubsystems.Remove(subsystem);
+        }
+
+        public static void EnsureMeshColliders()
+        {
+            if (!(s_Instance?.m_Initialized).GetValueOrDefault())
+            {
+                s_MeshCollidersRequested = true;
+                return;
+            }
+
+            if (!s_Instance.m_MeshCollidersCreated)
+                s_Instance.CreateMeshColliders();
         }
 
         readonly struct RaycastParams
