@@ -9,7 +9,7 @@ using UnityEngine.XR.Simulation;
 namespace UnityEditor.XR.Simulation
 {
     [InitializeOnLoad]
-    static class AREnvironmentViewUtilities
+    static class XREnvironmentViewUtilities
     {
         static bool s_HasEnvironmentSettings;
         static BaseSimulationSceneManager s_SimulationSceneManager;
@@ -28,15 +28,15 @@ namespace UnityEditor.XR.Simulation
             set => s_RenderingOverrideEnabled = value;
         }
 
-        static AREnvironmentViewUtilities()
+        static XREnvironmentViewUtilities()
         {
             s_SimulationRenderSettings = new SimulationRenderSettings();
 
             EditorApplication.playModeStateChanged += PlayModeStateChanged;
             CameraTextureProvider.preRenderCamera += PreRenderCameraTextureProvider;
             CameraTextureProvider.postRenderCamera += PostRenderCameraTextureProvider;
-            AREnvironmentViewCamera.preRender += PreRenderEnvironmentViewCamera;
-            AREnvironmentViewCamera.postRender += PostRenderEnvironmentViewCamera;
+            XREnvironmentViewCamera.preRender += PreRenderEnvironmentViewCamera;
+            XREnvironmentViewCamera.postRender += PostRenderEnvironmentViewCamera;
 
             // Turn off rendering while assembly reloading
             AssemblyReloadEvents.beforeAssemblyReload += BeforeAssemblyReload;
@@ -49,7 +49,7 @@ namespace UnityEditor.XR.Simulation
 
         static void PlayModeStateChanged(PlayModeStateChange mode)
         {
-            var environmentView = AREnvironmentViewManager.instance;
+            var environmentView = XREnvironmentViewManager.instance;
             switch (mode)
             {
                 case PlayModeStateChange.EnteredEditMode:
@@ -68,7 +68,7 @@ namespace UnityEditor.XR.Simulation
         {
             s_SimulationSceneManager = Application.isPlaying ?
                 SimulationSessionSubsystem.simulationSceneManager :
-                AREnvironmentViewManager.instance.activeSceneManager;
+                XREnvironmentViewManager.instance.activeSceneManager;
             s_HasEnvironmentSettings = s_SimulationSceneManager.simulationEnvironment != null;
 
             s_RenderingOverrideEnabled = true;
@@ -105,9 +105,9 @@ namespace UnityEditor.XR.Simulation
             if (!s_RenderingOverrideEnabled)
                 return;
 
-            // Due to the way AREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
+            // Due to the way XREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
             // But scene view camera is already the current camera when we reach this step.
-            if (!AREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
+            if (!XREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
                 return;
 
             if (!s_HasEnvironmentSettings || s_SimulationRenderSettings == null)
@@ -121,9 +121,9 @@ namespace UnityEditor.XR.Simulation
             if (!s_RenderingOverrideEnabled)
                 return;
             
-            // Due to the way AREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
+            // Due to the way XREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
             // But scene view camera is already the current camera when we reach this step.
-            if (!AREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
+            if (!XREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
                 return;
 
             RestoreBaseLighting();
@@ -269,16 +269,16 @@ namespace UnityEditor.XR.Simulation
          }
 
          /// <summary>
-         /// Used to toggle all the AR Environment Overlays to create the hidden settings tracking element if the
+         /// Used to toggle all the XR Environment Overlays to create the hidden settings tracking element if the
          /// XR Manager Settings were not created before opening the Overlay.
          /// </summary>
-         internal static void ToggleAREnvironmentOverlays()
+         internal static void ToggleXREnvironmentOverlays()
          {
              foreach (var sceneViewObj in SceneView.sceneViews)
              {
                  if (sceneViewObj is SceneView sceneView)
                  {
-                     if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
+                     if (sceneView.TryGetOverlay(XREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
                      {
                          if (environmentOverlay.displayed)
                          {

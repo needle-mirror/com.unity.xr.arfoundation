@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -462,6 +463,13 @@ namespace UnityEngine.XR.ARFoundation
                 default:
                     throw new ArgumentOutOfRangeException(nameof(m_CommandBufferRenderOrderState));
             }
+            
+            // callback to schedule the release of the metal textures after rendering is complete
+            var callback = NativeApi.Unity_Camera_GetTextureReleaseCallbackHandle();
+            if (callback != IntPtr.Zero)
+            {
+                commandBuffer.IssuePluginEvent(callback, 1);
+            }
         }
 
         /// <summary>
@@ -673,6 +681,19 @@ namespace UnityEngine.XR.ARFoundation
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Container to wrap the native APIs.
+        /// </summary>
+        internal static class NativeApi
+        {
+#if UNITY_XR_ARKIT_LOADER_ENABLED && !UNITY_EDITOR
+            [DllImport("__Internal", EntryPoint = "UnityARKit_Camera_GetTextureReleaseCallbackHandle")]
+            public static extern IntPtr Unity_Camera_GetTextureReleaseCallbackHandle();
+#else
+            public static IntPtr Unity_Camera_GetTextureReleaseCallbackHandle() => IntPtr.Zero;
+#endif
         }
     }
 }

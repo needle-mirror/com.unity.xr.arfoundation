@@ -19,7 +19,7 @@ namespace UnityEngine.XR.Simulation
 
         [SerializeField]
         [Tooltip("Total number of rays to project per scan.")]
-        int m_RaysPerCast = 256;
+        int m_RaysPerCast = 10;
 
         [SerializeField]
         [Tooltip("Maximum distance in meters from the camera after which the points will not be detected.")]

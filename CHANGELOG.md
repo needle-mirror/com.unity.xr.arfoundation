@@ -8,14 +8,31 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.2] - 2022-09-11
+
+### Changed
+
+- Renamed AR Environment toolbar and view to XR Environment.
+- Removed "experimental" from name of XR Simulation plugin in XR Management.
+- Fixed handling of scale and offset of XR Origin in simulation.
+
+### Fixed
+
+- Fixed [an issue](https://issuetracker.unity3d.com/issues/ar-camera-feed-jitters-and-shakes-with-mutithreaded-rendering-when-running-on-ios-16) where rendered frames comes out of order on iOS 16 when the app is built with multi-threaded rendering enabled in Unity.
+- Fixed an issue where both `ARRaycastManager` and `ARPointCloudManager` could attempt to copy invalid `NativeArray<T>`s when using the raycast fallback API.
+- Fixed an issue where `MaterialInspector` would throw obsolete warnings in URP projects using Unity 2022 or later.
+- Fixed an issue where the shaders "Simulation/Standard Lit" and "Simulation/URP/Lit" would throw errors if included in a build using the built-in render pipeline.
+- Fixed an issue in `SimulationPointCloudSubsystem` where the identifiers for points in a point cloud would not increment with new environment scans.
+- Fixed an issue where the obsolete `ARSessionOrigin.camera` property shows a warning during the build.
+- Fixed an [issue](https://issuetracker.unity3d.com/issues/simulation-hangs-on-arm-macs-with-silicon-editor-build) where XR Simulation would hang on Apple Silicon Macs.
+
 ## [5.0.0-pre.13] - 2022-06-28
 
 ### Changed
 
 - Removed error message for when XR Simulation Environments package sample is not found upon installing sample environments, and replaced it with a warning instructing how to import the sample.
-
 - Use version 1.0.0-pre.2 of *XR Simulation Environments* package installed through the AR Environment toolbar. This version adds documentation and an explicit dependency on AR Foundation.
-
+- Moved `XRCameraBackgroundRenderingMode` and `XRSupportedCameraBackgroundRenderingMode` enums to the UnityEngine.XR.ARSubsystems namespace.
 - Temporary scenes generated for XR Environment Simulation now have a uniquely generated hash appended to their names to prevent loading errors when restarting a simulated AR Session.
 
 ### Fixed

@@ -73,7 +73,7 @@ namespace UnityEngine.XR.Simulation
         PostProcessProfile m_PostProcessProfile;
 
         [SerializeField]
-        [Tooltip("When enabled, this environment prefab will be excluded from the selection dropdown in the AR Environment toolbar. " +
+        [Tooltip("When enabled, this environment prefab will be excluded from the selection dropdown in the XR Environment toolbar. " +
             "You can use this to exclude a base prefab that is only used as a template.")]
         bool m_ExcludeFromSelectionUI;
 
@@ -88,7 +88,7 @@ namespace UnityEngine.XR.Simulation
         public Bounds cameraMovementBounds => m_CameraMovementBounds;
 
         /// <summary>
-        /// When enabled, this environment prefab will be excluded from the selection dropdown in the AR Environment toolbar.
+        /// When enabled, this environment prefab will be excluded from the selection dropdown in the XR Environment toolbar.
         /// </summary>
         internal bool excludeFromSelectionUI
         {

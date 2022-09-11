@@ -11,7 +11,7 @@ namespace UnityEngine.XR.Simulation
 
         [SerializeField]
         [Tooltip("Voxel point density threshold that is independent of voxel size")]
-        int m_MinPointsPerSqMeter = 600;
+        int m_MinPointsPerSqMeter = 30;
 
         [SerializeField]
         [Tooltip("A plane with x or y size less than this value will be ignored")]

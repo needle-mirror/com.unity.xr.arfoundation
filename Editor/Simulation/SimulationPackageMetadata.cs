@@ -31,7 +31,7 @@ namespace UnityEditor.XR.Simulation
             {
                 new SimulationLoaderMetadata()
                 {
-                    loaderName = "XR Simulation (Experimental)",
+                    loaderName = "XR Simulation",
                     loaderType = typeof(SimulationLoader).FullName,
                     supportedBuildTargets = new List<BuildTargetGroup>()
                     {

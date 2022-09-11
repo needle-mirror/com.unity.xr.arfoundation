@@ -7,7 +7,7 @@ namespace UnityEngine.XR.Simulation
     [ImageEffectAllowedInSceneView] // This copies the component to the scene view camera from main camera per frame
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    class AREnvironmentViewCamera : MonoBehaviour
+    class XREnvironmentViewCamera : MonoBehaviour
     {
         internal static event Action<Camera> preRender;
         internal static event Action<Camera> postRender;

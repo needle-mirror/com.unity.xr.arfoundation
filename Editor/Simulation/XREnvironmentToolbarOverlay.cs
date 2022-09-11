@@ -11,17 +11,17 @@ using UnityEngine.UIElements;
 namespace UnityEditor.XR.Simulation
 {
     /// <summary>
-    /// Toolbar overlay for managing AR environments from the Scene view.
+    /// Toolbar overlay for managing XR environments from the Scene view.
     /// </summary>
-    [Icon(arEnvironmentIconPath)]
+    [Icon(xrEnvironmentIconPath)]
     [Overlay(typeof(SceneView), overlayId, toolbarDisplayName)]
-    class AREnvironmentToolbarOverlay : ToolbarOverlay
+    class XREnvironmentToolbarOverlay : ToolbarOverlay
     {
         const string k_IconsPath = "Packages/com.unity.xr.arfoundation/Editor/Icons/";
 
-        public const string toolbarDisplayName = "AR Environment";
-        public const string overlayId = "AREnvironmentToolbar";
-        public const string arEnvironmentIconPath = k_IconsPath + "AREnvironment.png";
+        public const string toolbarDisplayName = "XR Environment";
+        public const string overlayId = "XREnvironmentToolbar";
+        public const string xrEnvironmentIconPath = k_IconsPath + "XREnvironment.png";
         public const string arrowCaretLeftIconPath = k_IconsPath + "ArrowCaretLeft.png";
         public const string arrowCaretRightIconPath = k_IconsPath + "ArrowCaretRight.png";
         public const string addEditIconPath = k_IconsPath + "AddEdit.png";
@@ -30,7 +30,7 @@ namespace UnityEditor.XR.Simulation
 
         public static bool CanEnableContent(EditorWindow window)
         {
-            return AREnvironmentViewUtilities.IsBaseSceneView(window)
+            return XREnvironmentViewUtilities.IsBaseSceneView(window)
                 && !EditorApplication.isPlayingOrWillChangePlaymode
                 && SimulationEditorUtilities.simulationSubsystemEnabled
                 && PrefabStageUtility.GetCurrentPrefabStage() == null
@@ -59,20 +59,20 @@ namespace UnityEditor.XR.Simulation
             if (containerWindow is SceneView sceneView)
             {
                 if (value)
-                    AREnvironmentViewManager.instance.EnableEnvironmentView(sceneView);
+                    XREnvironmentViewManager.instance.EnableEnvironmentView(sceneView);
                 else
-                    AREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
+                    XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
             }
         }
 
-        AREnvironmentToolbarOverlay() : base(GetElementIds()) { }
+        XREnvironmentToolbarOverlay() : base(GetElementIds()) { }
 
         public override void OnCreated()
         {
             base.OnCreated();
             displayedChanged += OnDisplayedChanged;
             // ensure manager is started when overlay is created
-            var manager = AREnvironmentViewManager.instance;
+            var manager = XREnvironmentViewManager.instance;
 
             var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
 
@@ -88,7 +88,7 @@ namespace UnityEditor.XR.Simulation
             displayedChanged -= OnDisplayedChanged;
 
             if (containerWindow is SceneView sceneView)
-                AREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
+                XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
 
             base.OnWillBeDestroyed();
 
@@ -105,12 +105,12 @@ namespace UnityEditor.XR.Simulation
     [EditorToolbarElement(id, typeof(SceneView))]
     class HiddenToolbarTrackingElement : VisualElement
     {
-        public const string id = AREnvironmentToolbarOverlay.overlayId + "/HiddenTracker";
+        public const string id = XREnvironmentToolbarOverlay.overlayId + "/HiddenTracker";
 
         public HiddenToolbarTrackingElement()
         {
             // Create a hidden element to track Simulation loader being enabled or disabled
-            Add(AREnvironmentViewUtilities.TrackStandAloneXRSettingsChange());
+            Add(XREnvironmentViewUtilities.TrackStandAloneXRSettingsChange());
         }
     }
 
@@ -161,7 +161,7 @@ namespace UnityEditor.XR.Simulation
 
         void UpdateEnabled()
         {
-            SetEnabled(AREnvironmentToolbarOverlay.CanEnableContent(containerWindow));
+            SetEnabled(XREnvironmentToolbarOverlay.CanEnableContent(containerWindow));
         }
     }
 
@@ -175,7 +175,7 @@ namespace UnityEditor.XR.Simulation
         internal const string k_ImportEnvironmentsText = "Import sample environments";
         const int k_HorizontalLayoutWidth = 160;
 
-        public const string id = AREnvironmentToolbarOverlay.overlayId + "/EnvironmentDropdown";
+        public const string id = XREnvironmentToolbarOverlay.overlayId + "/EnvironmentDropdown";
 
         Overlay m_ContainerOverlay;
 
@@ -183,7 +183,7 @@ namespace UnityEditor.XR.Simulation
         {
             style.whiteSpace = WhiteSpace.NoWrap;
             tooltip = k_Tooltip;
-            var iconContent = EditorGUIUtility.TrIconContent(AREnvironmentToolbarOverlay.arEnvironmentIconPath);
+            var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.xrEnvironmentIconPath);
             icon = iconContent.image as Texture2D;
         }
 
@@ -195,7 +195,7 @@ namespace UnityEditor.XR.Simulation
             environmentsManager.activeEnvironmentChanged += UpdateText;
 
             // Display text when overlay is in horizontal layout, otherwise hide the text
-            if (containerWindow.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out m_ContainerOverlay))
+            if (containerWindow.TryGetOverlay(XREnvironmentToolbarOverlay.overlayId, out m_ContainerOverlay))
             {
                 UpdateFromOverlayLayout(m_ContainerOverlay.layout);
                 m_ContainerOverlay.layoutChanged += UpdateFromOverlayLayout;
@@ -339,7 +339,7 @@ namespace UnityEditor.XR.Simulation
         void UpdateEnabled()
         {
             SetEnabled(SimulationEnvironmentAssetsManager.Instance.environmentsCount > 1
-                && AREnvironmentToolbarOverlay.CanEnableContent(containerWindow));
+                && XREnvironmentToolbarOverlay.CanEnableContent(containerWindow));
         }
 
         void OnClicked()
@@ -362,12 +362,12 @@ namespace UnityEditor.XR.Simulation
     {
         const string k_Tooltip = "Load the previous environment.";
 
-        public const string id = AREnvironmentToolbarOverlay.overlayId + "/PreviousEnvironment";
+        public const string id = XREnvironmentToolbarOverlay.overlayId + "/PreviousEnvironment";
 
         public PreviousEnvironmentButton()
         {
             tooltip = k_Tooltip;
-            var iconContent = EditorGUIUtility.TrIconContent(AREnvironmentToolbarOverlay.arrowCaretLeftIconPath);
+            var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.arrowCaretLeftIconPath);
             icon = iconContent.image as Texture2D;
         }
 
@@ -382,12 +382,12 @@ namespace UnityEditor.XR.Simulation
     {
         const string k_Tooltip = "Load the next environment.";
 
-        public const string id = AREnvironmentToolbarOverlay.overlayId + "/NextEnvironment";
+        public const string id = XREnvironmentToolbarOverlay.overlayId + "/NextEnvironment";
 
         public NextEnvironmentButton()
         {
             tooltip = k_Tooltip;
-            var iconContent = EditorGUIUtility.TrIconContent(AREnvironmentToolbarOverlay.arrowCaretRightIconPath);
+            var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.arrowCaretRightIconPath);
             icon = iconContent.image as Texture2D;
         }
 
@@ -406,12 +406,12 @@ namespace UnityEditor.XR.Simulation
         const string k_EditEnvironmentText = "Edit environment";
         const string k_AssetsPath = "Assets";
 
-        public const string id = AREnvironmentToolbarOverlay.overlayId + "/AddEditEnvironmentDropdown";
+        public const string id = XREnvironmentToolbarOverlay.overlayId + "/AddEditEnvironmentDropdown";
 
         public AddEditEnvironmentDropdown()
         {
             tooltip = k_Tooltip;
-            var iconContent = EditorGUIUtility.TrIconContent(AREnvironmentToolbarOverlay.addEditIconPath);
+            var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.addEditIconPath);
             icon = iconContent.image as Texture2D;
         }
 

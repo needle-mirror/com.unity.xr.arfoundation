@@ -8,12 +8,12 @@ using UnityEngine.XR.Simulation;
 
 namespace UnityEditor.XR.Simulation
 {
-    class AREnvironmentViewManager : ScriptableSingleton<AREnvironmentViewManager>
+    class XREnvironmentViewManager : ScriptableSingleton<XREnvironmentViewManager>
     {
-        const string k_ViewName = "AR Environment";
+        const string k_ViewName = "XR Environment";
         static GUIContent s_SimulationSubsystemNotLoadedContent = new GUIContent($"{k_ViewName} is not Available.\nEnable XR Simulation in Project Settings > XR Plug-in Management.");
         static GUIContent s_BaseSceneViewContent = new GUIContent($"{k_ViewName} is not Available.\nUse a Scene View window.");
-        static GUIContent s_AREnvironmentViewTitleContent;
+        static GUIContent s_XREnvironmentViewTitleContent;
 
         [SerializeField]
         GUIContent m_SceneViewTitleContent;
@@ -22,7 +22,7 @@ namespace UnityEditor.XR.Simulation
         EditorSimulationSceneManager m_EditorSimulationSceneManager;
 
         [SerializeField]
-        AREnvironmentViewCamera m_EnvironmentViewCamera;
+        XREnvironmentViewCamera m_EnvironmentViewCamera;
 
         [SerializeField]
         SceneView[] m_ActiveEnvironmentViewsAtReload;
@@ -45,17 +45,17 @@ namespace UnityEditor.XR.Simulation
             return false;
         }
 
-        static GUIContent arEnvironmentViewTitleContent
+        static GUIContent xrEnvironmentViewTitleContent
         {
             get
             {
-                if (s_AREnvironmentViewTitleContent == null)
+                if (s_XREnvironmentViewTitleContent == null)
                 {
-                    s_AREnvironmentViewTitleContent = EditorGUIUtility.TrIconContent(AREnvironmentToolbarOverlay.arEnvironmentIconPath);
-                    s_AREnvironmentViewTitleContent.text = k_ViewName;
+                    s_XREnvironmentViewTitleContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.xrEnvironmentIconPath);
+                    s_XREnvironmentViewTitleContent.text = k_ViewName;
                 }
 
-                return s_AREnvironmentViewTitleContent;
+                return s_XREnvironmentViewTitleContent;
             }
         }
 
@@ -69,7 +69,7 @@ namespace UnityEditor.XR.Simulation
         internal HashSet<Camera> environmentCameras => m_EnvironmentCameras;
 
         [MenuItem("Window/XR/AR Foundation/" + k_ViewName)]
-        static void GetAREnvironmentView()
+        static void GetXREnvironmentView()
         {
             var environmentViewManager = instance;
             SceneView sceneView = null;
@@ -110,8 +110,8 @@ namespace UnityEditor.XR.Simulation
                 new SimulationUIAnalyticsArgs(
                     eventName: SimulationUIAnalyticsArgs.EventName.WindowUsed,
                     environmentGuid: assetGuid,
-                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = AREnvironmentToolbarOverlay.toolbarDisplayName, isActive = true }));
-            
+                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = XREnvironmentToolbarOverlay.toolbarDisplayName, isActive = true }));
+
             sceneView.Show();
             sceneView.Focus();
         }
@@ -170,7 +170,7 @@ namespace UnityEditor.XR.Simulation
 
         internal void EnableEnvironmentView(SceneView sceneView)
         {
-            if (!AREnvironmentViewUtilities.IsBaseSceneView(sceneView))
+            if (!XREnvironmentViewUtilities.IsBaseSceneView(sceneView))
             {
                 BaseSceneViewMessage(sceneView);
                 DisableEnvironmentView(sceneView);
@@ -182,7 +182,7 @@ namespace UnityEditor.XR.Simulation
             m_EnvironmentViews.Add(sceneView);
             m_EnvironmentCameras.Add(sceneView.camera);
 
-            EditorApplication.delayCall += () => sceneView.titleContent = arEnvironmentViewTitleContent;
+            EditorApplication.delayCall += () => sceneView.titleContent = xrEnvironmentViewTitleContent;
 
             if (ShowEnvironmentOverlay(sceneView) == null)
                 EditorApplication.delayCall += () => ShowEnvironmentOverlay(sceneView);
@@ -204,7 +204,7 @@ namespace UnityEditor.XR.Simulation
 
         internal void DisableEnvironmentView(SceneView sceneView)
         {
-            if (!AREnvironmentViewUtilities.IsBaseSceneView(sceneView) || sceneView == null)
+            if (!XREnvironmentViewUtilities.IsBaseSceneView(sceneView) || sceneView == null)
             {
                 m_EnvironmentViews.Remove(sceneView);
                 return;
@@ -237,8 +237,8 @@ namespace UnityEditor.XR.Simulation
                 return;
 
             // Cache the render settings in case they are being modified by the user.
-            if (AREnvironmentViewUtilities.renderingOverrideEnabled && !AREnvironmentViewUtilities.lightingOverrideActive)
-                AREnvironmentViewUtilities.simulationRenderSettings.UseSceneRenderSettings();
+            if (XREnvironmentViewUtilities.renderingOverrideEnabled && !XREnvironmentViewUtilities.lightingOverrideActive)
+                XREnvironmentViewUtilities.simulationRenderSettings.UseSceneRenderSettings();
         }
 
         void DuringSceneGui(SceneView sceneView)
@@ -250,7 +250,7 @@ namespace UnityEditor.XR.Simulation
                 || activeSceneManager == null || PrefabStageUtility.GetCurrentPrefabStage() != null)
             {
                 // Check if overlay is displayed without without display change being called
-                if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay) 
+                if (sceneView.TryGetOverlay(XREnvironmentToolbarOverlay.overlayId, out var environmentOverlay) 
                     && environmentOverlay.displayed)
                 {
                     EnableEnvironmentView(sceneView);
@@ -259,15 +259,15 @@ namespace UnityEditor.XR.Simulation
                 else
                 {
                     DoSceneViewXRay();
-                    if (sceneView.titleContent == arEnvironmentViewTitleContent)
+                    if (sceneView.titleContent == xrEnvironmentViewTitleContent)
                         sceneView.titleContent = m_SceneViewTitleContent;
                     
-                    return; 
+                    return;
                 }
             }
 
-            if (sceneView.titleContent != arEnvironmentViewTitleContent)
-                sceneView.titleContent = arEnvironmentViewTitleContent;
+            if (sceneView.titleContent != xrEnvironmentViewTitleContent)
+                sceneView.titleContent = xrEnvironmentViewTitleContent;
 
             sceneView.camera.overrideSceneCullingMask = m_CurrentSceneMask;
 
@@ -284,7 +284,7 @@ namespace UnityEditor.XR.Simulation
                 SimulationEnvironment.DrawWireCamera(Handles.DrawLine, simEnv.cameraStartingPose, sceneView.size * 0.06f);
             }
 
-            AREnvironmentViewUtilities.RestoreBaseLighting();
+            XREnvironmentViewUtilities.RestoreBaseLighting();
         }
 
         internal void SetUpOrChangeEnvironment()
@@ -336,8 +336,8 @@ namespace UnityEditor.XR.Simulation
                 return;
 
             m_CurrentSceneMask = EditorSceneManager.DefaultSceneCullingMask;
-            AREnvironmentViewUtilities.RestoreBaseLighting();
-            AREnvironmentViewUtilities.renderingOverrideEnabled = false;
+            XREnvironmentViewUtilities.RestoreBaseLighting();
+            XREnvironmentViewUtilities.renderingOverrideEnabled = false;
             m_EditorSimulationSceneManager?.TearDownEnvironment();
         }
 
@@ -348,10 +348,10 @@ namespace UnityEditor.XR.Simulation
         }
 
         /// <summary>
-        /// Checks the the 'main' camera has the <see cref="AREnvironmentViewCamera"/> component added to it.
+        /// Checks the the 'main' camera has the <see cref="XREnvironmentViewCamera"/> component added to it.
         /// This component is used to set render overrides when rendering the scene view camera. It is done this way
         /// since rendering components are copied over from the main camera to the scene view camera before every render.
-        /// Directly trying to add the <see cref="AREnvironmentViewCamera"/> to the scene view camera will not work
+        /// Directly trying to add the <see cref="XREnvironmentViewCamera"/> to the scene view camera will not work
         /// since it will be removed before rendering.
         /// </summary>
         void CheckARCamera()
@@ -376,9 +376,9 @@ namespace UnityEditor.XR.Simulation
             }
             else
             {
-                var environmentViewCamera = camera.GetComponent<AREnvironmentViewCamera>();
+                var environmentViewCamera = camera.GetComponent<XREnvironmentViewCamera>();
                 m_EnvironmentViewCamera = environmentViewCamera != null ? environmentViewCamera
-                    : camera.gameObject.AddComponent<AREnvironmentViewCamera>();
+                    : camera.gameObject.AddComponent<XREnvironmentViewCamera>();
 
                 m_EnvironmentViewCamera.hideFlags = HideFlags.HideAndDontSave | HideFlags.HideInInspector;
             }
@@ -427,7 +427,7 @@ namespace UnityEditor.XR.Simulation
 
         void BaseSceneViewMessage(SceneView sceneView)
         {
-            if (!AREnvironmentViewUtilities.IsBaseSceneView(sceneView))
+            if (!XREnvironmentViewUtilities.IsBaseSceneView(sceneView))
                 sceneView.ShowNotification(s_BaseSceneViewContent);
             else if (CheckRemoveNotifications(sceneView))
                 sceneView.RemoveNotification();
@@ -436,7 +436,7 @@ namespace UnityEditor.XR.Simulation
         bool CheckRemoveNotifications(SceneView sceneView)
         {
             return SimulationEditorUtilities.simulationSubsystemEnabled
-                && AREnvironmentViewUtilities.IsBaseSceneView(sceneView);
+                && XREnvironmentViewUtilities.IsBaseSceneView(sceneView);
         }
 
         internal void CacheEnvironmentViewsBeforeReload()
@@ -473,8 +473,8 @@ namespace UnityEditor.XR.Simulation
 
             // Only cache the title contents if we know the view is not a environment view.
             if (m_SceneViewTitleContent == null || m_SceneViewTitleContent.image == null
-                && AREnvironmentViewUtilities.IsBaseSceneView(sceneView)
-                && (s_AREnvironmentViewTitleContent == null || sceneView.titleContent != s_AREnvironmentViewTitleContent))
+                && XREnvironmentViewUtilities.IsBaseSceneView(sceneView)
+                && (s_XREnvironmentViewTitleContent == null || sceneView.titleContent != s_XREnvironmentViewTitleContent))
             {
                 m_SceneViewTitleContent = sceneView.titleContent;
             }
@@ -504,7 +504,7 @@ namespace UnityEditor.XR.Simulation
             if (sceneView == null)
                 return null;
             
-            if (sceneView.TryGetOverlay(AREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
+            if (sceneView.TryGetOverlay(XREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
             {
                 if (!environmentOverlay.displayed)
                     environmentOverlay.displayed = true;
@@ -514,4 +514,3 @@ namespace UnityEditor.XR.Simulation
         }
     }
 }
-

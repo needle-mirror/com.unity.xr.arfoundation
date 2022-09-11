@@ -4,7 +4,7 @@ using Unity.XR.CoreUtils;
 namespace UnityEngine.XR.Simulation
 {
     /// <summary>
-    /// Settings for XR Simulation.
+    /// Runtime settings for XR Simulation.
     /// </summary>
     [Serializable]
     [ScriptableSettingsPath(SimulationConstants.runtimeSettingsPath)]

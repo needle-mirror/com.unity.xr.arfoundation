@@ -71,7 +71,7 @@ namespace UnityEngine.XR.Simulation
 
             var prefab = XRSimulationPreferences.Instance.activeEnvironmentPrefab;
             if (prefab == null)
-                throw new InvalidOperationException("No environment prefab set. Pick an environment in a Scene View with Overlays -> AR Environment.");
+                throw new InvalidOperationException("No environment prefab set. Pick an environment in a Scene View with Overlays -> XR Environment.");
 
             m_EnvironmentRoot = GameObjectUtils.Instantiate(prefab);
             m_SimulationEnvironment = m_EnvironmentRoot.GetComponentInChildren<SimulationEnvironment>();

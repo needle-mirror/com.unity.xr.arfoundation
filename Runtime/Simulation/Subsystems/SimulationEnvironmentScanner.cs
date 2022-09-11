@@ -27,8 +27,8 @@ namespace UnityEngine.XR.Simulation
         EnvironmentScanParams m_EnvironmentScanParams;
 
         PhysicsScene m_PhysicsScene;
+        Transform m_SimulationCameraTransform;
         Camera m_Camera;
-        CameraOffset m_CameraOffset;
         float m_CameraScale;
         Pose m_CameraPose;
         Pose m_PreviousCameraPose;
@@ -40,6 +40,8 @@ namespace UnityEngine.XR.Simulation
 
         NativeArray<Vector3> m_Normals;
         NativeArray<Vector3> m_Points;
+
+        public float lastScanTime => m_LastScanTime;
 
         private SimulationEnvironmentScanner()
         {
@@ -53,23 +55,18 @@ namespace UnityEngine.XR.Simulation
             Dispose();
         }
 
-        public void Initialize(XROrigin origin, PhysicsScene physicsScene, GameObject environmentRoot)
+        public void Initialize(SimulationCamera simulationCamera, PhysicsScene physicsScene, GameObject environmentRoot)
         {
-            if (origin == null)
-                throw new NullReferenceException($"A reference to XROrigin is required by {nameof(SimulationEnvironmentScanner)}.");
-
             if (!physicsScene.IsValid())
                 throw new InvalidOperationException("The physics scene loaded for simulation is not valid.");
 
             m_PhysicsScene = physicsScene;
             m_EnvironmentRoot = environmentRoot;
 
-            m_Camera = origin.Camera;
-            if (m_Camera == null)
-                throw new NullReferenceException("Camera for XR is not set.");
+            m_SimulationCameraTransform = simulationCamera.transform;
+            m_Camera = simulationCamera.GetComponent<Camera>();
 
-            m_CameraOffset = new CameraOffset(m_Camera);
-            m_PreviousCameraPose = m_Camera.transform.GetWorldPose();
+            m_PreviousCameraPose = m_SimulationCameraTransform.GetWorldPose();
 
             m_Normals = new NativeArray<Vector3>(m_EnvironmentScanParams.raysPerCast, Allocator.Persistent);
             m_Points = new NativeArray<Vector3>(m_EnvironmentScanParams.raysPerCast, Allocator.Persistent);
@@ -132,7 +129,7 @@ namespace UnityEngine.XR.Simulation
 
         void PerformEnvironmentScan()
         {
-            var raycastParams = new RaycastParams(m_Camera, m_EnvironmentScanParams, m_CameraScale);
+            var raycastParams = new RaycastParams(m_SimulationCameraTransform, m_Camera, m_EnvironmentScanParams, m_CameraScale);
 
 #if UNITY_2022_1_OR_NEWER
             var raycastHits = PerformRaycastBatch(raycastParams);
@@ -153,8 +150,8 @@ namespace UnityEngine.XR.Simulation
                     if (hit.collider == null || hit.distance < raycastParams.scaledMinimumDistance)
                         continue;
 
-                    m_Normals[m_PointCount] = m_CameraOffset.ApplyInverseToDirection(hit.normal);
-                    m_Points[m_PointCount] = m_CameraOffset.ApplyInverseToPosition(hit.point);
+                    m_Normals[m_PointCount] = hit.normal;
+                    m_Points[m_PointCount] = hit.point;
 
                     m_PointCount++;
                 }
@@ -241,7 +238,7 @@ namespace UnityEngine.XR.Simulation
             if (Time.timeSinceLevelLoad - m_LastScanTime < m_EnvironmentScanParams.minimumRescanTime)
                 return false;
 
-            var cameraTransform = m_Camera.transform;
+            var cameraTransform = m_SimulationCameraTransform;
             m_CameraPose = cameraTransform.GetWorldPose();
             m_CameraScale = cameraTransform.lossyScale.x;
 
@@ -310,11 +307,10 @@ namespace UnityEngine.XR.Simulation
             public float scaledMinimumDistance { get; }
             public float scaledMaximumHitDistance { get; }
 
-            public RaycastParams(Camera camera, EnvironmentScanParams environmentScanParams, float cameraScale)
+            public RaycastParams(Transform transform, Camera camera, EnvironmentScanParams environmentScanParams, float cameraScale)
             {
-                var cameraTransform = camera.transform;
-                cameraPosition = cameraTransform.position;
-                cameraRotation = cameraTransform.rotation;
+                cameraPosition = transform.position;
+                cameraRotation = transform.rotation;
                 halfFov = camera.fieldOfView * 0.5f;
                 horizontalFov = camera.GetHorizontalFieldOfView();
 

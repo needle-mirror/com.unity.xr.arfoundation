@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 #if MODULE_URP_ENABLED
+using System;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.XR.ARSubsystems;
 #else
 using ScriptableRendererFeature = UnityEngine.ScriptableObject;
 #endif
@@ -158,6 +160,14 @@ namespace UnityEngine.XR.ARFoundation
                 cmd.BeginSample(k_CustomRenderPassName);
 
                 ARCameraBackground.AddBeforeBackgroundRenderHandler(cmd);
+                
+                // callback to schedule the release of the metal textures after rendering is complete
+                var callback = ARCameraBackground.NativeApi.Unity_Camera_GetTextureReleaseCallbackHandle();
+                if (callback != IntPtr.Zero)
+                {
+                    cmd.IssuePluginEvent(callback, 1);
+                }
+                
                 cmd.SetInvertCulling(m_InvertCulling);
 
                 cmd.SetViewProjectionMatrices(Matrix4x4.identity, projectionMatrix);

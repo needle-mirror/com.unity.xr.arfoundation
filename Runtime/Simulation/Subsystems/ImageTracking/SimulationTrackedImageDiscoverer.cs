@@ -16,7 +16,6 @@ namespace UnityEngine.XR.Simulation
         int m_TrackingUpdateIntervalMilliseconds = 100;
         SimulationRuntimeImageLibrary m_SimulationRuntimeImageLibrary;
         TrackedImageDiscoveryStrategy m_ImageDiscoveryStrategy;
-        CameraOffset m_CameraOffset;
         bool m_Initialized;
         bool m_IsRunning;
         CancellationTokenSource m_UpdateCancellationTokenSource;
@@ -122,7 +121,6 @@ namespace UnityEngine.XR.Simulation
                 throw new InvalidOperationException("The physics scene loaded for simulation is not valid.");
 
             m_ImageDiscoveryStrategy = new TrackedImageDiscoveryStrategy(camera, simPhysicsScene);
-            m_CameraOffset = new CameraOffset(camera);
             var trackingUpdateIntervalMilliseconds =
                 (int)(XRSimulationRuntimeSettings.Instance.trackedImageDiscoveryParams.trackingUpdateInterval * 1000);
 
@@ -217,18 +215,10 @@ namespace UnityEngine.XR.Simulation
             return new XRTrackedImage(
                 trackableId: image.trackableId,
                 sourceImageId: referenceImage?.guid ?? image.fallbackSourceImageId,
-                pose: CreatePoseUsingCameraOffset(image),
+                pose: image.transform.GetWorldPose(),
                 size: image.size,
                 trackingState: trackingState,
                 nativePtr: IntPtr.Zero);
-        }
-
-        Pose CreatePoseUsingCameraOffset(SimulatedTrackedImage image)
-        {
-            var imageTransform = image.transform;
-            var offsetPos = m_CameraOffset.ApplyInverseToPosition(imageTransform.position);
-            var offsetRot = m_CameraOffset.ApplyInverseToRotation(imageTransform.rotation);
-            return new Pose(offsetPos, offsetRot);
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.XR.Management;
 namespace UnityEditor.XR.Simulation
 {
     /// <summary>
-    /// Settings for AR Simulation.
+    /// Build settings for XR Simulation.
     /// </summary>
     [Serializable]
     [XRConfigurationData("XR Simulation", k_SettingsKey)]
@@ -23,7 +23,7 @@ namespace UnityEditor.XR.Simulation
 
         void Awake()
         {
-            EditorApplication.delayCall += AREnvironmentViewUtilities.ToggleAREnvironmentOverlays;
+            EditorApplication.delayCall += XREnvironmentViewUtilities.ToggleXREnvironmentOverlays;
         }
     }
 }

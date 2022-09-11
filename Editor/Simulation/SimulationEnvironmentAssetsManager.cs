@@ -19,7 +19,7 @@ namespace UnityEditor.XR.Simulation
 
         const string k_PrefabFilter = "t:prefab";
         const string k_RefreshMenuItemCategory = "Assets";
-        const string k_RefreshMenuItemName = "Refresh AR Environment List";
+        const string k_RefreshMenuItemName = "Refresh XR Environment List";
         const string k_RefreshMenuItemPath = k_RefreshMenuItemCategory + "/" + k_RefreshMenuItemName;
 
         /// <summary>

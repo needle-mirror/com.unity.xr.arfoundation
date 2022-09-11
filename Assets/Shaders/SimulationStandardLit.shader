@@ -1,6 +1,5 @@
 ﻿Shader "Simulation/Standard Lit"
 {
-    // A standard shader variant that takes the global room properties and applies them to cut out a view into the geometry based on camera location
     Properties
     {
         // Simulation/Legacy/Room X-Ray properties
@@ -58,6 +57,11 @@
 
     SubShader
     {
+        PackageRequirements
+        {
+            "com.unity.render-pipelines.universal"
+        }
+
         // Universal Pipeline tag is required. If Universal render pipeline is not set in the graphics settings
         // this Subshader will fail. One can add a subshader below or fallback to Standard built-in to make this
         // material work with both Universal Render Pipeline and Builtin Unity Pipeline

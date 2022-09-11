@@ -9,7 +9,7 @@ The tracked image manager is a type of [trackable manager](trackable-managers.md
 
 The tracked image manager creates [GameObjects](xref:UnityEngine.GameObject) for each detected image in the environment. Before an image can be detected, the manager must be instructed to look for a set of reference images compiled into a reference image library. It only detects images in this library.
 
-## Reference library
+## Reference image library
 
 For instructions on how to create a reference image library in the Unity Editor, see documentation on the [Tracked Image Subsystem](xref:arsubsystems-image-tracking-subsystem).
 

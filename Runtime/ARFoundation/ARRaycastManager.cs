@@ -38,7 +38,7 @@ namespace UnityEngine.XR.ARFoundation
         /// The name of the `GameObject` for each instantiated <see cref="ARRaycast"/>.
         /// </summary>
         protected override string gameObjectName => "ARRaycast";
-        
+
         /// <summary>
         /// If not null, this prefab will be instantiated for each <see cref="ARRaycast"/>.
         /// </summary>
@@ -262,9 +262,16 @@ namespace UnityEngine.XR.ARFoundation
             int dstIndex = 0;
             foreach (var hitArray in s_NativeRaycastHits)
             {
-                NativeArray<XRRaycastHit>.Copy(hitArray, 0, allHits, dstIndex, hitArray.Length);
-                dstIndex += hitArray.Length;
-                hitArray.Dispose();
+                if (hitArray.Length > 0)
+                {
+                    NativeArray<XRRaycastHit>.Copy(hitArray, 0, allHits, dstIndex, hitArray.Length);
+                    dstIndex += hitArray.Length;
+                }
+
+                if (hitArray.IsCreated)
+                {
+                    hitArray.Dispose();
+                }
             }
 
             return allHits;

@@ -14,10 +14,11 @@ namespace UnityEngine.XR.Simulation
         internal static event Action<Camera> postRenderCamera;
         internal event Action<CameraTextureFrameEventArgs> cameraFrameReceived;
 
-        Camera m_MainCamera;
+        Camera m_XrCamera;
         Camera m_SimulationRenderCamera;
         RenderTexture m_SimulationRenderTexture;
         Texture2D m_SimulationProviderTexture;
+        IntPtr m_TexturePtr;
         CameraTextureFrameEventArgs? m_CameraFrameEventArgs;
         SimulationXRayManager m_XRayManager;
 
@@ -27,22 +28,15 @@ namespace UnityEngine.XR.Simulation
 
         bool m_Initialized;
 
-        internal static CameraTextureProvider AddTextureProviderToScene(XROrigin xrOrigin)
+        internal static CameraTextureProvider AddTextureProviderToCamera(Camera simulationCamera, Camera xrCamera)
         {
-            var mainCamera = xrOrigin.Camera;
-            var go = GameObjectUtils.Create("CameraTextureProvider");
-            var providerTransform = go.transform;
-            providerTransform.SetParent(mainCamera.transform, false);
-
-            var simulationCamera = go.AddComponent<Camera>();
-            simulationCamera.depth = -100;
+            simulationCamera.depth = xrCamera.depth - 1;
             simulationCamera.cullingMask = 1 << XRSimulationRuntimeSettings.Instance.environmentLayer;
             simulationCamera.clearFlags = CameraClearFlags.Color;
             simulationCamera.backgroundColor = Color.clear;
-            simulationCamera.enabled = false;
 
-            var cameraTextureProvider = go.AddComponent<CameraTextureProvider>();
-            cameraTextureProvider.InitializeProvider(mainCamera, simulationCamera);
+            var cameraTextureProvider = simulationCamera.gameObject.AddComponent<CameraTextureProvider>();
+            cameraTextureProvider.InitializeProvider(xrCamera, simulationCamera);
 
             return cameraTextureProvider;
         }
@@ -67,18 +61,20 @@ namespace UnityEngine.XR.Simulation
                 return;
 
             // Currently assuming the main camera is being set to the correct settings for rendering to the target device
-            m_MainCamera.ResetProjectionMatrix();
-            CopyLimitedSettingsToCamera(m_MainCamera, m_SimulationRenderCamera);
+            m_XrCamera.ResetProjectionMatrix();
+            CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationRenderCamera);
             DoCameraRender(m_SimulationRenderCamera);
 
             if (!m_SimulationRenderTexture.IsCreated() && !m_SimulationRenderTexture.Create())
                 return;
 
             if (m_SimulationProviderTexture.width != m_SimulationRenderTexture.width
-                || m_SimulationProviderTexture.height != m_SimulationRenderTexture.height
-                && !m_SimulationProviderTexture.Reinitialize(m_SimulationRenderTexture.width, m_SimulationRenderTexture.height))
+                || m_SimulationProviderTexture.height != m_SimulationRenderTexture.height)
             {
-                return;
+                if (!m_SimulationProviderTexture.Reinitialize(m_SimulationRenderTexture.width, m_SimulationRenderTexture.height))
+                    return;
+
+                m_TexturePtr = m_SimulationProviderTexture.GetNativeTexturePtr();
             }
 
             Graphics.CopyTexture(m_SimulationRenderTexture, m_SimulationProviderTexture);
@@ -89,22 +85,22 @@ namespace UnityEngine.XR.Simulation
             var frameEventArgs = new CameraTextureFrameEventArgs
             {
                 timestampNs = (long)(Time.time * 1e9),
-                projectionMatrix = m_MainCamera.projectionMatrix,
+                projectionMatrix = m_XrCamera.projectionMatrix,
                 textures = m_CameraImagePlanes,
             };
 
             cameraFrameReceived?.Invoke(frameEventArgs);
         }
 
-        void InitializeProvider(Camera mainCamera, Camera simulationCamera)
+        void InitializeProvider(Camera xrCamera, Camera simulationCamera)
         {
             m_XRayManager = new SimulationXRayManager();
 
-            m_MainCamera = mainCamera;
+            m_XrCamera = xrCamera;
             m_SimulationRenderCamera = simulationCamera;
-            CopyLimitedSettingsToCamera(m_MainCamera, m_SimulationRenderCamera);
+            CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationRenderCamera);
 
-            var descriptor = new RenderTextureDescriptor(m_MainCamera.scaledPixelWidth, m_MainCamera.scaledPixelHeight);
+            var descriptor = new RenderTextureDescriptor(m_XrCamera.scaledPixelWidth, m_XrCamera.scaledPixelHeight);
 
             // Need to make sure we set the graphics format to our valid format
             // or we will get an out of range value for the render texture format
@@ -130,6 +126,7 @@ namespace UnityEngine.XR.Simulation
                     name = "Simulated Native Camera Texture",
                     hideFlags = HideFlags.HideAndDontSave
                 };
+                m_TexturePtr = m_SimulationProviderTexture.GetNativeTexturePtr();
             }
 
             BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
@@ -151,6 +148,9 @@ namespace UnityEngine.XR.Simulation
             var backgroundColor = destination.backgroundColor;
             var depth = destination.depth;
             var targetTexture = destination.targetTexture;
+            var localPosition = destination.transform.localPosition;
+            var localRotation = destination.transform.localRotation;
+            var localScale = destination.transform.localScale;
 
             destination.CopyFrom(source);
             destination.projectionMatrix = source.projectionMatrix;
@@ -161,6 +161,9 @@ namespace UnityEngine.XR.Simulation
             destination.backgroundColor = backgroundColor;
             destination.depth = depth;
             destination.targetTexture = targetTexture;
+            destination.transform.localPosition = localPosition;
+            destination.transform.localRotation = localRotation;
+            destination.transform.localScale = localScale;
         }
 
         void DoCameraRender(Camera renderCamera)
@@ -197,7 +200,7 @@ namespace UnityEngine.XR.Simulation
             if (m_CameraImagePlanes != null && m_CameraImagePlanes.Count > 0 && m_SimulationProviderTexture != null
                 && m_SimulationProviderTexture.isReadable)
             {
-                nativePtr = m_SimulationProviderTexture.GetNativeTexturePtr();
+                nativePtr =  m_TexturePtr;
                 return true;
             }
 

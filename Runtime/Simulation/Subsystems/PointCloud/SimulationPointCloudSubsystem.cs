@@ -45,6 +45,9 @@ namespace UnityEngine.XR.Simulation
 
             int m_PointCount;
             PointCloudRaycaster m_Raycaster;
+            ulong m_PointIdentifier;
+
+            float m_LastScanTime;
 
             public override void Start()
             {
@@ -53,6 +56,8 @@ namespace UnityEngine.XR.Simulation
 #endif
 
                 m_TrackableId = GenerateTrackableId();
+                m_PointIdentifier = 0;
+
                 m_PreviousTrackableId = TrackableId.invalidId;
 
                 m_Identifiers = new NativeArray<ulong>(k_DefaultConversionBufferCapacity, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
@@ -149,6 +154,10 @@ namespace UnityEngine.XR.Simulation
 
             void UpdatePointCloudData()
             {
+                var currentScanTime = SimulationEnvironmentScanner.instance.lastScanTime;
+                if (currentScanTime <= m_LastScanTime)
+                    return;
+
                 var points = SimulationEnvironmentScanner.instance.GetPoints(Allocator.Temp);
 
                 try
@@ -161,10 +170,13 @@ namespace UnityEngine.XR.Simulation
 
                     for (var i = 0; i < m_PointCount; i++)
                     {
-                        m_Identifiers[i] = (ulong)i;
+                        m_Identifiers[i] = m_PointIdentifier + (ulong)i;
                         m_Positions[i] = points[i];
                         m_ConfidenceValues[i] = Random.Range(0f, 1f);
                     }
+
+                    m_PointIdentifier += (ulong)m_PointCount;
+                    m_LastScanTime = currentScanTime;
                 }
                 finally
                 {

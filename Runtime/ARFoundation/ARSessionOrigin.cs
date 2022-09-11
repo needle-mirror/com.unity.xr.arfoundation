@@ -60,7 +60,11 @@ namespace UnityEngine.XR.ARFoundation
         /// (Deprecated) The <c>Camera</c> to associate with the AR device. It must be a child of this <c>ARSessionOrigin</c>.
         /// </summary>
         [Obsolete("camera has been deprecated. Use Camera instead.")]
+#if UNITY_EDITOR
         public new Camera camera
+#else
+        public Camera camera
+#endif
         {
             get => Camera;
             set => Camera = value;

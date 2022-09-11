@@ -116,7 +116,16 @@ namespace UnityEngine.XR.Simulation
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
 
-                m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToScene(Object.FindObjectOfType<XROrigin>());
+                var xrOrigin = Object.FindObjectOfType<XROrigin>();
+                if (xrOrigin == null)
+                    throw new NullReferenceException("No XROrigin found.");
+
+                var xrCamera = xrOrigin.Camera;
+                if (xrCamera == null)
+                    throw new NullReferenceException("No camera found under XROrigin.");
+
+                var simulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
+                m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simulationCamera.GetComponent<Camera>(), xrCamera);
                 m_CameraTextureProvider.cameraFrameReceived += CameraFrameReceived;
                 if (m_CameraTextureProvider != null && m_CameraTextureProvider.CameraFrameEventArgs != null)
                     m_CameraTextureFrameEventArgs = (CameraTextureFrameEventArgs)m_CameraTextureProvider.CameraFrameEventArgs;

@@ -3,6 +3,9 @@ using UnityEngine.XR.Simulation;
 
 namespace UnityEditor.XR.Simulation
 {
+    /// <summary>
+    /// This Editor renders to the XR Plug-in Management category of the Project Settings window.
+    /// </summary>
     [CustomEditor(typeof(XRSimulationSettings))]
     class XRSimulationSettingsEditor : Editor
     {

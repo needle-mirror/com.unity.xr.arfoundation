@@ -21,7 +21,7 @@ namespace UnityEngine.XR.Simulation
 
         class SimulationProvider : Provider
         {
-            CameraPoseProvider m_CameraPoseProvider;
+            SimulationCamera m_SimulationCamera;
             SimulationMeshSubsystem m_MeshSubsystem;
             SimulationEnvironmentScanner m_SimulationEnvironmentScanner;
 
@@ -40,8 +40,7 @@ namespace UnityEngine.XR.Simulation
 #endif
 
                 s_SimulationSceneManager = new SimulationSceneManager();
-                if (XRSimulationPreferences.Instance.enableNavigation)
-                    m_CameraPoseProvider = CameraPoseProvider.AddPoseProviderToScene();
+                m_SimulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
 
                 if (SimulationMeshSubsystem.GetActiveSubsystemInstance() != null)
                 {
@@ -61,7 +60,7 @@ namespace UnityEngine.XR.Simulation
                 m_XROriginCamera.cullingMask &= ~(1 << XRSimulationRuntimeSettings.Instance.environmentLayer);
 
                 m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.instance;
-                m_SimulationEnvironmentScanner.Initialize(xrOrigin,
+                m_SimulationEnvironmentScanner.Initialize(m_SimulationCamera,
                     s_SimulationSceneManager.environmentScene.GetPhysicsScene(),
                     s_SimulationSceneManager.simulationEnvironment.gameObject);
 
@@ -77,10 +76,10 @@ namespace UnityEngine.XR.Simulation
 
                 ShutdownSimulation();
 
-                if (m_CameraPoseProvider != null)
+                if (m_SimulationCamera != null)
                 {
-                    Object.Destroy(m_CameraPoseProvider.gameObject);
-                    m_CameraPoseProvider = null;
+                    Object.Destroy(m_SimulationCamera.gameObject);
+                    m_SimulationCamera = null;
                 }
 
                 s_SimulationSceneManager = null;
@@ -107,7 +106,7 @@ namespace UnityEngine.XR.Simulation
             void SetupSimulation()
             {
                 s_SimulationSceneManager.SetupEnvironment();
-                m_CameraPoseProvider.SetSimulationEnvironment(s_SimulationSceneManager.simulationEnvironment);
+                m_SimulationCamera.SetSimulationEnvironment(s_SimulationSceneManager.simulationEnvironment);
             }
 
             void ShutdownSimulation()

@@ -7,8 +7,10 @@ namespace UnityEngine.XR.Simulation
     /// Takes mouse and keyboard input and uses it to compute a new camera transform
     /// which is passed to our InputSubsystem in native code.
     /// </summary>
-    class CameraPoseProvider : MonoBehaviour
+    class SimulationCamera : MonoBehaviour
     {
+        static SimulationCamera s_Instance;
+
         CameraFPSModeHandler m_FPSModeHandler;
 
         void OnEnable()
@@ -19,7 +21,7 @@ namespace UnityEngine.XR.Simulation
 
         void Update()
         {
-            if (Application.isPlaying)
+            if (Application.isPlaying && XRSimulationPreferences.Instance.enableNavigation)
                 m_FPSModeHandler.HandleGameInput();
 
             if (!m_FPSModeHandler.moveActive)
@@ -49,12 +51,17 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
-        internal static CameraPoseProvider AddPoseProviderToScene()
+        internal static SimulationCamera GetOrCreateSimulationCamera()
         {
-            var go = GameObjectUtils.Create("CameraPoseProvider");
-            var cameraPoseProvider = go.AddComponent<CameraPoseProvider>();
+            if (!s_Instance)
+            {
+                var go = GameObjectUtils.Create("SimulationCamera");
+                s_Instance = go.AddComponent<SimulationCamera>();
+                var camera = go.AddComponent<Camera>();
+                camera.enabled = false;
+            }
 
-            return cameraPoseProvider;
+            return s_Instance;
         }
 
         [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_SetCameraPose")]

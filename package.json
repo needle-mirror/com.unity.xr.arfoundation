@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "5.0.0-pre.13",
+  "version": "5.0.2",
   "unity": "2021.2",
   "description": "A collection of Subsystems as well as MonoBehaviours and C# utilities for working with the Subsystems. \n\nIncludes: \n▪ Definitions of Subsystems \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "com.unity.inputsystem": "1.3.0",
-    "com.unity.xr.core-utils": "2.1.0-pre.1",
+    "com.unity.xr.core-utils": "2.1.0",
     "com.unity.xr.management": "4.0.1",
     "com.unity.ugui": "1.0.0",
     "com.unity.mathematics": "1.2.5",
@@ -28,15 +28,12 @@
     "com.unity.modules.unityanalytics": "1.0.0",
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
-  "_upm": {
-    "changelog": "### Changed\n\n- Removed error message for when XR Simulation Environments package sample is not found upon installing sample environments, and replaced it with a warning instructing how to import the sample.\n\n- Use version 1.0.0-pre.2 of *XR Simulation Environments* package installed through the AR Environment toolbar. This version adds documentation and an explicit dependency on AR Foundation.\n\n- Temporary scenes generated for XR Environment Simulation now have a uniquely generated hash appended to their names to prevent loading errors when restarting a simulated AR Session.\n\n### Fixed\n\n- Fixed an issue where `ARBackgroundRendererFeature` would overwrite rendered geometry when rendering in `AfterOpaques` mode while Occlusion was enabled.\n- Fixed an issue where the DefaultSimulationEnvironment would not render correctly when using the Universal Render Pipeline.\n- Fixed error in the AR Environment Overlay if the XR General Settings asset was not created before opening the overlay.\n- Fixed binding error in the AR Environment Overlay when enabling/disabling multiple Plug-in Providers in XR Plug-in Management.\n- Fixed issue in [Simulation Raycast Subsystem](xref:UnityEngine.XR.Simulation.SimulationRaycastSubsystem) where empty arrays were causing out of bounds exceptions.\n- Fixed simulation material inspectors so values correctly update from the inspector to the material.\n- Fixed hard crash from simulation mesh subsystem upon quickly entering and exiting play mode.\n- Fixed simulated image tracking subsystem checking for occlusion of images from the camera.\n- Fixed error loading AR Environment icon when AR Foundation is first added to a project.\n- Fixed crash in `RenderSettings` that was preventing the `SimulationRenderSettings` from being used in the AR Environment View in Unity 2022.1+.\n- Fixed issues where AR Environment Overlay would not be restored or display correctly in a Scene View."
-  },
   "upmCi": {
-    "footprint": "e461f69e2f4a158ff3c8d6053970b34ff1c6e951"
+    "footprint": "5083d09b679264d0092cb180a63ac77c979f5cfd"
   },
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "a9955987a2ea6a312d2009d6babcf76c1dc4c202"
+    "revision": "14592dfeeb9ecce202f640c8b661b72b3a763f72"
   }
 }

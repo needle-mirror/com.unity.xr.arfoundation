@@ -134,7 +134,8 @@ namespace UnityEditor.XR.Simulation
                 if (required)
                 {
                     Debug.LogWarning($"Could not find sample for package {k_ContentPackageName}. " +
-                                     $"Try selecting '{EnvironmentDropdown.k_ImportEnvironmentsText}' from the environment dropdown in the AR Environment toolbar.");
+                                     $"Try selecting '{EnvironmentDropdown.k_ImportEnvironmentsText}' from the environment " +
+                                     $"dropdown in the {XREnvironmentToolbarOverlay.toolbarDisplayName} toolbar.");
                 }
 
                 return false;

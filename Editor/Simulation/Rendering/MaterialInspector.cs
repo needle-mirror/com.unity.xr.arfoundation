@@ -1,16 +1,19 @@
 ﻿using System;
 using UnityEngine;
-
 #if INCLUDE_RENDER_PIPELINES_UNIVERSAL
 using UnityEditor.Rendering.Universal.ShaderGUI;
 #endif
 
 namespace UnityEditor.XR.Simulation.Rendering
 {
-    // Adapted from `UnityEditor.Rendering.Universal.ShaderGUI.LitShader`
+    /// <remarks>
+    /// Adapted from `UnityEditor.Rendering.Universal.ShaderGUI.LitShader`
+    /// </remarks>
     class MaterialInspector : BaseShaderGUI
     {
-        // Legacy Standard Blend Modes used in the "_Mode" Property
+        /// <summary>
+        /// Legacy Standard Blend Modes used in the "_Mode" Property
+        /// </summary>
         public enum LegacyBlendMode
         {
             Opaque,
@@ -21,18 +24,28 @@ namespace UnityEditor.XR.Simulation.Rendering
 
         const string k_XRayName = "X-Ray";
 
-        // Keep inconsistent naming for easier comparing with `UnityEditor.Rendering.Universal.ShaderGUI.LitShader`.
+        /// <remarks>
+        /// Keep inconsistent naming for easier comparing with `UnityEditor.Rendering.Universal.ShaderGUI.LitShader`.
+        /// </remarks>
         LitGUI.LitProperties litProperties;
 
-        // collect properties from the material properties
+        /// <inheritdoc/>
         public override void FindProperties(MaterialProperty[] properties)
         {
             base.FindProperties(properties);
             litProperties = new LitGUI.LitProperties(properties);
         }
 
-        // material changed check
-        public override void MaterialChanged(Material material)
+#if !INCLUDE_RENDER_PIPELINES_UNIVERSAL
+        /// <summary>
+        /// When URP is present, <see cref="BaseShaderGUI.MaterialChanged"/> is deprecated and replaced by
+        /// <see cref="ShaderGUI.ValidateMaterial"/>.
+        /// </summary>
+        public override void MaterialChanged(Material material) => ValidateMaterial(material);
+#endif
+
+        /// <inheritdoc/>
+        public override void ValidateMaterial(Material material)
         {
             if (material == null)
                 throw new ArgumentNullException("material");
@@ -44,7 +57,7 @@ namespace UnityEditor.XR.Simulation.Rendering
             SetLegacyAndDefaultShaderKeywords(material);
         }
 
-        // material main surface options
+        /// <inheritdoc/>
         public override void DrawSurfaceOptions(Material material)
         {
             using (new EditorGUI.DisabledScope(material.shader.name.Contains(k_XRayName)))
@@ -53,7 +66,7 @@ namespace UnityEditor.XR.Simulation.Rendering
             }
         }
 
-        // material main surface inputs
+        /// <inheritdoc/>
         public override void DrawSurfaceInputs(Material material)
         {
             base.DrawSurfaceInputs(material);
@@ -88,7 +101,7 @@ namespace UnityEditor.XR.Simulation.Rendering
             DrawTileOffset(materialEditor, baseMapProp);
         }
 
-        // material main advanced options
+        /// <inheritdoc/>
         public override void DrawAdvancedOptions(Material material)
         {
             using (new EditorGUI.DisabledScope(material.shader.name.Contains(k_XRayName)))
@@ -100,7 +113,7 @@ namespace UnityEditor.XR.Simulation.Rendering
                     materialEditor.ShaderProperty(litProperties.reflections, LitGUI.Styles.reflectionsText);
                     if(EditorGUI.EndChangeCheck())
                     {
-                        MaterialChanged(material);
+                        ValidateMaterial(material);
                     }
                 }
 
@@ -108,6 +121,7 @@ namespace UnityEditor.XR.Simulation.Rendering
             }
         }
 
+        /// <inheritdoc/>
         public override void AssignNewShaderToMaterial(Material material, Shader oldShader, Shader newShader)
         {
             if (material == null)
@@ -163,7 +177,7 @@ namespace UnityEditor.XR.Simulation.Rendering
                     material.SetTexture("_MetallicSpecGlossMap", texture);
             }
 
-            MaterialChanged(material);
+            ValidateMaterial(material);
         }
 
         void SyncWithLegacyValues(Material material)
