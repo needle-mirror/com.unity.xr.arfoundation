@@ -145,10 +145,11 @@ namespace UnityEngine.XR.ARFoundation
                     continue;
 
                 var points = pointCloud.positions.Value;
+                var xform = pointCloud.transform;
 
                 var sessionSpacePose = new Pose(
-                    pointCloud.transform.localPosition,
-                    pointCloud.transform.localRotation);
+                    xform.localPosition,
+                    xform.localRotation);
 
                 var invRotation = Quaternion.Inverse(sessionSpacePose.rotation);
 
@@ -202,9 +203,23 @@ namespace UnityEngine.XR.ARFoundation
             Allocator allocator) where T : struct
         {
             var dstArray = new NativeArray<T>(currentArray.Length + lengthToCopy, allocator);
-            NativeArray<T>.Copy(currentArray, dstArray);
-            NativeArray<T>.Copy(arrayToAppend, 0, dstArray, currentArray.Length, lengthToCopy);
-            currentArray.Dispose();
+            var currentArrayLength = currentArray.Length;
+
+            if (currentArrayLength > 0)
+            {
+                NativeArray<T>.Copy(currentArray, dstArray, currentArrayLength);
+            }
+
+            if (arrayToAppend.Length > 0)
+            {
+                NativeArray<T>.Copy(arrayToAppend, 0, dstArray, currentArrayLength, lengthToCopy);
+            }
+
+            if (currentArray.IsCreated)
+            {
+                currentArray.Dispose();
+            }
+
             currentArray = dstArray;
         }
 

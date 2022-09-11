@@ -11,7 +11,7 @@ The tracked object manager creates `GameObject`s for each detected object in the
 
 ## Reference library
 
-For instructions on how to create a reference object library, see documentation on the [Tracked Object Subsystem](http://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/object-tracking.html).
+For instructions on how to create a reference object library, see documentation on the [Tracked Object Subsystem](http://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.2/manual/object-tracking.html).
 
 The reference object library can be set at runtime, but as long as the tracked object manager component is enabled, the reference object library must be non-null.
 

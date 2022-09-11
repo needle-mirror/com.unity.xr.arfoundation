@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "4.2.3",
+  "version": "4.2.6",
   "unity": "2020.3",
   "description": "A collection of MonoBehaviours and C# utilities for working with AR Subsystems. \n\nIncludes: \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
@@ -15,19 +15,16 @@
     "core"
   ],
   "dependencies": {
-    "com.unity.xr.arsubsystems": "4.2.3",
+    "com.unity.xr.arsubsystems": "4.2.6",
     "com.unity.xr.management": "4.0.1",
     "com.unity.modules.particlesystem": "1.0.0"
   },
-  "upm": {
-    "changelog": "### Fixed,- Fixed [issue 1392753](https://issuetracker.unity3d.com/issues/flickering-slash-frozen-textures-when-ar-occlusion-manager-is-disabled) where occlusion texture would remain frozen instead of being cleared when the occlusion manager is disabled."
-  },
   "upmCi": {
-    "footprint": "c955e8c5fa09a019d8a918a04d6b1ed3392de255"
+    "footprint": "66b46660b792299b1097e1b195aa6ff301b75a6e"
   },
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "497981bbdfaf531fe240edcfa8f6edfd9aa1567e"
+    "revision": "ce431a269662645e01b2fb844b51b04d9c97bbdd"
   }
 }

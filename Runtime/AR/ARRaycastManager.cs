@@ -246,9 +246,16 @@ namespace UnityEngine.XR.ARFoundation
             int dstIndex = 0;
             foreach (var hitArray in s_NativeRaycastHits)
             {
-                NativeArray<XRRaycastHit>.Copy(hitArray, 0, allHits, dstIndex, hitArray.Length);
-                hitArray.Dispose();
-                dstIndex += hitArray.Length;
+                if (hitArray.Length > 0)
+                {
+                    NativeArray<XRRaycastHit>.Copy(hitArray, 0, allHits, dstIndex, hitArray.Length);
+                    dstIndex += hitArray.Length;
+                }
+
+                if (hitArray.IsCreated)
+                {
+                    hitArray.Dispose();
+                }
             }
 
             return allHits;

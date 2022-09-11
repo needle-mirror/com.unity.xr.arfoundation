@@ -8,6 +8,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.2.6] - 2022-09-11
+
+### Fixed
+
+- Fixed an issue where both `ARRaycastManager` and `ARPointCloudManager` could attempt to copy invalid `NativeArray<T>`s when using the raycast fallback API.
+- Fixed [issue 960](https://github.com/Unity-Technologies/arfoundation-samples/issues/960) where `ARPointCloudManager.Append` could incorrectly throw an `ArgumentException`. For developers with custom implementations of `XRRaycastSubsystem.Provider` which do not support raycasting with an arbitrary ray, fallback raycasts including hits from point clouds will now correctly return all values.
+- Fixed [issue 963](https://github.com/Unity-Technologies/arfoundation-samples/issues/963) where `ARRaycastManager.RaycastFallback` would sometimes return incomplete results. Developers with custom implementations of `XRRaycastSubsystem.Provider` which do not support raycasting with an arbitrary ray will now see correct results from `ARRaycastManager.Raycast(Ray, TrackableType, Allocator)`.
+
 ## [4.2.3] - 2022-03-01
 
 ### Fixed

@@ -73,7 +73,7 @@ The following platform packages and later implement the AR Foundation features i
 
 ## Subsystems
 
-AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@latest?preview=1&subfolder=/manual/) package and use the namespace `UnityEngine.XR.ARSubsystems`. You occasionally need to interact with the types in the AR Subsystems package.
+AR Foundation is built on subsystems. A **subsystem** is a platform-agnostic interface for surfacing different types of information. The AR-related subsystems are defined in the [`AR Subsystems`](https://docs.unity3d.com/Packages/com.unity.xr.arsubsystems@4.2/index.html) package and use the namespace `UnityEngine.XR.ARSubsystems`. You occasionally need to interact with the types in the AR Subsystems package.
 
 Each subsystem handles specific functionality. For example, `XRPlaneSubsystem` provides the plane detection interface.
 
