@@ -25,6 +25,9 @@ namespace UnityEditor.XR.Simulation
         public const string arrowCaretLeftIconPath = k_IconsPath + "ArrowCaretLeft.png";
         public const string arrowCaretRightIconPath = k_IconsPath + "ArrowCaretRight.png";
         public const string addEditIconPath = k_IconsPath + "AddEdit.png";
+        public const string viewEnvironmentIconPath = k_IconsPath + "ViewEnvironment.png";
+        public const string viewEnvironmentDisableIconPath = k_IconsPath + "NoViewEnvironment.png";
+
 
         public static Func<string[], string[]> collectElementIds;
 
@@ -42,6 +45,7 @@ namespace UnityEditor.XR.Simulation
             var elementIds = new[]
             {
                 HiddenToolbarTrackingElement.id,
+                EnvironmentVisibilityToggle.id,
                 EnvironmentDropdown.id,
                 PreviousEnvironmentButton.id,
                 NextEnvironmentButton.id,
@@ -56,13 +60,8 @@ namespace UnityEditor.XR.Simulation
 
         void OnDisplayedChanged(bool value)
         {
-            if (containerWindow is SceneView sceneView)
-            {
-                if (value)
-                    XREnvironmentViewManager.instance.EnableEnvironmentView(sceneView);
-                else
-                    XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
-            }
+            if (containerWindow is SceneView sceneView && !value)
+                XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
         }
 
         XREnvironmentToolbarOverlay() : base(GetElementIds()) { }
@@ -71,16 +70,6 @@ namespace UnityEditor.XR.Simulation
         {
             base.OnCreated();
             displayedChanged += OnDisplayedChanged;
-            // ensure manager is started when overlay is created
-            var manager = XREnvironmentViewManager.instance;
-
-            var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
-
-            AREditorAnalytics.simulationUIAnalyticsEvent.Send(
-                new SimulationUIAnalyticsArgs(
-                    eventName: SimulationUIAnalyticsArgs.EventName.WindowUsed,
-                    environmentGuid: assetGuid,
-                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = toolbarDisplayName, isActive = true }));
         }
 
         public override void OnWillBeDestroyed()
@@ -91,14 +80,6 @@ namespace UnityEditor.XR.Simulation
                 XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
 
             base.OnWillBeDestroyed();
-
-            var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
-
-            AREditorAnalytics.simulationUIAnalyticsEvent.Send(
-                new SimulationUIAnalyticsArgs(
-                    eventName: SimulationUIAnalyticsArgs.EventName.WindowUsed,
-                    environmentGuid: assetGuid,
-                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = toolbarDisplayName, isActive = false }));
         }
     }
 
@@ -491,6 +472,114 @@ namespace UnityEditor.XR.Simulation
         static void OnEditEnvironmentSelected()
         {
             SimulationEnvironmentAssetsManager.Instance.OpenActiveEnvironmentForEditing();
+        }
+    }
+
+    [EditorToolbarElement(id, typeof(SceneView))]
+    class EnvironmentVisibilityToggle : EditorToolbarToggle, IAccessContainerWindow
+    {
+        public const string id = XREnvironmentToolbarOverlay.overlayId + "/EnvironmentVisibility";
+        const string k_Tooltip = "When toggled on, the Scene View changes to an XR Environment View and displays the " +
+            "current simulation environment. When toggled off, the Scene View displays the active editing context.";
+
+        public EditorWindow containerWindow { get; set; }
+        
+        bool m_Value;
+
+        public override bool value
+        {
+            get { return m_Value; }
+            set
+            {
+                if (m_Value == value)
+                    return;
+                
+                m_Value = value;
+                var sceneView = containerWindow as SceneView;
+                if (value)
+                    XREnvironmentViewManager.instance.EnableEnvironmentView(sceneView);
+                else
+                    XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
+                
+                SetValueWithoutNotify(value);
+            }
+        }
+
+        EnvironmentVisibilityToggle()
+        {
+            tooltip = k_Tooltip;
+            onIcon = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.viewEnvironmentIconPath).image as Texture2D;
+            offIcon = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.viewEnvironmentDisableIconPath).image as Texture2D;
+
+            RegisterCallback<ClickEvent>(OnClick);
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            XREnvironmentViewManager.environmentViewEnabled += onEnvironmentViewEnabled;
+            XREnvironmentViewManager.environmentViewDisabled += onEnvironmentViewDisabled;
+            UpdateEnabled();
+            EditorApplication.delayCall += SyncToggleState;
+        }
+
+        void onEnvironmentViewEnabled(SceneView sceneView)
+        {
+            if (sceneView == containerWindow)
+                value = true;
+        }
+
+        void onEnvironmentViewDisabled(SceneView sceneView)
+        {
+            if (sceneView == containerWindow)
+                value = false;
+        }
+
+        void SyncToggleState()
+        {
+            // SetValueWithoutNotify calls UpdateIcon that sets the correct icon state for the button
+            m_Value = XREnvironmentViewManager.instance.IsEnvironmentViewEnabled(containerWindow);
+            SetValueWithoutNotify(m_Value);
+        }
+
+        void OnAttachToPanel(AttachToPanelEvent evt)
+        {
+            UpdateEnabled();
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            PrefabStage.prefabStageOpened += OnPrefabStageChanged;
+            PrefabStage.prefabStageClosing += OnPrefabStageChanged;
+            SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved += UpdateEnabled;
+        }
+
+        void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            PrefabStage.prefabStageOpened -= OnPrefabStageChanged;
+            PrefabStage.prefabStageClosing -= OnPrefabStageChanged;
+            SimulationEditorUtilities.simulationSubsystemLoaderAddedOrRemoved -= UpdateEnabled;
+        }
+
+        void OnPlayModeStateChanged(PlayModeStateChange change)
+        {
+            UpdateEnabled();
+        }
+
+        void OnPrefabStageChanged(PrefabStage prefabStage)
+        {
+            UpdateEnabled();
+        }
+
+        void UpdateEnabled()
+        {
+            SetEnabled(XREnvironmentToolbarOverlay.CanEnableContent(containerWindow));
+        }
+
+        void OnClick(ClickEvent evt)
+        {
+            var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
+
+            AREditorAnalytics.simulationUIAnalyticsEvent.Send(
+                new SimulationUIAnalyticsArgs(
+                    eventName: SimulationUIAnalyticsArgs.EventName.WindowUsed,
+                    environmentGuid: assetGuid,
+                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = XREnvironmentToolbarOverlay.toolbarDisplayName, isActive = value }));
         }
     }
 }

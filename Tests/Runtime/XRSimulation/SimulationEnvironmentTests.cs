@@ -28,7 +28,7 @@ namespace UnityEngine.XR.Simulation.Tests
         {
             var activeSceneName = SimulationSceneManager.activeSceneName;
             var environmentScene = FindSimulationScene(activeSceneName);
-            
+
             // Check simulation scene is initialized
             Assert.AreEqual(environmentScene.name, activeSceneName);
             Assert.AreEqual(1, environmentScene.rootCount, $"{activeSceneName} should only have one root GameObject.");
@@ -41,7 +41,7 @@ namespace UnityEngine.XR.Simulation.Tests
         public void EnvironmentLoaded()
         {
             (var sceneName, var environmentScene) = FindSimulationSceneAndAssertLoaded();
-            
+
             // Check the environment root is valid
             var rootGO = environmentScene.GetRootGameObjects()[0];
             var simulationEnvironment = rootGO.GetComponent<SimulationEnvironment>();

@@ -104,7 +104,7 @@ namespace UnityEditor.XR.Simulation
         {
             if (!s_RenderingOverrideEnabled)
                 return;
-
+            
             // Due to the way XREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
             // But scene view camera is already the current camera when we reach this step.
             if (!XREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
@@ -135,24 +135,21 @@ namespace UnityEditor.XR.Simulation
             if (!s_RenderingOverrideEnabled || s_SimulationSceneManager == null)
                 return;
 
-            if (!s_SimulationSceneManager.environmentScene.IsValid())
+            // Do not set scene manager override lighting in prefab stage
+            if (!s_SimulationSceneManager.environmentScene.IsValid() 
+                || PrefabStageUtility.GetCurrentPrefabStage() != null)
                 return;
-
+            
             if (!s_LightingOverrideActive)
                 s_SimulationRenderSettings.UseSceneRenderSettings();
 
-            // Do not set scene manager override lighting in prefab stage
-            if (s_SimulationSceneManager.environmentScene.IsValid()
-                && PrefabStageUtility.GetCurrentPrefabStage() == null)
-            {
-                Unsupported.SetOverrideLightingSettings(s_SimulationSceneManager.environmentScene);
+            Unsupported.SetOverrideLightingSettings(s_SimulationSceneManager.environmentScene);
 
-                var simulationEnvironment = s_SimulationSceneManager.simulationEnvironment;
-                if (simulationEnvironment != null)
-                    simulationEnvironment.renderSettings.ApplyTempRenderSettings();
+            var simulationEnvironment = s_SimulationSceneManager.simulationEnvironment;
+            if (simulationEnvironment != null)
+                simulationEnvironment.renderSettings.ApplyTempRenderSettings();
 
-                s_LightingOverrideActive = true;
-            }
+            s_LightingOverrideActive = true;
         }
 
         internal static void RestoreBaseLighting()
@@ -175,7 +172,7 @@ namespace UnityEditor.XR.Simulation
         internal static VisualElement TrackStandAloneXRSettingsChange()
         {
             var trackerElement = new VisualElement();
-
+            
             var property = GetLoadersArrayProperty();
             if (property == null)
                 return null;

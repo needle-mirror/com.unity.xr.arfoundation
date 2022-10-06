@@ -105,15 +105,31 @@ namespace UnityEngine.XR.ARFoundation
         Button m_DisplayConfigurationsMenuButton;
 
         /// <summary>
-        /// The button that displays the AR Debug Menu's configuration sub-menu.
+        /// The button that displays the AR Debug Menu's session configuration sub-menu.
         /// </summary>
         /// <value>
-        /// A button that will be used to display the AR Debug Menu's configuration sub-menu.
+        /// A button that will be used to display the AR Debug Menu's session configuration sub-menu.
         /// </value>
         public Button displayConfigurationsMenuButton
         {
             get => m_DisplayConfigurationsMenuButton;
             set => m_DisplayConfigurationsMenuButton = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The button that displays the AR Debug Menu's camera configuration sub-menu.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        Button m_DisplayCameraConfigurationsMenuButton;
+
+        /// <summary>
+        /// The button that displays the AR Debug Menu's camera configuration sub-menu.
+        /// </summary>
+        /// <value>
+        /// A button that will be used to display the AR Debug Menu's camera configuration sub-menu.
+        /// </value>
+        public Button displayCameraConfigurationsMenuButton
+        {
+            get => m_DisplayCameraConfigurationsMenuButton;
+            set => m_DisplayCameraConfigurationsMenuButton = value;
         }
 
         [SerializeField]
@@ -149,14 +165,30 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("The menu that displays available configurations for the current platform.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        [Tooltip("The menu that displays available camera configurations for the current session configuration.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        GameObject m_CameraConfigurationMenu;
+
+        /// <summary>
+        /// The menu that displays available <see cref="XRCameraConfiguration"/>s for the current session configuration.
+        /// </summary>
+        /// <value>
+        /// A menu that will be used to display available camera configurations for the current session configuration.
+        /// </value>
+        public GameObject cameraConfigurationMenu
+        {
+            get => m_CameraConfigurationMenu;
+            set => m_CameraConfigurationMenu = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The menu that displays available session configurations for the current platform.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
         GameObject m_ConfigurationMenu;
 
         /// <summary>
         /// The menu that displays available <see cref="Configuration"/>s for the current platform.
         /// </summary>
         /// <value>
-        /// A menu that will be used to display available configurations for the current platform.
+        /// A menu that will be used to display available session configurations for the current platform.
         /// </value>
         public GameObject configurationMenu
         {
@@ -355,11 +387,76 @@ namespace UnityEngine.XR.ARFoundation
             set => m_MenuFont = value;
         }
 
+        [SerializeField]
+        [Tooltip("The label that will display the resolution of the current camera configuration.")]
+        Text m_CameraResolutionLabel;
+
+        /// <summary>
+        /// The label that will display the resolution of the current camera configuration.
+        /// </summary>
+        /// <value>
+        /// A label that will display the resolution of the current camera configuration.
+        /// </value>
+        public Text cameraResolutionLabel
+        {
+            get => m_CameraResolutionLabel;
+            set => m_CameraResolutionLabel = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The label that will display the frame rate of the current camera configuration.")]
+        Text m_CameraFrameRateLabel;
+
+        /// <summary>
+        /// The label that will display the frame rate of the current camera configuration.
+        /// </summary>
+        /// <value>
+        /// A label that will display the frame rate of the current camera configuration.
+        /// </value>
+        public Text cameraFrameRateLabel
+        {
+            get => m_CameraFrameRateLabel;
+            set => m_CameraFrameRateLabel = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The label that will display whether depth sensor is supported in the current camera configuration.")]
+        Text m_CameraDepthSensorLabel;
+
+        /// <summary>
+        /// The label that will display whether depth sensor is supported in the current camera configuration.
+        /// </summary>
+        /// <value>
+        /// A label that will display whether depth sensor is supported in the current camera configuration.
+        /// </value>
+        public Text cameraDepthSensorLabel
+        {
+            get => m_CameraDepthSensorLabel;
+            set => m_CameraDepthSensorLabel = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The dropdown that will display the list of currently available camera configurations.")]
+        Dropdown m_CameraConfigurationDropdown;
+
+        /// <summary>
+        /// The dropdown that will display the list of currently available camera configurations.
+        /// </summary>
+        /// <value>
+        /// A dropdown that will display the list of currently available camera configurations.
+        /// </value>
+        public Dropdown cameraConfigurationDropdown
+        {
+            get => m_CameraConfigurationDropdown;
+            set => m_CameraConfigurationDropdown = value;
+        }
 
         //Managers
         XROrigin m_Origin;
 
         ARSession m_Session;
+
+        ARCameraManager m_CameraManager;
 
         //Visuals
         GameObject m_OriginAxis;
@@ -396,7 +493,11 @@ namespace UnityEngine.XR.ARFoundation
 
         bool m_ConfigMenuSetup;
 
+        bool m_CameraMenuSetup;
+
         Configuration m_CurrentConfiguration;
+
+        XRCameraConfiguration m_CurrentCameraConfiguration;
 
         int m_PreviousConfigCol = -1;
 
@@ -419,14 +520,15 @@ namespace UnityEngine.XR.ARFoundation
 
         bool CheckMenuConfigured()
         {
-            if(m_DisplayInfoMenuButton == null && m_DisplayConfigurationsMenuButton == null && m_DisplayDebugOptionsMenuButton == null && m_Toolbar == null)
+            if(m_DisplayInfoMenuButton == null && m_DisplayConfigurationsMenuButton == null && m_DisplayDebugOptionsMenuButton == null && m_DisplayCameraConfigurationsMenuButton == null && m_Toolbar == null)
             {
                 return false;
             }
-            else if(m_DisplayInfoMenuButton == null || m_DisplayConfigurationsMenuButton == null || m_DisplayDebugOptionsMenuButton == null || m_ShowOriginButton == null ||
+            else if(m_DisplayInfoMenuButton == null || m_DisplayConfigurationsMenuButton == null || m_DisplayDebugOptionsMenuButton == null || m_DisplayCameraConfigurationsMenuButton == null || m_ShowOriginButton == null ||
                 m_ShowPlanesButton == null || m_ShowAnchorsButton == null || m_ShowPointCloudsButton == null || m_FpsLabel == null || m_ConfigurationMenu == null ||
                 m_TrackingModeLabel == null || m_OriginAxisPrefab == null || m_AnchorPrefab == null || m_LineRendererPrefab == null || m_InfoMenu == null || m_DebugOptionsMenu == null || m_ConfigurationMenuRoot == null ||
-                m_MenuFont == null || m_Toolbar == null || m_DebugOptionsToastMenu == null || m_PointCloudParticleSystem == null)
+                m_MenuFont == null || m_Toolbar == null || m_DebugOptionsToastMenu == null || m_PointCloudParticleSystem == null || m_CameraConfigurationMenu == null || m_CameraResolutionLabel == null || m_CameraFrameRateLabel == null ||
+                m_CameraDepthSensorLabel == null || m_CameraConfigurationDropdown == null)
             {
                 Debug.LogWarning("The menu has not been fully configured so some functionality will be disabled. For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu");
             }
@@ -442,12 +544,24 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDisable()
         {
-            if(m_Origin)
+            if(m_Origin != null)
             {
                 var planeManager = m_Origin.GetComponent<ARPlaneManager>();
-                if(planeManager)
+                if(planeManager != null)
                 {
                     planeManager.planesChanged -= OnPlaneChanged;
+                }
+
+                var anchorManager = m_Origin.GetComponent<ARAnchorManager>();
+                if(anchorManager != null)
+                {
+                    anchorManager.anchorsChanged -= OnAnchorChanged;
+                }
+
+                var pointCloudManager = m_Origin.GetComponent<ARPointCloudManager>();
+                if(pointCloudManager != null)
+                {
+                    pointCloudManager.pointCloudsChanged -= OnPointCloudChanged;
                 }
             }
         }
@@ -482,12 +596,29 @@ namespace UnityEngine.XR.ARFoundation
                 m_ConfigMenuSetup = true;
             }
 
+            if(!m_CameraMenuSetup)
+            {
+                PopulateCameraDropdown();
+            }
+
             if(m_SessionSubsystem != null)
             {
                 if(m_SessionSubsystem.currentConfiguration.HasValue && m_SessionSubsystem.currentConfiguration.Value != m_CurrentConfiguration)
                 {
                     m_CurrentConfiguration = (Configuration)m_SessionSubsystem.currentConfiguration;
                     HighlightCurrentConfiguration(m_CurrentConfiguration.descriptor);
+                }
+            }
+            
+            if(m_CameraManager != null)
+            {
+                var cameraConfig = m_CameraManager.currentConfiguration;
+                if(cameraConfig.HasValue && cameraConfig != m_CurrentCameraConfiguration)
+                {
+                    m_CameraResolutionLabel.text = cameraConfig.Value.resolution != null? cameraConfig.Value.resolution.ToString() : "Not Available";
+                    m_CameraFrameRateLabel.text = cameraConfig.Value.framerate != null? cameraConfig.Value.framerate.ToString() : "Not Available";
+                    m_CameraDepthSensorLabel.text = cameraConfig.Value.depthSensorSupported.ToString();
+                    m_CurrentCameraConfiguration = (XRCameraConfiguration) cameraConfig;
                 }
             }
         }
@@ -520,6 +651,17 @@ namespace UnityEngine.XR.ARFoundation
             }
             m_Origin = origins[0];
 
+            var cameraManagers = FindObjectsOfType<ARCameraManager>();
+            if(cameraManagers.Length == 0)
+            {
+                Debug.LogWarning($"Failed to find an ARCameraManager in current scene. As a result, the camera configuration menu will be disabled.");
+                DisableToolbarButton(m_DisplayCameraConfigurationsMenuButton);
+            }
+            else
+            {
+                m_CameraManager = cameraManagers[0];
+            }
+
             m_CameraAR = m_Origin.Camera;
 #if !UNITY_IOS && !UNITY_ANDROID
             if(m_CameraAR == null)
@@ -532,6 +674,8 @@ namespace UnityEngine.XR.ARFoundation
             m_DisplayInfoMenuButton.onClick.AddListener(delegate { ShowMenu(m_InfoMenu); });
             m_DisplayConfigurationsMenuButton.onClick.AddListener(delegate { ShowMenu(m_ConfigurationMenu); });
             m_DisplayDebugOptionsMenuButton.onClick.AddListener(delegate { ShowMenu(m_DebugOptionsMenu); });
+            m_DisplayCameraConfigurationsMenuButton.onClick.AddListener(delegate { ShowMenu(m_CameraConfigurationMenu); });
+            m_CameraConfigurationDropdown.onValueChanged.AddListener(delegate { OnCameraDropdownValueChanged(m_CameraConfigurationDropdown); });
 
             Canvas menu = GetComponent<Canvas>();
 #if UNITY_IOS || UNITY_ANDROID
@@ -558,9 +702,11 @@ namespace UnityEngine.XR.ARFoundation
                 rect.anchoredPosition = new Vector2(0, 20);
                 var infoMenuButtonRect = m_DisplayInfoMenuButton.GetComponent<RectTransform>();
                 var configurationsMenuButtonRect = m_DisplayConfigurationsMenuButton.GetComponent<RectTransform>();
+                var cameraConfigurationsMenuButtonRect = m_DisplayCameraConfigurationsMenuButton.GetComponent<RectTransform>();
                 var debugOptionsMenuButtonRect = m_DisplayDebugOptionsMenuButton.GetComponent<RectTransform>();
                 infoMenuButtonRect.localEulerAngles =  new Vector3(infoMenuButtonRect.localEulerAngles.x, infoMenuButtonRect.localEulerAngles.y, -90);
                 configurationsMenuButtonRect.localEulerAngles = new Vector3(configurationsMenuButtonRect.localEulerAngles.x, configurationsMenuButtonRect.localEulerAngles.y, -90);
+                cameraConfigurationsMenuButtonRect.localEulerAngles = new Vector3(cameraConfigurationsMenuButtonRect.localEulerAngles.x, cameraConfigurationsMenuButtonRect.localEulerAngles.y, -90);
                 debugOptionsMenuButtonRect.localEulerAngles = new Vector3(debugOptionsMenuButtonRect.localEulerAngles.x, debugOptionsMenuButtonRect.localEulerAngles.y, -90);
 
                var infoMenuRect = m_InfoMenu.GetComponent<RectTransform>();
@@ -574,6 +720,12 @@ namespace UnityEngine.XR.ARFoundation
                configurationsMenuRect.anchorMax = new Vector2(0.5f, 0);
                configurationsMenuRect.pivot = new Vector2(0.5f, 0);
                configurationsMenuRect.anchoredPosition = new Vector2(0, 150);
+
+               var cameraConfigurationsMenuRect = m_CameraConfigurationMenu.GetComponent<RectTransform>();
+               cameraConfigurationsMenuRect.anchorMin = new Vector2(0.5f, 0);
+               cameraConfigurationsMenuRect.anchorMax = new Vector2(0.5f, 0);
+               cameraConfigurationsMenuRect.pivot = new Vector2(0.5f, 0);
+               cameraConfigurationsMenuRect.anchoredPosition = new Vector2(0, 150);
 
                var debugOptionsMenuRect = m_DebugOptionsMenu.GetComponent<RectTransform>();
                debugOptionsMenuRect.anchorMin = new Vector2(0.5f, 0);
@@ -634,6 +786,7 @@ namespace UnityEngine.XR.ARFoundation
                 //Clear any currently open menus.
                 m_InfoMenu.SetActive(false);
                 m_ConfigurationMenu.SetActive(false);
+                m_CameraConfigurationMenu.SetActive(false);
                 m_DebugOptionsMenu.SetActive(false);
 
                 menu.SetActive(true);
@@ -731,17 +884,22 @@ namespace UnityEngine.XR.ARFoundation
             else
             {
                 Debug.LogWarning($"As there is no active XRSessionSubsystem available, the {typeof(ARDebugMenu).FullName}'s configuration sub-menu will not be enabled.");
-                m_DisplayConfigurationsMenuButton.interactable = false;
-                var icons = m_DisplayConfigurationsMenuButton.GetComponentsInChildren<Image>();
-                if(icons.Length > 1)
+                DisableToolbarButton(m_DisplayConfigurationsMenuButton);
+            }
+        }
+
+        void DisableToolbarButton(Button button)
+        {
+            button.interactable = false;
+            var icons = button.GetComponentsInChildren<Image>();
+            if(icons.Length > 1)
+            {
+                var buttonImage = button.GetComponentsInChildren<Image>()[1];
+                if(buttonImage != null)
                 {
-                    var buttonImage = m_DisplayConfigurationsMenuButton.GetComponentsInChildren<Image>()[1];
-                    if(buttonImage != null)
-                    {
-                        var newAlpha =  buttonImage.color;
-                        newAlpha.a = 0.4f;
-                        buttonImage.color = newAlpha;
-                    }
+                    var newAlpha =  buttonImage.color;
+                    newAlpha.a = 0.4f;
+                    buttonImage.color = newAlpha;
                 }
             }
         }
@@ -1127,6 +1285,58 @@ namespace UnityEngine.XR.ARFoundation
                     lineRenderer.SetPosition(i, new Vector3(point2.x, 0, point2.y));
                 }
             }
+        }
+
+        void OnCameraDropdownValueChanged(Dropdown dropdown)
+        {
+            if ((m_CameraManager == null) || (m_CameraManager.subsystem == null) || !m_CameraManager.subsystem.running)
+            {
+                return;
+            }
+
+            var configurationIndex = dropdown.value;
+
+            using (var configurations = m_CameraManager.GetConfigurations(Allocator.Temp))
+            {
+                if (configurationIndex >= configurations.Length)
+                {
+                    return;
+                }
+
+                var configuration = configurations[configurationIndex];
+                m_CameraManager.currentConfiguration = configuration;
+            }
+        }
+
+        void PopulateCameraDropdown()
+        {
+            if ((m_CameraManager == null) || (m_CameraManager.subsystem == null) || !m_CameraManager.subsystem.running)
+                return;
+
+            using (var configurations = m_CameraManager.GetConfigurations(Allocator.Temp))
+            {
+                if (!configurations.IsCreated || (configurations.Length <= 0))
+                {
+                    return;
+                }
+
+                List<string> configurationNames = new List<string>();
+                foreach (var config in configurations)
+                {
+                    configurationNames.Add($"{config.width}x{config.height}{(config.framerate.HasValue ? $" at {config.framerate.Value} Hz" : "")}{(config.depthSensorSupported == Supported.Supported ? " depth sensor" : "")}");
+                }
+                m_CameraConfigurationDropdown.AddOptions(configurationNames);
+
+                var currentConfig = m_CameraManager.currentConfiguration;
+                for (int i = 0; i < configurations.Length; ++i)
+                {
+                    if (currentConfig == configurations[i])
+                    {
+                        m_CameraConfigurationDropdown.value = i;
+                    }
+                }
+            }
+            m_CameraMenuSetup = true;
         }
     }
 }

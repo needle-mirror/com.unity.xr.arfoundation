@@ -1,4 +1,5 @@
 using System;
+using Unity.XR.CoreUtils;
 using UnityEngine.SceneManagement;
 
 namespace UnityEngine.XR.Simulation
@@ -23,6 +24,11 @@ namespace UnityEngine.XR.Simulation
         {
             if (environmentScene.IsValid() && environmentScene != default)
                 SceneManager.UnloadSceneAsync(environmentScene);
+        }
+
+        protected override GameObject InstantiateEnvironment(GameObject environmentPrefab)
+        {
+            return GameObjectUtils.Instantiate(environmentPrefab);
         }
     }
 }

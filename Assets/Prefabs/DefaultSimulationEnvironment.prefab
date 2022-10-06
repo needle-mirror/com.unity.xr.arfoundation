@@ -634,16 +634,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CameraStartingPose:
-    position: {x: 0.6703577, y: 0.9345944, z: 1.2172877}
-    rotation: {x: -0.061283827, y: 0.927354, z: -0.17480235, w: -0.32512003}
+    position: {x: 0.22, y: 0.9345944, z: -0.21}
+    rotation: {x: -0.16794881, y: 0.414527, z: -0.078137435, w: -0.8909855}
   m_CameraMovementBounds:
     m_Center: {x: 0.044999838, y: 0.545, z: 0.00000011920929}
     m_Extent: {x: 1.3000004, y: 0.5500002, z: 1.2500005}
   m_DefaultViewPose:
-    position: {x: 0.82696277, y: 1.4320639, z: 2.207862}
-    rotation: {x: -0.06561027, y: 0.93392134, z: -0.26331285, w: -0.23270704}
-  m_DefaultViewPivot: {x: -0.42683762, y: -0.20484029, z: -0.15186587}
-  m_DefaultViewSize: 3.133653
+    position: {x: 0, y: 1.0609863, z: -1.5}
+    rotation: {x: -0.16100603, y: 0.1567927, z: -0.025916385, w: -0.97407466}
+  m_DefaultViewPivot: {x: 0, y: 0, z: 0}
+  m_DefaultViewSize: 2
   m_RenderSettings:
     m_AmbientMode: 1
     m_AmbientSkyColor: {r: 0.77254903, g: 0.73333335, b: 0.7372549, a: 1}

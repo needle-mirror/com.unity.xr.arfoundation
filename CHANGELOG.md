@@ -8,6 +8,23 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-pre.1] - 2022-10-06
+
+### Added
+
+- Added button to the AR Environment Overlay that when toggled on, the Scene View changes to an AR Environment View and displays the current simulation environment. When toggled off, the Scene View displays the active editing context.
+- Added Camera Configuration Menu to the [ARDebugMenu](xref:arfoundation-debug-menu).
+- Added a custom Editor for the `SimulationEnvironment` component that displays serializable `Pose.rotation` properties as `Vector3` Euler angles rather than `Quaternion`.
+
+### Changed
+
+- Simulation environment is now instantiated as a prefab instance in edit mode, so that changes made to the prefab are reflected in the XR Environment view.
+
+### Fixed
+
+- Fixed an issue where the shaders "Simulation/Standard Lit" and "Simulation/URP/Lit" needed to be manually re-imported after converting a project to URP.
+- Fixed truncation of property labels for XR Simulation settings in Project Settings window.
+
 ## [5.0.2] - 2022-09-11
 
 ### Changed
@@ -47,7 +64,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed simulated image tracking subsystem checking for occlusion of images from the camera.
 - Fixed error loading AR Environment icon when AR Foundation is first added to a project.
 - Fixed crash in `RenderSettings` that was preventing the `SimulationRenderSettings` from being used in the AR Environment View in Unity 2022.1+.
-- Fixed issues where AR Environment Overlay would not be restored or display correctly in a Scene View.
 
 ## [5.0.0-pre.12] - 2022-05-19
 
@@ -296,8 +312,8 @@ InvalidOperationException: Can't call "GetChanges" without "Start"ing the anchor
 
 ### Changed
 
-- **Anchors:** Previously, [ARAnchors](xref:UnityEngine.XR.ARFoundation.ARAnchor) were added and removed by calling [AddAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.AddAnchor(UnityEngine.Pose)) and [RemoveAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.RemoveAnchor(UnityEngine.XR.ARFoundation.ARAnchor)), respectively. Now, you can add an anchor by simply adding an `ARAnchor` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an anchor by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `ARAnchor` component (or its GameObject). See the [manual entry for anchors](xref:arfoundation-anchor-manager) for more details.
-- **Environment Probes:** Previously, [environment probes](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) were added and removed by calling [AddEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.AddEnvironmentProbe(UnityEngine.Pose,UnityEngine.Vector3,UnityEngine.Vector3)) and [RemoveEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.RemoveEnvironmentProbe(UnityEngine.XR.ARFoundation.AREnvironmentProbe)), respectively. Now, you can add an anchor by simply adding an `AREnvironmentProbe` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an environment probe by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `AREnvironmentProbe` component (or its GameObject). See the [manual entry for environment probes](xref:arfoundation-environment-probe-manager) for more details.
+- **Anchors:** Previously, [ARAnchors](xref:UnityEngine.XR.ARFoundation.ARAnchor) were added and removed by calling [AddAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.AddAnchor(UnityEngine.Pose)) and [RemoveAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.RemoveAnchor(UnityEngine.XR.ARFoundation.ARAnchor)), respectively. Now, you can add an anchor by simply adding an `ARAnchor` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an anchor by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `ARAnchor` component (or its GameObject). See the [manual entry for anchors](xref:arfoundation-anchors) for more details.
+- **Environment Probes:** Previously, [environment probes](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) were added and removed by calling [AddEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.AddEnvironmentProbe(UnityEngine.Pose,UnityEngine.Vector3,UnityEngine.Vector3)) and [RemoveEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.RemoveEnvironmentProbe(UnityEngine.XR.ARFoundation.AREnvironmentProbe)), respectively. Now, you can add an anchor by simply adding an `AREnvironmentProbe` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an environment probe by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `AREnvironmentProbe` component (or its GameObject). See the [manual entry for environment probes](xref:arfoundation-environment-probes) for more details.
 
 ### Fixed
 
@@ -323,7 +339,7 @@ Texture descriptor dimension should not change from None to Tex2D.
 
 ### Added
 
-- Added new sections in the manual documentation for [image tracking](xref:arfoundation-tracked-image-manager) and [anchors](xref:arfoundation-anchor-manager).
+- Added new sections in the manual documentation for image tracking and anchors.
 - Added a [trackable](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.trackable) property to the [ARRaycastHit](xref:UnityEngine.XR.ARFoundation.ARRaycastHit) which will refer to the [ARTrackable](xref:UnityEngine.XR.ARFoundation.ARTrackable) hit by the raycast, or `null` if no trackable was hit.
 
 ### Fixed
@@ -339,7 +355,7 @@ Texture descriptor dimension should not change from None to Tex2D.
 
 ### Fixed
 
-- Updated "[Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU](xref:arfoundation-manual#copying-the-camera-texture-to-a-render-texture-when-accessing-the-camera-image-on-the-gpu)" documentation to use a '[Command Buffer](xref:UnityEngine.Rendering.CommandBuffer)' instead of a '[Graphics.Blit()](xref:uid: UnityEngine.Graphics.Blit(UnityEngine.Texture,UnityEngine.RenderTexture))' to fix an issue where blit would not work on certain devices.
+- Updated "Copying the Camera Texture to a Render Texture when accessing the camera image on the GPU" documentation to use a '[Command Buffer](xref:UnityEngine.Rendering.CommandBuffer)' instead of a `Graphics.Blit()` to fix an issue where blit would not work on certain devices.
 - Fixed a `NullReferenceException` which would happen if you invoked [`ARSession.CheckAvailability()`](xref:UnityEngine.XR.ARFoundation.ARSession.CheckAvailability) when the ARSession's GameObject was disabled and had never been enabled.
 
 ## [4.1.0-preview.6] - 2020-07-27
@@ -350,7 +366,7 @@ No changes
 
 ### Changed
 
-- Updated ["Configuring the AR Camera background using a Scriptable Render Pipeline"](xref:arfoundation-ar-camera-background-with-scriptable-render-pipeline) documentation for further clarity on setup steps.
+- Updated "Configuring the AR Camera background using a Scriptable Render Pipeline" documentation for further clarity on setup steps.
 - Added documentation for the `ARMeshManager`.
 
 ### Fixed
@@ -531,7 +547,7 @@ No changes
 
 ### Fixed
 
-- Fixed a typo in [Face Tracking](xref:arfoundation-face-manager) documentation which incorrectly referred to planes instead of faces. Also updated the screenshot of the ARFaceManager to reflect the "Maximum Face Count" field.
+- Fixed a typo in Face Tracking documentation which incorrectly referred to planes instead of faces. Also updated the screenshot of the ARFaceManager to reflect the "Maximum Face Count" field.
 
 ## [3.0.0-preview.2] - 2019-09-05
 

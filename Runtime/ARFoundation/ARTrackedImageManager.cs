@@ -148,7 +148,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <remarks>
         /// The purpose of this property is to extend the functionality of <see cref="ARTrackedImage"/>s.
         /// It is not the recommended way to instantiate content associated with an <see cref="ARTrackedImage"/>.
-        /// See [Tracked Image Prefab](xref:arfoundation-tracked-image-manager#tracked-image-prefab) for more details.
         /// </remarks>
         public GameObject trackedImagePrefab
         {

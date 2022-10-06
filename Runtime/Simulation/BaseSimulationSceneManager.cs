@@ -73,7 +73,7 @@ namespace UnityEngine.XR.Simulation
             if (prefab == null)
                 throw new InvalidOperationException("No environment prefab set. Pick an environment in a Scene View with Overlays -> XR Environment.");
 
-            m_EnvironmentRoot = GameObjectUtils.Instantiate(prefab);
+            m_EnvironmentRoot = InstantiateEnvironment(prefab);
             m_SimulationEnvironment = m_EnvironmentRoot.GetComponentInChildren<SimulationEnvironment>();
             SceneManager.MoveGameObjectToScene(m_EnvironmentRoot, m_EnvironmentScene);
 
@@ -109,6 +109,7 @@ namespace UnityEngine.XR.Simulation
 
         protected abstract Scene CreateEnvironmentScene();
         protected abstract void DestroyEnvironmentScene();
+        protected abstract GameObject InstantiateEnvironment(GameObject environmentPrefab);
 
         static void EnsureLightMasking(GameObject root)
         {

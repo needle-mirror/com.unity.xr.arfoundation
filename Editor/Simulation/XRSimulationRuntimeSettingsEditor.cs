@@ -11,6 +11,7 @@ namespace UnityEditor.XR.Simulation
         const string k_UnnamedName = "(Unnamed)";
         const string k_ReservedName = "{0} (Reserved)";
         const string k_NamedLayerName = "{0} - {1}";
+        const float k_MinLabelWidth = 220f;
 
         SerializedObject m_SerializedObject;
         GUIContent[] m_LayersContent;
@@ -44,9 +45,16 @@ namespace UnityEditor.XR.Simulation
                     selectedIndex = EditorGUILayout.Popup(selectedIndex, m_LayersContent);
                 }
 
+                // Prevent fields with long names from getting cut off
+                var previousLabelWidth = EditorGUIUtility.labelWidth;
+                if (previousLabelWidth < k_MinLabelWidth)
+                    EditorGUIUtility.labelWidth = k_MinLabelWidth;
+
                 EditorGUILayout.PropertyField(m_EnvScanParamsProperty);
                 EditorGUILayout.PropertyField(m_ImageDiscoveryPramsProperty);
                 EditorGUILayout.PropertyField(m_PlaneFindingParamsProperty);
+
+                EditorGUIUtility.labelWidth = previousLabelWidth;
 
                 if (change.changed)
                 {
