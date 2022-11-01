@@ -6,14 +6,11 @@ namespace UnityEditor.XR.ARFoundation.Tests
 {
     class XROriginCreateUtilTests
     {
+        /// <summary>
+        /// This is necessary for correctness because Edit Mode tests contain all GameObjects in the active scene.
+        /// </summary>
         [OneTimeSetUp]
         public void OneTimeSetUp()
-        {
-            DestroyAllGameObjects();
-        }
-
-        [TearDown]
-        public void TearDown()
         {
             DestroyAllGameObjects();
         }
@@ -34,6 +31,7 @@ namespace UnityEditor.XR.ARFoundation.Tests
             var origin = XROriginCreateUtil.CreateXROriginWithParent(null);
             Assert.IsNotNull(origin);
             Assert.IsNull(origin.transform.parent);
+            Object.DestroyImmediate(origin);
         }
 
         [Test]
@@ -44,16 +42,21 @@ namespace UnityEditor.XR.ARFoundation.Tests
             Assert.IsNotNull(origin);
             Undo.PerformUndo();
             origin = Object.FindObjectOfType<XROrigin>();
-            Assert.IsTrue(origin == null);
+            Assert.IsTrue(origin == null); // using Unity's overload for the == operator
             Undo.PerformRedo();
             origin = Object.FindObjectOfType<XROrigin>();
             Assert.IsNotNull(origin);
+            Object.DestroyImmediate(origin);
         }
 
         static void DestroyAllGameObjects()
         {
             foreach (var g in Object.FindObjectsOfType<GameObject>())
             {
+                // Don't destroy GameObjects that are children within a Prefab instance
+                if (g == null || (PrefabUtility.IsPartOfAnyPrefab(g) && !PrefabUtility.IsAnyPrefabInstanceRoot(g)))
+                    continue;
+
                 Object.DestroyImmediate(g);
             }
         }

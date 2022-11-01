@@ -40,7 +40,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <remarks>
         /// The purpose of this property is to extend the functionality of <see cref="ARAnchor"/>s.
         /// It is not the recommended way to instantiate content associated with an <see cref="ARAnchor"/>.
-        /// See [Anchoring content](xref:arfoundation-anchor-manager#anchoring-content) for more details.
         /// </remarks>
         public GameObject anchorPrefab
         {

@@ -35,6 +35,7 @@ namespace UnityEngine.XR.Simulation
         int m_PointCount;
         float m_LastScanTime;
         bool m_Initialized;
+        bool m_Running;
         GameObject m_EnvironmentRoot;
         bool m_MeshCollidersCreated;
 
@@ -51,7 +52,6 @@ namespace UnityEngine.XR.Simulation
 
         ~SimulationEnvironmentScanner()
         {
-            s_Instance = null;
             Dispose();
         }
 
@@ -80,6 +80,19 @@ namespace UnityEngine.XR.Simulation
             m_Initialized = true;
         }
 
+        public void Start()
+        {
+            if (!m_Initialized)
+                throw new InvalidOperationException($"Attempting to start uninitialized {GetType().Name} Scanner");
+
+            m_Running = true;
+        }
+
+        public void Stop()
+        {
+            m_Running = false;
+        }
+
         public void Dispose()
         {
             if (m_Normals.IsCreated)
@@ -92,11 +105,14 @@ namespace UnityEngine.XR.Simulation
             m_Initialized = false;
 
             k_EnvironmentMeshes.Clear();
+            s_MeshCollidersRequested = false;
+
+            s_Instance = null;
         }
 
         public void Update()
         {
-            if (!m_Initialized ||
+            if (!m_Running ||
                 s_TrackingSubsystems.Count <= 0 ||
                 !ShouldRescan())
                 return;

@@ -303,7 +303,7 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Method to be implemented by the provider to handle any required platform-specifc functionality
+            /// Method to be implemented by the provider to handle any required platform-specific functionality
             /// immediately before rendering the camera background. This method will always be called on the render
             /// thread and should only be called by the code responsible for executing background rendering on
             /// mobile AR platforms.
@@ -372,7 +372,7 @@ namespace UnityEngine.XR.ARSubsystems
         public Material cameraMaterial => provider.cameraMaterial;
 
         /// <summary>
-        /// Method to be called on the render thread to handle any required platform-specifc functionality
+        /// Method to be called on the render thread to handle any required platform-specific functionality
         /// immediately before rendering the camera background. This method will always be called on the render
         /// thread and should only be called by the code responsible for executing background rendering on
         /// mobile AR platforms.

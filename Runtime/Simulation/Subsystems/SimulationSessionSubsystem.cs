@@ -27,26 +27,20 @@ namespace UnityEngine.XR.Simulation
 
             Camera m_XROriginCamera;
             int m_PreviousCullingMask;
+            bool m_Initialized;
 
             public override TrackingState trackingState => TrackingState.Tracking;
 
             public override Promise<SessionAvailability> GetAvailabilityAsync() =>
                 Promise<SessionAvailability>.CreateResolvedPromise(SessionAvailability.Installed | SessionAvailability.Supported);
 
-            public override void Start()
+            void Initialize()
             {
-#if UNITY_EDITOR
-                SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
-#endif
-
-                s_SimulationSceneManager = new SimulationSceneManager();
+                s_SimulationSceneManager ??= new SimulationSceneManager();
                 m_SimulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
 
                 if (SimulationMeshSubsystem.GetActiveSubsystemInstance() != null)
-                {
                     m_MeshSubsystem = new SimulationMeshSubsystem();
-                    m_MeshSubsystem.Start();
-                }
 
                 SetupSimulation();
 
@@ -56,13 +50,28 @@ namespace UnityEngine.XR.Simulation
                     throw new NullReferenceException($"An XR Origin is required in the scene, none found.");
 
                 m_XROriginCamera = xrOrigin.Camera;
-                m_PreviousCullingMask = m_XROriginCamera.cullingMask;
-                m_XROriginCamera.cullingMask &= ~(1 << XRSimulationRuntimeSettings.Instance.environmentLayer);
 
                 m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.instance;
                 m_SimulationEnvironmentScanner.Initialize(m_SimulationCamera,
                     s_SimulationSceneManager.environmentScene.GetPhysicsScene(),
                     s_SimulationSceneManager.simulationEnvironment.gameObject);
+
+                m_Initialized = true;
+            }
+
+            public override void Start()
+            {
+                if (!m_Initialized)
+                    Initialize();
+
+#if UNITY_EDITOR
+                SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
+#endif
+                m_MeshSubsystem?.Start();
+                m_SimulationEnvironmentScanner.Start();
+
+                m_PreviousCullingMask = m_XROriginCamera.cullingMask;
+                m_XROriginCamera.cullingMask &= ~(1 << XRSimulationRuntimeSettings.Instance.environmentLayer);
 
 #if UNITY_EDITOR
                 AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
@@ -74,18 +83,20 @@ namespace UnityEngine.XR.Simulation
                 if (m_XROriginCamera)
                     m_XROriginCamera.cullingMask = m_PreviousCullingMask;
 
-                ShutdownSimulation();
+                m_SimulationEnvironmentScanner.Stop();
 
+#if UNITY_EDITOR
+                AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
+#endif
+            }
+
+            public override void Destroy()
+            {
                 if (m_SimulationCamera != null)
                 {
                     Object.Destroy(m_SimulationCamera.gameObject);
                     m_SimulationCamera = null;
                 }
-
-                s_SimulationSceneManager = null;
-
-                m_SimulationEnvironmentScanner.Dispose();
-                m_SimulationEnvironmentScanner = null;
 
                 if (m_MeshSubsystem != null)
                 {
@@ -93,9 +104,19 @@ namespace UnityEngine.XR.Simulation
                     m_MeshSubsystem = null;
                 }
 
-#if UNITY_EDITOR
-                AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
-#endif
+                if (m_SimulationEnvironmentScanner != null)
+                {
+                    m_SimulationEnvironmentScanner.Dispose();
+                    m_SimulationEnvironmentScanner = null;
+                }
+
+                if (s_SimulationSceneManager != null)
+                {
+                    s_SimulationSceneManager.TearDownEnvironment();
+                    s_SimulationSceneManager = null;
+                }
+
+                m_Initialized = false;
             }
 
             public override void Update(XRSessionUpdateParams updateParams)
@@ -107,11 +128,6 @@ namespace UnityEngine.XR.Simulation
             {
                 s_SimulationSceneManager.SetupEnvironment();
                 m_SimulationCamera.SetSimulationEnvironment(s_SimulationSceneManager.simulationEnvironment);
-            }
-
-            void ShutdownSimulation()
-            {
-                s_SimulationSceneManager.TearDownEnvironment();
             }
 
 #if UNITY_EDITOR

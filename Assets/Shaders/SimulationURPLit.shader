@@ -58,7 +58,7 @@
     {
         PackageRequirements
         {
-            "com.unity.render-pipelines.universal"
+            "com.unity.render-pipelines.universal": "12.0"
         }
 
         // Universal Pipeline tag is required. If Universal render pipeline is not set in the graphics settings
