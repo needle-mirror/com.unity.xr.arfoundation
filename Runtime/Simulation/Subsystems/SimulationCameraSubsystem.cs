@@ -139,9 +139,13 @@ namespace UnityEngine.XR.Simulation
             public override void Stop()
             {
                 if (m_CameraTextureProvider != null)
-                {
                     m_CameraTextureProvider.cameraFrameReceived -= CameraFrameReceived;
+            }
 
+            public override void Destroy()
+            {
+                if (m_CameraTextureProvider != null)
+                {
                     Object.Destroy(m_CameraTextureProvider.gameObject);
                     m_CameraTextureProvider = null;
                 }

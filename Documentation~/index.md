@@ -31,7 +31,7 @@ AR Foundation supports the following features:
 | [Camera](xref:arfoundation-camera) | Render images from device cameras and perform light estimation. |
 | [Plane detection](xref:arfoundation-plane-detection) | Detect and track surfaces. |
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
-| [Oject tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
+| [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |
 | [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager) | Detect and track a human body. |
 | [Point clouds](xref:arfoundation-point-clouds) | Detect and track feature points. |

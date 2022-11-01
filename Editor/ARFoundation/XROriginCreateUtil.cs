@@ -1,10 +1,12 @@
 using System;
 using Unity.XR.CoreUtils;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.XR.ARFoundation;
+#if !XRI_PRESENT
+using UnityEditor.SceneManagement;
+#endif
 
 namespace UnityEditor.XR.ARFoundation
 {
@@ -24,13 +26,13 @@ namespace UnityEditor.XR.ARFoundation
         public static XROrigin CreateXROriginWithParent(Transform parent)
         {
             var originGo = ObjectFactory.CreateGameObject("XR Origin", typeof(XROrigin));
-            Place(originGo, parent);
+            CreateUtils.Place(originGo, parent);
 
             var offsetGo = ObjectFactory.CreateGameObject("Camera Offset");
-            Place(offsetGo, originGo.transform);
+            CreateUtils.Place(offsetGo, originGo.transform);
             
             var arCamera = CreateARMainCamera();
-            Place(arCamera.gameObject, offsetGo.transform);
+            CreateUtils.Place(arCamera.gameObject, offsetGo.transform);
 
             var origin = originGo.GetComponent<XROrigin>();
             origin.CameraFloorOffsetObject = offsetGo;
@@ -40,51 +42,6 @@ namespace UnityEditor.XR.ARFoundation
             return origin;
         }
 
-        static void Place(GameObject go, Transform parent)
-        {
-            var transform = go.transform;
-
-            if (parent != null)
-            {
-                ResetTransform(transform);
-                Undo.SetTransformParent(transform, parent, "Reparenting");
-                ResetTransform(transform);
-                go.layer = parent.gameObject.layer;
-            }
-            else
-            {
-                // Puts it at the scene pivot, and otherwise world origin if there is no Scene view.
-                var view = SceneView.lastActiveSceneView;
-                if (view != null)
-                    view.MoveToView(transform);
-                else
-                    transform.position = Vector3.zero;
-
-                StageUtility.PlaceGameObjectInCurrentStage(go);
-            }
-
-            GameObjectUtility.EnsureUniqueNameForSibling(go);
-        }
-        
-        static void ResetTransform(Transform transform)
-        {
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.identity;
-            transform.localScale = Vector3.one;
-
-            if (transform.parent is RectTransform)
-            {
-                var rectTransform = transform as RectTransform;
-                if (rectTransform != null)
-                {
-                    rectTransform.anchorMin = Vector2.zero;
-                    rectTransform.anchorMax = Vector2.one;
-                    rectTransform.anchoredPosition = Vector2.zero;
-                    rectTransform.sizeDelta = Vector2.zero;
-                }
-            }
-        }
-        
         static Camera CreateARMainCamera()
         {
             var mainCam = Camera.main;

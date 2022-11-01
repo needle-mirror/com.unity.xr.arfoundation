@@ -1,33 +1,54 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
 
 namespace UnityEditor.XR.ARFoundation
 {
-    internal static class SceneUtils
+    static class SceneUtils
     {
-        static readonly string k_DebugFaceMaterial = "Packages/com.unity.xr.arfoundation/Materials/DebugFace.mat";
+        const string k_BasePath = "Packages/com.unity.xr.arfoundation/";
+        const string k_DebugFaceMaterial = k_BasePath + "Assets/Materials/DebugFace.mat";
+        const string k_DebugPlaneMaterial = k_BasePath + "Assets/Materials/DebugPlane.mat";
+        const string k_DebugMenuPrefab = k_BasePath + "Assets/Prefabs/DebugMenu.prefab";
 
-        static readonly string k_DebugPlaneMaterial = "Packages/com.unity.xr.arfoundation/Materials/DebugPlane.mat";
+        const string k_ParticleMaterial = "Default-Particle.mat";
+        const string k_LineMaterial = "Default-Line.mat";
 
-        static readonly string k_ParticleMaterial = "Default-Particle.mat";
+        const float k_ParticleSize = 0.02f;
+        static readonly Color k_ParticleColor = new(253f / 255f, 184f / 255f, 19f / 255f);
 
-        static readonly string k_LineMaterial = "Default-Line.mat";
-
-        static readonly Color k_ParticleColor = new Color(253f / 255f, 184f / 255f, 19f / 255f);
-
-        static readonly float k_ParticleSize = 0.02f;
-
-        static readonly string k_DebugMenuPrefab = "Packages/com.unity.xr.arfoundation/Prefabs/DebugMenu.prefab";
+        static void SpawnObjectWithContext(Func<Transform, GameObject> spawnObjectWithParent, MenuCommand command)
+        {
+            var context = (command.context as GameObject);
+            var parent = context != null ? context.transform : null;
+            var spawnedObject = spawnObjectWithParent(parent);
+            Selection.activeGameObject = spawnedObject;
+        }
 
         [MenuItem("GameObject/XR/AR Session", false, 10)]
-        static void CreateARSession()
+        static void CreateARSession(MenuCommand menuCommand)
         {
-            ObjectFactory.CreateGameObject("AR Session", typeof(ARSession), typeof(ARInputManager));
+            SpawnObjectWithContext(CreateARSessionWithParent, menuCommand);
+        }
+
+        public static GameObject CreateARSessionWithParent(Transform parent)
+        {
+            var arSession = ObjectFactory.CreateGameObject(
+                "AR Session", typeof(ARSession), typeof(ARInputManager));
+            
+            CreateUtils.Place(arSession, parent);
+            Undo.RegisterCreatedObjectUndo(arSession, "Create AR Session");
+            return arSession;
         }
 
         [MenuItem("GameObject/XR/AR Default Point Cloud", false, 10)]
-        static void CreateARPointCloudVisualizer()
+        static void CreateARPointCloudVisualizer(MenuCommand menuCommand)
+        {
+            SpawnObjectWithContext(CreateARPointCloudVisualizerWithParent, menuCommand);
+        }
+
+        public static GameObject CreateARPointCloudVisualizerWithParent(Transform parent)
         {
             var go = ObjectFactory.CreateGameObject("AR Default Point Cloud",
                 typeof(ARPointCloudParticleVisualizer));
@@ -49,20 +70,38 @@ namespace UnityEditor.XR.ARFoundation
 
             var renderer = particleSystem.GetComponent<Renderer>();
             renderer.material = AssetDatabase.GetBuiltinExtraResource<Material>(k_ParticleMaterial);
+
+            CreateUtils.Place(go, parent);
+            Undo.RegisterCreatedObjectUndo(go, "Create AR Default Point Cloud");
+            return go;
         }
 
         [MenuItem("GameObject/XR/AR Default Plane", false, 10)]
-        static void CreateARPlaneVisualizer()
+        static void CreateARPlaneVisualizer(MenuCommand menuCommand)
+        {
+            SpawnObjectWithContext(CreateARPlaneVisualizerWithParent, menuCommand);
+        }
+
+        public static GameObject CreateARPlaneVisualizerWithParent(Transform parent)
         {
             var go = ObjectFactory.CreateGameObject("AR Default Plane",
                 typeof(ARPlaneMeshVisualizer), typeof(MeshCollider), typeof(MeshFilter),
                 typeof(MeshRenderer), typeof(LineRenderer));
             SetupMeshRenderer(go.GetComponent<MeshRenderer>(), k_DebugPlaneMaterial);
             SetupLineRenderer(go.GetComponent<LineRenderer>());
+
+            CreateUtils.Place(go, parent);
+            Undo.RegisterCreatedObjectUndo(go, "Create AR Default Plane");
+            return go;
         }
 
         [MenuItem("GameObject/XR/AR Default Face", false, 10)]
-        static void CreateARFaceVisualizer()
+        static void CreateARFaceVisualizer(MenuCommand menuCommand)
+        {
+            SpawnObjectWithContext(CreateARFaceVisualizerWithParent, menuCommand);
+        }
+
+        public static GameObject CreateARFaceVisualizerWithParent(Transform parent)
         {
             var go = ObjectFactory.CreateGameObject("AR Default Face",
                 typeof(ARFaceMeshVisualizer), typeof(MeshCollider), typeof(MeshFilter),
@@ -72,13 +111,26 @@ namespace UnityEditor.XR.ARFoundation
             //self shadowing doesn't look good on the default face
             meshRenderer.receiveShadows = false;
             meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            
+            CreateUtils.Place(go, parent);
+            Undo.RegisterCreatedObjectUndo(go, "Create AR Default Face");
+            return go;
         }
 
         [MenuItem("GameObject/XR/AR Debug Menu", false, 10)]
-        static void CreateARDebugMenu()
+        static void CreateARDebugMenu(MenuCommand menuCommand)
         {
-            var prefab = PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(k_DebugMenuPrefab));
-            Undo.RegisterCreatedObjectUndo(prefab, "AR Debug Menu");
+            SpawnObjectWithContext(CreateARDebugMenuWithParent, menuCommand);
+        }
+
+        public static GameObject CreateARDebugMenuWithParent(Transform parent)
+        {
+            var debugMenu = (GameObject)PrefabUtility.InstantiatePrefab(
+                AssetDatabase.LoadAssetAtPath<GameObject>(k_DebugMenuPrefab));
+
+            CreateUtils.Place(debugMenu, parent);
+            Undo.RegisterCreatedObjectUndo(debugMenu, "Create AR Debug Menu");
+            return debugMenu;
         }
 
         static void SetupLineRenderer(LineRenderer lineRenderer)
@@ -94,7 +146,7 @@ namespace UnityEditor.XR.ARFoundation
             lineRenderer.endColor = Color.black;
             lineRenderer.numCornerVertices = 4;
             lineRenderer.numCapVertices = 4;
-            lineRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            lineRenderer.shadowCastingMode = ShadowCastingMode.Off;
             lineRenderer.receiveShadows = false;
             lineRenderer.useWorldSpace = false;
         }
@@ -102,7 +154,7 @@ namespace UnityEditor.XR.ARFoundation
         static void SetupMeshRenderer(MeshRenderer meshRenderer, string materialName)
         {
             var material = AssetDatabase.LoadAssetAtPath<Material>(materialName);
-            meshRenderer.materials = new Material[] { material };
+            meshRenderer.sharedMaterials = new[] { material };
         }
     }
 }

@@ -8,6 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-pre.2] - 2022-11-01
+
+### Changed
+
+- Downloads version 1.0.0 of simulation environments package rather than 1.0.0-pre.2.
+
+### Fixed
+
+- Fixed various issues with the **GameObject** > **XR** menu:
+    - Fixed an issue where attempting to create an AR Debug Menu would fail.
+    - Fixed issues where the AR Default Plane and AR Default Face were created with a missing Material.
+    - Fixed issues where AR Session, AR Debug Menu, and AR default trackables were always created at the root of the scene hieararchy and did not become selected after creation. These menu items now use the currently selected GameObject in the scene as the parent.
+    - Fixed issues where some create operations could not be undone.
+- Fixed an issue in simulation where pausing and resuming the session would freeze the camera background.
+- Fixed [issue ARFB-125](https://issuetracker.unity3d.com/issues/plane-discovery-fails-in-ar-sim-upon-re-entry-into-simplear-via-menu) in simulation where plane and pointcloud discovery would stop working after loading a new scene.
+
 ## [5.1.0-pre.1] - 2022-10-06
 
 ### Added

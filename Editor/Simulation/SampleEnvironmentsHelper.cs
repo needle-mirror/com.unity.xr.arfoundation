@@ -13,7 +13,7 @@ namespace UnityEditor.XR.Simulation
     static class SampleEnvironmentsHelper
     {
         static readonly string k_ContentPackageName = "com.unity.xr-content.xr-sim-environments";
-        static readonly string k_ContentPackageVersion = "1.0.0-pre.2";
+        static readonly string k_ContentPackageVersion = "1.0.0";
         static readonly string k_ContentPackageFileName = $"{k_ContentPackageName}-{k_ContentPackageVersion}{k_TgzExtension}";
         static readonly string k_ContentPackageUrl =
             $"https://github.com/Unity-Technologies/{k_ContentPackageName}/releases/download/{k_ContentPackageVersion}/{k_ContentPackageFileName}";
