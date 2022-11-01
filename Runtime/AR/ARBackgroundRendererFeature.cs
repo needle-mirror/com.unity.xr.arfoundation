@@ -153,13 +153,6 @@ namespace UnityEngine.XR.ARFoundation
 
                 ARCameraBackground.AddBeforeBackgroundRenderHandler(cmd);
 
-                // callback to schedule the release of the metal textures after rendering is complete
-                var callback = ARCameraBackground.NativeApi.Unity_Camera_GetTextureReleaseCallbackHandle();
-                if (callback != IntPtr.Zero)
-                {
-                    cmd.IssuePluginEvent(callback, 1);
-                }
-
                 cmd.SetInvertCulling(m_InvertCulling);
 
                 cmd.SetViewProjectionMatrices(Matrix4x4.identity, k_BackgroundOrthoProjection);

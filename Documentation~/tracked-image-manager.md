@@ -83,7 +83,20 @@ If you use the version of [ScheduleAddImageJob](xref:UnityEngine.XR.ARSubsystems
 
 Multiple add image jobs can be processed concurrently. Whether or not `MutableRuntimeReferenceImageLibrary` is currently in use for image tracking has no effect on this.
 
-## Creating a manager at runtime
+### Reference images and texture import settings
+
+Image detection algorithms rely on accurate knowledge of a reference image's aspect ratio; however, Unity's default texture import setting adjusts texture resolutions to the nearest powers of 2 (PoT). This can have a negative effect on tracking capabilities when tracking non-power of 2 (NPoT) images.
+
+When a NPoT image is imported with default settings and added to a `MutableRuntimeReferenceImageLibrary` during runtime, it may display squashing, stretching, or scaling artifacts.
+
+To ensure images maintain their aspect ratio when imported, select the image in your project assets and change the **Non-Power of 2** texture import setting to **None**.
+
+>[!NOTE]
+> For textures with power-of 2 aspect ratios, **Non-Power of 2** setting will not be selectable as no adjustments are necessary.
+
+![Non-Power of Two Reference Image Settings](../images/ar-tracked-image-NPoT-texture-settings.png)
+
+## Create a manager at runtime
 
 When you add a component to an active `GameObject` at runtime, Unity immediately invokes its `OnEnable` method. However, the `ARTrackedImageManager` requires a non-null reference image library. If the reference image library is null when the `ARTrackedImageManager` is enabled, it will automatically disable itself.
 
