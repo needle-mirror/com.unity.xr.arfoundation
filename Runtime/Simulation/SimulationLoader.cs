@@ -17,6 +17,7 @@ namespace UnityEngine.XR.Simulation
         static List<XRImageTrackingSubsystemDescriptor> s_ImageTrackingSubsystemDescriptors = new List<XRImageTrackingSubsystemDescriptor>();
         static List<XRRaycastSubsystemDescriptor> s_RaycastSubsystemDescriptors = new List<XRRaycastSubsystemDescriptor>();
         static List<XRMeshSubsystemDescriptor> s_MeshSubsystemDescriptors  = new List<XRMeshSubsystemDescriptor>();
+        static List<XREnvironmentProbeSubsystemDescriptor> s_ProbeSubsystemDescriptors = new(); 
 
         /// <summary>
         /// Initializes the loader.
@@ -32,6 +33,7 @@ namespace UnityEngine.XR.Simulation
             CreateSubsystem<XRImageTrackingSubsystemDescriptor, XRImageTrackingSubsystem>(s_ImageTrackingSubsystemDescriptors, SimulationImageTrackingSubsystem.k_SubsystemId);
             CreateSubsystem<XRRaycastSubsystemDescriptor, XRRaycastSubsystem>(s_RaycastSubsystemDescriptors, SimulationRaycastSubsystem.k_SubsystemId);
             CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, SimulationMeshSubsystem.k_SubsystemId);
+            CreateSubsystem<XREnvironmentProbeSubsystemDescriptor, XREnvironmentProbeSubsystem>(s_ProbeSubsystemDescriptors, SimulationEnvironmentProbeSubsystem.k_SubsystemId);
 
             var sessionSubsystem = GetLoadedSubsystem<XRSessionSubsystem>();
             if (sessionSubsystem == null)
@@ -46,6 +48,7 @@ namespace UnityEngine.XR.Simulation
         /// <returns>Always returns `true`.</returns>
         public override bool Deinitialize()
         {
+            DestroySubsystem<XREnvironmentProbeSubsystem>();
             DestroySubsystem<XRMeshSubsystem>();
             DestroySubsystem<XRRaycastSubsystem>();
             DestroySubsystem<XRImageTrackingSubsystem>();

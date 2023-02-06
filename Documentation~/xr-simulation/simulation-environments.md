@@ -50,6 +50,10 @@ AR Foundation contains the following components and shaders you can use to creat
    <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated tracked image for image tracking purposes.</td>
   </tr>
   <tr>
+   <td colspan="2" ><a href="#simulated-environment-probe-component">Simulated Environment Probe component</a></td>
+   <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated environment probe. At runtime this GameObject will appear as an automatically placed environment probe.</td>
+  </tr>
+  <tr>
    <td colspan="2" ><a href="#x-ray-rendering">X-ray rendering</a></td>
    <td>Add the X Ray Region component and x-ray shaders to an XR Simulation environment to make it easier to prevent the camera from being obstructed by exterior walls.</td>
   </tr>
@@ -113,6 +117,17 @@ To visualize a simulated tracked image in your environment, Unity recommends cre
 
 > [!NOTE]
 > Visually representing a simulated tracked image in an XR Simulation environment is optional. XR Simulation only uses the Simulated Tracked Image component to detect and track images. It does not use textured meshes rendered in the environment for this purpose.
+
+## Simulated Environment Probe component
+
+Add a Simulated Environment Probe component to a GameObject in your XR Simulation environment to designate it as a *simulated environment probe*. Simulated environment probes simulate [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes.
+
+![Simulated Environment Probe component](../images/simulated-environment-probe.png)<br/>*Simulated Environment Probe component*
+
+| Property | Description |
+| :------- | :---------- |
+| **Cubemap** | An optional pre-existing user-generated [Cubemap](xref:UnityEngine.Cubemap) asset. If not set, a Cubemap will be generated when the environment probe is discovered during simulation. |
+| **Size** | Size in meters of the simulated environment probe. Sets both the box size of the underlying [Reflection Probe](xref:UnityEngine.ReflectionProbe) and the bounds for discovery. |
 
 <!-- Uncomment when component is fully implemented...
 

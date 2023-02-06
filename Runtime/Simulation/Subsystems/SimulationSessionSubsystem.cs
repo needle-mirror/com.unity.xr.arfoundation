@@ -1,5 +1,6 @@
 using System;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,11 +20,12 @@ namespace UnityEngine.XR.Simulation
 
         internal static SimulationSceneManager simulationSceneManager => s_SimulationSceneManager;
 
+        internal static event Action s_SimulationSessionReset;
+
         class SimulationProvider : Provider
         {
             SimulationCamera m_SimulationCamera;
             SimulationMeshSubsystem m_MeshSubsystem;
-            SimulationEnvironmentScanner m_SimulationEnvironmentScanner;
 
             Camera m_XROriginCamera;
             int m_PreviousCullingMask;
@@ -40,19 +42,22 @@ namespace UnityEngine.XR.Simulation
                 m_SimulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
 
                 if (SimulationMeshSubsystem.GetActiveSubsystemInstance() != null)
+                {
+                    m_MeshSubsystem?.Dispose();
                     m_MeshSubsystem = new SimulationMeshSubsystem();
+                }
 
                 SetupSimulation();
 
-                var xrOrigin = Object.FindObjectOfType<XROrigin>();
+                var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
 
                 if (xrOrigin == null)
                     throw new NullReferenceException($"An XR Origin is required in the scene, none found.");
 
                 m_XROriginCamera = xrOrigin.Camera;
 
-                m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.instance;
-                m_SimulationEnvironmentScanner.Initialize(m_SimulationCamera,
+                SimulationEnvironmentScanner.GetOrCreate().Initialize(
+                    m_SimulationCamera,
                     s_SimulationSceneManager.environmentScene.GetPhysicsScene(),
                     s_SimulationSceneManager.simulationEnvironment.gameObject);
 
@@ -68,7 +73,7 @@ namespace UnityEngine.XR.Simulation
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
                 m_MeshSubsystem?.Start();
-                m_SimulationEnvironmentScanner.Start();
+                SimulationEnvironmentScanner.GetOrCreate().Start();
 
                 m_PreviousCullingMask = m_XROriginCamera.cullingMask;
                 m_XROriginCamera.cullingMask &= ~(1 << XRSimulationRuntimeSettings.Instance.environmentLayer);
@@ -83,7 +88,7 @@ namespace UnityEngine.XR.Simulation
                 if (m_XROriginCamera)
                     m_XROriginCamera.cullingMask = m_PreviousCullingMask;
 
-                m_SimulationEnvironmentScanner.Stop();
+                SimulationEnvironmentScanner.GetOrCreate().Stop();
 
 #if UNITY_EDITOR
                 AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
@@ -104,11 +109,7 @@ namespace UnityEngine.XR.Simulation
                     m_MeshSubsystem = null;
                 }
 
-                if (m_SimulationEnvironmentScanner != null)
-                {
-                    m_SimulationEnvironmentScanner.Dispose();
-                    m_SimulationEnvironmentScanner = null;
-                }
+                SimulationEnvironmentScanner.GetOrCreate().Dispose();
 
                 if (s_SimulationSceneManager != null)
                 {
@@ -119,9 +120,11 @@ namespace UnityEngine.XR.Simulation
                 m_Initialized = false;
             }
 
+            public override void Reset() => s_SimulationSessionReset?.Invoke();
+
             public override void Update(XRSessionUpdateParams updateParams)
             {
-                m_SimulationEnvironmentScanner.Update();
+                SimulationEnvironmentScanner.GetOrCreate().Update();
             }
 
             void SetupSimulation()
@@ -131,14 +134,11 @@ namespace UnityEngine.XR.Simulation
             }
 
 #if UNITY_EDITOR
-            void OnBeforeAssemblyReload()
+            static void OnBeforeAssemblyReload()
             {
-#if UNITY_2022_2_OR_NEWER
-                const string domainReloadOptions = "<b>Stop Playing and Recompile</b>";
-#else
                 const string domainReloadOptions = 
                     "either <b>Recompile After Finished Playing</b> or <b>Stop Playing and Recompile</b>";
-#endif
+
                 Debug.LogError(
                     "XR Simulation does not support script recompilation while playing. To disable script compilation"+
                     " while playing, in the Preferences window under <b>General > Script Changes While Playing</b>,"+

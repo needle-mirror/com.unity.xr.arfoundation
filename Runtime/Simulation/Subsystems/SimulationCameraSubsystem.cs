@@ -2,6 +2,7 @@ using System;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine.Rendering;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -49,11 +50,9 @@ namespace UnityEngine.XR.Simulation
 
             double m_LastFrameTimestamp = 0;
 
-            SimulationXRCpuImageAPI m_XRCpuImageAPI = new SimulationXRCpuImageAPI();
-
             XRSupportedCameraBackgroundRenderingMode m_RequestedBackgroundRenderingMode = XRSupportedCameraBackgroundRenderingMode.BeforeOpaques;
 
-            public override XRCpuImage.Api cpuImageApi => m_XRCpuImageAPI;
+            public override XRCpuImage.Api cpuImageApi => SimulationXRCpuImageApi.instance;
             public override Feature currentCamera => Feature.WorldFacingCamera;
 
             public override XRCameraConfiguration? currentConfiguration
@@ -94,7 +93,7 @@ namespace UnityEngine.XR.Simulation
                             return XRCameraBackgroundRenderingMode.BeforeOpaques;
                         default:
                             return XRCameraBackgroundRenderingMode.None;
-                    }    
+                    }
                 }
             }
 
@@ -116,7 +115,7 @@ namespace UnityEngine.XR.Simulation
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
 
-                var xrOrigin = Object.FindObjectOfType<XROrigin>();
+                var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
                 if (xrOrigin == null)
                     throw new NullReferenceException("No XROrigin found.");
 
@@ -126,6 +125,7 @@ namespace UnityEngine.XR.Simulation
 
                 var simulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
                 m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simulationCamera.GetComponent<Camera>(), xrCamera);
+                m_CameraTextureProvider.onTextureReadbackFulfilled += SimulationXRCpuImageApi.OnCameraDataReceived;
                 m_CameraTextureProvider.cameraFrameReceived += CameraFrameReceived;
                 if (m_CameraTextureProvider != null && m_CameraTextureProvider.CameraFrameEventArgs != null)
                     m_CameraTextureFrameEventArgs = (CameraTextureFrameEventArgs)m_CameraTextureProvider.CameraFrameEventArgs;
@@ -139,7 +139,10 @@ namespace UnityEngine.XR.Simulation
             public override void Stop()
             {
                 if (m_CameraTextureProvider != null)
+                {
                     m_CameraTextureProvider.cameraFrameReceived -= CameraFrameReceived;
+                    m_CameraTextureProvider.onTextureReadbackFulfilled -= SimulationXRCpuImageApi.OnCameraDataReceived;
+                }
             }
 
             public override void Destroy()
@@ -171,8 +174,7 @@ namespace UnityEngine.XR.Simulation
 
             public override bool TryAcquireLatestCpuImage(out XRCpuImage.Cinfo cameraImageCinfo)
             {
-                cameraImageCinfo = new(0, new Vector2Int(), 1, m_LastFrameTimestamp, XRCpuImage.Format.Unknown);
-                return true;
+                return SimulationXRCpuImageApi.TryAcquireLatestImage(SimulationXRCpuImageApi.ImageType.Camera, out cameraImageCinfo);
             }
 
             void CameraFrameReceived(CameraTextureFrameEventArgs args)

@@ -2,8 +2,9 @@ using NUnit.Framework;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.Management;
 using UnityEngine.InputSystem;
-using UnityEngine.XR.TestTooling;
 using UnityEditor.XR.ARFoundation;
+using UnityEngine.XR.ARFoundation.InternalUtils;
+using UnityEngine.XR.TestTooling;
 
 namespace UnityEngine.XR.Simulation.Tests
 {
@@ -49,7 +50,7 @@ namespace UnityEngine.XR.Simulation.Tests
 
         protected void RemoveXROrigin()
         {
-            var xrOrigin = Object.FindObjectOfType<XROrigin>();
+            var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
 
             if (xrOrigin != null)
                 Object.Destroy(xrOrigin.gameObject);

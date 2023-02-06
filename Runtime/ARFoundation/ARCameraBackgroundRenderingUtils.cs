@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARFoundation
                 return s_FarClipMesh;
             }
         }
-        
+
         static bool s_InitializedNearClipMesh;
         static Mesh s_NearClipMesh;
 
@@ -71,7 +71,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <see cref="fullScreenNearClipMesh"/>.
         /// </summary>
         internal static Matrix4x4 beforeOpaquesOrthoProjection { get; } = Matrix4x4.Ortho(0f, 1f, 0f, 1f, -0.1f, 9.9f);
-        
+
         /// <summary>
         /// The orthogonal projection matrix for the after opaque background rendering. For use when drawing the
         /// <see cref="fullScreenFarClipMesh"/>.

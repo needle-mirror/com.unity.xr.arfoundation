@@ -16,9 +16,9 @@ AR Foundation supports the following features:
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |
 | [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager) | Detect and track a human body. |
 | [Point clouds](xref:arfoundation-point-clouds) | Detect and track feature points. |
-| [Raycasts](xref:arfoundation-raycasts) | Cast a ray against tracked items. |
-| [Anchors](xref:arfoundation-anchors) | Track an arbitrary point in space. |
+| [Raycasts](xref:arfoundation-raycasts) | Cast rays against tracked items. |
+| [Anchors](xref:arfoundation-anchors) | Track arbitrary points in space. |
 | [Meshing](xref:arfoundation-meshing) | Generate meshes of the environment. |
 | [Environment probes](xref:arfoundation-environment-probes) | Generate cubemaps of the environment. |
 | [Occlusion](xref:arfoundation-occlusion) | Occlude AR content with physical objects and perform human segmentation. |
-| [Participants](xref:arfoundation-participants) | Track other devices in a shared AR session. |
+| [Participants](xref:arfoundation-participant-tracking) | Track other devices in a shared AR session. |

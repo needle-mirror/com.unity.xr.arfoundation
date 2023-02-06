@@ -1,18 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
+#if MODULE_URP_ENABLED
+using UnityEngine.Rendering.Universal;
+#endif // end MODULE_URP_ENABLED
+
+using ImageType = UnityEngine.XR.Simulation.SimulationXRCpuImageApi.ImageType;
 
 namespace UnityEngine.XR.Simulation
 {
     class CameraTextureProvider : MonoBehaviour
     {
+        internal readonly struct TextureReadbackEventArgs
+        {
+            public readonly ImageType imageType;
+            public readonly NativeSlice<byte> textureData;
+            public readonly Vector2Int textureDimensions;
+            public readonly TextureFormat textureFormat;
+            public readonly long timestampNs;
+
+            public TextureReadbackEventArgs(
+                ImageType imageType,
+                NativeArray<byte> textureData,
+                Vector2Int textureDimensions,
+                TextureFormat textureFormat,
+                long timestampNs)
+            {
+                this.imageType = imageType;
+                this.textureData = textureData;
+                this.textureDimensions = textureDimensions;
+                this.textureFormat = textureFormat;
+                this.timestampNs = timestampNs;
+            }
+        }
+
         internal static event Action<Camera> preRenderCamera;
         internal static event Action<Camera> postRenderCamera;
         internal event Action<CameraTextureFrameEventArgs> cameraFrameReceived;
+        internal event Action<TextureReadbackEventArgs> onTextureReadbackFulfilled;
 
         Camera m_XrCamera;
         Camera m_SimulationRenderCamera;
@@ -22,11 +52,15 @@ namespace UnityEngine.XR.Simulation
         CameraTextureFrameEventArgs? m_CameraFrameEventArgs;
         SimulationXRayManager m_XRayManager;
 
-        readonly List<Texture2D> m_CameraImagePlanes = new List<Texture2D>();
+        readonly List<Texture2D> m_CameraImagePlanes = new();
 
         internal CameraTextureFrameEventArgs? CameraFrameEventArgs => m_CameraFrameEventArgs;
 
         bool m_Initialized;
+        CommandBuffer m_ReadbackCommandBuffer;
+#if MODULE_URP_ENABLED
+        SimulationCameraTextureReadbackPass m_SimulationReadbackRenderPass;
+#endif // end MODULE_URP_ENABLED
 
         internal static CameraTextureProvider AddTextureProviderToCamera(Camera simulationCamera, Camera xrCamera)
         {
@@ -52,7 +86,10 @@ namespace UnityEngine.XR.Simulation
                 m_SimulationRenderTexture.Release();
 
             if (m_SimulationProviderTexture != null)
+            {
                 UnityObjectUtils.Destroy(m_SimulationProviderTexture);
+                m_SimulationProviderTexture = null;
+            }
         }
 
         void Update()
@@ -63,6 +100,14 @@ namespace UnityEngine.XR.Simulation
             // Currently assuming the main camera is being set to the correct settings for rendering to the target device
             m_XrCamera.ResetProjectionMatrix();
             CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationRenderCamera);
+
+#if MODULE_URP_ENABLED
+            if (!ARRenderingUtils.useLegacyRenderPipeline)
+                ConfigureTextureReadbackForURP();
+            else
+#endif // end MODULE_URP_ENABLED
+                ConfigureLegacyCommandBufferIfNeeded();
+
             DoCameraRender(m_SimulationRenderCamera);
 
             if (!m_SimulationRenderTexture.IsCreated() && !m_SimulationRenderTexture.Create())
@@ -82,14 +127,34 @@ namespace UnityEngine.XR.Simulation
             m_CameraImagePlanes.Clear();
             m_CameraImagePlanes.Add(m_SimulationProviderTexture);
 
-            var frameEventArgs = new CameraTextureFrameEventArgs
+            m_CameraFrameEventArgs = new CameraTextureFrameEventArgs
             {
                 timestampNs = (long)(Time.time * 1e9),
                 projectionMatrix = m_XrCamera.projectionMatrix,
                 textures = m_CameraImagePlanes,
             };
 
-            cameraFrameReceived?.Invoke(frameEventArgs);
+            cameraFrameReceived?.Invoke(m_CameraFrameEventArgs.Value);
+        }
+
+#if MODULE_URP_ENABLED
+        void ConfigureTextureReadbackForURP()
+        {
+            var universalAdditionalCameraData = m_SimulationRenderCamera.GetUniversalAdditionalCameraData();
+            universalAdditionalCameraData.scriptableRenderer.EnqueuePass(m_SimulationReadbackRenderPass);
+        }
+#endif // end MODULE_URP_ENABLED
+
+        void ConfigureLegacyCommandBufferIfNeeded()
+        {
+            if (m_ReadbackCommandBuffer != null)
+                return;
+
+            m_ReadbackCommandBuffer = new CommandBuffer { name = "Simulation Environment Readback Command Buffer" };
+            if (TryConfigureReadbackCommandBuffer(m_ReadbackCommandBuffer))
+            {
+                m_SimulationRenderCamera.AddCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
+            }
         }
 
         void InitializeProvider(Camera xrCamera, Camera simulationCamera)
@@ -130,7 +195,10 @@ namespace UnityEngine.XR.Simulation
             }
 
             BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
-
+#if MODULE_URP_ENABLED
+            if (!ARRenderingUtils.useLegacyRenderPipeline)
+                m_SimulationReadbackRenderPass ??= new SimulationCameraTextureReadbackPass(this);
+#endif // end MODULE_URP_ENABLED
             m_Initialized = true;
         }
 
@@ -142,15 +210,16 @@ namespace UnityEngine.XR.Simulation
 
         static void CopyLimitedSettingsToCamera(Camera source, Camera destination)
         {
+            var destinationTransform = destination.transform;
             var scene = destination.scene;
             var cullingMask = destination.cullingMask;
             var clearFlags = destination.clearFlags;
             var backgroundColor = destination.backgroundColor;
             var depth = destination.depth;
             var targetTexture = destination.targetTexture;
-            var localPosition = destination.transform.localPosition;
-            var localRotation = destination.transform.localRotation;
-            var localScale = destination.transform.localScale;
+            var localPosition = destinationTransform.localPosition;
+            var localRotation = destinationTransform.localRotation;
+            var localScale = destinationTransform.localScale;
 
             destination.CopyFrom(source);
             destination.projectionMatrix = source.projectionMatrix;
@@ -161,9 +230,9 @@ namespace UnityEngine.XR.Simulation
             destination.backgroundColor = backgroundColor;
             destination.depth = depth;
             destination.targetTexture = targetTexture;
-            destination.transform.localPosition = localPosition;
-            destination.transform.localRotation = localRotation;
-            destination.transform.localScale = localScale;
+            destinationTransform.localPosition = localPosition;
+            destinationTransform.localRotation = localRotation;
+            destinationTransform.localScale = localScale;
         }
 
         void DoCameraRender(Camera renderCamera)
@@ -173,6 +242,60 @@ namespace UnityEngine.XR.Simulation
             preRenderCamera?.Invoke(renderCamera);
             renderCamera.Render();
             postRenderCamera?.Invoke(renderCamera);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        bool TryRequestReadbackForImageType(CommandBuffer commandBuffer, ImageType imageType, Texture2D texture)
+        {
+            if (texture == null)
+                return false;
+
+            var textureDimensions = new Vector2Int(texture.width, texture.height);
+            var textureFormat = texture.format;
+            commandBuffer.RequestAsyncReadback(
+                texture,
+                request =>
+                {
+                    OnTextureReadbackComplete(
+                        request,
+                        imageType,
+                        (long)(Time.time * 1e9),
+                        textureDimensions,
+                        textureFormat);
+                });
+            return true;
+        }
+
+        void OnTextureReadbackComplete(
+            AsyncGPUReadbackRequest request,
+            ImageType imageType,
+            long timestampNs,
+            Vector2Int textureDimensions,
+            TextureFormat textureFormat)
+        {
+            if (request.hasError)
+            {
+                Debug.LogError("Error reading back texture");
+                return;
+            }
+
+            using var textureData = request.GetData<byte>();
+            if (textureData.IsCreated)
+            {
+                onTextureReadbackFulfilled?.Invoke(
+                    new TextureReadbackEventArgs(
+                        imageType,
+                        textureData,
+                        textureDimensions,
+                        textureFormat,
+                        timestampNs));
+            }
+        }
+
+        internal bool TryConfigureReadbackCommandBuffer(CommandBuffer commandBuffer)
+        {
+            commandBuffer.Clear();
+            return TryRequestReadbackForImageType(commandBuffer, ImageType.Camera, m_SimulationProviderTexture);
         }
 
         internal void TryGetTextureDescriptors(out NativeArray<XRTextureDescriptor> planeDescriptors,
@@ -185,9 +308,15 @@ namespace UnityEngine.XR.Simulation
             var descriptors = new XRTextureDescriptor[1];
             if (isValid)
             {
-                descriptors[0] = new XRTextureDescriptor(nativePtr, m_SimulationProviderTexture.width, m_SimulationProviderTexture.height,
-                m_SimulationProviderTexture.mipmapCount, m_SimulationProviderTexture.format, SimulationCameraSubsystem.textureSinglePropertyNameId, 0,
-                TextureDimension.Tex2D);
+                descriptors[0] = new XRTextureDescriptor(
+                    nativePtr,
+                    m_SimulationProviderTexture.width,
+                    m_SimulationProviderTexture.height,
+                    m_SimulationProviderTexture.mipmapCount,
+                    m_SimulationProviderTexture.format,
+                    SimulationCameraSubsystem.textureSinglePropertyNameId,
+                    0,
+                    TextureDimension.Tex2D);
             }
             else
                 descriptors[0] = default;
@@ -197,7 +326,8 @@ namespace UnityEngine.XR.Simulation
 
         internal bool TryGetLatestImagePtr(out IntPtr nativePtr)
         {
-            if (m_CameraImagePlanes != null && m_CameraImagePlanes.Count > 0 && m_SimulationProviderTexture != null
+            if (m_CameraImagePlanes is { Count: > 0 }
+                && m_SimulationProviderTexture != null
                 && m_SimulationProviderTexture.isReadable)
             {
                 nativePtr =  m_TexturePtr;

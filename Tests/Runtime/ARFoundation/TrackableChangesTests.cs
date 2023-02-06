@@ -8,7 +8,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
     [TestFixture]
     class TrackableChangesTestFixture
     {
-        static readonly Allocator[] k_Allocators = new[]
+        static readonly Allocator[] k_Allocators =
         {
             Allocator.Temp,
             Allocator.TempJob,

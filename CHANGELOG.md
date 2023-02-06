@@ -8,6 +8,34 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-pre.3] - 2023-02-06
+
+### Added
+
+- Added a public constructor for [XRCpuImage](xref:UnityEngine.XR.ARSubsystems.XRCpuImage).
+- Added support for XRCpuImage API to XR Simulation.
+- Added additional enumeration values to [XRCpuImage.Format](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Format) for `RGB` image formats.
+- Added [XRCpuImageFormatExtensions.ToXRCpuImageFormat](xref:UnityEngine.XR.ARSubsystems.XRCpuImageFormatExtensions.ToXRCpuImageFormat(UnityEngine.TextureFormat)) extension method for converting [UnityEngine.TextureFormat](xref:UnityEngine.TextureFormat) to [XRCpuImage.Format](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Format).
+- Added support for the [Environment Probes](xref:arfoundation-environment-probes) feature in XR Simulation. You can now add and remove environment probes in Play mode, add a [Simulated Environment Probe component](xref:arfoundation-simulation-environments#simulated-environment-probe-component) to XR Simulation environments, and adjust environment probe discovery settings in [XR Simulation project settings](xref:arfoundation-simulation-project-settings).
+- Added [ARSession.Reset](xref:UnityEngine.XR.ARFoundation.ARSession.Reset) support to relevant subsystems in XR Simulation.
+
+### Changed
+
+- Downloads version 1.0.0 of simulation environments package rather than 1.0.0-pre.2.
+- Added the `StructLayout(LayoutKind.Sequential)` attribute to [XRCpuImage.Plane.Cinfo](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Plane.Cinfo) to ensure layout compatibility when marshalling the struct.
+- Changed [XRReferenceImage.ToString](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage.ToString) to include the reference image name in the generated string, in addition to previously included fields.
+- Changed the Editor behavior of XR Simulation Runtime Settings to add input validation and standardize naming conventions for similar settings across simulation subsystem providers.
+- Changed default values of XR Simulation Runtime Settings to improve plane detection performance. If your project already includes AR Foundation, you can accept the new default values by deleting the Asset at `Assets/XR/Resources/XRSimulationRuntimeSettings.asset` and restarting the Editor.
+
+### Removed
+
+- Removed a warning that was previously logged when your AR Foundation project build contained a scene with an `XROrigin` but not an `ARCameraBackground` or `ARCameraManager`. There are valid reasons to set up a scene this way, such as building for OpenXR, so the warning was not helpful. 
+
+### Fixed
+
+- Fixed an issue where AR content would not render in the Game view in XR Simulation when using [XRCameraBackgroundRenderingMode.AfterOpaques](xref:UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode).
+- Fixed an issue where some XR Simulation subsystem providers could break if you destroyed and immediately re-instantiated the Simulation Session Subsystem.
+
 ## [5.1.0-pre.2] - 2022-11-01
 
 ### Changed

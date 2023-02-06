@@ -19,6 +19,7 @@ namespace UnityEditor.XR.Simulation
         SerializedProperty m_EnvScanParamsProperty;
         SerializedProperty m_ImageDiscoveryPramsProperty;
         SerializedProperty m_PlaneFindingParamsProperty;
+        SerializedProperty m_ProbesParamsProperty;
 
         void OnEnable()
         {
@@ -27,6 +28,8 @@ namespace UnityEditor.XR.Simulation
             m_EnvScanParamsProperty = m_SerializedObject.FindProperty("m_EnvironmentScanParams");
             m_ImageDiscoveryPramsProperty = m_SerializedObject.FindProperty("m_TrackedImageDiscoveryParams");
             m_PlaneFindingParamsProperty = m_SerializedObject.FindProperty("m_PlaneFindingParams");
+            m_ProbesParamsProperty = m_SerializedObject.FindProperty("m_EnvironmentProbeDiscoveryParams");
+
             LayerContentsUpdate();
         }
 
@@ -51,8 +54,9 @@ namespace UnityEditor.XR.Simulation
                     EditorGUIUtility.labelWidth = k_MinLabelWidth;
 
                 EditorGUILayout.PropertyField(m_EnvScanParamsProperty);
-                EditorGUILayout.PropertyField(m_ImageDiscoveryPramsProperty);
                 EditorGUILayout.PropertyField(m_PlaneFindingParamsProperty);
+                EditorGUILayout.PropertyField(m_ImageDiscoveryPramsProperty);
+                EditorGUILayout.PropertyField(m_ProbesParamsProperty);
 
                 EditorGUIUtility.labelWidth = previousLabelWidth;
 

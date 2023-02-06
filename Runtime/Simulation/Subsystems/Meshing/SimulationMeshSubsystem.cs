@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
-using Unity.XR.CoreUtils;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
+using static UnityEngine.XR.Simulation.SimulationUtility;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,15 +17,15 @@ namespace UnityEngine.XR.Simulation
     /// Simulation implementation of <see cref="XRMeshSubsystem"/>.
     /// Do not create this directly. Use the <c>SubsystemManager</c> instead.
     /// </summary>
-    class SimulationMeshSubsystem : IDisposable
+    class SimulationMeshSubsystem : IDisposable, ISimulationSessionResetHandler
     {
         internal const string k_SubsystemId = "XRSimulation-Meshing";
 
-        Dictionary<TrackableId, IDisposable[]> m_NativeArrays = new Dictionary<TrackableId, IDisposable[]>();
-        readonly List<SimulationMesh> m_Meshes = new List<SimulationMesh>();
-        readonly List<CombineInstance> k_CombineInstances = new List<CombineInstance>();
-        readonly Dictionary<string, List<MeshFilter>> k_MeshesByClassification = new Dictionary<string, List<MeshFilter>>();
-        readonly List<MeshFilter> k_UnclassifiedMeshFilters = new List<MeshFilter>();
+        readonly Dictionary<TrackableId, IDisposable[]> m_NativeArrays = new();
+        readonly List<SimulationMesh> m_Meshes = new();
+        readonly List<CombineInstance> k_CombineInstances = new();
+        readonly Dictionary<string, List<MeshFilter>> k_MeshesByClassification = new();
+        readonly List<MeshFilter> k_UnclassifiedMeshFilters = new();
 
         XRMeshSubsystem m_Subsystem;
 
@@ -54,12 +54,15 @@ namespace UnityEngine.XR.Simulation
 #endif
 
             BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentReady;
+            SimulationSessionSubsystem.s_SimulationSessionReset += OnSimulationSessionReset;
+
             m_Subsystem ??= GetActiveSubsystemInstance();
         }
 
         /// <inheritdoc/>
         public void Dispose()
         {
+            SimulationSessionSubsystem.s_SimulationSessionReset -= OnSimulationSessionReset;
             BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentReady;
 
             RemoveMeshes();
@@ -71,6 +74,8 @@ namespace UnityEngine.XR.Simulation
 
             m_NativeArrays.Clear();
         }
+
+        public void OnSimulationSessionReset() => OnEnvironmentReady();
 
         void AddOrUpdateMesh(SimulationMesh mesh)
         {
@@ -123,11 +128,15 @@ namespace UnityEngine.XR.Simulation
             if (m_NativeArrays.TryGetValue(mesh.trackableId, out var nativeArrays))
                 Array.ForEach(nativeArrays, x => x.Dispose());
 
-            m_NativeArrays[mesh.trackableId] = new IDisposable[] {vertices, normals, indicesDisposable};
+            m_NativeArrays[mesh.trackableId] = new[] {vertices, normals, indicesDisposable};
         }
 
         void OnEnvironmentReady()
         {
+            if (SimulationSessionSubsystem.simulationSceneManager == null ||
+                SimulationSessionSubsystem.simulationSceneManager.simulationEnvironment == null)
+                return;
+
             var environmentRoot = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironment.gameObject;
 
             RemoveMeshes();
@@ -157,7 +166,7 @@ namespace UnityEngine.XR.Simulation
             k_MeshesByClassification.Clear();
             k_UnclassifiedMeshFilters.Clear();
 
-            List<MeshFilter> meshFilters = new List<MeshFilter>();
+            var meshFilters = new List<MeshFilter>();
             environmentRoot.GetComponentsInChildren(meshFilters);
 
             foreach (var meshFilter in meshFilters)
@@ -259,20 +268,14 @@ namespace UnityEngine.XR.Simulation
                 if (m_Subsystem != null && m_Subsystem.running)
                     RemoveMesh(mesh.trackableId.subId1, mesh.trackableId.subId2);
 
-                if (m_NativeArrays.TryGetValue(mesh.trackableId, out var nativeArrays))
-                {
-                    Array.ForEach(nativeArrays, x => x.Dispose());
-                    m_NativeArrays.Remove(mesh.trackableId);
-                }
+                if (!m_NativeArrays.TryGetValue(mesh.trackableId, out var nativeArrays))
+                    continue;
+                
+                Array.ForEach(nativeArrays, x => x.Dispose());
+                m_NativeArrays.Remove(mesh.trackableId);
             }
 
             m_Meshes.Clear();
-        }
-
-        TrackableId GenerateTrackableId()
-        {
-            Guid.NewGuid().Decompose(out var subId1, out var subId2);
-            return new TrackableId(subId1, subId2);
         }
 
         [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_AddOrUpdateMesh")]

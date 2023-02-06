@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Unity.Collections;
 
 namespace UnityEngine.XR.ARSubsystems
@@ -13,6 +14,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Container for the metadata that describes access to the raw camera image plane data.
             /// </summary>
+            [StructLayout(LayoutKind.Sequential)]
             public struct Cinfo : IEquatable<Cinfo>
             {
                 /// <summary>

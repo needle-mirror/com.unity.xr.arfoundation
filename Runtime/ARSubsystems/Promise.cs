@@ -26,8 +26,10 @@ namespace UnityEngine.XR.ARSubsystems
     /// <typeparam name="T">The type of information the asynchronous operation retrieves.</typeparam>
     public abstract class Promise<T> : CustomYieldInstruction
     {
+        bool m_Complete;
+
         /// <summary>
-        /// Will return <c>true</c> as long as the operation has not yet completed.
+        /// Will return <see langword="true"/> as long as the operation has not yet completed.
         /// </summary>
         public override bool keepWaiting
         {
@@ -39,8 +41,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// The result of the asynchronous operation.
-        /// Not valid until <see cref="keepWaiting"/> returns <c>false</c>.
+        /// The result of the asynchronous operation. Not valid until <see cref="keepWaiting"/> returns <see langword="false"/>.
         /// </summary>
         public T result { get; private set; }
 
@@ -55,10 +56,9 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// The creator of the <see cref="Promise{T}"/> should call this
-        /// when the asynchronous operation completes.
+        /// The creator of the <see cref="Promise{T}"/> should call this when the asynchronous operation completes.
         /// </summary>
-        /// <param name="result">The result of the asychronous operation.</param>
+        /// <param name="result">The result of the asynchronous operation.</param>
         protected void Resolve(T result)
         {
             this.result = result;
@@ -66,12 +66,9 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Invoked whenever <see cref="keepWaiting"/> is queried.
-        /// Implement this to perform per-frame updates.
+        /// Invoked whenever <see cref="keepWaiting"/> is queried. Implement this to perform per-frame updates.
         /// </summary>
         protected abstract void OnKeepWaiting();
-
-        bool m_Complete;
 
         class ImmediatePromise : Promise<T>
         {

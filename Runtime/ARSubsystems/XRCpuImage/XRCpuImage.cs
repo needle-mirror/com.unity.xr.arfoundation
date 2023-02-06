@@ -211,7 +211,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="api">The camera subsystem to use for interacting with the native image.</param>
         /// <param name="cinfo">Construction information. See <see cref="Cinfo"/>.</param>
-        internal XRCpuImage(XRCpuImage.Api api, Cinfo cinfo)
+        public XRCpuImage(XRCpuImage.Api api, Cinfo cinfo)
         {
             m_Api = api;
             m_NativeHandle = cinfo.nativeHandle;

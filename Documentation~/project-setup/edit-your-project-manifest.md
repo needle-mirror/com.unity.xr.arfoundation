@@ -14,7 +14,7 @@ AR Foundation 5.1 is compatible with Unity Editor versions 2021.2 and 2021.3, bu
 
 Since Unity 2021.1, Unity's release management team grants packages a "Released" status after they pass several testing stages and validation procedures for the Unity Editor version in development at that time. This means that the latest validated package version in your Unity Editor version might not be the latest published package. See [package states and lifecycle](https://docs.unity3d.com/Manual/upm-lifecycle.html) to learn more about the package lifecycle.
 
-Unity fully supports "Released" packages with the LTS cycle of their corresponding Editor version. For example, AR Foundation 5.0 entered "Released" status during development of Unity 2022.2, and will be supported alongside the 2022.3 LTS version of the Unity Editor. Thus, AR Foundation 5.0 appears in the Package Manager window in Unity 2022.x versions.
+Unity fully supports "Released" packages with the LTS cycle of their corresponding Editor version. For example, AR Foundation 5.0 entered "Released" status during development of Unity 2022.2, and will be supported alongside the 2022.3 LTS version of the Unity Editor. Thus, AR Foundation 5.0 appears in the Package Manager window in Unity 2022.2.
 
 It is possible to access AR Foundation 5.1 in Unity Editor versions 2021.2 or 2021.3, but AR Foundation 5.1 does not appear in the Package Manager window for these versions because they do not follow the same procedures for testing, validation, and LTS support.
 

@@ -7,7 +7,8 @@
         "Unity.XR.ARSubsystems",
         "Unity.XR.Management",
         "UnityEngine.SpatialTracking",
-        "Unity.XR.CoreUtils"
+        "Unity.XR.CoreUtils",
+        "Unity.XR.ARFoundation.InternalUtils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

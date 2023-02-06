@@ -13,9 +13,9 @@ namespace UnityEngine.XR.Simulation
     {
         internal const string k_SubsystemId = "XRSimulation-ImageTracking";
 
-        class SimulationProvider : Provider
+        class SimulationProvider : Provider, ISimulationSessionResetHandler
         {
-            SimulationTrackedImageDiscoverer m_Discoverer = new();
+            readonly SimulationTrackedImageDiscoverer m_Discoverer = new();
 
             XRTrackedImage[] m_Added;
             int m_NumAdded;
@@ -80,19 +80,36 @@ namespace UnityEngine.XR.Simulation
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
 
-                SimulationEnvironmentScanner.EnsureMeshColliders();
+                SimulationEnvironmentScanner.GetOrCreate().EnsureMeshColliders();
                 m_Discoverer.Start();
+
+                SimulationSessionSubsystem.s_SimulationSessionReset += OnSimulationSessionReset;
             }
 
             /// <inheritdoc/>
             public override void Stop()
             {
+                SimulationSessionSubsystem.s_SimulationSessionReset -= OnSimulationSessionReset;
                 m_Discoverer.Stop();
                 m_NumAdded = 0;
                 m_NumRemoved = 0;
             }
 
             public override void Destroy() { }
+
+            public void OnSimulationSessionReset()
+            {
+                if (!isInitialized)
+                    return;
+
+                ValidateChanges();
+
+                m_NumAdded = 0;
+                Array.Clear(m_Added, 0, m_Added.Length);
+                m_Updated.Clear();
+                
+                m_Discoverer.Restart();
+            }
 
             /// <inheritdoc/>
             public override TrackableChanges<XRTrackedImage> GetChanges(XRTrackedImage defaultTrackedImage, Allocator allocator)
@@ -144,11 +161,11 @@ namespace UnityEngine.XR.Simulation
                 for (var i = 0; i < m_Added.Length; i++)
                 {
                     var trackableId = m_Added[i].trackableId;
-                    if (m_Updated.TryGetValue(trackableId, out var latestUpdatedImage))
-                    {
-                        m_Added[i] = latestUpdatedImage;
-                        m_Updated.Remove(trackableId);
-                    }
+                    if (!m_Updated.TryGetValue(trackableId, out var latestUpdatedImage))
+                        continue;
+
+                    m_Added[i] = latestUpdatedImage;
+                    m_Updated.Remove(trackableId);
                 }
             }
 

@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+using UnityEngine.Assertions;
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -82,6 +85,25 @@ namespace UnityEngine.XR.ARSubsystems
             var array = new NativeArray<T>(length, allocator, NativeArrayOptions.UninitializedMemory);
             FillArrayWithValue(array, value);
             return array;
+        }
+
+        /// <summary>
+        /// Copies the contents of <paramref name="source"/> into the <c>NativeArray</c> <paramref name="destination"/>.
+        /// The lengths of both collections must match.
+        /// </summary>
+        /// <typeparam name="T">The type of the <c>NativeArray</c> structs that will be copied</typeparam>
+        /// <param name="source">The <c>IReadOnlyList</c> that provides the data</param>
+        /// <param name="destination">The <c>NativeArray</c> that will be written to</param>
+        public static void CopyFromReadOnlyList<T>(IReadOnlyList<T> source, NativeArray<T> destination)
+            where T : struct
+        {
+            if (source.Count != destination.Length)
+                throw new ArgumentException($"{nameof(source)} count doesn't match {nameof(destination)} length!");
+
+            for (var i = 0; i < source.Count; i++)
+            {
+                destination[i] = source[i];
+            }
         }
     }
 }

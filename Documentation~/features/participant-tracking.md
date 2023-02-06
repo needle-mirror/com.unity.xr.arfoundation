@@ -1,5 +1,5 @@
 ---
-uid: arfoundation-participants
+uid: arfoundation-participant-tracking
 ---
 # AR Participant Manager component
 

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
+using static UnityEngine.XR.Simulation.SimulationUtility;
 
 namespace UnityEngine.XR.Simulation
 {
@@ -93,6 +95,34 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
+        public void Restart()
+        {
+            if(!m_Initialized)
+                return;
+
+            if(m_IsRunning)
+                Stop();
+
+            for (var i = 0; i < m_TrackingStatesOfImages.Count; i++)
+            {
+                m_TrackingStatesOfImages[i] = TrackingState.None;
+            }
+
+            BeginUpdateLoopAfterDelay();
+        }
+
+        /// <summary>
+        /// Necessary to allow the ARManager-side to catch up to the removed trackables,
+        /// otherwise we could end up with a duplicate guid entry and an exception will be thrown.
+        /// </summary>
+        async void BeginUpdateLoopAfterDelay()
+        {
+            await RunWithoutCancellationExceptions(Task.Delay(m_TrackingUpdateIntervalMilliseconds,
+                CancellationToken.None));
+
+            BeginUpdateLoop();
+        }
+
         void Initialize()
         {
             if (m_IsRunning)
@@ -101,7 +131,7 @@ namespace UnityEngine.XR.Simulation
             m_ImagesInScene.Clear();
             m_TrackingStatesOfImages.Clear();
 
-            var origin = Object.FindObjectOfType<XROrigin>();
+            var origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
 
             if (origin == null)
                 throw new NullReferenceException($"{nameof(SimulationImageTrackingSubsystem)} requires that the current scene contains an {nameof(XROrigin)}, but none was found.");
@@ -172,23 +202,6 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
-        static async Task RunWithoutCancellationExceptions(Task task)
-        {
-            try
-            {
-                await task;
-            }
-            catch (TaskCanceledException) { }
-            catch (AggregateException aggregateException)
-            {
-                foreach (var e in aggregateException.InnerExceptions)
-                {
-                    if (e is not TaskCanceledException)
-                        throw e;
-                }
-            }
-        }
-
         void SubsystemAddImageAtIndex(int imageIndex)
         {
             var image = m_ImagesInScene[imageIndex];
@@ -210,7 +223,7 @@ namespace UnityEngine.XR.Simulation
             imageRemoved?.Invoke(image.trackableId);
         }
 
-        XRTrackedImage CreateXRImage(SimulatedTrackedImage image, TrackingState trackingState, XRReferenceImage? referenceImage)
+        static XRTrackedImage CreateXRImage(SimulatedTrackedImage image, TrackingState trackingState, XRReferenceImage? referenceImage)
         {
             return new XRTrackedImage(
                 trackableId: image.trackableId,

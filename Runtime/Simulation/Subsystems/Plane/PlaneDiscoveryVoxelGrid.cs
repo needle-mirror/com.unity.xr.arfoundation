@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;
+using static UnityEngine.XR.Simulation.SimulationUtility;
 
 namespace UnityEngine.XR.Simulation
 {
@@ -211,13 +212,6 @@ namespace UnityEngine.XR.Simulation
             {
                 vertices.Dispose();
             }
-        }
-
-        static TrackableId GenerateTrackableId()
-        {
-            Guid.NewGuid().Decompose(out var subId1, out var subId2);
-
-            return new TrackableId(subId1, subId2);
         }
     }
 }

@@ -1,20 +1,24 @@
 {
-  "name": "Unity.XR.ARFoundation.CodeSamples.Tests",
+    "name": "Unity.XR.ARFoundation.CodeSamples.Tests",
+    "rootNamespace": "",
     "references": [
         "Unity.XR.ARFoundation",
         "Unity.XR.ARSubsystems",
-        "Unity.XR.Management"
-    ],
-    "optionalUnityReferences": [
-        "TestAssemblies"
+        "Unity.XR.Management",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
-    ]
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
@@ -473,11 +474,11 @@ namespace UnityEngine.XR.ARFoundation
         int m_PreviousTrackingMode = -1;
 
         //Dictionaries
-        Dictionary<ARPlane, LineRenderer> m_PlaneLineRenderers = new Dictionary<ARPlane, LineRenderer>();
+        Dictionary<ARPlane, LineRenderer> m_PlaneLineRenderers = new();
 
-        Dictionary<ARAnchor, GameObject> m_AnchorPrefabs = new Dictionary<ARAnchor, GameObject>();
+        Dictionary<ARAnchor, GameObject> m_AnchorPrefabs = new();
 
-        Dictionary<ulong, Vector3> m_Points = new Dictionary<ulong, Vector3>();
+        Dictionary<ulong, Vector3> m_Points = new();
 
         ParticleSystem.Particle[] m_Particles;
 
@@ -501,9 +502,9 @@ namespace UnityEngine.XR.ARFoundation
 
         int m_PreviousConfigCol = -1;
 
-        List<List<Image>> m_ConfigurationUI = new List<List<Image>>();
+        List<List<Image>> m_ConfigurationUI = new();
 
-        List<Text> m_ColumnLabels = new List<Text>();
+        List<Text> m_ColumnLabels = new();
 
         void Start()
         {
@@ -625,41 +626,41 @@ namespace UnityEngine.XR.ARFoundation
 
         void InitMenu()
         {
-            var eventSystems = FindObjectsOfType<EventSystem>();
-            if(eventSystems.Length == 0)
+            var eventSystem = FindObjectsUtility.FindAnyObjectByType<EventSystem>();
+            if(eventSystem == null)
             {
                 Debug.LogError($"Failed to find EventSystem in current scene. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }
 
-            var sessions = FindObjectsOfType<ARSession>();
-            if(sessions.Length == 0)
+            var session = FindObjectsUtility.FindAnyObjectByType<ARSession>();
+            if(session == null)
             {
                 Debug.LogError($"Failed to find ARSession in current scene. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }
-            m_Session = sessions[0];
+            m_Session = session;
 
-            var origins = FindObjectsOfType<XROrigin>();
-            if(origins.Length == 0)
+            var origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+            if(origin == null)
             {
                 Debug.LogError($"Failed to find XROrigin in current scene. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }
-            m_Origin = origins[0];
+            m_Origin = origin;
 
-            var cameraManagers = FindObjectsOfType<ARCameraManager>();
-            if(cameraManagers.Length == 0)
+            var cameraManager = FindObjectsUtility.FindAnyObjectByType<ARCameraManager>();
+            if(cameraManager == null)
             {
                 Debug.LogWarning($"Failed to find an ARCameraManager in current scene. As a result, the camera configuration menu will be disabled.");
                 DisableToolbarButton(m_DisplayCameraConfigurationsMenuButton);
             }
             else
             {
-                m_CameraManager = cameraManagers[0];
+                m_CameraManager = cameraManager;
             }
 
             m_CameraAR = m_Origin.Camera;

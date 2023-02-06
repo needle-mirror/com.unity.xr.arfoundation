@@ -9,84 +9,74 @@ Go to **Edit** > **Project Settings** > **XR Plug-in Management** > **XR Simulat
 
 <table>
   <tr>
-   <td colspan="2" ><strong>Setting</strong></td>
+   <td colspan="2"><strong>Setting</strong></td>
    <td><strong>Description</strong></td>
   </tr>
   <tr>
-   <td colspan="2" ><strong>Environment Layer</strong></td>
+   <td colspan="2"><strong>Environment Layer</strong></td>
    <td>XR Simulation requires a dedicated <a href="https://docs.unity3d.com/Manual/Layers.html">layer</a> to render the XR Simulation environment separately from your scene. That layer is specified here, and by default is layer 30.</td>
   </tr>
   <tr>
-   <td colspan="2" ><strong>Environment Scan Params</strong></td>
+   <td colspan="2"><strong>Environment Scan Params</strong></td>
    <td>XR Simulation scans for point clouds and planes in the environment by raycasting against its meshes. These settings control that process.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Minimum Rescan Time</strong></td>
-   <td>The minimum time in seconds between two environment scans.</td>
+   <td><strong>Min Time Until Rescan</strong></td>
+   <td>Minimum time in seconds that must elapse between environment scans.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Delta Camera Distance To Rescan</strong></td>
-   <td>The minimum distance in meters a camera should move before the next environment scan.</td>
+   <td><strong>Min Camera Distance Until Rescan</strong></td>
+   <td>Minimum distance in meters the camera must move before the next environment scan. The next environment scan will trigger on the first Update after <strong>Min Time Until Rescan</strong> has elapsed where the camera has either moved at least <strong>Min Camera Distance</strong> or rotated at least <strong>Min Camera Rotation</strong>.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Delta Camera Angle To Rescan</strong></td>
-   <td>The minimum change of angle in degrees of the camera's rotation before the next environment scan.</td>
+   <td><strong>Min Camera Rotation Until Rescan</strong></td>
+   <td>Minimum angle change in degrees the camera must rotate before the next environment scan. The next environment scan will trigger on the first Update after <strong>Min Time Until Rescan</strong> has elapsed where the camera has either moved at least <strong>Min Camera Distance</strong> or rotated at least <strong>Min Camera Rotation</strong>.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Rays Per Cast</strong></td>
-   <td>Total number of rays to project per scan.</td>
+   <td><strong>Raycasts Per Scan</strong></td>
+   <td>Total number of rays to cast in each environment scan. Higher values may impact system performance.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Maximum Hit Distance</strong></td>
-   <td>Maximum distance in meters from the camera after which the points will not be detected.</td>
+   <td><strong>Max Raycast Hit Distance</strong></td>
+   <td>Distance in meters from the camera beyond which feature points will not be detected.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Minimum Hit Distance</strong></td>
-   <td>Points will not be detected within this distance from the camera in meters.</td>
+   <td><strong>Min Raycast Hit Distance</strong></td>
+   <td>Distance in meters from the camera within which feature points will not be detected.</td>
   </tr>
-  <tr>
-   <td colspan="2" ><strong>Tracked Image Discovery Params</strong></td>
-   <td>Performance tuning options for image tracking.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td><strong>Tracking Update Interval</strong></td>
-   <td>The time in seconds between two image tracking updates.</td>
-  </tr>
-  <tr>
-   <td colspan="2" ><strong>Plane Finding Params</strong></td>
+   <td colspan="2"><strong>Plane Discovery Params</strong></td>
    <td>Performance tuning options for plane detection.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Minimum Plane Update Time</strong></td>
-   <td>Minimum time in seconds between plane updates.</td>
+   <td><strong>Min Time Until Update</strong></td>
+   <td>Minimum time in seconds that must elapse between plane discovery updates.</td>
   </tr>
   <tr>
    <td></td>
    <td><strong>Min Points Per Sq Meter</strong></td>
-   <td>Voxel point density threshold that is independent of voxel size.</td>
+   <td>Voxel point density, independent of voxel size.</td>
   </tr>
   <tr>
    <td></td>
-   <td><strong>Min Side Length</strong></td>
-   <td>A plane with any side of length less than this value will be ignored.</td>
+   <td><strong>Min Plane Side Length</strong></td>
+   <td>A plane with x or y size less than this value in meters will be ignored.</td>
   </tr>
   <tr>
    <td></td>
    <td><strong>In Layer Merge Distance</strong></td>
-   <td>Planes within the same layer that are at most this distance from each other in meters will be merged.</td>
+   <td>Planes within the same layer that are at most this distance in meters from each other will be merged.</td>
   </tr>
   <tr>
    <td></td>
    <td><strong>Cross Layer Merge Distance</strong></td>
-   <td>Planes in adjacent layers with an elevation difference of at most this value in meters will be merged.</td>
+   <td>Planes in adjacent layers with an elevation difference of at most this distance in meters will be merged.</td>
   </tr>
   <tr>
    <td></td>
@@ -101,7 +91,7 @@ Go to **Edit** > **Project Settings** > **XR Plug-in Management** > **XR Simulat
   <tr>
    <td></td>
    <td><strong>Point Update Dropout Rate</strong></td>
-   <td>Probability for dropping per-plane updates. If a random number between 0 and 1 is below this number, the update is dropped.</td>
+   <td>Probability of dropping per-plane updates. If a random number between 0 and 1 is below this number, the update is dropped.</td>
   </tr>
   <tr>
    <td></td>
@@ -112,6 +102,40 @@ Go to **Edit** > **Project Settings** > **XR Plug-in Management** > **XR Simulat
    <td></td>
    <td><strong>Voxel Size</strong></td>
    <td>Side length of each voxel in the plane voxel grid.</td>
+  </tr>
+  <tr>
+   <td colspan="2"><strong>Tracked Image Discovery Params</strong></td>
+   <td>Performance tuning options for image tracking.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Min Time Until Update</strong></td>
+   <td>Minimum time in seconds that must elapse between image tracking updates.</td>
+  </tr>
+  <tr>
+  <tr>
+   <td colspan="2"><strong>Environment Probe Discovery Params</strong></td>
+   <td>Performance tuning options for discovery of automatically placed environment probes.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Min Time Until Update</strong></td>
+   <td>Minimum time in seconds between environment probe discovery updates.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Max Discovery Distance</strong></td>
+   <td>Maximum distance in meters from the camera at which automatically placed environment probes can be discovered.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Discovery Delay Time</strong></td>
+   <td>Time in seconds after an environment probe is discovered before it is added as a trackable.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Cubemap Face Size</strong></td>
+   <td>Width and height in pixels of each face of each environment probe's Cubemap.</td>
   </tr>
 </table>
 

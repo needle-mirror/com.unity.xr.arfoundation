@@ -5,14 +5,15 @@ using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.XR.Simulation;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 
 namespace UnityEditor.XR.Simulation
 {
     class XREnvironmentViewManager : ScriptableSingleton<XREnvironmentViewManager>
     {
         const string k_ViewName = "XR Environment";
-        static GUIContent s_SimulationSubsystemNotLoadedContent = new GUIContent($"{k_ViewName} is not Available.\nEnable XR Simulation in Project Settings > XR Plug-in Management.");
-        static GUIContent s_BaseSceneViewContent = new GUIContent($"{k_ViewName} is not Available.\nUse a Scene View window.");
+        static GUIContent s_SimulationSubsystemNotLoadedContent = new($"{k_ViewName} is not Available.\nEnable XR Simulation in Project Settings > XR Plug-in Management.");
+        static GUIContent s_BaseSceneViewContent = new($"{k_ViewName} is not Available.\nUse a Scene View window.");
         static GUIContent s_XREnvironmentViewTitleContent;
 
         public static event Action<SceneView> environmentViewEnabled;
@@ -35,8 +36,8 @@ namespace UnityEditor.XR.Simulation
 
         SimulationXRayManager m_XRayManager;
 
-        HashSet<SceneView> m_EnvironmentViews = new HashSet<SceneView>();
-        HashSet<Camera> m_EnvironmentCameras = new HashSet<Camera>();
+        HashSet<SceneView> m_EnvironmentViews = new();
+        HashSet<Camera> m_EnvironmentCameras = new();
 
         public bool IsEnvironmentViewEnabled(EditorWindow window)
         {
@@ -350,7 +351,7 @@ namespace UnityEditor.XR.Simulation
             var camera = Camera.main;
             if (camera == null)
             {
-                var xrOrigin = FindObjectOfType<XROrigin>();
+                var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
                 if (xrOrigin != null)
                     camera = xrOrigin.Camera;
             }

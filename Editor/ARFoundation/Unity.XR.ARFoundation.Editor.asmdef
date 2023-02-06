@@ -9,7 +9,8 @@
         "Unity.XR.Management.Editor",
         "Unity.XR.CoreUtils",
         "Unity.InputSystem",
-        "Unity.XR.ARAnalytics.Editor"
+        "Unity.XR.ARAnalytics.Editor",
+        "Unity.XR.ARFoundation.InternalUtils"
     ],
     "includePlatforms": [
         "Editor"

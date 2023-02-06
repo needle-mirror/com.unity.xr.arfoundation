@@ -7,7 +7,8 @@
         "Unity.XR.CoreUtils",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Unity.XR.ARFoundation.Editor"
+        "Unity.XR.ARFoundation.Editor",
+        "Unity.XR.ARFoundation.InternalUtils"
     ],
     "includePlatforms": [
         "Editor"

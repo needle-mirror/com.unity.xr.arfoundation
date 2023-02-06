@@ -56,9 +56,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <remarks>
         /// Image addition can take some time (several frames) due to extra processing that must occur to insert the
         /// image into the library. This is done using the [Unity Job System]
-        /// (https://docs.unity3d.com/Manual/JobSystem.html). The returned [AddReferenceImageJobState]
-        /// (xref:UnityEngine.XR.ARSubsystems.AddReferenceImageJobState) can be used to query for job completion and
-        /// whether the addition was successful.
+        /// (https://docs.unity3d.com/Manual/JobSystem.html). The returned
+        /// [AddReferenceImageJobState](xref:UnityEngine.XR.ARSubsystems.AddReferenceImageJobState) can be used to query
+        /// for job completion and whether the addition was successful.
         ///
         /// The bytes of the <paramref name="texture"/> are copied, so the texture may be safely
         /// destroyed after this method returns.

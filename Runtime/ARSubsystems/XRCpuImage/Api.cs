@@ -152,7 +152,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="nativeHandle">A unique identifier for the camera image to convert.</param>
             /// <param name="conversionParams">The parameters to use during the conversion.</param>
             /// <param name="callback">A delegate which must be invoked when the request is complete, whether the
-            /// conversion was successfully or not.</param>
+            /// conversion was successful or not.</param>
             /// <param name="context">A native pointer which must be passed back unaltered to
             /// <paramref name="callback"/>.</param>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera
@@ -210,7 +210,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// conversion.
             /// </summary>
             /// <param name="image">The <see cref="XRCpuImage"/> to convert.</param>
-            /// <param name="format">The [`TextureFormat`](https://docs.unity3d.com/ScriptReference/TextureFormat.html)
+            /// <param name="format">The <see cref="UnityEngine.TextureFormat"/>
             /// to test.</param>
             /// <returns>Returns `true` if <paramref name="image"/> can be converted to <paramref name="format"/>.
             /// Returns `false` otherwise.</returns>

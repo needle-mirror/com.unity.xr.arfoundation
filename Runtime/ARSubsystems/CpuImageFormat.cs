@@ -1,3 +1,5 @@
+using System;
+
 namespace UnityEngine.XR.ARSubsystems
 {
     public partial struct XRCpuImage
@@ -61,29 +63,86 @@ namespace UnityEngine.XR.ARSubsystems
             /// 16-bit unsigned integer, describing the depth (distance to an object) in millimeters.
             /// </summary>
             DepthUint16 = 5,
+
+            /// <summary>
+            /// Single channel image format with 32 bits per pixel.
+            /// </summary>
+            OneComponent32 = 6,
+
+            /// <summary>
+            /// 4 channel image with 8 bits per channel, describing the color in ARGB order.
+            /// </summary>
+            ARGB32 = 7,
+
+            /// <summary>
+            /// 4 channel image with 8 bits per channel, describing the color in RGBA order.
+            /// </summary>
+            RGBA32 = 8,
+
+            /// <summary>
+            /// 4 channel image with 8 bits per channel, describing the color in BGRA order.
+            /// </summary>
+            BGRA32 = 9,
+
+            /// <summary>
+            /// 3 8-bit unsigned integer channels, describing the color in RGB order.
+            /// </summary>
+            RGB24 = 10,
         }
     }
 
     /// <summary>
-    /// Extensions to the <see cref="XRCpuImage.Format"/> enum.
+    /// Extensions to convert between <see cref="UnityEngine.TextureFormat"/> and <see cref="XRCpuImage.Format"/>.
     /// </summary>
     public static class XRCpuImageFormatExtensions
     {
         /// <summary>
-        /// Attempts to convert an <see cref="XRCpuImage.Format"/> to a `UnityEngine.TextureFormat`.
+        /// Attempts to convert an <see cref="XRCpuImage.Format"/> to a <see cref="UnityEngine.TextureFormat"/>.
         /// </summary>
-        /// <param name="this">The <see cref="XRCpuImage.Format"/> being extended.</param>
-        /// <returns>Returns a `TextureFormat` that matches <paramref name="this"/> if possible. Returns 0 if there
-        ///     is no matching `TextureFormat`.</returns>
+        /// <param name="this">Defines an extension of <see cref="XRCpuImage.Format"/>.</param>
+        /// <returns>
+        /// Returns a texture format that matches <paramref name="this"/> if possible. Returns 0 if there
+        /// is no matching texture format.
+        /// </returns>
         public static TextureFormat AsTextureFormat(this XRCpuImage.Format @this)
         {
-            switch (@this)
+            return @this switch
             {
-                case XRCpuImage.Format.OneComponent8: return TextureFormat.R8;
-                case XRCpuImage.Format.DepthFloat32: return TextureFormat.RFloat;
-                case XRCpuImage.Format.DepthUint16: return TextureFormat.RFloat;
-                default: return 0;
-            }
+                XRCpuImage.Format.OneComponent8 => TextureFormat.R8,
+                XRCpuImage.Format.DepthFloat32 => TextureFormat.RFloat,
+                XRCpuImage.Format.DepthUint16 => TextureFormat.RFloat,
+                XRCpuImage.Format.RGBA32 => TextureFormat.RGBA32,
+                XRCpuImage.Format.BGRA32 => TextureFormat.BGRA32,
+                XRCpuImage.Format.RGB24 => TextureFormat.RGB24,
+                _ => 0
+            };
+        }
+
+        /// <summary>
+        /// Attempts to convert a <see cref="UnityEngine.TextureFormat"/> to an <see cref="XRCpuImage.Format"/>.
+        /// </summary>
+        /// <param name="this">Defines an extension of <see cref="UnityEngine.TextureFormat"/>.</param>
+        /// <returns>
+        /// Returns a <see cref="XRCpuImage.Format"/> that matches <paramref name="this"/> if possible. Returns
+        /// <see cref="XRCpuImage.Format.Unknown"/> if there is no matching <see cref="XRCpuImage.Format"/>.
+        /// </returns>
+        /// <remarks>
+        /// For some formats, there may be multiple <see cref="XRCpuImage.Format"/>s that match the format. In this case
+        /// this method will return a generalized format. For example, <see cref="UnityEngine.TextureFormat.RFloat"/> will return
+        /// <see cref="XRCpuImage.Format.OneComponent32"/> instead of <see cref="XRCpuImage.Format.DepthFloat32"/> as it's
+        /// possible that the single channel is not depth. In these cases, you should also check the image type.
+        /// </remarks>
+        public static XRCpuImage.Format ToXRCpuImageFormat(this TextureFormat @this)
+        {
+            return @this switch {
+                TextureFormat.R8 => XRCpuImage.Format.OneComponent8,
+                TextureFormat.RFloat => XRCpuImage.Format.OneComponent32,
+                TextureFormat.ARGB32 => XRCpuImage.Format.ARGB32,
+                TextureFormat.RGBA32 => XRCpuImage.Format.RGBA32,
+                TextureFormat.BGRA32 => XRCpuImage.Format.BGRA32,
+                TextureFormat.RGB24 => XRCpuImage.Format.RGB24,
+                _ => XRCpuImage.Format.Unknown
+            };
         }
     }
 }

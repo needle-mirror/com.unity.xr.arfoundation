@@ -21,6 +21,34 @@ namespace UnityEngine.XR.ARSubsystems
         };
 
         /// <summary>
+        /// Constructs an <see cref="XREnvironmentProbe"/>.
+        /// </summary>
+        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this tracked probe.</param>
+        /// <param name="scale">The scale of the associated probe.</param>
+        /// <param name="pose">The <c>Pose</c> associated with the probe.</param>
+        /// <param name="size">The size (rendering bounds) of the associated probe.</param>
+        /// <param name="descriptor">The <see cref="XRTextureDescriptor"/> associated with the probe's cubemap.</param>
+        /// <param name="trackingState">The <see cref="TrackingState"/> of the probe.</param>
+        /// <param name="nativePtr">A native pointer associated with the probe's cubemap.</param>
+        public XREnvironmentProbe(
+            TrackableId trackableId,
+            Vector3 scale,
+            Pose pose,
+            Vector3 size,
+            XRTextureDescriptor descriptor,
+            TrackingState trackingState,
+            IntPtr nativePtr)
+        {
+            m_TrackableId = trackableId;
+            m_Scale = scale;
+            m_Pose = pose;
+            m_Size = size;
+            m_TextureDescriptor = descriptor;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+        }
+
+        /// <summary>
         /// Uniquely identifies each environment probe in an AR session.
         /// </summary>
         /// <value>

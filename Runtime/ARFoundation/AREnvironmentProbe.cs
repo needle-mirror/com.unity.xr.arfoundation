@@ -3,8 +3,6 @@ using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 
-using Object = UnityEngine.Object;
-
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -16,6 +14,20 @@ namespace UnityEngine.XR.ARFoundation
     [HelpURL(typeof(AREnvironmentProbe))]
     public class AREnvironmentProbe : ARTrackable<XREnvironmentProbe, AREnvironmentProbe>
     {
+        /*
+         * Generated Cubemaps from simulated environment probes cause the ReflectionProbe GUI to spam access error messages.
+         * The issue is creating a read-only texture view from an "external" read-only texture.
+         * By default the Unity Editor cannot normally access external textures for display in the Inspector.
+         * The texture can be seen the Inspector, but ownership information isn't
+         * passed along. Thus the GUI texture display code treats it as an external texture.
+         * To work around this, the hideflags are configured to hide the ReflectionProbe component
+         * in Play Mode. The flags are then reverted when the probe is disabled.
+         * This doesn't affect the ability to save or for user code to access the component.
+         * This should only be done to prevent needless log spam until a better solution is determined.
+         */
+#if UNITY_EDITOR
+        const HideFlags k_ProbeHideFlags = HideFlags.DontSave | HideFlags.HideInInspector | HideFlags.NotEditable;
+#endif
         /// <summary>
         /// The reflection probe component attached to the GameObject.
         /// </summary>
@@ -60,6 +72,10 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         FilterMode m_EnvironmentTextureFilterMode = FilterMode.Trilinear;
+
+#if UNITY_EDITOR
+        HideFlags m_PreviousProbeHideFlags = HideFlags.None;
+#endif
 
         /// <summary>
         /// The placement type (for example, manual or automatic). If manual, this probe was created by <see cref="AREnvironmentProbeManager.AddEnvironmentProbe(Pose, Vector3, Vector3)"/>.
@@ -188,6 +204,11 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnEnable()
         {
+#if UNITY_EDITOR
+            m_PreviousProbeHideFlags = m_ReflectionProbe.hideFlags;
+            m_ReflectionProbe.hideFlags = k_ProbeHideFlags;
+#endif
+
             if (AREnvironmentProbeManager.instance is AREnvironmentProbeManager manager)
             {
                 manager.TryAddEnvironmentProbe(this);
@@ -208,6 +229,11 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnDisable()
         {
+#if UNITY_EDITOR
+            m_ReflectionProbe.hideFlags = m_PreviousProbeHideFlags;
+            m_PreviousProbeHideFlags = HideFlags.None;
+#endif
+
             if (AREnvironmentProbeManager.instance is AREnvironmentProbeManager manager)
             {
                 manager.TryRemoveEnvironmentProbe(this);

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 
 namespace UnityEngine.XR.Simulation.Tests
 {
@@ -24,13 +25,13 @@ namespace UnityEngine.XR.Simulation.Tests
         [Order(1)]
         public void PoseProviderAvailable()
         {
-            var xrOrigin = Object.FindObjectOfType<XROrigin>();
+            var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
             Assert.IsNotNull(xrOrigin);
 
             var xrCamera = xrOrigin.Camera;
             Assert.IsNotNull(xrCamera);
 
-            var poseProvider = Object.FindObjectOfType<SimulationCamera>();
+            var poseProvider = FindObjectsUtility.FindAnyObjectByType<SimulationCamera>();
             Assert.IsNotNull(poseProvider, $"No active {nameof(SimulationCamera)} is available.");
         }
     }

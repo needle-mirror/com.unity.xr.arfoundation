@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "5.1.0-pre.2",
+  "version": "5.1.0-pre.3",
   "unity": "2021.2",
   "description": "A collection of Subsystems as well as MonoBehaviours and C# utilities for working with the Subsystems. \n\nIncludes: \n▪ Definitions of Subsystems \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "com.unity.inputsystem": "1.3.0",
-    "com.unity.xr.core-utils": "2.1.0",
+    "com.unity.xr.core-utils": "2.2.0-pre.1",
     "com.unity.xr.management": "4.0.1",
     "com.unity.ugui": "1.0.0",
     "com.unity.mathematics": "1.2.5",
@@ -28,12 +28,16 @@
     "com.unity.modules.unityanalytics": "1.0.0",
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
-  "upmCi": {
-    "footprint": "030366584e5e6e2f6251c5d274d9834bf4a0a489"
+  "_upm": {
+    "changelog": "### Added\n\n- Added a public constructor for [XRCpuImage](xref:UnityEngine.XR.ARSubsystems.XRCpuImage).\n- Added support for XRCpuImage API to XR Simulation.\n- Added additional enumeration values to [XRCpuImage.Format](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Format) for `RGB` image formats.\n- Added [XRCpuImageFormatExtensions.ToXRCpuImageFormat](xref:UnityEngine.XR.ARSubsystems.XRCpuImageFormatExtensions.ToXRCpuImageFormat(UnityEngine.TextureFormat)) extension method for converting [UnityEngine.TextureFormat](xref:UnityEngine.TextureFormat) to [XRCpuImage.Format](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Format).\n- Added support for the [Environment Probes](xref:arfoundation-environment-probes) feature in XR Simulation. You can now add and remove environment probes in Play mode, add a [Simulated Environment Probe component](xref:arfoundation-simulation-environments#simulated-environment-probe-component) to XR Simulation environments, and adjust environment probe discovery settings in [XR Simulation project settings](xref:arfoundation-simulation-project-settings).\n- Added [ARSession.Reset](xref:UnityEngine.XR.ARFoundation.ARSession.Reset) support to relevant subsystems in XR Simulation.\n\n### Changed\n\n- Downloads version 1.0.0 of simulation environments package rather than 1.0.0-pre.2.\n- Added the `StructLayout(LayoutKind.Sequential)` attribute to [XRCpuImage.Plane.Cinfo](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Plane.Cinfo) to ensure layout compatibility when marshalling the struct.\n- Changed [XRReferenceImage.ToString](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage.ToString) to include the reference image name in the generated string, in addition to previously included fields.\n- Changed the Editor behavior of XR Simulation Runtime Settings to add input validation and standardize naming conventions for similar settings across simulation subsystem providers.\n- Changed default values of XR Simulation Runtime Settings to improve plane detection performance. If your project already includes AR Foundation, you can accept the new default values by deleting the Asset at `Assets/XR/Resources/XRSimulationRuntimeSettings.asset` and restarting the Editor.\n\n### Removed\n\n- Removed a warning that was previously logged when your AR Foundation project build contained a scene with an `XROrigin` but not an `ARCameraBackground` or `ARCameraManager`. There are valid reasons to set up a scene this way, such as building for OpenXR, so the warning was not helpful. \n\n### Fixed\n\n- Fixed an issue where AR content would not render in the Game view in XR Simulation when using [XRCameraBackgroundRenderingMode.AfterOpaques](xref:UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode).\n- Fixed an issue where some XR Simulation subsystem providers could break if you destroyed and immediately re-instantiated the Simulation Session Subsystem."
   },
+  "upmCi": {
+    "footprint": "87eabf2674a0c93e88c965bd7fe31ffac370faa9"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@5.1/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "bbde313fed995f8e51a3be1e9bf5048ab62ffe4c"
+    "revision": "139bb15bbaa1dba8130e1b605c77210494f9a7ba"
   }
 }

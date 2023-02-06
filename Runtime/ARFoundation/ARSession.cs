@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
@@ -182,7 +183,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         void WarnIfMultipleARSessions()
         {
-            var sessions = FindObjectsOfType<ARSession>();
+            var sessions = FindObjectsUtility.FindObjectsByType<ARSession>();
             if (sessions.Length > 1)
             {
                 // Compile a list of session names

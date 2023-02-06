@@ -105,7 +105,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <returns>A string representation of the reference image.</returns>
         public override string ToString() =>
-            $"GUID: '{guid}', Texture GUID: '{textureGuid}` Size: {(m_SpecifySize ? "" : "NOT ")} specified {m_Size}";
+            $"Name: '{name}', GUID: '{guid}', Texture GUID: '{textureGuid}` Size: {(m_SpecifySize ? "" : "NOT ")} specified {m_Size}";
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
