@@ -8,8 +8,10 @@ namespace UnityEngine.XR.Simulation
     [Serializable]
     class TrackedImageDiscoveryParams
     {
-        [SerializeField, Tooltip("The time in seconds between two tracking updates.")]
-        float m_TrackingUpdateInterval = 0.1f;
+        [SerializeField]
+        [Range(SimulationConstants.oneHundredTwentyFps, 1)]
+        [Tooltip("Minimum time in seconds that must elapse between image tracking updates.")]
+        float m_TrackingUpdateInterval = 0.09f;
 
         public float trackingUpdateInterval => m_TrackingUpdateInterval;
     }

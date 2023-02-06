@@ -8,6 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.4] - 2023-02-06
+
+### Changed
+
+- Changed the Editor behavior of XR Simulation Runtime Settings to add input validation and standardize naming conventions for similar settings across simulation subsystem providers.
+- Changed default values of XR Simulation Runtime Settings to improve plane detection performance. If your project already includes AR Foundation, you can accept the new default values by deleting the Asset at `Assets/XR/Resources/XRSimulationRuntimeSettings.asset` and restarting the Editor.
+
+### Removed
+
+- Removed a warning that was previously logged when your AR Foundation project build contained a scene with an `XROrigin` but not an `ARCameraBackground` or `ARCameraManager`. There are valid reasons to set up a scene this way, such as building for OpenXR, so the warning was not helpful.
+
+### Fixed
+
+- Fixed an issue where AR content would not render in the Game view in XR Simulation when using [XRCameraBackgroundRenderingMode.AfterOpaques](xref:UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode).
+- Fixed an issue where some XR Simulation subsystem providers could break if you destroyed and immediately re-instantiated the Simulation Session Subsystem.
+
 ## [5.0.3] - 2022-11-01
 
 ### Added

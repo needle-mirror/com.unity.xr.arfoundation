@@ -15,21 +15,21 @@ You can currently test the following AR features using XR Simulation:
 
 | Feature                                                                                       |   |
 | :-------------------------------------------------------------------------------------------- |:-:|
-| [Session](xref:arfoundation-session)                                                          | ✓ |
-| [Device tracking](xref:arfoundation-device-tracking)                                          | ✓ |
-| [Camera](xref:arfoundation-camera)                                                            | ✓ |
-| [Plane detection](xref:arfoundation-plane-detection)                                          | ✓ |
-| [Image tracking](xref:arfoundation-image-tracking)                                            | ✓ |
+| [Session](xref:arfoundation-session)                                                          | Yes |
+| [Device tracking](xref:arfoundation-device-tracking)                                          | Yes |
+| [Camera](xref:arfoundation-camera)                                                            | Yes |
+| [Plane detection](xref:arfoundation-plane-detection)                                          | Yes |
+| [Image tracking](xref:arfoundation-image-tracking)                                            | Yes |
 | [Object tracking](xref:arfoundation-object-tracking)                                          |   |
 | [Face tracking](xref:arfoundation-face-tracking)                                              |   |
 | [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager)                          |   |
-| [Point clouds](xref:arfoundation-point-clouds)                                                | ✓ |
-| [Raycasts](xref:arfoundation-raycasts)                                                        | ✓ |
+| [Point clouds](xref:arfoundation-point-clouds)                                                | Yes |
+| [Raycasts](xref:arfoundation-raycasts)                                                        | Yes |
 | [Anchors](xref:arfoundation-anchors)                                                          |   |
-| [Meshing](xref:arfoundation-meshing)                                                          | ✓ |
+| [Meshing](xref:arfoundation-meshing)                                                          | Yes |
 | [Environment Probes](xref:arfoundation-environment-probes)                                    |   |
 | [Occlusion](xref:arfoundation-occlusion)                                                      |   |
-| [Participants](xref:arfoundation-participants)                                                |   |
+| [Participants](xref:arfoundation-participant-tracking)                                        |   |
 
 ## Architecture
 

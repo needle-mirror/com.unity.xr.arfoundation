@@ -18,14 +18,14 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// The portion of the original image that will be used as input to the conversion.
+            /// The input rectangle must be completely contained inside the <c>XRCpuImage</c> <see cref="XRCpuImage.dimensions"/>.
             /// </summary>
-            /// <remarks>
-            /// The input rectangle must be completely contained inside the <c>XRCpuImage</c>
-            /// <see cref="XRCpuImage.dimensions"/>.
-            /// </remarks>
             /// <value>
             /// The portion of the original image that will be converted.
             /// </value>
+            /// <remarks>
+            /// It can be significantly faster to convert a sub-rectangle of the original image if you know which part of the image you need.
+            /// </remarks>
             public RectInt inputRect
             {
                 get => m_InputRect;
@@ -40,6 +40,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// <value>
             /// The dimensions of the converted image.
             /// </value>
+            /// <example>
+            /// For example, you could supply `(inputRect.width / 2, inputRect.height / 2)` to get a half resolution image.
+            /// This can decrease the time it takes to perform a color conversion.
+            /// </example>
             public Vector2Int outputDimensions
             {
                 get => m_OutputDimensions;
@@ -65,6 +69,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <value>
             /// The transformation to apply to the image during conversion.
             /// </value>
+            /// <remarks>
+            /// Transformations typically do not increase the processing time.
+            /// </remarks>
             public Transformation transformation
             {
                 get => m_Transformation;

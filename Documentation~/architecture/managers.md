@@ -64,7 +64,7 @@ This table summarizes the trackable managers and their trackable types.
 | [ARRaycastManager](xref:arfoundation-raycasts#ar-raycast-manager-component) | [ARRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycast) | Repeats a raycast every frame. |
 | [ARAnchorManager](xref:arfoundation-anchors#ar-anchor-manager-component) | [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | Track an arbitrary point in space. |
 | [AREnvironmentProbeManager](xref:arfoundation-environment-probes#ar-environment-probe-manager-component) | [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | Generate cubemaps of the environment. |
-| [ARParticipantManager](xref:arfoundation-participants#ar-participant-manager-component) | [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | Track other devices in a shared AR session. |
+| [ARParticipantManager](xref:arfoundation-participant-tracking#ar-participant-manager-component) | [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | Track other devices in a shared AR session. |
 
 ### Enumerating trackables
 
@@ -94,7 +94,7 @@ A trackable can be added, updated, and removed. A trackable is always added befo
 | [ARPointCloudManager](xref:arfoundation-point-clouds#ar-point-cloud-manager-component) | `pointCloudsChanged` |
 | [ARAnchorManager](xref:arfoundation-anchors#ar-anchor-manager-component) | `anchorsChanged` |
 | [AREnvironmentProbeManager](xref:arfoundation-environment-probes#ar-environment-probe-manager-component) | `environmentProbesChanged` |
-| [ARParticipantManager](xref:arfoundation-participants#ar-participant-manager-component) | `participantsChanged` |
+| [ARParticipantManager](xref:arfoundation-participant-tracking#ar-participant-manager-component) | `participantsChanged` |
 
 See each manager's documentation for more information about responding to these events.
 

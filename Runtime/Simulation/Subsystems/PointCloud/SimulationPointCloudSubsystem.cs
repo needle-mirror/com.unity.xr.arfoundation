@@ -19,7 +19,7 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         protected override void OnStart()
         {
-            SimulationEnvironmentScanner.RegisterSubsystem(this);
+            SimulationEnvironmentScanner.GetOrCreate().RegisterSubsystem(this);
             base.OnStart();
         }
 
@@ -28,7 +28,7 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         protected override void OnStop()
         {
-            SimulationEnvironmentScanner.UnregisterSubsystem(this);
+            SimulationEnvironmentScanner.GetOrCreate().UnregisterSubsystem(this);
             base.OnStop();
         }
 
@@ -154,11 +154,11 @@ namespace UnityEngine.XR.Simulation
 
             void UpdatePointCloudData()
             {
-                var currentScanTime = SimulationEnvironmentScanner.instance.lastScanTime;
+                var currentScanTime = SimulationEnvironmentScanner.GetOrCreate().lastScanTime;
                 if (currentScanTime <= m_LastScanTime)
                     return;
 
-                var points = SimulationEnvironmentScanner.instance.GetPoints(Allocator.Temp);
+                var points = SimulationEnvironmentScanner.GetOrCreate().GetPoints(Allocator.Temp);
 
                 try
                 {

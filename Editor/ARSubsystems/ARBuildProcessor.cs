@@ -38,8 +38,7 @@ namespace UnityEditor.XR.ARSubsystems
         public static void PreprocessBuild(BuildTarget buildTarget)
         {
             // Get the list of active loaders for the given BuildTarget
-            var settings = XRGeneralSettingsPerBuildTarget
-                .XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(buildTarget));
+            var settings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(buildTarget));
             var activeLoaders = settings && settings.Manager ? settings.Manager.activeLoaders : null;
             if (activeLoaders == null)
                 return;

@@ -9,20 +9,17 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.Simulation
 {
     /// <summary>
-    /// Scanner that scans the simulation environment using raycasts and provides
-    /// a list of points and their normals.
+    /// Scanner that scans the simulation environment using raycasts and provides a list of points and their normals.
     /// </summary>
     class SimulationEnvironmentScanner : IDisposable
     {
-        // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use
-        // Reference type collections must also be cleared after use
-        static readonly List<MeshRenderer> k_EnvironmentMeshes = new List<MeshRenderer>();
-
-        static readonly List<SubsystemWithProvider> s_TrackingSubsystems = new();
         static SimulationEnvironmentScanner s_Instance;
-        static bool s_MeshCollidersRequested;
 
-        public static SimulationEnvironmentScanner instance => s_Instance ??= new SimulationEnvironmentScanner();
+        // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use.
+        // Reference type collections must also be cleared after use
+        static readonly List<MeshRenderer> s_EnvironmentMeshes = new();
+
+        readonly List<SubsystemWithProvider> m_TrackingSubsystems = new();
 
         EnvironmentScanParams m_EnvironmentScanParams;
 
@@ -37,6 +34,7 @@ namespace UnityEngine.XR.Simulation
         bool m_Initialized;
         bool m_Running;
         GameObject m_EnvironmentRoot;
+        bool m_MeshCollidersRequested;
         bool m_MeshCollidersCreated;
 
         NativeArray<Vector3> m_Normals;
@@ -44,15 +42,20 @@ namespace UnityEngine.XR.Simulation
 
         public float lastScanTime => m_LastScanTime;
 
-        private SimulationEnvironmentScanner()
+        SimulationEnvironmentScanner()
         {
             m_EnvironmentScanParams = XRSimulationRuntimeSettings.Instance.environmentScanParams;
             m_Initialized = false;
         }
 
-        ~SimulationEnvironmentScanner()
+        public static SimulationEnvironmentScanner GetOrCreate()
         {
-            Dispose();
+            // Written this way to make it easy to add a breakpoint when new instance is created
+            // ReSharper disable once ConvertIfStatementToNullCoalescingExpression
+            if (s_Instance == null)
+                s_Instance = new SimulationEnvironmentScanner();
+
+            return s_Instance;
         }
 
         public void Initialize(SimulationCamera simulationCamera, PhysicsScene physicsScene, GameObject environmentRoot)
@@ -71,9 +74,9 @@ namespace UnityEngine.XR.Simulation
             m_Normals = new NativeArray<Vector3>(m_EnvironmentScanParams.raysPerCast, Allocator.Persistent);
             m_Points = new NativeArray<Vector3>(m_EnvironmentScanParams.raysPerCast, Allocator.Persistent);
 
-            if (s_MeshCollidersRequested)
+            if (m_MeshCollidersRequested)
             {
-                s_MeshCollidersRequested = false;
+                m_MeshCollidersRequested = false;
                 CreateMeshColliders();
             }
 
@@ -104,8 +107,10 @@ namespace UnityEngine.XR.Simulation
             m_PointCount = 0;
             m_Initialized = false;
 
-            k_EnvironmentMeshes.Clear();
-            s_MeshCollidersRequested = false;
+            s_EnvironmentMeshes.Clear();
+            m_MeshCollidersRequested = false;
+
+            m_TrackingSubsystems.Clear();
 
             s_Instance = null;
         }
@@ -113,7 +118,7 @@ namespace UnityEngine.XR.Simulation
         public void Update()
         {
             if (!m_Running ||
-                s_TrackingSubsystems.Count <= 0 ||
+                m_TrackingSubsystems.Count <= 0 ||
                 !ShouldRescan())
                 return;
 
@@ -262,11 +267,39 @@ namespace UnityEngine.XR.Simulation
                    Quaternion.Angle(m_PreviousCameraPose.rotation, m_CameraPose.rotation) > m_EnvironmentScanParams.deltaCameraAngleToRescan;
         }
 
+        public void RegisterSubsystem<TSubsystem>(TSubsystem subsystem)
+            where TSubsystem : SubsystemWithProvider, new()
+        {
+            if (m_TrackingSubsystems.Contains(subsystem))
+                return;
+
+            m_TrackingSubsystems.Add(subsystem);
+            EnsureMeshColliders();
+        }
+
+        public void UnregisterSubsystem<TSubsystem>(TSubsystem subsystem)
+            where TSubsystem : SubsystemWithProvider, new()
+        {
+            m_TrackingSubsystems.Remove(subsystem);
+        }
+
+        public void EnsureMeshColliders()
+        {
+            if (!m_Initialized)
+            {
+                m_MeshCollidersRequested = true;
+                return;
+            }
+
+            if (!m_MeshCollidersCreated)
+                CreateMeshColliders();
+        }
+
         void CreateMeshColliders()
         {
             // k_EnvironmentMeshes is cleared by GetComponentsInChildren
-            m_EnvironmentRoot.GetComponentsInChildren(k_EnvironmentMeshes);
-            foreach (var mesh in k_EnvironmentMeshes)
+            m_EnvironmentRoot.GetComponentsInChildren(s_EnvironmentMeshes);
+            foreach (var mesh in s_EnvironmentMeshes)
             {
                 if (mesh.GetComponent<SimulatedBoundedPlane>())
                     continue;
@@ -279,37 +312,9 @@ namespace UnityEngine.XR.Simulation
                 meshObject.AddComponent<MeshCollider>();
             }
 
-            k_EnvironmentMeshes.Clear();
+            s_EnvironmentMeshes.Clear();
 
             m_MeshCollidersCreated = true;
-        }
-
-        public static void RegisterSubsystem<TSubsystem>(TSubsystem subsystem)
-            where TSubsystem : SubsystemWithProvider, new()
-        {
-            if (s_TrackingSubsystems.Contains(subsystem))
-                return;
-
-            s_TrackingSubsystems.Add(subsystem);
-            EnsureMeshColliders();
-        }
-
-        public static void UnregisterSubsystem<TSubsystem>(TSubsystem subsystem)
-            where TSubsystem : SubsystemWithProvider, new()
-        {
-            s_TrackingSubsystems.Remove(subsystem);
-        }
-
-        public static void EnsureMeshColliders()
-        {
-            if (!(s_Instance?.m_Initialized).GetValueOrDefault())
-            {
-                s_MeshCollidersRequested = true;
-                return;
-            }
-
-            if (!s_Instance.m_MeshCollidersCreated)
-                s_Instance.CreateMeshColliders();
         }
 
         readonly struct RaycastParams

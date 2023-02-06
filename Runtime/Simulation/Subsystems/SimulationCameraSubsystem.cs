@@ -2,6 +2,7 @@ using System;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine.Rendering;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -116,7 +117,7 @@ namespace UnityEngine.XR.Simulation
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
 
-                var xrOrigin = Object.FindObjectOfType<XROrigin>();
+                var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
                 if (xrOrigin == null)
                     throw new NullReferenceException("No XROrigin found.");
 

@@ -27,7 +27,7 @@ Go to **Window** > **XR** > **AR Foundation** > **XR Environment** to open the X
    <td></td>
    <td></td>
    <td><strong>Install sample environments</strong></td>
-   <td>Installs the sample environment assets to your project. See <a href="#install-the-sample-environments">Install the sample environments</a>.</td>
+   <td>Installs the sample environment assets to your project. See <a href="simulation-getting-started.md#install-the-sample-environments">Install the sample environments</a>.</td>
   </tr>
   <tr>
    <td><strong>B</strong></td>
@@ -64,7 +64,7 @@ Go to **Window** > **XR** > **AR Foundation** > **XR Environment** to open the X
   <tr>
    <td><strong>E</strong></td>
    <td colspan="2" ><strong>Camera starting pose</strong></td>
-   <td>Visualizes the initial position and rotation of the Camera in the environment when you enter Play Mode. See <a href="#simulation-environment-component">Simulation Environment component</a> for more information about setting these values.</td>
+   <td>Visualizes the initial position and rotation of the Camera in the environment when you enter Play Mode. See <a href="simulation-environments.md#simulation-environment-component">Simulation Environment component</a> for more information about setting these values.</td>
   </tr>
 </table>
 

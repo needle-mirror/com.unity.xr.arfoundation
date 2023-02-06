@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine.XR.ARSubsystems;
@@ -59,7 +60,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             public static SupportsInstall supportsInstall;
 
-            static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();
+            static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new();
 
             XRSessionSubsystem sessionSubsystem => GetLoadedSubsystem<XRSessionSubsystem>();
 
@@ -85,8 +86,12 @@ namespace UnityEngine.XR.ARFoundation
             xrManager.loaders.Add(ScriptableObject.CreateInstance<MockLoader>());
 #pragma warning restore CS0618
             xrManager.InitializeLoaderSync();
+#if UNITY_EDITOR
             XRGeneralSettings.Instance = ScriptableObject.CreateInstance<XRGeneralSettings>();
             XRGeneralSettings.Instance.Manager = xrManager;
+#else
+            throw new InvalidOperationException("This test is only valid on the Editor platform.");
+#endif
         }
 
         static void DeinitMock()
@@ -98,7 +103,11 @@ namespace UnityEngine.XR.ARFoundation
 #pragma warning restore CS0618
             ScriptableObject.Destroy(xrManager);
             ScriptableObject.Destroy(XRGeneralSettings.Instance);
+#if UNITY_EDITOR
             XRGeneralSettings.Instance = null;
+#else
+            throw new InvalidOperationException("This test is only valid on the Editor platform.");
+#endif
         }
 
         static void RunAvailabilityCheck(SupportsInstall supportsInstall, SessionAvailability availability)

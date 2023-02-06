@@ -17,10 +17,10 @@ namespace UnityEngine.XR.Simulation
         EnvironmentScanParams m_EnvironmentScanParams;
 
         [SerializeField]
-        TrackedImageDiscoveryParams m_TrackedImageDiscoveryParams;
+        PlaneFindingParams m_PlaneFindingParams = new();
 
         [SerializeField]
-        PlaneFindingParams m_PlaneFindingParams = new();
+        TrackedImageDiscoveryParams m_TrackedImageDiscoveryParams = new();
 
         [Header("X-Ray Options")]
         [SerializeField, Tooltip("Use x-ray visuals on the simulation environments.")]

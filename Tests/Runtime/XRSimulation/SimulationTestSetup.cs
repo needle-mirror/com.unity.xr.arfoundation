@@ -4,13 +4,17 @@ using UnityEngine.XR.Management;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.TestTooling;
 using UnityEditor.XR.ARFoundation;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 
 namespace UnityEngine.XR.Simulation.Tests
 {
     abstract class SimulationTestSetup : LoaderTestSetup<SimulationLoader>
     {
-        static bool noXrmOrActiveSimulationLoader => XRGeneralSettings.Instance == null || XRGeneralSettings.Instance.Manager == null ||
-                                    XRGeneralSettings.Instance.Manager.activeLoader == null || XRGeneralSettings.Instance.Manager.activeLoader is not SimulationLoader;
+        static bool noXrmOrActiveSimulationLoader =>
+            XRGeneralSettings.Instance == null ||
+            XRGeneralSettings.Instance.Manager == null ||
+            XRGeneralSettings.Instance.Manager.activeLoader == null ||
+            XRGeneralSettings.Instance.Manager.activeLoader is not SimulationLoader;
 
         /// <summary>
         /// Set up the <c>SimulationLoader</c> for runtime test.
@@ -49,7 +53,7 @@ namespace UnityEngine.XR.Simulation.Tests
 
         protected void RemoveXROrigin()
         {
-            var xrOrigin = Object.FindObjectOfType<XROrigin>();
+            var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
 
             if (xrOrigin != null)
                 Object.Destroy(xrOrigin.gameObject);
@@ -64,8 +68,7 @@ namespace UnityEngine.XR.Simulation.Tests
             mouse.MakeCurrent();
         }
 
-        protected TXRSubsystem GetSubsystem<TXRSubsystem>()
-            where TXRSubsystem : class, ISubsystem, new()
+        protected TXRSubsystem GetSubsystem<TXRSubsystem>() where TXRSubsystem : class, ISubsystem, new()
         {
             // Simulation loader exist
             Assert.IsNotNull(m_Loader, $"No active {nameof(SimulationLoader)} is available.");

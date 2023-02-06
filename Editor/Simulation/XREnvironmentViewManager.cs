@@ -4,6 +4,7 @@ using Unity.XR.CoreUtils;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.Simulation;
 
 namespace UnityEditor.XR.Simulation
@@ -362,7 +363,7 @@ namespace UnityEditor.XR.Simulation
             var camera = Camera.main;
             if (camera == null)
             {
-                var xrOrigin = FindObjectOfType<XROrigin>();
+                var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
                 if (xrOrigin != null)
                     camera = xrOrigin.Camera;
             }

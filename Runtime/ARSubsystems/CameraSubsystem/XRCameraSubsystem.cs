@@ -15,47 +15,6 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRCameraSubsystem : SubsystemWithProvider<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>
     {
         /// <summary>
-        /// Construct the <c>XRCameraSubsystem</c>.
-        /// </summary>
-        public XRCameraSubsystem() { }
-
-        /// <summary>
-        /// Gets the camera currently in use.
-        /// </summary>
-        /// <returns></returns>
-        public Feature currentCamera => provider.currentCamera.Cameras();
-
-        /// <summary>
-        /// Get or set the requested camera (that is, the <see cref="Feature.AnyCamera"/> bits).
-        /// </summary>
-        public Feature requestedCamera
-        {
-            get => provider.requestedCamera;
-            set => provider.requestedCamera = value.Cameras();
-        }
-
-        /// <summary>
-        /// Get the current <see cref="XRCameraBackgroundRenderingMode"/>.
-        /// </summary>
-        public XRCameraBackgroundRenderingMode currentCameraBackgroundRenderingMode => permissionGranted
-                ? provider.currentBackgroundRenderingMode
-                : XRCameraBackgroundRenderingMode.None;
-
-        /// <summary>
-        /// Get or set the requested <see cref="XRSupportedCameraBackgroundRenderingMode"/>.
-        /// </summary>
-        public XRSupportedCameraBackgroundRenderingMode requestedCameraBackgroundRenderingMode
-        {
-            get => provider.requestedBackgroundRenderingMode;
-            set => provider.requestedBackgroundRenderingMode = value;
-        }
-
-        /// <summary>
-        /// Get the supported <see cref="XRSupportedCameraBackgroundRenderingMode"/>s. Indicates which <see cref="XRCameraBackgroundRenderingMode"/> are supported.
-        /// </summary>
-        public XRSupportedCameraBackgroundRenderingMode supportedCameraBackgroundRenderingMode => provider.supportedBackgroundRenderingMode;
-
-        /// <summary>
         /// Interface for providing camera functionality for the implementation.
         /// </summary>
         public class Provider : SubsystemProvider<XRCameraSubsystem>
@@ -66,37 +25,35 @@ namespace UnityEngine.XR.ARSubsystems
             public virtual XRCpuImage.Api cpuImageApi => null;
 
             /// <summary>
-            /// Property to be implemented by the provder to get the material used by <c>XRCameraSubsystem</c> to
-            /// render the camera texture.
+            /// Get the Material used by this <see cref="XRCameraSubsystem"/> to render the camera texture.
             /// </summary>
-            /// <returns>
-            /// The material to render the camera texture.
-            /// </returns>
+            /// <value>The Material to render the camera texture.</value>
             public virtual Material cameraMaterial => null;
 
             /// <summary>
-            /// Property to be implemented by the provider to determine whether camera permission has been granted.
+            /// Get whether camera permission has been granted.
             /// </summary>
-            /// <value>
-            /// <c>true</c> if camera permission has been granted. Otherwise, <c>false</c>.
-            /// </value>
+            /// <value><see langword="true"/> if camera permission has been granted. Otherwise, <see langword="false"/>.</value>
             public virtual bool permissionGranted => false;
 
             /// <summary>
-            /// <c>True</c> if culling should be inverted during rendering. Some front-facing
-            /// camera modes might require this.
+            /// Get whether culling should be inverted during rendering. Some front-facing camera modes might
+            /// require this.
             /// </summary>
+            /// <value><see langword="true"/> if culling should be inverted during rendering. Otherwise, <see langword="false"/>.</value>
             public virtual bool invertCulling => false;
 
             /// <summary>
-            /// This property should get the actual camera facing direction.
+            /// Get the actual camera facing direction.
             /// </summary>
+            /// <value>The current camera facing direction.</value>
+            /// <seealso cref="requestedCamera"/>
             public virtual Feature currentCamera => Feature.None;
 
             /// <summary>
-            /// This property should get or set the requested camera facing direction,
-            /// that is, the <see cref="Feature.AnyCamera"/> bits.
+            /// Get or set the requested camera facing direction, that is, the <see cref="Feature.AnyCamera"/> bits.
             /// </summary>
+            /// <value>The requested camera facing direction</value>.
             public virtual Feature requestedCamera
             {
                 get => Feature.None;
@@ -104,44 +61,16 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Method to be implemented by the provider to start the camera for the subsystem.
+            /// Get whether auto focus is enabled.
             /// </summary>
-            public override void Start() { }
-
-            /// <summary>
-            /// Method to be implemented by the provider to stop the camera for the subsystem.
-            /// </summary>
-            public override void Stop() { }
-
-            /// <summary>
-            /// Method to be implemented by the provider to destroy the camera for the subsystem.
-            /// </summary>
-            public override void Destroy() { }
-
-            /// <summary>
-            /// Method to be implemented by the provider to get the camera frame for the subsystem.
-            /// </summary>
-            /// <param name="cameraParams">The current Unity <c>Camera</c> parameters.</param>
-            /// <param name="cameraFrame">The current camera frame returned by the method.</param>
-            /// <returns>
-            /// <c>true</c> if the method successfully got a frame. Otherwise, <c>false</c>.
-            /// </returns>
-            public virtual bool TryGetFrame(
-                XRCameraParams cameraParams,
-                out XRCameraFrame cameraFrame)
-            {
-                cameraFrame = default(XRCameraFrame);
-                return false;
-            }
-
-            /// <summary>
-            /// Property to be implemented by the provider to get the current camera focus mode.
-            /// </summary>
+            /// <value><see langword="true"/> if auto focus is enabled. Otherwise, <see langword="false"/>.</value>
+            /// <seealso cref="autoFocusRequested"/>
             public virtual bool autoFocusEnabled => false;
 
             /// <summary>
-            /// Property to be implemented by the provider to get or set the focus mode for the camera.
+            /// Get or set whether auto focus is requested.
             /// </summary>
+            /// <value><see langword="true"/> if auto focus is requested. Otherwise, <see langword="false"/>.</value>
             public virtual bool autoFocusRequested
             {
                 get => false;
@@ -149,13 +78,16 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Property to be implemented by the provider to get the current light estimation mode in use.
+            /// Get the current light estimation mode in use by the subsystem.
             /// </summary>
+            /// <value>The current light estimation mode.</value>
+            /// <seealso cref="requestedLightEstimation"/>
             public virtual Feature currentLightEstimation => Feature.None;
 
             /// <summary>
-            /// Property to be implemented by the provider to get or set the light estimation mode.
+            /// Get or set the requested light estimation mode.
             /// </summary>
+            /// <value>The requested light estimation mode.</value>
             public virtual Feature requestedLightEstimation
             {
                 get => Feature.None;
@@ -163,40 +95,9 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Method to be implemented by the provider to get the camera intrinisics information.
-            /// </summary>
-            /// <param name="cameraIntrinsics">The camera intrinsics information returned from the method.</param>
-            /// <returns>
-            /// <c>true</c> if the method successfully gets the camera intrinsics information. Otherwise, <c>false</c>.
-            /// </returns>
-            public virtual bool TryGetIntrinsics(
-                out XRCameraIntrinsics cameraIntrinsics)
-            {
-                cameraIntrinsics = default(XRCameraIntrinsics);
-                return false;
-            }
-
-            /// <summary>
-            /// Method to be implemented by the provider to query the supported camera configurations.
-            /// </summary>
-            /// <param name="defaultCameraConfiguration">A default value used to fill the returned array before copying
-            /// in real values. This ensures future additions to this struct are backwards compatible.</param>
-            /// <param name="allocator">The allocation strategy to use for the returned data.</param>
-            /// <returns>
-            /// The supported camera configurations.
-            /// </returns>
-            public virtual NativeArray<XRCameraConfiguration> GetConfigurations(XRCameraConfiguration defaultCameraConfiguration,
-                                                                                Allocator allocator)
-            {
-                return new NativeArray<XRCameraConfiguration>(0, allocator);
-            }
-
-            /// <summary>
             /// Property to be implemented by the provider to query or set the current camera configuration.
             /// </summary>
-            /// <value>
-            /// The current camera configuration, if it exists. Otherise, <c>null</c>.
-            /// </value>
+            /// <value>The current camera configuration, if it exists. Otherwise, <see langword="null"/>.</value>
             /// <exception cref="System.NotSupportedException">Thrown when setting the current configuration if the
             /// implementation does not support camera configurations.</exception>
             /// <exception cref="System.ArgumentException">Thrown when setting the current configuration if the given
@@ -210,13 +111,16 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Property implemented by the provider to query the current <see cref="XRCameraBackgroundRenderingMode"/>.
+            /// Get the current <see cref="XRCameraBackgroundRenderingMode"/>.
             /// </summary>
+            /// <value>The current <see cref="XRCameraBackgroundRenderingMode"/>.</value>
+            /// <seealso cref="requestedBackgroundRenderingMode"/>
             public virtual XRCameraBackgroundRenderingMode currentBackgroundRenderingMode => XRCameraBackgroundRenderingMode.None;
 
             /// <summary>
-            /// Property implemented by the provider to query or set the requested <see cref="XRCameraBackgroundRenderingMode"/>.
+            /// Get or set the requested <see cref="XRCameraBackgroundRenderingMode"/>.
             /// </summary>
+            /// <value>The requested background rendering mode.</value>
             public virtual XRSupportedCameraBackgroundRenderingMode requestedBackgroundRenderingMode
             {
                 get => XRSupportedCameraBackgroundRenderingMode.Any;
@@ -224,22 +128,73 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Property implemented by the provider to query the supported <see cref="XRCameraBackgroundRenderingMode"/>s
-            /// defined as <see cref="XRSupportedCameraBackgroundRenderingMode"/>s.
+            /// Get the supported <see cref="XRCameraBackgroundRenderingMode"/>s defined as <see cref="XRSupportedCameraBackgroundRenderingMode"/>s.
             /// </summary>
+            /// <value>The supported background rendering modes.</value>
             public virtual XRSupportedCameraBackgroundRenderingMode supportedBackgroundRenderingMode => XRSupportedCameraBackgroundRenderingMode.None;
 
             /// <summary>
-            /// Get the <see cref="XRTextureDescriptor"/>s associated with the current
-            /// <see cref="XRCameraFrame"/>.
+            /// Start the camera for the subsystem.
             /// </summary>
+            public override void Start() { }
+
+            /// <summary>
+            /// Stop the camera for the subsystem.
+            /// </summary>
+            public override void Stop() { }
+
+            /// <summary>
+            /// Destroy the camera for the subsystem.
+            /// </summary>
+            public override void Destroy() { }
+
+            /// <summary>
+            /// Get the camera frame for the subsystem.
+            /// </summary>
+            /// <param name="cameraParams">The current Unity <c>Camera</c> parameters.</param>
+            /// <param name="cameraFrame">The current camera frame returned by the method.</param>
+            /// <returns><see langword="true"/> if the method successfully got a frame. Otherwise, <see langword="false"/>.</returns>
+            public virtual bool TryGetFrame(
+                XRCameraParams cameraParams,
+                out XRCameraFrame cameraFrame)
+            {
+                cameraFrame = default;
+                return false;
+            }
+
+            /// <summary>
+            /// Get the camera intrinsics information.
+            /// </summary>
+            /// <param name="cameraIntrinsics">The camera intrinsics information returned from the method.</param>
+            /// <returns><see langword="true"/> if the method successfully gets the camera intrinsics information.
+            /// Otherwise, <see langword="false"/>.</returns>
+            public virtual bool TryGetIntrinsics(
+                out XRCameraIntrinsics cameraIntrinsics)
+            {
+                cameraIntrinsics = default(XRCameraIntrinsics);
+                return false;
+            }
+
+            /// <summary>
+            /// Get the supported camera configurations.
+            /// </summary>
+            /// <param name="defaultCameraConfiguration">A default value used to fill the returned array before copying in
+            /// real values. This ensures future additions to this <see langword="struct"/> are backwards compatible.</param>
+            /// <param name="allocator">The allocation strategy to use for the returned data.</param>
+            /// <returns>The supported camera configurations.</returns>
+            public virtual NativeArray<XRCameraConfiguration> GetConfigurations(XRCameraConfiguration defaultCameraConfiguration,
+                                                                                Allocator allocator)
+            {
+                return new NativeArray<XRCameraConfiguration>(0, allocator);
+            }
+
+            /// <summary>
+            /// Get the <see cref="XRTextureDescriptor"/>s associated with the current <see cref="XRCameraFrame"/>.
+            /// </summary>
+            /// <param name="defaultDescriptor">A default value used to fill the returned array before copying in real
+            /// values. This ensures future additions to this <see langword="struct"/> are backwards compatible.</param>
+            /// <param name="allocator">The allocation strategy to use for the returned data..</param>
             /// <returns>The current texture descriptors.</returns>
-            /// <param name="defaultDescriptor">A default value which should
-            /// be used to fill the returned array before copying in the
-            /// real values. This ensures future additions to this struct
-            /// are backwards compatible.</param>
-            /// <param name="allocator">The allocator to use when creating
-            /// the returned <c>NativeArray</c>.</param>
             public virtual NativeArray<XRTextureDescriptor> GetTextureDescriptors(
                 XRTextureDescriptor defaultDescriptor,
                 Allocator allocator)
@@ -248,11 +203,10 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Method to be implemented by the provider to get the enabled and disabled shader keywords for the
-            /// material.
+            /// Get the enabled and disabled shader keywords for the Material.
             /// </summary>
-            /// <param name="enabledKeywords">The keywords to enable for the material.</param>
-            /// <param name="disabledKeywords">The keywords to disable for the material.</param>
+            /// <param name="enabledKeywords">The keywords to enable for the Material.</param>
+            /// <param name="disabledKeywords">The keywords to disable for the Material.</param>
             public virtual void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
             {
                 enabledKeywords = null;
@@ -260,14 +214,11 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Method to be implemented by the provider to query for the latest native camera image.
+            /// Get the latest native camera image.
             /// </summary>
-            /// <param name="cameraImageCinfo">The metadata required to construct a <see cref="XRCpuImage"/></param>
-            /// <returns>
-            /// <c>true</c> if the camera image is acquired. Otherwise, <c>false</c>.
-            /// </returns>
-            /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera
-            /// image.</exception>
+            /// <param name="cameraImageCinfo">The metadata required to construct a <see cref="XRCpuImage"/>.</param>
+            /// <returns><see langword="true"/> if the camera image is acquired. Otherwise, <see langword="false"/>.</returns>
+            /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.</exception>
             public virtual bool TryAcquireLatestCpuImage(out XRCpuImage.Cinfo cameraImageCinfo)
             {
                 throw new NotSupportedException("getting camera image is not supported by this implementation");
@@ -277,26 +228,25 @@ namespace UnityEngine.XR.ARSubsystems
             /// Create the camera material from the given camera shader name.
             /// </summary>
             /// <param name="cameraShaderName">The name of the camera shader.</param>
-            /// <returns>
-            /// The created camera material shader.
-            /// </returns>
-            /// <exception cref="System.InvalidOperationException">Thrown if the shader cannot be found or if a
-            /// material cannot be created for the shader.</exception>
+            /// <returns>The created camera material shader.</returns>
+            /// <exception cref="System.InvalidOperationException">Thrown if the shader cannot be found or if a material
+            /// cannot be created for the shader.</exception>
             protected Material CreateCameraMaterial(string cameraShaderName)
             {
                 var shader = Shader.Find(cameraShaderName);
                 if (shader == null)
                 {
-                    throw new InvalidOperationException($"Could not find shader named '{cameraShaderName}' required "
-                                                        + $"for video overlay on camera subsystem.");
+                    throw new InvalidOperationException(
+                        $"Could not find shader named '{cameraShaderName}' required "
+                        + $"for video overlay on camera subsystem.");
                 }
 
-                Material material = new Material(shader);
+                var material = new Material(shader);
                 if (material == null)
                 {
-                    throw new InvalidOperationException($"Could not create a material for shader named "
-                                                        + $"'{cameraShaderName}' required for video overlay on camera "
-                                                        + $"subsystem.");
+                    throw new InvalidOperationException(
+                        $"Could not create a material for shader named '{cameraShaderName}' required for video"
+                        + " overlay on camera subsystem.");
                 }
 
                 return material;
@@ -308,21 +258,64 @@ namespace UnityEngine.XR.ARSubsystems
             /// thread and should only be called by the code responsible for executing background rendering on
             /// mobile AR platforms.
             /// </summary>
-            /// <param name="id">Platform specific identifier.</param>
+            /// <param name="id">Platform-specific identifier.</param>
             public virtual void OnBeforeBackgroundRender(int id) {}
         }
 
         /// <summary>
-        /// Get the current focus mode in use by the provider.
+        /// Get the camera currently in use.
         /// </summary>
+        /// <value>The current camera.</value>
+        public Feature currentCamera => provider.currentCamera.Cameras();
+
+        /// <summary>
+        /// Get or set the requested camera (that is, the <see cref="Feature.AnyCamera"/> bits).
+        /// </summary>
+        /// <value>The requested camera.</value>
+        public Feature requestedCamera
+        {
+            get => provider.requestedCamera;
+            set => provider.requestedCamera = value.Cameras();
+        }
+
+        /// <summary>
+        /// Get the current <see cref="XRCameraBackgroundRenderingMode"/>.
+        /// </summary>
+        /// <value>The current camera background rendering mode.</value>
+        /// <seealso cref="requestedCameraBackgroundRenderingMode"/>
+        public XRCameraBackgroundRenderingMode currentCameraBackgroundRenderingMode => permissionGranted
+            ? provider.currentBackgroundRenderingMode
+            : XRCameraBackgroundRenderingMode.None;
+
+        /// <summary>
+        /// Get or set the requested <see cref="XRSupportedCameraBackgroundRenderingMode"/>.
+        /// </summary>
+        /// <value>The requested camera background rendering mode.</value>
+        public XRSupportedCameraBackgroundRenderingMode requestedCameraBackgroundRenderingMode
+        {
+            get => provider.requestedBackgroundRenderingMode;
+            set => provider.requestedBackgroundRenderingMode = value;
+        }
+
+        /// <summary>
+        /// Get the supported <see cref="XRSupportedCameraBackgroundRenderingMode"/>s.
+        /// Indicates which <see cref="XRCameraBackgroundRenderingMode"/>s are supported.
+        /// </summary>
+        /// <value>The supported camera background rendering modes.</value>
+        public XRSupportedCameraBackgroundRenderingMode supportedCameraBackgroundRenderingMode =>
+            provider.supportedBackgroundRenderingMode;
+
+        /// <summary>
+        /// Indicates whether auto focus is enabled.
+        /// </summary>
+        /// <value><see langword="true"/> if auto focus is enabled. Otherwise, <see langword="false"/>.</value>
+        /// <seealso cref="autoFocusRequested"/>
         public bool autoFocusEnabled => provider.autoFocusEnabled;
 
         /// <summary>
-        /// Get or set the focus mode for the camera.
+        /// Get or set whether autofocus is requested.
         /// </summary>
-        /// <value>
-        /// The focus mode for the camera.
-        /// </value>
+        /// <value><see langword="true"/> if autofocus is requested. Otherwise, <see langword="false"/>.</value>
         public bool autoFocusRequested
         {
             get => provider.autoFocusRequested;
@@ -330,17 +323,16 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Returns the current light estimation mode in use by the provider.
+        /// Get the current light estimation mode in use by the provider.
         /// </summary>
+        /// <value>The current light estimation mode.</value>
         /// <seealso cref="requestedLightEstimation"/>
         public Feature currentLightEstimation => provider.currentLightEstimation.LightEstimation();
 
         /// <summary>
         /// Get or set the requested light estimation mode.
         /// </summary>
-        /// <value>
-        /// The light estimation mode.
-        /// </value>
+        /// <value>The requested light estimation mode.</value>
         public Feature requestedLightEstimation
         {
             get => provider.requestedLightEstimation.LightEstimation();
@@ -348,13 +340,61 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Gets the <see cref="XRTextureDescriptor"/>s associated with the
-        /// current frame. The caller owns the returned <c>NativeArray</c>
-        /// and is responsible for calling <c>Dispose</c> on it.
+        /// Get the Material used by <see cref="XRCameraSubsystem"/> to render the camera texture.
+        /// </summary>
+        /// <value>The Material to render the camera texture.</value>
+        public Material cameraMaterial => provider.cameraMaterial;
+
+        /// <summary>
+        /// Indicates whether camera permission has been granted.
+        /// </summary>
+        /// <value><see langword="true"/> if camera permission has been granted. Otherwise, <see langword="false"/>.</value>
+        public bool permissionGranted => provider.permissionGranted;
+
+        /// <summary>
+        /// Set this to <see langword="true"/> to invert the culling mode during rendering. Some front-facing
+        /// camera modes might require this.
+        /// </summary>
+        public bool invertCulling => provider.invertCulling;
+
+        /// <summary>
+        /// The current camera configuration.
+        /// </summary>
+        /// <value>The current camera configuration, if it exists. Otherwise, <see langword="null"/>.</value>
+        /// <exception cref="System.NotSupportedException">Thrown when setting the current configuration if the
+        /// implementation does not support camera configurations.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when setting the current configuration if the given
+        /// configuration is <see langword="null"/>.</exception>
+        /// <exception cref="System.ArgumentException">Thrown when setting the current configuration if the given
+        /// configuration is not a supported camera configuration.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown when setting the current configuration if the
+        /// implementation is unable to set the current camera configuration.
+        /// </exception>
+        public virtual XRCameraConfiguration? currentConfiguration
+        {
+            get => provider.currentConfiguration;
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value), "cannot set the camera configuration to null");
+                }
+
+                provider.currentConfiguration = value;
+            }
+        }
+
+        /// <summary>
+        /// Construct the <see cref="XRCameraSubsystem"/>.
+        /// </summary>
+        public XRCameraSubsystem() { }
+
+        /// <summary>
+        /// Gets the <see cref="XRTextureDescriptor"/>s associated with the current frame. The caller owns the returned
+        /// <c>NativeArray</c> and is responsible for calling <c>Dispose</c> on it.
         /// </summary>
         /// <returns>An array of texture descriptors.</returns>
-        /// <param name="allocator">The allocator to use when creating
-        /// the returned <c>NativeArray</c>.</param>
+        /// <param name="allocator">The allocator to use when creating the returned <c>NativeArray</c>.</param>
         public NativeArray<XRTextureDescriptor> GetTextureDescriptors(
             Allocator allocator)
         {
@@ -362,14 +402,6 @@ namespace UnityEngine.XR.ARSubsystems
                 default(XRTextureDescriptor),
                 allocator);
         }
-
-        /// <summary>
-        /// Get the material used by <c>XRCameraSubsystem</c> to render the camera texture.
-        /// </summary>
-        /// <value>
-        /// The material to render the camera texture.
-        /// </value>
-        public Material cameraMaterial => provider.cameraMaterial;
 
         /// <summary>
         /// Method to be called on the render thread to handle any required platform-specific functionality
@@ -384,67 +416,30 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Returns the camera intrinsics information.
+        /// Get the camera intrinsics information.
         /// </summary>
+        /// <param name="cameraIntrinsics">The returned camera intrinsics information.</param>
+        /// <returns><see langword="true"/> if the method successfully gets the camera intrinsics information.
+        /// Otherwise, <see langword="false"/>.</returns>
         /// <remarks>
         /// > [!NOTE]
         /// > The intrinsics may change each frame. You should call this each frame that you need intrinsics
         /// > in order to ensure you are using the intrinsics for the current frame.
         /// </remarks>
-        /// <param name="cameraIntrinsics">The camera intrinsics information returned from the method.</param>
-        /// <returns>
-        /// <c>true</c> if the method successfully gets the camera intrinsics information. Otherwise, <c>false</c>.
-        /// </returns>
         public bool TryGetIntrinsics(out XRCameraIntrinsics cameraIntrinsics)
         {
             return provider.TryGetIntrinsics(out cameraIntrinsics);
         }
 
         /// <summary>
-        /// Queries for the supported camera configurations.
+        /// Get the supported camera configurations.
         /// </summary>
         /// <param name="allocator">The allocation strategy to use for the returned data.</param>
-        /// <returns>
-        /// The supported camera configurations.
-        /// </returns>
+        /// <returns>The supported camera configurations.</returns>
         public NativeArray<XRCameraConfiguration> GetConfigurations(Allocator allocator)
         {
-            return provider.GetConfigurations(default(XRCameraConfiguration), allocator);
+            return provider.GetConfigurations(default, allocator);
         }
-
-        /// <summary>
-        /// The current camera configuration.
-        /// </summary>
-        /// <value>
-        /// The current camera configuration, if it exists. Otherise, <c>null</c>.
-        /// </value>
-        /// <exception cref="System.NotSupportedException">Thrown when setting the current configuration if the
-        /// implementation does not support camera configurations.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown when setting the current configuration if the given
-        /// configuration is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentException">Thrown when setting the current configuration if the given
-        /// configuration is not a supported camera configuration.</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown when setting the current configuration if the
-        /// implementation is unable to set the current camera configuration.</exception>
-        public virtual XRCameraConfiguration? currentConfiguration
-        {
-            get => provider.currentConfiguration;
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value", "cannot set the camera configuration to null");
-                }
-
-                provider.currentConfiguration = value;
-            }
-        }
-
-        /// <summary>
-        /// Set this to <c>true</c> to invert the culling mode during rendering. Some front-facing
-        /// camera modes might require this.
-        /// </summary>
-        public bool invertCulling => provider.invertCulling;
 
         /// <summary>
         /// Get the latest frame from the provider.
@@ -452,29 +447,17 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="cameraParams">The Unity <c>Camera</c> parameters.</param>
         /// <param name="frame">The camera frame to be populated if the subsystem is running and successfully provides
         /// the latest camera frame.</param>
-        /// <returns>
-        /// <c>true</c> if the camera frame is successfully returned. Otherwise, <c>false</c>.
-        /// </returns>
-        public bool TryGetLatestFrame(
-            XRCameraParams cameraParams,
-            out XRCameraFrame frame)
+        /// <returns><see langword="true"/> if the camera frame is successfully returned. Otherwise, <see langword="false"/>.</returns>
+        public bool TryGetLatestFrame(XRCameraParams cameraParams, out XRCameraFrame frame)
         {
             if (running && provider.TryGetFrame(cameraParams, out frame))
             {
                 return true;
             }
 
-            frame = default(XRCameraFrame);
+            frame = default;
             return false;
         }
-
-        /// <summary>
-        /// Determines whether camera permission has been granted.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if camera permission has been granted. Otherwise, <c>false</c>.
-        /// </value>
-        public bool permissionGranted => provider.permissionGranted;
 
         /// <summary>
         /// Get the enabled and disabled shader keywords for the material.
@@ -489,13 +472,12 @@ namespace UnityEngine.XR.ARSubsystems
         /// to utilities to convert to RGB and Grayscale formats. This method is obsolete. Use
         /// <see cref="TryAcquireLatestCpuImage"/> instead.
         /// </summary>
+        /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <see langword="true"/>.</param>
+        /// <returns><see langword="true"/> if the image was acquired. Otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.</exception>
         /// <remarks>
         /// The returned <see cref="XRCpuImage"/> must be disposed to avoid resource leaks.
         /// </remarks>
-        /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <c>true</c>.</param>
-        /// <returns>Returns `true` if the image was acquired. Returns `false` otherwise.</returns>
-        /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.
-        /// </exception>
         [Obsolete("Use TryAcquireLatestCpuImage instead. (2020-05-19)")]
         public bool TryGetLatestImage(out XRCpuImage cpuImage) => TryAcquireLatestCpuImage(out cpuImage);
 
@@ -503,13 +485,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
         /// to utilities to convert to RGB and Grayscale formats.
         /// </summary>
-        /// <remarks>
-        /// The returned <see cref="XRCpuImage"/> must be disposed to avoid resource leaks.
-        /// </remarks>
-        /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <c>true</c>.</param>
-        /// <returns>Returns `true` if the image was acquired. Returns `false` otherwise.</returns>
-        /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.
-        /// </exception>
+        /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <see langword="true"/>.</param>
+        /// <returns><see langword="true"/> if the image was acquired. Otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.</exception>
+        /// <remarks>The returned <see cref="XRCpuImage"/> must be disposed to avoid resource leaks.</remarks>
         public bool TryAcquireLatestCpuImage(out XRCpuImage cpuImage)
         {
             if (provider.cpuImageApi != null && provider.TryAcquireLatestCpuImage(out var cinfo))
@@ -527,28 +506,26 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="cameraSubsystemParams">The parameters defining the camera subsystem functionality implemented
         /// by the subsystem provider.</param>
-        /// <returns>
-        /// <c>true</c> if the subsystem implementation is registered. Otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="System.ArgumentException">Thrown when the values specified in the
-        /// <see cref="XRCameraSubsystemCinfo"/> parameter are invalid. Typically, this will occur
+        /// <returns><see langword="true"/> if the subsystem implementation is registered. Otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="System.ArgumentException">Thrown when the values specified in the <see cref="XRCameraSubsystemCinfo"/> parameter are invalid.
+        /// Typically, this will occur:
         /// <list type="bullet">
         /// <item>
-        /// <description>if <see cref="XRCameraSubsystemCinfo.id"/> is <c>null</c> or empty</description>
+        /// <description>if <see cref="XRCameraSubsystemCinfo.id"/> is <see langword="null"/> or empty</description>
         /// </item>
         /// <item>
-        /// <description>if <see cref="XRCameraSubsystemCinfo.implementationType"/> is <c>null</c></description>
+        /// <description>if <see cref="XRCameraSubsystemCinfo.implementationType"/> is <see langword="null"/></description>
         /// </item>
         /// <item>
-        /// <description>if <see cref="XRCameraSubsystemCinfo.implementationType"/> does not derive from the
-        /// <see cref="XRCameraSubsystem"/> class
+        /// <description>if <see cref="XRCameraSubsystemCinfo.implementationType"/> does not derive from
+        /// <see cref="XRCameraSubsystem"/>
         /// </description>
         /// </item>
         /// </list>
         /// </exception>
         public static bool Register(XRCameraSubsystemCinfo cameraSubsystemParams)
         {
-            XRCameraSubsystemDescriptor cameraSubsystemDescriptor = XRCameraSubsystemDescriptor.Create(cameraSubsystemParams);
+            var cameraSubsystemDescriptor = XRCameraSubsystemDescriptor.Create(cameraSubsystemParams);
             SubsystemDescriptorStore.RegisterDescriptor(cameraSubsystemDescriptor);
             return true;
         }

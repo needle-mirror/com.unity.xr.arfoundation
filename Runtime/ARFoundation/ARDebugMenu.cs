@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
@@ -494,7 +495,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void InitMenu()
         {
-            var eventSystems = FindObjectsOfType<EventSystem>();
+            var eventSystems = FindObjectsUtility.FindObjectsByType<EventSystem>();
             if(eventSystems.Length == 0)
             {
                 Debug.LogError($"Failed to find EventSystem in current scene. As a result, this component will be disabled.");
@@ -502,23 +503,21 @@ namespace UnityEngine.XR.ARFoundation
                 return;
             }
 
-            var sessions = FindObjectsOfType<ARSession>();
-            if(sessions.Length == 0)
+            m_Session = FindObjectsUtility.FindAnyObjectByType<ARSession>();
+            if(m_Session == null)
             {
                 Debug.LogError($"Failed to find ARSession in current scene. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }
-            m_Session = sessions[0];
 
-            var origins = FindObjectsOfType<XROrigin>();
-            if(origins.Length == 0)
+            m_Origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+            if(m_Origin == null)
             {
                 Debug.LogError($"Failed to find XROrigin in current scene. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }
-            m_Origin = origins[0];
 
             m_CameraAR = m_Origin.Camera;
 #if !UNITY_IOS && !UNITY_ANDROID

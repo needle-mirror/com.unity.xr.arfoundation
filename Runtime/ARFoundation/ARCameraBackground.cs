@@ -228,10 +228,7 @@ namespace UnityEngine.XR.ARFoundation
         [MonoPInvokeCallback(typeof(Action<int>))]
         static void BeforeBackgroundRenderHandler(int eventId)
         {
-            if (s_CameraSubsystem != null)
-            {
-                s_CameraSubsystem.OnBeforeBackgroundRender(eventId);
-            }
+            s_CameraSubsystem?.OnBeforeBackgroundRender(eventId);
         }
 
         /// <summary>
@@ -257,20 +254,36 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Static reference to the active XRCameraSubsystem. Necessary here for access from a static delegate.
         /// </summary>
-        static ARSubsystems.XRCameraSubsystem s_CameraSubsystem;
+        static XRCameraSubsystem s_CameraSubsystem;
 
         /// <summary>
         /// Whether culling should be inverted. Used during command buffer configuration,
         /// see [CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html).
         /// </summary>
         /// <seealso cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/>
-        protected bool shouldInvertCulling => m_CameraManager?.subsystem?.invertCulling ?? false;
+        protected bool shouldInvertCulling
+        {
+            get
+            {
+                // Use Unity == operator overload for comparing UnityEngine.Object with null
+                if (m_CameraManager == null || m_CameraManager.subsystem == null)
+                    return false;
+
+                return m_CameraManager.subsystem.invertCulling;
+            }
+        }
 
         /// <summary>
-        /// The current (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode). Determines which render order
-        /// to use.
+        /// The current <see cref="XRCameraBackgroundRenderingMode"/>. Determines which render order to use.
         /// </summary>
-        public XRCameraBackgroundRenderingMode currentRenderingMode => m_CameraManager?.currentRenderingMode ?? XRCameraBackgroundRenderingMode.None;
+        public XRCameraBackgroundRenderingMode currentRenderingMode
+        {
+            get
+            {
+                // Use Unity == operator overload for comparing UnityEngine.Object with null
+                return m_CameraManager == null ? XRCameraBackgroundRenderingMode.None : m_CameraManager.currentRenderingMode;
+            }
+        }
 
         void Awake()
         {
@@ -323,11 +336,8 @@ namespace UnityEngine.XR.ARFoundation
 
             m_PreviousCameraFieldOfView = m_Camera.fieldOfView;
 
-            Material material = defaultMaterial;
-            if (useLegacyRenderPipeline && (material != null))
-            {
+            if (useLegacyRenderPipeline && defaultMaterial != null)
                 EnableLegacyRenderPipelineBackgroundRendering();
-            }
         }
 
         /// <summary>
@@ -376,8 +386,7 @@ namespace UnityEngine.XR.ARFoundation
         /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
         /// when rendering before opaques.
         /// </summary>
-        static readonly CameraEvent[] s_DefaultBeforeOpaqueCameraEvents = new[]
-        {
+        static readonly CameraEvent[] s_DefaultBeforeOpaqueCameraEvents = {
             CameraEvent.BeforeForwardOpaque,
             CameraEvent.BeforeGBuffer
         };
@@ -387,8 +396,7 @@ namespace UnityEngine.XR.ARFoundation
         /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
         /// when rendering after opaques.
         /// </summary>
-        static readonly CameraEvent[] s_DefaultAfterOpaqueCameraEvents = new[]
-        {
+        static readonly CameraEvent[] s_DefaultAfterOpaqueCameraEvents = {
             CameraEvent.AfterForwardOpaque,
             CameraEvent.AfterGBuffer
         };
@@ -417,23 +425,17 @@ namespace UnityEngine.XR.ARFoundation
         {
             get
             {
-                switch (m_CommandBufferRenderOrderState)
+                return m_CommandBufferRenderOrderState switch
                 {
-                    case XRCameraBackgroundRenderingMode.BeforeOpaques:
-                        return s_DefaultBeforeOpaqueCameraEvents;
-
-                    case XRCameraBackgroundRenderingMode.AfterOpaques:
-                        return s_DefaultAfterOpaqueCameraEvents;
-
-                    default:
-                        return default;
-                }
+                    XRCameraBackgroundRenderingMode.BeforeOpaques => s_DefaultBeforeOpaqueCameraEvents,
+                    XRCameraBackgroundRenderingMode.AfterOpaques => s_DefaultAfterOpaqueCameraEvents,
+                    _ => default(IEnumerable<CameraEvent>)
+                };
             }
         }
 
         /// <summary>
-        /// Configures the <paramref name="commandBuffer"/> by first clearing it,
-        /// and then adding necessary render commands.
+        /// Configures the <paramref name="commandBuffer"/> by first clearing it, then adding necessary render commands.
         /// </summary>
         /// <param name="commandBuffer">The command buffer to configure.</param>
         protected virtual void ConfigureLegacyCommandBuffer(CommandBuffer commandBuffer)
@@ -460,6 +462,7 @@ namespace UnityEngine.XR.ARFoundation
                     commandBuffer.Blit(texture, BuiltinRenderTextureType.CameraTarget, material);
                     break;
 
+                case XRCameraBackgroundRenderingMode.None:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(m_CommandBufferRenderOrderState));
             }
@@ -493,14 +496,16 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Adds the AR Camera Background (xref: UnityEngine.Rendering.CommandBuffer) to the <see cref="legacyCameraEvents"/>.
+        /// Adds the AR Camera Background <see cref="CommandBuffer"/> to the <see cref="legacyCameraEvents"/>.
         /// </summary>
         /// <exception cref="NullReferenceException">
-        /// If the AR Camera Background (xref: UnityEngine.Rendering.CommandBuffer) is <c>null</c>.
+        /// If the AR Camera Background <see cref="CommandBuffer"/> is <see langword="null"/>.
         /// </exception>
         void AddCommandBufferToCameraEvent()
         {
-            var commandBuffer = m_CommandBuffer ?? throw new NullReferenceException();
+            if (m_CommandBuffer == null)
+                throw new NullReferenceException();
+
             foreach (var cameraEvent in legacyCameraEvents)
             {
                 camera.AddCommandBuffer(cameraEvent, m_CommandBuffer);
@@ -508,7 +513,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Removes the AR Camera Background (xref: UnityEngine.Rendering.CommandBuffer) from the camera rendering events.
+        /// Removes the AR Camera Background <see cref="CommandBuffer"/> from the camera rendering events.
         /// </summary>
         void RemoveCommandBufferFromCameraEvents()
         {

@@ -16,7 +16,7 @@
         Pass
         {
             Cull Off
-            ZTest Always
+            ZTest LEqual
             ZWrite On
             Lighting Off
             LOD 100

@@ -80,7 +80,7 @@ namespace UnityEngine.XR.Simulation
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
 
-                SimulationEnvironmentScanner.EnsureMeshColliders();
+                SimulationEnvironmentScanner.GetOrCreate().EnsureMeshColliders();
                 m_Discoverer.Start();
             }
 

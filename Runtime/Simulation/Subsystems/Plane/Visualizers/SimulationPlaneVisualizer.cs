@@ -1,8 +1,11 @@
+#if ENABLE_SIMULATION_DEBUG_VISUALS
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
+#endif
 
 namespace UnityEngine.XR.Simulation
 {
@@ -50,7 +53,7 @@ namespace UnityEngine.XR.Simulation
                 return;
             }
 
-            var origin = FindObjectOfType<XROrigin>();
+            var origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
             if (origin == null)
             {
                 Disable("Cannot find XROrigin in the scene.");

@@ -25,46 +25,35 @@ namespace UnityEngine.XR.ARFoundation
     }
 
     /// <summary>
-    /// Provides conversion utilities between (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) and
-    /// <see cref="CameraBackgroundRenderingMode"/>.
+    /// Provides conversion utilities between <see cref="XRCameraBackgroundRenderingMode"/> and <see cref="CameraBackgroundRenderingMode"/>.
     /// </summary>
     public static class CameraBackgroundRenderingModeUtilities
     {
         /// <summary>
-        /// Converts a <see cref="CameraBackgroundRenderingMode"/> to a (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode).
+        /// Converts a <see cref="CameraBackgroundRenderingMode"/> to an <see cref="XRCameraBackgroundRenderingMode"/>.
         /// </summary>
-        /// <param name="mode">
-        /// The <see cref="CameraBackgroundRenderingMode"/> to convert to a (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode).
-        /// </param>
+        /// <param name="mode">The <see cref="CameraBackgroundRenderingMode"/> to convert.</param>
         /// <returns>
-        /// The (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) conversion of the given <see cref="CameraBackgroundRenderingMode"/>.
+        /// The converted <see cref="XRCameraBackgroundRenderingMode"/>.
         /// </returns>
         public static XRSupportedCameraBackgroundRenderingMode ToXRSupportedCameraBackgroundRenderingMode(this CameraBackgroundRenderingMode mode)
         {
-            switch (mode)
+            return mode switch
             {
-                case CameraBackgroundRenderingMode.Any:
-                    return XRSupportedCameraBackgroundRenderingMode.Any;
-
-                case CameraBackgroundRenderingMode.BeforeOpaques:
-                    return XRSupportedCameraBackgroundRenderingMode.BeforeOpaques;
-
-                case CameraBackgroundRenderingMode.AfterOpaques:
-                    return XRSupportedCameraBackgroundRenderingMode.AfterOpaques;
-
-                default:
-                    return XRSupportedCameraBackgroundRenderingMode.None;
-            }
+                CameraBackgroundRenderingMode.Any => XRSupportedCameraBackgroundRenderingMode.Any,
+                CameraBackgroundRenderingMode.BeforeOpaques => XRSupportedCameraBackgroundRenderingMode.BeforeOpaques,
+                CameraBackgroundRenderingMode.AfterOpaques => XRSupportedCameraBackgroundRenderingMode.AfterOpaques,
+                _ => XRSupportedCameraBackgroundRenderingMode.None
+            };
         }
 
         /// <summary>
-        /// Converts a (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) to a <see cref="CameraBackgroundRenderingMode"/>.
+        /// Converts an <see cref="XRCameraBackgroundRenderingMode"/> to a <see cref="CameraBackgroundRenderingMode"/>.
         /// </summary>
-        /// <param name="mode">
-        /// The (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) to convert to a <see cref="CameraBackgroundRenderingMode"/>.
+        /// <param name="mode">The <see cref="XRCameraBackgroundRenderingMode"/> to convert.
         /// </param>
         /// <returns>
-        /// The <see cref="CameraBackgroundRenderingMode"/> conversion of the given (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode).
+        /// The converted <see cref="CameraBackgroundRenderingMode"/>.
         /// </returns>
         public static CameraBackgroundRenderingMode ToBackgroundRenderingMode(this XRSupportedCameraBackgroundRenderingMode mode)
         {
@@ -77,6 +66,7 @@ namespace UnityEngine.XR.ARFoundation
                     return CameraBackgroundRenderingMode.AfterOpaques;
 
                 case XRSupportedCameraBackgroundRenderingMode.Any:
+                case XRSupportedCameraBackgroundRenderingMode.None:
                 default:
                     return CameraBackgroundRenderingMode.Any;
             }

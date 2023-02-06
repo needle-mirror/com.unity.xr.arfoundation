@@ -6,27 +6,37 @@ namespace UnityEngine.XR.Simulation
     class EnvironmentScanParams
     {
         [SerializeField]
-        [Tooltip("The time in seconds between two environment scans.")]
-        float m_MinimumRescanTime = 0.15f;
+        [Range(SimulationConstants.oneHundredTwentyFps, 1)]
+        [Tooltip("Minimum time in seconds that must elapse between environment scans.")]
+        float m_MinimumRescanTime = 0.10f;
 
         [SerializeField]
-        [Tooltip("The minimum distance in meters a camera should move before the next environment scan.")]
+        [Range(0.001f, 1)]
+        [Tooltip("Minimum distance in meters the camera must move before the next environment scan. "
+            + "\n\nThe next environment scan will trigger on the first Update after Min Time Until Rescan has elapsed "
+            + "where the camera has either moved at least Min Camera Distance or rotated at least Min Camera Rotation.")]
         float m_DeltaCameraDistanceToRescan = 0.025f;
 
         [SerializeField]
-        [Tooltip("Minimum change of angle in degrees of the camera before the next environment scan.")]
+        [Range(0.001f, 90)]
+        [Tooltip("Minimum angle change in degrees the camera must rotate before the next environment scan. "
+            + "\n\nThe next environment scan will trigger on the first Update after Min Time Until Rescan has elapsed "
+            + "where the camera has either moved at least Min Camera Distance or rotated at least Min Camera Rotation.")]
         float m_DeltaCameraAngleToRescan = 4f;
 
         [SerializeField]
-        [Tooltip("Total number of rays to project per scan.")]
+        [Range(1, 9999)]
+        [Tooltip("Total number of rays to cast in each environment scan. Higher values may impact system performance.")]
         int m_RaysPerCast = 10;
 
         [SerializeField]
-        [Tooltip("Maximum distance in meters from the camera after which the points will not be detected.")]
-        float m_MaximumHitDistance = 2f;
+        [Range(0, 9999)]
+        [Tooltip("Distance in meters from the camera beyond which feature points will not be detected.")]
+        float m_MaximumHitDistance = 12f;
 
         [SerializeField]
-        [Tooltip("The points will not be detected between camera and this distance in meters.")]
+        [Range(0, 9999)]
+        [Tooltip("Distance in meters from the camera within which feature points will not be detected.")]
         float m_MinimumHitDistance = 0.05f;
 
         public float minimumRescanTime

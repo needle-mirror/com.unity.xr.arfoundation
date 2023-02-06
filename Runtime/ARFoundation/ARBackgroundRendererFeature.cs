@@ -87,8 +87,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// An abstract (xref: UnityEngine.Rendering.Universal.ScriptableRenderPass) that provides common
-        /// utilities for rendering an AR Camera Background.
+        /// An abstract <see cref="ScriptableRenderPass"/> that provides common utilities for rendering an AR Camera Background.
         /// </summary>
         abstract class ARCameraBackgroundRenderPass : ScriptableRenderPass
         {
@@ -120,17 +119,15 @@ namespace UnityEngine.XR.ARFoundation
             protected abstract Matrix4x4 projectionMatrix { get; }
 
             /// <summary>
-            /// The (xref: UnityEngine.Mesh) used in this custom render pass.
+            /// The <see cref="Mesh"/> used in this custom render pass.
             /// </summary>
             protected abstract Mesh mesh { get; }
 
             /// <summary>
             /// Set up the background render pass.
             /// </summary>
-            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/>
-            ///  component that provides the (xref: UnityEngine.Material)
-            /// and any additional rendering information required by the render pass.
-            /// </param>
+            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/> component that provides the <see cref="Material"/>
+            /// and any additional rendering information required by the render pass.</param>
             /// <param name="invertCulling">Whether the culling mode should be inverted.</param>
             public void Setup(ARCameraBackground cameraBackground, bool invertCulling)
             {
@@ -140,13 +137,10 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             /// <summary>
-            /// Provides inheritors an opportunity to perform any specialized setup during
-            /// (xref: UnityEngine.Rendering.Universal.ScriptableRenderPass.Setup).
+            /// Provides inheritors an opportunity to perform any specialized setup during <see cref="ScriptableRenderPass.Setup"/>.
             /// </summary>
-            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/> component
-            /// that provides the (xref: UnityEngine.Material)
-            /// and any additional rendering information required by the render pass.
-            /// </param>
+            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/> component that provides the <see cref="Material"/>
+            /// and any additional rendering information required by the render pass.</param>
             protected virtual void SetupInternal(ARCameraBackground cameraBackground) {}
 
             /// <summary>

@@ -55,7 +55,7 @@ namespace UnityEngine.XR.Simulation
 
         // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use
         // Reference type collections must also be cleared after use
-        static readonly List<Light> k_SimulationLights = new List<Light>();
+        static readonly List<Light> k_SimulationLights = new();
 
         protected static string GenerateUniqueSceneName() => $"{k_EnvironmentSceneName} {Guid.NewGuid().ToString()}";
 

@@ -26,7 +26,7 @@ With the exception of [Device tracking](xref:arfoundation-device-tracking), the 
 | [Meshing](xref:arfoundation-meshing)                       | [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) |
 | [Environment Probes](xref:arfoundation-environment-probes) | [XREnvironmentProbeSubsystem](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystem) |
 | [Occlusion](xref:arfoundation-occlusion)                   | [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) |
-| [Participants](xref:arfoundation-participants)             | [XRParticipantSubsystem](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystem) |
+| [Participants](xref:arfoundation-participant-tracking)     | [XRParticipantSubsystem](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystem) |
 
 ## Subsystem life cycle
 

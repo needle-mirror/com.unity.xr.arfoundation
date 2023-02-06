@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
-using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.Rendering;
 
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Manages the lifetime of the <c>XRCameraSubsystem</c>. Add one of these to a <c>Camera</c> in your scene
+    /// Manages the life cycle of the <see cref="XRCameraSubsystem"/>. Add one of these to a <c>Camera</c> in your scene
     /// if you want camera texture and light estimation information to be available.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
@@ -19,6 +18,19 @@ namespace UnityEngine.XR.ARFoundation
         SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>,
         ISerializationCallbackReceiver
     {
+        static List<Texture2D> s_Textures = new();
+        static List<int> s_PropertyIds = new();
+        readonly List<ARTextureInfo> m_TextureInfos = new();
+
+        Camera m_Camera;
+        bool m_PreRenderInvertCullingValue;
+        ARTextureInfo m_CameraGrainInfo;
+
+        /// <summary>
+        /// An event which fires each time a new camera frame is received.
+        /// </summary>
+        public event Action<ARCameraFrameEventArgs> frameReceived;
+
         [SerializeField]
         [HideInInspector]
         CameraFocusMode m_FocusMode = CameraFocusMode.Auto;
@@ -26,32 +38,7 @@ namespace UnityEngine.XR.ARFoundation
         [SerializeField]
         [HideInInspector]
         LightEstimationMode m_LightEstimationMode = LightEstimationMode.Disabled;
-
-        /// <summary>
-        /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
-        /// interface. Invoked before serialization.
-        /// </summary>
-        public void OnBeforeSerialize() {}
-
-        /// <summary>
-        /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
-        /// interface. Invoked after deserialization.
-        /// </summary>
-        public void OnAfterDeserialize()
-        {
-            if (m_FocusMode != (CameraFocusMode)(-1))
-            {
-                m_AutoFocus = m_FocusMode == CameraFocusMode.Auto;
-                m_FocusMode = (CameraFocusMode)(-1);
-            }
-
-            if (m_LightEstimationMode != (LightEstimationMode)(-1))
-            {
-                m_LightEstimation = m_LightEstimationMode.ToLightEstimation();
-                m_LightEstimationMode = (LightEstimationMode)(-1);
-            }
-        }
-
+        
         [SerializeField]
         [Tooltip("When enabled, auto focus will be requested on the (physical) AR camera.")]
         bool m_AutoFocus = true;
@@ -84,9 +71,10 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get the current focus mode in use by the subsystem, or <c>false</c> if there
-        /// is no subsystem.
+        /// Get the current focus mode in use by the subsystem.
         /// </summary>
+        /// <value><see langword="true"/> if auto focus is enabled. <see langword="false"/> if fixed focus is enabled
+        /// or if there is no loaded <see cref="XRCameraSubsystem"/>.</value>
         public bool autoFocusEnabled => subsystem?.autoFocusEnabled ?? false;
 
         [SerializeField]
@@ -94,11 +82,9 @@ namespace UnityEngine.XR.ARFoundation
         LightEstimation m_LightEstimation = LightEstimation.None;
 
         /// <summary>
-        /// Get or set the requested <c>LightEstimation</c> for the camera.
+        /// Get or set the requested <see cref="LightEstimation"/> for the camera.
         /// </summary>
-        /// <value>
-        /// The light estimation mode for the camera.
-        /// </value>
+        /// <value>The light estimation mode for the camera.</value>
         public LightEstimation requestedLightEstimation
         {
             get => subsystem?.requestedLightEstimation.ToLightEstimation() ?? m_LightEstimation;
@@ -162,12 +148,10 @@ namespace UnityEngine.XR.ARFoundation
         CameraBackgroundRenderingMode m_RenderMode = CameraBackgroundRenderingMode.Any;
 
         /// <summary>
-        /// The current requested <see cref="CameraBackgroundRenderingMode"/>.
+        /// The current requested <see cref="CameraBackgroundRenderingMode"/>. When set, this value is converted to an
+        /// <see cref="XRCameraBackgroundRenderingMode"/> and passed to <see cref="XRCameraSubsystem.requestedCameraBackgroundRenderingMode"/>
+        /// if the camera subsystem is non-null.
         /// </summary>
-        /// <remarks>
-        /// When set, this value is converted to an (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) and passed to the underlying
-        /// subsystem if it is available.
-        /// </remarks>
         public CameraBackgroundRenderingMode requestedBackgroundRenderingMode
         {
             get => subsystem?.requestedCameraBackgroundRenderingMode.ToBackgroundRenderingMode() ?? m_RenderMode;
@@ -182,56 +166,67 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The current (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode) of the underlying
-        /// (xref: UnityEngine.XR.ARSubsystems.XRCameraSubsystem).
+        /// The current <see cref="XRCameraBackgroundRenderingMode"/> of the <see cref="XRCameraSubsystem"/>, or
+        /// <see cref="XRCameraBackgroundRenderingMode.None"/> if the subsystem is <see langword="null"/>.
         /// </summary>
-        /// <value>
-        /// Will be (xref: UnityEngine.XR.ARSubsystems.XRCameraBackgroundRenderingMode.None)
-        /// if the underlying subsystem does not exist.
-        /// </value>
+        /// <value>The current camera background rendering mode.</value>
         public XRCameraBackgroundRenderingMode currentRenderingMode => subsystem?.currentCameraBackgroundRenderingMode ?? XRCameraBackgroundRenderingMode.None;
 
         /// <summary>
-        /// Determines whether camera permission has been granted.
+        /// Indicates whether camera permission has been granted.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if permission has been granted. Otherwise, <c>false</c>.
-        /// </value>
+        /// <value><see langword="true"/> if permission has been granted. Otherwise, <see langword="false"/>.</value>
         public bool permissionGranted => subsystem is { permissionGranted: true };
 
         /// <summary>
-        /// An event which fires each time a new camera frame is received.
+        /// The Material used in background rendering.
         /// </summary>
-        public event Action<ARCameraFrameEventArgs> frameReceived;
-
-        /// <summary>
-        /// The material used in background rendering.
-        /// </summary>
-        /// <value>
-        /// The material used in background rendering.
-        /// </value>
+        /// <value>The Material used in background rendering.</value>
         public Material cameraMaterial => subsystem?.cameraMaterial;
 
         /// <summary>
-        /// Tries to get camera intrinsics. Camera intrinsics refers to properties
-        /// of a physical camera which might be useful when performing additional
-        /// computer vision processing on the camera image.
+        /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
+        /// interface. Invoked before serialization.
         /// </summary>
+        public void OnBeforeSerialize() {}
+
+        /// <summary>
+        /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
+        /// interface. Invoked after deserialization.
+        /// </summary>
+        public void OnAfterDeserialize()
+        {
+            if (m_FocusMode != (CameraFocusMode)(-1))
+            {
+                m_AutoFocus = m_FocusMode == CameraFocusMode.Auto;
+                m_FocusMode = (CameraFocusMode)(-1);
+            }
+
+            if (m_LightEstimationMode != (LightEstimationMode)(-1))
+            {
+                m_LightEstimation = m_LightEstimationMode.ToLightEstimation();
+                m_LightEstimationMode = (LightEstimationMode)(-1);
+            }
+        }
+
+        /// <summary>
+        /// Tries to get camera intrinsics. Camera intrinsics refers to properties of a physical camera which might be
+        /// useful when performing additional computer vision processing on the camera image.
+        /// </summary>
+        /// <param name="cameraIntrinsics">The camera intrinsics to be populated if the camera supports intrinsics.
+        /// </param>
+        /// <returns><see langword="true"/> if <paramref name="cameraIntrinsics"/> was populated. Otherwise,
+        /// <see langword="false"/>.</returns>
         /// <remarks>
         /// > [!NOTE]
         /// > The intrinsics may change each frame. You should call this each frame that you need intrinsics
         /// > in order to ensure you are using the intrinsics for the current frame.
         /// </remarks>
-        /// <param name="cameraIntrinsics">The camera intrinsics to be populated if the camera supports intrinsics.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if <paramref name="cameraIntrinsics"/> was populated. Otherwise, <c>false</c>.
-        /// </returns>
         public bool TryGetIntrinsics(out XRCameraIntrinsics cameraIntrinsics)
         {
             if (subsystem == null)
             {
-                cameraIntrinsics = default(XRCameraIntrinsics);
+                cameraIntrinsics = default;
                 return false;
             }
 
@@ -242,22 +237,18 @@ namespace UnityEngine.XR.ARFoundation
         /// Get the camera configurations currently supported for the implementation.
         /// </summary>
         /// <param name="allocator">The allocation strategy to use for the returned data.</param>
-        /// <returns>
-        /// The supported camera configurations.
-        /// </returns>
+        /// <returns>The supported camera configurations.</returns>
         public NativeArray<XRCameraConfiguration> GetConfigurations(Allocator allocator)
             => subsystem?.GetConfigurations(allocator) ?? new NativeArray<XRCameraConfiguration>(0, allocator);
 
         /// <summary>
         /// The current camera configuration.
         /// </summary>
-        /// <value>
-        /// The current camera configuration, if it exists. Otherise, <c>null</c>.
-        /// </value>
+        /// <value>The current camera configuration, if it exists. Otherwise, <see langword="null"/>.</value>
         /// <exception cref="System.NotSupportedException">Thrown when setting the current configuration if the
         /// implementation does not support camera configurations.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown when setting the current configuration if the given
-        /// configuration is <c>null</c>.</exception>
+        /// configuration is <see langword="null"/>.</exception>
         /// <exception cref="System.ArgumentException">Thrown when setting the current configuration if the given
         /// configuration is not a supported camera configuration.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown when setting the current configuration if the
@@ -268,9 +259,7 @@ namespace UnityEngine.XR.ARFoundation
             set
             {
                 if (subsystem != null)
-                {
                     subsystem.currentConfiguration = value;
-                }
             }
         }
 
@@ -279,12 +268,10 @@ namespace UnityEngine.XR.ARFoundation
         /// to utilities to convert to RGB and Grayscale formats. This method is deprecated. Use
         /// <see cref="TryAcquireLatestCpuImage"/> instead.
         /// </summary>
-        /// <remarks>
-        /// The `XRCpuImage` must be disposed to avoid resource leaks.
-        /// </remarks>
-        /// <param name="cpuImage">A valid `XRCpuImage` if this method returns `true`.</param>
-        /// <returns>Returns `true` if the latest camera image was successfully acquired.
-        ///     Returns `false` otherwise.</returns>
+        /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <see langword="true"/>.</param>
+        /// <returns><see langword="true"/> if the latest camera image was successfully acquired. Otherwise,
+        /// <see langword="false"/>.</returns>
+        /// <remarks>The `XRCpuImage` must be disposed to avoid resource leaks.</remarks>
         [Obsolete("Use TryAcquireLatestCpuImage instead. (2020-05-19")]
         public bool TryGetLatestImage(out XRCpuImage cpuImage) => TryAcquireLatestCpuImage(out cpuImage);
 
@@ -292,12 +279,10 @@ namespace UnityEngine.XR.ARFoundation
         /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
         /// to utilities to convert to RGB and Grayscale formats.
         /// </summary>
-        /// <remarks>
-        /// The `XRCpuImage` must be disposed to avoid resource leaks.
-        /// </remarks>
         /// <param name="cpuImage">A valid `XRCpuImage` if this method returns `true`.</param>
-        /// <returns>Returns `true` if the latest camera image was successfully acquired.
-        ///     Returns `false` otherwise.</returns>
+        /// <returns><see langword="true"/> if the latest camera image was successfully acquired. Otherwise,
+        /// <see langword="false"/>.</returns>
+        /// <remarks>The <see cref="XRCpuImage"/> must be disposed to avoid resource leaks.</remarks>
         public bool TryAcquireLatestCpuImage(out XRCpuImage cpuImage)
         {
             if (subsystem == null)
@@ -314,9 +299,7 @@ namespace UnityEngine.XR.ARFoundation
             m_Camera = GetComponent<Camera>();
         }
 
-        /// <summary>
-        /// Callback before the subsystem is started (but after it is created).
-        /// </summary>
+        /// <inheritdoc/>
         protected override void OnBeforeStart()
         {
             subsystem.requestedCameraBackgroundRenderingMode = m_RenderMode.ToXRSupportedCameraBackgroundRenderingMode();
@@ -325,9 +308,7 @@ namespace UnityEngine.XR.ARFoundation
             subsystem.requestedCamera = m_FacingDirection.ToFeature();
         }
 
-        /// <summary>
-        /// Callback when the manager is disabled.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -359,13 +340,10 @@ namespace UnityEngine.XR.ARFoundation
                 screenOrientation = Screen.orientation
             };
 
-            XRCameraFrame frame;
-            if (subsystem.TryGetLatestFrame(cameraParams, out frame))
+            if (subsystem.TryGetLatestFrame(cameraParams, out XRCameraFrame frame))
             {
                 UpdateTexturesInfos();
-
-                if (frameReceived != null)
-                    InvokeFrameReceivedEvent(frame);
+                InvokeFrameReceivedEvent(frame);
             }
         }
 
@@ -381,7 +359,7 @@ namespace UnityEngine.XR.ARFoundation
                 int numUpdated = Math.Min(m_TextureInfos.Count, textureDescriptors.Length);
 
                 // Update the existing textures that are in common between the two arrays.
-                for (int i = 0; i < numUpdated; ++i)
+                for (var i = 0; i < numUpdated; ++i)
                 {
                     m_TextureInfos[i] = ARTextureInfo.GetUpdatedTextureInfo(m_TextureInfos[i], textureDescriptors[i]);
                 }
@@ -390,7 +368,7 @@ namespace UnityEngine.XR.ARFoundation
                 // textures.
                 if (numUpdated < m_TextureInfos.Count)
                 {
-                    for (int i = numUpdated; i < m_TextureInfos.Count; ++i)
+                    for (var i = numUpdated; i < m_TextureInfos.Count; ++i)
                     {
                         m_TextureInfos[i].Reset();
                     }
@@ -400,7 +378,7 @@ namespace UnityEngine.XR.ARFoundation
                 // additional descriptors.
                 else if (textureDescriptors.Length > m_TextureInfos.Count)
                 {
-                    for (int i = numUpdated; i < textureDescriptors.Length; ++i)
+                    for (var i = numUpdated; i < textureDescriptors.Length; ++i)
                     {
                         m_TextureInfos.Add(new ARTextureInfo(textureDescriptors[i]));
                     }
@@ -419,6 +397,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="frame">The camera frame raising the event.</param>
         void InvokeFrameReceivedEvent(XRCameraFrame frame)
         {
+            if (frameReceived == null)
+                return;
+
             var lightEstimation = new ARLightEstimationData();
 
             if (frame.hasAverageBrightness)
@@ -501,17 +482,5 @@ namespace UnityEngine.XR.ARFoundation
 
             frameReceived(eventArgs);
         }
-
-        static List<Texture2D> s_Textures = new List<Texture2D>();
-
-        static List<int> s_PropertyIds = new List<int>();
-
-        readonly List<ARTextureInfo> m_TextureInfos = new List<ARTextureInfo>();
-
-        Camera m_Camera;
-
-        bool m_PreRenderInvertCullingValue;
-
-        ARTextureInfo m_CameraGrainInfo;
     }
 }

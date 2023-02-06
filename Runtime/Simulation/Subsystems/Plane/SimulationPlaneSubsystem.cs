@@ -49,7 +49,7 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         protected override void OnStart()
         {
-            SimulationEnvironmentScanner.RegisterSubsystem(this);
+            SimulationEnvironmentScanner.GetOrCreate().RegisterSubsystem(this);
             base.OnStart();
         }
 
@@ -58,7 +58,7 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         protected override void OnStop()
         {
-            SimulationEnvironmentScanner.UnregisterSubsystem(this);
+            SimulationEnvironmentScanner.GetOrCreate().UnregisterSubsystem(this);
             base.OnStop();
         }
 
@@ -103,7 +103,7 @@ namespace UnityEngine.XR.Simulation
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
 
-                m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.instance;
+                m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.GetOrCreate();
                 m_PlaneFindingParams = XRSimulationRuntimeSettings.Instance.planeFindingParams;
 
                 BaseSimulationSceneManager.environmentSetupFinished += CreateVoxelGrids;
