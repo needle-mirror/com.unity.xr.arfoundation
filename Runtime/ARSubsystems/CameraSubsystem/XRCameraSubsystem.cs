@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     /// <remarks>
     /// The <c>XRCameraSubsystem</c> links a Unity <c>Camera</c> to a device camera for video overlay (pass-thru
-    /// rendering). It also allows developers to query for environmental light estimation, when available.
+    /// rendering). It also allows developers to query for environmental light estimation if available.
     /// </remarks>
     public class XRCameraSubsystem : SubsystemWithProvider<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>
     {

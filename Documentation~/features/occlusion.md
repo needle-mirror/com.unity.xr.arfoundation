@@ -16,7 +16,7 @@ The types of depth images supported are:
 - **Human Depth**: distance from the device to any part of a human recognized within the camera field of view.
 - **Human Stencil**: value designating, for each pixel, whether that pixel contains a recognized human.
 
-The sripting interface allows for:
+The scripting interface allows for:
 - Enabling, disabling, and quality configuration for the various supported depth images.
 - Querying the availability of each type of depth image.
 - Access to the depth image data.

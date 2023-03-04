@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Unity.Collections;
@@ -62,7 +61,7 @@ namespace UnityEngine.XR.Simulation
             base.OnStop();
         }
 
-        class SimulationProvider : Provider
+        class SimulationProvider : Provider, ISimulationSessionResetHandler
         {
             const int k_InitialPlanesCapacity = 4;
 
@@ -111,10 +110,13 @@ namespace UnityEngine.XR.Simulation
                 m_LastPlaneUpdateTime = Time.timeSinceLevelLoad;
 
                 m_PlaneRaycaster = new PlaneRaycaster(GetPlanesReadOnly);
+
+                SimulationSessionSubsystem.s_SimulationSessionReset += OnSimulationSessionReset;
             }
 
             public override void Stop()
             {
+                SimulationSessionSubsystem.s_SimulationSessionReset -= OnSimulationSessionReset;
                 BaseSimulationSceneManager.environmentSetupFinished -= CreateVoxelGrids;
 
                 m_Initialized = false;
@@ -124,18 +126,42 @@ namespace UnityEngine.XR.Simulation
 
                 m_AllPlanes.Clear();
 
-                if (m_VoxelGrids != null)
-                {
-                    foreach (var voxelGrid in m_VoxelGrids)
-                    {
-                        voxelGrid.Dispose();
-                    }
-
-                    m_VoxelGrids = null;
-                }
+                DestroyVoxelGrids();
             }
 
             public override void Destroy() { }
+
+            void DestroyVoxelGrids()
+            {
+                if (m_VoxelGrids == null)
+                    return;
+
+                foreach (var voxelGrid in m_VoxelGrids)
+                {
+                    voxelGrid.Dispose();
+                }
+
+                m_VoxelGrids = null;
+            }
+
+            public void OnSimulationSessionReset()
+            {
+                var removedPlanesCount = m_RemovedPlanes.Count;
+                for (var i = 0; i < removedPlanesCount; i++)
+                {
+                    var removed = m_RemovedPlanes[i];
+                    m_AllPlanes.Remove(removed.trackableId);
+                }
+
+                m_RemovedPlanes.AddRange(m_AllPlanes.Values);
+                m_AddedPlanes.Clear();
+                m_UpdatedPlanes.Clear();
+                m_AllPlanes.Clear();
+
+                DestroyVoxelGrids();
+                CreateVoxelGrids();
+                m_LastPlaneUpdateTime = Time.realtimeSinceStartup;
+            }
 
             public override PlaneDetectionMode requestedPlaneDetectionMode { get; set; }
 

@@ -32,7 +32,7 @@ namespace UnityEngine.XR.Simulation
             base.OnStop();
         }
 
-        class SimulationProvider : Provider
+        class SimulationProvider : Provider, ISimulationSessionResetHandler
         {
             const int k_DefaultConversionBufferCapacity = 8;
 
@@ -57,9 +57,15 @@ namespace UnityEngine.XR.Simulation
 
                 m_TrackableId = GenerateTrackableId();
                 m_PointIdentifier = 0;
-
                 m_PreviousTrackableId = TrackableId.invalidId;
 
+                CreatePointsData();
+
+                SimulationSessionSubsystem.s_SimulationSessionReset += OnSimulationSessionReset;
+            }
+
+            void CreatePointsData()
+            {
                 m_Identifiers = new NativeArray<ulong>(k_DefaultConversionBufferCapacity, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
                 m_Positions = new NativeArray<Vector3>(k_DefaultConversionBufferCapacity, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
                 m_ConfidenceValues = new NativeArray<float>(k_DefaultConversionBufferCapacity, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
@@ -68,8 +74,15 @@ namespace UnityEngine.XR.Simulation
 
             public override void Stop()
             {
+                SimulationSessionSubsystem.s_SimulationSessionReset -= OnSimulationSessionReset;
+                
                 m_TrackableId = TrackableId.invalidId;
 
+                DestroyPointsData();
+            }
+
+            void DestroyPointsData()
+            {
                 m_Raycaster.Stop();
                 m_Raycaster = null;
                 m_Identifiers.Dispose();
@@ -77,15 +90,28 @@ namespace UnityEngine.XR.Simulation
                 m_ConfidenceValues.Dispose();
             }
 
+            public void OnSimulationSessionReset()
+            {
+                m_PreviousTrackableId = m_TrackableId;
+                m_TrackableId = GenerateTrackableId();
+                m_PointCount = 0;
+                m_PointIdentifier = 0;
+
+                DestroyPointsData();
+                CreatePointsData();
+
+                m_LastScanTime = SimulationEnvironmentScanner.GetOrCreate().lastScanTime;
+            }
+
             public override TrackableChanges<XRPointCloud> GetChanges(XRPointCloud defaultPointCloud, Allocator allocator)
             {
                 UpdatePointCloudData();
 
-                NativeArray<XRPointCloud> added = new NativeArray<XRPointCloud>(0, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-                NativeArray<XRPointCloud> updated = new NativeArray<XRPointCloud>(0, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-                NativeArray<TrackableId> removed = new NativeArray<TrackableId>(0, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+                var added = new NativeArray<XRPointCloud>(0, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+                var updated = new NativeArray<XRPointCloud>(0, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+                var removed = new NativeArray<TrackableId>(0, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
 
-                TrackableChanges<XRPointCloud> changes = new TrackableChanges<XRPointCloud>();
+                var changes = new TrackableChanges<XRPointCloud>();
 
                 try
                 {

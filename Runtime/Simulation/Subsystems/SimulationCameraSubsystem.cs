@@ -170,12 +170,6 @@ namespace UnityEngine.XR.Simulation
                 return base.GetTextureDescriptors(defaultDescriptor, allocator);
             }
 
-            public override bool TryAcquireLatestCpuImage(out XRCpuImage.Cinfo cameraImageCinfo)
-            {
-                cameraImageCinfo = new(0, new Vector2Int(), 1, m_LastFrameTimestamp, XRCpuImage.Format.Unknown);
-                return true;
-            }
-
             void CameraFrameReceived(CameraTextureFrameEventArgs args)
             {
                 m_CameraTextureFrameEventArgs = args;
@@ -268,7 +262,7 @@ namespace UnityEngine.XR.Simulation
                 providerType = typeof(SimulationProvider),
                 subsystemTypeOverride = typeof(SimulationCameraSubsystem),
                 supportsCameraConfigurations = true,
-                supportsCameraImage = true,
+                supportsCameraImage = false,
             };
 
             if (!XRCameraSubsystem.Register(cInfo))

@@ -8,6 +8,18 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.5] - 2023-03-04
+
+### Added
+
+- Added [ARSession.Reset](xref:UnityEngine.XR.ARFoundation.ARSession.Reset) support to relevant subsystems in XR Simulation.
+
+### Fixed
+
+- Fixed an issue for the XR Simulation camera where looking down or up would incorrectly affect the direction of movement in some cases.
+- Fixed an issue where `SimulationCameraSubsystem.subsystemDescriptor.supportsCameraImage` incorrectly returned `true`. The `SimulationCameraSubsystem` in AR Foundation 5.0 does not support the [TryAcquireLatestCpuImage](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.TryAcquireLatestCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) API, and this property now correctly returns `false`. If you need access to `TryAcquireLatestCpuImage` in XR Simulation, you can upgrade to AR Foundation 5.1, currently in pre-release.
+- Fixed an issue where `SimulationCameraSubsystem.TryAcquireLatestCpuImage` incorrectly returned `true`. This API previously assigned invalid data to its out parameter, and now correctly throws a `NotSupportedException` instead. If you need access to `TryAcquireLatestCpuImage` in XR Simulation, you can upgrade to AR Foundation 5.1, currently in pre-release.
+
 ## [5.0.4] - 2023-02-06
 
 ### Changed

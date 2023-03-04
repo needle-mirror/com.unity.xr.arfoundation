@@ -94,6 +94,34 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
+        public void Restart()
+        {
+            if(!m_Initialized)
+                return;
+            
+            if(m_IsRunning)
+                Stop();
+
+            for (var i = 0; i < m_TrackingStatesOfImages.Count; i++)
+            {
+                m_TrackingStatesOfImages[i] = TrackingState.None;
+            }
+            
+            BeginUpdateLoopAfterDelay();
+        }
+
+        /// <summary>
+        /// Necessary to allow the ARManager-side to catch up to the removed trackables,
+        /// otherwise we could end up with a duplicate guid entry and an exception will be thrown.
+        /// </summary>
+        async void BeginUpdateLoopAfterDelay()
+        {
+            await RunWithoutCancellationExceptions(Task.Delay(m_TrackingUpdateIntervalMilliseconds,
+                CancellationToken.None));
+            
+            BeginUpdateLoop();
+        }
+
         void Initialize()
         {
             if (m_IsRunning)
@@ -211,7 +239,7 @@ namespace UnityEngine.XR.Simulation
             imageRemoved?.Invoke(image.trackableId);
         }
 
-        XRTrackedImage CreateXRImage(SimulatedTrackedImage image, TrackingState trackingState, XRReferenceImage? referenceImage)
+        static XRTrackedImage CreateXRImage(SimulatedTrackedImage image, TrackingState trackingState, XRReferenceImage? referenceImage)
         {
             return new XRTrackedImage(
                 trackableId: image.trackableId,

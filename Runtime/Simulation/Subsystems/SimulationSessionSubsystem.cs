@@ -20,6 +20,8 @@ namespace UnityEngine.XR.Simulation
 
         internal static SimulationSceneManager simulationSceneManager => s_SimulationSceneManager;
 
+        internal static event Action s_SimulationSessionReset;
+
         class SimulationProvider : Provider
         {
             SimulationCamera m_SimulationCamera;
@@ -40,7 +42,10 @@ namespace UnityEngine.XR.Simulation
                 m_SimulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
 
                 if (SimulationMeshSubsystem.GetActiveSubsystemInstance() != null)
+                {
+                    m_MeshSubsystem?.Dispose();
                     m_MeshSubsystem = new SimulationMeshSubsystem();
+                }
 
                 SetupSimulation();
 
@@ -114,6 +119,8 @@ namespace UnityEngine.XR.Simulation
 
                 m_Initialized = false;
             }
+
+            public override void Reset() => s_SimulationSessionReset?.Invoke();
 
             public override void Update(XRSessionUpdateParams updateParams)
             {

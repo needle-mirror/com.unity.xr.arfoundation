@@ -9,136 +9,158 @@ namespace UnityEngine.XR.ARSubsystems
     public struct XRCameraSubsystemCinfo : IEquatable<XRCameraSubsystemCinfo>
     {
         /// <summary>
-        /// Specifies an identifier for the provider implementation of the subsystem.
-        /// </summary>
-        /// <value>
         /// The identifier for the provider implementation of the subsystem.
-        /// </value>
+        /// </summary>
+        /// <value>The identifier value.</value>
         public string id { get; set; }
 
         /// <summary>
-        /// Specifies the provider implementation type to use for instantiation.
-        /// </summary>
-        /// <value>
         /// The provider implementation type to use for instantiation.
-        /// </value>
+        /// </summary>
+        /// <value>The provider implementation type.</value>
         public Type providerType { get; set; }
 
         /// <summary>
-        /// Specifies the <c>XRCameraSubsystem</c>-derived type that forwards casted calls to its provider.
+        /// The <see cref="XRCameraSubsystem"/>-derived type to use for instantiation. The instantiated instance of this
+        /// type will forward casted calls to its provider.
         /// </summary>
-        /// <value>
-        /// The type of the subsystem to use for instantiation. If null, <c>XRCameraSubsystem</c> will be instantiated.
-        /// </value>
+        /// <value>The subsystem implementation type.
+        ///   If <see langword="null"/>, <see cref="XRCameraSubsystem"/> will be instantiated.</value>
         public Type subsystemTypeOverride { get; set; }
 
         /// <summary>
-        /// Specifies the provider implementation type to use for instantiation.
-        /// </summary>
-        /// <value>
         /// The provider implementation type to use for instantiation.
-        /// </value>
+        /// </summary>
+        /// <value>The provider implementation type.</value>
         [Obsolete("XRCameraSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
         public Type implementationType { get; set; }
 
         /// <summary>
-        /// Specifies if the current subsystem is allowed to provide the average brightness.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.averageBrightness">XRCameraFrame.averageBrightness</see>.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide the average brightness. Otherwise, <c>false</c>.
-        /// </value>
+        /// <value><see langword="true"/> if the implementation can provide average brightness.
+        ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageBrightness { get; set; }
 
         /// <summary>
-        /// Specifies if the current subsystem is allowed to provide the average camera temperature.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.averageColorTemperature">XRCameraFrame.averageColorTemperature</see>.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide the average camera temperature. Otherwise, <c>false</c>.
-        /// </value>
+        /// <value><see langword="true"/> if the implementation can provide average camera temperature.
+        ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageColorTemperature { get; set; }
 
         /// <summary>
-        /// True if color correction is supported.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.averageIntensityInLumens">XRCameraFrame.averageIntensityInLumens</see>.
         /// </summary>
-        public bool supportsColorCorrection { get; set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide a display matrix.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide a display matrix. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsDisplayMatrix { get; set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide a projection matrix.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide a projection matrix. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsProjectionMatrix { get; set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide a timestamp.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide a timestamp. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsTimestamp { get; set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem supports camera configurations.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem supports camera configurations. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsCameraConfigurations { get; set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide camera images.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide camera images. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsCameraImage { get; set; }
-
-        /// <summary>
-        /// Specifies if current subsystem is allowed to provide the average intensity in lumens.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if current subsystem is allowed to provide the average intensity in lumens. Otherwise, <c>false</c>.
-        /// </value>
+        /// <value><see langword="true"/> if the implementation can provide average intensity in lumens.
+        ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageIntensityInLumens { get; set; }
 
         /// <summary>
-        /// Specifies whether the subsystem supports ambient intensity light estimation while face tracking.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
         /// </summary>
-        public bool supportsFaceTrackingAmbientIntensityLightEstimation { get; set; }
+        /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsCameraGrain { get; set; }
 
         /// <summary>
-        /// Specifies whether the subsystem supports HDR light estimation while face tracking.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.colorCorrection">XRCameraFrame.colorCorrection</see>.
         /// </summary>
-        public bool supportsFaceTrackingHDRLightEstimation { get; set; }
+        /// <value><see langword="true"/> if the implementation can provide color correction.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsColorCorrection { get; set; }
 
         /// <summary>
-        /// Specifies whether the subsystem supports ambient intensity light estimation while world tracking.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.displayMatrix">XRCameraFrame.displayMatrix</see>.
         /// </summary>
-        public bool supportsWorldTrackingAmbientIntensityLightEstimation { get; set; }
+        /// <value><see langword="true"/> if the implementation can provide a display matrix.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsDisplayMatrix { get; set; }
 
         /// <summary>
-        /// Specifies whether the subsystem supports HDR light estimation while world tracking.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.projectionMatrix">XRCameraFrame.projectionMatrix</see>.
         /// </summary>
-        public bool supportsWorldTrackingHDRLightEstimation { get; set; }
+        /// <value><see langword="true"/> if the implementation can provide a projection matrix.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsProjectionMatrix { get; set; }
 
         /// <summary>
-        /// Specifies whether the subsystem supports setting the camera's focus mode.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.timestampNs">XRCameraFrame.timestampNs</see>.
         /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide a timestamp.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsTimestamp { get; set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports camera configurations.
+        /// If <see langword="false"/>, the <c>get</c> accessor for
+        /// <see cref="XRCameraSubsystem.currentConfiguration">XRCameraSubsystem.currentConfiguration</see> may return
+        /// <see langword="null"/>, and the <c>set</c> accessor must throw a <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports camera configurations.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsCameraConfigurations { get; set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation can provide camera images.
+        /// If <see langword="false"/>,
+        /// <see cref="XRCameraSubsystem.TryAcquireLatestCpuImage">XRCameraSubsystem.TryAcquireLatestCpuImage</see>
+        /// must throw a <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide camera images.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsCameraImage { get; set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports the ability to set the camera's focus mode.
+        /// If <see langword="false"/>,the <c>set</c> accessor for
+        /// <see cref="XRCameraSubsystem.autoFocusRequested">XRCameraSubsystem.autoFocusRequested</see> will have no effect.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports focus modes. Otherwise, <see langword="false"/>.</value>
         public bool supportsFocusModes { get; set; }
 
         /// <summary>
-        /// Specifies whether the subsystem supports a camera grain effect.
+        /// Indicates whether the provider implementation supports ambient intensity light estimation while face
+        /// tracking is enabled.
+        /// If <see langword="false"/>, <see cref="XRCameraFrame.hasAverageBrightness">XRCameraFrame.hasAverageBrightness</see>
+        /// and <see cref="XRCameraFrame.hasAverageIntensityInLumens">XRCameraFrame.hasAverageIntensityInLumens</see>
+        /// must be <see langword="false"/> while face tracking is enabled.
         /// </summary>
-        public bool supportsCameraGrain { get; set; }
+        /// <value><see langword="true"/> if the implementation supports ambient intensity while face tracking is enabled.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsFaceTrackingAmbientIntensityLightEstimation { get; set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports HDR light estimation while face tracking is enabled.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports HDR light estimation while face tracking is enabled.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsFaceTrackingHDRLightEstimation { get; set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports ambient intensity light estimation while world tracking.
+        /// If <see langword="false"/>, <see cref="XRCameraFrame.hasAverageBrightness">XRCameraFrame.hasAverageBrightness</see>
+        /// and <see cref="XRCameraFrame.hasAverageIntensityInLumens">XRCameraFrame.hasAverageIntensityInLumens</see>
+        /// must be <see langword="false"/> while world tracking.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports ambient intensity while world tracking.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsWorldTrackingAmbientIntensityLightEstimation { get; set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports HDR light estimation while world tracking.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports HDR light estimation while world tracking.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsWorldTrackingHDRLightEstimation { get; set; }
 
         /// <summary>
         /// Tests for equality.
@@ -228,14 +250,14 @@ namespace UnityEngine.XR.ARSubsystems
     }
 
     /// <summary>
-    /// Specifies a functionality description that can be registered for each implementation that provides the
-    /// <see cref="XRCameraSubsystem"/> interface.
+    /// Specifies the functionalities supported by a provider of the <see cref="XRCameraSubsystem"/>.
+    /// Provider implementations must derive from <c>XRCameraSubsystem.Provider</c> and may override virtual class members.
     /// </summary>
     public sealed class XRCameraSubsystemDescriptor :
         SubsystemDescriptorWithProvider<XRCameraSubsystem, XRCameraSubsystem.Provider>
     {
         /// <summary>
-        /// Constructs a <c>XRCameraSubsystemDescriptor</c> based on the given parameters.
+        /// Construct an instance.
         /// </summary>
         /// <param name="cameraSubsystemParams">The parameters required to initialize the descriptor.</param>
         XRCameraSubsystemDescriptor(XRCameraSubsystemCinfo cameraSubsystemParams)
@@ -261,147 +283,181 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Specifies if the current subsystem is allowed to provide the average brightness.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.averageBrightness">XRCameraFrame.averageBrightness</see>.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide the average brightness. Otherwise, <c>false</c>.
-        /// </value>
+        /// <value><see langword="true"/> if the implementation can provide average brightness.
+        ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageBrightness { get; private set; }
 
         /// <summary>
-        /// Specifies if the current subsystem is allowed to provide the average camera temperature.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.averageColorTemperature">XRCameraFrame.averageColorTemperature</see>.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide the average camera temperature. Otherwise, <c>false</c>.
-        /// </value>
+        /// <see langword="true"/> if the implementation can provide average camera temperature.
+        ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageColorTemperature { get; private set; }
 
         /// <summary>
-        /// Specifies if the current subsystem is allowed to provide color correction.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.averageIntensityInLumens">XRCameraFrame.averageIntensityInLumens</see>.
         /// </summary>
-        public bool supportsColorCorrection { get; private set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide a display matrix.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide a display matrix. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsDisplayMatrix { get; private set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide a projection matrix.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide a projection matrix. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsProjectionMatrix { get; private set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide the timestamp.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide the timestamp. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsTimestamp { get; private set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem supports camera configurations.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem supports camera configurations. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsCameraConfigurations { get; private set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide camera images.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide camera images. Otherwise, <c>false</c>.
-        /// </value>
-        public bool supportsCameraImage { get; private set; }
-
-        /// <summary>
-        /// Specifies if the current subsystem is allowed to provide the average intensity in lumens.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current subsystem is allowed to provide the average intensity in lumens. Otherwise, <c>false</c>.
-        /// </value>
+        /// <value><see langword="true"/> if the implementation can provide average intensity in lumens.
+        ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageIntensityInLumens { get; private set; }
 
         /// <summary>
-        /// <c>True</c> if the subsystem supports setting the camera's focus mode.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
         /// </summary>
-        public bool supportsFocusModes { get; private set; }
-
-        /// <summary>
-        /// <c>True</c> if the subsystem supports ambient intensity light estimation while face tracking.
-        /// </summary>
-        public bool supportsFaceTrackingAmbientIntensityLightEstimation { get; private set; }
-
-        /// <summary>
-        /// <c>True</c> if the subsystem supports HDR light estimation while face tracking.
-        /// </summary>
-        public bool supportsFaceTrackingHDRLightEstimation { get; private set; }
-
-        /// <summary>
-        /// <c>True</c> if the subsystem supports ambient intensity light estimation while world tracking.
-        /// </summary>
-        public bool supportsWorldTrackingAmbientIntensityLightEstimation { get; private set; }
-
-        /// <summary>
-        /// <c>True</c> if the subsystem supports HDR light estimation while world tracking.
-        /// </summary>
-        public bool supportsWorldTrackingHDRLightEstimation { get; private set; }
-
-        /// <summary>
-        /// <c>True</c> if the subsystem supports the camera grain effect.
-        /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
+        ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsCameraGrain { get; private set; }
 
         /// <summary>
-        /// Creates a <c>XRCameraSubsystemDescriptor</c> based on the given parameters and validates that the
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.colorCorrection">XRCameraFrame.colorCorrection</see>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide color correction.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsColorCorrection { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.displayMatrix">XRCameraFrame.displayMatrix</see>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide a display matrix.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsDisplayMatrix { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.projectionMatrix">XRCameraFrame.projectionMatrix</see>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide a projection matrix.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsProjectionMatrix { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="XRCameraFrame.timestampNs">XRCameraFrame.timestampNs</see>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide a timestamp.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsTimestamp { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports camera configurations.
+        /// If <see langword="false"/>, the <c>get</c> accessor for
+        /// <see cref="XRCameraSubsystem.currentConfiguration">XRCameraSubsystem.currentConfiguration</see> may return
+        /// <see langword="null"/>, and the <c>set</c> accessor must throw a <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports camera configurations.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsCameraConfigurations { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation can provide camera images.
+        /// If <see langword="false"/>,
+        /// <see cref="XRCameraSubsystem.TryAcquireLatestCpuImage">XRCameraSubsystem.TryAcquireLatestCpuImage</see>
+        /// must throw a <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation can provide camera images.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsCameraImage { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports the ability to set the camera's focus mode.
+        /// If <see langword="false"/>, the <c>set</c> accessor for
+        /// <see cref="XRCameraSubsystem.autoFocusRequested">XRCameraSubsystem.autoFocusRequested</see> will have no effect.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports focus modes.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsFocusModes { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports ambient intensity light estimation while face
+        /// tracking is enabled.
+        /// If <see langword="false"/>, <see cref="XRCameraFrame.hasAverageBrightness">XRCameraFrame.hasAverageBrightness</see>
+        /// and <see cref="XRCameraFrame.hasAverageIntensityInLumens">XRCameraFrame.hasAverageIntensityInLumens</see>
+        /// must be <see langword="false"/> while face tracking is enabled.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports ambient intensity while face tracking is enabled.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsFaceTrackingAmbientIntensityLightEstimation { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports HDR light estimation while face tracking is enabled.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports HDR light estimation while face tracking is enabled.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsFaceTrackingHDRLightEstimation { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports ambient intensity light estimation while world tracking.
+        /// If <see langword="false"/>, <see cref="XRCameraFrame.hasAverageBrightness">XRCameraFrame.hasAverageBrightness</see>
+        /// and <see cref="XRCameraFrame.hasAverageIntensityInLumens">XRCameraFrame.hasAverageIntensityInLumens</see>
+        /// must be <see langword="false"/> while world tracking.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports ambient intensity while world tracking.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsWorldTrackingAmbientIntensityLightEstimation { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports HDR light estimation while world tracking.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports HDR light estimation while world tracking.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsWorldTrackingHDRLightEstimation { get; private set; }
+
+        /// <summary>
+        /// Creates a <c>XRCameraSubsystemDescriptor</c> based on the given parameters, and validates that the
         /// <see cref="XRCameraSubsystemCinfo.id"/> and <see cref="XRCameraSubsystemCinfo.implementationType"/>
         /// properties are properly specified.
         /// </summary>
         /// <param name="cameraSubsystemParams">The parameters that define how to initialize the descriptor.</param>
         /// <returns>
-        /// The created <c>XRCameraSubsystemDescriptor</c>.
+        /// The created instance.
         /// </returns>
         /// <exception cref="System.ArgumentException">Thrown when the values specified in the
-        /// <see cref="XRCameraSubsystemCinfo"/> parameter are invalid. Typically, this happens:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>If <see cref="XRCameraSubsystemCinfo.id"/> is <c>null</c> or empty.</description>
-        /// </item>
-        /// <item>
-        /// <description>If <see cref="XRCameraSubsystemCinfo.implementationType"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description>If <see cref="XRCameraSubsystemCinfo.implementationType"/> does not derive from the
-        /// <see cref="XRCameraSubsystem"/> class.
-        /// </description>
-        /// </item>
-        /// </list>
+        ///   <see cref="XRCameraSubsystemCinfo"/> parameter are invalid. Typically, this happens in the following circumstances:
+        ///     <list type="bullet">
+        ///       <item>
+        ///         <description>If <see cref="XRCameraSubsystemCinfo.id"/> is <c>null</c> or empty.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>If <see cref="XRCameraSubsystemCinfo.implementationType"/> is <c>null</c>.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>If <see cref="XRCameraSubsystemCinfo.implementationType"/> does not derive from the
+        ///           <see cref="XRCameraSubsystem"/> class.</description>
+        ///       </item>
+        ///     </list>
         /// </exception>
         internal static XRCameraSubsystemDescriptor Create(XRCameraSubsystemCinfo cameraSubsystemParams)
         {
-            if (String.IsNullOrEmpty(cameraSubsystemParams.id))
+            if (string.IsNullOrEmpty(cameraSubsystemParams.id))
             {
-                throw new ArgumentException("Cannot create camera subsystem descriptor because id is invalid",
-                                            "cameraSubsystemParams");
+                throw new ArgumentException(
+                    "Cannot create camera subsystem descriptor because id is invalid",
+                    nameof(cameraSubsystemParams));
             }
 
             if (cameraSubsystemParams.providerType == null
                 || !cameraSubsystemParams.providerType.IsSubclassOf(typeof(XRCameraSubsystem.Provider)))
             {
-                throw new ArgumentException("Cannot create camera subsystem descriptor because providerType is invalid", "cameraSubsystemParams");
+                throw new ArgumentException(
+                    "Cannot create camera subsystem descriptor because providerType is invalid",
+                    nameof(cameraSubsystemParams));
             }
 
             if (cameraSubsystemParams.subsystemTypeOverride != null
                 && !cameraSubsystemParams.subsystemTypeOverride.IsSubclassOf(typeof(XRCameraSubsystem)))
             {
-                throw new ArgumentException("Cannot create camera subsystem descriptor because subsystemTypeOverride is invalid", "cameraSubsystemParams");
+                throw new ArgumentException(
+                    "Cannot create camera subsystem descriptor because subsystemTypeOverride is invalid",
+                    nameof(cameraSubsystemParams));
             }
 
             return new XRCameraSubsystemDescriptor(cameraSubsystemParams);

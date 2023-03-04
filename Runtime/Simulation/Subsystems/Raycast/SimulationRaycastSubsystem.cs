@@ -17,7 +17,7 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         class SimulationProvider : Provider
         {
-            List<NativeArray<XRRaycastHit>> m_RaycasterHitResults = new();
+            readonly List<NativeArray<XRRaycastHit>> m_RaycasterHitResults = new();
 
 #if UNITY_EDITOR
             public override void Start()
