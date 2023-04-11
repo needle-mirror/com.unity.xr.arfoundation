@@ -16,6 +16,7 @@ namespace UnityEngine.XR.Simulation
     class SimulationTrackedImageDiscoverer
     {
         int m_TrackingUpdateIntervalMilliseconds = 100;
+        int m_PreviousLibraryCount;
         SimulationRuntimeImageLibrary m_SimulationRuntimeImageLibrary;
         TrackedImageDiscoveryStrategy m_ImageDiscoveryStrategy;
         bool m_Initialized;
@@ -130,6 +131,8 @@ namespace UnityEngine.XR.Simulation
 
             m_ImagesInScene.Clear();
             m_TrackingStatesOfImages.Clear();
+            m_ReferenceImagesForImages.Clear();
+            m_PreviousLibraryCount = 0;
 
             var origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
 
@@ -156,6 +159,8 @@ namespace UnityEngine.XR.Simulation
 
             if (trackingUpdateIntervalMilliseconds > 0)
                 m_TrackingUpdateIntervalMilliseconds = trackingUpdateIntervalMilliseconds;
+
+            m_PreviousLibraryCount = m_SimulationRuntimeImageLibrary?.count ?? 0;
 
             foreach (var rootObject in simScene.GetRootGameObjects())
             {
@@ -184,18 +189,28 @@ namespace UnityEngine.XR.Simulation
 
                 using (new ScopedProfiler("XRSimulationImageTracking"))
                 {
+                    var hasLibrary = m_SimulationRuntimeImageLibrary != null;
+                    var currentLibraryCount = hasLibrary ? m_SimulationRuntimeImageLibrary.count : 0;
+                    var hasLibraryChanged = hasLibrary && currentLibraryCount > m_PreviousLibraryCount;
+
                     for (var i = 0; i < m_ImagesInScene.Count; i++)
                     {
                         var image = m_ImagesInScene[i];
                         var prevTrackingState = m_TrackingStatesOfImages[i];
                         var newTrackingState = m_ImageDiscoveryStrategy.ComputeTrackingState(image);
 
+                        if (!m_ReferenceImagesForImages[i].HasValue && hasLibraryChanged)
+                        {
+                            m_ReferenceImagesForImages[i] = m_SimulationRuntimeImageLibrary.GetReferenceImageWithTexture(image.texture);
+                        }
+
                         if (prevTrackingState is TrackingState.None && newTrackingState is TrackingState.Tracking)
                             SubsystemAddImageAtIndex(i);
-
                         else if (prevTrackingState is TrackingState.Tracking || newTrackingState is TrackingState.Tracking)
                             SubsystemUpdateImageAtIndex(i, newTrackingState);
                     }
+
+                    m_PreviousLibraryCount = currentLibraryCount;
                 }
 
                 await RunWithoutCancellationExceptions(Task.Delay(m_TrackingUpdateIntervalMilliseconds, cancellationToken));

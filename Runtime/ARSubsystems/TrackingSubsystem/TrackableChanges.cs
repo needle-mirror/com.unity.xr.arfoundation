@@ -11,6 +11,10 @@ namespace UnityEngine.XR.ARSubsystems
     /// <typeparam name="T">The <see cref="ITrackable"/> that can be added and updated.</typeparam>
     public struct TrackableChanges<T> : IDisposable where T : struct, ITrackable
     {
+        NativeArray<T> m_Added;
+        NativeArray<T> m_Updated;
+        NativeArray<TrackableId> m_Removed;
+
         /// <summary>
         /// An array of added trackables.
         /// </summary>
@@ -169,11 +173,5 @@ namespace UnityEngine.XR.ARSubsystems
             m_Removed = removed;
             isCreated = true;
         }
-
-        NativeArray<T> m_Added;
-
-        NativeArray<T> m_Updated;
-
-        NativeArray<TrackableId> m_Removed;
     }
 }

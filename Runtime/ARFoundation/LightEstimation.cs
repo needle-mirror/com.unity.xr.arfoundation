@@ -95,6 +95,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="mode">The <c>LightEstimationMode</c> to convert.</param>
         /// <returns>The <see cref="LightEstimation"/> representation of the <c>LightEstimationMode</c>.</returns>
+        [Obsolete("LightEstimationMode is deprecated. (2023-02-22)")]
         public static LightEstimation ToLightEstimation(this LightEstimationMode mode)
         {
             switch (mode)
@@ -116,6 +117,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="self">The <see cref="LightEstimation"/> being converted.</param>
         /// <returns>A <c>LightEstimationMode</c> representation of the <see cref="LightEstimation"/>.</returns>
+        [Obsolete("LightEstimationMode is deprecated. (2023-02-22)")]
         public static LightEstimationMode ToLightEstimationMode(this LightEstimation self)
         {
             switch (self)

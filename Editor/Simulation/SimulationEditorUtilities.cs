@@ -23,10 +23,10 @@ namespace UnityEditor.XR.Simulation
             var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Standalone);
 
             var simActive = false;
-            if (generalSettings != null)
+            if (generalSettings != null && generalSettings.AssignedSettings != null)
             {
-                var managerSettings = generalSettings.AssignedSettings;
-                simActive = managerSettings.activeLoaders.Any(loader => loader.GetType() == typeof(SimulationLoader));
+                var activeLoaders = generalSettings.AssignedSettings.activeLoaders;
+                simActive = activeLoaders != null && activeLoaders.Any(loader => loader.GetType() == typeof(SimulationLoader));
             }
 
             if (s_SimulationSubsystemEnabled != simActive)

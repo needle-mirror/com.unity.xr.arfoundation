@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARSubsystems
     {
         /// <summary>
         /// Reconstructs a [Guid](xref:System.Guid) from two <c>ulong</c>s representing the low and high bytes.
-        /// Use [UnityEditor.XR.ARSubsystems.GuidExtensions.Decompose](xref:UnityEditor.XR.ARSubsystems.GuidExtensions.Decompose(System.Guid,System.UInt64@,System.UInt64@))
+        /// Use [GuidUtil.Decompose](xref:UnityEditor.XR.ARSubsystems.GuidUtil.Decompose(System.Guid@))
         /// to decompose the guid into its low and high components.
         /// </summary>
         /// <param name="low">The low 8 bytes of the guid</param>

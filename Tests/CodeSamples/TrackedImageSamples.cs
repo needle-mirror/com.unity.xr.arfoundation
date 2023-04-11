@@ -70,6 +70,9 @@ namespace UnityEngine.XR.ARFoundation
 
             void AddImage(Texture2D imageToAdd)
             {
+                if (ARSession.state == ARSessionState.None)
+                    return; // Session state is invalid
+
                 if (m_TrackedImageManager.referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
                 {
                     mutableLibrary.ScheduleAddImageWithValidationJob(
@@ -93,6 +96,9 @@ namespace UnityEngine.XR.ARFoundation
                           int widthInPixels, int heightInPixels,
                           float widthInMeters)
             {
+                if (ARSession.state == ARSessionState.None)
+                    return; // Session state is invalid
+
                 if (m_TrackedImageManager.referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
                 {
                     var aspectRatio = (float)widthInPixels / (float)heightInPixels;
@@ -131,6 +137,9 @@ namespace UnityEngine.XR.ARFoundation
             #region trackedimage_CreateRuntimeLibrary
             void AddImage(Texture2D imageToAdd)
             {
+                if (ARSession.state == ARSessionState.None)
+                    return; // Session state is invalid
+
                 var library = m_TrackedImageManager.CreateRuntimeLibrary();
                 if (library is MutableRuntimeReferenceImageLibrary mutableLibrary)
                 {

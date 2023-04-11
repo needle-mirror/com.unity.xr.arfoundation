@@ -54,26 +54,24 @@ namespace UnityEngine.XR.ARFoundation
         /// Asynchronously adds <paramref name="texture"/> to <paramref name="library"/>.
         /// </summary>
         /// <remarks>
-        /// Image addition can take some time (several frames) due to extra processing that must occur to insert the
-        /// image into the library. This is done using the [Unity Job System]
-        /// (https://docs.unity3d.com/Manual/JobSystem.html). The returned
-        /// [AddReferenceImageJobState](xref:UnityEngine.XR.ARSubsystems.AddReferenceImageJobState) can be used to query
-        /// for job completion and whether the addition was successful.
-        ///
-        /// The bytes of the <paramref name="texture"/> are copied, so the texture may be safely
-        /// destroyed after this method returns.
+        /// <para>The bytes of the <paramref name="texture"/> are copied, so the texture may be safely
+        /// destroyed after this method returns.</para>
+        /// > [!TIP]
+        /// > Do not call this method on your app's first frame. <see cref="ARSession.state">ARSession.state</see> should
+        /// > be <see cref="ARSessionState.SessionTracking"/> before you schedule an add image job. You can implement a
+        /// > <c>MonoBehaviour</c>'s <see href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html">Start</see>
+        /// > method as a coroutine and `yield` until the AR Session state is <c>SessionTracking</c>.
         /// </remarks>
         /// <param name="library">The <see cref="MutableRuntimeReferenceImageLibrary"/> being extended.</param>
-        /// <param name="texture">The [Texture2D](xref:UnityEngine.Texture2D) to use as image target.</param>
+        /// <param name="texture">The <see cref="Texture2D"/> to add to <paramref name="library"/>.</param>
         /// <param name="name">The name of the image.</param>
         /// <param name="widthInMeters">The physical width of the image, in meters.</param>
         /// <param name="inputDeps">Input job dependencies (optional).</param>
-        /// <returns>Returns an [AddReferenceImageJobState](xref:UnityEngine.XR.ARSubsystems.AddReferenceImageJobState)
-        /// that can be used to query the status of the job. The `AddReferenceImageJobState` can be used to
-        /// determine whether the image was successfully added. If image validity can be determined, invalid images
-        /// will be not be added to the reference image library.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="library"/> is `null`.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
+        /// <returns><para>Returns an <see cref="AddReferenceImageJobState"/> that you can use to query for job completion and
+        /// whether the image was successfully added.</para>
+        /// <para>If image validity can be determined, invalid images will be not be added.</para></returns>
+        /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="library"/> is <see langword="null"/>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is <see langword="null"/>.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
         public static AddReferenceImageJobState ScheduleAddImageWithValidationJob(
             this MutableRuntimeReferenceImageLibrary library,

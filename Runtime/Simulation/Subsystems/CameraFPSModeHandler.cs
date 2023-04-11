@@ -105,7 +105,7 @@ namespace UnityEngine.XR.Simulation
         public Pose CalculateMovement(Pose pose, bool invertY = false)
         {
             var rotation = CalculateMouseRotation(pose.rotation, invertY);
-            var position = pose.position + rotation.ConstrainYaw() * GetMovementDirection();
+            var position = pose.position + rotation.ConstrainYawNormalized() * GetMovementDirection();
             if (useMovementBounds && movementBounds != default && !movementBounds.Contains(position))
                 position = movementBounds.ClosestPoint(position);
 

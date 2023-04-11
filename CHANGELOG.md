@@ -8,6 +8,18 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-pre.4] - 2023-04-11
+
+### Deprecated
+
+- Deprecated the `UnityEngine.XR.ARSubsystems.LightEstimationMode` enum and related extension methods. This functionality was replaced by the [Feature](xref:UnityEngine.XR.ARSubsystems.Feature) flags enum in AR Foundation 3.1, and `LightEstimationMode` has since been unused.
+
+### Fixed
+
+- Fixed an issue where `UnityEditor.XR.Simulation.SimulationEditorUtilities` could incorrectly throw a `NullReferenceException` when you opened the Editor if no XR Plug-in was enabled for the standalone build target.
+- Fixed an issue for the XR Simulation camera where looking down or up would incorrectly affect the direction of movement in some cases.
+- Fixed an [issue](https://issuetracker.unity3d.com/issues/opengl-xrsimulation-does-not-show-scene-gameobjects-when-using-opengl-graphics-api) for the XR Simulation background where the depth value would be incorrect for graphics APIs using non reversed depth buffer.
+
 ## [5.1.0-pre.3] - 2023-02-06
 
 ### Added
@@ -26,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed [XRReferenceImage.ToString](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage.ToString) to include the reference image name in the generated string, in addition to previously included fields.
 - Changed the Editor behavior of XR Simulation Runtime Settings to add input validation and standardize naming conventions for similar settings across simulation subsystem providers.
 - Changed default values of XR Simulation Runtime Settings to improve plane detection performance. If your project already includes AR Foundation, you can accept the new default values by deleting the Asset at `Assets/XR/Resources/XRSimulationRuntimeSettings.asset` and restarting the Editor.
+- Added support for mutable runtime reference image libraries to XR Simulation.
 
 ### Removed
 

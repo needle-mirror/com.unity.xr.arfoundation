@@ -37,7 +37,7 @@ namespace UnityEngine.XR.ARSubsystems
         ColorCorrection = (1 << 3),
 
         /// <summary>
-        /// The project matrix for the frame is included.
+        /// The projection matrix for the frame is included.
         /// </summary>
         [Description("ProjectionMatrix")]
         ProjectionMatrix = (1 << 4),
@@ -104,121 +104,133 @@ namespace UnityEngine.XR.ARSubsystems
     }
 
     /// <summary>
-    /// Parameters of the Unity <c>Camera</c> that might be necessary or useful to the provider.
+    /// Represents a frame captured by the device camera with included metadata.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct XRCameraFrame : IEquatable<XRCameraFrame>
     {
         /// <summary>
-        /// The timestamp, in nanoseconds, associated with this frame.
+        /// The timestamp of the frame, in nanoseconds.
         /// </summary>
-        /// <value>The timestamp, in nanoseconds, associated with this frame.</value>
+        /// <value>The timestamp.</value>
         public long timestampNs => m_TimestampNs;
         long m_TimestampNs;
 
         /// <summary>
-        /// The estimated brightness of the scene.
+        /// The average pixel intensity of the frame in gamma color space, used to match the intensity of light in the
+        /// real-world environment. Values are in the range [0.0, 1.0] with zero being black and one being white.
         /// </summary>
-        /// <value>The estimated brightness of the scene.</value>
+        /// <value>The average pixel intensity of the frame.</value>
+        /// <seealso cref="averageIntensityInLumens"/>
         public float averageBrightness => m_AverageBrightness;
         float m_AverageBrightness;
 
         /// <summary>
-        /// The estimated color temperature of the scene.
+        /// The estimated color temperature of ambient light in the frame, in degrees Kelvin.
         /// </summary>
-        /// <value>The estimated color temperature of the scene.</value>
+        /// <value>The estimated color temperature.</value>
+        /// <remarks>
+        /// A value of 6500 represents neutral (pure white) lighting; lower values indicate a "warmer" yellow or
+        /// orange tint, and higher values indicate a "cooler" blue tint.
+        /// </remarks>
         public float averageColorTemperature => m_AverageColorTemperature;
         float m_AverageColorTemperature;
 
         /// <summary>
-        /// The estimated color correction value of the scene.
+        /// The estimated color correction value of the frame.
         /// </summary>
-        /// <value>The estimated color correction value of the scene.</value>
+        /// <value>The color correction value.</value>
+        /// <remarks>
+        /// The RGB scale factors are not intended to brighten nor dim the scene. They are only to shift the color
+        /// of virtual objects towards the color of the light; not intensity of the light.
+        /// </remarks>
         public Color colorCorrection => m_ColorCorrection;
         Color m_ColorCorrection;
 
         /// <summary>
-        /// The 4x4 projection matrix for the camera frame.
+        /// The 4x4 projection matrix for the frame.
         /// </summary>
-        /// <value>The 4x4 projection matrix for the camera frame.</value>
+        /// <value>The projection matrix.</value>
         public Matrix4x4 projectionMatrix => m_ProjectionMatrix;
         Matrix4x4 m_ProjectionMatrix;
 
         /// <summary>
-        /// The 4x4 display matrix for the camera frame.
+        /// The 4x4 display matrix for the frame. Defines how to render the frame to the screen.
         /// </summary>
-        /// <value>The 4x4 display matrix for the camera frame.</value>
+        /// <value>The display matrix.</value>
         public Matrix4x4 displayMatrix => m_DisplayMatrix;
         Matrix4x4 m_DisplayMatrix;
 
         /// <summary>
-        /// The <see cref="TrackingState"/> associated with the camera.
+        /// The camera's <see cref="TrackingState"/> when this frame was captured.
         /// </summary>
-        /// <value>The tracking state associated with the camera.</value>
+        /// <value>The tracking state.</value>
         public TrackingState trackingState => m_TrackingState;
         TrackingState m_TrackingState;
 
         /// <summary>
-        /// A native pointer associated with this frame. The data pointed to by this pointer is specific to provider
-        /// implementation.
+        /// The native pointer associated with this frame.
+        /// The data pointed to by this pointer is specific to provider implementation.
         /// </summary>
-        /// <value>The native pointer associated with this frame.</value>
+        /// <value>The native pointer.</value>
         public IntPtr nativePtr => m_NativePtr;
         IntPtr m_NativePtr;
 
         /// <summary>
-        /// The set of all flags indicating which properties are included in the frame.
+        /// The set of flags that indicates which properties are included in the frame.
         /// </summary>
-        /// <value>The set of all flags indicating which properties are included in the frame.</value>
+        /// <value>The included camera frame properties.</value>
         public XRCameraFrameProperties properties => m_Properties;
         XRCameraFrameProperties m_Properties;
 
         /// <summary>
-        /// The estimated intensity, in lumens, of the scene.
+        /// The estimated intensity of the real-world environment, in lumens.
+        /// Represents an average of directional light sources.
         /// </summary>
-        /// <value>The estimated intensity, in lumens, of the scene.</value>
+        /// <value>The estimated intensity.</value>
+        /// <seealso cref="averageBrightness"/>
         public float averageIntensityInLumens => m_AverageIntensityInLumens;
         float m_AverageIntensityInLumens;
 
         /// <summary>
-        /// The camera exposure duration, in seconds with sub-millisecond precision, of the scene.
+        /// The camera exposure duration of the frame, in seconds with sub-millisecond precision.
         /// </summary>
-        /// <value>The camera exposure duration, in seconds with sub-millisecond precision, of the scene.</value>
+        /// <value>The camera exposure duration.</value>
         public double exposureDuration => m_ExposureDuration;
         double m_ExposureDuration;
 
         /// <summary>
-        /// The camera exposure offset of the scene for lighting scaling.
+        /// The camera exposure offset of the frame for lighting scaling.
         /// </summary>
-        /// <value>The camera exposure offset of the scene for lighting scaling.</value>
+        /// <value>The camera exposure offset.</value>
         public float exposureOffset => m_ExposureOffset;
         float m_ExposureOffset;
 
         /// <summary>
-        /// The estimated intensity in lumens of the most influential real-world light in the scene.
+        /// The estimated intensity in lumens of the strongest directional light source in the real-world environment.
         /// </summary>
-        /// <value>The estimated intensity in lumens of the most influential real-world light in the scene.</value>
+        /// <value>The estimated intensity of the main light.</value>
         public float mainLightIntensityLumens => m_MainLightIntensityLumens;
         float m_MainLightIntensityLumens;
 
         /// <summary>
-        /// The estimated color of the most influential real-world light in the scene.
+        /// The estimated color of the strongest directional light source in the real-world environment.
         /// </summary>
-        /// <value>The estimated color of the most influential real-world light in the scene.</value>
+        /// <value>The estimated color of the main light.</value>
         public Color mainLightColor => m_MainLightColor;
         Color m_MainLightColor;
 
         /// <summary>
-        /// The estimated direction of the most influential real-world light in the scene.
+        /// The estimated direction of the strongest directional light source in the real-world environment.
         /// </summary>
-        /// <value>The estimated direction of the most influential real-world light in the scene.</value>
+        /// <value>The estimated direction of the main light.</value>
         public Vector3 mainLightDirection => m_MainLightDirection;
         Vector3 m_MainLightDirection;
 
         /// <summary>
-        /// The ambient spherical harmonic coefficients that represent lighting in the real-world.
+        /// The ambient spherical harmonic coefficients that represent the real-world lighting.
         /// </summary>
-        /// <value>The ambient spherical harmonic coefficients that represent lighting in the real-world.</value>
+        /// <value>The ambient spherical harmonic coefficients.</value>
         /// <remarks>
         /// See <see href="https://docs.unity3d.com/ScriptReference/Rendering.SphericalHarmonicsL2.html">Rendering.SphericalHarmonicsL2</see>
         /// for further details.
@@ -229,129 +241,128 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// A texture that simulates the camera's noise.
         /// </summary>
-        /// <value>A texture that simulates the camera's noise.</value>
+        /// <value>The camera grain texture.</value>
         public XRTextureDescriptor cameraGrain => m_CameraGrain;
         XRTextureDescriptor m_CameraGrain;
 
         /// <summary>
         /// The level of intensity of camera grain noise in a scene.
         /// </summary>
-        /// <value>The level of intensity of camera grain noise in a scene.</value>
+        /// <value>The noise intensity.</value>
         public float noiseIntensity => m_NoiseIntensity;
         float m_NoiseIntensity;
 
         /// <summary>
-        /// Indicates whether the frame has a timestamp.
+        /// Indicates whether <see cref="timestampNs"/> was assigned a value.
         /// </summary>
         /// <value><see langword="true"/> if the frame has a timestamp. Otherwise, <see langword="false"/>.</value>
         public bool hasTimestamp => (m_Properties & XRCameraFrameProperties.Timestamp) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has an average brightness.
+        /// Indicates whether <see cref="averageBrightness"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has an average brightness. Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has an average brightness value. Otherwise, <see langword="false"/>.</value>
         public bool hasAverageBrightness => (m_Properties & XRCameraFrameProperties.AverageBrightness) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has an average color temperature.
+        /// Indicates whether <see cref="averageColorTemperature"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has an average color temperature. Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has an average color temperature value. Otherwise, <see langword="false"/>.</value>
         public bool hasAverageColorTemperature => (m_Properties & XRCameraFrameProperties.AverageColorTemperature) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has a color correction value.
+        /// Indicates whether <see cref="colorCorrection"/> was assigned a value.
         /// </summary>
         /// <value><see langword="true"/> if the frame has a color correction value. Otherwise, <see langword="false"/>.</value>
         public bool hasColorCorrection => (m_Properties & XRCameraFrameProperties.ColorCorrection) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has a projection matrix.
+        /// Indicates whether <see cref="projectionMatrix"/> was assigned a value.
         /// </summary>
         /// <value><see langword="true"/> if the frame has a projection matrix. Otherwise, <see langword="false"/>.</value>
         public bool hasProjectionMatrix => (m_Properties & XRCameraFrameProperties.ProjectionMatrix) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has a display matrix.
+        /// Indicates whether <see cref="displayMatrix"/> was assigned a value.
         /// </summary>
         /// <value><see langword="true"/> if the frame has a display matrix. Otherwise, <see langword="false"/>.</value>
         public bool hasDisplayMatrix => (m_Properties & XRCameraFrameProperties.DisplayMatrix) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has an average intensity in lumens.
+        /// Indicates whether <see cref="averageIntensityInLumens"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has an average intensity in lumens. Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has an average intensity value in lumens. Otherwise, <see langword="false"/>.</value>
         public bool hasAverageIntensityInLumens => (m_Properties & XRCameraFrameProperties.AverageIntensityInLumens) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has an exposure duration in seconds with sub-millisecond precision.
+        /// Indicates whether <see cref="exposureDuration"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has an exposure duration in seconds with sub-millisecond precision.
-        /// Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has an exposure duration value. Otherwise, <see langword="false"/>.</value>
         public bool hasExposureDuration => (m_Properties & XRCameraFrameProperties.ExposureDuration) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has an exposure offset for scaling lighting.
+        /// Indicates whether <see cref="exposureOffset"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has an exposure offset for scaling lighting. Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has an exposure offset value. Otherwise, <see langword="false"/>.</value>
         public bool hasExposureOffset => (m_Properties & XRCameraFrameProperties.ExposureOffset) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has the estimated main light channel-wise intensity of the scene.
+        /// Indicates whether <see cref="mainLightIntensityLumens"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has the estimated main light channel-wise intensity of the scene.
+        /// <value><see langword="true"/> if the frame has an estimated main light intensity value.
         /// Otherwise, <see langword="false"/>.</value>
         public bool hasMainLightIntensityLumens => (m_Properties & XRCameraFrameProperties.MainLightIntensityLumens) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has the estimated main light color of the scene.
+        /// Indicates whether <see cref="mainLightColor"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has the estimated main light color of the scene. Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has an estimated main light color value. Otherwise, <see langword="false"/>.</value>
         public bool hasMainLightColor => (m_Properties & XRCameraFrameProperties.MainLightColor) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has the estimated main light direction of the scene.
+        /// Indicates whether <see cref="mainLightDirection"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has the estimated main light direction of the scene. Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has an estimated main light direction value. Otherwise, <see langword="false"/>.</value>
         public bool hasMainLightDirection => (m_Properties & XRCameraFrameProperties.MainLightDirection) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has the ambient spherical harmonics coefficients of the scene.
+        /// Indicates whether <see cref="ambientSphericalHarmonics"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has the ambient spherical harmonics coefficients of the scene.
+        /// <value><see langword="true"/> if the frame has values for ambient spherical harmonics coefficients.
         /// Otherwise, <see langword="false"/>.</value>
         public bool hasAmbientSphericalHarmonics => (m_Properties & XRCameraFrameProperties.AmbientSphericalHarmonics) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has a camera grain texture.
+        /// Indicates whether <see cref="cameraGrain"/> was assigned a value.
         /// </summary>
         /// <value><see langword="true"/> if the frame has a camera grain texture. Otherwise, <see langword="false"/>.</value>
         public bool hasCameraGrain => (m_Properties & XRCameraFrameProperties.CameraGrain) != 0;
 
         /// <summary>
-        /// Indicates whether the frame has a camera grain noise.
+        /// Indicates whether <see cref="noiseIntensity"/> was assigned a value.
         /// </summary>
-        /// <value><see langword="true"/> if the frame has a camera grain noise. Otherwise, <see langword="false"/>.</value>
+        /// <value><see langword="true"/> if the frame has a camera grain noise intensity value. Otherwise, <see langword="false"/>.</value>
         public bool hasNoiseIntensity => (m_Properties & XRCameraFrameProperties.NoiseIntensity) != 0;
 
         /// <summary>
         /// Creates a <see cref="XRCameraFrame"/>.
         /// </summary>
-        /// <param name="timestamp">The timestamp, in nanoseconds, associated with this frame.</param>
-        /// <param name="averageBrightness">The estimated brightness of the scene.</param>
-        /// <param name="averageColorTemperature">The estimated color temperature of the scene.</param>
-        /// <param name="colorCorrection">The estimated color correction value of the scene.</param>
-        /// <param name="projectionMatrix">The 4x4 projection matrix for the camera frame.</param>
-        /// <param name="displayMatrix">The 4x4 display matrix for the camera frame.</param>
-        /// <param name="trackingState">The <see cref="TrackingState"/> associated with the camera.</param>
-        /// <param name="nativePtr">A native pointer associated with this frame.</param>
-        /// <param name="properties">The set of all flags indicating which properties are included in the frame.</param>
-        /// <param name="averageIntensityInLumens">The estimated intensity, in lumens, of the scene.</param>
-        /// <param name="exposureDuration">The camera exposure duration, in seconds with sub-millisecond precision, of the scene.</param>
-        /// <param name="exposureOffset">The camera exposure offset of the scene for lighting scaling.</param>
-        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of the most influential real-world light in the scene.</param>
-        /// <param name="mainLightColor">The estimated color of the most influential real-world light in the scene.</param>
-        /// <param name="mainLightDirection">The estimated direction of the most influential real-world light in the scene.</param>
-        /// <param name="ambientSphericalHarmonics">The ambient spherical harmonic coefficients that represent lighting in the real-world.</param>
+        /// <param name="timestamp">The timestamp of the frame, in nanoseconds.</param>
+        /// <param name="averageBrightness">The estimated intensity of the frame, in gamma color space.</param>
+        /// <param name="averageColorTemperature">The estimated color temperature of the frame.</param>
+        /// <param name="colorCorrection">The estimated color correction value of the frame.</param>
+        /// <param name="projectionMatrix">The 4x4 projection matrix for the frame.</param>
+        /// <param name="displayMatrix">The 4x4 display matrix for the frame.</param>
+        /// <param name="trackingState">The camera's <see cref="TrackingState"/> when the frame was captured.</param>
+        /// <param name="nativePtr">The native pointer associated with the frame.</param>
+        /// <param name="properties">The set of flags that indicates which properties are included in the frame..</param>
+        /// <param name="averageIntensityInLumens">The estimated intensity of the real-world environment, in lumens.</param>
+        /// <param name="exposureDuration">The camera exposure duration of the frame, in seconds with sub-millisecond precision.</param>
+        /// <param name="exposureOffset">The camera exposure offset of the frame for lighting scaling.</param>
+        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of strongest real-world directional light source.</param>
+        /// <param name="mainLightColor">The estimated color of the strongest real-world directional light source.</param>
+        /// <param name="mainLightDirection">The estimated direction of the strongest real-world directional light source.</param>
+        /// <param name="ambientSphericalHarmonics">The ambient spherical harmonic coefficients that represent the real-world lighting.</param>
         /// <param name="cameraGrain">A texture that simulates the camera's noise.</param>
         /// <param name="noiseIntensity">The level of intensity of camera grain noise in a scene.</param>
         public XRCameraFrame(long timestamp,
@@ -394,10 +405,11 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Provides a timestamp of the camera frame.
+        /// Get the timestamp of the frame if possible.
         /// </summary>
-        /// <param name="timestampNs">The timestamp of the camera frame.</param>
-        /// <returns><see langword="true"/> if the timestamp was provided. Otherwise, <see langword="false"/>.</returns>
+        /// <param name="timestampNs">The timestamp of the camera frame, equal to <see cref="timestampNs"/>.</param>
+        /// <returns><see langword="true"/> if the frame has a timestamp. Otherwise, <see langword="false"/>.
+        ///   Equal to <see cref="hasTimestamp"/>.</returns>
         public bool TryGetTimestamp(out long timestampNs)
         {
             timestampNs = this.timestampNs;
@@ -405,10 +417,11 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Provides the brightness for the whole image as an average of all pixels' brightness.
+        /// Get the average brightness of the frame if possible.
         /// </summary>
-        /// <param name="averageBrightness">An estimated average brightness for the environment.</param>
-        /// <returns><see langword="true"/> if average brightness was provided. Otherwise, <see langword="false"/>.</returns>
+        /// <param name="averageBrightness">The average pixel intensity of the frame, equal to <see cref="averageBrightness"/>.</param>
+        /// <returns><see langword="true"/> if the frame has an average brightness value. Otherwise, <see langword="false"/>.
+        ///   Equal to <see cref="hasAverageBrightness"/>.</returns>
         public bool TryGetAverageBrightness(out float averageBrightness)
         {
             averageBrightness = this.averageBrightness;
@@ -416,10 +429,12 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Provides the color temperature for the whole image as an average of all pixels' color temperature.
+        /// Get the estimated color temperature of the frame if possible.
         /// </summary>
-        /// <param name="averageColorTemperature">An estimated color temperature.</param>
-        /// <returns><see langword="true"/> if average color temperature was provided. Otherwise, <see langword="false"/>.</returns>
+        /// <param name="averageColorTemperature">The estimated color temperature of the frame, in degrees Kelvin.
+        ///   Equal to <see cref="averageColorTemperature"/>.</param>
+        /// <returns><see langword="true"/> if the frame has an estimated color temperature value. Otherwise, <see langword="false"/>.
+        ///   Equal to <see cref="hasAverageColorTemperature"/>.</returns>
         public bool TryGetAverageColorTemperature(out float averageColorTemperature)
         {
             averageColorTemperature = this.averageColorTemperature;
@@ -427,10 +442,11 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Provides the projection matrix for the camera frame.
+        /// Get the projection matrix for the frame if possible.
         /// </summary>
-        /// <param name="projectionMatrix">The projection matrix used by the <c>XRCameraSubsystem</c>.</param>
-        /// <returns><see langword="true"/> if the projection matrix was provided. Otherwise, <see langword="false"/>.</returns>
+        /// <param name="projectionMatrix">The projection matrix. Equal to <see cref="projectionMatrix"/>.</param>
+        /// <returns><see langword="true"/> if the frame has a projection matrix. Otherwise, <see langword="false"/>.
+        ///   Equal to <see cref="hasProjectionMatrix"/>.</returns>
         public bool TryGetProjectionMatrix(out Matrix4x4 projectionMatrix)
         {
             projectionMatrix = this.projectionMatrix;
@@ -438,10 +454,11 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Provides the display matrix defining how texture is being rendered on the screen.
+        /// Get the display matrix for the frame if possible.
         /// </summary>
-        /// <param name="displayMatrix">The display matrix for rendering.</param>
-        /// <returns><see langword="true"/> if the display matrix was provided. Otherwise, <see langword="false"/>.</returns>
+        /// <param name="displayMatrix">The display matrix. Equal to <see cref="displayMatrix"/>.</param>
+        /// <returns><see langword="true"/> if the frame has a display matrix. Otherwise, <see langword="false"/>.
+        ///   Equal to <see cref="hasDisplayMatrix"/>.</returns>
         public bool TryGetDisplayMatrix(out Matrix4x4 displayMatrix)
         {
             displayMatrix = this.displayMatrix;
@@ -449,10 +466,11 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Provides the intensity, in lumens, for the environment.
+        /// Get the estimated intensity in lumens of the real-world environment, if possible.
         /// </summary>
-        /// <param name="averageIntensityInLumens">An estimated average intensity, in lumens, for the environment.</param>
-        /// <returns><see langword="true"/> if the average intensity was provided. Otherwise, returns <see langword="false"/>.</returns>
+        /// <param name="averageIntensityInLumens">The estimated intensity. Equal to <see cref="averageIntensityInLumens"/>.</param>
+        /// <returns><see langword="true"/> if the frame has an estimated intensity value in lumens.
+        ///   Otherwise, returns <see langword="false"/>. Equal to <see cref="hasAverageIntensityInLumens"/>.</returns>
         public bool TryGetAverageIntensityInLumens(out float averageIntensityInLumens)
         {
             averageIntensityInLumens = this.averageIntensityInLumens;

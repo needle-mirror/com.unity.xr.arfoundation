@@ -158,7 +158,7 @@ namespace UnityEngine.XR.Simulation
             /// </summary>
             void ValidateChanges()
             {
-                for (var i = 0; i < m_Added.Length; i++)
+                for (var i = 0; i < m_NumAdded; i++)
                 {
                     var trackableId = m_Added[i].trackableId;
                     if (!m_Updated.TryGetValue(trackableId, out var latestUpdatedImage))
@@ -205,8 +205,8 @@ namespace UnityEngine.XR.Simulation
                 subsystemTypeOverride = typeof(SimulationImageTrackingSubsystem),
                 requiresPhysicalImageDimensions = false,
                 supportsMovingImages = true,
-                supportsMutableLibrary = false,
-                supportsImageValidation = false
+                supportsMutableLibrary = true,
+                supportsImageValidation = true
             });
         }
     }
