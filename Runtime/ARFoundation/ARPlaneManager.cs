@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
-using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 
@@ -117,10 +116,10 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     TrackableType trackableTypes = TrackableType.None;
 
-                    var normal = plane.transform.localRotation * Vector3.up;
-                    var infinitePlane = new Plane(normal, plane.transform.localPosition);
-                    float distance;
-                    if (!infinitePlane.Raycast(ray, out distance))
+                    var t = plane.transform;
+                    var normal = t.localRotation * Vector3.up;
+                    var infinitePlane = new Plane(normal, t.localPosition);
+                    if (!infinitePlane.Raycast(ray, out var distance))
                         continue;
 
                     // Pose in session space
@@ -135,12 +134,12 @@ namespace UnityEngine.XR.ARFoundation
                     var hitPositionPlaneSpace3d = Quaternion.Inverse(plane.transform.localRotation) * (pose.position - plane.transform.localPosition);
                     var hitPositionPlaneSpace = new Vector2(hitPositionPlaneSpace3d.x, hitPositionPlaneSpace3d.z);
 
-                    var estimatedOrWithinBounds = TrackableType.PlaneWithinBounds | TrackableType.PlaneEstimated;
+                    const TrackableType estimatedOrWithinBounds = TrackableType.PlaneWithinBounds | TrackableType.PlaneEstimated;
                     if ((trackableTypeMask & estimatedOrWithinBounds) != TrackableType.None)
                     {
                         var differenceFromCenter = hitPositionPlaneSpace - plane.centerInPlaneSpace;
-                        if ((Mathf.Abs(differenceFromCenter.x) <= plane.extents.x) &&
-                            (Mathf.Abs(differenceFromCenter.y) <= plane.extents.y))
+                        if (Mathf.Abs(differenceFromCenter.x) <= plane.extents.x &&
+                            Mathf.Abs(differenceFromCenter.y) <= plane.extents.y)
                         {
                             trackableTypes |= (estimatedOrWithinBounds & trackableTypeMask);
                         }
@@ -239,16 +238,7 @@ namespace UnityEngine.XR.ARFoundation
             ARPlane plane,
             BoundedPlane sessionRelativeData)
         {
-            ARPlane subsumedByPlane;
-            if (m_Trackables.TryGetValue(sessionRelativeData.subsumedById, out subsumedByPlane))
-            {
-                plane.subsumedBy = subsumedByPlane;
-            }
-            else
-            {
-                plane.subsumedBy = null;
-            }
-
+            plane.subsumedBy = m_Trackables.GetValueOrDefault(sessionRelativeData.subsumedById);
             plane.UpdateBoundary(subsystem);
         }
 
@@ -266,11 +256,11 @@ namespace UnityEngine.XR.ARFoundation
             if (planesChanged != null)
             {
                 using (new ScopedProfiler("OnPlanesChanged"))
-                planesChanged(
-                    new ARPlanesChangedEventArgs(
-                        added,
-                        updated,
-                        removed));
+                    planesChanged(
+                        new ARPlanesChangedEventArgs(
+                            added,
+                            updated,
+                            removed));
             }
         }
 

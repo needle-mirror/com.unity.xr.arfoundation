@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.6] - 2023-05-13
+
+### Fixed
+
+- Fixed an issue where `UnityEditor.XR.Simulation.SimulationEditorUtilities` could incorrectly throw a `NullReferenceException` when you opened the Editor if no XR Plug-in was enabled for the standalone build target.
+- Fixed an [issue](https://issuetracker.unity3d.com/issues/opengl-xrsimulation-does-not-show-scene-gameobjects-when-using-opengl-graphics-api) for the XR Simulation background where the depth value would be incorrect for graphics APIs using non reversed depth buffer.
+
 ## [5.0.5] - 2023-03-04
 
 ### Added

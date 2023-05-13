@@ -4,60 +4,85 @@ using UnityEngine.SubsystemsImplementation;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// Describes the capabilities of an <see cref="XRPlaneSubsystem"/>.
+    /// Indicates the capabilities supported by a provider of the <see cref="XRPlaneSubsystem"/>. Provider
+    /// implementations must derive from <see cref="XRPlaneSubsystem.Provider"/> and may override virtual class members.
     /// </summary>
-    public class XRPlaneSubsystemDescriptor :
-        SubsystemDescriptorWithProvider<XRPlaneSubsystem, XRPlaneSubsystem.Provider>
+    public class XRPlaneSubsystemDescriptor : SubsystemDescriptorWithProvider<XRPlaneSubsystem, XRPlaneSubsystem.Provider>
     {
         /// <summary>
-        /// <c>true</c> if the subsystem supports horizontal plane detection.
+        /// Indicates whether the provider implementation supports the detection of horizontal planes,
+        /// such as the floor.
+        /// If <see langword="false"/>, <see cref="BoundedPlane"/> trackables returned by
+        /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
+        /// <see cref="BoundedPlane.alignment"/> values set to either <see cref="PlaneAlignment.HorizontalDown"/> or
+        /// <see cref="PlaneAlignment.HorizontalUp"/>.
         /// </summary>
-        public bool supportsHorizontalPlaneDetection { get; private set; }
+        /// <value><see langword="true"/> if the implementation supports horizontal plane detection.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsHorizontalPlaneDetection { get; }
 
         /// <summary>
-        /// <c>true</c> if the subsystem supports vertical plane detection.
+        /// Indicates whether the provider implementation supports the detection of vertical planes, such as walls.
+        /// If <see langword="false"/>, <see cref="BoundedPlane"/> trackables returned by
+        /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
+        /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
         /// </summary>
-        public bool supportsVerticalPlaneDetection { get; private set; }
+        /// <value><see langword="true"/> if the implementation supports vertical plane detection.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsVerticalPlaneDetection { get; }
 
         /// <summary>
-        /// <c>true</c> if the subsystem supports arbitrarily angled plane detection.
+        /// Indicates whether the provider implementation supports the detection of planes that are aligned with
+        /// neither the horizontal nor vertical axes.
+        /// If <see langword="false"/>, <see cref="BoundedPlane"/> trackables returned by
+        /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
+        /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
         /// </summary>
-        public bool supportsArbitraryPlaneDetection { get; private set; }
+        /// <value><see langword="true"/> if the implementation supports the detection of planes oriented at arbitrary angles.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsArbitraryPlaneDetection { get; }
 
         /// <summary>
-        /// <c>true</c> if the subsystem supports boundary vertices for its planes.
+        /// Indicates whether the provider implementation supports boundary vertices for its planes.
+        /// If <see langword="false"/>, <see cref="XRPlaneSubsystem.GetBoundary">XRPlaneSubsystem.GetBoundary</see>
+        /// must throw a <see cref="NotSupportedException"/>.
         /// </summary>
-        public bool supportsBoundaryVertices { get; private set; }
+        /// <value><see langword="true"/> if the implementation supports boundary vertices for its planes.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsBoundaryVertices { get; }
 
         /// <summary>
-        /// <c>true</c> if the current subsystem supports plane classification. Otherwise, <c>false</c>.
+        /// Indicates whether the provider implementation can provide a value for
+        /// <see cref="BoundedPlane.classification">BoundedPlane.classification</see>. If <see langword="false"/>, all
+        /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have a
+        /// <c>classification</c> value of <see cref="PlaneClassification.None"/>.
         /// </summary>
-        public bool supportsClassification { get; private set; }
+        /// <value><see langword="true"/> if the implementation supports plane classification.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsClassification { get; }
 
         /// <summary>
-        /// Constructor info used to register a descriptor.
+        /// Contains the parameters necessary to construct a new <see cref="XRPlaneSubsystemDescriptor"/> instance.
         /// </summary>
         public struct Cinfo : IEquatable<Cinfo>
         {
             /// <summary>
-            /// The string identifier for a specific implementation.
+            /// The unique identifier of the provider implementation. No specific format is required.
             /// </summary>
             public string id { get; set; }
 
             /// <summary>
-            /// Specifies the provider implementation type to use for instantiation.
-            /// </summary>
-            /// <value>
             /// The provider implementation type to use for instantiation.
-            /// </value>
+            /// </summary>
+            /// <value>The provider implementation type.</value>
             public Type providerType { get; set; }
 
             /// <summary>
-            /// Specifies the <c>XRPlaneSubsystem</c>-derived type that forwards casted calls to its provider.
+            /// The <see cref="XRPlaneSubsystem"/>-derived type to use for instantiation. The instantiated instance of
+            /// this type will forward casted calls to its provider.
             /// </summary>
-            /// <value>
-            /// The type of the subsystem to use for instantiation. If null, <c>XRPlaneSubsystem</c> will be instantiated.
-            /// </value>
+            /// <value>The subsystem implementation type.
+            ///   If <see langword="null"/>, <see cref="XRPlaneSubsystem"/> will be instantiated.</value>
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
@@ -67,35 +92,63 @@ namespace UnityEngine.XR.ARSubsystems
             public Type subsystemImplementationType { get; set; }
 
             /// <summary>
-            /// <c>true</c> if the subsystem supports horizontal plane detection.
+            /// Indicates whether the provider implementation supports the detection of horizontal planes,
+            /// such as the floor.
+            /// If <see langword="false"/>, <see cref="BoundedPlane"/> trackables returned by
+            /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
+            /// <see cref="BoundedPlane.alignment"/> value set to either <see cref="PlaneAlignment.HorizontalDown"/> or
+            /// <see cref="PlaneAlignment.HorizontalUp"/>.
             /// </summary>
+            /// <value><see langword="true"/> if the implementation supports horizontal plane detection.
+            ///   Otherwise, <see langword="false"/>.</value>
             public bool supportsHorizontalPlaneDetection { get; set; }
 
             /// <summary>
-            /// <c>true</c> if the subsystem supports vertical plane detection.
+            /// Indicates whether the provider implementation supports the detection of vertical planes, such as walls.
+            /// If <see langword="false"/>, <see cref="BoundedPlane"/> trackables returned by
+            /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
+            /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
             /// </summary>
+            /// <value><see langword="true"/> if the implementation supports vertical plane detection.
+            ///   Otherwise, <see langword="false"/>.</value>
             public bool supportsVerticalPlaneDetection { get; set; }
 
             /// <summary>
-            /// <c>true</c> if the subsystem supports arbitrarily angled plane detection.
+            /// Indicates whether the provider implementation supports the detection of planes that are aligned with
+            /// neither the horizontal nor vertical axes.
+            /// If <see langword="false"/>, <see cref="BoundedPlane"/> trackables returned by
+            /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
+            /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
             /// </summary>
+            /// <value><see langword="true"/> if the implementation supports the detection of planes oriented at arbitrary angles.
+            ///   Otherwise, <see langword="false"/>.</value>
             public bool supportsArbitraryPlaneDetection { get; set; }
 
             /// <summary>
-            /// <c>true</c> if the subsystem supports boundary vertices for its planes.
+            /// Indicates whether the provider implementation supports boundary vertices for its planes.
+            /// If <see langword="false"/>, <see cref="XRPlaneSubsystem.GetBoundary">XRPlaneSubsystem.GetBoundary</see>
+            /// must throw a <see cref="NotSupportedException"/>.
             /// </summary>
+            /// <value><see langword="true"/> if the implementation supports boundary vertices for its planes.
+            ///   Otherwise, <see langword="false"/>.</value>
             public bool supportsBoundaryVertices { get; set; }
 
             /// <summary>
-            /// <c>true</c> if the subsystem supports boundary vertices for its planes.
+            /// Indicates whether the provider implementation can provide a value for
+            /// <see cref="BoundedPlane.classification">BoundedPlane.classification</see>. If <see langword="false"/>, all
+            /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have a
+            /// <c>classification</c> value of <see cref="PlaneClassification.None"/>.
             /// </summary>
+            /// <value><see langword="true"/> if the implementation supports plane classification.
+            ///   Otherwise, <see langword="false"/>.</value>
             public bool supportsClassification { get; set; }
 
             /// <summary>
             /// Tests for equality.
             /// </summary>
             /// <param name="other">The other <see cref="Cinfo"/> to compare against.</param>
-            /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="Cinfo"/>, otherwise false.</returns>
+            /// <returns><see langword="true"/> if every field in <paramref name="other"/> is equal to this instance.
+            ///   Otherwise, <see langword="false"/>.</returns>
             public bool Equals(Cinfo other)
             {
                 return
@@ -112,9 +165,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Tests for equality.
             /// </summary>
-            /// <param name="obj">The `object` to compare against.</param>
-            /// <returns>`True` if <paramref name="obj"/> is of type <see cref="Cinfo"/> and
-            /// <see cref="Equals(Cinfo)"/> also returns `true`; otherwise `false`.</returns>
+            /// <param name="obj">The <c>object</c> to compare against.</param>
+            /// <returns><see langword="true"/> if <paramref name="obj"/> is of type <see cref="Cinfo"/> and
+            ///   <see cref="Equals(Cinfo)"/> also returns <see langword="true"/>.
+            ///   Otherwise, <see langword="false"/>.</returns>
             public override bool Equals(object obj)
             {
                 if (!(obj is Cinfo))
@@ -144,24 +198,26 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Tests for equality. Same as <see cref="Equals(Cinfo)"/>.
+            /// Tests for equality. Equivalent to <see cref="Equals(Cinfo)"/>.
             /// </summary>
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
-            /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+            /// <returns><see langword="true"/> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>.
+            ///   Otherwise, <see langword="false"/>.</returns>
             public static bool operator ==(Cinfo lhs, Cinfo rhs) => lhs.Equals(rhs);
 
             /// <summary>
-            /// Tests for inequality. Same as `!`<see cref="Equals(Cinfo)"/>.
+            /// Tests for inequality. Equivalent to `!`<see cref="Equals(Cinfo)"/>.
             /// </summary>
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
-            /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+            /// <returns><see langword="true"/> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>.
+            ///   Otherwise, <see langword="false"/>.</returns>
             public static bool operator !=(Cinfo lhs, Cinfo rhs) => !lhs.Equals(rhs);
         }
 
         /// <summary>
-        /// Creates a new subsystem descriptor and registers it with the <c>SubsystemManager</c>.
+        /// Creates a new subsystem descriptor instance and registers it with the <see cref="SubsystemManager"/>.
         /// </summary>
         /// <param name="cinfo">Construction info for the descriptor.</param>
         public static void Create(Cinfo cinfo)

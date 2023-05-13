@@ -65,7 +65,11 @@
                 fixed4 col = tex2D(_textureSingle, i.uv);
                 fragment_output o;
                 o.color = col;
+#if defined(UNITY_REVERSED_Z)
                 o.depth = 0.0f;
+#else
+                o.depth = 1.0f;
+#endif
                 return o;
             }
             ENDCG
