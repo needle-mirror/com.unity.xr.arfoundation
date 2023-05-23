@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="descriptors">The set of available configurations supported by the session.</param>
         /// <param name="requestedFeatures">The set of requested <see cref="Feature"/>s.</param>
         /// <returns>A <see cref="Configuration"/> the session should use.
-        /// See <see cref="Configuration.Configuration(ConfigurationDescriptor, Feature)"/> for restrictions
+        /// See <see cref="Configuration(ConfigurationDescriptor, Feature)"/> for restrictions
         /// on the selected configuration.</returns>
         public abstract Configuration ChooseConfiguration(
             NativeSlice<ConfigurationDescriptor> descriptors,

@@ -106,16 +106,16 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Should create a new anchor "attached" to the trackable with id <paramref name="trackableToAffix"/>.
+            /// Should create a new anchor "attached" to the trackable with id <paramref name="attachedToId"/>.
             /// The behavior of the anchor depends on the type of trackable to which this anchor is attached and
             /// might be implementation-defined.
             /// </summary>
-            /// <param name="trackableToAffix">The id of the trackable to which to attach.</param>
+            /// <param name="attachedToId">The id of the trackable to which to attach.</param>
             /// <param name="pose">The pose, in session space, of the anchor to create.</param>
             /// <param name="anchor">The new anchor. Must be valid only if this method returns <c>true</c>.</param>
             /// <returns><c>true</c> if the new anchor was added, otherwise <c>false</c>.</returns>
             public virtual bool TryAttachAnchor(
-                TrackableId trackableToAffix,
+                TrackableId attachedToId,
                 Pose pose,
                 out XRAnchor anchor)
             {

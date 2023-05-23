@@ -20,6 +20,7 @@ namespace UnityEditor.XR.Simulation
         SerializedProperty m_ImageDiscoveryPramsProperty;
         SerializedProperty m_PlaneFindingParamsProperty;
         SerializedProperty m_ProbesParamsProperty;
+        SerializedProperty m_AnchorParamsProperty;
 
         void OnEnable()
         {
@@ -29,13 +30,14 @@ namespace UnityEditor.XR.Simulation
             m_ImageDiscoveryPramsProperty = m_SerializedObject.FindProperty("m_TrackedImageDiscoveryParams");
             m_PlaneFindingParamsProperty = m_SerializedObject.FindProperty("m_PlaneFindingParams");
             m_ProbesParamsProperty = m_SerializedObject.FindProperty("m_EnvironmentProbeDiscoveryParams");
-
-            LayerContentsUpdate();
+            m_AnchorParamsProperty = m_SerializedObject.FindProperty("m_AnchorDiscoveryParams");
         }
 
         public override void OnInspectorGUI()
         {
+            LayerContentsUpdate();
             m_SerializedObject.Update();
+
             using (var change = new EditorGUI.ChangeCheckScope())
             {
                 var layerIndex = m_EnvLayerProperty.intValue;
@@ -57,6 +59,7 @@ namespace UnityEditor.XR.Simulation
                 EditorGUILayout.PropertyField(m_PlaneFindingParamsProperty);
                 EditorGUILayout.PropertyField(m_ImageDiscoveryPramsProperty);
                 EditorGUILayout.PropertyField(m_ProbesParamsProperty);
+                EditorGUILayout.PropertyField(m_AnchorParamsProperty);
 
                 EditorGUIUtility.labelWidth = previousLabelWidth;
 
@@ -78,7 +81,7 @@ namespace UnityEditor.XR.Simulation
             m_LayersContent = new GUIContent[SimulationConstants.validLayerCount];
             for (var i = 0; i < SimulationConstants.validLayerCount; i++)
             {
-                m_LayersContent[i] = GetLayerIndexGUIContent(i+ SimulationConstants.firstValidLayer);
+                m_LayersContent[i] = GetLayerIndexGUIContent(i + SimulationConstants.firstValidLayer);
             }
         }
 

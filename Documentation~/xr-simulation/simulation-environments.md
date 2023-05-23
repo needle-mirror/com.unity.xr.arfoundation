@@ -54,6 +54,10 @@ AR Foundation contains the following components and shaders you can use to creat
    <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated environment probe. At runtime this GameObject will appear as an automatically placed environment probe.</td>
   </tr>
   <tr>
+   <td colspan="2" ><a href="#simulated-anchor-component">Simulated Anchor component</a></td>
+   <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated anchor. At runtime this GameObject will appear as a pre-existing anchor in the environment.</td>
+  </tr>
+  <tr>
    <td colspan="2" ><a href="#x-ray-rendering">X-ray rendering</a></td>
    <td>Add the X Ray Region component and x-ray shaders to an XR Simulation environment to make it easier to prevent the camera from being obstructed by exterior walls.</td>
   </tr>
@@ -128,6 +132,14 @@ Add a Simulated Environment Probe component to a GameObject in your XR Simulatio
 | :------- | :---------- |
 | **Cubemap** | An optional pre-existing user-generated [Cubemap](xref:UnityEngine.Cubemap) asset. If not set, a Cubemap will be generated when the environment probe is discovered during simulation. |
 | **Size** | Size in meters of the simulated environment probe. Sets both the box size of the underlying [Reflection Probe](xref:UnityEngine.ReflectionProbe) and the bounds for discovery. |
+
+## Simulated Anchor component
+
+Add a Simulated Anchor component to a GameObject in your XR Simulation to designate it as a *simulated anchor*. 
+
+Simulated anchors simulate [loading existing anchors](xref:arfoundation-anchors#loading-anchors) via automatically supplied AR data outside of the users control.
+
+A simulated anchor requires no additional configuration. Anchor [Pose](xref:UnityEngine.Pose) data comes from its GameObject's [Transform](xref:UnityEngine.Transform) component.
 
 <!-- Uncomment when component is fully implemented...
 

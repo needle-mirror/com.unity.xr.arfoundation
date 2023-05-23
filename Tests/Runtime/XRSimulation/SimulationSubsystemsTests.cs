@@ -135,6 +135,14 @@ namespace UnityEngine.XR.Simulation.Tests
             CheckSubsystemAvailable<XRRaycastSubsystem, SimulationRaycastSubsystem>();
         }
 
+        [Test]
+        [Order(2)]
+        [Category("SimulationSubsystemsAvailable")]
+        public void AnchorSubsystemAvailable()
+        {
+            CheckSubsystemAvailable<XRAnchorSubsystem, SimulationAnchorSubsystem>();
+        }
+
         #endregion
 
         [Test]
@@ -226,6 +234,16 @@ namespace UnityEngine.XR.Simulation.Tests
         public void RaycastSubsystemFunctional()
         {
             CheckSubsystemFunctional<XRRaycastSubsystem, SimulationRaycastSubsystem>();
+        }
+
+        [Test]
+        [Order(4)]
+        [Category("SimulationSubsystemsFunctional")]
+        public void AnchorSubsystemFunctional()
+        {
+            AddXROrigin();
+            CheckSubsystemFunctional<XRAnchorSubsystem, SimulationAnchorSubsystem>();
+            RemoveXROrigin();
         }
 
         #endregion

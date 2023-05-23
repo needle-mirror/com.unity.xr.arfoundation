@@ -12,4 +12,5 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Unity.XR.ARSubsystems.Editor")]
 [assembly: InternalsVisibleTo("Unity.XR.ARSubsystems.Editor.Tests")]
 [assembly: InternalsVisibleTo("Unity.XR.Simulation.Editor")]
+[assembly: InternalsVisibleTo("Unity.XR.ARFoundation.InternalUtils.Editor.Tests")]
 #endif

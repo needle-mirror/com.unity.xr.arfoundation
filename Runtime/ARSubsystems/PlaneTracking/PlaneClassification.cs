@@ -44,6 +44,11 @@
         /// <summary>
         /// The plane is classified as a window.
         /// </summary>
-        Window
+        Window,
+
+        /// <summary>
+        /// The plane is classified as other.
+        /// </summary>
+        Other = int.MaxValue,
     }
 }

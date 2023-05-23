@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Unity.Collections;
@@ -384,11 +385,14 @@ namespace UnityEngine.XR.Simulation
 #endif
             }
 
-            ReadOnlyDictionary<TrackableId, DiscoveredPlane> GetPlanesReadOnly()
+            internal IReadOnlyDictionary<TrackableId, DiscoveredPlane> GetPlanesReadOnly()
             {
-                return new ReadOnlyDictionary<TrackableId, DiscoveredPlane>(m_AllPlanes);
+                return m_AllPlanes;
             }
         }
+
+        internal IReadOnlyDictionary<TrackableId, DiscoveredPlane> GetPlanesReadOnly() =>
+            ((SimulationProvider)provider).GetPlanesReadOnly();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()

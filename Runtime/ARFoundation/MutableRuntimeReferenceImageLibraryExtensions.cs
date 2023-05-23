@@ -58,7 +58,7 @@ namespace UnityEngine.XR.ARFoundation
         /// destroyed after this method returns.</para>
         /// > [!TIP]
         /// > Do not call this method on your app's first frame. <see cref="ARSession.state">ARSession.state</see> should
-        /// > be <see cref="ARSessionState.SessionTracking"/> before you schedule an add image job. You can implement a
+        /// > be <see cref="ARSessionState.SessionInitializing"/> or <see cref="ARSessionState.SessionTracking"/> before you schedule an add image job. You can implement a
         /// > <c>MonoBehaviour</c>'s <see href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html">Start</see>
         /// > method as a coroutine and `yield` until the AR Session state is <c>SessionTracking</c>.
         /// </remarks>

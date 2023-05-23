@@ -163,6 +163,13 @@ namespace UnityEngine.XR.ARSubsystems
         public bool supportsWorldTrackingHDRLightEstimation { get; set; }
 
         /// <summary>
+        /// Indicates whether the provider implementation supports EXIF data.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports EXIF data.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsExifData { get; set; }
+        
+        /// <summary>
         /// Tests for equality.
         /// </summary>
         /// <param name="other">The other <see cref="XRCameraSubsystemCinfo"/> to compare against.</param>
@@ -187,7 +194,8 @@ namespace UnityEngine.XR.ARSubsystems
                 && supportsWorldTrackingAmbientIntensityLightEstimation.Equals(other.supportsWorldTrackingAmbientIntensityLightEstimation)
                 && supportsWorldTrackingHDRLightEstimation.Equals(other.supportsWorldTrackingHDRLightEstimation)
                 && supportsFocusModes.Equals(other.supportsFocusModes)
-                && supportsCameraGrain.Equals(other.supportsCameraGrain);
+                && supportsCameraGrain.Equals(other.supportsCameraGrain)
+                && supportsExifData.Equals(other.supportsExifData);
         }
 
         /// <summary>
@@ -244,6 +252,7 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode = (hashCode * 486187739) + supportsWorldTrackingHDRLightEstimation.GetHashCode();
                 hashCode = (hashCode * 486187739) + supportsFocusModes.GetHashCode();
                 hashCode = (hashCode * 486187739) + supportsCameraGrain.GetHashCode();
+                hashCode = (hashCode * 486187739) + supportsExifData.GetHashCode();
             }
             return hashCode;
         }
@@ -280,6 +289,7 @@ namespace UnityEngine.XR.ARSubsystems
             supportsWorldTrackingAmbientIntensityLightEstimation = cameraSubsystemParams.supportsWorldTrackingAmbientIntensityLightEstimation;
             supportsWorldTrackingHDRLightEstimation = cameraSubsystemParams.supportsWorldTrackingHDRLightEstimation;
             supportsCameraGrain = cameraSubsystemParams.supportsCameraGrain;
+            supportsExifData = cameraSubsystemParams.supportsExifData;
         }
 
         /// <summary>
@@ -410,6 +420,13 @@ namespace UnityEngine.XR.ARSubsystems
         /// <value><see langword="true"/> if the implementation supports HDR light estimation while world tracking.
         ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsWorldTrackingHDRLightEstimation { get; private set; }
+        
+        /// <summary>
+        /// Indicates whether the provider implementation supports EXIF data.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports EXIF data.
+        ///   Otherwise, <see langword="false"/>.</value>
+        public bool supportsExifData { get; private set; }
 
         /// <summary>
         /// Creates a <c>XRCameraSubsystemDescriptor</c> based on the given parameters, and validates that the

@@ -8,6 +8,19 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-pre.6] - 2023-05-23
+
+### Added
+
+- Added a set of custom visual scripting nodes designed to help you use AR Foundation in visual scripting projects. Refer to [Visual Scripting](xref:arfoundation-visual-scripting) to learn more about how to set up an AR Foundation visual scripting project.
+- Added support for the [Anchors](xref:arfoundation-anchors) feature in XR Simulation. You can now add and remove anchors in Play mode, add a [Simulated Anchor component](xref:arfoundation-simulation-environments#simulated-anchor-component) to XR Simulation environments, and adjust anchor discovery settings in [XR Simulation project settings](xref:arfoundation-simulation-project-settings).
+- Added enum value `Other` to [PlaneClassification](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications).
+- Added the ability for camera subsystem providers to include [EXIF](https://en.wikipedia.org/wiki/Exif) data with the `XRCameraFrame`.
+
+### Changed
+
+- If XR Simulation is enabled in your project, it will now automatically attempt to set its Environment Layer name to "XR Simulation". XR Simulation uses Layer 30 as its default Environment Layer, but you can change this setting by going to **Edit** > **Project Settings** > **XR Plug-in Management** > **XR Simulation**.
+
 ## [5.1.0-pre.4] - 2023-04-11
 
 ### Deprecated

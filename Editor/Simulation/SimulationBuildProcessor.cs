@@ -1,5 +1,4 @@
 using UnityEditor.XR.Management;
-using UnityEngine.XR.Simulation;
 
 namespace UnityEditor.XR.Simulation
 {

@@ -47,18 +47,18 @@ If you set **Attempt Update** to **true**, the device tries to install AR softwa
 
 ### Session state
 
-To determine the current state of the session (for example, whether the device is supported, if AR software is being installed, and whether the session is working), use `ARSession.state`. You can also subscribe to the `ARSession.stateChanged` event to receive a callback when the session state changes.
+Use [ARSession.state](xref:UnityEngine.XR.ARFoundation.ARSession.state) to get the current session state. You can also subscribe to the [ARSession.stateChanged](xref:UnityEngine.XR.ARFoundation.ARSession.stateChanged) event to receive a callback when the state changes. Refer to the table below for a list of all possible states:
 
-|`ARSessionState`|**Description**|
-|-|-|
-|`None`|The AR System has not been initialized and availability is unknown.|
-|`Unsupported`|The current device doesn't support AR.|
-|`CheckingAvailability`|The system is checking the availability of AR on the current device.|
-|`NeedsInstall`|The current device supports AR, but AR support requires additional software to be installed.|
-|`Installing`|AR software is being installed.|
-|`Ready`|AR is supported and ready.|
-|`SessionInitialized`|An AR session is initializing (that is, starting up). This usually means AR is working, but hasn't gathered enough information about the environment.|
-|`SessionTracking`|An AR session is running and is tracking (that is, the device is able to determine its position and orientation in the world).|
+| Session state | Description |
+| :------------ | :---------- |
+| [None](xref:UnityEngine.XR.ARFoundation.ARSessionState.None) | AR has not been initialized and availability is unknown. You can call [CheckAvailability](xref:UnityEngine.XR.ARFoundation.ARSession.CheckAvailability) to check availability of AR on the device. |
+| [Unsupported](xref:UnityEngine.XR.ARFoundation.ARSessionState.Unsupported) | The device does not support AR. |
+| [CheckingAvailability](xref:UnityEngine.XR.ARFoundation.ARSessionState.CheckingAvailability) | The session subsystem is currently checking availability of AR on the device. The [CheckAvailability](xref:UnityEngine.XR.ARFoundation.ARSession.CheckAvailability) coroutine has not yet completed. |
+| [NeedsInstall](xref:UnityEngine.XR.ARFoundation.ARSessionState.NeedsInstall) | The device supports AR, but requires additional software to be installed. If the provider [supports runtime installation](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall), you can call [Install](xref:UnityEngine.XR.ARFoundation.ARSession.Install) to attempt installation of AR software on the device. |
+| [Installing](xref:UnityEngine.XR.ARFoundation.ARSessionState.Installing) | AR software is currently installing. The [Install](xref:UnityEngine.XR.ARFoundation.ARSession.Install) coroutine has not yet completed. |
+| [Ready](xref:UnityEngine.XR.ARFoundation.ARSessionState.Ready) | The device supports AR, and any necessary software is installed. This state will automatically change to either `SessionInitializing` or `SessionTracking`. |
+| [SessionInitializing](xref:UnityEngine.XR.ARFoundation.ARSessionState.SessionInitializing) | The AR session is currently initializing. This usually means AR is running, but not yet tracking successfully. |
+| [SessionTracking](xref:UnityEngine.XR.ARFoundation.ARSessionState.SessionTracking) | The AR session is running and tracking successfully. The device is able to determine its position and orientation in the world. If tracking is lost during a session, this state may change to `SessionInitializing`. |
 
 # AR Input Manager
 

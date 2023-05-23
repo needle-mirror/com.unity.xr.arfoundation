@@ -1,9 +1,9 @@
 #if UNITY_CODING_ENABLED
 using Unity.Coding.Editor.ApiScraping;
 
-namespace UnityEditor.XR.ARFoundation
+namespace UnityEditor.XR.ARFoundation.Tests
 {
-    static class MenuOptions
+    static class Scraper
     {
         [MenuItem("AR Foundation/Scrape APIs")]
         static void ScrapeApis() => ApiScraping.Scrape();

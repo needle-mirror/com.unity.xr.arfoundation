@@ -11,5 +11,6 @@ The most significant updates in this release include:
 - Added Camera Configuration menu to the [ARDebugMenu](xref:arfoundation-debug-menu).
 - Added support for the [Environment Probes](xref:arfoundation-environment-probes) feature in XR Simulation. You can now add and remove environment probes in Play mode, add a [Simulated Environment Probe component](xref:arfoundation-simulation-environments#simulated-environment-probe-component) to XR Simulation environments, and adjust environment probe discovery settings in [XR Simulation project settings](xref:arfoundation-simulation-project-settings).
 - Added [ARSession.Reset](xref:UnityEngine.XR.ARFoundation.ARSession.Reset) support to relevant subsystems in XR Simulation.
+- Added the ability for camera subsystem providers to include [EXIF](https://en.wikipedia.org/wiki/Exif) data with the `XRCameraFrame`.
 
 For a full list of changes and updates in this version, see the [AR Foundation package changelog](xref:arfoundation-changelog).

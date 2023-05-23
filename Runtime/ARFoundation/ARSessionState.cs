@@ -6,47 +6,49 @@ namespace UnityEngine.XR.ARFoundation
     public enum ARSessionState
     {
         /// <summary>
-        /// The AR system has not been initialized. Availability is unknown.
-        /// <see cref="ARSession.CheckAvailability"/>.
+        /// AR has not been initialized and availability is unknown.
+        /// You can call <see cref="ARSession.CheckAvailability"/> to check availability of AR on the device.
         /// </summary>
         None,
 
         /// <summary>
-        /// AR is not supported on the current device.
+        /// AR is not supported on the device.
         /// </summary>
         Unsupported,
 
         /// <summary>
-        /// The system is checking for the availability of AR.
-        /// <see cref="ARSession.CheckAvailability"/>.
+        /// The session subsystem is currently checking availability of AR on the device.
+        /// The <see cref="ARSession.CheckAvailability"/> coroutine has not yet completed.
         /// </summary>
         CheckingAvailability,
 
         /// <summary>
-        /// AR is supported, but requires additional software to be installed.
-        /// <see cref="ARSession.Install"/>.
+        /// The device supports AR, but requires additional software to be installed.
+        /// If the provider [supports runtime installation](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall),
+        /// you can call <see cref="ARSession.Install"/> to attempt installation of AR software on the device.
         /// </summary>
         NeedsInstall,
 
         /// <summary>
-        /// AR software is being installed. <see cref="ARSession.Install"/>.
+        /// AR software is currently installing.
+        /// The <see cref="ARSession.Install"/> coroutine has not yet completed.
         /// </summary>
         Installing,
 
         /// <summary>
-        /// AR is supported and ready.
+        /// The device supports AR, and any necessary software is installed.
+        /// This state will automatically change to either <c>SessionInitializing</c> or <c>SessionTracking</c>.
         /// </summary>
         Ready,
 
         /// <summary>
-        /// An AR session is initializing (that is, starting up). This usually means AR is working
-        /// but has not yet gathered enough information about the environment.
+        /// The AR session is currently initializing. This usually means AR is running, but not yet tracking successfully.
         /// </summary>
         SessionInitializing,
 
         /// <summary>
-        /// An AR session is running and is tracking (that is, the device is able to determine its
-        /// position and orientation in the world).
+        /// The AR session is running and tracking successfully. The device is able to determine its position and orientation in the world.
+        /// If tracking is lost during a session, this state may change to <c>SessionInitializing</c>.
         /// </summary>
         SessionTracking
     }

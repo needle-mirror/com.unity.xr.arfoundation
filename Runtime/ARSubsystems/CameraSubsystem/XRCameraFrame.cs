@@ -101,6 +101,12 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         [Description("NoiseIntensity")]
         NoiseIntensity = (1 << 14),
+        
+        /// <summary>
+        /// EXIF data for the frame is included.
+        /// </summary>
+        [Description("ExifData")]
+        ExifData = (1 << 15),
     }
 
     /// <summary>
@@ -251,6 +257,12 @@ namespace UnityEngine.XR.ARSubsystems
         /// <value>The noise intensity.</value>
         public float noiseIntensity => m_NoiseIntensity;
         float m_NoiseIntensity;
+        
+        /// <summary>
+        /// The frame's EXIF data.
+        /// </summary>
+        /// <value>The EXIF data.</value>
+        XRCameraFrameExifData m_ExifData;
 
         /// <summary>
         /// Indicates whether <see cref="timestampNs"/> was assigned a value.
@@ -345,6 +357,12 @@ namespace UnityEngine.XR.ARSubsystems
         public bool hasNoiseIntensity => (m_Properties & XRCameraFrameProperties.NoiseIntensity) != 0;
 
         /// <summary>
+        /// Indicates whether <see cref="exifData"/> was assigned a value.
+        /// </summary>
+        /// <value><see langword="true"/> if the frame has EXIF data. Otherwise, <see langword="false"/>.</value>
+        bool hasExifData => (m_Properties & XRCameraFrameProperties.ExifData) != 0;
+        
+        /// <summary>
         /// Creates a <see cref="XRCameraFrame"/>.
         /// </summary>
         /// <param name="timestamp">The timestamp of the frame, in nanoseconds.</param>
@@ -365,7 +383,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="ambientSphericalHarmonics">The ambient spherical harmonic coefficients that represent the real-world lighting.</param>
         /// <param name="cameraGrain">A texture that simulates the camera's noise.</param>
         /// <param name="noiseIntensity">The level of intensity of camera grain noise in a scene.</param>
-        public XRCameraFrame(long timestamp,
+        public XRCameraFrame(
+            long timestamp,
             float averageBrightness,
             float averageColorTemperature,
             Color colorCorrection,
@@ -402,6 +421,59 @@ namespace UnityEngine.XR.ARSubsystems
             m_AmbientSphericalHarmonics = ambientSphericalHarmonics;
             m_CameraGrain = cameraGrain;
             m_NoiseIntensity = noiseIntensity;
+            m_ExifData = default;
+        }
+        
+        /// <summary>
+        /// Creates a <see cref="XRCameraFrame"/> with EXIF data.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the frame, in nanoseconds.</param>
+        /// <param name="averageBrightness">The estimated intensity of the frame, in gamma color space.</param>
+        /// <param name="averageColorTemperature">The estimated color temperature of the frame.</param>
+        /// <param name="colorCorrection">The estimated color correction value of the frame.</param>
+        /// <param name="projectionMatrix">The 4x4 projection matrix for the frame.</param>
+        /// <param name="displayMatrix">The 4x4 display matrix for the frame.</param>
+        /// <param name="trackingState">The camera's <see cref="TrackingState"/> when the frame was captured.</param>
+        /// <param name="nativePtr">The native pointer associated with the frame.</param>
+        /// <param name="properties">The set of flags that indicates which properties are included in the frame.</param>
+        /// <param name="averageIntensityInLumens">The estimated intensity of the real-world environment, in lumens.</param>
+        /// <param name="exposureDuration">The camera exposure duration of the frame, in seconds with sub-millisecond precision.</param>
+        /// <param name="exposureOffset">The camera exposure offset of the frame for lighting scaling.</param>
+        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of strongest real-world directional light source.</param>
+        /// <param name="mainLightColor">The estimated color of the strongest real-world directional light source.</param>
+        /// <param name="mainLightDirection">The estimated direction of the strongest real-world directional light source.</param>
+        /// <param name="ambientSphericalHarmonics">The ambient spherical harmonic coefficients that represent the real-world lighting.</param>
+        /// <param name="cameraGrain">A texture that simulates the camera's noise.</param>
+        /// <param name="noiseIntensity">The level of intensity of camera grain noise in a scene.</param>
+        /// <param name="exifData">The EXIF data.</param>
+        public XRCameraFrame(
+            long timestamp,
+            float averageBrightness,
+            float averageColorTemperature,
+            Color colorCorrection,
+            Matrix4x4 projectionMatrix,
+            Matrix4x4 displayMatrix,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            XRCameraFrameProperties properties,
+            float averageIntensityInLumens,
+            double exposureDuration,
+            float exposureOffset,
+            float mainLightIntensityInLumens,
+            Color mainLightColor,
+            Vector3 mainLightDirection,
+            SphericalHarmonicsL2 ambientSphericalHarmonics,
+            XRTextureDescriptor cameraGrain,
+            float noiseIntensity,
+            XRCameraFrameExifData exifData) 
+        : this(timestamp, averageBrightness, averageColorTemperature, 
+            colorCorrection, projectionMatrix, displayMatrix, 
+            trackingState, nativePtr, properties, 
+            averageIntensityInLumens, exposureDuration, exposureOffset, 
+            mainLightIntensityInLumens, mainLightColor, mainLightDirection,
+            ambientSphericalHarmonics, cameraGrain, noiseIntensity)
+        {
+            m_ExifData = exifData;
         }
 
         /// <summary>
@@ -476,6 +548,18 @@ namespace UnityEngine.XR.ARSubsystems
             averageIntensityInLumens = this.averageIntensityInLumens;
             return hasAverageIntensityInLumens;
         }
+        
+        /// <summary>
+        /// Get the frame's EXIF data, if possible.
+        /// </summary>
+        /// <param name="exifData">The EXIF data.</param>
+        /// <returns><see langword="true"/> if the frame has EXIF data.
+        ///   Otherwise, returns <see langword="false"/>.</returns>
+        public bool TryGetExifData(out XRCameraFrameExifData exifData)
+        {
+            exifData = m_ExifData;
+            return hasExifData;
+        }
 
         /// <summary>
         /// Compares for equality.
@@ -498,6 +582,7 @@ namespace UnityEngine.XR.ARSubsystems
                     && m_AmbientSphericalHarmonics.Equals(other.m_AmbientSphericalHarmonics)
                     && m_CameraGrain.Equals(other.m_CameraGrain)
                     && m_NoiseIntensity.Equals(other.m_NoiseIntensity)
+                    && m_ExifData.Equals(other.m_ExifData)
                     && (m_Properties == other.m_Properties));
         }
 
@@ -560,6 +645,7 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode = (hashCode * 486187739) + m_MainLightIntensityLumens.GetHashCode();
                 hashCode = (hashCode * 486187739) + m_CameraGrain.GetHashCode();
                 hashCode = (hashCode * 486187739) + m_NoiseIntensity.GetHashCode();
+                hashCode = (hashCode * 486187739) + m_ExifData.GetHashCode();
                 hashCode = (hashCode * 486187739) + m_NativePtr.GetHashCode();
                 hashCode = (hashCode * 486187739) + ((int)m_Properties).GetHashCode();
             }
@@ -588,6 +674,7 @@ namespace UnityEngine.XR.ARSubsystems
             sb.AppendLine($"  AmbientSphericalHarmonics: {m_AmbientSphericalHarmonics}");
             sb.AppendLine($"  NoiseIntensity: {m_NoiseIntensity:0.000}");
             sb.AppendLine($"  NativePtr: {m_NativePtr.ToString("X16")}");
+            sb.AppendLine($"  ExifData: {m_ExifData.ToString()}");
             sb.AppendLine("}");
             return sb.ToString();
         }

@@ -10,6 +10,12 @@ namespace UnityEngine.XR.ARSubsystems
     [StructLayout(LayoutKind.Sequential)]
     public struct XRAnchor : ITrackable, IEquatable<XRAnchor>
     {
+        TrackableId m_Id;
+        Pose m_Pose;
+        TrackingState m_TrackingState;
+        IntPtr m_NativePtr;
+        Guid m_SessionId;
+
         /// <summary>
         /// Gets a default-initialized <see cref="XRAnchor"/>. This may be
         /// different from the zero-initialized version (for example, the <see cref="pose"/>
@@ -17,7 +23,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         public static XRAnchor defaultValue => s_Default;
 
-        static readonly XRAnchor s_Default = new XRAnchor
+        static readonly XRAnchor s_Default = new()
         {
             m_Id = TrackableId.invalidId,
             m_Pose = Pose.identity,
@@ -150,15 +156,5 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
         public static bool operator!=(XRAnchor lhs, XRAnchor rhs) => !lhs.Equals(rhs);
-
-        TrackableId m_Id;
-
-        Pose m_Pose;
-
-        TrackingState m_TrackingState;
-
-        IntPtr m_NativePtr;
-
-        Guid m_SessionId;
     }
 }

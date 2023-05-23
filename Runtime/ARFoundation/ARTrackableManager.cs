@@ -5,7 +5,6 @@ using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 using UnityEngine.SubsystemsImplementation;
 
-
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -32,12 +31,16 @@ namespace UnityEngine.XR.ARFoundation
         where TSessionRelativeData : struct, ITrackable
         where TTrackable : ARTrackable<TSessionRelativeData, TTrackable>
     {
+        static List<TTrackable> s_Added = new List<TTrackable>();
+        static List<TTrackable> s_Updated = new List<TTrackable>();
+        static List<TTrackable> s_Removed = new List<TTrackable>();
+
         internal static ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable> instance { get; private set; }
 
         /// <summary>
         /// A collection of all trackables managed by this component.
         /// </summary>
-        public TrackableCollection<TTrackable> trackables => new TrackableCollection<TTrackable>(m_Trackables);
+        public TrackableCollection<TTrackable> trackables => new(m_Trackables);
 
         /// <summary>
         /// Iterates over every instantiated <see cref="ARTrackable{TSessionRelativeData,TTrackable}"/> and
@@ -65,7 +68,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// (Deprecated) The <c>XROrigin</c> which will be used to instantiate detected trackables.
         /// </summary>
-
         [Obsolete("'sessionOrigin' has been obsoleted; use 'origin' instead. (UnityUpgradable) -> origin", false)]
         protected XROrigin sessionOrigin { get; private set; }
 
@@ -83,12 +85,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// A dictionary of all trackables, keyed by <c>TrackableId</c>.
         /// </summary>
-        protected Dictionary<TrackableId, TTrackable> m_Trackables = new Dictionary<TrackableId, TTrackable>();
+        protected Dictionary<TrackableId, TTrackable> m_Trackables = new();
 
         /// <summary>
         /// A dictionary of trackables added via <see cref="CreateTrackableImmediate(TSessionRelativeData)"/> but not yet reported as added.
         /// </summary>
-        protected Dictionary<TrackableId, TTrackable> m_PendingAdds = new Dictionary<TrackableId, TTrackable>();
+        protected Dictionary<TrackableId, TTrackable> m_PendingAdds = new();
 
         /// <summary>
         /// Invoked by Unity once when this component wakes up.
@@ -250,8 +252,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Invoked after creating the trackable. The trackable's <c>sessionRelativeData</c> property will already be set.
         /// </summary>
         /// <param name="trackable">The newly created trackable.</param>
-        protected virtual void OnCreateTrackable(TTrackable trackable)
-        { }
+        protected virtual void OnCreateTrackable(TTrackable trackable) { }
 
         /// <summary>
         /// Invoked just after session-relative data has been set on a trackable.
@@ -342,7 +343,7 @@ namespace UnityEngine.XR.ARFoundation
 
         string GetTrackableName(TrackableId trackableId)
         {
-            return gameObjectName + " " + trackableId.ToString();
+            return gameObjectName + " " + trackableId;
         }
 
         (GameObject gameObject, bool shouldBeActive) CreateGameObjectDeactivated()
@@ -452,11 +453,5 @@ namespace UnityEngine.XR.ARFoundation
                 Destroy(trackable.gameObject);
             }
         }
-
-        static List<TTrackable> s_Added = new List<TTrackable>();
-
-        static List<TTrackable> s_Updated = new List<TTrackable>();
-
-        static List<TTrackable> s_Removed = new List<TTrackable>();
     }
 }

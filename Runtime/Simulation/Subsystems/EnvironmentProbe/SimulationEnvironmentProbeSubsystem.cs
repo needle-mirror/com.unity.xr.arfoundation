@@ -1,6 +1,5 @@
 ﻿using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
-using static UnityEngine.XR.ARSubsystems.NativeCopyUtility;
 
 namespace UnityEngine.XR.Simulation
 {
@@ -85,9 +84,9 @@ namespace UnityEngine.XR.Simulation
 
                     var changes = new TrackableChanges<XREnvironmentProbe>(addedCount, updatedCount, removedCount, allocator);
 
-                    CopyFromReadOnlyList(added, changes.added);
-                    CopyFromReadOnlyList(updated, changes.updated);
-                    CopyFromReadOnlyList(removed, changes.removed);
+                    NativeCopyUtility.CopyFromReadOnlyList(added, changes.added);
+                    NativeCopyUtility.CopyFromReadOnlyList(updated, changes.updated);
+                    NativeCopyUtility.CopyFromReadOnlyList(removed, changes.removed);
 
                     m_ProbeDiscoverer.ClearChangeBuffers();
 

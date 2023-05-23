@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
@@ -10,7 +11,7 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     class PlaneRaycaster : IRaycaster
     {
-        Func<ReadOnlyDictionary<TrackableId, DiscoveredPlane>> m_PlanesGetter;
+        readonly Func<IReadOnlyDictionary<TrackableId, DiscoveredPlane>> m_PlanesGetter;
 
         /// <summary>
         /// Constructs a <see cref="PlaneRaycaster"/> instance.
@@ -19,7 +20,7 @@ namespace UnityEngine.XR.Simulation
         /// Gets a <see cref="NativeArray{T}"/> of <see cref="DiscoveredPlane"/>s in session space.
         /// The getter is called once per call to <see cref="PlaneRaycaster.Raycast"/>.
         /// </param>
-        public PlaneRaycaster(Func<ReadOnlyDictionary<TrackableId, DiscoveredPlane>> planesGetter)
+        public PlaneRaycaster(Func<IReadOnlyDictionary<TrackableId, DiscoveredPlane>> planesGetter)
         {
             m_PlanesGetter = planesGetter;
             SimulationRaycasterRegistry.instance.RegisterRaycaster(this);
@@ -73,20 +74,20 @@ namespace UnityEngine.XR.Simulation
                     // Construct the correct output TrackableTypes, using more math when needed
                     var trackableTypes = TrackableType.None;
 
-                    if (trackableTypeMask.HasFlag(TrackableType.PlaneWithinInfinity))
+                    if ((trackableTypeMask & TrackableType.PlaneWithinInfinity) != 0)
                         trackableTypes |= TrackableType.PlaneWithinInfinity;
 
                     var hitPose = new Pose(ray.origin + ray.direction * hitDistance, planeRotation);
                     var hitPositionPlaneSpace3d = Quaternion.Inverse(planeRotation) * (hitPose.position - planePosition);
                     var hitPositionPlaneSpace = new Vector2(hitPositionPlaneSpace3d.x, hitPositionPlaneSpace3d.z);
 
-                    if (trackableTypeMask.HasFlag(TrackableType.PlaneWithinPolygon))
+                    if ((trackableTypeMask & TrackableType.PlaneWithinPolygon) != 0)
                     {
                         if (WindingNumber(hitPositionPlaneSpace, plane.vertices) != 0)
                             trackableTypes |= TrackableType.PlaneWithinPolygon;
                     }
 
-                    var estimatedOrWithinBounds = TrackableType.PlaneWithinBounds | TrackableType.PlaneEstimated;
+                    const TrackableType estimatedOrWithinBounds = TrackableType.PlaneWithinBounds | TrackableType.PlaneEstimated;
                     if ((trackableTypeMask & estimatedOrWithinBounds) != TrackableType.None)
                     {
                         var differenceFromCenter = hitPositionPlaneSpace - plane.center;

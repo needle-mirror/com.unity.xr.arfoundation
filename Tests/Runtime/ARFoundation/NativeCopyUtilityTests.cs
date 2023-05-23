@@ -79,6 +79,37 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [TestCase(Allocator.Temp)]
         [TestCase(Allocator.TempJob)]
         [TestCase(Allocator.Persistent)]
+        public void CopyFromReadOnlyCollection(Allocator allocator)
+        {
+            const int testLength = 42;
+            var src = new List<TwoFloats>(42);
+            for (var i = 0; i < testLength; i++)
+            {
+                src.Add(new TwoFloats(-i, i * 2));
+            }
+
+            NativeArray<TwoFloats> dst = default;
+
+            try
+            {
+                dst = new NativeArray<TwoFloats>(src.Count, allocator, NativeArrayOptions.UninitializedMemory);
+                NativeCopyUtility.CopyFromReadOnlyCollection(src, dst);
+
+                for (var i = 0; i < testLength; i++)
+                {
+                    Assert.IsTrue(src[i].Equals(dst[i]));
+                }
+            }
+            finally
+            {
+                if (dst.IsCreated)
+                    dst.Dispose();
+            }
+        }
+        
+        [TestCase(Allocator.Temp)]
+        [TestCase(Allocator.TempJob)]
+        [TestCase(Allocator.Persistent)]
         public void CopyFromReadOnlyList(Allocator allocator)
         {
             const int testLength = 42;

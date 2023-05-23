@@ -466,6 +466,9 @@ namespace UnityEngine.XR.ARFoundation
 
             if(frame.hasNoiseIntensity)
                  eventArgs.noiseIntensity = frame.noiseIntensity;
+            
+            if (frame.TryGetExifData(out XRCameraFrameExifData exifData))
+                eventArgs.exifData = exifData;
 
             s_Textures.Clear();
             s_PropertyIds.Clear();

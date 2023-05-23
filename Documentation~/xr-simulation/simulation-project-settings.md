@@ -137,6 +137,15 @@ Go to **Edit** > **Project Settings** > **XR Plug-in Management** > **XR Simulat
    <td><strong>Cubemap Face Size</strong></td>
    <td>Width and height in pixels of each face of each environment probe's Cubemap.</td>
   </tr>
+  <tr>
+    <td colspan="2"><strong>Anchor Discovery Params</strong></td>
+    <td>Performance tuning options for discovery of automatically placed anchors.</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><strong>Min Time Until Update</strong></td>
+    <td>Minimum time in seconds between anchor discovery updates.</td>
+  </tr>
 </table>
 
 # XR Simulation preferences

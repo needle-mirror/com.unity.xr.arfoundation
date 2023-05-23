@@ -46,7 +46,7 @@ namespace UnityEditor.XR.ARFoundation
                 arManagersInfo[i] = new ARUsageAnalyticsArgs.ARManagerInfo
                 {
                     name = arManager.GetType().Name,
-                    active = arManager.enabled
+                    active = arManager.isActiveAndEnabled
                 };
             }
 

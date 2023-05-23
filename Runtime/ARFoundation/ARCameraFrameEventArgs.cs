@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -85,6 +86,22 @@ namespace UnityEngine.XR.ARFoundation
         public float noiseIntensity { get; internal set; }
 
         /// <summary>
+        /// The frame's EXIF data.
+        /// </summary>
+        internal XRCameraFrameExifData exifData { get; set; }
+
+        /// <summary>
+        /// Get the EXIF data of the frame if possible.
+        /// </summary>
+        /// <param name="exifData">The EXIF data of the camera frame.</param>
+        /// <returns><see langword="true"/> if the frame contains EXIF data. Otherwise, <see langword="false"/>.</returns>
+        public bool TryGetExifData(out XRCameraFrameExifData exifData)
+        {
+            exifData = this.exifData;
+            return this.exifData.hasAnyProperties;
+        }
+        
+        /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
         /// <returns>A hash code generated from this object's fields.</returns>
@@ -102,6 +119,7 @@ namespace UnityEngine.XR.ARFoundation
                 hash = hash * 486187739 + exposureOffset.GetHashCode();
                 hash = hash * 486187739 + cameraGrainTexture.GetHashCode();
                 hash = hash * 486187739 + noiseIntensity.GetHashCode();
+                hash = hash * 486187739 + exifData.GetHashCode();
                 hash = hash * 486187739 + (enabledMaterialKeywords == null ? 0 : enabledMaterialKeywords.GetHashCode());
                 hash = hash * 486187739 + (disabledMaterialKeywords == null ? 0 : disabledMaterialKeywords.GetHashCode());
                 return hash;
@@ -134,6 +152,7 @@ namespace UnityEngine.XR.ARFoundation
             stringBuilder.Append("\ndisplayMatrix: " + displayMatrix);
             stringBuilder.Append("\ntexture count: " + (textures == null ? 0 : textures.Count));
             stringBuilder.Append("\npropertyNameId count: " + (propertyNameIds == null ? 0 : propertyNameIds.Count));
+            stringBuilder.Append("\nexifData: " + (exifData.hasAnyProperties ? exifData.ToString() : "null"));
 
             return stringBuilder.ToString();
         }
@@ -157,6 +176,7 @@ namespace UnityEngine.XR.ARFoundation
                 && (exposureOffset == other.exposureOffset)
                 && (cameraGrainTexture == other.cameraGrainTexture)
                 && (noiseIntensity == other.noiseIntensity)
+                && exifData.Equals(other.exifData)
                 && ((enabledMaterialKeywords == null) ? (other.enabledMaterialKeywords == null)
                     : enabledMaterialKeywords.Equals(other.enabledMaterialKeywords))
                 && ((disabledMaterialKeywords == null) ? (other.disabledMaterialKeywords == null)

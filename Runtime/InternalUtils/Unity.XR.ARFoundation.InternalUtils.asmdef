@@ -3,7 +3,8 @@
     "rootNamespace": "UnityEngine.XR.ARFoundation.InternalUtils",
     "references": [
         "Unity.XR.ARSubsystems",
-        "Unity.XR.CoreUtils"
+        "Unity.XR.CoreUtils",
+        "Unity.XR.Management"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

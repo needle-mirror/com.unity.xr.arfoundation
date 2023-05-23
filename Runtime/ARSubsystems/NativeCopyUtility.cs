@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
-using UnityEngine.Assertions;
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -80,7 +79,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="length">The length of the array to create.</param>
         /// <param name="allocator">The allocator with which to create the <c>NativeArray</c>.</param>
         /// <returns>A new <c>NativeArray</c> initialized with copies of <paramref name="value"/>.</returns>
-        public static unsafe NativeArray<T> CreateArrayFilledWithValue<T>(T value, int length, Allocator allocator) where T : struct
+        public static NativeArray<T> CreateArrayFilledWithValue<T>(T value, int length, Allocator allocator) where T : struct
         {
             var array = new NativeArray<T>(length, allocator, NativeArrayOptions.UninitializedMemory);
             FillArrayWithValue(array, value);
@@ -94,15 +93,42 @@ namespace UnityEngine.XR.ARSubsystems
         /// <typeparam name="T">The type of the <c>NativeArray</c> structs that will be copied</typeparam>
         /// <param name="source">The <c>IReadOnlyList</c> that provides the data</param>
         /// <param name="destination">The <c>NativeArray</c> that will be written to</param>
+        /// <exception cref="ArgumentException">Thrown when there is a mismatch between <paramref name="source"/> and <paramref name="destination"/> sizes.</exception>
         public static void CopyFromReadOnlyList<T>(IReadOnlyList<T> source, NativeArray<T> destination)
             where T : struct
         {
             if (source.Count != destination.Length)
-                throw new ArgumentException($"{nameof(source)} count doesn't match {nameof(destination)} length!");
+                throw new ArgumentException(
+                    $"{nameof(source)} count {source.Count} doesn't match {nameof(destination)} length {destination.Length}!");
 
             for (var i = 0; i < source.Count; i++)
             {
                 destination[i] = source[i];
+            }
+        }
+
+        /// <summary>
+        /// Copies the contents of <paramref name="source"/> into the <c>NativeArray</c> <paramref name="destination"/>.
+        /// The lengths of both collections must match.
+        /// </summary>
+        /// <typeparam name="T">The type of the <c>NativeArray</c> structs that will be copied</typeparam>
+        /// <param name="source">The <c>IReadOnlyCollection</c> that provides the data</param>
+        /// <param name="destination">The <c>NativeArray</c> that will be written to</param>
+        /// <exception cref="ArgumentException">Thrown when there is a mismatch between <paramref name="source"/> and <paramref name="destination"/> sizes.</exception>
+        /// <remarks> Prefer IReadOnlyList over IReadOnlyCollection for copy performance where possible.</remarks>
+        /// <seealso cref="CopyFromReadOnlyList{T}"/>
+        public static void CopyFromReadOnlyCollection<T>(IReadOnlyCollection<T> source, NativeArray<T> destination)
+            where T : struct
+        {
+            if (source.Count != destination.Length)
+                throw new ArgumentException(
+                    $"{nameof(source)} count {source.Count} doesn't match {nameof(destination)} length {destination.Length}!");
+
+            var index = 0;
+            foreach (var item in source)
+            {
+                destination[index] = item;
+                index++;
             }
         }
     }

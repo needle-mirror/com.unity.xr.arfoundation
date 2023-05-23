@@ -2,10 +2,10 @@ using NUnit.Framework;
 using UnityEngine.XR.ARFoundation;
 using Unity.XR.CoreUtils;
 
-namespace UnityEditor.XR.ARFoundation
+namespace UnityEditor.XR.ARFoundation.Tests
 {
     [TestFixture]
-    class MeshManagerTests
+    class ARMeshManagerTests
     {
         [Test]
         public void CanBeUsedInPrefab()

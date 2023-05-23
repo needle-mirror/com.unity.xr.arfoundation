@@ -25,14 +25,12 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_RaycastPrefab;
 
         static Comparison<ARRaycastHit> s_RaycastHitComparer = RaycastHitComparer;
-
-        static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new List<NativeArray<XRRaycastHit>>();
+        static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new();
 
         Func<Vector2, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastViewportDelegate;
-
         Func<Ray, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastRayDelegate;
 
-        List<IRaycaster> m_Raycasters = new List<IRaycaster>();
+        List<IRaycaster> m_Raycasters = new();
 
         /// <summary>
         /// The name of the `GameObject` for each instantiated <see cref="ARRaycast"/>.
@@ -52,9 +50,11 @@ namespace UnityEngine.XR.ARFoundation
         /// Cast a ray from a point in screen space against trackables, that is, detected features such as planes.
         /// </summary>
         /// <param name="screenPoint">The point, in device screen pixels, from which to cast.</param>
-        /// <param name="hitResults">Contents are replaced with the raycast results, if successful.</param>
+        /// <param name="hitResults">Contents are replaced with the raycast results, if successful.
+        /// Results are sorted by distance in closest-first order.</param>
         /// <param name="trackableTypes">(Optional) The types of trackables to cast against.</param>
-        /// <returns>True if the raycast hit a trackable in the <paramref name="trackableTypes"/></returns>
+        /// <returns><see langword="true"/> if the raycast hit a trackable in the <paramref name="trackableTypes"/>.
+        /// Otherwise, <see langword="false"/>.</returns>
         #region ARRaycastManager_Raycast_screenPoint
         public bool Raycast(
             Vector2 screenPoint,
@@ -77,9 +77,11 @@ namespace UnityEngine.XR.ARFoundation
         /// Cast a <c>Ray</c> against trackables, that is, detected features such as planes.
         /// </summary>
         /// <param name="ray">The <c>Ray</c>, in Unity world space, to cast.</param>
-        /// <param name="hitResults">Contents are replaced with the raycast results, if successful.</param>
+        /// <param name="hitResults">Contents are replaced with the raycast results, if successful.
+        /// Results are sorted by distance in closest-first order.</param>
         /// <param name="trackableTypes">(Optional) The types of trackables to cast against.</param>
-        /// <returns>True if the raycast hit a trackable in the <paramref name="trackableTypes"/></returns>
+        /// <returns><see langword="true"/> if the raycast hit a trackable in the <paramref name="trackableTypes"/>.
+        /// Otherwise, <see langword="false"/>.</returns>
         #region ARRaycastManager_Raycast_ray
         public bool Raycast(
             Ray ray,

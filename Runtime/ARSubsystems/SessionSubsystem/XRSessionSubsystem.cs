@@ -12,6 +12,10 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRSessionSubsystem
         : SubsystemWithProvider<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {
+        static readonly ConfigurationChooser DefaultConfigurationChooser = new DefaultConfigurationChooser();
+
+        ConfigurationChooser m_ConfigurationChooser;
+
         /// <summary>
         /// Returns an implementation-defined pointer associated with the session.
         /// </summary>
@@ -55,7 +59,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         public XRSessionSubsystem()
         {
-            m_ConfigurationChooser = m_DefaultConfigurationChooser;
+            m_ConfigurationChooser = DefaultConfigurationChooser;
         }
 
         /// <summary>
@@ -121,11 +125,12 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="updateParams">Data needed by the session to perform its update.</param>
         public void Update(XRSessionUpdateParams updateParams)
         {
-            currentConfiguration = DetermineConfiguration(requestedFeatures);
+            var features = requestedFeatures;
+            currentConfiguration = DetermineConfiguration(features);
             if (currentConfiguration.HasValue)
             {
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-                DebugPrintConfigurationChange(currentConfiguration.Value, requestedFeatures);
+                DebugPrintConfigurationChange(currentConfiguration.Value, features);
 #endif
                 provider.Update(updateParams, currentConfiguration.Value);
             }
@@ -235,7 +240,7 @@ namespace UnityEngine.XR.ARSubsystems
             {
                 if (ReferenceEquals(value, null))
                 {
-                    m_ConfigurationChooser = m_DefaultConfigurationChooser;
+                    m_ConfigurationChooser = DefaultConfigurationChooser;
                 }
                 else
                 {
@@ -243,9 +248,6 @@ namespace UnityEngine.XR.ARSubsystems
                 }
             }
         }
-        ConfigurationChooser m_DefaultConfigurationChooser = new DefaultConfigurationChooser();
-
-        ConfigurationChooser m_ConfigurationChooser;
 
         /// <summary>
         /// Gets the <see cref="NotTrackingReason"/> for the session.

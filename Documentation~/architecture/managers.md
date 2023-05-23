@@ -45,9 +45,9 @@ If your [provider plug-in](xref:arfoundation-manual#required-packages) does not 
 
 ## Trackables and trackable managers
 
-Many AR Foundation subsystems detect and track objects in the physical environment. These subsystems are called [tracking subsystems](xref:arfoundation-subsystems#tracking-subsystems) and their managers are called *trackable managers*. Trackable managers use data from the tracking subsystems to create and maintain *trackable* components and their GameObjects.
+Many AR Foundation subsystems detect and track objects in the physical environment. These subsystems are called [tracking subsystems](xref:arfoundation-subsystems#tracking-subsystems) and their managers are called *trackable managers*. Trackable managers use data from the tracking subsystems to create and maintain trackable components and their GameObjects.
 
-A trackable is a special component that represents anything that can be detected and tracked in the real world. Planes, point clouds, anchors, environment probes, faces, body, images, and 3D objects are all examples of objects with corresponding trackable components.
+[!include[](../snippets/trackable-definition.md)]
 
 Each type of trackable is created and maintained by a trackable manager of a matching type. A trackable manager wraps a tracking subsystem and uses its data to manage trackables and their GameObjects. For example, the [ARPlaneManager](xref:UnityEngine.XR.ARFoundation.ARPlaneManager) generates [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) trackables using data from the [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem).
 
@@ -82,7 +82,7 @@ The `trackables` property returns a `TrackableCollection`, which can be enumerat
 
 ### Trackable life cycle
 
-A trackable can be added, updated, and removed. A trackable is always added before it is updated or removed. A trackable cannot be updated once removed. Each frame, managers query their subsystems to determine whether any changes to their trackables have occurred since the previous frame. Each trackable manager has an event to which you can subscribe to be notified of these changes, as shown below:
+A trackable's life cycle is managed by its tracking subsystem, and has three phases: added, updated, and removed. A trackable must first be added, then on subsequent frames it can be updated, removed, or have no changes. Each frame, managers query their subsystems to determine whether any changes to their trackables have occurred since the previous frame. Each trackable manager has an event to which you can subscribe to be notified of these changes, as shown below:
 
 | **Trackable Manager** | **Event** |
 | --------------------- | --------- |

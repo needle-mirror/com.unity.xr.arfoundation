@@ -1,6 +1,6 @@
 {
     "name": "Unity.XR.ARFoundation.Editor.Tests",
-    "rootNamespace": "",
+    "rootNamespace": "UnityEditor.XR.ARFoundation.Tests",
     "references": [
         "Unity.XR.ARFoundation",
         "Unity.Coding.Editor",

@@ -1,5 +1,6 @@
 {
     "xref": [
         "com.unity.xr.arkit",
-        "com.unity.xr.arcore"],
+        "com.unity.xr.arcore",
+        "com.unity.visualscripting"],
 }
