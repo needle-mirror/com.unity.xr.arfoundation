@@ -8,6 +8,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-pre.8] - 2023-06-09
+
+### Fixed
+
+- Fixed issue where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `XRPlaneSubsystem.GetChanges` is called.
+- Fixed issue [ARFB-271](https://issuetracker.unity3d.com/issues/ar-simulation-error-on-arsession-dot-reset-simulationprovider-dot-createvoxelgrids) where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `ArSession.Reset` is called.
+
+- Fixed an issue in `SimulationMeshingProvider` where mesh data updates were not properly marked as no longer dirty. This caused the subsystem to unnecessarily update meshes every frame.
+
 ## [5.1.0-pre.6] - 2023-05-23
 
 ### Added

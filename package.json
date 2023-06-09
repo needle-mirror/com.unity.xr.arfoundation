@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "5.1.0-pre.6",
+  "version": "5.1.0-pre.8",
   "unity": "2021.2",
   "description": "A collection of Subsystems as well as MonoBehaviours and C# utilities for working with the Subsystems. \n\nIncludes: \n▪ Definitions of Subsystems \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added a set of custom visual scripting nodes designed to help you use AR Foundation in visual scripting projects. Refer to [Visual Scripting](xref:arfoundation-visual-scripting) to learn more about how to set up an AR Foundation visual scripting project.\n- Added support for the [Anchors](xref:arfoundation-anchors) feature in XR Simulation. You can now add and remove anchors in Play mode, add a [Simulated Anchor component](xref:arfoundation-simulation-environments#simulated-anchor-component) to XR Simulation environments, and adjust anchor discovery settings in [XR Simulation project settings](xref:arfoundation-simulation-project-settings).\n- Added enum value `Other` to [PlaneClassification](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications).\n- Added the ability for camera subsystem providers to include [EXIF](https://en.wikipedia.org/wiki/Exif) data with the `XRCameraFrame`.\n\n### Changed\n\n- If XR Simulation is enabled in your project, it will now automatically attempt to set its Environment Layer name to \"XR Simulation\". XR Simulation uses Layer 30 as its default Environment Layer, but you can change this setting by going to **Edit** > **Project Settings** > **XR Plug-in Management** > **XR Simulation**."
+    "changelog": "### Fixed\n\n- Fixed issue where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `XRPlaneSubsystem.GetChanges` is called.\n- Fixed issue [ARFB-271](https://issuetracker.unity3d.com/issues/ar-simulation-error-on-arsession-dot-reset-simulationprovider-dot-createvoxelgrids) where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `ArSession.Reset` is called.\n\n- Fixed an issue in `SimulationMeshingProvider` where mesh data updates were not properly marked as no longer dirty. This caused the subsystem to unnecessarily update meshes every frame."
   },
   "upmCi": {
-    "footprint": "962cfda17cba74b622a2bf2b7012b1ae79b1894b"
+    "footprint": "9166fbc317c9a44ea61872149de06e705cc0c0d2"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@5.1/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "9925313cbe381f68184f63d7deff386be33ecf59"
+    "revision": "f9037dfd15a9eaf6ff6553201c1fdb8dddaac315"
   }
 }
