@@ -7,7 +7,7 @@ namespace UnityEditor.XR.ARSubsystems.Tests
     [TestFixture]
     class ARSubsystemEditorTests
     {
-        [MenuItem("AR Foundation/Image Libraries/Clear data stores")]
+        [MenuItem("AR Foundation/Tests/Clear image library data stores")]
         static void ClearReferenceImageLibraryDataStores()
         {
             foreach (var library in XRReferenceImageLibrary.All())

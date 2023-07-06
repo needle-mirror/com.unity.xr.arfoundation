@@ -61,7 +61,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The classification of this plane.
         /// </summary>
-        public PlaneClassification classification { get { return sessionRelativeData.classification; } }
+        public PlaneClassification classification => sessionRelativeData.classification;
 
         /// <summary>
         /// The 2D center point, in plane space

@@ -16,6 +16,7 @@ Unity officially supports the following provider plug-ins:
 * [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) on Android
 * [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html) on iOS
 * [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html) on HoloLens 2
+* [Meta OpenXR Feature](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@0.1/manual/index.html) on Meta Quest
 
 > [!NOTE]
 > AR Foundation will not work on a target platform unless you also install the provider plug-in package for that platform. See [Install AR Foundation](xref:arfoundation-install) for detailed setup instructions.
@@ -48,23 +49,23 @@ AR Foundation provider plug-ins rely on platform implementations of AR features,
 
 The table below lists the available features in each Unity-supported provider plug-in:
 
-| Feature                                                                                       | ARCore | ARKit | OpenXR |
-| :-------------------------------------------------------------------------------------------- | :----: | :---: | :----: |
-| [Session](xref:arfoundation-session)                                                          |  Yes   |  Yes  |  Yes   |
-| [Device tracking](xref:arfoundation-device-tracking)                                          |  Yes   |  Yes  |  Yes   |
-| [Camera](xref:arfoundation-camera)                                                            |  Yes   |  Yes  |        |
-| [Plane detection](xref:arfoundation-plane-detection)                                          |  Yes   |  Yes  |        |
-| [Image tracking](xref:arfoundation-image-tracking)                                            |  Yes   |  Yes  |        |
-| [Object tracking](xref:arfoundation-object-tracking)                                          |        |  Yes  |        |
-| [Face tracking](xref:arfoundation-face-tracking)                                              |  Yes   |  Yes  |        |
-| [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager)                          |        |  Yes  |        |
-| [Point clouds](xref:arfoundation-point-clouds)                                                |  Yes   |  Yes  |        |
-| [Raycasts](xref:arfoundation-raycasts)                                                        |  Yes   |  Yes  |        |
-| [Anchors](xref:arfoundation-anchors)                                                          |  Yes   |  Yes  |  Yes   |
-| [Meshing](xref:arfoundation-meshing)                                                          |        |  Yes  |  Yes   |
-| [Environment probes](xref:arfoundation-environment-probes)                                    |  Yes   |  Yes  |        |
-| [Occlusion](xref:arfoundation-occlusion)                                                      |  Yes   |  Yes  |        |
-| [Participants](xref:arfoundation-participant-tracking)                                        |        |  Yes  |        |
+| Feature                                                                                       | ARCore | ARKit | HoloLens (OpenXR) | Meta Quest (OpenXR) |
+| :-------------------------------------------------------------------------------------------- | :----: | :---: | :---------------: | :------------: |
+| [Session](xref:arfoundation-session)                                                          |  Yes   |  Yes  |        Yes        |      Yes       |
+| [Device tracking](xref:arfoundation-device-tracking)                                          |  Yes   |  Yes  |        Yes        |      Yes       |
+| [Camera](xref:arfoundation-camera)                                                            |  Yes   |  Yes  |                   |      Yes       |
+| [Plane detection](xref:arfoundation-plane-detection)                                          |  Yes   |  Yes  |        Yes        |      Yes       |
+| [Image tracking](xref:arfoundation-image-tracking)                                            |  Yes   |  Yes  |                   |                |
+| [Object tracking](xref:arfoundation-object-tracking)                                          |        |  Yes  |                   |                |
+| [Face tracking](xref:arfoundation-face-tracking)                                              |  Yes   |  Yes  |                   |                |
+| [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager)                          |        |  Yes  |                   |                |
+| [Point clouds](xref:arfoundation-point-clouds)                                                |  Yes   |  Yes  |                   |                |
+| [Raycasts](xref:arfoundation-raycasts)                                                        |  Yes   |  Yes  |        Yes        |      Yes       |
+| [Anchors](xref:arfoundation-anchors)                                                          |  Yes   |  Yes  |        Yes        |      Yes       |
+| [Meshing](xref:arfoundation-meshing)                                                          |        |  Yes  |        Yes        |                |
+| [Environment probes](xref:arfoundation-environment-probes)                                    |  Yes   |  Yes  |                   |                |
+| [Occlusion](xref:arfoundation-occlusion)                                                      |  Yes   |  Yes  |                   |                |
+| [Participants](xref:arfoundation-participant-tracking)                                        |        |  Yes  |                   |                |
 
 # Samples
 

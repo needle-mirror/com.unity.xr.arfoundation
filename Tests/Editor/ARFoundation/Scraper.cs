@@ -5,7 +5,7 @@ namespace UnityEditor.XR.ARFoundation.Tests
 {
     static class Scraper
     {
-        [MenuItem("AR Foundation/Scrape APIs")]
+        [MenuItem("AR Foundation/Tests/Scrape APIs")]
         static void ScrapeApis() => ApiScraping.Scrape();
     }
 }
