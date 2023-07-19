@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "5.0.6",
+  "version": "5.0.7",
   "unity": "2021.2",
   "description": "A collection of Subsystems as well as MonoBehaviours and C# utilities for working with the Subsystems. \n\nIncludes: \n▪ Definitions of Subsystems \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
@@ -29,15 +29,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed an issue where `UnityEditor.XR.Simulation.SimulationEditorUtilities` could incorrectly throw a `NullReferenceException` when you opened the Editor if no XR Plug-in was enabled for the standalone build target.\n- Fixed an [issue](https://issuetracker.unity3d.com/issues/opengl-xrsimulation-does-not-show-scene-gameobjects-when-using-opengl-graphics-api) for the XR Simulation background where the depth value would be incorrect for graphics APIs using non reversed depth buffer."
+    "changelog": "### Fixed\n\n- Fixed issue [ARFB-271](https://issuetracker.unity3d.com/issues/ar-simulation-error-on-arsession-dot-reset-simulationprovider-dot-createvoxelgrids) where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `ArSession.Reset` is called.\n- Fixed an issue in `SimulationMeshingProvider` where mesh data updates were not properly marked as no longer dirty. This caused the subsystem to unnecessarily update meshes every frame.\n- Fixed issue where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `XRPlaneSubsystem.GetChanges` is called.\n- Fixed issue [ARFB-176](https://issuetracker.unity3d.com/issues/ios-arenvironmentprobemanager-dot-ondestroy-triggers-application-crash) where destroying an `AREnvironmentProbe` prior to destroying the `AREnvironmentProbeManager` would cause a crash.\n- Fixed issue [ARFB-307](https://issuetracker.unity3d.com/issues/ios-arcamerabackground-retains-depth-texture-when-switching-to-a-scene-with-no-occlusion) where occlusion was persisting after the `AROcclusionManager` was disabled."
   },
   "upmCi": {
-    "footprint": "58a4dc532af8ad5101925c7c276d27db1108a283"
+    "footprint": "1075804a5a8abce909271d4c17db7a543968ffc2"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@5.0/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "e0c23bb6c351af6a055d43302e6f3bd55cb3a4be"
+    "revision": "2ed0403e7f5d44edc028e2251019fb47962bd8d7"
   }
 }

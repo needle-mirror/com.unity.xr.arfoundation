@@ -305,11 +305,8 @@ namespace UnityEngine.XR.ARFoundation
 
             if (subsystem.RemoveEnvironmentProbe(probe.trackableId))
             {
-                if (m_PendingAdds.ContainsKey(probe.trackableId))
-                {
-                    m_PendingAdds.Remove(probe.trackableId);
-                    m_Trackables.Remove(probe.trackableId);
-                }
+                m_Trackables.Remove(probe.trackableId);
+                m_PendingAdds.Remove(probe.trackableId);
 
                 probe.pending = false;
                 return true;
@@ -349,7 +346,8 @@ namespace UnityEngine.XR.ARFoundation
             foreach (var kvp in m_Trackables)
             {
                 var environmentProbe = kvp.Value;
-                Object.Destroy(environmentProbe.gameObject);
+                if (environmentProbe != null)
+                    Destroy(environmentProbe.gameObject);
             }
         }
 

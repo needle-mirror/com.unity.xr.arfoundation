@@ -8,6 +8,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.7] - 2023-07-19
+
+### Fixed
+
+- Fixed issue [ARFB-271](https://issuetracker.unity3d.com/issues/ar-simulation-error-on-arsession-dot-reset-simulationprovider-dot-createvoxelgrids) where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `ArSession.Reset` is called.
+- Fixed an issue in `SimulationMeshingProvider` where mesh data updates were not properly marked as no longer dirty. This caused the subsystem to unnecessarily update meshes every frame.
+- Fixed issue where `SimulationPlaneSubsystem` could throw a `NullReferenceException` when `XRPlaneSubsystem.GetChanges` is called.
+- Fixed issue [ARFB-176](https://issuetracker.unity3d.com/issues/ios-arenvironmentprobemanager-dot-ondestroy-triggers-application-crash) where destroying an `AREnvironmentProbe` prior to destroying the `AREnvironmentProbeManager` would cause a crash.
+- Fixed issue [ARFB-307](https://issuetracker.unity3d.com/issues/ios-arcamerabackground-retains-depth-texture-when-switching-to-a-scene-with-no-occlusion) where occlusion was persisting after the `AROcclusionManager` was disabled.
+
 ## [5.0.6] - 2023-05-13
 
 ### Fixed

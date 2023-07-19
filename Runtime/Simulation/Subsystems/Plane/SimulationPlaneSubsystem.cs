@@ -361,8 +361,14 @@ namespace UnityEngine.XR.Simulation
                 }
             }
 
+            /// <summary>
+            /// This method assumes the simulation environment setup is completed.
+            /// </summary>
             void CreateVoxelGrids()
             {
+                if (SimulationSessionSubsystem.simulationSceneManager == null)
+                    return;
+
                 var cameraMovementBounds = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironment.cameraMovementBounds;
                 var maximumHitDistance = XRSimulationRuntimeSettings.Instance.environmentScanParams.maximumHitDistance;
                 var extents = cameraMovementBounds.extents;

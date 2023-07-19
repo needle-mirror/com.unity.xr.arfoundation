@@ -516,6 +516,12 @@ namespace UnityEngine.XR.ARFoundation
             m_HumanDepthTextureInfo.Reset();
             m_EnvironmentDepthTextureInfo.Reset();
             m_EnvironmentDepthConfidenceTextureInfo.Reset();
+            
+            for (int i = 0; i < m_TextureInfos.Count; ++i)
+            {
+                m_TextureInfos[i].Reset();
+            }
+            m_TextureInfos.Clear();
         }
 
         /// <summary>
