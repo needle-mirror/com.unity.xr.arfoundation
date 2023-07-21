@@ -5,8 +5,13 @@ namespace UnityEditor.XR.Simulation
         [InitializeOnLoadMethod]
         static void RegisterForEnvironmentChange()
         {
-            var environmentAssetsManager = SimulationEnvironmentAssetsManager.Instance;
-            environmentAssetsManager.activeEnvironmentChanged += OnEnvironmentChange;
+            // Do not access EditorScriptableSettings.Instance during InitializeOnLoad because it can fail to find the
+            // existing settings asset on first import, which causes lots of issues down the line
+            EditorApplication.delayCall += () =>
+            {
+                var environmentAssetsManager = SimulationEnvironmentAssetsManager.Instance;
+                environmentAssetsManager.activeEnvironmentChanged += OnEnvironmentChange;
+            };
         }
 
         static void OnEnvironmentChange()

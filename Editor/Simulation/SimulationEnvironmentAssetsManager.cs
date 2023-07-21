@@ -365,7 +365,14 @@ namespace UnityEditor.XR.Simulation
             
             void OnPostprocessPrefab(GameObject g)
             {
-                if (g.GetComponent<SimulationEnvironment>() != null || Instance.m_EnvironmentPrefabPaths.Contains(AssetDatabase.GetAssetPath(g)))
+                if (g.GetComponent<SimulationEnvironment>() != null)
+                    s_NeedsRefresh = true;
+
+                // Settings instance may not exist on first import, and we should not try to create one
+                if (BaseInstance == null)
+                    return;
+
+                if (BaseInstance.m_EnvironmentPrefabPaths.Contains(AssetDatabase.GetAssetPath(g)))
                     s_NeedsRefresh = true;
             }
 
@@ -374,7 +381,10 @@ namespace UnityEditor.XR.Simulation
             {
                 if (!s_NeedsRefresh)
                 {
-                    var environmentPaths = Instance.m_EnvironmentPrefabPaths;
+                    if (BaseInstance == null)
+                        return;
+
+                    var environmentPaths = BaseInstance.m_EnvironmentPrefabPaths;
                     foreach (var deletedAssetPath in deletedAssets)
                     {
                         if (environmentPaths.Contains(deletedAssetPath))
@@ -385,8 +395,8 @@ namespace UnityEditor.XR.Simulation
                     }
                 }
 
-                if (s_NeedsRefresh)
-                    Instance.CollectEnvironments();
+                if (s_NeedsRefresh && BaseInstance != null)
+                    BaseInstance.CollectEnvironments();
 
                 s_NeedsRefresh = false;
             }

@@ -5,35 +5,37 @@ using UnityEngine.SubsystemsImplementation;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// Base class for an anchor subsystem.
+    /// This subsystem provides information regarding anchors. An anchor is a pose (position and rotation) in the physical
+    /// environment that is tracked by an XR device. Anchors are updated as the device refines its understanding of the
+    /// environment, allowing you to reliably place virtual content at a real-world pose.
     /// </summary>
     /// <remarks>
-    /// <para>An anchor is a pose in the physical environment that is tracked by an XR device.
-    /// As the device refines its understanding of the environment, anchors will be
-    /// updated, allowing you to keep virtual content connected to a real-world position and orientation.</para>
-    /// <para>This abstract class should be implemented by an XR provider and instantiated using the <c>SubsystemManager</c>
-    /// to enumerate the available <see cref="XRAnchorSubsystemDescriptor"/>s.</para>
+    /// This is a base class with an abstract provider type to be implemented by provider plug-in packages.
+    /// This class itself does not implement anchor tracking.
     /// </remarks>
     public class XRAnchorSubsystem
         : TrackingSubsystem<XRAnchor, XRAnchorSubsystem, XRAnchorSubsystemDescriptor, XRAnchorSubsystem.Provider>
     {
         /// <summary>
-        /// Constructor. Do not invoke directly; use the <c>SubsystemManager</c>
-        /// to enumerate the available <see cref="XRAnchorSubsystemDescriptor"/>s
-        /// and call <c>Create</c> on the desired descriptor.
+        /// Do not invoke this constructor directly.
         /// </summary>
+        /// <remarks>
+        /// If you are implementing your own custom subsystem [Lifecycle management](xref:xr-plug-in-management-provider#lifecycle-management),
+        /// use the [SubsystemManager](xref:UnityEngine.SubsystemManager)
+        /// to enumerate the available <see cref="XRAnchorSubsystemDescriptor"/>s, then call
+        /// <see cref="XRAnchorSubsystemDescriptor.Create()"/> on the desired descriptor.
+        /// </remarks>
         public XRAnchorSubsystem() { }
 
         /// <summary>
-        /// Get the changes to anchors (added, updated, and removed) since the last call
-        /// to <see cref="GetChanges(Allocator)"/>.
+        /// Get the changes to anchors (added, updated, and removed) since the last call to this method.
         /// </summary>
         /// <param name="allocator">An allocator to use for the <c>NativeArray</c>s in <see cref="TrackableChanges{T}"/>.</param>
-        /// <returns>Changes since the last call to <see cref="GetChanges"/>.</returns>
+        /// <returns>Changes since the last call to this method.</returns>
         public override TrackableChanges<XRAnchor> GetChanges(Allocator allocator)
         {
             if (!running)
-                throw new InvalidOperationException("Can't call \"GetChanges\" without \"Start\"ing the anchor subsystem!");
+                throw new InvalidOperationException($"Can't call {nameof(GetChanges)} without \"Start\"ing the anchor subsystem!");
 
             var changes = provider.GetChanges(XRAnchor.defaultValue, allocator);
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
@@ -43,11 +45,11 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Attempts to create a new anchor with the provide <paramref name="pose"/>.
+        /// Attempts to create a new anchor at the provided <paramref name="pose"/>.
         /// </summary>
         /// <param name="pose">The pose, in session space, of the new anchor.</param>
-        /// <param name="anchor">The new anchor. Only valid if this method returns <c>true</c>.</param>
-        /// <returns><c>true</c> if the new anchor was added, otherwise <c>false</c>.</returns>
+        /// <param name="anchor">The new anchor. Only valid if this method returns <see langword="true"/>.</param>
+        /// <returns><see langword="true"/> if the output anchor was added. Otherwise, <see langword="false"/>.</returns>
         public bool TryAddAnchor(Pose pose, out XRAnchor anchor)
         {
             return provider.TryAddAnchor(pose, out anchor);
@@ -82,15 +84,16 @@ namespace UnityEngine.XR.ARSubsystems
         public abstract class Provider : SubsystemProvider<XRAnchorSubsystem>
         {
             /// <summary>
-            /// Invoked to get the changes to anchors (added, updated, and removed) since the last call to
-            /// <see cref="GetChanges(XRAnchor,Allocator)"/>.
+            /// Gets a <see cref="TrackableChanges{T}"/> struct containing any changes to anchors since the last
+            /// time you called this method. You are responsible to <see cref="TrackableChanges{T}.Dispose"/> the returned
+            /// <c>TrackableChanges</c> instance.
             /// </summary>
-            /// <param name="defaultAnchor">The default anchor. This should be used to initialize the returned
-            /// <c>NativeArray</c>s for backwards compatibility.
-            /// See <see cref="TrackableChanges{T}.TrackableChanges(void*, int, void*, int, void*, int, T, int, Unity.Collections.Allocator)"/>.
+            /// <param name="defaultAnchor">The default anchor. You should use this to initialize the returned
+            ///   <see cref="TrackableChanges{T}"/> instance by passing it to the constructor
+            ///   <see cref="TrackableChanges{T}(int,int,int,Allocator,T)"/>.
             /// </param>
-            /// <param name="allocator">An allocator to use for the <c>NativeArray</c>s in <see cref="TrackableChanges{T}"/>.</param>
-            /// <returns>Changes since the last call to <see cref="GetChanges"/>.</returns>
+            /// <param name="allocator">An <c>Allocator</c> to use when allocating the returned <c>NativeArray</c>s.</param>
+            /// <returns>The changes to anchors since the last call to this method.</returns>
             public abstract TrackableChanges<XRAnchor> GetChanges(XRAnchor defaultAnchor, Allocator allocator);
 
             /// <summary>
@@ -101,7 +104,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <returns>Should return <c>true</c> if the new anchor was added, otherwise <c>false</c>.</returns>
             public virtual bool TryAddAnchor(Pose pose, out XRAnchor anchor)
             {
-                anchor = default(XRAnchor);
+                anchor = default;
                 return false;
             }
 
@@ -119,7 +122,7 @@ namespace UnityEngine.XR.ARSubsystems
                 Pose pose,
                 out XRAnchor anchor)
             {
-                anchor = default(XRAnchor);
+                anchor = default;
                 return false;
             }
 
@@ -133,8 +136,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-        ValidationUtility<XRAnchor> m_ValidationUtility =
-            new ValidationUtility<XRAnchor>();
+        ValidationUtility<XRAnchor> m_ValidationUtility = new();
 #endif
     }
 }

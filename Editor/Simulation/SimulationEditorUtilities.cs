@@ -18,7 +18,17 @@ namespace UnityEditor.XR.Simulation
         internal static bool CheckIsSimulationSubsystemEnabled()
         {
             if (Application.isPlaying)
-                return XRGeneralSettings.Instance.Manager.activeLoader is SimulationLoader;
+            {
+                var instance = XRGeneralSettings.Instance;
+                if (instance == null)
+                    return false;
+
+                var manager = instance.Manager;
+                if (manager == null)
+                    return false;
+                
+                return manager.activeLoader is SimulationLoader;
+            }
 
             var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Standalone);
 
@@ -26,7 +36,13 @@ namespace UnityEditor.XR.Simulation
             if (generalSettings != null && generalSettings.AssignedSettings != null)
             {
                 var activeLoaders = generalSettings.AssignedSettings.activeLoaders;
-                simActive = activeLoaders != null && activeLoaders.Any(loader => loader.GetType() == typeof(SimulationLoader));
+                simActive = activeLoaders != null && activeLoaders.Any(loader =>
+                {
+                    if (loader == null)
+                        return false;
+
+                    return loader.GetType() == typeof(SimulationLoader);
+                });
             }
 
             if (s_SimulationSubsystemEnabled != simActive)

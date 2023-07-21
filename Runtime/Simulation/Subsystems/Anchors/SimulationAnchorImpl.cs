@@ -52,7 +52,7 @@ namespace UnityEngine.XR.Simulation
             SubsystemsUtility.TryGetLoadedSubsystem<XRPlaneSubsystem, SimulationPlaneSubsystem>(out m_PlaneSubsystem);
             
             m_Origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
-            if(m_Origin == null || m_PlaneSubsystem == null || m_SessionId == Guid.Empty)
+            if(m_Origin == null || m_PlaneSubsystem == null || sessionSubsystem == null)
             {
                 Debug.LogWarning("SimulationAnchorImpl could not be started because the XROrigin, SimulationPlaneSubsystem, or SimulationSessionSubsystem could not be found.");
                 return;

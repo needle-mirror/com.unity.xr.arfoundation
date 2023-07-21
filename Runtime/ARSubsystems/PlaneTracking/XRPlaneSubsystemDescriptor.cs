@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="PlaneAlignment.HorizontalUp"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports horizontal plane detection.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsHorizontalPlaneDetection { get; }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports vertical plane detection.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsVerticalPlaneDetection { get; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports the detection of planes oriented at arbitrary angles.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsArbitraryPlaneDetection { get; }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// must throw a <see cref="NotSupportedException"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports boundary vertices for its planes.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsBoundaryVertices { get; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <c>classification</c> value of <see cref="PlaneClassification.None"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports plane classification.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsClassification { get; }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// this type will forward casted calls to its provider.
             /// </summary>
             /// <value>The subsystem implementation type.
-            ///   If <see langword="null"/>, <see cref="XRPlaneSubsystem"/> will be instantiated.</value>
+            /// If <see langword="null"/>, <see cref="XRPlaneSubsystem"/> will be instantiated.</value>
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
@@ -100,7 +100,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="PlaneAlignment.HorizontalUp"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports horizontal plane detection.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsHorizontalPlaneDetection { get; set; }
 
             /// <summary>
@@ -110,7 +110,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports vertical plane detection.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsVerticalPlaneDetection { get; set; }
 
             /// <summary>
@@ -121,7 +121,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports the detection of planes oriented at arbitrary angles.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsArbitraryPlaneDetection { get; set; }
 
             /// <summary>
@@ -130,7 +130,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// must throw a <see cref="NotSupportedException"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports boundary vertices for its planes.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsBoundaryVertices { get; set; }
 
             /// <summary>
@@ -140,7 +140,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <c>classification</c> value of <see cref="PlaneClassification.None"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports plane classification.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsClassification { get; set; }
 
             /// <summary>
@@ -148,7 +148,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="other">The other <see cref="Cinfo"/> to compare against.</param>
             /// <returns><see langword="true"/> if every field in <paramref name="other"/> is equal to this instance.
-            ///   Otherwise, <see langword="false"/>.</returns>
+            /// Otherwise, <see langword="false"/>.</returns>
             public bool Equals(Cinfo other)
             {
                 return
@@ -167,8 +167,8 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="obj">The <c>object</c> to compare against.</param>
             /// <returns><see langword="true"/> if <paramref name="obj"/> is of type <see cref="Cinfo"/> and
-            ///   <see cref="Equals(Cinfo)"/> also returns <see langword="true"/>.
-            ///   Otherwise, <see langword="false"/>.</returns>
+            /// <see cref="Equals(Cinfo)"/> also returns <see langword="true"/>.
+            /// Otherwise, <see langword="false"/>.</returns>
             public override bool Equals(object obj)
             {
                 if (!(obj is Cinfo))
@@ -203,7 +203,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
             /// <returns><see langword="true"/> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>.
-            ///   Otherwise, <see langword="false"/>.</returns>
+            /// Otherwise, <see langword="false"/>.</returns>
             public static bool operator ==(Cinfo lhs, Cinfo rhs) => lhs.Equals(rhs);
 
             /// <summary>
@@ -212,12 +212,12 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
             /// <returns><see langword="true"/> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>.
-            ///   Otherwise, <see langword="false"/>.</returns>
+            /// Otherwise, <see langword="false"/>.</returns>
             public static bool operator !=(Cinfo lhs, Cinfo rhs) => !lhs.Equals(rhs);
         }
 
         /// <summary>
-        /// Creates a new subsystem descriptor instance and registers it with the <see cref="SubsystemManager"/>.
+        /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
         /// </summary>
         /// <param name="cinfo">Construction info for the descriptor.</param>
         public static void Create(Cinfo cinfo)

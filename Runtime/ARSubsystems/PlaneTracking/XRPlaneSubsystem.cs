@@ -20,9 +20,14 @@ namespace UnityEngine.XR.ARSubsystems
 #endif
 
         /// <summary>
-        /// Constructs a plane subsystem. Do not invoke directly. Instead, call
-        /// <see cref="XRPlaneSubsystemDescriptor.Create(XRPlaneSubsystemDescriptor.Cinfo)">XRPlaneSubsystemDescriptor.Create</see>.
+        /// Do not invoke this constructor directly.
         /// </summary>
+        /// <remarks>
+        /// If you are implementing your own custom subsystem [Lifecycle management](xref:xr-plug-in-management-provider#lifecycle-management),
+        /// use the [SubsystemManager](xref:UnityEngine.SubsystemManager)
+        /// to enumerate the available <see cref="XRPlaneSubsystemDescriptor"/>s, then call
+        /// <see cref="XRPlaneSubsystemDescriptor.Create()"/> on the desired descriptor.
+        /// </remarks>
         public XRPlaneSubsystem() { }
 
         /// <summary>

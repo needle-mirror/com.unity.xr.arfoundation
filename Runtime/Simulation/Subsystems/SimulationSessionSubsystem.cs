@@ -36,7 +36,7 @@ namespace UnityEngine.XR.Simulation
             public override Promise<SessionAvailability> GetAvailabilityAsync() =>
                 Promise<SessionAvailability>.CreateResolvedPromise(SessionAvailability.Installed | SessionAvailability.Supported);
 
-            void Initialize()
+            bool Initialize()
             {
                 s_SimulationSceneManager ??= new SimulationSceneManager();
                 m_SimulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
@@ -52,7 +52,10 @@ namespace UnityEngine.XR.Simulation
                 var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
 
                 if (xrOrigin == null)
-                    throw new NullReferenceException($"An XR Origin is required in the scene, none found.");
+                {
+                    Debug.LogError($"An XR Origin is required in the scene, none found.");
+                    return false;
+                }
 
                 m_XROriginCamera = xrOrigin.Camera;
 
@@ -62,12 +65,13 @@ namespace UnityEngine.XR.Simulation
                     s_SimulationSceneManager.simulationEnvironment.gameObject);
 
                 m_Initialized = true;
+                return true;
             }
 
             public override void Start()
             {
-                if (!m_Initialized)
-                    Initialize();
+                if (!m_Initialized && !Initialize())
+                    return;
 
 #if UNITY_EDITOR
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);

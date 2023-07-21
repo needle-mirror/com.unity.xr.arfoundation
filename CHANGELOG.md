@@ -8,6 +8,20 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0-pre.10] - 2023-07-21
+
+### Changed
+
+- Entering XR Simulation without an `XR Origin` in the scene now logs an error to the console rather than throwing an exception.
+
+### Fixed
+
+- Fixed an issue where `SimulationAnchorImpl` would incorrectly fail to start and log a warning when using the `ARAnchorManager` in XR Simulation.
+- Fixed issue [ARFB-307](https://issuetracker.unity3d.com/issues/ios-arcamerabackground-retains-depth-texture-when-switching-to-a-scene-with-no-occlusion) where occlusion was persisting after the `AROcclusionManager` was disabled.
+- Fixed an issue in `SimulationEditorUtilities` where uninstalling an XR package while its loader is active causes `NullReferenceException` in the Unity Editor.
+- Fixed an issue where `SimulationEnvironmentAssetsManager` could cause errors on fresh project import by trying to create a new settings assets when the project already has one.
+- Fixed an issue where `SimulationEditorUtilities` could result in an `NullReferenceException` when checking whether simulation loader is enabled or not.
+
 ## [5.1.0-pre.9] - 2023-07-06
 
 ### Fixed

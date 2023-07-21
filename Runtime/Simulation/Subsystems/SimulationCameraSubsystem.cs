@@ -117,11 +117,17 @@ namespace UnityEngine.XR.Simulation
 
                 var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
                 if (xrOrigin == null)
-                    throw new NullReferenceException("No XROrigin found.");
+                {
+                    Debug.LogError("An XR Origin is required in the scene, none found.");
+                    return;
+                }
 
                 var xrCamera = xrOrigin.Camera;
                 if (xrCamera == null)
-                    throw new NullReferenceException("No camera found under XROrigin.");
+                {
+                    Debug.LogError("No camera found under XROrigin.");
+                    return;
+                }
 
                 var simulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
                 m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simulationCamera.GetComponent<Camera>(), xrCamera);
