@@ -26,7 +26,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// If you are implementing your own custom subsystem [Lifecycle management](xref:xr-plug-in-management-provider#lifecycle-management),
         /// use the [SubsystemManager](xref:UnityEngine.SubsystemManager)
         /// to enumerate the available <see cref="XRPlaneSubsystemDescriptor"/>s, then call
-        /// <see cref="XRPlaneSubsystemDescriptor.Create()"/> on the desired descriptor.
+        /// <see cref="ISubsystemDescriptor.Create">XRPlaneSubsystemDescriptor.Create()</see> on the desired descriptor.
         /// </remarks>
         public XRPlaneSubsystem() { }
 

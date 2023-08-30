@@ -41,7 +41,7 @@ A manager responds to being enabled or disabled by calling corresponding [subsys
 * `OnEnable`: Invokes subsystem `Start`
 * `OnDisable`: Invokes subsystem `Stop`
 
-If your [provider plug-in](xref:arfoundation-manual#required-packages) does not implement a particular subsystem, the corresponding manager automatically disables itself. For example, the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/manual/index.html) does not currently implement the [XRObjectTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystem), so the [ARTrackedObjectManager](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager) always disables itself on the Android platform. See [Platform support](xref:arfoundation-manual#platform-support) or your provider documentation to confirm which subsystems are available on your target platform(s).
+If your [provider plug-in](xref:arfoundation-manual#required-packages) does not implement a particular subsystem, the corresponding manager automatically disables itself. For example, the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) does not currently implement the [XRObjectTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystem), so the [ARTrackedObjectManager](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager) always disables itself on the Android platform. See [Platform support](xref:arfoundation-manual#platform-support) or your provider documentation to confirm which subsystems are available on your target platform(s).
 
 ## Trackables and trackable managers
 

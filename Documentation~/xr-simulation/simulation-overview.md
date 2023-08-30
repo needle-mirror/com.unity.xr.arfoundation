@@ -13,7 +13,7 @@ AR Foundation includes a variety of preconfigured sample environments that you c
 
 You can currently test the following AR features using XR Simulation:
 
-| Feature                                                                                       |   |
+| Feature                                                                                       | Supported |
 | :-------------------------------------------------------------------------------------------- |:-:|
 | [Session](xref:arfoundation-session)                                                          | Yes |
 | [Device tracking](xref:arfoundation-device-tracking)                                          | Yes |
@@ -25,7 +25,7 @@ You can currently test the following AR features using XR Simulation:
 | [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager)                          |   |
 | [Point clouds](xref:arfoundation-point-clouds)                                                | Yes |
 | [Raycasts](xref:arfoundation-raycasts)                                                        | Yes |
-| [Anchors](xref:arfoundation-anchors)                                                          |   |
+| [Anchors](xref:arfoundation-anchors)                                                          | Yes |
 | [Meshing](xref:arfoundation-meshing)                                                          | Yes |
 | [Environment Probes](xref:arfoundation-environment-probes)                                    | Yes |
 | [Occlusion](xref:arfoundation-occlusion)                                                      |   |
@@ -36,7 +36,7 @@ You can currently test the following AR features using XR Simulation:
 AR Foundation defines its AR features using [subsystems](xref:arfoundation-subsystems). Subsystem implementations are called *providers*. XR Simulation includes Editor-only providers for certain subsystems as shown above, allowing you test your app in Play Mode with no changes necessary to your scene or build settings.
 
 > [!NOTE]
-> AR Foundation only uses the XR Simulation providers when you run your app in the Editor. The appropriate platform provider, such as the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.0/manual/index.html) on Android and the [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.0/manual/index.html) on iOS, is always used when you build and run on a device.
+> AR Foundation only uses the XR Simulation providers when you run your app in the Editor. The appropriate platform provider, such as the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) on Android and the [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html) on iOS, is always used when you build and run on a device.
 
 ## Limitations
 
