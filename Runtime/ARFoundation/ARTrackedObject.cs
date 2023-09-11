@@ -12,20 +12,6 @@ namespace UnityEngine.XR.ARFoundation
     public class ARTrackedObject : ARTrackable<XRTrackedObject, ARTrackedObject>
     {
         /// <summary>
-        /// Get a native pointer associated with this tracked object.
-        /// </summary>
-        /// <remarks>
-        /// The data pointed to by this member is implementation defined.
-        /// The lifetime of the pointed to object is also
-        /// implementation defined, but should be valid at least until the next
-        /// <see cref="ARSession"/> update.
-        /// </remarks>
-        public IntPtr nativePtr
-        {
-            get { return sessionRelativeData.nativePtr; }
-        }
-
-        /// <summary>
         /// The reference object which was used to detect this object in the environment.
         /// </summary>
         public XRReferenceObject referenceObject { get; internal set; }

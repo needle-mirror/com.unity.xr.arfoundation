@@ -10,19 +10,16 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The segmentation depth is disabled and will not be generated.
         /// </summary>
-        [Description("Disabled")]
         Disabled = 0,
 
         /// <summary>
         /// The segmentation depth is enabled and will be generated with no additional image filtering.
         /// </summary>
-        [Description("Fastest")]
         Fastest = 1,
 
         /// <summary>
         /// The segmentation depth is enabled and will be generated with additional image filtering.
         /// </summary>
-        [Description("Best")]
         Best = 2,
     }
 

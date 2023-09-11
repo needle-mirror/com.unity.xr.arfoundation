@@ -58,12 +58,6 @@ namespace UnityEngine.XR.ARSubsystems
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
-            /// The <c>Type</c> of the implementation.
-            /// </summary>
-            [Obsolete("XRSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
-            public Type subsystemImplementationType { get; set; }
-
-            /// <summary>
             /// Generates a hash code suitable for use in a <c>HashSet</c> or <c>Dictionary</c>.
             /// </summary>
             /// <returns>A hash code suitable for use in a <c>HashSet</c> or <c>Dictionary</c>.</returns>
@@ -124,7 +118,18 @@ namespace UnityEngine.XR.ARSubsystems
         /// This should only be used by subsystem implementors.
         /// </summary>
         /// <param name="cinfo">Information used to construct the descriptor.</param>
+        [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void RegisterDescriptor(Cinfo cinfo)
+        {
+            Register(cinfo);
+        }
+
+        /// <summary>
+        /// Register a subsystem implementation.
+        /// This should only be used by subsystem implementors.
+        /// </summary>
+        /// <param name="cinfo">Information used to construct the descriptor.</param>
+        public static void Register(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRSessionSubsystemDescriptor(cinfo));
         }

@@ -7,9 +7,9 @@ using Unity.XR.CoreUtils;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// A manager for <see cref="ARPlane"/>s. Creates, updates, and removes
-    /// <c>GameObject</c>s in response to detected surfaces in the physical
-    /// environment.
+    /// A [trackable manager](xref:arfoundation-managers#trackables-and-trackable-managers) that detects and tracks
+    /// flat surfaces in the physical environment. Add this component to your XR Origin GameObject to enable plane
+    /// detection in your app.
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_PlaneManager)]
     [DisallowMultipleComponent]
@@ -27,7 +27,7 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_PlanePrefab;
 
         /// <summary>
-        /// Getter or setter for the Plane Prefab.
+        /// Get or set the prefab to instantiate for each detected plane. Can be <see langword="null"/>.
         /// </summary>
         public GameObject planePrefab
         {
@@ -38,18 +38,6 @@ namespace UnityEngine.XR.ARFoundation
         [SerializeField, PlaneDetectionModeMask]
         [Tooltip("The types of planes to detect.")]
         PlaneDetectionMode m_DetectionMode = (PlaneDetectionMode)(-1);
-
-        /// <summary>
-        /// Get or set the <c>PlaneDetectionMode</c> to use for plane detection.
-        /// This property is obsolete.
-        /// Use <see cref="requestedDetectionMode"/> or <see cref="currentDetectionMode"/> instead.
-        /// </summary>
-        [Obsolete("Use requestedDetectionMode or currentDetectionMode instead")]
-        public PlaneDetectionMode detectionMode
-        {
-            get => m_DetectionMode;
-            set => requestedDetectionMode = value;
-        }
 
         /// <summary>
         /// Get or set the requested plane detection mode.
@@ -214,7 +202,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get the Prefab which will be instantiated for each <see cref="ARPlane"/>. Can be `null`.
+        /// Get the prefab to instantiate for each detected plane. Can be <see langword="null"/>.
         /// </summary>
         /// <returns>The Prefab which will be instantiated for each <see cref="ARPlane"/>.</returns>
         protected override GameObject GetPrefab() => m_PlanePrefab;
@@ -265,7 +253,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The name to be used for the <c>GameObject</c> whenever a new plane is detected.
+        /// The name to be used for the instantiated GameObject whenever a new plane is detected.
         /// </summary>
         protected override string gameObjectName => "ARPlane";
 
@@ -285,7 +273,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Invoked when Unity disables this `MonoBehaviour`. Used to unregister with the <see cref="ARRaycastManager"/>.
+        /// Invoked when this component is disabled. Used to unregister with the <see cref="ARRaycastManager"/>.
         /// </summary>
         protected override void OnDisable()
         {

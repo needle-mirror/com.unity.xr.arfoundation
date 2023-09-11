@@ -11,13 +11,13 @@ The anchor manager creates GameObjects for each anchor. An anchor is a particula
 
 ## Anchor Prefab
 
-While the [ARAnchorManager](xref:UnityEngine.XR.ARFoundation.ARAnchorManager) has an ["Anchor Prefab"](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorPrefab) field, this is not intended for content. When an anchor is created in some way other than `AddComponent`, such as loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.0/api/UnityEngine.XR.ARKit.ARWorldMap.html) that contained anchors, AR Foundation creates a new [GameObject](xref:UnityEngine.GameObject) to represent it.
+While the [ARAnchorManager](xref:UnityEngine.XR.ARFoundation.ARAnchorManager) has an ["Anchor Prefab"](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorPrefab) field, this is not intended for content. When an anchor is created in some way other than `AddComponent`, such as loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/api/UnityEngine.XR.ARKit.ARWorldMap.html) that contained anchors, AR Foundation creates a new [GameObject](xref:UnityEngine.GameObject) to represent it.
 
 If "Anchor Prefab" is `null`, AR Foundation creates a GameObject with an `ARAnchor` component on it. However, if you want the anchor to also include additional components, you can provide a Prefab for AR Foundation to instantiate for the anchor. In other words, the Prefab field extends the default behavior of anchors, but it is not the recommended way to place content in the world.
 
 ## Adding and removing anchors
 
-To add a new anchor, add the [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) component to any GameObject using [AddComponent&lt;ARAnchor&gt;](xref:UnityEngine.GameObject.AddComponent). Anchors can also be created indirectly, for example by loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.0/api/UnityEngine.XR.ARKit.ARWorldMap.html) which includes saved anchors.
+To add a new anchor, add the [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) component to any GameObject using [AddComponent&lt;ARAnchor&gt;](xref:UnityEngine.GameObject.AddComponent). Anchors can also be created indirectly, for example by loading an [ARWorldMap](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/api/UnityEngine.XR.ARKit.ARWorldMap.html) which includes saved anchors.
 
 You should not change the [transform](xref:UnityEngine.Transform) of an anchor; its transform is updated automatically by ARFoundation.
 

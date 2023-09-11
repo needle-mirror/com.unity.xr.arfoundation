@@ -86,12 +86,6 @@ namespace UnityEngine.XR.ARSubsystems
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
-            /// The concrete <c>Type</c> which will be instantiated if <c>Create</c> is called on this subsystem descriptor.
-            /// </summary>
-            [Obsolete("XRPlaneSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
-            public Type subsystemImplementationType { get; set; }
-
-            /// <summary>
             /// Indicates whether the provider implementation supports the detection of horizontal planes,
             /// such as the floor.
             /// If <see langword="false"/>, <see cref="BoundedPlane"/> trackables returned by
@@ -220,10 +214,19 @@ namespace UnityEngine.XR.ARSubsystems
         /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
         /// </summary>
         /// <param name="cinfo">Construction info for the descriptor.</param>
+        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void Create(Cinfo cinfo)
         {
-            var descriptor = new XRPlaneSubsystemDescriptor(cinfo);
-            SubsystemDescriptorStore.RegisterDescriptor(descriptor);
+            Register(cinfo);
+        }
+
+        /// <summary>
+        /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
+        /// </summary>
+        /// <param name="cinfo">Construction info for the descriptor.</param>
+        public static void Register(Cinfo cinfo)
+        {
+            SubsystemDescriptorStore.RegisterDescriptor(new XRPlaneSubsystemDescriptor(cinfo));
         }
 
         XRPlaneSubsystemDescriptor(Cinfo cinfo)

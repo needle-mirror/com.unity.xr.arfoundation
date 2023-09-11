@@ -52,8 +52,8 @@ namespace UnityEngine.XR.ARFoundation
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            XRSessionSubsystemDescriptor.RegisterDescriptor(GetDescriptorCinfo(SupportsInstall.No));
-            XRSessionSubsystemDescriptor.RegisterDescriptor(GetDescriptorCinfo(SupportsInstall.Yes));
+            XRSessionSubsystemDescriptor.Register(GetDescriptorCinfo(SupportsInstall.No));
+            XRSessionSubsystemDescriptor.Register(GetDescriptorCinfo(SupportsInstall.Yes));
         }
 
         class MockLoader : XRLoaderHelper

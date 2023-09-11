@@ -66,12 +66,6 @@ namespace UnityEngine.XR.ARFoundation
         protected XROrigin origin { get; private set; }
 
         /// <summary>
-        /// (Deprecated) The <c>XROrigin</c> which will be used to instantiate detected trackables.
-        /// </summary>
-        [Obsolete("'sessionOrigin' has been obsoleted; use 'origin' instead. (UnityUpgradable) -> origin", false)]
-        protected XROrigin sessionOrigin { get; private set; }
-
-        /// <summary>
         /// The name prefix that should be used when instantiating new <c>GameObject</c>s.
         /// </summary>
         protected abstract string gameObjectName { get; }
@@ -161,7 +155,7 @@ namespace UnityEngine.XR.ARFoundation
                 var transform = trackable.transform;
                 if (transform.parent != eventArgs.TrackablesParent)
                 {
-                    var desiredPose = eventArgs.TrackablesParent.TransformPose(trackable.sessionRelativePose);
+                    var desiredPose = eventArgs.TrackablesParent.TransformPose(trackable.pose);
                     transform.SetPositionAndRotation(desiredPose.position, desiredPose.rotation);
                 }
             }

@@ -19,7 +19,20 @@ namespace UnityEngine.XR.ARFoundation
     /// - <see cref="ARTrackedImage"/>
     /// - <see cref="ARTrackedObject"/>
     /// </remarks>
-    public abstract class ARTrackable : MonoBehaviour { }
+    public abstract class ARTrackable : MonoBehaviour, ITrackable
+    {
+        /// <inheritdoc/>
+        public abstract TrackableId trackableId { get; }
+
+        /// <inheritdoc/>
+        public abstract Pose pose { get; }
+
+        /// <inheritdoc/>
+        public abstract TrackingState trackingState { get; }
+
+        /// <inheritdoc/>
+        public abstract IntPtr nativePtr { get; }
+    }
 
     /// <summary>
     /// A generic component for trackables. A "trackable" is a feature in the physical
@@ -48,16 +61,17 @@ namespace UnityEngine.XR.ARFoundation
             set => m_DestroyOnRemoval = value;
         }
 
-        /// <summary>
-        /// The <c>TrackableId</c> associated with this trackable. <c>TrackableId</c>s
-        /// are typically unique to a particular session.
-        /// </summary>
-        public TrackableId trackableId => sessionRelativeData.trackableId;
+        /// <inheritdoc/>
+        public override TrackableId trackableId => sessionRelativeData.trackableId;
 
-        /// <summary>
-        /// The tracking state associated with this trackable.
-        /// </summary>
-        public TrackingState trackingState => sessionRelativeData.trackingState;
+        /// <inheritdoc/>
+        public override Pose pose => sessionRelativeData.pose;
+
+        /// <inheritdoc/>
+        public override TrackingState trackingState => sessionRelativeData.trackingState;
+
+        /// <inheritdoc/>
+        public override IntPtr nativePtr => sessionRelativeData.nativePtr;
 
         /// <summary>
         /// Pending means the trackable was added manually (usually via an <c>AddTrackable</c>-style method
@@ -80,7 +94,5 @@ namespace UnityEngine.XR.ARFoundation
         { }
 
         internal void SetSessionRelativeData(TSessionRelativeData data) => sessionRelativeData = data;
-
-        internal Pose sessionRelativePose => sessionRelativeData.pose;
     }
 }

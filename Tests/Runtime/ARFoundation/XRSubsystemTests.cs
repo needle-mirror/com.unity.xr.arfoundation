@@ -45,6 +45,11 @@ namespace UnityEngine.XR.ARSubsystems.Tests
 
         public static void RegisterDescriptor(Cinfo cinfo)
         {
+            Register(cinfo);
+        }
+
+        public static void Register(Cinfo cinfo)
+        {
             SubsystemDescriptorStore.RegisterDescriptor(new XRTestSubsystemDescriptor(cinfo));
         }
 
@@ -87,7 +92,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            XRTestSubsystemDescriptor.RegisterDescriptor(new XRTestSubsystemDescriptor.Cinfo
+            XRTestSubsystemDescriptor.Register(new XRTestSubsystemDescriptor.Cinfo
             {
                 id = "Test-Subsystem",
                 providerType = typeof(XRTestSubsystemImpl.ProviderImpl),

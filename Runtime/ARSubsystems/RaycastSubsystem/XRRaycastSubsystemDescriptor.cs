@@ -36,12 +36,6 @@ namespace UnityEngine.XR.ARSubsystems
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
-            /// The <c>Type</c> of the subsystem.
-            /// </summary>
-            [Obsolete("XRRaycastSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
-            public Type subsystemImplementationType { get; set; }
-
-            /// <summary>
             /// Whether the provider supports casting a ray from a screen point.
             /// </summary>
             public bool supportsViewportBasedRaycast { get; set; }
@@ -151,7 +145,17 @@ namespace UnityEngine.XR.ARSubsystems
         /// Registers a new descriptor. Should be called by provider implementations.
         /// </summary>
         /// <param name="cinfo"></param>
+        [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void RegisterDescriptor(Cinfo cinfo)
+        {
+            Register(cinfo);
+        }
+
+        /// <summary>
+        /// Registers a new descriptor. Should be called by provider implementations.
+        /// </summary>
+        /// <param name="cinfo"></param>
+        public static void Register(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRRaycastSubsystemDescriptor(cinfo));
         }

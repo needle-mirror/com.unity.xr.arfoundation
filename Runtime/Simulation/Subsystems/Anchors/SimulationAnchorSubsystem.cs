@@ -89,16 +89,18 @@ namespace UnityEngine.XR.Simulation
 
             public override bool TryAddAnchor(Pose pose, out XRAnchor anchor)
             {
-                anchor = XRAnchor.defaultValue;
-
-                var hasImpl = m_AnchorImpl != null;
-                if(hasImpl)
+                using (new ScopedProfiler("SimulationAnchorSubsystem.TryAddAnchor"))
                 {
-                    m_AnchorImpl.AddPoseAnchor(pose, out anchor);
-                    return true;
-                }
+                    anchor = XRAnchor.defaultValue;
 
-                return false;
+                    if (m_AnchorImpl != null)
+                    {
+                        m_AnchorImpl.AddPoseAnchor(pose, out anchor);
+                        return true;
+                    }
+
+                    return false;
+                }
             }
 
             public override bool TryAttachAnchor(TrackableId attachedToId, Pose pose, out XRAnchor anchor)
@@ -115,12 +117,13 @@ namespace UnityEngine.XR.Simulation
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
-            XRAnchorSubsystemDescriptor.Create(new XRAnchorSubsystemDescriptor.Cinfo
+            XRAnchorSubsystemDescriptor.Register(new XRAnchorSubsystemDescriptor.Cinfo
             {
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),
                 subsystemTypeOverride = typeof(SimulationAnchorSubsystem),
                 supportsTrackableAttachments = true,
+                supportsSynchronousAdd = true,
             });
         }
     }

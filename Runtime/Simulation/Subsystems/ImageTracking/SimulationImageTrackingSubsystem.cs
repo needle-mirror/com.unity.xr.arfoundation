@@ -198,7 +198,7 @@ namespace UnityEngine.XR.Simulation
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
-            XRImageTrackingSubsystemDescriptor.Create(new XRImageTrackingSubsystemDescriptor.Cinfo
+            XRImageTrackingSubsystemDescriptor.Register(new XRImageTrackingSubsystemDescriptor.Cinfo
             {
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),

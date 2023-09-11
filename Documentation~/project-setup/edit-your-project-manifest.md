@@ -1,14 +1,14 @@
 ---
 uid: arfoundation-edit-your-project-manifest
 ---
-# Access AR Foundation 5.1 in Unity 2021
+# Access AR Foundation 6.0 in Unity 2023.2
 
-AR Foundation 5.1 is compatible with Unity Editor versions 2021.2 and 2021.3, but it does not appear in the Package Manager window for these Editor versions. See the following topics to learn why this is the case and how to access AR Foundation 5.1 in these Unity Editor versions.
+AR Foundation 6.0 is compatible with Unity Editor version 2023.2, but it does not appear in the Package Manager window for this Editor version. See the following topics to learn why this is the case and how to access AR Foundation 6.0 in Unity 2023.2.
 
 | Topic | Description |
 | :---- | :---------- |
-| [Understand the Package Manager window](#understand-the-package-manager-window) | Understand why AR Foundation 5.1 does not appear in the Package Manager window in Unity 2021.2 or 2021.3 |
-| [Edit your project manifest](#edit-your-project-manifest) | Learn how to access AR Foundation 5.1 in Unity 2021.2 or 2021.3. |
+| [Understand the Package Manager window](#understand-the-package-manager-window) | Understand why AR Foundation 6.0 does not appear in the Package Manager window in Unity 2023.2 |
+| [Edit your project manifest](#edit-your-project-manifest) | Learn how to access AR Foundation 6.0 in Unity 2023.2. |
 
 ## Understand the Package Manager window
 
@@ -16,9 +16,9 @@ Since Unity 2021.1, Unity's release management team grants packages a "Released"
 
 Unity fully supports "Released" packages with the LTS cycle of their corresponding Editor version. For example, AR Foundation 5.0 entered "Released" status during development of Unity 2022.2, and will be supported alongside the 2022.3 LTS version of the Unity Editor. Thus, AR Foundation 5.0 appears in the Package Manager window in Unity 2022.2.
 
-It is possible to access AR Foundation 5.1 in Unity Editor versions 2021.2 or 2021.3, but AR Foundation 5.1 does not appear in the Package Manager window for these versions because they do not follow the same procedures for testing, validation, and LTS support.
+It is possible to access AR Foundation 6.0 in Unity 2023.2, but AR Foundation 6.0 does not appear in the Package Manager window for this version because it does not follow the same procedures for testing, validation, and LTS support.
 
-To access AR Foundation 5.1 in Unity 2021.2 or 2021.3, edit your project manifest as explained below.
+To access AR Foundation 6.0 in Unity 2023.2, edit your project manifest as explained below.
 
 ## Edit your project manifest
 
@@ -30,7 +30,7 @@ When you edit your project manifest, you control which package versions Unity lo
 
 As of Unity 2021.1, you can [add a registry package by name](https://docs.unity3d.com/Manual/upm-ui-quick.html) using the Package Manager window.
 
-To access AR Foundation 5.1 in Unity 2021.2 or 2021.3 this way, follow the steps below:
+To access AR Foundation 6.0 in Unity 2023.2 this way, follow the steps below:
 
 1. In the Package Manger window, add `com.unity.xr.arfoundation` by name and type your desired version number into the **Version (optional)** field.
 
@@ -41,7 +41,7 @@ To access AR Foundation 5.1 in Unity 2021.2 or 2021.3 this way, follow the steps
 
 3. If your project targets OpenXR devices, add `com.unity.xr.openxr`. If you do not specify a version number, Unity will import the most recent verified package for your Editor version, otherwise see the [OpenXR Plug-in documentation](https://docs.unity3d.com/Packages/com.unity.xr.openxr@latest) to learn more about compatible versions for your Editor.
 
-4. If you are upgrading from AR Foundation 4, you should [remove](https://docs.unity3d.com/Manual/upm-ui-remove.html) `com.unity.xr.arsubsystems` and `com.unity.xr.arkit-face-tracking` if present. These packages were deprecated with the release of AR Foundation 5.0, and their contents were merged into `com.unity.xr.arfoundation` and `com.unity.xr.arkit`, respectively. Both of these packages are now empty and discontinued as of version 5.0.0.
+4. If you are upgrading from AR Foundation 4, you should [remove](https://docs.unity3d.com/Manual/upm-ui-remove.html) `com.unity.xr.arsubsystems` and `com.unity.xr.arkit-face-tracking` if present. These packages were deprecated with the release of AR Foundation 5.0, and their contents were merged into `com.unity.xr.arfoundation` and `com.unity.xr.arkit`, respectively. Both of these packages are now empty and discontinued as of version 5.0.2.
 
 ### Manually edit the project manifest file
 

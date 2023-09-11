@@ -22,7 +22,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor.RegisterDescriptor(new UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor.Cinfo
+            UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor.Register(new UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor.Cinfo
             {
                 id = k_TestSubsystemId,
                 providerType = typeof(XRPointCloudSubsystemImpl.TestProvider),

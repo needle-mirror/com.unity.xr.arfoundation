@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            XRSessionSubsystemDescriptor.RegisterDescriptor(new XRSessionSubsystemDescriptor.Cinfo
+            XRSessionSubsystemDescriptor.Register(new XRSessionSubsystemDescriptor.Cinfo
             {
                 id = "Test-Session",
                 providerType = typeof(XRSessionSubsystemImpl.ProviderImpl),

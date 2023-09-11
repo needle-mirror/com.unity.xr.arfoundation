@@ -46,6 +46,7 @@ namespace UnityEngine.XR.Simulation
         public enum ImageType
         {
             Camera = 0,
+            Depth = 1,
         }
 
         /// <summary>

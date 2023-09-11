@@ -13,8 +13,8 @@ The AR Foundation package contains interfaces for AR features, but doesn't imple
 
 Unity officially supports the following provider plug-ins:
 
-* [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) on Android
-* [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html) on iOS
+* [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/index.html) on Android
+* [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/index.html) on iOS
 * [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html) on HoloLens 2
 * [Meta OpenXR Feature](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@0.1/manual/index.html) on Meta Quest
 
@@ -30,7 +30,7 @@ AR Foundation supports the following features:
 | [Session](xref:arfoundation-session) | Enable, disable, and configure AR on the target platform. |
 | [Device tracking](xref:arfoundation-device-tracking) | Track the device's position and rotation in physical space. |
 | [Camera](xref:arfoundation-camera) | Render images from device cameras and perform light estimation. |
-| [Plane detection](xref:arfoundation-plane-detection) | Detect and track surfaces. |
+| [Plane detection](xref:arfoundation-plane-detection) | Detect and track flat surfaces. |
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
 | [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |

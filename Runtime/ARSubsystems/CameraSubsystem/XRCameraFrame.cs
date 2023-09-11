@@ -15,97 +15,81 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The timestamp of the frame is included.
         /// </summary>
-        [Description("Timestamp")]
         Timestamp = (1 << 0),
 
         /// <summary>
         /// The average brightness of the frame is included.
         /// </summary>
-        [Description("AverageBrightness")]
         AverageBrightness = (1 << 1),
 
         /// <summary>
         /// The average color temperature of the frame is included.
         /// </summary>
-        [Description("AverageColorTemperature")]
         AverageColorTemperature = (1 << 2),
 
         /// <summary>
         /// The color correction value of the frame is included.
         /// </summary>
-        [Description("ColorCorrection")]
         ColorCorrection = (1 << 3),
 
         /// <summary>
         /// The projection matrix for the frame is included.
         /// </summary>
-        [Description("ProjectionMatrix")]
         ProjectionMatrix = (1 << 4),
 
         /// <summary>
         /// The display matrix for the frame is included.
         /// </summary>
-        [Description("DisplayMatrix")]
         DisplayMatrix = (1 << 5),
 
         /// <summary>
         /// The average intensity in lumens is included.
         /// </summary>
-        [Description("AverageIntensityInLumens")]
         AverageIntensityInLumens = (1 << 6),
 
         /// <summary>
         /// The camera exposure duration is included.
         /// </summary>
-        [Description("ExposureDuration")]
         ExposureDuration = (1 << 7),
 
         /// <summary>
         /// The camera exposure offset is included.
         /// </summary>
-        [Description("ExposureOffset")]
         ExposureOffset = (1 << 8),
 
         /// <summary>
         /// The estimated scene main light direction is included.
         /// </summary>
-        [Description("MainLightDirection")]
         MainLightDirection = (1 << 9),
 
         /// <summary>
         /// The estimated scene main light color is included.
         /// </summary>
-        [Description("MainLightColor")]
         MainLightColor = (1 << 10),
 
         /// <summary>
         /// The estimated scene main light intensity in lumens is included.
         /// </summary>
-        [Description("MainLightIntensityLumens")]
         MainLightIntensityLumens = (1 << 11),
 
         /// <summary>
         /// Ambient spherical harmonics are included.
         /// </summary>
-        [Description("AmbientSphericalHarmonics")]
         AmbientSphericalHarmonics = (1 << 12),
 
         /// <summary>
         /// The camera grain texture is included.
         /// </summary>
-        [Description("CameraGrain")]
         CameraGrain = (1 << 13),
 
         /// <summary>
         /// The camera grain noise intensity is included.
         /// </summary>
-        [Description("NoiseIntensity")]
         NoiseIntensity = (1 << 14),
-        
+
         /// <summary>
         /// EXIF data for the frame is included.
         /// </summary>
-        [Description("ExifData")]
         ExifData = (1 << 15),
     }
 
@@ -257,7 +241,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <value>The noise intensity.</value>
         public float noiseIntensity => m_NoiseIntensity;
         float m_NoiseIntensity;
-        
+
         /// <summary>
         /// The frame's EXIF data.
         /// </summary>
@@ -361,7 +345,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value><see langword="true"/> if the frame has EXIF data. Otherwise, <see langword="false"/>.</value>
         bool hasExifData => (m_Properties & XRCameraFrameProperties.ExifData) != 0;
-        
+
         /// <summary>
         /// Creates a <see cref="XRCameraFrame"/>.
         /// </summary>
@@ -423,7 +407,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_NoiseIntensity = noiseIntensity;
             m_ExifData = default;
         }
-        
+
         /// <summary>
         /// Creates a <see cref="XRCameraFrame"/> with EXIF data.
         /// </summary>
@@ -465,11 +449,11 @@ namespace UnityEngine.XR.ARSubsystems
             SphericalHarmonicsL2 ambientSphericalHarmonics,
             XRTextureDescriptor cameraGrain,
             float noiseIntensity,
-            XRCameraFrameExifData exifData) 
-        : this(timestamp, averageBrightness, averageColorTemperature, 
-            colorCorrection, projectionMatrix, displayMatrix, 
-            trackingState, nativePtr, properties, 
-            averageIntensityInLumens, exposureDuration, exposureOffset, 
+            XRCameraFrameExifData exifData)
+        : this(timestamp, averageBrightness, averageColorTemperature,
+            colorCorrection, projectionMatrix, displayMatrix,
+            trackingState, nativePtr, properties,
+            averageIntensityInLumens, exposureDuration, exposureOffset,
             mainLightIntensityInLumens, mainLightColor, mainLightDirection,
             ambientSphericalHarmonics, cameraGrain, noiseIntensity)
         {
@@ -548,7 +532,7 @@ namespace UnityEngine.XR.ARSubsystems
             averageIntensityInLumens = this.averageIntensityInLumens;
             return hasAverageIntensityInLumens;
         }
-        
+
         /// <summary>
         /// Get the frame's EXIF data, if possible.
         /// </summary>

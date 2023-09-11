@@ -30,7 +30,7 @@ class MyRaycastSubsystem : XRRaycastSubsystem
         // In this case XRRaycastSubsystemDescriptor provides a registration 
         // helper method. See each subsystem descriptor's API documentation 
         // for more information.
-        XRRaycastSubsystemDescriptor.RegisterDescriptor(new XRImageTrackingSubsystemDescriptor.Cinfo
+        XRRaycastSubsystemDescriptor.Register(new XRImageTrackingSubsystemDescriptor.Cinfo
         {
             providerType = typeof(MyProvider),
             subsystemTypeOverride = typeof(MyRaycastSubsystem),

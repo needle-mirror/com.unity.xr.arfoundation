@@ -97,40 +97,40 @@ namespace UnityEngine.XR.Simulation
             public event Action<IReadOnlyList<DiscoveredPlane>, IReadOnlyList<DiscoveredPlane>, IReadOnlyList<DiscoveredPlane>> postPlaneUpdating;
 #endif
 
+            protected override bool TryInitialize()
+            {
+                m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.GetOrCreate();
+                m_PlaneFindingParams = XRSimulationRuntimeSettings.Instance.planeFindingParams;
+
+                m_LastPlaneUpdateTime = Time.timeSinceLevelLoad;
+                m_PlaneRaycaster = new PlaneRaycaster(GetPlanesReadOnly);
+
+                BaseSimulationSceneManager.environmentSetupFinished += CreateVoxelGrids;
+                SimulationSessionSubsystem.s_SimulationSessionReset += OnSimulationSessionReset;
+
+                return true;
+            }
+
             public override void Start()
             {
 #if UNITY_EDITOR
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
-
-                m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.GetOrCreate();
-                m_PlaneFindingParams = XRSimulationRuntimeSettings.Instance.planeFindingParams;
-
-                BaseSimulationSceneManager.environmentSetupFinished += CreateVoxelGrids;
-
-                m_LastPlaneUpdateTime = Time.timeSinceLevelLoad;
-
-                m_PlaneRaycaster = new PlaneRaycaster(GetPlanesReadOnly);
-
-                SimulationSessionSubsystem.s_SimulationSessionReset += OnSimulationSessionReset;
             }
 
-            public override void Stop()
+            // Unused but required by parent class
+            public override void Stop() { }
+
+            public override void Destroy()
             {
                 SimulationSessionSubsystem.s_SimulationSessionReset -= OnSimulationSessionReset;
                 BaseSimulationSceneManager.environmentSetupFinished -= CreateVoxelGrids;
 
-                m_Initialized = false;
-
                 m_PlaneRaycaster.Stop();
                 m_PlaneRaycaster = null;
-
                 m_AllPlanes.Clear();
-
                 DestroyVoxelGrids();
             }
-
-            public override void Destroy() { }
 
             void DestroyVoxelGrids()
             {
@@ -143,6 +143,7 @@ namespace UnityEngine.XR.Simulation
                 }
 
                 m_VoxelGrids = null;
+                m_Initialized = false;
             }
 
             public void OnSimulationSessionReset()
@@ -362,14 +363,14 @@ namespace UnityEngine.XR.Simulation
                 }
             }
 
-            /// <summary>
+            /// <remarks>
             /// This method assumes the simulation environment setup is completed.
-            /// </summary>
+            /// </remarks>
             void CreateVoxelGrids()
             {
-                if (SimulationSessionSubsystem.simulationSceneManager == null)
+                if (SimulationSessionSubsystem.simulationSceneManager == null || m_Initialized)
                     return;
-                
+
                 var cameraMovementBounds = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironment.cameraMovementBounds;
                 var maximumHitDistance = XRSimulationRuntimeSettings.Instance.environmentScanParams.maximumHitDistance;
                 var extents = cameraMovementBounds.extents;
@@ -414,7 +415,7 @@ namespace UnityEngine.XR.Simulation
                 supportsBoundaryVertices = true
             };
 
-            XRPlaneSubsystemDescriptor.Create(cinfo);
+            XRPlaneSubsystemDescriptor.Register(cinfo);
         }
     }
 }

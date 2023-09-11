@@ -78,19 +78,6 @@ namespace UnityEngine.XR.ARFoundation
         public event Action<AROcclusionFrameEventArgs> frameReceived;
 
         /// <summary>
-        /// The mode for generating the human segmentation stencil texture.
-        /// This method is obsolete.
-        /// Use <see cref="requestedHumanStencilMode"/>
-        /// or  <see cref="currentHumanStencilMode"/> instead.
-        /// </summary>
-        [Obsolete("Use requestedSegmentationStencilMode or currentSegmentationStencilMode instead. (2020-01-14)")]
-        public HumanSegmentationStencilMode humanSegmentationStencilMode
-        {
-            get => m_HumanSegmentationStencilMode;
-            set => requestedHumanStencilMode = value;
-        }
-
-        /// <summary>
         /// The requested mode for generating the human segmentation stencil texture.
         /// </summary>
         public HumanSegmentationStencilMode requestedHumanStencilMode
@@ -118,19 +105,6 @@ namespace UnityEngine.XR.ARFoundation
                  + "Medium -- Medium rendering quality. Medium frame computation.\n"
                  + "Best -- Best rendering quality. Increased frame computation.")]
         HumanSegmentationStencilMode m_HumanSegmentationStencilMode = HumanSegmentationStencilMode.Disabled;
-
-        /// <summary>
-        /// The mode for generating the human segmentation depth texture.
-        /// This method is obsolete.
-        /// Use <see cref="requestedHumanDepthMode"/>
-        /// or  <see cref="currentHumanDepthMode"/> instead.
-        /// </summary>
-        [Obsolete("Use requestedSegmentationDepthMode or currentSegmentationDepthMode instead. (2020-01-15)")]
-        public HumanSegmentationDepthMode humanSegmentationDepthMode
-        {
-            get => m_HumanSegmentationDepthMode;
-            set => requestedHumanDepthMode = value;
-        }
 
         /// <summary>
         /// Get or set the requested human segmentation depth mode.

@@ -21,7 +21,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            XRRaycastSubsystemDescriptor.RegisterDescriptor(new XRRaycastSubsystemDescriptor.Cinfo
+            XRRaycastSubsystemDescriptor.Register(new XRRaycastSubsystemDescriptor.Cinfo
             {
                 id = "Test-Raycast",
                 providerType = typeof(XRRaycastSubsystemImpl.MockProvider),

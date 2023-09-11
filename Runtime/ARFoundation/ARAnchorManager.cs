@@ -7,17 +7,14 @@ using Unity.XR.CoreUtils;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Manages anchors.
+    /// A [trackable manager](xref:arfoundation-managers#trackables-and-trackable-managers) that enables you to add and
+    /// track anchors. Add this component to your XR Origin GameObject to enable anchor tracking in your app.
     /// </summary>
     /// <remarks>
-    /// <para>Use this component to programmatically add, remove, or query for
-    /// anchors. Anchors are <c>Pose</c>s in the world
-    /// which will be periodically updated by an AR device as its understanding
-    /// of the world changes.</para>
-    /// <para>Subscribe to changes (added, updated, and removed) via the
-    /// <see cref="ARAnchorManager.anchorsChanged"/> event.</para>
+    /// An anchor is a pose (position and rotation) in the physical environment that is tracked by an XR device.
+    /// Anchors are updated as the device refines its understanding of the environment, allowing you to reliably place
+    /// virtual content at a physical pose.
     /// </remarks>
-    /// <seealso cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}"/>
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
@@ -29,13 +26,22 @@ namespace UnityEngine.XR.ARFoundation
         XRAnchor,
         ARAnchor>
     {
+        UnityEngine.Pool.ObjectPool<AwaitableCompletionSource<Result<ARAnchor>>> m_AsyncCompletionSources = new(
+            createFunc: () => new AwaitableCompletionSource<Result<ARAnchor>>(),
+            actionOnGet: null,
+            actionOnRelease: null,
+            actionOnDestroy: null,
+            collectionCheck: false,
+            defaultCapacity: 8,
+            maxSize: 1024);
+
         [SerializeField]
         [Tooltip("If not null, instantiates this prefab for each instantiated anchor.")]
         [FormerlySerializedAs("m_ReferencePointPrefab")]
         GameObject m_AnchorPrefab;
 
         /// <summary>
-        /// This prefab will be instantiated for each <see cref="ARAnchor"/>. May be `null`.
+        /// This prefab will be instantiated for each <see cref="ARAnchor"/>. May be <see langword="null"/>.
         /// </summary>
         /// <remarks>
         /// The purpose of this property is to extend the functionality of <see cref="ARAnchor"/>s.
@@ -48,44 +54,10 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Invoked once per frame to communicate changes to anchors, including
-        /// new anchors, the update of existing anchors, and the removal
-        /// of previously existing anchors.
+        /// Invoked once per frame to communicate changes: new anchors, updates to existing
+        /// anchors, and removed anchors.
         /// </summary>
         public event Action<ARAnchorsChangedEventArgs> anchorsChanged;
-
-        /// <summary>
-        /// Attempts to add an <see cref="ARAnchor"/> with the given <c>Pose</c>.
-        /// </summary>
-        /// <remarks>
-        /// If <see cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}.GetPrefab()"/>
-        /// is not null, a new instance of that prefab will be instantiated. Otherwise, a
-        /// new <c>GameObject</c> will be created. In either case, the resulting
-        /// <c>GameObject</c> will have an <see cref="ARAnchor"/> component on it.
-        /// </remarks>
-        /// <param name="pose">The pose, in Unity world space, of the <see cref="ARAnchor"/>.</param>
-        /// <returns>A new <see cref="ARAnchor"/> if successful, otherwise <c>null</c>.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if this `MonoBehaviour` is not enabled.</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown if the underlying subsystem is `null`.</exception>
-        [Obsolete("Add an anchor using AddComponent<" + nameof(ARAnchor) + ">(). (2020-10-06)")]
-        public ARAnchor AddAnchor(Pose pose)
-        {
-            if (!enabled)
-                throw new InvalidOperationException("Cannot create an anchor from a disabled anchor manager.");
-
-            if (subsystem == null)
-                throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");
-
-            var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
-
-            // Add the anchor to the XRAnchorSubsystem
-            if (subsystem.TryAddAnchor(sessionRelativePose, out var sessionRelativeData))
-            {
-                return CreateTrackableImmediate(sessionRelativeData);
-            }
-
-            return null;
-        }
 
         internal bool TryAddAnchor(ARAnchor anchor)
         {
@@ -106,11 +78,39 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Attempts to create a new anchor at the given <paramref name="pose"/>.
+        /// </summary>
+        /// <example>
+        /// Use this API with C# async/await syntax as shown below:
+        /// <code>
+        ///     var result = await TryAddAnchorAsync(pose);
+        ///     if (result.TryGetResult(out var anchor))
+        ///         DoSomethingWith(anchor);
+        /// </code>
+        /// </example>
+        /// <param name="pose">The pose, in Unity world space, of the anchor.</param>
+        /// <returns>The result of the async operation.</returns>
+        public async Awaitable<Result<ARAnchor>> TryAddAnchorAsync(Pose pose)
+        {
+            var completionSource = m_AsyncCompletionSources.Get();
+            var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
+            var subsystemResult = await subsystem.TryAddAnchorAsync(sessionRelativePose);
+
+            var wasSuccessful = subsystemResult.TryGetResult(out var sessionRelativeData);
+            completionSource.SetResult(new Result<ARAnchor>(wasSuccessful, CreateTrackableImmediate(sessionRelativeData)));
+            var resultAwaitable = completionSource.Awaitable;
+
+            completionSource.Reset();
+            m_AsyncCompletionSources.Release(completionSource);
+            return await resultAwaitable;
+        }
+
+        /// <summary>
         /// Attempts to create a new anchor that is attached to an existing <see cref="ARPlane"/>.
         /// </summary>
         /// <param name="plane">The <see cref="ARPlane"/> to which to attach.</param>
-        /// <param name="pose">The initial <c>Pose</c>, in Unity world space, of the anchor.</param>
-        /// <returns>A new <see cref="ARAnchor"/> if successful, otherwise <c>null</c>.</returns>
+        /// <param name="pose">The initial pose, in Unity world space, of the anchor.</param>
+        /// <returns>A new <see cref="ARAnchor"/> if successful, otherwise <see langword="null"/>.</returns>
         public ARAnchor AttachAnchor(ARPlane plane, Pose pose)
         {
             if (!enabled)
@@ -129,35 +129,6 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Attempts to remove an <see cref="ARAnchor"/>.
-        /// </summary>
-        /// <param name="anchor">The anchor you wish to remove.</param>
-        /// <returns>
-        /// <c>True</c> if the anchor was successfully removed.
-        /// <c>False</c> usually means the anchor is not longer tracked by the system.
-        /// </returns>
-        [Obsolete("Call Destroy() on the " + nameof(ARAnchor) + " component to remove it. (2020-10-06)")]
-        public bool RemoveAnchor(ARAnchor anchor)
-        {
-            if (!enabled)
-                throw new InvalidOperationException("Cannot create an anchor from a disabled anchor manager.");
-
-            if (subsystem == null)
-                throw new InvalidOperationException("Anchor manager has no subsystem. Enable the manager first.");
-
-            if (anchor == null)
-                throw new ArgumentNullException(nameof(anchor));
-
-            if (subsystem.TryRemoveAnchor(anchor.trackableId))
-            {
-                DestroyPendingTrackable(anchor.trackableId);
-                return true;
-            }
-
-            return false;
         }
 
         internal bool TryRemoveAnchor(ARAnchor anchor)
@@ -184,11 +155,11 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Gets the <see cref="ARAnchor"/> with given <paramref name="trackableId"/>,
-        /// or <c>null</c> if it does not exist.
+        /// Gets the <see cref="ARAnchor"/> with given <paramref name="trackableId"/>, or <see langword="null"/> if
+        /// no such anchor exists.
         /// </summary>
         /// <param name="trackableId">The <see cref="TrackableId"/> of the <see cref="ARAnchor"/> to retrieve.</param>
-        /// <returns>The <see cref="ARAnchor"/> with <paramref name="trackableId"/> or <c>null</c> if it does not exist.</returns>
+        /// <returns>The <see cref="ARAnchor"/> or <see langword="null"/>.</returns>
         public ARAnchor GetAnchor(TrackableId trackableId)
         {
             if (m_Trackables.TryGetValue(trackableId, out var anchor))
@@ -204,7 +175,7 @@ namespace UnityEngine.XR.ARFoundation
         protected override GameObject GetPrefab() => m_AnchorPrefab;
 
         /// <summary>
-        /// The name to assign to the `GameObject` instantiated for each <see cref="ARAnchor"/>.
+        /// The name to assign to the GameObject instantiated for each <see cref="ARAnchor"/>.
         /// </summary>
         protected override string gameObjectName => "Anchor";
 

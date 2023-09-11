@@ -18,17 +18,6 @@ namespace UnityEngine.XR.ARFoundation
         bool m_Updated;
 
         /// <summary>
-        /// Get a native pointer associated with this raycast.
-        /// </summary>
-        /// <remarks>
-        /// The data pointed to by this member is implementation defined.
-        /// The lifetime of the pointed to object is also
-        /// implementation defined, but should be valid at least until the next
-        /// <see cref="ARSession"/> update.
-        /// </remarks>
-        public IntPtr nativePtr => sessionRelativeData.nativePtr;
-
-        /// <summary>
         /// The distance, in meters, between the raycast's origin and intersection point.
         /// </summary>
         public float distance => sessionRelativeData.distance;

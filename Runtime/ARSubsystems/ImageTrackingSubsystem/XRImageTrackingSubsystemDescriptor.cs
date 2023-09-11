@@ -35,12 +35,6 @@ namespace UnityEngine.XR.ARSubsystems
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
-            /// The <c>System.Type</c> of the provider implementation, used to instantiate the class.
-            /// </summary>
-            [Obsolete("XRImageTrackingSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
-            public Type subsystemImplementationType { get; set; }
-
-            /// <summary>
             /// Whether the subsystem supports tracking the poses of moving images in realtime.
             /// </summary>
             /// <remarks>
@@ -167,7 +161,17 @@ namespace UnityEngine.XR.ARSubsystems
         /// Registers a new descriptor with the <c>SubsystemManager</c>.
         /// </summary>
         /// <param name="cinfo">The construction information for the new descriptor.</param>
+        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void Create(Cinfo cinfo)
+        {
+            Register(cinfo);
+        }
+
+        /// <summary>
+        /// Registers a new descriptor with the <c>SubsystemManager</c>.
+        /// </summary>
+        /// <param name="cinfo">The construction information for the new descriptor.</param>
+        public static void Register(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRImageTrackingSubsystemDescriptor(cinfo));
         }

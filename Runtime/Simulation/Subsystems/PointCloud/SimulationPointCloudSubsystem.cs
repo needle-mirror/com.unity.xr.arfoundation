@@ -228,7 +228,7 @@ namespace UnityEngine.XR.Simulation
                 supportsConfidence = true
             };
 
-            XRPointCloudSubsystemDescriptor.RegisterDescriptor(cinfo);
+            XRPointCloudSubsystemDescriptor.Register(cinfo);
         }
     }
 }

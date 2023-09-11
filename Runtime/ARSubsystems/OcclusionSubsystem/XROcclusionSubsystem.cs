@@ -332,10 +332,21 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>
         /// <c>true</c> if the descriptor was registered. Otherwise, <c>false</c>.
         /// </returns>
+        [Obsolete("XROcclusionSubsystem.Register(XROcclusionSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XROcclusionSubsystemDescriptor.Register(XROcclusionSubsystemDescriptor.Cinfo) instead.")]
         public static bool Register(XROcclusionSubsystemCinfo occlusionSubsystemCinfo)
         {
-            XROcclusionSubsystemDescriptor occlusionSubsystemDescriptor = XROcclusionSubsystemDescriptor.Create(occlusionSubsystemCinfo);
-            SubsystemDescriptorStore.RegisterDescriptor(occlusionSubsystemDescriptor);
+            var occlusionSubsystemInfo = new XROcclusionSubsystemDescriptor.Cinfo()
+            {
+                id = occlusionSubsystemCinfo.id,
+                providerType = occlusionSubsystemCinfo.providerType,
+                subsystemTypeOverride = occlusionSubsystemCinfo.subsystemTypeOverride,
+                humanSegmentationStencilImageSupportedDelegate = occlusionSubsystemCinfo.humanSegmentationStencilImageSupportedDelegate,
+                humanSegmentationDepthImageSupportedDelegate = occlusionSubsystemCinfo.humanSegmentationDepthImageSupportedDelegate,
+                environmentDepthImageSupportedDelegate = occlusionSubsystemCinfo.environmentDepthImageSupportedDelegate,
+                environmentDepthConfidenceImageSupportedDelegate = occlusionSubsystemCinfo.environmentDepthConfidenceImageSupportedDelegate,
+                environmentDepthTemporalSmoothingSupportedDelegate = occlusionSubsystemCinfo.environmentDepthTemporalSmoothingSupportedDelegate
+            };
+            XROcclusionSubsystemDescriptor.Register(occlusionSubsystemInfo);
             return true;
         }
 

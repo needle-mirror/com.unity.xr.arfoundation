@@ -78,6 +78,23 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
+            /// Get whether Image Stabilization is enabled.
+            /// </summary>
+            /// <value><see langword="true"/> if EIS is enabled. Otherwise, <see langword="false"/>.</value>
+            /// <seealso cref="imageStabilizationRequested"/>
+            public virtual bool imageStabilizationEnabled => false;
+
+            /// <summary>
+            /// Get or set whether Image Stabilization is requested.
+            /// </summary>
+            /// <value><see langword="true"/> if EIS is requested. Otherwise, <see langword="false"/>.</value>
+            public virtual bool imageStabilizationRequested
+            {
+                get => false;
+                set { }
+            }
+
+            /// <summary>
             /// Get the current light estimation mode in use by the subsystem.
             /// </summary>
             /// <value>The current light estimation mode.</value>
@@ -132,6 +149,17 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <value>The supported background rendering modes.</value>
             public virtual XRSupportedCameraBackgroundRenderingMode supportedBackgroundRenderingMode => XRSupportedCameraBackgroundRenderingMode.None;
+
+            /// <summary>
+            /// Attempts to get the platform specific rendering parameters for rendering the camera background texture.
+            /// </summary>
+            /// <param name="cameraBackgroundRenderingParameters">The platform specific rendering parameters for rendering the camera background texture.</param>
+            /// <returns><see langword="true"/> if the platform provides specialized rendering parameters. Otherwise, <see langword="false"/>.</returns>
+            public virtual bool TryGetRenderingParameters(out XRCameraBackgroundRenderingParams cameraBackgroundRenderingParameters)
+            {
+                cameraBackgroundRenderingParameters = default;
+                return false;
+            }
 
             /// <summary>
             /// Start the camera for the subsystem.
@@ -323,6 +351,23 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Indicate whether Image Stabilization is enabled.
+        /// </summary>
+        /// <value><see langword="true"/> if EIS is enabled. Otherwise, <see langword="false"/>.</value>
+        /// <seealso cref="imageStabilizationRequested"/>
+        public bool imageStabilizationEnabled => provider.imageStabilizationEnabled;
+
+        /// <summary>
+        /// Get or set whether Image Stabilization is requested.
+        /// </summary>
+        /// <value><see langword="true"/> if EIS is requested. Otherwise, <see langword="false"/>.</value>
+        public bool imageStabilizationRequested
+        {
+            get => provider.imageStabilizationRequested;
+            set => provider.imageStabilizationRequested = value;
+        }
+
+        /// <summary>
         /// Get the current light estimation mode in use by the provider.
         /// </summary>
         /// <value>The current light estimation mode.</value>
@@ -344,6 +389,18 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value>The Material to render the camera texture.</value>
         public Material cameraMaterial => provider.cameraMaterial;
+
+        /// <summary>
+        /// Attempts to get the platform specific rendering parameters for rendering the camera background texture.
+        /// </summary>
+        /// <param name="cameraBackgroundRenderingParameters">
+        /// The platform specific rendering parameters for rendering the camera background texture.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the platform provides specialized rendering parameters or <see langword="false"/> otherwise.
+        /// </returns>
+        public bool TryGetRenderingParameters(out XRCameraBackgroundRenderingParams cameraBackgroundRenderingParameters)
+            => provider.TryGetRenderingParameters(out cameraBackgroundRenderingParameters);
 
         /// <summary>
         /// Indicates whether camera permission has been granted.
@@ -469,20 +526,6 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
-        /// to utilities to convert to RGB and Grayscale formats. This method is obsolete. Use
-        /// <see cref="TryAcquireLatestCpuImage"/> instead.
-        /// </summary>
-        /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <see langword="true"/>.</param>
-        /// <returns><see langword="true"/> if the image was acquired. Otherwise, <see langword="false"/>.</returns>
-        /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.</exception>
-        /// <remarks>
-        /// The returned <see cref="XRCpuImage"/> must be disposed to avoid resource leaks.
-        /// </remarks>
-        [Obsolete("Use TryAcquireLatestCpuImage instead. (2020-05-19)")]
-        public bool TryGetLatestImage(out XRCpuImage cpuImage) => TryAcquireLatestCpuImage(out cpuImage);
-
-        /// <summary>
-        /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
         /// to utilities to convert to RGB and Grayscale formats.
         /// </summary>
         /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <see langword="true"/>.</param>
@@ -508,25 +551,36 @@ namespace UnityEngine.XR.ARSubsystems
         /// by the subsystem provider.</param>
         /// <returns><see langword="true"/> if the subsystem implementation is registered. Otherwise, <see langword="false"/>.</returns>
         /// <exception cref="System.ArgumentException">Thrown when the values specified in the <see cref="XRCameraSubsystemCinfo"/> parameter are invalid.
-        /// Typically, this will occur:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>if <see cref="XRCameraSubsystemCinfo.id"/> is <see langword="null"/> or empty</description>
-        /// </item>
-        /// <item>
-        /// <description>if <see cref="XRCameraSubsystemCinfo.implementationType"/> is <see langword="null"/></description>
-        /// </item>
-        /// <item>
-        /// <description>if <see cref="XRCameraSubsystemCinfo.implementationType"/> does not derive from
-        /// <see cref="XRCameraSubsystem"/>
-        /// </description>
-        /// </item>
-        /// </list>
+        /// Typically, this happens when required parameters are <see langword="null"/> or empty
+        /// or types that do not derive from the required base class.
         /// </exception>
+        [Obsolete("XRCameraSubsystem.Register(XRCameraSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XRCameraSubsystemDescriptor.Register(XRCameraSubsystemDescriptor.Cinfo) instead.")]
         public static bool Register(XRCameraSubsystemCinfo cameraSubsystemParams)
         {
-            var cameraSubsystemDescriptor = XRCameraSubsystemDescriptor.Create(cameraSubsystemParams);
-            SubsystemDescriptorStore.RegisterDescriptor(cameraSubsystemDescriptor);
+            var cameraSubsystemCinfo = new XRCameraSubsystemDescriptor.Cinfo
+            {
+                id = cameraSubsystemParams.id,
+                providerType = cameraSubsystemParams.providerType,
+                subsystemTypeOverride = cameraSubsystemParams.subsystemTypeOverride,
+                supportsAverageBrightness = cameraSubsystemParams.supportsAverageBrightness,
+                supportsAverageColorTemperature = cameraSubsystemParams.supportsAverageColorTemperature,
+                supportsColorCorrection = cameraSubsystemParams.supportsColorCorrection,
+                supportsDisplayMatrix = cameraSubsystemParams.supportsDisplayMatrix,
+                supportsProjectionMatrix = cameraSubsystemParams.supportsProjectionMatrix,
+                supportsTimestamp = cameraSubsystemParams.supportsTimestamp,
+                supportsCameraConfigurations = cameraSubsystemParams.supportsCameraConfigurations,
+                supportsCameraImage = cameraSubsystemParams.supportsCameraImage,
+                supportsAverageIntensityInLumens = cameraSubsystemParams.supportsAverageIntensityInLumens,
+                supportsFocusModes = cameraSubsystemParams.supportsFocusModes,
+                supportsFaceTrackingAmbientIntensityLightEstimation = cameraSubsystemParams.supportsFaceTrackingAmbientIntensityLightEstimation,
+                supportsFaceTrackingHDRLightEstimation = cameraSubsystemParams.supportsFaceTrackingHDRLightEstimation,
+                supportsWorldTrackingAmbientIntensityLightEstimation = cameraSubsystemParams.supportsWorldTrackingAmbientIntensityLightEstimation,
+                supportsWorldTrackingHDRLightEstimation = cameraSubsystemParams.supportsWorldTrackingHDRLightEstimation,
+                supportsCameraGrain = cameraSubsystemParams.supportsCameraGrain,
+                supportsImageStabilizationDelegate = cameraSubsystemParams.supportsImageStabilizationDelegate,
+                supportsExifData = cameraSubsystemParams.supportsExifData
+            };
+            XRCameraSubsystemDescriptor.Register(cameraSubsystemCinfo);
             return true;
         }
     }

@@ -23,22 +23,6 @@ namespace UnityEngine.XR.ARFoundation
         XREnvironmentProbe,
         AREnvironmentProbe>
     {
-        /// <summary>
-        /// A property of the environment probe subsystem that, if enabled, automatically generates environment probes
-        /// for the scene.
-        /// This method is obsolete.
-        /// Use <see cref="automaticPlacementRequested"/> or <see cref="automaticPlacementEnabled"/> instead.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if automatic environment probe placement is enabled. Otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Use automaticPlacementRequested or automaticPlacementEnabled instead. (2020-01-16)")]
-        public bool automaticPlacement
-        {
-            get => m_AutomaticPlacement;
-            set => automaticPlacementRequested = value;
-        }
-
         bool supportsAutomaticPlacement => descriptor?.supportsAutomaticPlacement == true;
 
         /// <summary>
@@ -81,18 +65,6 @@ namespace UnityEngine.XR.ARFoundation
         [Tooltip("The texture filter mode to be used with the reflection probe environment texture.")]
         FilterMode m_EnvironmentTextureFilterMode = FilterMode.Trilinear;
 
-        /// <summary>
-        /// Specifies whether the environment textures should be returned as HDR textures.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the environment textures should be returned as HDR textures. Otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Use environmentTextureHDRRequested or environmentTextureHDREnabled instead. (2020-01-16)")]
-        public bool environmentTextureHDR
-        {
-            get => m_EnvironmentTextureHDR;
-            set => environmentTextureHDRRequested = value;
-        }
         [SerializeField]
         [Tooltip("Whether the environment textures should be returned as HDR textures.")]
         bool m_EnvironmentTextureHDR = true;
@@ -159,47 +131,6 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
-        /// <summary>
-        /// Creates a new environment probe at <paramref name="pose"/> with <paramref name="scale"/> and <paramref name="size"/>
-        /// if supported by the subsystem. Use the <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
-        /// `supportsManualPlacement` property to determine support for this feature. If successful, a new
-        /// <c>GameObject</c> with an <see cref="AREnvironmentProbe"/> is created
-        /// immediately; however, the provider might not report the environment probe as added until a future frame. Check the
-        /// status of the probe by inspecting its
-        /// <see cref="ARTrackable{TSessionRelativeData,TTrackable}.pending"/> property.
-        /// </summary>
-        /// <param name="pose">The position and rotation at which to create the new environment probe.</param>
-        /// <param name="scale">The scale of the new environment probe.</param>
-        /// <param name="size">The size (dimensions) of the new environment probe.</param>
-        /// <returns>A new <see cref="AREnvironmentProbe"/> if successful, otherwise <c>null</c>.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if this manager is not enabled</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown if this manager has no subsystem.</exception>
-        /// <exception cref="System.NotSupportedException">Thrown if manual placement is not supported by this subsystem.
-        /// Check for support on the <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
-        ///     `supportsManualPlacement` property.</exception>
-        [Obsolete("Add an environment probe using AddComponent<" + nameof(AREnvironmentProbe) + ">(). (2020-10-06)")]
-        public AREnvironmentProbe AddEnvironmentProbe(Pose pose, Vector3 scale, Vector3 size)
-        {
-            if (!enabled)
-                throw new InvalidOperationException("Cannot create an environment probe from a disabled environment probe manager.");
-
-            if (subsystem == null)
-                throw new InvalidOperationException("Environment probe manager has no subsystem. Enable the manager first.");
-
-            if (!descriptor.supportsManualPlacement)
-                throw new NotSupportedException("Manual environment probe placement is not supported by this subsystem.");
-
-            var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
-            if (subsystem.TryAddEnvironmentProbe(sessionRelativePose, scale, size, out var sessionRelativeData))
-            {
-                var probe = CreateTrackableImmediate(sessionRelativeData);
-                probe.placementType = AREnvironmentProbePlacementType.Manual;
-                return probe;
-            }
-
-            return null;
-        }
-
         internal bool TryAddEnvironmentProbe(AREnvironmentProbe probe)
         {
             if (!CanBeAddedToSubsystem(probe))
@@ -230,58 +161,6 @@ namespace UnityEngine.XR.ARFoundation
                 CreateTrackableFromExisting(probe, sessionRelativeData);
                 probe.placementType = AREnvironmentProbePlacementType.Manual;
                 return probe;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Remove an existing environment probe. Support for this feature is provider-specific. Check for support with
-        /// the <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
-        /// `supportsRemovalOfManual` and `supportsRemovalOfAutomatic` properties.
-        /// </summary>
-        /// <param name="probe">The environment probe to remove</param>
-        /// <returns><c>true</c> if the environment probe was removed, otherwise <c>false</c>.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if this manager is not enabled.</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown if
-        ///     <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.subsystem"/> is `null`.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="probe"/> is `null`.</exception>
-        /// <exception cref="System.InvalidOperationException">
-        /// Thrown if the environment probe was manually placed, but removal of manually placed probes is not supported.
-        /// You can check for this case with <see cref="AREnvironmentProbe.placementType"/> and the
-        /// <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
-        /// 'supportsRemovalOfManual` property.
-        /// </exception>
-        /// <exception cref="System.InvalidOperationException">
-        /// Thrown if the environment probe was automatically placed, but removal of automatically placed probes is not supported.
-        /// You can check for this case with <see cref="AREnvironmentProbe.placementType"/> and the
-        /// <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
-        /// `supportsRemovalOfAutomatic` property.
-        /// </exception>
-        [Obsolete("Call Destroy() on the " + nameof(AREnvironmentProbe) + " component to remove it. (2020-10-06)")]
-        public bool RemoveEnvironmentProbe(AREnvironmentProbe probe)
-        {
-            if (!enabled)
-                throw new InvalidOperationException("Cannot remove an environment probe from a disabled environment probe manager.");
-
-            if (subsystem == null)
-                throw new InvalidOperationException("Environment probe manager has no subsystem. Enable the manager first.");
-
-            if (probe == null)
-                throw new ArgumentNullException(nameof(probe));
-
-            var desc = descriptor;
-
-            if ((probe.placementType == AREnvironmentProbePlacementType.Manual) && !desc.supportsRemovalOfManual)
-                throw new InvalidOperationException("Removal of manually placed environment probes is not supported by this subsystem.");
-
-            if ((probe.placementType == AREnvironmentProbePlacementType.Automatic) && !desc.supportsRemovalOfAutomatic)
-                throw new InvalidOperationException("Removal of automatically placed environment probes is not supported by this subsystem.");
-
-            if (subsystem.RemoveEnvironmentProbe(probe.trackableId))
-            {
-                DestroyPendingTrackable(probe.trackableId);
-                return true;
             }
 
             return false;
@@ -384,7 +263,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Sets the current state of the <see cref="automaticPlacement"/> property to the
+        /// Sets the current state of the <see cref="automaticPlacementRequested"/> property to the
         /// <c>XREnvironmentProbeSubsystem</c>, if the subsystem exists and supports automatic placement.
         /// </summary>
         void SetAutomaticPlacementStateOnSubsystem()
@@ -396,7 +275,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Sets the current state of the <see cref="environmentTextureHDR"/> property to the
+        /// Sets the current state of the <see cref="environmentTextureHDRRequested"/> property to the
         /// <c>XREnvironmentProbeSubsystem</c>, if the subsystem exists and supports HDR environment textures.
         /// </summary>
         void SetEnvironmentTextureHDRStateOnSubsystem()

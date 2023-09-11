@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            XRAnchorSubsystemDescriptor.Create(new XRAnchorSubsystemDescriptor.Cinfo
+            XRAnchorSubsystemDescriptor.Register(new XRAnchorSubsystemDescriptor.Cinfo
             {
                 id = "Test-Anchor",
                 providerType = typeof(XRAnchorSubsystemImpl.TestProvider),

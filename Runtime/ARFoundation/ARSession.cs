@@ -41,17 +41,6 @@ namespace UnityEngine.XR.ARFoundation
         bool m_MatchFrameRate = true;
 
         /// <summary>
-        /// If <c>true</c>, the session will block execution until a new AR frame is available.
-        /// This property is obsolete. Use <see cref="matchFrameRateRequested"/> or <see cref="matchFrameRateEnabled"/> instead.
-        /// </summary>
-        [Obsolete("Use matchFrameRateRequested or matchFrameRateEnabled instead. (2020-01-28)")]
-        public bool matchFrameRate
-        {
-            get => m_MatchFrameRate;
-            set => matchFrameRateRequested = value;
-        }
-
-        /// <summary>
         /// If <c>true</c>, the underlying subsystem will attempt to synchronize the AR frame rate with Unity's.
         /// </summary>
         /// <seealso cref="matchFrameRateRequested"/>

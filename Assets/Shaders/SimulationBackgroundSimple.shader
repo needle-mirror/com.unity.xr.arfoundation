@@ -2,7 +2,8 @@
 {
     Properties
     {
-        _textureSingle ("TextureSingle", 2D) = "white" {}
+        _TextureSingle ("TextureSingle", 2D) = "white" {}
+        _TextureSingleDepth ("TextureSingleDepth", 2D) = "black" {}
     }
     SubShader
     {
@@ -49,7 +50,8 @@
                 float depth : SV_Depth;
             };
 
-            sampler2D _textureSingle;
+            sampler2D _TextureSingle;
+            sampler2D _TextureSingleDepth;
 
             v2f vert (appdata v)
             {
@@ -59,17 +61,29 @@
                 return o;
             }
 
+            uniform float _UnityCameraForwardScale;
+
+            float ConvertDistanceToDepth(float d)
+            {
+                d = _UnityCameraForwardScale > 0.0 ? _UnityCameraForwardScale * d : d;
+
+                float zBufferParamsW = 1.0 / _ProjectionParams.y;
+                float zBufferParamsY = _ProjectionParams.z * zBufferParamsW;
+                float zBufferParamsX = 1.0 - zBufferParamsY;
+                float zBufferParamsZ = zBufferParamsX * _ProjectionParams.w;
+
+                // Clip any distances smaller than the near clip plane, and compute the depth value from the distance.
+                return (d < _ProjectionParams.y) ? 1.0f : ((1.0 / zBufferParamsZ) * ((1.0 / d) - zBufferParamsW));
+            }
+
             fragment_output frag (v2f i)
             {
                 // sample the texture
-                fixed4 col = tex2D(_textureSingle, i.uv);
+                fixed4 col = tex2D(_TextureSingle, i.uv);
                 fragment_output o;
                 o.color = col;
-#if defined(UNITY_REVERSED_Z)
-                o.depth = 0.0f;
-#else
-                o.depth = 1.0f;
-#endif
+                float depth = tex2D(_TextureSingleDepth, i.uv).x;
+                o.depth = 1 - ConvertDistanceToDepth(depth);
                 return o;
             }
             ENDCG

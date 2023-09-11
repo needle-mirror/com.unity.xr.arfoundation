@@ -43,7 +43,7 @@ namespace UnityEngine.XR.ARFoundation
             var currentCamera = renderingData.cameraData.camera;
             if ((currentCamera != null) && (currentCamera.cameraType == CameraType.Game))
             {
-                ARCameraBackground cameraBackground = currentCamera.gameObject.GetComponent<ARCameraBackground>();
+                var cameraBackground = currentCamera.gameObject.GetComponent<ARCameraBackground>();
                 if ((cameraBackground != null) && cameraBackground.backgroundRenderingEnabled
                     && (cameraBackground.material != null)
                     && TrySelectRenderPassForBackgroundRenderMode(cameraBackground.currentRenderingMode, out var renderPass))
@@ -97,15 +97,12 @@ namespace UnityEngine.XR.ARFoundation
             const string k_CustomRenderPassName = "AR Background Pass (URP)";
 
             /// <summary>
-            /// The mesh for rendering the background material.
-            /// </summary>
-            protected Mesh m_BackgroundMesh;
-
-            /// <summary>
             /// The material used for rendering the device background using the camera video texture and potentially
             /// other device-specific properties and textures.
             /// </summary>
             Material m_BackgroundMaterial;
+
+            XRCameraBackgroundRenderingParams m_CameraBackgroundRenderingParams;
 
             /// <summary>
             /// Whether the culling mode should be inverted.
@@ -114,14 +111,15 @@ namespace UnityEngine.XR.ARFoundation
             bool m_InvertCulling;
 
             /// <summary>
-            /// The projection matrix used to render the <see cref="mesh"/>.
+            /// The default platform rendering parameters for the camera background.
             /// </summary>
-            protected abstract Matrix4x4 projectionMatrix { get; }
+            XRCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams
+                => ARCameraBackgroundRenderingUtils.SelectDefaultBackgroundRenderParametersForRenderMode(renderingMode);
 
             /// <summary>
-            /// The <see cref="Mesh"/> used in this custom render pass.
+            /// The rendering mode for the camera background.
             /// </summary>
-            protected abstract Mesh mesh { get; }
+            protected abstract XRCameraBackgroundRenderingMode renderingMode { get; }
 
             /// <summary>
             /// Set up the background render pass.
@@ -132,6 +130,10 @@ namespace UnityEngine.XR.ARFoundation
             public void Setup(ARCameraBackground cameraBackground, bool invertCulling)
             {
                 SetupInternal(cameraBackground);
+
+                if (!cameraBackground.TryGetRenderingParameters(out m_CameraBackgroundRenderingParams))
+                    m_CameraBackgroundRenderingParams = defaultCameraBackgroundRenderingParams;
+
                 m_BackgroundMaterial = cameraBackground.material;
                 m_InvertCulling = invertCulling;
             }
@@ -157,9 +159,12 @@ namespace UnityEngine.XR.ARFoundation
 
                 cmd.SetInvertCulling(m_InvertCulling);
 
-                cmd.SetViewProjectionMatrices(Matrix4x4.identity, projectionMatrix);
+                cmd.SetViewProjectionMatrices(Matrix4x4.identity, Matrix4x4.identity);
 
-                cmd.DrawMesh(mesh, Matrix4x4.identity, m_BackgroundMaterial);
+                cmd.DrawMesh(m_CameraBackgroundRenderingParams.backgroundGeometry,
+                             m_CameraBackgroundRenderingParams.backgroundTransform,
+                             m_BackgroundMaterial);
+
 
                 cmd.SetViewProjectionMatrices(renderingData.cameraData.camera.worldToCameraMatrix,
                                               renderingData.cameraData.camera.projectionMatrix);
@@ -202,11 +207,8 @@ namespace UnityEngine.XR.ARFoundation
                 ConfigureClear(ClearFlag.Depth, Color.clear);
             }
 
-            /// <inheritdoc />
-            protected override Matrix4x4 projectionMatrix => ARCameraBackgroundRenderingUtils.beforeOpaquesOrthoProjection;
-
-            /// <inheritdoc />
-            protected override Mesh mesh => ARCameraBackgroundRenderingUtils.fullScreenNearClipMesh;
+            protected override XRCameraBackgroundRenderingMode renderingMode
+                => XRCameraBackgroundRenderingMode.BeforeOpaques;
         }
 
         /// <summary>
@@ -243,11 +245,8 @@ namespace UnityEngine.XR.ARFoundation
                 }
             }
 
-            /// <inheritdoc />
-            protected override Matrix4x4 projectionMatrix => ARCameraBackgroundRenderingUtils.afterOpaquesOrthoProjection;
-
-            /// <inheritdoc />
-            protected override Mesh mesh => ARCameraBackgroundRenderingUtils.fullScreenFarClipMesh;
+            protected override XRCameraBackgroundRenderingMode renderingMode
+                => XRCameraBackgroundRenderingMode.AfterOpaques;
         }
 #endif // MODULE_URP_ENABLED
     }

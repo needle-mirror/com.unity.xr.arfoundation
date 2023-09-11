@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get or set the maximum number of faces to track simultaneously.
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the requested maximum face count is less than
-        /// one. To stop face tracking, call <see cref="XRSubsystem{TSubsystemDescriptor}.Stop()"/>.</exception>
+        /// one. To stop face tracking, call <see cref="SubsystemWithProvider.Stop()"/>.</exception>
         /// <exception cref="System.NotSupportedException">Thrown if the requested maximum face count is greater than
         /// one but the subsystem does not support tracking multiple faces.</exception>
         public int requestedMaximumFaceCount

@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// register one of these from each depth data provider.
     /// </remarks>
     /// <seealso cref="XRDepthSubsystem"/>
-    [Obsolete("XRDepthSubsystemDescriptor has been deprecated. Use XRPointCloudSubsystemDescriptor instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor", true)]
+    [Obsolete("XRDepthSubsystemDescriptor has been deprecated. Use XRPointCloudSubsystemDescriptor instead.")]
     public class XRDepthSubsystemDescriptor : SubsystemDescriptorWithProvider<XRDepthSubsystem, XRDepthSubsystem.Provider>
     {
         /// <summary>

@@ -23,7 +23,7 @@ namespace UnityEngine.XR.ARSubsystems
         public abstract class Provider : SubsystemProvider<XRObjectTrackingSubsystem>
         {
             /// <summary>
-            /// Get the changes to <see cref="XRTrackedObject"/>s (added, updated, and removed) 
+            /// Get the changes to <see cref="XRTrackedObject"/>s (added, updated, and removed)
             /// since the last call to this method. This is typically invoked once per frame.
             /// </summary>
             /// <param name="template">A 'template' <see cref="XRTrackedObject"/>. <see cref="XRTrackedObject"/>
@@ -123,13 +123,20 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="id">A unique string identifying the subsystem implementation.</param>
         /// <param name="capabilities">Describes the capabilities of the implementation.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="id"/> is <c>null</c>.</exception>
+        [Obsolete("XRObjectTrackingSubsystem.Register<T>(string id, XRObjectTrackingSubsystemDescriptor.Capabilities capabilities) has been deprecated in AR Foundation version 6.0. Instead use XRObjectTrackingSubsystemDescriptor.Register(XRObjectTrackingSubsystemDescriptor.Cinfo cinfo)", false)]
         public static void Register<T>(string id, XRObjectTrackingSubsystemDescriptor.Capabilities capabilities)
             where T : XRObjectTrackingSubsystem.Provider
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            SubsystemDescriptorStore.RegisterDescriptor(new XRObjectTrackingSubsystemDescriptor(id, typeof(T), null, capabilities));
+            XRObjectTrackingSubsystemDescriptor.Register(
+                new XRObjectTrackingSubsystemDescriptor.Cinfo()
+                {
+                    id = id,
+                    providerType = typeof(T),
+                    subsystemTypeOverride = null
+                });
         }
 
         /// <summary>
@@ -141,6 +148,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="id">A unique string identifying the subsystem implementation.</param>
         /// <param name="capabilities">Describes the capabilities of the implementation.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="id"/> is <c>null</c>.</exception>
+        [Obsolete("XRObjectTrackingSubsystem.Register<TProvider, TSubsystemOverride>(string id, XRObjectTrackingSubsystemDescriptor.Capabilities capabilities) has been deprecated in AR Foundation version 6.0. Instead use XRObjectTrackingSubsystemDescriptor.Register(XRObjectTrackingSubsystemDescriptor.Cinfo cinfo)", false)]
         public static void Register<TProvider, TSubsystemOverride>(string id, XRObjectTrackingSubsystemDescriptor.Capabilities capabilities)
             where TProvider : XRObjectTrackingSubsystem.Provider
             where TSubsystemOverride : XRObjectTrackingSubsystem
@@ -148,7 +156,13 @@ namespace UnityEngine.XR.ARSubsystems
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            SubsystemDescriptorStore.RegisterDescriptor(new XRObjectTrackingSubsystemDescriptor(id, typeof(TProvider), typeof(TSubsystemOverride), capabilities));
+            XRObjectTrackingSubsystemDescriptor.Register(
+                new XRObjectTrackingSubsystemDescriptor.Cinfo()
+                {
+                    id = id,
+                    providerType = typeof(TProvider),
+                    subsystemTypeOverride = typeof(TSubsystemOverride)
+                });
         }
 
         XRReferenceObjectLibrary m_Library;

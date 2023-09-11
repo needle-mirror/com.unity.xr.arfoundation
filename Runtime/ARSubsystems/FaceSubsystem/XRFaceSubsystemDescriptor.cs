@@ -48,6 +48,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// During <c>InitializeOnLoad</c>, the Face Tracking data provider should create a descriptor using
     /// the parameters here to specify which of the XRFaceSubsystem features it supports.
     /// </remarks>
+    [Obsolete("FaceSubsystemParams has been deprecated in AR Foundation version 6.0. Use XRFaceSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor/Cinfo", false)]
     public struct FaceSubsystemParams : IEquatable<FaceSubsystemParams>
     {
         /// <summary>
@@ -70,12 +71,6 @@ namespace UnityEngine.XR.ARSubsystems
         /// The type of the subsystem to use for instantiation. If null, <c>XRFaceSubsystem</c> will be instantiated.
         /// </value>
         public Type subsystemTypeOverride { get; set; }
-
-        /// <summary>
-        /// The concrete <c>Type</c> which will be instantiated if <c>Create</c> is called on this subsystem descriptor.
-        /// </summary>
-        [Obsolete("XRFaceSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
-        public Type subsystemImplementationType { get; set; }
 
         /// <summary>
         /// Whether the subsystem supports getting a pose for the face.
@@ -233,23 +228,11 @@ namespace UnityEngine.XR.ARSubsystems
     /// The descriptor of the <see cref="XRFaceSubsystem"/> that shows which face tracking features are available on that XRSubsystem.
     /// </summary>
     /// <remarks>
-    /// Use the <c>Create</c> factory method along with <see cref="FaceSubsystemParams"/> struct to construct and
+    /// Use the <c>Create</c> factory method along with <see cref="XRFaceSubsystemDescriptor.Cinfo"/> struct to construct and
     /// register one of these from each face tracking data provider.
     /// </remarks>
     public class XRFaceSubsystemDescriptor : SubsystemDescriptorWithProvider<XRFaceSubsystem, XRFaceSubsystem.Provider>
     {
-        XRFaceSubsystemDescriptor(FaceSubsystemParams descriptorParams)
-        {
-            id = descriptorParams.id;
-            providerType = descriptorParams.providerType;
-            subsystemTypeOverride = descriptorParams.subsystemTypeOverride;
-            supportsFacePose = descriptorParams.supportsFacePose;
-            supportsFaceMeshVerticesAndIndices = descriptorParams.supportsFaceMeshVerticesAndIndices;
-            supportsFaceMeshUVs = descriptorParams.supportsFaceMeshUVs;
-            supportsFaceMeshNormals = descriptorParams.supportsFaceMeshNormals;
-            supportsEyeTracking = descriptorParams.supportsEyeTracking;
-        }
-
         /// <summary>
         /// Whether the subsystem can produce a <c>Pose</c> for each detected face.
         /// </summary>
@@ -276,13 +259,227 @@ namespace UnityEngine.XR.ARSubsystems
         public bool supportsEyeTracking { get; }
 
         /// <summary>
+        /// This struct is an initializer for the creation of a <see cref="XRFaceSubsystemDescriptor"/>.
+        /// </summary>
+        /// <remarks>
+        /// During <c>InitializeOnLoad</c>, the Face Tracking data provider should create a descriptor using
+        /// the parameters here to specify which of the XRFaceSubsystem features it supports.
+        /// </remarks>
+        public struct Cinfo : IEquatable<Cinfo>
+        {
+            /// <summary>
+            /// The string identifier for a specific implementation.
+            /// </summary>
+            public string id { get; set; }
+
+            /// <summary>
+            /// Specifies the provider implementation type to use for instantiation.
+            /// </summary>
+            /// <value>
+            /// The provider implementation type to use for instantiation.
+            /// </value>
+            public Type providerType { get; set; }
+
+            /// <summary>
+            /// Specifies the <c>XRFaceSubsystem</c>-derived type that forwards casted calls to its provider.
+            /// </summary>
+            /// <value>
+            /// The type of the subsystem to use for instantiation. If null, <c>XRFaceSubsystem</c> will be instantiated.
+            /// </value>
+            public Type subsystemTypeOverride { get; set; }
+
+            /// <summary>
+            /// Whether the subsystem supports getting a pose for the face.
+            /// </summary>
+            public bool supportsFacePose
+            {
+                get => (m_Capabilities & FaceSubsystemCapabilities.Pose) != 0;
+                set
+                {
+                    if (value)
+                    {
+                        m_Capabilities |= FaceSubsystemCapabilities.Pose;
+                    }
+                    else
+                    {
+                        m_Capabilities &= ~FaceSubsystemCapabilities.Pose;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Whether the subsystem supports getting vertices and triangle indices describing a face mesh.
+            /// </summary>
+            public bool supportsFaceMeshVerticesAndIndices
+            {
+                get => (m_Capabilities & FaceSubsystemCapabilities.MeshVerticesAndIndices) != 0;
+                set
+                {
+                    if (value)
+                    {
+                        m_Capabilities |= FaceSubsystemCapabilities.MeshVerticesAndIndices;
+                    }
+                    else
+                    {
+                        m_Capabilities &= ~FaceSubsystemCapabilities.MeshVerticesAndIndices;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Whether the subsystem supports texture coordinates for the face mesh.
+            /// </summary>
+            public bool supportsFaceMeshUVs
+            {
+                get => (m_Capabilities & FaceSubsystemCapabilities.MeshUVs) != 0;
+                set
+                {
+                    if (value)
+                    {
+                        m_Capabilities |= FaceSubsystemCapabilities.MeshUVs;
+                    }
+                    else
+                    {
+                        m_Capabilities &= ~FaceSubsystemCapabilities.MeshUVs;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Whether the subsystem supports normals for the face mesh.
+            /// </summary>
+            public bool supportsFaceMeshNormals
+            {
+                get => (m_Capabilities & FaceSubsystemCapabilities.MeshNormals) != 0;
+                set
+                {
+                    if (value)
+                    {
+                        m_Capabilities |= FaceSubsystemCapabilities.MeshNormals;
+                    }
+                    else
+                    {
+                        m_Capabilities &= ~FaceSubsystemCapabilities.MeshNormals;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Whether the subsystem supports eye tracking for each detected face.
+            /// </summary>
+            public bool supportsEyeTracking
+            {
+                get => (m_Capabilities & FaceSubsystemCapabilities.EyeTracking) != 0;
+                set
+                {
+                    if (value)
+                    {
+                        m_Capabilities |= FaceSubsystemCapabilities.EyeTracking;
+                    }
+                    else
+                    {
+                        m_Capabilities &= FaceSubsystemCapabilities.EyeTracking;
+                    }
+                }
+            }
+
+            FaceSubsystemCapabilities m_Capabilities;
+
+            /// <summary>
+            /// Tests for equality.
+            /// </summary>
+            /// <param name="other">The other <see cref="Cinfo"/> to compare against.</param>
+            /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="Cinfo"/>, otherwise false.</returns>
+            public bool Equals(Cinfo other)
+            {
+                return
+                    m_Capabilities == other.m_Capabilities &&
+                    ReferenceEquals(id, other.id) &&
+                    ReferenceEquals(providerType, other.providerType) &&
+                    ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride);
+            }
+
+            /// <summary>
+            /// Tests for equality.
+            /// </summary>
+            /// <param name="obj">The `object` to compare against.</param>
+            /// <returns>`True` if <paramref name="obj"/> is of type <see cref="Cinfo"/> and
+            /// <see cref="Equals(Cinfo)"/> also returns `true`; otherwise `false`.</returns>
+            public override bool Equals(object obj) => (obj is Cinfo) && Equals((Cinfo)obj);
+
+            /// <summary>
+            /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
+            /// </summary>
+            /// <returns>A hash code generated from this object's fields.</returns>
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    int hashCode = HashCodeUtil.ReferenceHash(id);
+                    hashCode = 486187739 * hashCode + HashCodeUtil.ReferenceHash(providerType);
+                    hashCode = 486187739 * hashCode + HashCodeUtil.ReferenceHash(subsystemTypeOverride);
+                    hashCode = 486187739 * hashCode + ((int)m_Capabilities).GetHashCode();
+                    return hashCode;
+                }
+            }
+
+            /// <summary>
+            /// Tests for equality. Same as <see cref="Equals(Cinfo)"/>.
+            /// </summary>
+            /// <param name="lhs">The left-hand side of the comparison.</param>
+            /// <param name="rhs">The right-hand side of the comparison.</param>
+            /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+            public static bool operator ==(Cinfo lhs, Cinfo rhs) => lhs.Equals(rhs);
+
+            /// <summary>
+            /// Tests for inequality. Same as `!`<see cref="Equals(Cinfo)"/>.
+            /// </summary>
+            /// <param name="lhs">The left-hand side of the comparison.</param>
+            /// <param name="rhs">The right-hand side of the comparison.</param>
+            /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+            public static bool operator !=(Cinfo lhs, Cinfo rhs) => lhs.Equals(rhs);
+        }
+
+        /// <summary>
         /// Creates a subsystem descriptor. Used to register an implementation of the <see cref="XRFaceSubsystem"/>.
         /// </summary>
         /// <param name="descriptorParams">Parameters describing the <see cref="XRFaceSubsystem"/>.</param>
+        [Obsolete("Create(FaceSubsystemParams) has been deprecated in AR Foundation version 6.0. Use Register(XRFaceSubsystemDescriptor.Cinfo) instead (UnityUpgradable) -> Register(*)", false)]   
         public static void Create(FaceSubsystemParams descriptorParams)
         {
-            var descriptor = new XRFaceSubsystemDescriptor(descriptorParams);
-            SubsystemDescriptorStore.RegisterDescriptor(descriptor);
+            var FaceSubsystemInfo = new XRFaceSubsystemDescriptor.Cinfo()
+            {
+                id = descriptorParams.id,
+                providerType = descriptorParams.providerType,
+                subsystemTypeOverride = descriptorParams.subsystemTypeOverride,
+                supportsFacePose = descriptorParams.supportsFacePose,
+                supportsFaceMeshVerticesAndIndices = descriptorParams.supportsFaceMeshVerticesAndIndices,
+                supportsFaceMeshUVs = descriptorParams.supportsFaceMeshUVs,
+                supportsFaceMeshNormals = descriptorParams.supportsFaceMeshNormals,
+                supportsEyeTracking = descriptorParams.supportsEyeTracking
+            };
+            Register(FaceSubsystemInfo);
+        }
+
+        /// <summary>
+        /// Creates a subsystem descriptor. Used to register an implementation of the <see cref="XRFaceSubsystem"/>.
+        /// </summary>
+        /// <param name="cinfo">Parameters describing the <see cref="XRFaceSubsystem"/>.</param>
+        public static void Register(Cinfo cinfo)
+        {
+            SubsystemDescriptorStore.RegisterDescriptor(new XRFaceSubsystemDescriptor(cinfo));
+        }
+
+        XRFaceSubsystemDescriptor(Cinfo descriptorParams)
+        {
+            id = descriptorParams.id;
+            providerType = descriptorParams.providerType;
+            subsystemTypeOverride = descriptorParams.subsystemTypeOverride;
+            supportsFacePose = descriptorParams.supportsFacePose;
+            supportsFaceMeshVerticesAndIndices = descriptorParams.supportsFaceMeshVerticesAndIndices;
+            supportsFaceMeshUVs = descriptorParams.supportsFaceMeshUVs;
+            supportsFaceMeshNormals = descriptorParams.supportsFaceMeshNormals;
+            supportsEyeTracking = descriptorParams.supportsEyeTracking;
         }
     }
 }

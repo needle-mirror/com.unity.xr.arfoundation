@@ -38,8 +38,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="inputDeps">Input job dependencies (optional).</param>
         /// <returns>A [JobHandle](xref:Unity.Jobs.JobHandle) which can be used to chain together multiple tasks or to
         ///     query for completion. Can be safely discarded.</returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="library"/> is `null`.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="library"/> is `null`.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="ARSession.state"/> hasn't reached the ready state.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
         [Obsolete("Use " + nameof(ScheduleAddImageWithValidationJob) + " instead. (2020-10-20)")]
         public static JobHandle ScheduleAddImageJob(
@@ -70,8 +71,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns><para>Returns an <see cref="AddReferenceImageJobState"/> that you can use to query for job completion and
         /// whether the image was successfully added.</para>
         /// <para>If image validity can be determined, invalid images will be not be added.</para></returns>
-        /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="library"/> is <see langword="null"/>.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="library"/> is <see langword="null"/>.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is <see langword="null"/>.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="ARSession.state"/> hasn't reached the ready state.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
         public static AddReferenceImageJobState ScheduleAddImageWithValidationJob(
             this MutableRuntimeReferenceImageLibrary library,
@@ -80,6 +82,9 @@ namespace UnityEngine.XR.ARFoundation
             float? widthInMeters,
             JobHandle inputDeps = default)
         {
+            if (ARSession.state < ARSessionState.Ready)
+                throw new InvalidOperationException("The ARSession has not reached the ready state. Ensure that AR is supported and running before you call this method.");
+
             if (ReferenceEquals(library, null))
                 throw new ArgumentNullException(nameof(library));
 

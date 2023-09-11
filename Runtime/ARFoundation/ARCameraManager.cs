@@ -41,7 +41,7 @@ namespace UnityEngine.XR.ARFoundation
         // If a user has an old project from 2019 lying around, OnAfterDeserialize will auto-upgrade them to the new API.
         LightEstimationMode m_LightEstimationMode = LightEstimationMode.Disabled;
 #pragma warning restore CS0618
-        
+
         [SerializeField]
         [Tooltip("When enabled, auto focus will be requested on the (physical) AR camera.")]
         bool m_AutoFocus = true;
@@ -63,22 +63,38 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get or set the focus mode. This method is obsolete. The getter uses
-        /// <see cref="autoFocusEnabled"/> and the setter uses <see cref="autoFocusRequested"/>.
-        /// </summary>
-        [Obsolete("Use autoFocusEnabled or autoFocusRequested instead. (2019-12-13)")]
-        public CameraFocusMode focusMode
-        {
-            get => autoFocusEnabled ? CameraFocusMode.Auto : CameraFocusMode.Fixed;
-            set => autoFocusRequested = (value == CameraFocusMode.Auto);
-        }
-
-        /// <summary>
         /// Get the current focus mode in use by the subsystem.
         /// </summary>
         /// <value><see langword="true"/> if auto focus is enabled. <see langword="false"/> if fixed focus is enabled
         /// or if there is no loaded <see cref="XRCameraSubsystem"/>.</value>
         public bool autoFocusEnabled => subsystem?.autoFocusEnabled ?? false;
+
+        [SerializeField]
+        [Tooltip("When enabled, Image Stabilization will be requested on the AR camera.")]
+        bool m_ImageStabilization = false;
+
+        /// <summary>
+        /// Get or set whether Image Stabilization is requested.
+        /// </summary>
+        public bool imageStabilizationRequested
+        {
+            get => subsystem?.imageStabilizationRequested ?? m_ImageStabilization;
+            set
+            {
+                m_ImageStabilization = value;
+                if (enabled && subsystem != null)
+                {
+                    subsystem.imageStabilizationRequested = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get whether Image Stabilization in enabled.
+        /// </summary>
+        /// <value><see langword="true"/> if EIS is enabled. <see langword="false"/> if EIS is not enabled
+        /// or if there is no loaded <see cref="XRCameraSubsystem"/>.</value>
+        public bool imageStabilizationEnabled => subsystem?.imageStabilizationEnabled ?? false;
 
         [SerializeField]
         [Tooltip("The light estimation mode for the AR camera.")]
@@ -106,18 +122,6 @@ namespace UnityEngine.XR.ARFoundation
         /// if there is no subsystem.
         /// </summary>
         public LightEstimation currentLightEstimation => subsystem?.currentLightEstimation.ToLightEstimation() ?? LightEstimation.None;
-
-        /// <summary>
-        /// Get or set the light estimation mode. This method is obsolete. The getter
-        /// uses <see cref="currentLightEstimation"/> and the setter uses
-        /// <see cref="requestedLightEstimation"/>.
-        /// </summary>
-        [Obsolete("Use currentLightEstimation or requestedLightEstimation instead. (2019-12-13)")]
-        public LightEstimationMode lightEstimationMode
-        {
-            get => m_LightEstimation.ToLightEstimationMode();
-            set => requestedLightEstimation = value.ToLightEstimation();
-        }
 
         [SerializeField]
         [Tooltip("The requested camera facing direction")]
@@ -270,18 +274,6 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
-        /// to utilities to convert to RGB and Grayscale formats. This method is deprecated. Use
-        /// <see cref="TryAcquireLatestCpuImage"/> instead.
-        /// </summary>
-        /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <see langword="true"/>.</param>
-        /// <returns><see langword="true"/> if the latest camera image was successfully acquired. Otherwise,
-        /// <see langword="false"/>.</returns>
-        /// <remarks>The `XRCpuImage` must be disposed to avoid resource leaks.</remarks>
-        [Obsolete("Use TryAcquireLatestCpuImage instead. (2020-05-19")]
-        public bool TryGetLatestImage(out XRCpuImage cpuImage) => TryAcquireLatestCpuImage(out cpuImage);
-
-        /// <summary>
-        /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as
         /// to utilities to convert to RGB and Grayscale formats.
         /// </summary>
         /// <param name="cpuImage">A valid `XRCpuImage` if this method returns `true`.</param>
@@ -309,6 +301,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             subsystem.requestedCameraBackgroundRenderingMode = m_RenderMode.ToXRSupportedCameraBackgroundRenderingMode();
             subsystem.autoFocusRequested = m_AutoFocus;
+            subsystem.imageStabilizationRequested = m_ImageStabilization;
             subsystem.requestedLightEstimation = m_LightEstimation.ToFeature();
             subsystem.requestedCamera = m_FacingDirection.ToFeature();
         }
@@ -335,6 +328,7 @@ namespace UnityEngine.XR.ARFoundation
             m_FacingDirection = subsystem.requestedCamera.ToCameraFacingDirection();
             m_LightEstimation = subsystem.requestedLightEstimation.ToLightEstimation();
             m_AutoFocus = subsystem.autoFocusRequested;
+            m_ImageStabilization = subsystem.imageStabilizationRequested;
 
             var cameraParams = new XRCameraParams
             {

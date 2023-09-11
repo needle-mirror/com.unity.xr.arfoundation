@@ -16,14 +16,6 @@ namespace UnityEngine.XR.ARFoundation
     public class ARHumanBody : ARTrackable<XRHumanBody, ARHumanBody>, IDisposable
     {
         /// <summary>
-        /// The pose for the human body origin.
-        /// </summary>
-        /// <value>
-        /// The pose for the human body origin.
-        /// </value>
-        public Pose pose => sessionRelativeData.pose;
-
-        /// <summary>
         /// The scale factor that relates the implementation's default body height to the estimated height.
         /// </summary>
         /// <value>

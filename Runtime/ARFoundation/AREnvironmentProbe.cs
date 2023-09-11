@@ -78,7 +78,9 @@ namespace UnityEngine.XR.ARFoundation
 #endif
 
         /// <summary>
-        /// The placement type (for example, manual or automatic). If manual, this probe was created by <see cref="AREnvironmentProbeManager.AddEnvironmentProbe(Pose, Vector3, Vector3)"/>.
+        /// The placement type (for example, manual or automatic) for this `AREnvironmentProbe`.
+        /// If manual, this probe was created by instantiating a <see cref="GameObject"/> with the <see cref="AREnvironmentProbe"/> component
+        /// or by adding an `AREnvironmentProbe` with <see cref="GameObject.AddComponent{T}"/>.
         /// </summary>
         public AREnvironmentProbePlacementType placementType { get; internal set; }
 
@@ -91,14 +93,6 @@ namespace UnityEngine.XR.ARFoundation
         /// The extents of the environment probe. This is always half the <see cref="size"/>.
         /// </summary>
         public Vector3 extents => size * .5f;
-
-        /// <summary>
-        /// A native pointer associated with this environment probe.
-        /// The data pointed to by this pointer is implementation defined.
-        /// While the lifetime is also implementation defined, it should be valid at
-        /// least until the next frame.
-        /// </summary>
-        public IntPtr nativePtr => sessionRelativeData.nativePtr;
 
         /// <summary>
         /// The <c>XRTextureDescriptor</c> associated with this environment probe. This is used to generate the cubemap texture on the reflection probe component.

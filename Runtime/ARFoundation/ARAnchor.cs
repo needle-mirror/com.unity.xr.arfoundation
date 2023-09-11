@@ -17,16 +17,6 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARAnchor : ARTrackable<XRAnchor, ARAnchor>
     {
         /// <summary>
-        /// Get the native pointer associated with this <see cref="ARAnchor"/>.
-        /// </summary>
-        /// <remarks>
-        /// The data pointed to by this pointer is implementation defined. While its
-        /// lifetime is also implementation defined, it should be valid until at least
-        /// the next <see cref="ARSession"/> update.
-        /// </remarks>
-        public IntPtr nativePtr => sessionRelativeData.nativePtr;
-
-        /// <summary>
         /// Get the session identifier from which this anchor originated.
         /// </summary>
         public Guid sessionId => sessionRelativeData.sessionId;
@@ -35,19 +25,14 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (ARAnchorManager.instance is ARAnchorManager manager)
             {
-                manager.TryAddAnchor(this);
+                if (sessionRelativeData.trackableId == TrackableId.invalidId && !manager.TryAddAnchor(this))
+                {
+                    gameObject.SetActive(false);
+                }
             }
             else
             {
                 pending = true;
-            }
-        }
-
-        void Update()
-        {
-            if (trackableId.Equals(TrackableId.invalidId) && ARAnchorManager.instance is ARAnchorManager manager)
-            {
-                manager.TryAddAnchor(this);
             }
         }
 

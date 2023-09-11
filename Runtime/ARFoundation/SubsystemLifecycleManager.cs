@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine.XR.Management;
 using UnityEngine.SubsystemsImplementation;
+using UnityEngine.XR.ARFoundation.InternalUtils;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -33,19 +33,11 @@ namespace UnityEngine.XR.ARFoundation
         /// Returns the active <c>TSubsystem</c> instance if present, otherwise returns null.
         /// </summary>
         /// <returns>The active subsystem instance, or `null` if there isn't one.</returns>
-        protected TSubsystem GetActiveSubsystemInstance()
+        protected static TSubsystem GetActiveSubsystemInstance()
         {
-            TSubsystem activeSubsystem = null;
+            var success = SubsystemUtils.TryGetLoadedSubsystem(out TSubsystem activeSubsystem);
 
-            // Query the currently active loader for the created subsystem, if one exists.
-            if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
-            {
-                XRLoader loader = XRGeneralSettings.Instance.Manager.activeLoader;
-                if (loader != null)
-                    activeSubsystem = loader.GetLoadedSubsystem<TSubsystem>();
-            }
-
-            if (activeSubsystem == null)
+            if (!success)
                 Debug.LogWarningFormat($"No active {typeof(TSubsystem).FullName} is available. Please ensure that a " +
                                        "valid loader configuration exists in the XR project settings.");
 

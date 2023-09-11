@@ -89,17 +89,6 @@ namespace UnityEngine.XR.ARFoundation
         public Plane infinitePlane => new Plane(normal, transform.position);
 
         /// <summary>
-        /// Get a native pointer associated with this plane.
-        /// </summary>
-        /// <remarks>
-        /// The data pointed to by this member is implementation defined.
-        /// The lifetime of the pointed to object is also
-        /// implementation defined, but should be valid at least until the next
-        /// <see cref="ARSession"/> update.
-        /// </remarks>
-        public IntPtr nativePtr => sessionRelativeData.nativePtr;
-
-        /// <summary>
         /// The plane's boundary points, in plane space, that is, relative to this <see cref="ARPlane"/>'s
         /// local position and rotation.
         /// </summary>

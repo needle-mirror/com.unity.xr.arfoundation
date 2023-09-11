@@ -100,19 +100,6 @@ namespace UnityEngine.XR.ARFoundation
         [Tooltip("The maximum number of moving images to track in realtime. Not all implementations support this feature.")]
         int m_MaxNumberOfMovingImages;
 
-        /// <summary>
-        /// The maximum number of moving images to track in real time.
-        /// This property is obsolete.
-        /// Use <see cref="requestedMaxNumberOfMovingImages"/>
-        /// or  <see cref="currentMaxNumberOfMovingImages"/> instead.
-        /// </summary>
-        [Obsolete("Use requestedMaxNumberOfMovingImages or currentMaxNumberOfMovingImages instead. (2020-01-16)")]
-        public int maxNumberOfMovingImages
-        {
-            get => m_MaxNumberOfMovingImages;
-            set => requestedMaxNumberOfMovingImages = value;
-        }
-
         bool supportsMovingImages => descriptor?.supportsMovingImages == true;
 
         /// <summary>

@@ -69,14 +69,6 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get the index of <paramref name="referenceObject"/> in the object library.
         /// </summary>
         /// <param name="referenceObject">The <see cref="XRReferenceObject"/> to find.</param>
-        /// <returns>The zero-based index of the <paramref name="referenceObject"/>, or -1 if not found.</returns>
-        [Obsolete("Use IndexOf instead (deprecated 2021-02-01).")]
-        public int indexOf(XRReferenceObject referenceObject) => IndexOf(referenceObject);
-
-        /// <summary>
-        /// Get the index of <paramref name="referenceObject"/> in the object library.
-        /// </summary>
-        /// <param name="referenceObject">The <see cref="XRReferenceObject"/> to find.</param>
         /// <returns>Returns the zero-based index of the <paramref name="referenceObject"/> if found. Returns -1 if not
         ///     found.</returns>
         public int IndexOf(XRReferenceObject referenceObject) => m_ReferenceObjects.IndexOf(referenceObject);

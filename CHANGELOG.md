@@ -8,6 +8,113 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0-pre.3] - 2023-09-11
+
+### Added
+
+- Added [XRObjectTrackingSubsystemDescriptor.Register(XRObjectTrackingSubsystemDescriptor.Cinfo)](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystemDescriptor.Register(UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystemDescriptor.Cinfo)) to replace the deprecated register methods present in `XRObjectTrackingSubsystem`
+- Added [XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo)](UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor.Register(UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor.Cinfo)) to replace the deprecated register methods present in `XRParticipantSubsystem`
+- Added support for asynchronous anchor creation. Refer to [What's New](xref:arfoundation-whats-new#asynchronous-tryaddanchor-api) for more information.
+- Added support for Image Stabilization, which helps stabilize shaky video from the camera.
+- Added support for Occlusion to XR Simulation.
+- Added the following subsystem descriptor registration methods for consistency with other subsystem descriptors:
+  - [XRCameraSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.Register)
+  - [XREnvironmentProbeSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor.Register)
+  - [XRHumanBodySubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRHumanBodySubsystemDescriptor.Register)
+  - [XROcclusionSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.Register)
+
+### Changed
+
+- Changed [ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageWithValidationJob) to check if the `ARSession.state` has reached the ready state before scheduling the add image operation.
+- Changed `ARTrackable` to now implement the `ITrackable` interface, enabling generic API designs when dealing with trackables.
+- Changed `XRPlaneSubsystem.Provider.requestedPlaneDetectionMode` to `abstract` from `virtual`.
+- Changed `Promise<T>.OnKeepWaiting()` to `virtual` instead of `abstract`.
+- Changed `SubsystemLifecycleManager.GetActiveSubsystemInstance()` to `protected static` from `protected`, as it does not use any instance members of the `SubsystemLifecycleManager` class. 
+- Changed the life cycle behavior of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) in the event that adding the anchor to the `XRAnchorSubsystem` failed. Instead of retrying the add operation every frame, the `ARAnchor` component now disables itself after the first failed attempt.
+
+### Deprecated
+
+- Deprecated the structs `XRObjectTrackingSubsystemDescriptor.Capabilities` and `XRParticipantSubsystemDescriptor.Capabilities`.
+- Deprecated the `XRObjectTrackingSubsystemDescriptor.Register` and `XRParticipantSubsystemDescriptor.Register` methods that use the now-deprecated `Capabilities` struct.
+- Deprecated and replaced the following APIs for consistency with other subsystems:
+  - `XRCameraSubsystemCinfo` to `XRCameraSubsystemDescriptor.Cinfo`
+  - `FaceSubsystemParams` to `XRFaceSubsystemDescriptor.Cinfo`
+  - `XRHumanBodySubsystemCinfo` to `XRHumanBodySubsystemDescriptor.Cinfo`
+  - `XREnvironmentProbeSubsystemCinfo` to `XREnvironmentProbeSubsystemDescriptor.Cinfo`
+  - `XROcclusionSubsystemCinfo` to `XROcclusionSubsystemDescriptor.Cinfo`
+  - `XRAnchorSubsystemDescriptor.Create` to `XRAnchorSubsystemDescriptor.Register`
+  - `XRFaceSubsystemDescriptor.Create` to `XRFaceSubsystemDescriptor.Register`
+  - `XRImageTrackingSubsystemDescriptor.Create` to `XRImageTrackingSubsystemDescriptor.Register`
+  - `XRPlaneSubsystemDescriptor.Create` to `XRPlaneSubsystemDescriptor.Register`
+  - `XRPointCloudSubsystemDescriptor.RegisterDescriptor` to `XRPointCloudSubsystemDescriptor.Register`
+  - `XRRaycastSubsystemDescriptor.RegisterDescriptor` to `XRRaycastSubsystemDescriptor.Register`
+  - `XRSessionSubsystemDescriptor.RegisterDescriptor` to `XRSessionSubsystemDescriptor.Register`
+  - `XRCameraSubsystem.Register` to `XRCameraSubsystemDescriptor.Register`
+  - `XREnvironmentProbeSubsystem.Register` to `XREnvironmentProbeSubsystemDescriptor.Register`
+  - `XRHumanBodySubsystem.Register` to `XRHumanBodySubsystemDescriptor.Register`
+  - `XROcclusionSubsystem.Register` to `XROcclusionSubsystemDescriptor.Register`
+
+### Removed
+
+- Removed the `Description` attribute from values of several enums, as the attribute was unused:
+  - `XRCameraFrameProperties`
+  - `AREnvironmentProbePlacementType`
+  - `CameraFocusMode`
+  - `LightEstimationMode`
+  - `EnvironmentDepthMode`
+  - `HumanSegmentationDepthMode`
+  - `HumanSegmentationStencilMode`
+  - `OcclusionPreferenceMode`
+- Removed the following deprecated APIs:
+  - `ARAnchorManager.AddAnchor` method
+  - `ARAnchorManager.RemoveAnchor` method
+  - `ARCamerManager.focusMode` property
+  - `ARCamerManager.lightEstimationMode` property
+  - `ARCamerManager.TryGetLatestImage` method
+  - `AREnvironmentProbeManager.automaticPlacement` property
+  - `AREnvironmentProbeManager.environmentTextureHDR` property
+  - `AREnvironmentProbeManager.AddEnvironmentProbe` method
+  - `AREnvironmentProbeManager.RemoveEnvironmentProbe` method
+  - `ARFaceManager.maximumFaceCount` property
+  - `ARHumanBodyManager.humanBodyPose2DEstimationEnabled` property
+  - `ARHumanBodyManager.humanBodyPose3DEstimationEnabled` property
+  - `ARHumanBodyManager.humanBodyPose3DScaleEstimationEnabled` property
+  - `AROcclusionManager.humanSegmentationStencilMode` property
+  - `AROcclusionManager.humanSegmentationDepthMode` property
+  - `ARPlaneManager.detectionMode` property
+  - `ARSession.matchFrameRate` property
+  - `ARTrackableManager.sessionOrigin` property
+  - `ARTrackedImageManager.maxNumberOfMovingImages` property
+  - `MutableRuntimeReferenceImageLibrary.ScheduleAddImageJob` method
+  - `XRAnchorSubsystemDescriptor.Cinfo.subsystemImplementationType` property
+  - `XRCameraSubsystem.TryGetLatestImage` method
+  - `XRCameraSubsystemCinfo.implementationType` property
+  - `XREnvironmentProbeSubsystemCinfo.implmentationType` property
+  - `FaceSubsystemParams.subsystemImplementationType` property
+  - `XRHumanBodySubsystemCinfo.implementationType` property
+  - `XRImageTrackingSubsystem.Cinfo.subsystemImplementationType` property
+  - `XROcclusionSubsystemCinfo.implementationType` property
+  - `XROcclusionSubsystemCinfo.supportsHumanSegmentationStencilImage` property
+  - `XROcclusionSubsystemCinfo.supportsHumanSegmentationDepthImage` property
+  - `XROcclusionSubsystemCinfo.queryForSupportsEnvironmentDepthImage` property
+  - `XROcclusionSubsystemCinfo.queryForSupportsEnvironmentDepthConfidenceImage` property
+  - `XROcclusionSubsystemDescriptor.supportsHumanSegmentationStencilImage` property
+  - `XROcclusionSubsystemDescriptor.supportsHumanSegmentationDepthImage` property
+  - `XROcclusionSubsystemDescriptor.supportsEnvironmentDepthImage` property
+  - `XROcclusionSubsystemDescriptor.supportsEnvironmentDepthConfidenceImage` property
+  - `XRPlaneSubsystemDescriptor.Cinfo.subsystemImplementationType` property
+  - `XRPointCloudSubsystemDescriptor.Cinfo.implementationType` property
+  - `XRRaycastSubsystemDescriptor.Cinfo.subsystemImplementationType` property
+  - `XRReferenceObjectLibrary.indexOf` method
+  - `XRSessionSubsystem.subsystemImplementationType` property
+  - `XRSubsystem` class
+- Removed the image file `/Editor/Icons/ARVR@4x.png` as it was unused.
+
+### Fixed
+
+- Fixed [ScheduleAddImageJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob) and [ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageWithValidationJob) documentation to describe the correct exceptions thrown if `library` is null.
+- Fixed an issue in XR Simulation where disabling and re-enabling the AR Plane Manager component would cause duplicate planes to be detected where planes had already been detected previously.
+
 ## [5.1.0-pre.10] - 2023-07-21
 
 ### Changed
@@ -43,7 +150,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added a set of custom visual scripting nodes designed to help you use AR Foundation in visual scripting projects. Refer to [Visual Scripting](xref:arfoundation-visual-scripting) to learn more about how to set up an AR Foundation visual scripting project.
 - Added support for the [Anchors](xref:arfoundation-anchors) feature in XR Simulation. You can now add and remove anchors in Play mode, add a [Simulated Anchor component](xref:arfoundation-simulation-environments#simulated-anchor-component) to XR Simulation environments, and adjust anchor discovery settings in [XR Simulation project settings](xref:arfoundation-simulation-project-settings).
-- Added enum value `Other` to [PlaneClassification](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications).
+- Added enum value `Other` to [PlaneClassification](xref:UnityEngine.XR.ARSubsystems.PlaneClassification).
 - Added the ability for camera subsystem providers to include [EXIF](https://en.wikipedia.org/wiki/Exif) data with the `XRCameraFrame`.
 
 ### Changed
@@ -302,7 +409,7 @@ No changes
 
 ### Added
 
-- Added support new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
+- Added support for new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) interface available in 2021.2, which allows providers to specify a separate transform for each mesh.
 - Added methods to get the [raw](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.TryAcquireRawEnvironmentDepthCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) and [smoothed](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.TryAcquireSmoothedEnvironmentDepthCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) depth images independently.
 - Added a [depthSensorSupported](xref:UnityEngine.XR.ARSubsystems.XRCameraConfiguration.depthSensorSupported) flag to the `XRCameraConfiguration` to indicate whether or not a depth sensor is supported by the camera configuration.
 

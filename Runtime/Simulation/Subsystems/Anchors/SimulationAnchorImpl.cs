@@ -46,11 +46,11 @@ namespace UnityEngine.XR.Simulation
                 return;
 
             m_SessionId = Guid.Empty;
-            if (SubsystemsUtility.TryGetLoadedSubsystem<XRSessionSubsystem, SimulationSessionSubsystem>(out var sessionSubsystem))
+            if (SubsystemUtils.TryGetLoadedSubsystem<XRSessionSubsystem, SimulationSessionSubsystem>(out var sessionSubsystem))
                 m_SessionId = sessionSubsystem.sessionId;
 
-            SubsystemsUtility.TryGetLoadedSubsystem<XRPlaneSubsystem, SimulationPlaneSubsystem>(out m_PlaneSubsystem);
-            
+            SubsystemUtils.TryGetLoadedSubsystem<XRPlaneSubsystem, SimulationPlaneSubsystem>(out m_PlaneSubsystem);
+
             m_Origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
             if(m_Origin == null || m_PlaneSubsystem == null || sessionSubsystem == null)
             {
@@ -413,5 +413,5 @@ namespace UnityEngine.XR.Simulation
 
             public XRAnchor GetAnchor() => anchor;
         }
-    } 
+    }
 }

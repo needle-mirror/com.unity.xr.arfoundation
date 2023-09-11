@@ -16,6 +16,11 @@ class SimulationCameraTextureReadbackPass : ScriptableRenderPass
         renderPassEvent = RenderPassEvent.AfterRendering;
     }
 
+    public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
+    {
+        ConfigureInput(ScriptableRenderPassInput.Color | ScriptableRenderPassInput.Depth);
+    }
+
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
         using var commandBuffer = CommandBufferPool.Get("SimulationCameraTextureReadbackPass");

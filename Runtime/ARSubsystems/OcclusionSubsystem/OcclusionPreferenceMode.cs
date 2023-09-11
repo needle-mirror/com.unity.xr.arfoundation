@@ -10,19 +10,16 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The preference is to occlude using environment depth.
         /// </summary>
-        [Description("PreferEnvironmentOcclusion")]
         PreferEnvironmentOcclusion = 0,
 
         /// <summary>
         /// The preference is to occlude using human segmentation stencil and depth.
         /// </summary>
-        [Description("PreferHumanOcclusion")]
         PreferHumanOcclusion = 1,
 
         /// <summary>
         /// The preference is to not occlude.
         /// </summary>
-        [Description("NoOcclusion")]
         NoOcclusion = 2,
     }
 }

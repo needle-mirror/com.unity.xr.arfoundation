@@ -71,12 +71,6 @@ namespace UnityEngine.XR.ARSubsystems
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
-            /// The concrete <c>Type</c> which will be instantiated if <c>Create</c> is called on this subsystem descriptor.
-            /// </summary>
-            [Obsolete("XRPointCloudSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
-            public Type implementationType;
-
-            /// <summary>
             /// <c>True</c> if the subsystem supports feature points, <c>false</c> otherwise.
             /// </summary>
             public bool supportsFeaturePoints
@@ -222,10 +216,19 @@ namespace UnityEngine.XR.ARSubsystems
         /// Registers a subsystem implementation with the <c>SubsystemManager</c>.
         /// </summary>
         /// <param name="descriptorParams"></param>
+        [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void RegisterDescriptor(Cinfo descriptorParams)
         {
-            var descriptor = new XRPointCloudSubsystemDescriptor(descriptorParams);
-            SubsystemDescriptorStore.RegisterDescriptor(descriptor);
+            Register(descriptorParams);
+        }
+
+        /// <summary>
+        /// Registers a subsystem descriptor with the <c>SubsystemManager</c>.
+        /// </summary>
+        /// <param name="cinfo"></param>
+        public static void Register(Cinfo cinfo)
+        {
+            SubsystemDescriptorStore.RegisterDescriptor(new XRPointCloudSubsystemDescriptor(cinfo));
         }
     }
 }

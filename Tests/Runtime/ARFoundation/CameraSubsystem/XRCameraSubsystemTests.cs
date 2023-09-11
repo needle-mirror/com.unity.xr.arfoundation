@@ -19,7 +19,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            XRCameraSubsystem.Register(new XRCameraSubsystemCinfo
+            XRCameraSubsystemDescriptor.Register(new XRCameraSubsystemDescriptor.Cinfo
             {
                 id = "Test-Camera",
                 providerType = typeof(XRCameraSubsystemImpl.ProviderImpl),

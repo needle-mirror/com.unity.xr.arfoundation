@@ -29,7 +29,7 @@ namespace UnityEngine.XR.Simulation
         /// <value>
         /// The shader property name for the  simple RGB component of the camera video frame.
         /// </value>
-        const string k_TextureSinglePropertyName = "_textureSingle";
+        const string k_TextureSinglePropertyName = "_TextureSingle";
 
         /// <summary>
         /// The shader property name identifier for the simple RGB component of the camera video frame.
@@ -270,7 +270,7 @@ namespace UnityEngine.XR.Simulation
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
-            var cInfo = new XRCameraSubsystemCinfo {
+            var cInfo = new XRCameraSubsystemDescriptor.Cinfo {
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),
                 subsystemTypeOverride = typeof(SimulationCameraSubsystem),
@@ -278,8 +278,7 @@ namespace UnityEngine.XR.Simulation
                 supportsCameraImage = true,
             };
 
-            if (!XRCameraSubsystem.Register(cInfo))
-                Debug.LogError("Cannot register the camera subsystem");
+            XRCameraSubsystemDescriptor.Register(cInfo);
         }
     }
 }

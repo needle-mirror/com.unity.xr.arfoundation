@@ -164,6 +164,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <seealso cref="EnvironmentDepth"/>
         EnvironmentDepthTemporalSmoothing = 1 << 26,
+
+        /// <summary>
+        /// Image Stabilization enabled.
+        /// </summary>
+        ImageStabilization = 1 << 27,
     }
 
     /// <summary>
@@ -382,6 +387,9 @@ namespace UnityEngine.XR.ARSubsystems
                         break;
                     case Feature.EnvironmentDepthTemporalSmoothing:
                         names.Add("Environment Depth Temporal Smoothing");
+                        break;
+                    case Feature.ImageStabilization:
+                        names.Add("Image Stabilization");
                         break;
                     default:
                         names.Add(feature.ToString());

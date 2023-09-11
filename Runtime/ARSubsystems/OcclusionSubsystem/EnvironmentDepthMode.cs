@@ -10,7 +10,6 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The environment depth is disabled and will not be generated.
         /// </summary>
-        [Description("Disabled")]
         Disabled = 0,
 
         /// <summary>
@@ -19,19 +18,16 @@ namespace UnityEngine.XR.ARSubsystems
         /// <remarks>
         /// On <see cref="Fastest"/> mode, there is no smoothing or other post processing applied to the texture.
         /// </remarks>
-        [Description("Fastest")]
         Fastest = 1,
 
         /// <summary>
         /// The environment depth is enabled and will be generated at the medium resolution.
         /// </summary>
-        [Description("Medium")]
         Medium = 2,
 
         /// <summary>
         /// The environment depth is enabled and will be generated at the best resolution.
         /// </summary>
-        [Description("Best")]
         Best = 3,
     }
 

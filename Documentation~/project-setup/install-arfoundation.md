@@ -7,10 +7,10 @@ AR Foundation is an official Unity package available via the [Package Manager](h
 
 ## Editor compatibility
 
-AR Foundation 5.1 is compatible with Unity 2021.2 and up.
+AR Foundation 6.0 is compatible with Unity 2023.2 and up.
 
 > [!NOTE]
-> AR Foundation 5.1 is compatible with Unity 2021.2 and 2021.3, but it does not appear in the Package Manager window of these Editor versions. See [access AR Foundation 5.1 in Unity 2021](xref:arfoundation-edit-your-project-manifest) to learn how to edit your project manifest.
+> AR Foundation 6.0 is compatible with Unity 2023.2, but it does not appear in the Package Manager window of this Editor version. See [access AR Foundation 6.0 in Unity 2023.2](xref:arfoundation-edit-your-project-manifest) to learn how to edit your project manifest.
 
 ### Older Editor versions
 
@@ -18,8 +18,8 @@ If your project requires an older version of the Editor, you can use the followi
 
 | Editor version | AR Foundation version |
 | :------------: | :-------------------: |
+|     2021.3+    |       5.0 or 5.1      |
 |     2020.3+    |          4.2          |
-|     2019.4+    |          4.1          |
 
 # Required packages
 
@@ -29,9 +29,9 @@ Unity officially supports the following provider plug-ins with this version of A
 
 | AR Platform | Provider plug-in                                                                                        | Version |
 | :---------- | :------------------------------------------------------------------------------------------------------ | :------ |
-| Android     | [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) |   5.1   |
-| iOS         | [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html)    |   5.1   |
-| HoloLens 2  | [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html)           |   1.5   |
+| Android     | [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/index.html) |   6.0   |
+| iOS         | [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/index.html)    |   6.0   |
+| HoloLens 2  | [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.8/manual/index.html)           |   1.8   |
 
 To use AR Foundation on a device, you must install at least one provider plug-in, either from the Package Manager or by going to **Project Settings** > **XR Plug-in Management** as shown below.
 
@@ -46,8 +46,8 @@ Some provider plug-ins require that you set specific project settings for AR to 
 
 | Provider plug-in | Setup instructions |
 | :--------------- | :----------------- |
-| [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/project-configuration-arcore.html) |
-| [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/project-configuration-arkit.html) |
+| [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/project-configuration-arcore.html) |
+| [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/project-configuration-arkit.html) |
 
 
 ## Third-party plug-ins

@@ -15,18 +15,6 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARHumanBodyManager :
         ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider, XRHumanBody, ARHumanBody>
     {
-        /// <summary>
-        /// Whether 2D body pose tracking is enabled. This method is obsolete.
-        /// Use <see cref="pose2DRequested"/>
-        /// or  <see cref="pose2DEnabled"/> instead.
-        /// </summary>
-        [Obsolete("Use pose2DEnabled or pose2DRequested instead. 2020-01-14")]
-        public bool humanBodyPose2DEstimationEnabled
-        {
-            get => m_Pose2D;
-            set => pose2DRequested = value;
-        }
-
         [SerializeField, FormerlySerializedAs("m_HumanBodyPose2DEstimationEnabled")]
         [Tooltip("Whether to estimate the 2D pose for any human bodies detected.")]
         bool m_Pose2D = true;
@@ -58,17 +46,6 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        /// <summary>
-        /// Whether 3D body pose tracking is enabled. This method is obsolete.
-        /// Use <see cref="pose3DEnabled"/> or <see cref="pose3DRequested"/> instead.
-        /// </summary>
-        [Obsolete("Use pose3DEnabled or pose3DRequested instead. 2020-01-14")]
-        public bool humanBodyPose3DEstimationEnabled
-        {
-            get => m_Pose3D;
-            set => pose3DRequested = value;
-        }
-
         [SerializeField, FormerlySerializedAs("m_HumanBodyPose3DEstimationEnabled")]
         [Tooltip("Whether to estimate the 3D pose for any human bodies detected.")]
         bool m_Pose3D = true;
@@ -96,17 +73,6 @@ namespace UnityEngine.XR.ARFoundation
         /// Whether 3D human pose estimation is enabled.
         /// </summary>
         public bool pose3DEnabled => subsystem?.pose3DEnabled ?? false;
-
-        /// <summary>
-        /// Whether 3D body pose scale estimation is enabled. This method is obsolete.
-        /// Use <see cref="pose3DScaleEstimationEnabled"/> or <see cref="pose3DScaleEstimationRequested"/> instead.
-        /// </summary>
-        [Obsolete("Use pose3DScaleEstimationRequested or pose3DScaleEstimationRequested instead. 2020-01-14")]
-        public bool humanBodyPose3DScaleEstimationEnabled
-        {
-            get => m_Pose3DScaleEstimation;
-            set => pose3DScaleEstimationRequested = value;
-        }
 
         [SerializeField, FormerlySerializedAs("m_HumanBodyPose3DScaleEstimationEnabled")]
         [Tooltip("Whether to estimate the 3D pose for any human bodies detected.")]
@@ -233,7 +199,7 @@ namespace UnityEngine.XR.ARFoundation
             if (humanBodiesChanged != null)
             {
                 using (new ScopedProfiler("OnHumanBodiesChanged"))
-                humanBodiesChanged(new ARHumanBodiesChangedEventArgs(added, updated, removed));
+                    humanBodiesChanged(new ARHumanBodiesChangedEventArgs(added, updated, removed));
             }
         }
     }

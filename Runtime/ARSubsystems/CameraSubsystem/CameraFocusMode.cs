@@ -10,13 +10,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The focus is fixed and does not change.
         /// </summary>
-        [Description("Fixed")]
         Fixed = 0,
 
         /// <summary>
         /// The focus will change automatically.
         /// </summary>
-        [Description("Auto")]
         Auto = 1,
     }
 }

@@ -68,12 +68,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Invoked whenever <see cref="keepWaiting"/> is queried. Implement this to perform per-frame updates.
         /// </summary>
-        protected abstract void OnKeepWaiting();
+        protected virtual void OnKeepWaiting() { }
 
         class ImmediatePromise : Promise<T>
         {
-            protected override void OnKeepWaiting() { }
-
             public ImmediatePromise(T immediateResult)
             {
                 Resolve(immediateResult);

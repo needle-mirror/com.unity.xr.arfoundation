@@ -1,7 +1,7 @@
 {
     "name": "Unity.XR.ARSubsystems",
+    "rootNamespace": "UnityEngine.XR.ARSubsystems",
     "references": [
-        "Unity.Subsystem.Registration",
         "Unity.InputSystem"
     ],
     "includePlatforms": [],

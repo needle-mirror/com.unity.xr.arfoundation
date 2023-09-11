@@ -26,7 +26,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// If you are implementing your own custom subsystem [Lifecycle management](xref:xr-plug-in-management-provider#lifecycle-management),
         /// use the [SubsystemManager](xref:UnityEngine.SubsystemManager)
         /// to enumerate the available <see cref="XRPlaneSubsystemDescriptor"/>s, then call
-        /// <see cref="XRPlaneSubsystemDescriptor.Create()"/> on the desired descriptor.
+        /// <see cref="XRPlaneSubsystemDescriptor.Register">XRPlaneSubsystemDescriptor.Register()</see> on the desired descriptor.
         /// </remarks>
         public XRPlaneSubsystem() { }
 
@@ -191,17 +191,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Get or set the requested <see cref="PlaneDetectionMode"/>.
             /// </summary>
-            public virtual PlaneDetectionMode requestedPlaneDetectionMode
-            {
-                get => PlaneDetectionMode.None;
-                set
-                {
-                    if (value != PlaneDetectionMode.None)
-                    {
-                        throw new NotSupportedException("Plane detection is not supported.");
-                    }
-                }
-            }
+            public abstract PlaneDetectionMode requestedPlaneDetectionMode { get; set; }
 
             /// <summary>
             /// Get the current plane detection mode in use by the provider.

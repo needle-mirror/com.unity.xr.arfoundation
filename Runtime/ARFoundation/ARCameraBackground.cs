@@ -427,12 +427,36 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Attempts to read the platform specific rendering parameters from the camera subsystem.
+        /// If it fails, it will return a default value built from the current <see cref="currentRenderingMode"/>.
+        /// </summary>
+        /// <param name="renderingParams">
+        /// The platform specific rendering parameters if they are available. Otherwise, a default value built from the
+        /// <see cref="currentRenderingMode"/>.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if the platform specific rendering parameters are available. Otherwise, <c>false</c>.
+        /// </returns>
+        internal bool TryGetRenderingParameters(out XRCameraBackgroundRenderingParams renderingParams)
+        {
+            renderingParams = default;
+            return s_CameraSubsystem != null && s_CameraSubsystem.TryGetRenderingParameters(out renderingParams);
+        }
+
+        /// <summary>
         /// Configures the <paramref name="commandBuffer"/> by first clearing it, then adding necessary render commands.
         /// </summary>
         /// <param name="commandBuffer">The command buffer to configure.</param>
         protected virtual void ConfigureLegacyCommandBuffer(CommandBuffer commandBuffer)
         {
-            Texture texture = !material.HasProperty(k_MainTexName) ? null : material.GetTexture(k_MainTexName);
+            if (!TryGetRenderingParameters(out var backgroundRenderingParams))
+            {
+                backgroundRenderingParams = ARCameraBackgroundRenderingUtils.SelectDefaultBackgroundRenderParametersForRenderMode(currentRenderingMode);
+            }
+
+            var clearFlags = currentRenderingMode == XRCameraBackgroundRenderingMode.AfterOpaques
+                ? RTClearFlags.None
+                : RTClearFlags.Depth;
 
             commandBuffer.Clear();
             AddBeforeBackgroundRenderHandler(commandBuffer);
@@ -441,23 +465,20 @@ namespace UnityEngine.XR.ARFoundation
             commandBuffer.SetInvertCulling(m_CommandBufferCullingState);
             m_CommandBufferRenderOrderState = currentRenderingMode;
 
-            switch (m_CommandBufferRenderOrderState)
-            {
-                case XRCameraBackgroundRenderingMode.AfterOpaques:
-                    commandBuffer.SetViewProjectionMatrices(Matrix4x4.identity, ARCameraBackgroundRenderingUtils.afterOpaquesOrthoProjection);
-                    commandBuffer.DrawMesh(ARCameraBackgroundRenderingUtils.fullScreenFarClipMesh, Matrix4x4.identity, material);
-                    commandBuffer.SetViewProjectionMatrices(camera.worldToCameraMatrix, camera.projectionMatrix);
-                    break;
+            commandBuffer.SetViewProjectionMatrices(
+                Matrix4x4.identity,
+                Matrix4x4.identity);
 
-                case XRCameraBackgroundRenderingMode.BeforeOpaques:
-                    commandBuffer.ClearRenderTarget(true, false, Color.clear);
-                    commandBuffer.Blit(texture, BuiltinRenderTextureType.CameraTarget, material);
-                    break;
-
-                case XRCameraBackgroundRenderingMode.None:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(m_CommandBufferRenderOrderState));
-            }
+#if UNITY_2023_1_OR_NEWER
+            commandBuffer.ClearRenderTarget(clearFlags, Color.clear);
+#else
+            commandBuffer.ClearRenderTarget(clearFlags, Color.clear, 1.0f, 0);
+#endif
+            commandBuffer.DrawMesh(
+                backgroundRenderingParams.backgroundGeometry,
+                backgroundRenderingParams.backgroundTransform,
+                material);
+            commandBuffer.SetViewProjectionMatrices(camera.worldToCameraMatrix, camera.projectionMatrix);
         }
 
         /// <summary>
@@ -546,6 +567,7 @@ namespace UnityEngine.XR.ARFoundation
 
                 if (m_CommandBuffer != null)
                 {
+                    var renderModeChanged = false;
                     if (m_CommandBufferRenderOrderState != activeRenderingMode)
                     {
                         RemoveCommandBufferFromCameraEvents();
@@ -553,15 +575,16 @@ namespace UnityEngine.XR.ARFoundation
 
                         OnCameraRenderingModeChanged?.Invoke(activeRenderingMode);
                         SetCameraDepthTextureMode(activeRenderingMode);
-                        ConfigureLegacyCommandBuffer(m_CommandBuffer);
 
+                        renderModeChanged = true;
+                    }
+
+                    ConfigureLegacyCommandBuffer(m_CommandBuffer);
+
+                    if (renderModeChanged)
+                    {
                         DisableBackgroundClearFlags();
                         AddCommandBufferToCameraEvent();
-
-                    }
-                    else if (m_CommandBufferCullingState != shouldInvertCulling)
-                    {
-                        ConfigureLegacyCommandBuffer(m_CommandBuffer);
                     }
                 }
             }
@@ -570,21 +593,21 @@ namespace UnityEngine.XR.ARFoundation
                 EnableBackgroundRendering();
             }
 
-            Material material = this.material;
-            if (material != null)
+            var mat = material;
+            if (mat != null)
             {
                 var count = eventArgs.textures.Count;
                 for (int i = 0; i < count; ++i)
                 {
-                    material.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
+                    mat.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
                 }
 
                 if (eventArgs.displayMatrix.HasValue)
                 {
-                    material.SetMatrix(k_DisplayTransformId, eventArgs.displayMatrix.Value);
+                    mat.SetMatrix(k_DisplayTransformId, eventArgs.displayMatrix.Value);
                 }
 
-                SetMaterialKeywords(material, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
+                SetMaterialKeywords(mat, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
             }
 
             if (eventArgs.projectionMatrix.HasValue)
@@ -628,22 +651,22 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="eventArgs">The occlusion frame event arguments.</param>
         void OnOcclusionFrameReceived(AROcclusionFrameEventArgs eventArgs)
         {
-            Material material = this.material;
-            if (material != null)
+            var mat = material;
+            if (mat != null)
             {
                 var count = eventArgs.textures.Count;
                 for (int i = 0; i < count; ++i)
                 {
-                    material.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
+                    mat.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
                 }
 
-                SetMaterialKeywords(material, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
+                SetMaterialKeywords(mat, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
 
                 // Set scale: this computes the affect the camera's localToWorld has on the the length of the
                 // forward vector, i.e., how much farther from the camera are things than with unit scale.
                 var forward = transform.localToWorldMatrix.GetColumn(2);
                 var scale = forward.magnitude;
-                material.SetFloat(k_CameraForwardScaleId, scale);
+                mat.SetFloat(k_CameraForwardScaleId, scale);
             }
         }
 

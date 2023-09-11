@@ -18,6 +18,12 @@ namespace UnityEngine.XR.ARSubsystems.Tests
             {
                 return default;
             }
+
+            public override PlaneDetectionMode requestedPlaneDetectionMode
+            {
+                get => PlaneDetectionMode.None;
+                set { }
+            }
         }
     }
 
@@ -27,7 +33,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {
-            XRPlaneSubsystemDescriptor.Create(new XRPlaneSubsystemDescriptor.Cinfo
+            XRPlaneSubsystemDescriptor.Register(new XRPlaneSubsystemDescriptor.Cinfo
             {
                 id = "Test-Plane",
                 providerType = typeof(XRPlaneSubsystemImpl.TestProvider),

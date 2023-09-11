@@ -33,6 +33,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// The reference image was not added due to an unknown error.
         /// </summary>
         ErrorUnknown,
+
+        /// <summary>
+        /// The reference image was not added because it was a duplicate.
+        /// </summary>
+        ErrorDuplicateImage,
     }
 
     /// <summary>

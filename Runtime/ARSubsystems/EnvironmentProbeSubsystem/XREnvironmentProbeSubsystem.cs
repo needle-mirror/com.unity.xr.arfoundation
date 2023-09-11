@@ -227,26 +227,25 @@ namespace UnityEngine.XR.ARSubsystems
         /// <c>true</c> if the subsystem implementation is registered. Otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentException">Thrown when the values specified in the
-        /// <paramref name="environmentProbeSubsystemCinfo"/> parameter are invalid. Typically, this happens:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>If <see cref="XREnvironmentProbeSubsystemCinfo.id"/> is <c>null</c> or empty.</description>
-        /// </item>
-        /// <item>
-        /// <description>If <see cref="XREnvironmentProbeSubsystemCinfo.implementationType"/> is <c>null.</c>
-        /// </description>
-        /// </item>
-        /// <item>
-        /// <description>If <see cref="XREnvironmentProbeSubsystemCinfo.implementationType"/> does not derive from the
-        /// <c>XREnvironmentProbeSubsystem</c> class.
-        /// </description>
-        /// </item>
-        /// </list>
+        /// <paramref name="environmentProbeSubsystemCinfo"/> parameter are invalid. Typically, this happens when
+        /// required parameters are <see langword="null"/> or empty or types that do not derive from the required base class.
         /// </exception>
+        [Obsolete("XREnvironmentProbeSubsystem.Register(XREnvironmentProbeSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XREnvironmentProbeSubsystemDescriptor.Register(XREnvironmentProbeSubsystemDescriptor.Cinfo) instead.")]
         public static bool Register(XREnvironmentProbeSubsystemCinfo environmentProbeSubsystemCinfo)
         {
-            XREnvironmentProbeSubsystemDescriptor environmentProbeSubsystemDescriptor = XREnvironmentProbeSubsystemDescriptor.Create(environmentProbeSubsystemCinfo);
-            SubsystemDescriptorStore.RegisterDescriptor(environmentProbeSubsystemDescriptor);
+            var environmentProbeSubsystemInfo = new XREnvironmentProbeSubsystemDescriptor.Cinfo()
+            {
+                id = environmentProbeSubsystemCinfo.id,
+                providerType = environmentProbeSubsystemCinfo.providerType,
+                subsystemTypeOverride = environmentProbeSubsystemCinfo.subsystemTypeOverride,
+                supportsManualPlacement = environmentProbeSubsystemCinfo.supportsManualPlacement,
+                supportsRemovalOfManual = environmentProbeSubsystemCinfo.supportsRemovalOfManual,
+                supportsAutomaticPlacement = environmentProbeSubsystemCinfo.supportsAutomaticPlacement,
+                supportsRemovalOfAutomatic = environmentProbeSubsystemCinfo.supportsRemovalOfAutomatic,
+                supportsEnvironmentTexture = environmentProbeSubsystemCinfo.supportsEnvironmentTexture,
+                supportsEnvironmentTextureHDR = environmentProbeSubsystemCinfo.supportsEnvironmentTextureHDR
+            };
+            XREnvironmentProbeSubsystemDescriptor.Register(environmentProbeSubsystemInfo);
             return true;
         }
     }

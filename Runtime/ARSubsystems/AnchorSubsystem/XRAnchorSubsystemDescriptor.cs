@@ -18,6 +18,14 @@ namespace UnityEngine.XR.ARSubsystems
         public bool supportsTrackableAttachments { get; }
 
         /// <summary>
+        /// Indicates whether the provider implementation supports synchronously adding anchors via
+        /// <see cref="XRAnchorSubsystem.TryAddAnchor">XRAnchorSubsystem.TryAddAnchor</see>.
+        /// If <see langword="false"/>, `TryAddAnchor` must always return false. In this case, use
+        /// <see cref="XRAnchorSubsystem.TryAddAnchorAsync">XRAnchorSubsystem.TryAddAnchorAsync</see> instead.
+        /// </summary>
+        public bool supportsSynchronousAdd { get; }
+
+        /// <summary>
         /// Contains the parameters necessary to construct a new <see cref="XRAnchorSubsystemDescriptor"/> instance.
         /// </summary>
         public struct Cinfo : IEquatable<Cinfo>
@@ -42,17 +50,19 @@ namespace UnityEngine.XR.ARSubsystems
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
-            /// The concrete <c>Type</c> of the subsystem which will be instantiated if a subsystem is created from this descriptor.
-            /// </summary>
-            [Obsolete("XRAnchorSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.", true)]
-            public Type subsystemImplementationType { get; set; }
-
-            /// <summary>
             /// Indicates whether the provider implementation supports attachments (that is, the ability to attach an anchor to a trackable).
             /// If <see langword="false"/>, <see cref="XRAnchorSubsystem.TryAttachAnchor">XRAnchorSubsystem.TryAttachAnchor</see>
             /// must always return <see langword="false"/>.
             /// </summary>
             public bool supportsTrackableAttachments { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation supports synchronously adding anchors via
+            /// <see cref="XRAnchorSubsystem.TryAddAnchor">XRAnchorSubsystem.TryAddAnchor</see>.
+            /// If <see langword="false"/>, `TryAddAnchor` must always return false. In this case, use
+            /// <see cref="XRAnchorSubsystem.TryAddAnchorAsync">XRAnchorSubsystem.TryAddAnchorAsync</see> instead.
+            /// </summary>
+            public bool supportsSynchronousAdd { get; set; }
 
             /// <summary>
             /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -117,7 +127,17 @@ namespace UnityEngine.XR.ARSubsystems
         /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
         /// </summary>
         /// <param name="cinfo">Construction info for the descriptor.</param>
+        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void Create(Cinfo cinfo)
+        {
+            Register(cinfo);
+        }
+
+        /// <summary>
+        /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
+        /// </summary>
+        /// <param name="cinfo">Construction info for the descriptor.</param>
+        public static void Register(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRAnchorSubsystemDescriptor(cinfo));
         }
@@ -128,6 +148,7 @@ namespace UnityEngine.XR.ARSubsystems
             providerType = cinfo.providerType;
             subsystemTypeOverride = cinfo.subsystemTypeOverride;
             supportsTrackableAttachments = cinfo.supportsTrackableAttachments;
+            supportsSynchronousAdd = cinfo.supportsSynchronousAdd;
         }
     }
 }

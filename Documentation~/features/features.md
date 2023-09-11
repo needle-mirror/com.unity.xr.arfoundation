@@ -10,7 +10,7 @@ AR Foundation supports the following features:
 | [Session](xref:arfoundation-session) | Enable, disable, and configure AR on the target platform. |
 | [Device tracking](xref:arfoundation-device-tracking) | Track the device's position and rotation in physical space. |
 | [Camera](xref:arfoundation-camera) | Render images from device cameras and perform light estimation. |
-| [Plane detection](xref:arfoundation-plane-detection) | Detect and track surfaces. |
+| [Plane detection](xref:arfoundation-plane-detection) | Detect and track flat surfaces. |
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
 | [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |

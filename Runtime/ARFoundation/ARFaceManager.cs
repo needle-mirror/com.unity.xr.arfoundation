@@ -60,17 +60,6 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get or set the maximum number of faces to track simultaneously. This method is obsolete.
-        /// Use <see cref="currentMaximumFaceCount"/> or <see cref="requestedMaximumFaceCount"/> instead.
-        /// </summary>
-        [Obsolete("Use requestedMaximumFaceCount or currentMaximumFaceCount instead. (2020-01-14)")]
-        public int maximumFaceCount
-        {
-            get => subsystem?.currentMaximumFaceCount ?? m_MaximumFaceCount;
-            set => requestedMaximumFaceCount = value;
-        }
-
-        /// <summary>
         /// Get the maximum number of faces to track simultaneously.
         /// </summary>
         public int currentMaximumFaceCount => subsystem?.currentMaximumFaceCount ?? 0;
@@ -135,7 +124,7 @@ namespace UnityEngine.XR.ARFoundation
             if (facesChanged != null)
             {
                 using (new ScopedProfiler("OnFacesChanged"))
-                facesChanged(new ARFacesChangedEventArgs(added, updated, removed));
+                    facesChanged(new ARFacesChangedEventArgs(added, updated, removed));
             }
         }
 

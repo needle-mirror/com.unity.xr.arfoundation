@@ -112,7 +112,7 @@ namespace UnityEngine.XR.Simulation
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
-            Register(new XREnvironmentProbeSubsystemCinfo
+            XREnvironmentProbeSubsystemDescriptor.Register(new XREnvironmentProbeSubsystemDescriptor.Cinfo
             {
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),

@@ -51,17 +51,6 @@ namespace UnityEngine.XR.ARFoundation
         public NativeArray<Vector2> uvs => GetUndisposable(m_FaceMesh.uvs);
 
         /// <summary>
-        /// Get a native pointer associated with this face.
-        /// </summary>
-        /// <remarks>
-        /// The data pointed to by this member is implementation defined.
-        /// The lifetime of the pointed to object is also
-        /// implementation defined, but should be valid at least until the next
-        /// <see cref="ARSession"/> update.
-        /// </remarks>
-        public IntPtr nativePtr => sessionRelativeData.nativePtr;
-
-        /// <summary>
         /// The [transform](https://docs.unity3d.com/ScriptReference/Transform.html) of the left eye of the face, or `null` if there is no data for the left eye.
         /// </summary>
         public Transform leftEye { get; private set; }
