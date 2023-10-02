@@ -8,6 +8,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.2.9] - 2023-10-02
+
+### Changed
+
+- Upgraded AR Subsystems dependency version from 4.2.8 to 4.2.9.
+
+### Fixed
+
+- Fixed issue [ARFB-176](https://issuetracker.unity3d.com/issues/ios-arenvironmentprobemanager-dot-ondestroy-triggers-application-crash) where destroying an `AREnvironmentProbe` prior to destroying the `AREnvironmentProbeManager` would cause a crash.
+
 ## [4.2.8] - 2023-05-15
 
 No changes
