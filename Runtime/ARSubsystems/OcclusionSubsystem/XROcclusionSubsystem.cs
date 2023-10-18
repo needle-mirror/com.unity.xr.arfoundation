@@ -321,8 +321,16 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="enabledKeywords">The keywords to enable for the material.</param>
         /// <param name="disabledKeywords">The keywords to disable for the material.</param>
+        [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.")]
         public void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
             => provider.GetMaterialKeywords(out enabledKeywords, out disabledKeywords);
+
+        /// <summary>
+        /// Get the enabled and disabled shader keywords for the material.
+        /// </summary>
+        /// <returns>Returns an <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
+        public ShaderKeywords GetShaderKeywords()
+            => provider.GetShaderKeywords();
 
         /// <summary>
         /// Register the descriptor for the occlusion subsystem implementation.
@@ -637,10 +645,20 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="enabledKeywords">The keywords to enable for the material.</param>
             /// <param name="disabledKeywords">The keywords to disable for the material.</param>
+            [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.")]
             public virtual void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
             {
                 enabledKeywords = null;
                 disabledKeywords = null;
+            }
+
+            /// <summary>
+            /// Get the enabled and disabled shader keywords for the material.
+            /// </summary>
+            /// <returns>The enabled and disabled shader keywords for the Material.</returns>
+            public virtual ShaderKeywords GetShaderKeywords()
+            {
+                return default;
             }
         }
     }

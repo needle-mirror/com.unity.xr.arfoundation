@@ -550,21 +550,23 @@ namespace UnityEngine.XR.ARFoundation
                 var planeManager = m_Origin.GetComponent<ARPlaneManager>();
                 if(planeManager != null)
                 {
-                    planeManager.planesChanged -= OnPlaneChanged;
+                    planeManager.trackablesChanged.RemoveListener(OnPlaneChanged);
                 }
 
                 var anchorManager = m_Origin.GetComponent<ARAnchorManager>();
                 if(anchorManager != null)
                 {
-                    anchorManager.anchorsChanged -= OnAnchorChanged;
+                    anchorManager.trackablesChanged.RemoveListener(OnAnchorChanged);
                 }
 
                 var pointCloudManager = m_Origin.GetComponent<ARPointCloudManager>();
                 if(pointCloudManager != null)
                 {
-                    pointCloudManager.pointCloudsChanged -= OnPointCloudChanged;
+                    pointCloudManager.trackablesChanged.RemoveListener(OnPointCloudChanged);
                 }
             }
+
+            DeregisterUIListeners();
         }
 
         void Update()
@@ -747,33 +749,58 @@ namespace UnityEngine.XR.ARFoundation
             var planeManager = m_Origin.GetComponent<ARPlaneManager>();
             if(m_ShowPlanesButton && m_LineRendererPrefab && planeManager)
             {
-                m_PlaneVisualizers = new GameObject("PlaneVisualizers");
+                if (m_PlaneVisualizers == null)
+                {
+                    m_PlaneVisualizers = new GameObject("PlaneVisualizers");
+                }
+
                 m_PlaneVisualizers.SetActive(false);
                 m_ShowPlanesButton.interactable = true;
                 m_ShowPlanesButton.onValueChanged.AddListener(delegate {TogglePlanesVisibility();});
-                planeManager.planesChanged += OnPlaneChanged;
+                planeManager.trackablesChanged.AddListener(OnPlaneChanged);
             }
 
             var anchorManager = m_Origin.GetComponent<ARAnchorManager>();
             if(m_ShowAnchorsButton && m_AnchorPrefab && anchorManager)
             {
-                m_AnchorVisualizers = new GameObject("AnchorVisualizers");
+                if (m_AnchorVisualizers == null)
+                {
+                    m_AnchorVisualizers = new GameObject("AnchorVisualizers");
+                }
+
                 m_AnchorVisualizers.SetActive(false);
                 m_ShowAnchorsButton.interactable = true;
                 m_ShowAnchorsButton.onValueChanged.AddListener(delegate {ToggleAnchorsVisibility();});
-                anchorManager.anchorsChanged += OnAnchorChanged;
+                anchorManager.trackablesChanged.AddListener(OnAnchorChanged);
             }
 
             var pointCloudManager = m_Origin.GetComponent<ARPointCloudManager>();
             if(m_ShowPointCloudsButton && m_PointCloudParticleSystem && pointCloudManager)
             {
-                m_PointCloudParticleSystem = Instantiate(m_PointCloudParticleSystem, m_Origin.TrackablesParent);
+                if (m_PointCloudParticleSystem == null)
+                {
+                    m_PointCloudParticleSystem = Instantiate(m_PointCloudParticleSystem, m_Origin.TrackablesParent);
+                }
+               
                 var renderer = m_PointCloudParticleSystem.GetComponent<Renderer>();
                 renderer.enabled = false;
-                pointCloudManager.pointCloudsChanged += OnPointCloudChanged;
+                pointCloudManager.trackablesChanged.AddListener(OnPointCloudChanged);
                 m_ShowPointCloudsButton.interactable = true;
                 m_ShowPointCloudsButton.onValueChanged.AddListener(delegate {TogglePointCloudVisibility(renderer);});
             }
+        }
+
+        void DeregisterUIListeners()
+        {
+            m_DisplayInfoMenuButton.onClick.RemoveAllListeners();
+            m_DisplayConfigurationsMenuButton.onClick.RemoveAllListeners();
+            m_DisplayDebugOptionsMenuButton.onClick.RemoveAllListeners();
+            m_DisplayCameraConfigurationsMenuButton.onClick.RemoveAllListeners();
+            m_CameraConfigurationDropdown.onValueChanged.RemoveAllListeners();
+
+            m_ShowPlanesButton.onValueChanged.RemoveAllListeners();
+            m_ShowAnchorsButton.onValueChanged.RemoveAllListeners();
+            m_ShowPointCloudsButton.onValueChanged.RemoveAllListeners();
         }
 
         void ShowMenu(GameObject menu)
@@ -1091,7 +1118,7 @@ namespace UnityEngine.XR.ARFoundation
             transform.localScale = new Vector3(heightScale, heightScale, 1);
         }
 
-        void OnPlaneChanged(ARPlanesChangedEventArgs eventArgs)
+        void OnPlaneChanged(ARTrackablesChangedEventArgs<ARPlane> eventArgs)
         {
             foreach(var plane in eventArgs.added)
             {
@@ -1118,7 +1145,7 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void OnAnchorChanged(ARAnchorsChangedEventArgs eventArgs)
+        void OnAnchorChanged(ARTrackablesChangedEventArgs<ARAnchor> eventArgs)
         {
             foreach(var anchor in eventArgs.added)
             {
@@ -1145,7 +1172,7 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void OnPointCloudChanged(ARPointCloudChangedEventArgs eventArgs)
+        void OnPointCloudChanged(ARTrackablesChangedEventArgs<ARPointCloud> eventArgs)
         {
             foreach(var pointCloud in eventArgs.added)
             {

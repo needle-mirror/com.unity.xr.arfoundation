@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -11,7 +10,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The <see cref="ARPlane" /> which triggered the event.
         /// </summary>
-        public ARPlane plane { get; private set; }
+        public ARPlane plane { get; }
 
         /// <summary>
         /// Constructor for plane changed events.
@@ -41,10 +40,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <see cref="Equals(ARPlaneBoundaryChangedEventArgs)"/> also returns `true`; otherwise `false`.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is ARPlaneBoundaryChangedEventArgs))
-                return false;
-
-            return Equals((ARPlaneBoundaryChangedEventArgs)obj);
+            return obj is ARPlaneBoundaryChangedEventArgs args && Equals(args);
         }
 
         /// <summary>

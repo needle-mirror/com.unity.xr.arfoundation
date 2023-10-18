@@ -30,11 +30,20 @@ namespace UnityEngine.XR.Simulation
             Camera m_XROriginCamera;
             int m_PreviousCullingMask;
             bool m_Initialized;
+            Guid m_SessionId;
 
             public override TrackingState trackingState => TrackingState.Tracking;
 
             public override Promise<SessionAvailability> GetAvailabilityAsync() =>
                 Promise<SessionAvailability>.CreateResolvedPromise(SessionAvailability.Installed | SessionAvailability.Supported);
+
+            public override Guid sessionId => m_SessionId;
+
+            protected override bool TryInitialize()
+            {
+                m_SessionId = Guid.NewGuid();
+                return true;
+            }
 
             bool Initialize()
             {
@@ -121,10 +130,15 @@ namespace UnityEngine.XR.Simulation
                     s_SimulationSceneManager = null;
                 }
 
+                m_SessionId = Guid.Empty;
                 m_Initialized = false;
             }
 
-            public override void Reset() => s_SimulationSessionReset?.Invoke();
+            public override void Reset()
+            {
+                m_SessionId = Guid.NewGuid();
+                s_SimulationSessionReset?.Invoke();
+            }
 
             public override void Update(XRSessionUpdateParams updateParams)
             {
@@ -140,7 +154,7 @@ namespace UnityEngine.XR.Simulation
 #if UNITY_EDITOR
             static void OnBeforeAssemblyReload()
             {
-                const string domainReloadOptions = 
+                const string domainReloadOptions =
                     "either <b>Recompile After Finished Playing</b> or <b>Stop Playing and Recompile</b>";
 
                 Debug.LogError(

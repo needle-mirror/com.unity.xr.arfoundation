@@ -152,7 +152,7 @@ namespace UnityEngine.XR.Simulation
                     plane.size,
                     plane.alignment,
                     plane.trackingState,
-                    plane.classification,
+                    plane.classifications,
                     subsumedVertices);
                 subsumedPlaneData.DisposeAndSetPlane(ref subsumedPlane);
             }
@@ -177,7 +177,7 @@ namespace UnityEngine.XR.Simulation
                     size,
                     m_PlaneAlignment,
                     TrackingState.Tracking,
-                    PlaneClassification.None,
+                    PlaneClassifications.None,
                     vertices);
                 layerPlane.DisposeAndSetPlane(ref newPlane);
             }
@@ -204,7 +204,7 @@ namespace UnityEngine.XR.Simulation
                     size,
                     plane.alignment,
                     plane.trackingState,
-                    plane.classification,
+                    plane.classifications,
                     vertices);
                 layerPlane.DisposeAndSetPlane(ref newPlane);
             }

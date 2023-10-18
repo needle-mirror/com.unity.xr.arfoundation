@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -19,29 +20,29 @@ namespace UnityEngine.XR.ARSubsystems
                 PlaneAlignment.None,
                 TrackingState.None,
                 IntPtr.Zero,
-                PlaneClassification.None);
+                PlaneClassifications.None);
 
         /// <summary>
-        /// Gets a default-initialized <see cref="BoundedPlane"/>. This can be
+        /// Gets a default-initialized instance. This can be
         /// different from the zero-initialized version, e.g., the <see cref="pose"/>
         /// is <c>Pose.identity</c> instead of zero-initialized.
         /// </summary>
         public static BoundedPlane defaultValue => s_Default;
 
         /// <summary>
-        /// Constructs a new <see cref="BoundedPlane"/>. This is just a data container
-        /// for a plane's session relative data. These are typically created by
-        /// <see cref="XRPlaneSubsystem.GetChanges(Unity.Collections.Allocator)"/>.
+        /// Constructs a new instance. <c>Bounded Plane</c> objects are typically created by
+        /// <see cref="XRPlaneSubsystem.GetChanges(Unity.Collections.Allocator)">XRPlaneSubsystem.GetChanges</see>.
         /// </summary>
-        /// <param name="trackableId">The <see cref="TrackableId"/> associated with the plane.</param>
+        /// <param name="trackableId">The `TrackableId` associated with the plane.</param>
         /// <param name="subsumedBy">The plane which subsumed this one. Use <see cref="TrackableId.invalidId"/> if it has not been subsumed.</param>
         /// <param name="pose">The <c>Pose</c> associated with the plane.</param>
         /// <param name="center">The center of the plane, in plane space (relative to <paramref name="pose"/>).</param>
         /// <param name="size">The dimensions associated with the plane.</param>
-        /// <param name="alignment">The <see cref="PlaneAlignment"/> associated with the plane.</param>
-        /// <param name="trackingState">The <see cref="TrackingState"/> associated with the plane.</param>
+        /// <param name="alignment">The `PlaneAlignment` associated with the plane.</param>
+        /// <param name="trackingState">The `TrackingState` associated with the plane.</param>
         /// <param name="nativePtr">The native pointer associated with the plane.</param>
-        /// <param name="classification">The <see cref="PlaneClassification"/> associated with the plane.</param>
+        /// <param name="classification">The `PlaneClassification` associated with the plane.</param>
+        [Obsolete("BoundedPlane(TrackableId, TrackableId, Pose, Vector2, Vector2, PlaneAlignment, TrackingState, IntPtr, PlaneClassification) has been deprecated in AR Foundation version 6.0. Use BoundedPlane(TrackableId, TrackableId, Pose, Vector2, Vector2, PlaneAlignment, TrackingState, IntPtr, PlaneClassifications) instead.")]
         public BoundedPlane(
             TrackableId trackableId,
             TrackableId subsumedBy,
@@ -61,7 +62,42 @@ namespace UnityEngine.XR.ARSubsystems
             m_Alignment = alignment;
             m_TrackingState = trackingState;
             m_NativePtr = nativePtr;
-            m_Classification = classification;
+            m_Classifications = classification.ConvertToPlaneClassifications();
+        }
+
+        /// <summary>
+        /// Constructs a new instance. <c>BoundedPlane</c> objects are typically created by
+        /// <see cref="XRPlaneSubsystem.GetChanges(Unity.Collections.Allocator)">XRPlaneSubsystem.GetChanges</see>.
+        /// </summary>
+        /// <param name="trackableId">The `TrackableId` associated with the plane.</param>
+        /// <param name="subsumedBy">The plane which subsumed this one. Use <see cref="TrackableId.invalidId"/> if it has not been subsumed.</param>
+        /// <param name="pose">The <c>Pose</c> describing the position and orientation of the plane.</param>
+        /// <param name="center">The center of the plane, in plane space (relative to <paramref name="pose"/>).</param>
+        /// <param name="size">The dimensions of the plane.</param>
+        /// <param name="alignment">The `PlaneAlignment` describing the alignment between the plane and the session space axes.</param>
+        /// <param name="trackingState">The `TrackingState` describing how well the XR device is tracking the plane.</param>
+        /// <param name="nativePtr">The native pointer associated with the plane.</param>
+        /// <param name="classifications">The PlaneClassifications assigned to the plane by the XR device.</param>
+        public BoundedPlane(
+            TrackableId trackableId,
+            TrackableId subsumedBy,
+            Pose pose,
+            Vector2 center,
+            Vector2 size,
+            PlaneAlignment alignment,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            PlaneClassifications classifications)
+        {
+            m_TrackableId = trackableId;
+            m_SubsumedById = subsumedBy;
+            m_Pose = pose;
+            m_Center = center;
+            m_Size = size;
+            m_Alignment = alignment;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_Classifications = classifications;
         }
 
         /// <summary>
@@ -112,9 +148,23 @@ namespace UnityEngine.XR.ARSubsystems
         public IntPtr nativePtr => m_NativePtr;
 
         /// <summary>
-        /// The <see cref="PlaneClassification"/> of the plane.
+        /// The classification of this plane.
         /// </summary>
-        public PlaneClassification classification => m_Classification;
+        [Obsolete("classification has been deprecated in AR Foundation version 6.0. Use classifications instead.")]
+        public PlaneClassification classification
+        {
+            get
+            {
+                PlaneClassification classificationTemp = PlaneClassification.None;
+                classificationTemp.ConvertFromPlaneClassifications(m_Classifications);
+                return classificationTemp;
+            }
+        }
+
+        /// <summary>
+        /// The classifications of this plane.
+        /// </summary>
+        public PlaneClassifications classifications => m_Classifications;
 
         /// <summary>
         /// The width of the plane in meters.
@@ -164,17 +214,21 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>A string that describes the plane's properties.</returns>
         public override string ToString()
         {
-            return string.Format(
-                "Plane:\n\ttrackableId: {0}\n\tsubsumedById: {1}\n\tpose: {2}\n\tcenter: {3}\n\tsize: {4}\n\talignment: {5}\n\tclassification: {6}\n\ttrackingState: {7}\n\tnativePtr: {8:X16}",
-                trackableId,
-                subsumedById,
-                pose,
-                center,
-                size,
-                alignment,
-                classification,
-                trackingState,
-                nativePtr.ToInt64());
+            SharedStringBuilder.stringBuilder.AppendLine("Plane:");
+            SharedStringBuilder.stringBuilder.AppendLine("\ttrackableId: " + trackableId);
+            SharedStringBuilder.stringBuilder.AppendLine("\tsubsumedById: " + subsumedById);
+            SharedStringBuilder.stringBuilder.AppendLine("\tpose: " + pose);
+            SharedStringBuilder.stringBuilder.AppendLine("\tcenter: " + center);
+            SharedStringBuilder.stringBuilder.AppendLine("\tsize: " + size);
+            SharedStringBuilder.stringBuilder.AppendLine("\talignment: " + alignment);
+            SharedStringBuilder.stringBuilder.AppendLine("\tclassifications: " + classifications);
+            SharedStringBuilder.stringBuilder.AppendLine("\ttrackingState: " + trackingState);
+            SharedStringBuilder.stringBuilder.Append("\tnativePtr: ");
+            SharedStringBuilder.stringBuilder.Append("" + nativePtr.ToInt64(), 0, 16);
+            SharedStringBuilder.stringBuilder.Append("\n");
+            string tempString = SharedStringBuilder.stringBuilder.ToString();
+            SharedStringBuilder.stringBuilder.Clear();
+            return tempString;
         }
 
         /// <summary>
@@ -199,7 +253,7 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode = (hashCode * 486187739) + m_Center.GetHashCode();
                 hashCode = (hashCode * 486187739) + m_Size.GetHashCode();
                 hashCode = (hashCode * 486187739) + ((int)m_Alignment).GetHashCode();
-                hashCode = (hashCode * 486187739) + ((int)m_Classification).GetHashCode();
+                hashCode = (hashCode * 486187739) + ((int)m_Classifications).GetHashCode();
                 hashCode = (hashCode * 486187739) + ((int)m_TrackingState).GetHashCode();
                 hashCode = (hashCode * 486187739) + m_NativePtr.GetHashCode();
                 return hashCode;
@@ -236,7 +290,7 @@ namespace UnityEngine.XR.ARSubsystems
                 m_Center.Equals(other.m_Center) &&
                 m_Size.Equals(other.m_Size) &&
                 (m_Alignment == other.m_Alignment) &&
-                (m_Classification == other.m_Classification) &&
+                (m_Classifications == other.m_Classifications) &&
                 (m_TrackingState == other.m_TrackingState) &&
                 (m_NativePtr == other.m_NativePtr);
         }
@@ -257,6 +311,6 @@ namespace UnityEngine.XR.ARSubsystems
 
         IntPtr m_NativePtr;
 
-        PlaneClassification m_Classification;
+        PlaneClassifications m_Classifications;
     }
 }

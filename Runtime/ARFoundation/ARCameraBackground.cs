@@ -1,6 +1,7 @@
 using AOT;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
@@ -607,7 +608,7 @@ namespace UnityEngine.XR.ARFoundation
                     mat.SetMatrix(k_DisplayTransformId, eventArgs.displayMatrix.Value);
                 }
 
-                SetMaterialKeywords(mat, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
+                SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
             }
 
             if (eventArgs.projectionMatrix.HasValue)
@@ -660,7 +661,7 @@ namespace UnityEngine.XR.ARFoundation
                     mat.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
                 }
 
-                SetMaterialKeywords(mat, eventArgs.enabledMaterialKeywords, eventArgs.disabledMaterialKeywords);
+                SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
 
                 // Set scale: this computes the affect the camera's localToWorld has on the the length of the
                 // forward vector, i.e., how much farther from the camera are things than with unit scale.
@@ -670,27 +671,27 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        static void SetMaterialKeywords(Material material, List<string> enabledMaterialKeywords,
-            List<string> disabledMaterialKeywords)
+        static void SetShaderKeywords(Material material, ReadOnlyCollection<string> enabledShaderKeywords,
+            ReadOnlyCollection<string> disabledShaderKeywords)
         {
-            if (enabledMaterialKeywords != null)
+            if (enabledShaderKeywords != null)
             {
-                foreach (var materialKeyword in enabledMaterialKeywords)
+                foreach (var shaderKeyword in enabledShaderKeywords)
                 {
-                    if (!material.IsKeywordEnabled(materialKeyword))
+                    if (!material.IsKeywordEnabled(shaderKeyword))
                     {
-                        material.EnableKeyword(materialKeyword);
+                        material.EnableKeyword(shaderKeyword);
                     }
                 }
             }
 
-            if (disabledMaterialKeywords != null)
+            if (disabledShaderKeywords != null)
             {
-                foreach (var materialKeyword in disabledMaterialKeywords)
+                foreach (var shaderKeyword in disabledShaderKeywords)
                 {
-                    if (material.IsKeywordEnabled(materialKeyword))
+                    if (material.IsKeywordEnabled(shaderKeyword))
                     {
-                        material.DisableKeyword(materialKeyword);
+                        material.DisableKeyword(shaderKeyword);
                     }
                 }
             }

@@ -64,7 +64,7 @@ Prior to AR Foundation 4.2, reference image libraries had to be built into the P
 
 ## Respond to detected images
 
-Subscribe to the ARTrackedImageManager's [trackedImagesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagesChanged) event to be notified whenever an image is added (that is, first detected), updated, or removed:
+Subscribe to the ARTrackedImageManager's [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged) event to be notified whenever an image is added (that is, first detected), updated, or removed:
 
 [!code-cs[trackedimage_subscribe_to_events](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_subscribe_to_events)]
 

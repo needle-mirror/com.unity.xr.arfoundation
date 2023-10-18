@@ -57,6 +57,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Invoked once per frame to communicate changes: new anchors, updates to existing
         /// anchors, and removed anchors.
         /// </summary>
+        [Obsolete("anchorsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
         public event Action<ARAnchorsChangedEventArgs> anchorsChanged;
 
         internal bool TryAddAnchor(ARAnchor anchor)
@@ -185,6 +186,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of added anchors.</param>
         /// <param name="updated">The list of updated anchors.</param>
         /// <param name="removed">The list of removed anchors.</param>
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(
             List<ARAnchor> added,
             List<ARAnchor> updated,
@@ -194,7 +196,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 using (new ScopedProfiler("OnAnchorsChanged"))
                 {
-                    anchorsChanged(new ARAnchorsChangedEventArgs(
+                    anchorsChanged?.Invoke(new ARAnchorsChangedEventArgs(
                         added,
                         updated,
                         removed));

@@ -115,12 +115,16 @@ When XR Simulation detects images that are not part of the reference image libra
 
 For XR Simulation to track images properly, a simulated tracked image's transform must be orientated such that its local y-axis (the green arrow) points in the same direction as the image surface normal: perpendicular to the image plane with its positive direction pointing forward from the image. Likewise, a tracked image's z-axis (the blue arrow) must point upward to the top of the image. See the example simulated tracked image below as a reference:
 
-![A sample simulated tracked image GameObject hierarchy, consisting of a parent GameObject with a Simulated Tracked Image component and a child GameObject with a textured Quad.](../images/simulated-tracked-image-hierarchy.png)<br/>*An example simulated tracked image with green arrow pointing forward and blue arrow pointing up*
+![A sample simulated tracked image shown in the Scene view.](../images/simulated-tracked-image-hierarchy.png)<br/>*An example simulated tracked image with green arrow pointing forward and blue arrow pointing up*
 
-To visualize a simulated tracked image in your environment, Unity recommends creating a Quad as a child GameObject of the simulated tracked image. Rotate the Quad 90 degrees along its x-axis, and set its scale to match the Simulated Tracked Image component's **Image Physical Size Meters** property. You can see this GameObject hiearchy used in the example simulated tracked image above.
+To help you visualize simulated tracked images in your XR Simulation environments, the Simulated Tracked Image component adds `MeshFilter` and `MeshRenderer` components to your GameObject and uses them to render a textured mesh. Use this textured mesh to help you set up your image:
+
+* **Size**: Set the mesh size with the **Image Physical Size Meters** property
+* **Texture**: Set the mesh texture with the **Image** property
+* **Placement**: Move and rotate the GameObject so that the textured mesh is oriented correctly in your environment
 
 > [!NOTE]
-> Visually representing a simulated tracked image in an XR Simulation environment is optional. XR Simulation only uses the Simulated Tracked Image component to detect and track images. It does not use textured meshes rendered in the environment for this purpose.
+> Visually representing a simulated tracked image in an XR Simulation environment is optional. XR Simulation only uses the Simulated Tracked Image component to detect and track images. It does not use textured meshes rendered in the environment for this purpose. You can disable the Mesh Renderer component on the image GameObject if you prefer not to render the image mesh.
 
 ## Simulated Environment Probe component
 

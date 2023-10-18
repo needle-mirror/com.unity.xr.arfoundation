@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -25,12 +26,24 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The list of keywords to be enabled for the material.
         /// </summary>
+        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use enabledShaderKeywords instead.")]
         public List<string> enabledMaterialKeywords { get; internal set; }
 
         /// <summary>
         /// The list of keywords to be disabled for the material.
         /// </summary>
+        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use disabledShaderKeywords instead.")]
         public List<string> disabledMaterialKeywords { get; internal set; }
+
+        /// <summary>
+        /// The enabled shader keywords.
+        /// </summary>
+        public ReadOnlyCollection<string> enabledShaderKeywords { get; internal set; }
+
+        /// <summary>
+        /// The disabled shader keywords.
+        /// </summary>
+        public ReadOnlyCollection<string> disabledShaderKeywords { get; internal set; }
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -39,8 +52,8 @@ namespace UnityEngine.XR.ARFoundation
         public override int GetHashCode() => HashCodeUtil.Combine(
             HashCodeUtil.ReferenceHash(textures),
             HashCodeUtil.ReferenceHash(propertyNameIds),
-            HashCodeUtil.ReferenceHash(enabledMaterialKeywords),
-            HashCodeUtil.ReferenceHash(disabledMaterialKeywords));
+            HashCodeUtil.ReferenceHash(enabledShaderKeywords),
+            HashCodeUtil.ReferenceHash(disabledShaderKeywords));
 
         /// <summary>
         /// Tests for equality.
@@ -60,10 +73,10 @@ namespace UnityEngine.XR.ARFoundation
             => (((textures == null) ? (other.textures == null) : textures.Equals(other.textures))
                 && ((propertyNameIds == null) ? (other.propertyNameIds == null)
                     : propertyNameIds.Equals(other.propertyNameIds))
-                && ((enabledMaterialKeywords == null) ? (other.enabledMaterialKeywords == null)
-                    : enabledMaterialKeywords.Equals(other.enabledMaterialKeywords))
-                && ((disabledMaterialKeywords == null) ? (other.disabledMaterialKeywords == null)
-                    : disabledMaterialKeywords.Equals(other.disabledMaterialKeywords)));
+                && ((enabledShaderKeywords == null) ? (other.enabledShaderKeywords == null)
+                    : enabledShaderKeywords.Equals(other.enabledShaderKeywords))
+                && ((disabledShaderKeywords == null) ? (other.disabledShaderKeywords == null)
+                    : disabledShaderKeywords.Equals(other.disabledShaderKeywords)));
 
         /// <summary>
         /// Tests for equality. Same as <see cref="Equals(AROcclusionFrameEventArgs)"/>.

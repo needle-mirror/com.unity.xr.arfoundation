@@ -281,7 +281,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 if (meshesChanged != null && (m_Added.Count + m_Updated.Count + m_Removed.Count > 0))
                 {
-                    meshesChanged(new ARMeshesChangedEventArgs(m_Added, m_Updated, m_Removed));
+                    meshesChanged?.Invoke(new ARMeshesChangedEventArgs(m_Added, m_Updated, m_Removed));
                 }
             }
             finally

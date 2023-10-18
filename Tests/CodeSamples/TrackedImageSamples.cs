@@ -17,11 +17,11 @@ namespace UnityEngine.XR.ARFoundation
             [SerializeField]
             ARTrackedImageManager m_TrackedImageManager;
 
-            void OnEnable() => m_TrackedImageManager.trackedImagesChanged += OnChanged;
+            void OnEnable() => m_TrackedImageManager.trackablesChanged.AddListener(OnChanged);
 
-            void OnDisable() => m_TrackedImageManager.trackedImagesChanged -= OnChanged;
+            void OnDisable() => m_TrackedImageManager.trackablesChanged.RemoveListener(OnChanged);
 
-            void OnChanged(ARTrackedImagesChangedEventArgs eventArgs)
+            void OnChanged(ARTrackablesChangedEventArgs<ARTrackedImage> eventArgs)
             {
                 foreach (var newImage in eventArgs.added)
                 {

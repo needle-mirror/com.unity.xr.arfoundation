@@ -73,6 +73,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Raised for each new <see cref="ARFace"/> detected in the environment.
         /// </summary>
+        [Obsolete("facesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
         public event Action<ARFacesChangedEventArgs> facesChanged;
 
         /// <summary>
@@ -116,6 +117,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of added <see cref="ARFace"/>s.</param>
         /// <param name="updated">The list of updated <see cref="ARFace"/>s.</param>
         /// <param name="removed">The list of removed <see cref="ARFace"/>s.</param>
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(
             List<ARFace> added,
             List<ARFace> updated,
@@ -124,7 +126,7 @@ namespace UnityEngine.XR.ARFoundation
             if (facesChanged != null)
             {
                 using (new ScopedProfiler("OnFacesChanged"))
-                    facesChanged(new ARFacesChangedEventArgs(added, updated, removed));
+                    facesChanged?.Invoke(new ARFacesChangedEventArgs(added, updated, removed));
             }
         }
 

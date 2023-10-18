@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
+using UnityEngine.Events;
 using UnityEngine.SubsystemsImplementation;
 
 namespace UnityEngine.XR.ARFoundation
@@ -24,18 +25,24 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
     public abstract class ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>
-        : SubsystemLifecycleManager<TSubsystem, TSubsystemDescriptor, TProvider>
+        : SubsystemLifecycleManager<TSubsystem, TSubsystemDescriptor, TProvider>, ITrackablesChanged<TTrackable>
         where TSubsystem : TrackingSubsystem<TSessionRelativeData, TSubsystem, TSubsystemDescriptor, TProvider>, new()
         where TSubsystemDescriptor : SubsystemDescriptorWithProvider<TSubsystem, TProvider>
         where TProvider : SubsystemProvider<TSubsystem>
         where TSessionRelativeData : struct, ITrackable
         where TTrackable : ARTrackable<TSessionRelativeData, TTrackable>
     {
-        static List<TTrackable> s_Added = new List<TTrackable>();
-        static List<TTrackable> s_Updated = new List<TTrackable>();
-        static List<TTrackable> s_Removed = new List<TTrackable>();
+        static List<TTrackable> s_Added = new();
+        static List<TTrackable> s_Updated = new();
+        static List<TTrackable> s_Removed = new();
 
         internal static ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable> instance { get; private set; }
+
+        /// <summary>
+        /// Invoked when trackables have changed (been added, updated, or removed).
+        /// </summary>
+        [field: SerializeField]
+        public UnityEvent<ARTrackablesChangedEventArgs<TTrackable>> trackablesChanged { get; private set; }
 
         /// <summary>
         /// A collection of all trackables managed by this component.
@@ -216,7 +223,10 @@ namespace UnityEngine.XR.ARFoundation
                     (s_Updated.Count) > 0 ||
                     (s_Removed.Count) > 0)
                 {
+#pragma  warning disable CS0618 // disables warning from deprecation
                     OnTrackablesChanged(s_Added, s_Updated, s_Removed);
+#pragma  warning restore CS0618
+                    NotifyTrackablesChanged(s_Added, s_Updated, s_Removed);
                 }
             }
             finally
@@ -228,7 +238,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Invoked when trackables have change (that is, they were added, updated, or removed).
+        /// Invoked when trackables have changed (that is, they were added, updated, or removed).
         /// Use this to perform additional logic, or to invoke public events
         /// related to your trackables.
         /// </summary>
@@ -236,11 +246,23 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="updated">A list of trackables updated this frame.</param>
         /// <param name="removed">A list of trackables removed this frame.
         /// The trackable components are not destroyed until after this method returns.</param>
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected virtual void OnTrackablesChanged(
             List<TTrackable> added,
             List<TTrackable> updated,
             List<TTrackable> removed)
         { }
+
+        void NotifyTrackablesChanged(
+            List<TTrackable> added,
+            List<TTrackable> updated,
+            List<TTrackable> removed)
+        {
+            if (trackablesChanged != null)
+            {
+                trackablesChanged?.Invoke(new ARTrackablesChangedEventArgs<TTrackable>(added, updated, removed));
+            }
+        }
 
         /// <summary>
         /// Invoked after creating the trackable. The trackable's <c>sessionRelativeData</c> property will already be set.

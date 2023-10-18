@@ -1,6 +1,6 @@
 {
     "name": "Unity.XR.Simulation.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "UnityEditor.XR.Simulation",
     "references": [
         "Unity.EditorCoroutines.Editor",
         "Unity.XR.Management.Editor",

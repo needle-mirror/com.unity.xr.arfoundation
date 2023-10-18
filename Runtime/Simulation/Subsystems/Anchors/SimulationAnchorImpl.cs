@@ -24,6 +24,7 @@ namespace UnityEngine.XR.Simulation
         readonly Dictionary<TrackableId, SimulatedAnchorData> m_SimulatedAnchorDataLookup = new(k_DefaultCapacity);
 
         SimulationPlaneSubsystem m_PlaneSubsystem;
+        SimulationSessionSubsystem m_SessionSubsystem;
         XROrigin m_Origin;
 
         Guid m_SessionId;
@@ -46,13 +47,12 @@ namespace UnityEngine.XR.Simulation
                 return;
 
             m_SessionId = Guid.Empty;
-            if (SubsystemUtils.TryGetLoadedSubsystem<XRSessionSubsystem, SimulationSessionSubsystem>(out var sessionSubsystem))
-                m_SessionId = sessionSubsystem.sessionId;
+            if (SubsystemUtils.TryGetLoadedSubsystem<XRSessionSubsystem, SimulationSessionSubsystem>(out m_SessionSubsystem))
+                m_SessionId = m_SessionSubsystem.sessionId;
 
             SubsystemUtils.TryGetLoadedSubsystem<XRPlaneSubsystem, SimulationPlaneSubsystem>(out m_PlaneSubsystem);
-
             m_Origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
-            if(m_Origin == null || m_PlaneSubsystem == null || sessionSubsystem == null)
+            if(m_Origin == null || m_PlaneSubsystem == null || m_SessionSubsystem == null)
             {
                 Debug.LogWarning("SimulationAnchorImpl could not be started because the XROrigin, SimulationPlaneSubsystem, or SimulationSessionSubsystem could not be found.");
                 return;
@@ -238,6 +238,7 @@ namespace UnityEngine.XR.Simulation
             if (!m_IsStarted)
                 return;
 
+            m_SessionId = m_SessionSubsystem.sessionId;
             RemoveAllAnchorsFrom(m_AttachedAnchorDataLookup);
             RemoveAllAnchorsFrom(m_PoseAnchorDataLookup);
             ClearEnvironmentSimulatedAnchors();

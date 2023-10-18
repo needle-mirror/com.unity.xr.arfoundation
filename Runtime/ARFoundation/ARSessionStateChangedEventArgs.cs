@@ -35,10 +35,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <see cref="Equals(ARSessionStateChangedEventArgs)"/> also returns `true`; otherwise `false`.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is ARSessionStateChangedEventArgs))
-                return false;
-
-            return Equals((ARSessionStateChangedEventArgs)obj);
+            return obj is ARSessionStateChangedEventArgs args && Equals(args);
         }
 
         /// <summary>

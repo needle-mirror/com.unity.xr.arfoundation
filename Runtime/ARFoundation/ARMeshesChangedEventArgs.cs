@@ -11,17 +11,17 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The list of <c>MeshFilter</c>s added since the last event.
         /// </summary>
-        public List<MeshFilter> added { get; private set; }
+        public List<MeshFilter> added { get; }
 
         /// <summary>
         /// The list of <c>MeshFilter</c>s udpated since the last event.
         /// </summary>
-        public List<MeshFilter> updated { get; private set; }
+        public List<MeshFilter> updated { get; }
 
         /// <summary>
         /// The list of <c>MeshFilter</c>s removed since the last event.
         /// </summary>
-        public List<MeshFilter> removed { get; private set; }
+        public List<MeshFilter> removed { get; }
 
         /// <summary>
         /// Constructs an <see cref="ARMeshesChangedEventArgs"/>.
@@ -56,10 +56,7 @@ namespace UnityEngine.XR.ARFoundation
         /// and compares equal using <see cref="Equals(ARMeshesChangedEventArgs)"/>.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is ARMeshesChangedEventArgs))
-                return false;
-
-            return Equals((ARMeshesChangedEventArgs)obj);
+            return obj is ARMeshesChangedEventArgs args && Equals(args);
         }
 
         /// <summary>
@@ -69,11 +66,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>A string representation of this struct.</returns>
         public override string ToString()
         {
-            return string.Format("Added: {0}, Updated: {1}, Removed: {2}",
-                added == null ? 0 : added.Count,
-                updated == null ? 0 : updated.Count,
-                removed == null ? 0 : removed.Count);
-
+            return $"Added: {added?.Count ?? 0}, Updated: {updated?.Count ?? 0}, Removed: {removed?.Count ?? 0}";
         }
 
         /// <summary>

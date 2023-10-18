@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using UnityEngine.XR.ARSubsystems;
 
@@ -68,12 +69,24 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The list of keywords to be enabled for the material.
         /// </summary>
+        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use enabledShaderKeywords instead.")]
         public List<string> enabledMaterialKeywords { get; internal set; }
 
         /// <summary>
         /// The list of keywords to be disabled for the material.
         /// </summary>
+        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use disabledShaderKeywords instead.")]
         public List<string> disabledMaterialKeywords { get; internal set; }
+
+        /// <summary>
+        /// The enabled shader keywords.
+        /// </summary>
+        public ReadOnlyCollection<string> enabledShaderKeywords { get; internal set; }
+
+        /// <summary>
+        /// The disabled shader keywords.
+        /// </summary>
+        public ReadOnlyCollection<string> disabledShaderKeywords { get; internal set; }
 
        /// <summary>
         /// The camera grain texture effect.
@@ -120,8 +133,8 @@ namespace UnityEngine.XR.ARFoundation
                 hash = hash * 486187739 + cameraGrainTexture.GetHashCode();
                 hash = hash * 486187739 + noiseIntensity.GetHashCode();
                 hash = hash * 486187739 + exifData.GetHashCode();
-                hash = hash * 486187739 + (enabledMaterialKeywords == null ? 0 : enabledMaterialKeywords.GetHashCode());
-                hash = hash * 486187739 + (disabledMaterialKeywords == null ? 0 : disabledMaterialKeywords.GetHashCode());
+                hash = hash * 486187739 + (enabledShaderKeywords == null ? 0 : enabledShaderKeywords.GetHashCode());
+                hash = hash * 486187739 + (disabledShaderKeywords == null ? 0 : disabledShaderKeywords.GetHashCode());
                 return hash;
             }
         }
@@ -177,10 +190,10 @@ namespace UnityEngine.XR.ARFoundation
                 && (cameraGrainTexture == other.cameraGrainTexture)
                 && (noiseIntensity == other.noiseIntensity)
                 && exifData.Equals(other.exifData)
-                && ((enabledMaterialKeywords == null) ? (other.enabledMaterialKeywords == null)
-                    : enabledMaterialKeywords.Equals(other.enabledMaterialKeywords))
-                && ((disabledMaterialKeywords == null) ? (other.disabledMaterialKeywords == null)
-                    : disabledMaterialKeywords.Equals(other.disabledMaterialKeywords));
+                && ((enabledShaderKeywords == null) ? (other.enabledShaderKeywords == null)
+                    : enabledShaderKeywords.Equals(other.enabledShaderKeywords))
+                && ((disabledShaderKeywords == null) ? (other.disabledShaderKeywords == null)
+                    : disabledShaderKeywords.Equals(other.disabledShaderKeywords));
         }
 
         /// <summary>

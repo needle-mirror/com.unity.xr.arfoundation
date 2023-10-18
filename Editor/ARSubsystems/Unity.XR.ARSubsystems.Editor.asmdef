@@ -3,8 +3,7 @@
     "references": [
         "Unity.XR.ARSubsystems",
         "Unity.XR.Management",
-        "Unity.XR.Management.Editor",
-        "Unity.InternalAPIEditorBridge.005"
+        "Unity.XR.Management.Editor"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [

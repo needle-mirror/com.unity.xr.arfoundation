@@ -21,12 +21,12 @@ To add a new anchor, add the [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAncho
 
 You should not change the [transform](xref:UnityEngine.Transform) of an anchor; its transform is updated automatically by ARFoundation.
 
-When you add an anchor, it might take a frame or two before the anchor manager's [anchorsChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorsChanged) event reports it as added. During the time between being added and being reported as added, the anchor is in a "pending" state. You can query for this with the [ARAnchor.pending](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.pending) property.
+When you add an anchor, it might take a frame or two before the anchor manager's [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged) event reports it as added. During the time between being added and being reported as added, the anchor is in a "pending" state. You can query for this with the [ARAnchor.pending](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.pending) property.
 
 To remove an anchor, [Destroy](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the AR Anchor component (or its GameObject).
 
 > [!NOTE]
-> When you `Destroy` an [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor), you will not receive an `anchorsChanged` event for it.
+> When you `Destroy` an [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor), you will not receive a `trackablesChanged` event for it.
 
 ### Loading anchors
 

@@ -63,6 +63,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Invoked when planes have changed (been added, updated, or removed).
         /// </summary>
+        [Obsolete("planesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
         public event Action<ARPlanesChangedEventArgs> planesChanged;
 
         /// <summary>
@@ -236,19 +237,16 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of added <see cref="ARPlane"/>s.</param>
         /// <param name="updated">The list of updated <see cref="ARPlane"/>s.</param>
         /// <param name="removed">The list of removed <see cref="ARPlane"/>s.</param>
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(
             List<ARPlane> added,
             List<ARPlane> updated,
             List<ARPlane> removed)
         {
-            if (planesChanged != null)
+            if (trackablesChanged != null)
             {
                 using (new ScopedProfiler("OnPlanesChanged"))
-                    planesChanged(
-                        new ARPlanesChangedEventArgs(
-                            added,
-                            updated,
-                            removed));
+                    planesChanged?.Invoke(new ARPlanesChangedEventArgs(added, updated, removed));
             }
         }
 

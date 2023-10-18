@@ -568,15 +568,15 @@ namespace UnityEngine.XR.ARFoundation
                     m_TexturePropertyIds.Add(m_TextureInfos[i].descriptor.propertyNameId);
                 }
 
-                subsystem.GetMaterialKeywords(out List<string> enabledMaterialKeywords, out List<string>disabledMaterialKeywords);
+                ShaderKeywords shaderKeywords = subsystem.GetShaderKeywords();
 
                 AROcclusionFrameEventArgs args = new AROcclusionFrameEventArgs();
                 args.textures = m_Textures;
                 args.propertyNameIds = m_TexturePropertyIds;
-                args.enabledMaterialKeywords = enabledMaterialKeywords;
-                args.disabledMaterialKeywords = disabledMaterialKeywords;
+                args.enabledShaderKeywords = shaderKeywords.enabledKeywords;
+                args.disabledShaderKeywords = shaderKeywords.disabledKeywords;
 
-                frameReceived(args);
+                frameReceived?.Invoke(args);
             }
         }
     }

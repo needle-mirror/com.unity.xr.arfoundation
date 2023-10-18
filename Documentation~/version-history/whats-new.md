@@ -10,12 +10,14 @@ The most significant updates in this release include:
 - Added support for Image Stabilization, which helps stabilize shaky video from the camera.
 - Added support for Occlusion to XR Simulation, allowing you to test occlusion without having to deploy to device. The pixel values provided are given in Unity units from the camera. (By default, 1 Unity unit = 1 meter.)
 - Added the following subsystem descriptor registration methods for consistency with other subsystem descriptors:
- - [XRCameraSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.Register)
- - [XREnvironmentProbeSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor.Register)
- - [XRHumanBodySubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRHumanBodySubsystemDescriptor.Register)
- - [XROcclusionSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.Register)
+  - [XRCameraSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.Register)
+  - [XREnvironmentProbeSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor.Register)
+  - [XRHumanBodySubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRHumanBodySubsystemDescriptor.Register)
+  - [XROcclusionSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.Register)
+- Added support for planes to have multiple semantic labels via the [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications) flags enum, [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications), and [BoundedPlane.classifications](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.classifications).
 - Added `XRObjectTrackingSubsystemDescriptor.Register(XRObjectTrackingSubsystemDescriptor.Cinfo cinfo)` to replace the deprecated register methods present in `XRObjectTrackingSubsystem`
 - Added `XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo cinfo)` to replace the deprecated register methods present in `XRParticipantSubsystem`
+- Added [XRCameraSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.GetMaterialKeywords) and [XROcclusionSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.GetMaterialKeywords). Both return a new read-only [ShaderKeywords](xref:UnityEngine.XR.ARSubsystems.ShaderKeywords) struct.
 
 ### Asynchronous TryAddAnchor API
 
@@ -29,6 +31,14 @@ In previous versions of AR Foundation, it was only possible to create anchors sy
 
 To implement `TryAddAnchorAsync`, it is possible that no action is required on your part. The default implementation will attempt to forward calls to your provider's synchronous implementation and return its results.
 
+### ARTrackableManager API
+
+In AR Foundation 6, each class that inherits `ARTrackableManager` had its trackables changed event and `OnTrackablesChanged` method deprecated to be replaced by a single event [ARTrackableManager.trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged). This allows each trackable manager to now generically handle its corresponding trackables changed event and simplify the code needed to work across all `ARTrackableManager`s.
+
+Additionally, each event arguments struct used in the trackables changed events of all the `ARTrackableManager`s has been deprecated in favor of a generic [ARTrackablesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs).
+
+Lastly, the new `ARTrackableManager.trackablesChanged` event is a `UnityEvent` which means it is now accessible from the Inspector.
+
 ## Changed
 
 - Changed `Promise<T>.OnKeepWaiting()` to `virtual` instead of `abstract`.
@@ -36,8 +46,11 @@ To implement `TryAddAnchorAsync`, it is possible that no action is required on y
 - Changed `SubsystemLifecycleManager.GetActiveSubsystemInstance()` to `protected static` from `protected`, as it does not use any instance members of the `SubsystemLifecycleManager` class.
 - Changed the life cycle behavior of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) in the event that adding the anchor to the `XRAnchorSubsystem` failed. Instead of retrying the add operation every frame, the `ARAnchor` component now disables itself after the first failed attempt.
 - Changed `ARTrackable` to now implement the `ITrackable` interface, enabling generic API designs when dealing with trackables.
+- Changed the [SimulatedTrackedImage](xref:UnityEngine.XR.Simulation.SimulatedTrackedImage) component to render a textured mesh of its image, allowing you to see the image in the Scene view and Game view without requiring additional GameObjects.
+  - Removed now-unnecessary Quad GameObjects from the DefaultSimulationEnvironment.
+- Changed the behavior of `SimulationSessionSubsystem.sessionId` to now return a non-empty unique value when the subsystem is running. You can access the session id using `XRSessionSubsystem.sessionId`.
 
-### Deprecated
+## Deprecated
 
 - Deprecated and replaced the following APIs for consistency with other subsystems:
   - `XRCameraSubsystemCinfo` to `XRCameraSubsystemDescriptor.Cinfo`
@@ -56,9 +69,61 @@ To implement `TryAddAnchorAsync`, it is possible that no action is required on y
   - `XREnvironmentProbeSubsystem.Register` to `XREnvironmentProbeSubsystemDescriptor.Register`
   - `XRHumanBodySubsystem.Register` to `XRHumanBodySubsystemDescriptor.Register`
   - `XROcclusionSubsystem.Register` to `XROcclusionSubsystemDescriptor.Register`
+- Deprecated the following APIs:
+  - [PlaneClassification](xref:UnityEngine.XR.ARSubsystems.PlaneClassification)
+  - [ARPlane.classification](xref:UnityEngine.XR.ARFoundation.ARPlane.classification)
+  - [BoundedPlane.classification](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.classification)
+  - [BoundedPlane constructor](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.%23ctor(UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.Pose,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.XR.ARSubsystems.PlaneAlignment,UnityEngine.XR.ARSubsystems.TrackingState,System.IntPtr,UnityEngine.XR.ARSubsystems.PlaneClassification))
+  - [ARAnchorManager.anchorsChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorsChanged)
+  - [ARAnchorManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.OnTrackablesChanged)
+  - [AREnvironmentProbeManager.environmenProbesChanged](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.environmentProbesChanged)
+  - [AREnvironmentProbeManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.OnTrackablesChanged)
+  - [ARFaceManager.facesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.facesChanged)
+  - [ARFaceManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.OnTrackablesChanged)
+  - [ARHumanBodyManager.humanBodiesChanged](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager.humanBodiesChanged)
+  - [ARHumanBodyManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager.OnTrackablesChanged)
+  - [ARParticipantManager.participantsChanged](xref:UnityEngine.XR.ARFoundation.ARParticipantManager.participantsChanged)
+  - [ARParticipantManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARParticipantManager.OnTrackablesChanged)
+  - [ARPlaneManager.planesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.planesChanged)
+  - [ARPlaneManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.OnTrackablesChanged)
+  - [ARPointCloudManager.pointCloudsChanged](xref:UnityEngine.XR.ARFoundation.ARPointCloudManager.pointCloudsChanged)
+  - [ARPointCloudManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARPointCloudManager.OnTrackablesChanged)
+  - [ARTrackedImageManager.trackedImagesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagesChanged)
+  - [ARTrackedImageManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.OnTrackablesChanged)
+  - [ARTrackedObjectManager.trackedObjectsChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.trackedObjectsChanged)
+  - [ARTrackedObjectManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.OnTrackablesChanged)
+  - [ARTrackableManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.OnTrackablesChanged)
+  - [ARPlaneManagerListener](xref:UnityEngine.XR.ARFoundation.ARPlaneManagerListener)
+- Deprecated the following structs to be replaced by [ARTrackablesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs):
+  - [ARAnchorsChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARAnchorsChangedEventArgs)
+  - [AREnvironmentProbesChangedEvent](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbesChangedEvent)
+  - [ARFacesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARFacesChangedEventArgs)
+  - [ARHumanBodiesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARHumanBodiesChangedEventArgs)
+  - [ARParticipantsChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARParticipantsChangedEventArgs)
+  - [ARPlanesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARPlanesChangedEventArgs)
+  - [ARPointCloudChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARPointCloudChangedEventArgs)
+  - [ARTrackedImagesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackedImagesChangedEventArgs)
+  - [ARTrackedObjectsChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectsChangedEventArgs)
 - Deprecated the structs `XRObjectTrackingSubsystemDescriptor.Capabilities` and `XRParticipantSubsystemDescriptor.Capabilities`, since they do not have any functionality.
 - Deprecated the `XRObjectTrackingSubsystemDescriptor.Register` and `XRParticipantSubsystemDescriptor.Register` methods that use the now-deprecated `Capabilities` struct.
-
+- Deprecated and replaced the following APIs:
+  - `XRCameraSubsystem.GetMaterialKeywords` to `XRCameraSubsystem.GetShaderKeywords`
+  - `XROcclusionSubsystem.GetMaterialKeywords` to `XROcclusionSubsystem.GetShaderKeywords`
+  - `ARCameraFrameEventArgs.enabledMaterialKeywords` to `ARCameraFrameEventArgs.enabledShaderKeywords`
+  - `ARCameraFrameEventArgs.disabledMaterialKeywords` to `ARCameraFrameEventArgs.disabledShaderKeywords`
+  - `AROcclusionFrameEventArgs.enabledMaterialKeywords` to `AROcclusionFrameEventArgs.enabledShaderKeywords`
+  - `AROcclusionFrameEventArgs.disabledMaterialKeywords` to `AROcclusionFrameEventArgs.disabledShaderKeywords`
+- Deprecated the following Visual Scripting nodes:
+  - `OnAnchorsChanged`
+  - `OnEnvironmentProbesChanged`
+  - `OnFacesChanged`
+  - `OnHumanBodiesChanged`
+  - `OnParticipantsChanged`
+  - `OnPlanesChanged`
+  - `OnPointCloudsChanged`
+  - `OnTrackedImagesChanged`
+  - `OnTrackedObjectsChanged`
+  
 ## Removed
 
 - Removed the image file `/Editor/Icons/ARVR@4x.png` as it was unused.

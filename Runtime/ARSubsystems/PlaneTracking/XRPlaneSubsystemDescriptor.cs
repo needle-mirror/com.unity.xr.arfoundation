@@ -53,11 +53,11 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Indicates whether the provider implementation can provide a value for
-        /// <see cref="BoundedPlane.classification">BoundedPlane.classification</see>. If <see langword="false"/>, all
-        /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have a
-        /// <c>classification</c> value of <see cref="PlaneClassification.None"/>.
+        /// <see cref="BoundedPlane.classifications">BoundedPlane.classifications</see>. If <see langword="false"/>, all
+        /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have
+        /// <c>classifications</c> value of <see cref="PlaneClassifications.None"/>.
         /// </summary>
-        /// <value><see langword="true"/> if the implementation supports plane classification.
+        /// <value><see langword="true"/> if the implementation supports plane classifications.
         /// Otherwise, <see langword="false"/>.</value>
         public bool supportsClassification { get; }
 
@@ -129,9 +129,9 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Indicates whether the provider implementation can provide a value for
-            /// <see cref="BoundedPlane.classification">BoundedPlane.classification</see>. If <see langword="false"/>, all
+            /// <see cref="BoundedPlane.classifications">BoundedPlane.classifications</see>. If <see langword="false"/>, all
             /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have a
-            /// <c>classification</c> value of <see cref="PlaneClassification.None"/>.
+            /// <c>classifications</c> value of <see cref="PlaneClassifications.None"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports plane classification.
             /// Otherwise, <see langword="false"/>.</value>

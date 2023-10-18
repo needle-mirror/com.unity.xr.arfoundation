@@ -153,6 +153,7 @@ namespace UnityEngine.XR.ARFoundation
         /// This happens just before <see cref="ARTrackedImage"/>s are destroyed, so you can set <c>ARTrackedImage.destroyOnRemoval</c> to <c>false</c>
         /// from this event to suppress this behavior.
         /// </summary>
+        [Obsolete("trackedImagesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
         public event Action<ARTrackedImagesChangedEventArgs> trackedImagesChanged;
 
         /// <summary>
@@ -237,6 +238,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">A list of images added this frame.</param>
         /// <param name="updated">A list of images updated this frame.</param>
         /// <param name="removed">A list of images removed this frame.</param>
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(
             List<ARTrackedImage> added,
             List<ARTrackedImage> updated,
@@ -245,7 +247,7 @@ namespace UnityEngine.XR.ARFoundation
             if (trackedImagesChanged != null)
             {
                 using (new ScopedProfiler("OnTrackedImagesChanged"))
-                trackedImagesChanged(
+                trackedImagesChanged?.Invoke(
                     new ARTrackedImagesChangedEventArgs(
                         added,
                         updated,

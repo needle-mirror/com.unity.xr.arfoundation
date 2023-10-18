@@ -17,7 +17,7 @@ You can specify a **Detection Mode**, which can be horizontal, vertical, or both
 
 ## Plane life cycle
 
-Planes can be added, updated, and removed. Once per frame, the AR plane manager can invoke the `planesChanged` event with `List`s of planes that have been added, updated, and removed since the last frame.
+Planes can be added, updated, and removed. Once per frame, the AR plane manager can invoke the `trackablesChanged` event with `IReadOnlyCollection`s of planes that have been added, updated, and removed since the last frame.
 
 When a plane is first detected, the plane manager reports it as "added". Subsequent updates to the plane are refinements on this initial plane detection. A plane typically grows as you scan more of the environment.
 

@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 
@@ -14,7 +15,7 @@ namespace UnityEngine.XR.Simulation
                 Vector2.zero,
                 PlaneAlignment.None,
                 TrackingState.None,
-                PlaneClassification.None,
+                PlaneClassifications.None,
                 default);
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace UnityEngine.XR.Simulation
         /// different from the zero-initialized version, e.g., the <see cref="pose"/>
         /// is <c>Pose.identity</c> instead of zero-initialized.
         /// </summary>
-        public static DiscoveredPlane defaultValue => s_Default;
+        internal static DiscoveredPlane defaultValue => s_Default;
 
         TrackableId m_TrackableId;
         TrackableId m_SubsumedById;
@@ -31,62 +32,62 @@ namespace UnityEngine.XR.Simulation
         Vector2 m_Size;
         PlaneAlignment m_Alignment;
         TrackingState m_TrackingState;
-        PlaneClassification m_Classification;
+        PlaneClassifications m_Classifications;
         NativeArray<Vector2> m_Vertices;
 
         /// <summary>
         /// The <see cref="TrackableId"/> associated with this plane.
         /// </summary>
-        public TrackableId trackableId => m_TrackableId;
+        internal TrackableId trackableId => m_TrackableId;
 
         /// <summary>
         /// The <see cref="TrackableId"/> associated with the plane which subsumed this one. Will be <see cref="TrackableId.invalidId"/>
         /// if this plane has not been subsumed.
         /// </summary>
-        public TrackableId subsumedById => m_SubsumedById;
+        internal TrackableId subsumedById => m_SubsumedById;
 
         /// <summary>
         /// The <c>Pose</c>, in session space, of the plane.
         /// </summary>
-        public Pose pose => m_Pose;
+        internal Pose pose => m_Pose;
 
         /// <summary>
         /// The center of the plane in plane space (relative to its <see cref="pose"/>).
         /// </summary>
-        public Vector2 center => m_Center;
+        internal Vector2 center => m_Center;
 
         /// <summary>
         /// The extents of the plane (half dimensions) in meters.
         /// </summary>
-        public Vector2 extents => m_Size * 0.5f;
+        internal Vector2 extents => m_Size * 0.5f;
 
         /// <summary>
         /// The size (dimensions) of the plane in meters.
         /// </summary>
-        public Vector2 size => m_Size;
+        internal Vector2 size => m_Size;
 
         /// <summary>
         /// The <see cref="PlaneAlignment"/> of the plane.
         /// </summary>
-        public PlaneAlignment alignment => m_Alignment;
+        internal PlaneAlignment alignment => m_Alignment;
 
         /// <summary>
         /// The <see cref="TrackingState"/> of the plane.
         /// </summary>
-        public TrackingState trackingState => m_TrackingState;
+        internal TrackingState trackingState => m_TrackingState;
 
         /// <summary>
-        /// The <see cref="PlaneClassification"/> of the plane.
+        /// The <see cref="PlaneClassifications"/> of the plane.
         /// </summary>
-        public PlaneClassification classification => m_Classification;
+        internal PlaneClassifications classifications => m_Classifications;
 
         /// <summary>
         /// Creates a read-only alias to the <c>NativeArray</c> of the boundary vertices.
         /// The caller cannot Dispose it.
         /// </summary>
-        public NativeArray<Vector2>.ReadOnly vertices => !m_Vertices.IsCreated ? default : m_Vertices.AsReadOnly();
+        internal NativeArray<Vector2>.ReadOnly vertices => !m_Vertices.IsCreated ? default : m_Vertices.AsReadOnly();
 
-        public BoundedPlane boundedPlane => new(
+        internal BoundedPlane boundedPlane => new(
             m_TrackableId,
             m_SubsumedById,
             m_Pose,
@@ -95,7 +96,7 @@ namespace UnityEngine.XR.Simulation
             m_Alignment,
             m_TrackingState,
             IntPtr.Zero,
-            m_Classification);
+            m_Classifications);
 
         /// <summary>
         /// Constructs a new <see cref="DiscoveredPlane"/>. This is just a data container
@@ -109,9 +110,9 @@ namespace UnityEngine.XR.Simulation
         /// <param name="size">The dimensions associated with the plane.</param>
         /// <param name="alignment">The <see cref="PlaneAlignment"/> associated with the plane.</param>
         /// <param name="trackingState">The <see cref="TrackingState"/> associated with the plane.</param>
-        /// <param name="classification">The <see cref="PlaneClassification"/> associated with the plane.</param>
+        /// <param name="classifications">The <see cref="PlaneClassifications"/> associated with the plane.</param>
         /// <param name="vertices">The <c>NativeArray</c> of the boundary associated with the plane.</param>
-        public DiscoveredPlane(
+        internal DiscoveredPlane(
             TrackableId trackableId,
             TrackableId subsumedById,
             Pose pose,
@@ -119,7 +120,7 @@ namespace UnityEngine.XR.Simulation
             Vector2 size,
             PlaneAlignment alignment,
             TrackingState trackingState,
-            PlaneClassification classification,
+            PlaneClassifications classifications,
             NativeArray<Vector2> vertices)
         {
             m_TrackableId = trackableId;
@@ -129,7 +130,8 @@ namespace UnityEngine.XR.Simulation
             m_Size = size;
             m_Alignment = alignment;
             m_TrackingState = trackingState;
-            m_Classification = classification;
+            m_Classifications = classifications;
+            m_LogBuilder = new();
 
             m_Vertices = vertices.IsCreated ? new NativeArray<Vector2>(vertices, Allocator.Persistent) : default;
         }
@@ -140,16 +142,18 @@ namespace UnityEngine.XR.Simulation
         /// <returns>A string that describes the plane's properties.</returns>
         public override string ToString()
         {
-            return string.Format(
-                "Plane:\n\ttrackableId: {0}\n\tsubsumedById: {1}\n\tpose: {2}\n\tcenter: {3}\n\tsize: {4}\n\talignment: {5}\n\tclassification: {6}\n\ttrackingState: {7}",
-                trackableId,
-                subsumedById,
-                pose,
-                center,
-                size,
-                alignment,
-                classification,
-                trackingState);
+            m_LogBuilder.AppendLine("Plane:");
+            m_LogBuilder.AppendLine("\ttrackableId: " + trackableId);
+            m_LogBuilder.AppendLine("\tsubsumedById: " + subsumedById);
+            m_LogBuilder.AppendLine("\tpose: " + pose);
+            m_LogBuilder.AppendLine("\tcenter: " + center);
+            m_LogBuilder.AppendLine("\tsize: " + size);
+            m_LogBuilder.AppendLine("\talignment: " + alignment);
+            m_LogBuilder.AppendLine("\tclassifications: " + classifications);
+            m_LogBuilder.AppendLine("\ttrackingState: " + trackingState);
+            string tempString = m_LogBuilder.ToString();
+            m_LogBuilder.Clear();
+            return tempString;
         }
 
         /// <summary>
@@ -183,7 +187,7 @@ namespace UnityEngine.XR.Simulation
                 hashCode = (hashCode * 486187739) + m_Center.GetHashCode();
                 hashCode = (hashCode * 486187739) + m_Size.GetHashCode();
                 hashCode = (hashCode * 486187739) + ((int)m_Alignment).GetHashCode();
-                hashCode = (hashCode * 486187739) + ((int)m_Classification).GetHashCode();
+                hashCode = (hashCode * 486187739) + ((int)m_Classifications).GetHashCode();
                 hashCode = (hashCode * 486187739) + ((int)m_TrackingState).GetHashCode();
                 hashCode = (hashCode * 486187739) + m_Vertices.GetHashCode();
                 return hashCode;
@@ -223,9 +227,11 @@ namespace UnityEngine.XR.Simulation
                 m_Center.Equals(other.m_Center) &&
                 m_Size.Equals(other.m_Size) &&
                 (m_Alignment == other.m_Alignment) &&
-                (m_Classification == other.m_Classification) &&
+                (m_Classifications == other.m_Classifications) &&
                 (m_TrackingState == other.m_TrackingState) &&
                 (m_Vertices == other.m_Vertices);
         }
+
+        StringBuilder m_LogBuilder;
     }
 }

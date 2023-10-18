@@ -125,6 +125,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The event that is fired when a change to the detected human bodies is reported.
         /// </summary>
+        [Obsolete("humanBodiesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
         public event Action<ARHumanBodiesChangedEventArgs> humanBodiesChanged;
 
         /// <summary>
@@ -194,12 +195,13 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of human bodies added to the set of trackables.</param>
         /// <param name="updated">The list of human bodies updated in the set of trackables.</param>
         /// <param name="removed">The list of human bodies removed to the set of trackables.</param>
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(List<ARHumanBody> added, List<ARHumanBody> updated, List<ARHumanBody> removed)
         {
             if (humanBodiesChanged != null)
             {
                 using (new ScopedProfiler("OnHumanBodiesChanged"))
-                    humanBodiesChanged(new ARHumanBodiesChangedEventArgs(added, updated, removed));
+                    humanBodiesChanged?.Invoke(new ARHumanBodiesChangedEventArgs(added, updated, removed));
             }
         }
     }

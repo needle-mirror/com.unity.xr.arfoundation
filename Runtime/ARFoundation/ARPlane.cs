@@ -61,7 +61,21 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The classification of this plane.
         /// </summary>
-        public PlaneClassification classification => sessionRelativeData.classification;
+        [Obsolete("classification has been deprecated in AR Foundation 6.0. Use classifications instead.")]
+        public PlaneClassification classification
+        {
+            get
+            {
+                PlaneClassification classificationTemp = PlaneClassification.None;
+                classificationTemp.ConvertFromPlaneClassifications(sessionRelativeData.classifications);
+                return classificationTemp;
+            }
+        }
+
+        /// <summary>
+        /// The classifications of this plane.
+        /// </summary>
+        public PlaneClassifications classifications => sessionRelativeData.classifications;
 
         /// <summary>
         /// The 2D center point, in plane space
@@ -227,7 +241,7 @@ namespace UnityEngine.XR.ARFoundation
             if (m_HasBoundaryChanged && boundaryChanged != null)
             {
                 m_HasBoundaryChanged = false;
-                boundaryChanged(new ARPlaneBoundaryChangedEventArgs(this));
+                boundaryChanged?.Invoke(new ARPlaneBoundaryChangedEventArgs(this));
             }
         }
     }
