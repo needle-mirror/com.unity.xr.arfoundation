@@ -46,8 +46,7 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             if (activeSubsystem == null)
-                Debug.LogWarningFormat($"No active {typeof(TSubsystem).FullName} is available. Please ensure that a " +
-                                       "valid loader configuration exists in the XR project settings.");
+                Debug.LogWarning($"No active {typeof(TSubsystem).FullName} is available. This feature is either not supported on the current platform, or you may need to enable a provider in <b>Project Settings</b> > <b>XR Plug-in Management</b>.");
 
             return activeSubsystem;
         }

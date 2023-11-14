@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.1] - 2023-11-14
+
+### Fixed
+
+- Fixed an issue in XR Simulation where disabling and re-enabling the AR Plane Manager component would cause duplicate planes to be detected where planes had already been detected previously.
+- Fixed an issue where disabling and re-enabling the [ARDebugMenu](xref:arfoundation-debug-menu) component would create duplicate trackable visualizers and cause UI buttons to become unresponsive.
+
 ## [5.1.0] - 2023-08-30
 
 No changes
