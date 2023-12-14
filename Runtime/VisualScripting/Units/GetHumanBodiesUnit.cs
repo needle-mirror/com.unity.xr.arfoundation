@@ -20,8 +20,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         XRHumanBodySubsystem.Provider,
         XRHumanBody,
         ARHumanBody>
-    {
-    }
+    { }
 }
 
 #endif // VISUALSCRIPTING_1_8_OR_NEWER

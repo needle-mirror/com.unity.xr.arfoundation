@@ -1,5 +1,6 @@
 using System;
 using UnityEngine.Rendering;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 
 using StringBuilder = System.Text.StringBuilder;
 
@@ -8,6 +9,11 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// A structure for light estimation information provided by the AR device.
     /// </summary>
+    /// <remarks>
+    /// While you can request any of these simultaneously, support for each varies among devices.
+    /// Some platforms might not be able to simultaneously provide all options, 
+    /// or it might depend on other features (for example, camera <strong>Facing Direction</strong>).
+    /// </remarks>
     public struct ARLightEstimationData : IEquatable<ARLightEstimationData>
     {
         /// <summary>
@@ -25,7 +31,7 @@ namespace UnityEngine.XR.ARFoundation
                 if (m_AverageBrightness.HasValue)
                     return m_AverageBrightness;
                 else if (m_AverageIntensityInLumens.HasValue)
-                    return ConvertLumensToBrightness(m_AverageIntensityInLumens.Value);
+                    return UnitConversionUtility.ConvertLumensToBrightness(m_AverageIntensityInLumens.Value);
 
                 return null;
             }
@@ -68,7 +74,7 @@ namespace UnityEngine.XR.ARFoundation
                 if (m_AverageIntensityInLumens.HasValue)
                     return m_AverageIntensityInLumens;
                 else if (m_AverageBrightness.HasValue)
-                    return ConvertBrightnessToLumens(m_AverageBrightness.Value);
+                    return UnitConversionUtility.ConvertBrightnessToLumens(m_AverageBrightness.Value);
 
                 return null;
             }
@@ -99,7 +105,7 @@ namespace UnityEngine.XR.ARFoundation
                 if (m_MainLightBrightness.HasValue)
                     return m_MainLightBrightness;
                 else if (mainLightIntensityLumens.HasValue)
-                    return ConvertLumensToBrightness(mainLightIntensityLumens.Value);
+                    return UnitConversionUtility.ConvertLumensToBrightness(mainLightIntensityLumens.Value);
 
                 return null;
             }
@@ -227,20 +233,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns><c>false</c> if <paramref name="lhs"/> compares equal to <paramref name="rhs"/>, <c>true</c> otherwise.</returns>
         public static bool operator !=(ARLightEstimationData lhs, ARLightEstimationData rhs) => !lhs.Equals(rhs);
 
-        float ConvertBrightnessToLumens(float brightness)
-        {
-            return Mathf.Clamp(brightness*k_MaxLuminosity, 0f, k_MaxLuminosity);
-        }
-
-        float ConvertLumensToBrightness(float lumens)
-        {
-            return Mathf.Clamp(lumens/k_MaxLuminosity, 0f, 1f);
-        }
-
-        private float? m_AverageBrightness;
-        private float? m_AverageIntensityInLumens;
-        private float? m_MainLightBrightness;
-
-        const float k_MaxLuminosity = 2000.0f;
+        float? m_AverageBrightness;
+        float? m_AverageIntensityInLumens;
+        float? m_MainLightBrightness;
     }
 }

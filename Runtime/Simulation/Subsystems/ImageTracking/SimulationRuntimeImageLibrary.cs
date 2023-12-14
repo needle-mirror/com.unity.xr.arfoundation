@@ -57,20 +57,24 @@ namespace UnityEngine.XR.Simulation
         protected override XRReferenceImage GetReferenceImageAt(int index) => m_Images[index];
 
         /// <summary>
-        /// Given a texture, returns an <see cref="XRReferenceImage"/> from the library with a matching texture,
+        /// Given a guid of a texture, returns an <see cref="XRReferenceImage"/> from the library with a matching texture,
         /// or <c>null</c> if no match was found.
         /// </summary>
-        /// <param name="texture">The texture whose <see cref="XRReferenceImage"/> we are seeking.</param>
-        /// <returns>An <see cref="XRReferenceImage"/> with a matching texture, or <c>null</c> if not found.</returns>
-        public XRReferenceImage? GetReferenceImageWithTexture(Texture2D texture)
+        /// <param name="textureGuid">The guid of the texture whose <see cref="XRReferenceImage"/> we are seeking.</param>
+        /// <param name="image">The <see cref="XRReferenceImage"/> found with a matching <see cref="Guid"/>, will be <see langword="default"/> if not found</param>
+        /// <returns>A <see langword="bool"/> that indicates if a matching texture was found.</returns>
+        public bool TryGetReferenceImageWithGuid(Guid textureGuid, out XRReferenceImage image)
         {
             foreach (var referenceImage in m_Images)
             {
-                if (referenceImage.texture == texture)
-                    return referenceImage;
+                if (referenceImage.textureGuid == textureGuid)
+                {
+                    image = referenceImage;
+                    return true;
+                }
             }
-
-            return null;
+            image = default;
+            return false;
         }
 
         /// <inheritdoc/>
@@ -104,7 +108,7 @@ namespace UnityEngine.XR.Simulation
 
         /// <inheritdoc/>
         protected override JobHandle ScheduleAddImageJobImpl(
-            NativeSlice<byte> imageBytes, Vector2Int sizeInPixels, TextureFormat format, 
+            NativeSlice<byte> imageBytes, Vector2Int sizeInPixels, TextureFormat format,
             XRReferenceImage referenceImage, JobHandle inputDependencies) =>
             ScheduleAddImageWithValidationJobImpl(imageBytes, sizeInPixels, format, referenceImage, inputDependencies).jobHandle;
 

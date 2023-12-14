@@ -6,7 +6,7 @@ namespace UnityEngine.XR.Simulation
     /// Marks an object in a simulation environment as a source from which to provide a tracked bounded plane.
     /// This is used to provide a fully scanned plane and is not required to support plane finding in a simulation environment.
     /// </summary>
-    [AddComponentMenu("")]
+    [AddComponentMenu("")] // not yet supported by SimulationPlaneSubsystem, so don't show in AddComponentMenu
     class SimulatedBoundedPlane : MonoBehaviour
     {
         [SerializeField]

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
-using static UnityEngine.XR.Simulation.SimulationUtility;
+using static UnityEngine.XR.Simulation.SimulationUtils;
 
 namespace UnityEngine.XR.Simulation
 {
@@ -168,7 +168,13 @@ namespace UnityEngine.XR.Simulation
                 {
                     m_ImagesInScene.Add(image);
                     m_TrackingStatesOfImages.Add(TrackingState.None);
-                    m_ReferenceImagesForImages.Add(m_SimulationRuntimeImageLibrary?.GetReferenceImageWithTexture(image.texture));
+                    if (m_SimulationRuntimeImageLibrary != null)
+                    {
+                        m_SimulationRuntimeImageLibrary.TryGetReferenceImageWithGuid(
+                            image.imageAssetGuid,
+                            out var foundImage);
+                        m_ReferenceImagesForImages.Add(foundImage);
+                    }
                 }
             }
 
@@ -201,7 +207,12 @@ namespace UnityEngine.XR.Simulation
 
                         if (!m_ReferenceImagesForImages[i].HasValue && hasLibraryChanged)
                         {
-                            m_ReferenceImagesForImages[i] = m_SimulationRuntimeImageLibrary.GetReferenceImageWithTexture(image.texture);
+                            if (m_SimulationRuntimeImageLibrary.TryGetReferenceImageWithGuid(
+                                    image.imageAssetGuid,
+                                    out var foundImage))
+                            {
+                                m_ReferenceImagesForImages[i] = foundImage;
+                            }
                         }
 
                         if (prevTrackingState is TrackingState.None && newTrackingState is TrackingState.Tracking)

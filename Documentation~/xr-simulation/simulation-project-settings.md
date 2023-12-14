@@ -154,7 +154,56 @@ Go to menu **Edit** > **Preferences** > **XR Simulation** (Windows) or **Unity**
 
 ![XR Simulation preferences](../images/simulation-preferences.png)<br/>*XR Simulation preferences*
 
-| Setting | Description |
-| :------ | :---------- |
-| **Environment Prefab** | Stores the Prefab asset for the active XR Simulation environment. Note that it is easier to set this in the [XR Environment view](xref:arfoundation-simulation-xr-environment-view) because the view's Environment list only includes environment Prefabs rather than every Prefab in the project. |
-| **Enable Navigation** | Enables or disables the navigation controls that XR simulation adds to the Game view (using the **WASD**, **Q**, **E**, and **Shift** keys and the mouse). You can disable these navigation controls if they interfere with your own input handling. |
+<table>
+  <tr>
+   <td colspan="2"><strong>Setting</strong></td>
+   <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+   <td colspan="2"><strong>Environment Prefab</strong></td>
+   <td>Stores the Prefab asset for the active XR Simulation environment. Note that it is easier to set this in the <a href="simulation-xr-environment-view.md">XR Environment view</a> because the view's Environment list only includes environment Prefabs rather than every Prefab in the project.</td>
+  </tr>
+  <tr>
+   <td colspan="2"><strong>Navigation Input Action References</strong></td>
+   <td> Sets input bindings that will be used for navigation controls in XR Simulation (<strong>WASD</strong>, <strong>Q</strong>, <strong>E</strong>, and <strong>Shift</strong> keys and the mouse by default). Refer to <a href="simulation-getting-started.md#navigation-controls">Navigation controls</a> for information about using the default controls or the <a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@latest?subfolder=/manual/index.html">Input System Manual</a> to learn how to create your own custom input actions.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Unlock Input Action Reference</strong></td>
+   <td><strong>Button</strong> type action that toggles navigation actions on/off. If not set, actions will be active by default.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Move Input Action Reference</strong></td>
+   <td><strong>Value (Vector 3)</strong> type action that controls movement.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Look Input Action Reference</strong></td>
+   <td><strong>Value (Delta/Vector 2)</strong> type action that controls rotation.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Sprint Input Action Reference</strong></td>
+   <td><strong>Button</strong> type action that activates fast movement.</td>
+  </tr>
+  <tr>
+   <td colspan="2"><strong>Navigation Settings</strong></td>
+   <td>Other navigation settings for configuring speed during XR Simulation.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Look Speed</strong></td>
+   <td>Controls the simulation camera's rotation speed.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Move Speed</strong></td>
+   <td>Controls the simulation camera's base movement speed.</td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><strong>Move Speed Modifier</strong></td>
+   <td>Modifies the simulation camera's base movement speed for faster movement.</td>
+  </tr>
+</table>

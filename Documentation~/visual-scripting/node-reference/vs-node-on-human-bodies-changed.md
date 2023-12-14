@@ -19,6 +19,6 @@ Triggers when AR Human Bodies have changed. AR Human Bodies can be added, update
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [List](xref:System.Collections.Generic.List`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | List of AR Human Bodies that have been added. |
-| **Updated** | [List](xref:System.Collections.Generic.List`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | List of AR Human Bodies that have been updated. |
-| **Removed** | [List](xref:System.Collections.Generic.List`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | List of AR Human Bodies that have been removed. |
+| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been added. |
+| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been updated. |
+| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been removed. |

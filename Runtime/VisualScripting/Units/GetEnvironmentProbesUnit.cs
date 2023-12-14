@@ -20,8 +20,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         XREnvironmentProbeSubsystem.Provider,
         XREnvironmentProbe,
         AREnvironmentProbe>
-    {
-    }
+    { }
 }
 
 #endif // VISUALSCRIPTING_1_8_OR_NEWER

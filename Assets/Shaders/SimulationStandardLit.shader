@@ -45,6 +45,10 @@
         [HideInInspector] _DstBlend("__dst", Float) = 0.0
         [HideInInspector] _ZWrite("__zw", Float) = 1.0
         [HideInInspector] _Cull("__cull", Float) = 2.0
+        [HideInInspector] _SrcBlendAlpha("__srcA", Float) = 1.0
+        [HideInInspector] _DstBlendAlpha("__dstA", Float) = 0.0
+        [HideInInspector] _BlendModePreserveSpecular("_BlendModePreserveSpecular", Float) = 1.0
+        [HideInInspector] _AlphaToMask("__alphaToMask", Float) = 0.0
 
         [HideInInspector] _ReceiveShadows("Receive Shadows", Float) = 1.0
         // Editmode props
@@ -75,7 +79,6 @@
         UsePass "Universal Render Pipeline/Lit/DepthOnly"
         // This pass it not used during regular rendering, only for lightmap baking.
         UsePass "Universal Render Pipeline/Lit/Meta"
-        UsePass "Universal Render Pipeline/Lit/Universal2D"
     }
 
     Fallback "Simulation/Legacy/Standard"

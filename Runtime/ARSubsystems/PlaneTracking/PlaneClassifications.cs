@@ -73,29 +73,9 @@ namespace UnityEngine.XR.ARSubsystems
         Table = 1u << 8,
 
         /// <summary>
-        /// The plane is classified as a bed.
+        /// The plane is classified as an invisible wall face .
         /// </summary>
-        Bed = 1u << 9,
-
-        /// <summary>
-        /// The plane is classified as a lamp.
-        /// </summary>
-        Lamp = 1u << 10,
-
-        /// <summary>
-        /// The plane is classified as a plant.
-        /// </summary>
-        Plant = 1u << 11,
-
-        /// <summary>
-        /// The plane is classified as a screen.
-        /// </summary>
-        Screen = 1u << 12,
-
-        /// <summary>
-        /// The plane is classified as storage.
-        /// </summary>
-        Storage = 1u << 13,
+        InvisibleWallFace = 1u << 9,
 
         /// <summary>
         /// The plane is classified as other.

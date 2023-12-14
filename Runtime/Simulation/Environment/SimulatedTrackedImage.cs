@@ -1,6 +1,12 @@
 using System;
+using Unity.XR.CoreUtils;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using GuidUtil = UnityEngine.XR.ARSubsystems.GuidUtil;
+using SerializableGuid = UnityEngine.XR.ARSubsystems.SerializableGuid;
 
 namespace UnityEngine.XR.Simulation
 {
@@ -12,7 +18,8 @@ namespace UnityEngine.XR.Simulation
     [ExecuteInEditMode]
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
-    class SimulatedTrackedImage : MonoBehaviour
+    [DisallowMultipleComponent]
+    public class SimulatedTrackedImage : MonoBehaviour
     {
         const float k_MinSideLengthMeters = .01f;
         const string k_QuadShader = "Unlit/Texture";
@@ -34,6 +41,9 @@ namespace UnityEngine.XR.Simulation
 
         [SerializeField, HideInInspector]
         MeshRenderer m_QuadMeshRenderer;
+
+        [ReadOnly, ShowInDebugInspectorOnly]
+        SerializableGuid m_SerializableImageAssetGuid;
 
         static Material s_QuadBaseMaterial;
 
@@ -64,6 +74,11 @@ namespace UnityEngine.XR.Simulation
         /// The <see cref="TrackableId"/> for the tracked image.
         /// </summary>
         public TrackableId trackableId { get; private set; } = TrackableId.invalidId;
+
+        /// <summary>
+        /// The unique 128-bit ID associated with the asset file of the above texture.
+        /// </summary>
+        public Guid imageAssetGuid => m_SerializableImageAssetGuid.guid;
 
         /// <summary>
         /// A unique 128-bit ID associated with the content of the tracked image.
@@ -109,6 +124,10 @@ namespace UnityEngine.XR.Simulation
             }
 
             UpdateQuadMesh();
+
+#if UNITY_EDITOR
+            SetSerializedGuid();
+#endif
         }
 
         /// <remarks>
@@ -122,6 +141,11 @@ namespace UnityEngine.XR.Simulation
         {
             if (m_QuadMesh == null)
                 CreateQuadMesh();
+
+#if UNITY_EDITOR
+            if (m_SerializableImageAssetGuid.guid == Guid.Empty)
+                SetSerializedGuid();
+#endif
         }
 
         void CreateQuadMesh()
@@ -149,7 +173,7 @@ namespace UnityEngine.XR.Simulation
 
             m_QuadMesh.UploadMeshData(false);
             m_QuadMeshFilter.mesh = m_QuadMesh;
-            
+
             if (s_QuadBaseMaterial == null)
                 s_QuadBaseMaterial = new Material(Shader.Find(k_QuadShader));
 
@@ -184,6 +208,19 @@ namespace UnityEngine.XR.Simulation
 
             if (m_Image != null)
                 m_QuadMaterial.name = m_Image.name;
+        }
+
+        void SetSerializedGuid()
+        {
+#if UNITY_EDITOR
+            if (m_Image == null)
+                return;
+
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(m_Image.GetInstanceID(), out string assetGuidString, out var _);
+            var guid = new Guid(assetGuidString);
+            guid.Decompose(out var low, out var high);
+            m_SerializableImageAssetGuid = new SerializableGuid(low, high);
+#endif
         }
     }
 }

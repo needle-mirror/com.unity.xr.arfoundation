@@ -6,7 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
-using static UnityEngine.XR.Simulation.SimulationUtility;
+using static UnityEngine.XR.Simulation.SimulationUtils;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

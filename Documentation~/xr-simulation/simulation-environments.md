@@ -58,6 +58,10 @@ AR Foundation contains the following components and shaders you can use to creat
    <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated anchor. At runtime this GameObject will appear as a pre-existing anchor in the environment.</td>
   </tr>
   <tr>
+   <td colspan="2" ><a href="#simulated-light-component">Simulated Light component</a></td>
+   <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated light. At runtime this GameObject will be used for lighting estimation.</td>
+  </tr>
+  <tr>
    <td colspan="2" ><a href="#x-ray-rendering">X-ray rendering</a></td>
    <td>Add the X Ray Region component and x-ray shaders to an XR Simulation environment to make it easier to prevent the camera from being obstructed by exterior walls.</td>
   </tr>
@@ -160,6 +164,12 @@ The Simulated Mesh Classification component has a single property, **Classificat
 <a name="simulated-bounded-plane-component"></a>
 ### Simulated Bounded Plane component
 -->
+
+## Simulated Light component
+
+Add a Simulated Light component to a GameObject in your XR Simulation to designate it as a *simulated light*. Simulated lights supply data to AR Foundation's light estimation API, which your app can access via the [ARLightEstimationData](xref:UnityEngine.XR.ARFoundation.ARLightEstimationData) object passed by `ARCameraManager.frameReceived`.
+
+A simulated light requires no additional configuration. Light data comes from its GameObject's Light component.
 
 ## X-ray rendering
 

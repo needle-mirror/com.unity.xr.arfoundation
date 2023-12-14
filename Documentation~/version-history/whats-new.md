@@ -18,6 +18,12 @@ The most significant updates in this release include:
 - Added `XRObjectTrackingSubsystemDescriptor.Register(XRObjectTrackingSubsystemDescriptor.Cinfo cinfo)` to replace the deprecated register methods present in `XRObjectTrackingSubsystem`
 - Added `XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo cinfo)` to replace the deprecated register methods present in `XRParticipantSubsystem`
 - Added [XRCameraSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.GetMaterialKeywords) and [XROcclusionSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.GetMaterialKeywords). Both return a new read-only [ShaderKeywords](xref:UnityEngine.XR.ARSubsystems.ShaderKeywords) struct.
+- Added new API to make it possible for XR Simulation to identify images even if **Keep Texture at Runtime** is disabled in the reference image library:
+  - Added [SimulatedTrackedImage.imageAssetGuid](xref:UnityEngine.XR.Simulation.SimulatedTrackedImage.imageAssetGuid)
+- Added documentation:
+  - Added [Display matrix format and derivation](xref:arfoundation-display-matrix-format-and-derivation) manual page.
+  - Added [Custom background shaders](xref:arfoundation-custom-background-shaders) manual page.
+- Added settings in the XR Simulation Preferences window for configuring navigation `InputAction`s and navigation speed.
 
 ### Asynchronous TryAddAnchor API
 
@@ -39,6 +45,20 @@ Additionally, each event arguments struct used in the trackables changed events 
 
 Lastly, the new `ARTrackableManager.trackablesChanged` event is a `UnityEvent` which means it is now accessible from the Inspector.
 
+#### Visual Scripting
+
+The following Visual Scripting nodes were deprecated, and new versions were built using the new `ARTrackableManager.trackablesChanged` event:
+
+  - `OnAnchorsChanged`
+  - `OnEnvironmentProbesChanged`
+  - `OnFacesChanged`
+  - `OnHumanBodiesChanged`
+  - `OnParticipantsChanged`
+  - `OnPlanesChanged`
+  - `OnPointCloudsChanged`
+  - `OnTrackedImagesChanged`
+  - `OnTrackedObjectsChanged`
+
 ## Changed
 
 - Changed `Promise<T>.OnKeepWaiting()` to `virtual` instead of `abstract`.
@@ -49,6 +69,7 @@ Lastly, the new `ARTrackableManager.trackablesChanged` event is a `UnityEvent` w
 - Changed the [SimulatedTrackedImage](xref:UnityEngine.XR.Simulation.SimulatedTrackedImage) component to render a textured mesh of its image, allowing you to see the image in the Scene view and Game view without requiring additional GameObjects.
   - Removed now-unnecessary Quad GameObjects from the DefaultSimulationEnvironment.
 - Changed the behavior of `SimulationSessionSubsystem.sessionId` to now return a non-empty unique value when the subsystem is running. You can access the session id using `XRSessionSubsystem.sessionId`.
+- Changed XR Simulation navigation controls to be bound to configurable `InputAction`s instead of hard-coded to WASD keys.
 
 ## Deprecated
 
@@ -93,7 +114,6 @@ Lastly, the new `ARTrackableManager.trackablesChanged` event is a `UnityEvent` w
   - [ARTrackedObjectManager.trackedObjectsChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.trackedObjectsChanged)
   - [ARTrackedObjectManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.OnTrackablesChanged)
   - [ARTrackableManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.OnTrackablesChanged)
-  - [ARPlaneManagerListener](xref:UnityEngine.XR.ARFoundation.ARPlaneManagerListener)
 - Deprecated the following structs to be replaced by [ARTrackablesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs):
   - [ARAnchorsChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARAnchorsChangedEventArgs)
   - [AREnvironmentProbesChangedEvent](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbesChangedEvent)
@@ -123,7 +143,38 @@ Lastly, the new `ARTrackableManager.trackablesChanged` event is a `UnityEvent` w
   - `OnPointCloudsChanged`
   - `OnTrackedImagesChanged`
   - `OnTrackedObjectsChanged`
-  
+- Deprecated and replaced the following APIs:
+  - `XRCameraFrame.timestampNs` to `XRCameraFrame.TryGetTimestamp`
+  - `XRCameraFrame.hasTimestamp` to `XRCameraFrame.TryGetTimestamp`
+  - `XRCameraFrame.averageBrightness` to `XRCameraFrame.TryGetAverageBrightness`
+  - `XRCameraFrame.hasAverageBrightness` to `XRCameraFrame.TryGetAverageBrightness`
+  - `XRCameraFrame.averageColorTemperature` to `XRCameraFrame.TryGetAverageColorTemperature`
+  - `XRCameraFrame.hasAverageColorTemperature` to `XRCameraFrame.TryGetAverageColorTemperature`
+  - `XRCameraFrame.colorCorrection` to `XRCameraFrame.TryGetColorCorrection`
+  - `XRCameraFrame.hasColorCorrection` to `XRCameraFrame.TryGetColorCorrection`
+  - `XRCameraFrame.projectionMatrix` to `XRCameraFrame.TryGetProjectionMatrix`
+  - `XRCameraFrame.hasProjectionMatrix` to `XRCameraFrame.TryGetProjectionMatrix`
+  - `XRCameraFrame.displayMatrix` to `XRCameraFrame.TryGetDisplayMatrix`
+  - `XRCameraFrame.hasDisplayMatrix` to `XRCameraFrame.TryGetDisplayMatrix`
+  - `XRCameraFrame.averageIntensityInLumens` to `XRCameraFrame.TryGetAverageIntensityInLumens`
+  - `XRCameraFrame.hasAverageIntensityInLumens` to `XRCameraFrame.TryGetAverageIntensityInLumens`
+  - `XRCameraFrame.exposureDuration` to `XRCameraFrame.TryGetExposureDuration`
+  - `XRCameraFrame.hasExposureDuration` to `XRCameraFrame.TryGetExposureDuration`
+  - `XRCameraFrame.exposureOffset` to `XRCameraFrame.TryGetExposureOffset`
+  - `XRCameraFrame.hasExposureOffset` to `XRCameraFrame.TryGetExposureOffset`
+  - `XRCameraFrame.mainLightIntensityLumens` to `XRCameraFrame.TryGetMainLightIntensityLumens`
+  - `XRCameraFrame.hasMainLightIntensityLumens` to `XRCameraFrame.TryGetMainLightIntensityLumens`
+  - `XRCameraFrame.mainLightColor` to `XRCameraFrame.TryGetMainLightColor`
+  - `XRCameraFrame.hasMainLightColor` to `XRCameraFrame.TryGetMainLightColor`
+  - `XRCameraFrame.mainLightDirection` to `XRCameraFrame.TryGetMainLightDirection`
+  - `XRCameraFrame.hasMainLightDirection` to `XRCameraFrame.TryGetMainLightDirection`
+  - `XRCameraFrame.ambientSphericalHarmonics` to `XRCameraFrame.TryGetAmbientSphericalHarmonics`
+  - `XRCameraFrame.hasAmbientSphericalHarmonics` to `XRCameraFrame.TryGetAmbientSphericalHarmonics`
+  - `XRCameraFrame.cameraGrain` to `XRCameraFrame.TryGetCameraGrain`
+  - `XRCameraFrame.hasCameraGrain` to `XRCameraFrame.TryGetCameraGrain`
+  - `XRCameraFrame.noiseIntensity` to `XRCameraFrame.TryGetNoiseIntensity`
+  - `XRCameraFrame.hasNoiseIntensity` to `XRCameraFrame.TryGetNoiseIntensity`
+
 ## Removed
 
 - Removed the image file `/Editor/Icons/ARVR@4x.png` as it was unused.
@@ -170,6 +221,8 @@ If your code uses any of these APIs, you must upgrade to use the recommended rep
 | `XRReferenceObjectLibrary.indexOf`                                          | Use IndexOf instead.                                                                                                                                                                  |
 | `XRSessionSubsystem.subsystemImplementationType`                            | XRSessionSubsystem no longer supports the deprecated set of base classes for subsystems as of Unity 2020.2. Use providerType and, optionally, subsystemTypeOverride instead.          |
 | `XRSubsystem`                                                               | XRSubsystem has been deprecated. Use UnityEngine.SubsystemsImplementation.SubsystemWithProvider instead.                                                                              |
+
+- Removed **Enable Navigation** setting from XR Simulation Preferences window. Navigation controls can now be disabled by clearing the **Navigation Input Action References** settings in the same window.
 
 For a full list of changes and updates in this version, see the [AR Foundation package changelog](xref:arfoundation-changelog).
 

@@ -68,6 +68,8 @@ namespace UnityEngine.XR.Simulation
 
         SimulationOcclusionSubsystem m_OcclusionSubsystem;
 
+        bool m_EnableDepthReadback;
+
         internal static CameraTextureProvider AddTextureProviderToCamera(Camera simulationCamera, Camera xrCamera)
         {
             simulationCamera.depth = xrCamera.depth - 1;
@@ -139,7 +141,7 @@ namespace UnityEngine.XR.Simulation
                 ConfigureTextureReadbackForURP();
             else
 #endif // end MODULE_URP_ENABLED
-                ConfigureLegacyCommandBufferIfNeeded();
+                ConfigureBuiltInCommandBufferIfNeeded();
 
             DoCameraRender(m_SimulationRenderCamera);
 
@@ -165,7 +167,7 @@ namespace UnityEngine.XR.Simulation
 
             cameraFrameReceived?.Invoke(m_CameraFrameEventArgs.Value);
 
-            if (!IsOcclusionLoadedAndRunning()
+            if (!m_EnableDepthReadback
                 || !m_SimulationRenderDepthTexture.IsCreated()
                 && !m_SimulationRenderDepthTexture.Create())
                 return;
@@ -185,10 +187,18 @@ namespace UnityEngine.XR.Simulation
         }
 #endif // end MODULE_URP_ENABLED
 
-        void ConfigureLegacyCommandBufferIfNeeded()
+        void ConfigureBuiltInCommandBufferIfNeeded()
         {
             if (m_ReadbackCommandBuffer != null)
                 return;
+
+            ConfigureBuiltInCommandBuffer();
+        }
+
+        void ConfigureBuiltInCommandBuffer()
+        {
+            if (m_ReadbackCommandBuffer != null)
+                m_SimulationRenderCamera.RemoveCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
 
             m_ReadbackCommandBuffer = new CommandBuffer { name = "Simulation Environment Readback Command Buffer" };
             if (TryConfigureReadbackCommandBuffer(m_ReadbackCommandBuffer))
@@ -366,13 +376,22 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
+        internal void SetEnableDepthReadback(bool useDepth)
+        {
+            if (m_EnableDepthReadback != useDepth)
+            {
+                m_EnableDepthReadback = useDepth;
+                ConfigureBuiltInCommandBuffer();
+            }
+        }
+
         internal bool TryConfigureReadbackCommandBuffer(CommandBuffer commandBuffer)
         {
             commandBuffer.Clear();
             commandBuffer.name = "Simulation Background Pre-Render";
             // Must default to true so if depth isn't needed, this function still returns true.
             bool depthReabackReturn = true;
-            if (IsOcclusionLoadedAndRunning())
+            if (m_EnableDepthReadback)
             {
                 var colorTarget = m_SimulationRenderCamera.activeTexture.colorBuffer;
                 var depthTarget = m_SimulationRenderCamera.activeTexture.depthBuffer;
@@ -463,15 +482,6 @@ namespace UnityEngine.XR.Simulation
 
             nativePtr = IntPtr.Zero;
             return false;
-        }
-
-        internal bool IsOcclusionLoadedAndRunning()
-        {
-            if (m_OcclusionSubsystem == null)
-                SubsystemUtils.TryGetLoadedSubsystem<XROcclusionSubsystem, SimulationOcclusionSubsystem>(
-                    out m_OcclusionSubsystem);
-
-            return m_OcclusionSubsystem != null && m_OcclusionSubsystem.running;
         }
     }
 }

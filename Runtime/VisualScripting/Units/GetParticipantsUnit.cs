@@ -20,8 +20,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         XRParticipantSubsystem.Provider,
         XRParticipant,
         ARParticipant>
-    {
-    }
+    { }
 }
 
 #endif // VISUALSCRIPTING_1_8_OR_NEWER

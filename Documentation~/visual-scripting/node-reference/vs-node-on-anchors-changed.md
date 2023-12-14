@@ -19,6 +19,6 @@ Triggers when AR Anchors have changed. AR Anchors can be added, updated, and/or 
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [List](xref:System.Collections.Generic.List`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | List of AR Anchors that have been added. |
-| **Updated** | [List](xref:System.Collections.Generic.List`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | List of AR Anchors that have been updated. |
-| **Removed** | [List](xref:System.Collections.Generic.List`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | List of AR Anchors that have been removed. |
+| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been added. |
+| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been updated. |
+| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been removed. |

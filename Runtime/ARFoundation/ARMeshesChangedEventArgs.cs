@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<MeshFilter> added { get; }
 
         /// <summary>
-        /// The list of <c>MeshFilter</c>s udpated since the last event.
+        /// The list of <c>MeshFilter</c>s updated since the last event.
         /// </summary>
         public List<MeshFilter> updated { get; }
 

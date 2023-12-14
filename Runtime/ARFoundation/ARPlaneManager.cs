@@ -23,7 +23,9 @@ namespace UnityEngine.XR.ARFoundation
         ARPlane>, IRaycaster
     {
         [SerializeField]
-        [Tooltip("If not null, instantiates this prefab for each created plane.")]
+        [Tooltip(
+            "If not null, this prefab is instantiated for each detected plane. " +
+            "If the prefab does not contain an AR Plane component, ARPlaneManager will add one.")]
         GameObject m_PlanePrefab;
 
         /// <summary>

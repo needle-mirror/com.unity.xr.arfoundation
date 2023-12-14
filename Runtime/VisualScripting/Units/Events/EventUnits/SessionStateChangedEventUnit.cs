@@ -16,6 +16,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     public sealed class SessionStateChangedEventUnit : GlobalEventUnit<ARSessionState>
     {
         static bool s_CallbackIsRegistered;
+        static readonly Type k_HookNameKey = typeof(ARSessionStateChangedEventArgs);
 
         /// <summary>
         /// <see cref="ARSessionState"/> output.
@@ -27,7 +28,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         /// <summary>
         /// The hook name.
         /// </summary>
-        protected override string hookName => Constants.EventHookNames.sessionStateChanged;
+        protected override string hookName => Constants.EventHookNames[k_HookNameKey];
 
         /// <summary>
         /// Fired once on startup for each instance of this unit in the scene.
@@ -56,7 +57,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
 
         static void HandleStateChange(ARSessionStateChangedEventArgs args)
         {
-            EventBus.Trigger(Constants.EventHookNames.sessionStateChanged, args.state);
+            EventBus.Trigger(Constants.EventHookNames[k_HookNameKey], args.state);
         }
 
         /// <summary>

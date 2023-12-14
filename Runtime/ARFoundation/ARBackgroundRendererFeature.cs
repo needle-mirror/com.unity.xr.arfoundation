@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 #if MODULE_URP_ENABLED
 using System;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.XR.ARSubsystems;
 #else
@@ -111,6 +112,11 @@ namespace UnityEngine.XR.ARFoundation
             bool m_InvertCulling;
 
             /// <summary>
+            /// The data that is used in both RenderGraph and non-RenderGraph paths.
+            /// </summary>
+            PassData m_PassData = new PassData();
+
+            /// <summary>
             /// The default platform rendering parameters for the camera background.
             /// </summary>
             XRCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams
@@ -144,6 +150,44 @@ namespace UnityEngine.XR.ARFoundation
             /// <param name="cameraBackground">The <see cref="ARCameraBackground"/> component that provides the <see cref="Material"/>
             /// and any additional rendering information required by the render pass.</param>
             protected virtual void SetupInternal(ARCameraBackground cameraBackground) {}
+            
+            // Data provided for the static ExecutePass function
+
+            class PassData
+            {
+                internal CameraData cameraData;
+                internal bool invertCulling;
+                internal XRCameraBackgroundRenderingParams cameraBackgroundRenderingParams;
+                internal Material backgroundMaterial;
+            }
+            
+            /// <summary>
+            /// Execute the commands to render the camera background.
+            /// This function is used for both RenderGraph and non-RenderGraph paths.
+            /// It needs to be static because passing any non-static functions that rely on instance data or on local
+            /// variables, would cause the RenderGraph’s RenderFunction lambda to capture those, which will cause GC allocations.
+            /// </summary>
+            static void ExecutePass(RasterCommandBuffer cmd, PassData passData)
+            {
+                cmd.BeginSample(k_CustomRenderPassName);
+
+                ARCameraBackground.AddBeforeBackgroundRenderHandler(cmd);
+
+                cmd.SetInvertCulling(passData.invertCulling);
+
+                cmd.SetViewProjectionMatrices(Matrix4x4.identity, Matrix4x4.identity);
+
+                cmd.DrawMesh(
+                    passData.cameraBackgroundRenderingParams.backgroundGeometry,
+                    passData.cameraBackgroundRenderingParams.backgroundTransform,
+                    passData.backgroundMaterial);
+
+
+                cmd.SetViewProjectionMatrices(passData.cameraData.camera.worldToCameraMatrix,
+                    passData.cameraData.camera.projectionMatrix);
+
+                cmd.EndSample(k_CustomRenderPassName);
+            }
 
             /// <summary>
             /// Execute the commands to render the camera background.
@@ -153,23 +197,14 @@ namespace UnityEngine.XR.ARFoundation
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
                 var cmd = CommandBufferPool.Get(k_CustomRenderPassName);
-                cmd.BeginSample(k_CustomRenderPassName);
 
-                ARCameraBackground.AddBeforeBackgroundRenderHandler(cmd);
+                m_PassData.cameraData = renderingData.cameraData;
+                m_PassData.invertCulling = m_InvertCulling;
+                m_PassData.cameraBackgroundRenderingParams = m_CameraBackgroundRenderingParams;
+                m_PassData.backgroundMaterial = m_BackgroundMaterial;
 
-                cmd.SetInvertCulling(m_InvertCulling);
-
-                cmd.SetViewProjectionMatrices(Matrix4x4.identity, Matrix4x4.identity);
-
-                cmd.DrawMesh(m_CameraBackgroundRenderingParams.backgroundGeometry,
-                             m_CameraBackgroundRenderingParams.backgroundTransform,
-                             m_BackgroundMaterial);
-
-
-                cmd.SetViewProjectionMatrices(renderingData.cameraData.camera.worldToCameraMatrix,
-                                              renderingData.cameraData.camera.projectionMatrix);
-
-                cmd.EndSample(k_CustomRenderPassName);
+                ExecutePass(CommandBufferHelpers.GetRasterCommandBuffer(cmd), m_PassData);
+                
                 context.ExecuteCommandBuffer(cmd);
 
                 CommandBufferPool.Release(cmd);

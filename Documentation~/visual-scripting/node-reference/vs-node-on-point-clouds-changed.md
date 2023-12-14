@@ -19,6 +19,6 @@ Triggers when AR Point Clouds have changed. AR Point Clouds can be added, update
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [List](xref:System.Collections.Generic.List`1) of [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) | List of AR Point Clouds that have been added. |
-| **Updated** | [List](xref:System.Collections.Generic.List`1) of [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) | List of AR Point Clouds that have been updated. |
-| **Removed** | [List](xref:System.Collections.Generic.List`1) of [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) | List of AR Point Clouds that have been removed. |
+| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) | AR Point Clouds that have been added. |
+| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) | AR Point Clouds that have been updated. |
+| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) | AR Point Clouds that have been removed. |

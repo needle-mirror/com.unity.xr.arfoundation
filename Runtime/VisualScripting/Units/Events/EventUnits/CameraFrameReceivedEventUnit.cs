@@ -15,6 +15,8 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [TypeIcon(typeof(ARCameraManager))]
     public sealed class CameraFrameReceivedEventUnit : GameObjectEventUnit<ARCameraFrameEventArgs>
     {
+        static readonly Type k_HookNameKey = typeof(ARCameraFrameEventArgs);
+
         /// <summary>
         /// <see cref="ARCameraFrameEventArgs"/> output.
         /// </summary>
@@ -24,7 +26,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         /// <summary>
         /// The hook name.
         /// </summary>
-        protected override string hookName => Constants.EventHookNames.cameraFrameReceived;
+        protected override string hookName => Constants.EventHookNames[k_HookNameKey];
 
         /// <summary>
         /// The <see cref="MessageListener"/> type.

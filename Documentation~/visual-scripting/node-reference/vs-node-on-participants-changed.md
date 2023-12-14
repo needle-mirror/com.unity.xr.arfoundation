@@ -19,6 +19,6 @@ Triggers when AR Participants have changed. AR Participants can be added, update
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [List](xref:System.Collections.Generic.List`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | List of AR Participants that have been added. |
-| **Updated** | [List](xref:System.Collections.Generic.List`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | List of AR Participants that have been updated. |
-| **Removed** | [List](xref:System.Collections.Generic.List`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | List of AR Participants that have been removed. |
+| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been added. |
+| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been updated. |
+| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been removed. |

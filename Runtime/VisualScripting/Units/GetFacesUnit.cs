@@ -20,8 +20,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         XRFaceSubsystem.Provider,
         XRFace,
         ARFace>
-    {
-    }
+    { }
 }
 
 #endif // VISUALSCRIPTING_1_8_OR_NEWER

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -88,7 +87,7 @@ namespace UnityEngine.XR.ARFoundation
         void OnBoundaryChanged(ARPlaneBoundaryChangedEventArgs eventArgs)
         {
             var boundary = m_Plane.boundary;
-            if (!ARPlaneMeshGenerators.GenerateMesh(mesh, new Pose(transform.localPosition, transform.localRotation), boundary))
+            if (!ARPlaneMeshGenerator.TryGenerateMesh(mesh, boundary))
                 return;
 
             var lineRenderer = GetComponent<LineRenderer>();

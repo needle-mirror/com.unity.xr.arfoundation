@@ -401,65 +401,65 @@ namespace UnityEngine.XR.ARFoundation
 
             var lightEstimation = new ARLightEstimationData();
 
-            if (frame.hasAverageBrightness)
-                lightEstimation.averageBrightness = frame.averageBrightness;
+            if (frame.TryGetAverageBrightness(out var averageBrightness))
+                lightEstimation.averageBrightness = averageBrightness;
 
-            if (frame.hasAverageIntensityInLumens)
-                lightEstimation.averageIntensityInLumens = frame.averageIntensityInLumens;
+            if (frame.TryGetAverageIntensityInLumens(out var averageIntensityInLumens))
+                lightEstimation.averageIntensityInLumens = averageIntensityInLumens;
 
-            if (frame.hasAverageColorTemperature)
-                lightEstimation.averageColorTemperature = frame.averageColorTemperature;
+            if (frame.TryGetAverageColorTemperature(out var averageColorTemperature))
+                lightEstimation.averageColorTemperature = averageColorTemperature;
 
-            if (frame.hasColorCorrection)
-                lightEstimation.colorCorrection = frame.colorCorrection;
+            if (frame.TryGetColorCorrection(out var colorCorrection))
+                lightEstimation.colorCorrection = colorCorrection;
 
-            if (frame.hasMainLightDirection)
-                lightEstimation.mainLightDirection = frame.mainLightDirection;
+            if (frame.TryGetMainLightDirection(out var mainLightDirection))
+                lightEstimation.mainLightDirection = mainLightDirection;
 
-            if (frame.hasMainLightIntensityLumens)
-                lightEstimation.mainLightIntensityLumens = frame.mainLightIntensityLumens;
+            if (frame.TryGetMainLightIntensityLumens(out var mainLightIntensityLumens))
+                lightEstimation.mainLightIntensityLumens = mainLightIntensityLumens;
 
-            if (frame.hasMainLightColor)
-                lightEstimation.mainLightColor = frame.mainLightColor;
+            if (frame.TryGetMainLightColor(out var mainLightColor))
+                lightEstimation.mainLightColor = mainLightColor;
 
-            if (frame.hasAmbientSphericalHarmonics)
-                lightEstimation.ambientSphericalHarmonics = frame.ambientSphericalHarmonics;
+            if (frame.TryGetAmbientSphericalHarmonics(out var ambientSphericalHarmonics))
+                lightEstimation.ambientSphericalHarmonics = ambientSphericalHarmonics;
 
             var eventArgs = new ARCameraFrameEventArgs();
 
             eventArgs.lightEstimation = lightEstimation;
 
-            if (frame.hasTimestamp)
-                eventArgs.timestampNs = frame.timestampNs;
+            if (frame.TryGetTimestamp(out var timestampNs))
+                eventArgs.timestampNs = timestampNs;
 
-            if (frame.hasProjectionMatrix)
-                eventArgs.projectionMatrix = frame.projectionMatrix;
+            if (frame.TryGetProjectionMatrix(out var projectionMatrix))
+                eventArgs.projectionMatrix = projectionMatrix;
 
-            if (frame.hasDisplayMatrix)
-                eventArgs.displayMatrix = frame.displayMatrix;
+            if (frame.TryGetDisplayMatrix(out var displayMatrix))
+                eventArgs.displayMatrix = displayMatrix;
 
-            if (frame.hasExposureDuration)
-                eventArgs.exposureDuration = frame.exposureDuration;
+            if (frame.TryGetExposureDuration(out var exposureDuration))
+                eventArgs.exposureDuration = exposureDuration;
 
-            if (frame.hasExposureOffset)
-                eventArgs.exposureOffset = frame.exposureOffset;
+            if (frame.TryGetExposureOffset(out var exposureOffset))
+                eventArgs.exposureOffset = exposureOffset;
 
-            if (frame.hasCameraGrain)
+            if (frame.TryGetCameraGrain(out var cameraGrain))
             {
-                if(m_CameraGrainInfo.texture == null && ARTextureInfo.IsSupported(frame.cameraGrain))
+                if(m_CameraGrainInfo.texture == null && ARTextureInfo.IsSupported(cameraGrain))
                 {
-                    m_CameraGrainInfo = new ARTextureInfo(frame.cameraGrain);
+                    m_CameraGrainInfo = new ARTextureInfo(cameraGrain);
                 }
-                else if(m_CameraGrainInfo.texture != null && ARTextureInfo.IsSupported(frame.cameraGrain))
+                else if(m_CameraGrainInfo.texture != null && ARTextureInfo.IsSupported(cameraGrain))
                 {
-                    m_CameraGrainInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CameraGrainInfo, frame.cameraGrain);
+                    m_CameraGrainInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CameraGrainInfo, cameraGrain);
                 }
 
                 eventArgs.cameraGrainTexture = m_CameraGrainInfo.texture;
             }
 
-            if(frame.hasNoiseIntensity)
-                 eventArgs.noiseIntensity = frame.noiseIntensity;
+            if(frame.TryGetNoiseIntensity(out var noiseIntensity))
+                 eventArgs.noiseIntensity = noiseIntensity;
             
             if (frame.TryGetExifData(out XRCameraFrameExifData exifData))
                 eventArgs.exifData = exifData;

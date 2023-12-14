@@ -8,12 +8,68 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0-pre.5] - 2023-12-14
+
+### Added
+
+- Added new API to make it possible for XR Simulation to identify images even if **Keep Texture at Runtime** is disabled in the reference image library:
+  - Added [SimulatedTrackedImage.imageAssetGuid](xref:UnityEngine.XR.Simulation.SimulatedTrackedImage.imageAssetGuid)
+- Added an editor window in **Assets** > **AR Foundation** > **Build AssetBundles** that you can use to build AssetBundles containing [XRReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary) objects.
+- Added new versions of these Visual Scripting nodes, based on the new `ARTrackableManager.trackablesChanged` event:
+  - `OnAnchorsChanged`
+  - `OnEnvironmentProbesChanged`
+  - `OnFacesChanged`
+  - `OnHumanBodiesChanged`
+  - `OnParticipantsChanged`
+  - `OnPlanesChanged`
+  - `OnPointCloudsChanged`
+  - `OnTrackedImagesChanged`
+  - `OnTrackedObjectsChanged`
+- Added new API [ARPlaneMeshGenerator.TryGenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerator.TryGenerateMesh) to support generating meshes of simple polygons, i.e. concave and convex polygons.
+- Added documentation:
+  - Added [Display matrix format and derivation](xref:arfoundation-display-matrix-format-and-derivation) manual page.
+  - Added [Custom background shaders](xref:arfoundation-custom-background-shaders) manual page.
+- Added [SimulatedTrackedImage](xref:arfoundation-simulation-environments#simulated-tracked-image-component) as a public class. This class has been present since AR Foundation 5.0, but previously was not public.
+- Added settings in the XR Simulation Preferences window for configuring navigation `InputAction`s and navigation speed.
+
+### Changed
+
+- Changed the [Use reference image libraries with AssetBundles](xref:arfoundation-image-tracking#use-reference-image-libraries-with-assetbundles) section of the Image tracking documentation to mention that `ARBuildProcessor.PreprocessBuild` must be called before building AssetBundles.
+- Changed the location of the **Refresh XR Environment List** menu item from **Assets** to **Assets** > **AR Foundation**.
+- Changed the materials "Debug Face" and "Debug Plane" to be compatible with URP by changing them to the 'Simulation/StandardLit' shader instead of the unity standard shader.
+- Changed the XR Simulation Environments version imported by the XR Environment Overlay from 1.0.0 to 2.0.1.
+- Changed the [Plane detection](xref:arfoundation-plane-detection) documentation to contain more information and better organization.
+- Changed the `SimulatedLight` component to disallow multiple copies of the component on the same GameObject, which would result in incorrect light estimation.
+- Changed XR Simulation navigation controls to be bound to configurable `InputAction`s instead of hard-coded to WASD keys.
+
+### Deprecated
+
+- [ARPlaneMeshGenerators](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators)
+  - [ARPlaneMeshGenerators.GenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateMesh)
+  - [ARPlaneMeshGenerators.GenerateUvs](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateUvs)
+  - [ARPlaneMeshGenerators.GenerateIndices](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateIndices)
+
+### Removed
+
+- Removed semantic labels from [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications) that describe 3D volumes.
+- Removed the "Version History" documentation section, which contained upgrade guides for previous versions of AR Foundation. To access upgrade guides for previous AR Foundation versions, refer to the respective documentation versions.
+- Removed **Enable Navigation** setting from XR Simulation Preferences window. Navigation controls can now be disabled by clearing the **Navigation Input Action References** settings in the same window.
+
+### Fixed
+
+- Fixed an issue in XR Simulation where a warning was logged stating that saving had no effect because of a missing FilePathAttribute.
+- Fixed an issue in XR Simulation where if the AR Occlusion Manager component was disabled at the start of a scene, occlusion would not work correctly if you later enabled the component.
+- Fixed an issue where the [ARTrackableManager.trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged) event was initialized to `null`.
+- Fixed an issue where `SimulatedAnchor` components could incorrectly affect XR Simulation when used in scenes other than the XR simulation environment.
+
 ## [6.0.0-pre.4] - 2023-10-18
 
 ### Added
 
 - Added `UnityEvent` [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged) to `ARTrackableManager`.
 - Added struct [ARTrackablesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs) for the `trackablesChanged` event argument.
+- Added support for lighting estimation in [SimulationCameraSubsystem](xref:UnityEngine.XR.Simulation.SimulationCameraSubsystem).
+- Added 'InvisibleWallFace' semantic label to [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications).
 
 ### Changed
 
@@ -50,7 +106,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - [ARTrackedObjectManager.trackedObjectsChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.trackedObjectsChanged)
   - [ARTrackedObjectManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.OnTrackablesChanged)
   - [ARTrackableManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.OnTrackablesChanged)
-  - [ARPlaneManagerListener](xref:UnityEngine.XR.ARFoundation.ARPlaneManagerListener)
 - Deprecated the following structs:
   - [ARAnchorsChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARAnchorsChangedEventArgs)
   - [AREnvironmentProbesChangedEvent](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbesChangedEvent)
@@ -71,6 +126,37 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `OnPointCloudsChanged`
   - `OnTrackedImagesChanged`
   - `OnTrackedObjectsChanged`
+- Deprecated and replaced the following APIs:
+  - `XRCameraFrame.timestampNs` to `XRCameraFrame.TryGetTimestamp`
+  - `XRCameraFrame.hasTimestamp` to `XRCameraFrame.TryGetTimestamp`
+  - `XRCameraFrame.averageBrightness` to `XRCameraFrame.TryGetAverageBrightness`
+  - `XRCameraFrame.hasAverageBrightness` to `XRCameraFrame.TryGetAverageBrightness`
+  - `XRCameraFrame.averageColorTemperature` to `XRCameraFrame.TryGetAverageColorTemperature`
+  - `XRCameraFrame.hasAverageColorTemperature` to `XRCameraFrame.TryGetAverageColorTemperature`
+  - `XRCameraFrame.colorCorrection` to `XRCameraFrame.TryGetColorCorrection`
+  - `XRCameraFrame.hasColorCorrection` to `XRCameraFrame.TryGetColorCorrection`
+  - `XRCameraFrame.projectionMatrix` to `XRCameraFrame.TryGetProjectionMatrix`
+  - `XRCameraFrame.hasProjectionMatrix` to `XRCameraFrame.TryGetProjectionMatrix`
+  - `XRCameraFrame.displayMatrix` to `XRCameraFrame.TryGetDisplayMatrix`
+  - `XRCameraFrame.hasDisplayMatrix` to `XRCameraFrame.TryGetDisplayMatrix`
+  - `XRCameraFrame.averageIntensityInLumens` to `XRCameraFrame.TryGetAverageIntensityInLumens`
+  - `XRCameraFrame.hasAverageIntensityInLumens` to `XRCameraFrame.TryGetAverageIntensityInLumens`
+  - `XRCameraFrame.exposureDuration` to `XRCameraFrame.TryGetExposureDuration`
+  - `XRCameraFrame.hasExposureDuration` to `XRCameraFrame.TryGetExposureDuration`
+  - `XRCameraFrame.exposureOffset` to `XRCameraFrame.TryGetExposureOffset`
+  - `XRCameraFrame.hasExposureOffset` to `XRCameraFrame.TryGetExposureOffset`
+  - `XRCameraFrame.mainLightIntensityLumens` to `XRCameraFrame.TryGetMainLightIntensityLumens`
+  - `XRCameraFrame.hasMainLightIntensityLumens` to `XRCameraFrame.TryGetMainLightIntensityLumens`
+  - `XRCameraFrame.mainLightColor` to `XRCameraFrame.TryGetMainLightColor`
+  - `XRCameraFrame.hasMainLightColor` to `XRCameraFrame.TryGetMainLightColor`
+  - `XRCameraFrame.mainLightDirection` to `XRCameraFrame.TryGetMainLightDirection`
+  - `XRCameraFrame.hasMainLightDirection` to `XRCameraFrame.TryGetMainLightDirection`
+  - `XRCameraFrame.ambientSphericalHarmonics` to `XRCameraFrame.TryGetAmbientSphericalHarmonics`
+  - `XRCameraFrame.hasAmbientSphericalHarmonics` to `XRCameraFrame.TryGetAmbientSphericalHarmonics`
+  - `XRCameraFrame.cameraGrain` to `XRCameraFrame.TryGetCameraGrain`
+  - `XRCameraFrame.hasCameraGrain` to `XRCameraFrame.TryGetCameraGrain`
+  - `XRCameraFrame.noiseIntensity` to `XRCameraFrame.TryGetNoiseIntensity`
+  - `XRCameraFrame.hasNoiseIntensity` to `XRCameraFrame.TryGetNoiseIntensity`
 
 ### Removed
 

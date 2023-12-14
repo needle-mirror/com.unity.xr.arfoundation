@@ -42,7 +42,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Invoked when trackables have changed (been added, updated, or removed).
         /// </summary>
         [field: SerializeField]
-        public UnityEvent<ARTrackablesChangedEventArgs<TTrackable>> trackablesChanged { get; private set; }
+        public UnityEvent<ARTrackablesChangedEventArgs<TTrackable>> trackablesChanged { get; private set; } = new();
 
         /// <summary>
         /// A collection of all trackables managed by this component.

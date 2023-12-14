@@ -6,7 +6,7 @@ uid: arfoundation-universal-render-pipeline
 AR Foundation supports the Universal Render Pipeline (URP) versions 7.0.0 or later. See the URP [Getting started](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest?subfolder=/manual/InstallingAndConfiguringURP.html) page for more details on switching to URP.
 
 > [!NOTE]
-> Projects made using URP are not compatible with the High Definition Render Pipeline or the built-in Unity rendering pipeline. Before you start development, you must decide which render pipeline to use in your project.
+>  You can use either URP or the Built-in Render Pipeline with AR Foundation, but you should decide which render pipeline to use in your project before you start development.
 
 # Configure URP for AR Foundation
 
@@ -27,7 +27,7 @@ To use the Universal Rendering Pipeline, you must create a `Pipeline Asset`. Fol
 ## Configuring URP to work with ARFoundation
 
 > [!NOTE]
-> URP provides a pipeline conversion tool that builds a series of assets and pipelines to mimic the built-in Legacy rendered. If you wish to use this tool you must either do it before assigning the `ARBackgroundRenderFeature` to a renderer or make sure you go back and set the proper URP Render Pipeline Asset as your Render Pipeline Asset.
+> URP provides a pipeline conversion tool that builds a series of assets and pipelines to mimic the Built-in Render Pipeline. If you wish to use this tool you must either do it before assigning the `ARBackgroundRenderFeature` to a renderer or make sure you go back and set the proper URP Render Pipeline Asset as your Render Pipeline Asset.
 
 After you created a `Pipeline Asset`, you can configure the asset to work with AR Foundation. Follow these steps:
 

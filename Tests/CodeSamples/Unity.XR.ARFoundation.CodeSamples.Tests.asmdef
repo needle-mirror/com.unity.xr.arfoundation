@@ -1,6 +1,6 @@
 {
     "name": "Unity.XR.ARFoundation.CodeSamples.Tests",
-    "rootNamespace": "",
+    "rootNamespace": "UnityEngine.XR.ARFoundation.Tests",
     "references": [
         "Unity.XR.ARFoundation",
         "Unity.XR.ARSubsystems",

@@ -17,6 +17,8 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         ARCameraManager m_Manager;
         StringBuilder m_LogBuilder = new();
 
+        static readonly Type k_HookNameKey = typeof(ARCameraFrameEventArgs);
+
         void OnEnable()
         {
             m_Manager = GetComponent<ARCameraManager>();
@@ -50,7 +52,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         }
 
         void OnFrameReceived(ARCameraFrameEventArgs args)
-            => EventBus.Trigger(Constants.EventHookNames.cameraFrameReceived, gameObject, args);
+            => EventBus.Trigger(Constants.EventHookNames[k_HookNameKey], gameObject, args);
     }
 }
 

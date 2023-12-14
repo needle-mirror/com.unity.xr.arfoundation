@@ -20,8 +20,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         XRPointCloudSubsystem.Provider,
         XRPointCloud,
         ARPointCloud>
-    {
-    }
+    { }
 }
 
 #endif // VISUALSCRIPTING_1_8_OR_NEWER

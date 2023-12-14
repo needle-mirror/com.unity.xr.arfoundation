@@ -15,6 +15,8 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [TypeIcon(typeof(ARFace))]
     public sealed class FaceUpdatedEventUnit : GameObjectEventUnit<ARFaceUpdatedEventArgs>
     {
+        static readonly Type k_HookNameKey = typeof(ARFaceUpdatedEventArgs);
+
         /// <summary>
         /// <see cref="ARFaceUpdatedEventArgs"/> output.
         /// </summary>
@@ -25,7 +27,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         /// <summary>
         /// The hook name.
         /// </summary>
-        protected override string hookName => Constants.EventHookNames.faceUpdated;
+        protected override string hookName => Constants.EventHookNames[k_HookNameKey];
 
         /// <summary>
         /// The <see cref="MessageListener"/> type.

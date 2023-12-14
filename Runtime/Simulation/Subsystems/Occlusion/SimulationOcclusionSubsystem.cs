@@ -58,10 +58,13 @@ namespace UnityEngine.XR.Simulation
                 var simCamera = simulationCamera.GetComponent<Camera>();
                 simCamera.depthTextureMode = DepthTextureMode.Depth;
                 m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simCamera, xrCamera);
+
+                m_CameraTextureProvider.SetEnableDepthReadback(true);
             }
 
             public override void Stop()
             {
+                m_CameraTextureProvider.SetEnableDepthReadback(false);
             }
 
             public override void Destroy()

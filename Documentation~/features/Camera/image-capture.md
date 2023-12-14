@@ -43,7 +43,7 @@ Once you have an `XRCpuImage`, you can convert it to a [Texture2D](xref:UnityEng
 
 ## Synchronous conversion
 
-To synchronously convert an `XRCpuImage` to a grayscale or color format, call [XRCpuImage.Convert](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Convert(UnityEngine.XR.ARSubsystems.XRCpuImage.ConversionParams,System.IntPtr,System.Int32)):
+To synchronously convert an `XRCpuImage` to a grayscale or color format, call [XRCpuImage.Convert](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Convert*):
 
 ```csharp
 public void Convert(

@@ -19,6 +19,6 @@ Triggers when AR Environment Probes have changed. AR Environment Probes can be a
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [List](xref:System.Collections.Generic.List`1) of [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | List of AR Environment Probes that have been added. |
-| **Updated** | [List](xref:System.Collections.Generic.List`1) of [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | List of AR Environment Probes that have been updated. |
-| **Removed** | [List](xref:System.Collections.Generic.List`1) of [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | List of AR Environment Probes that have been removed. |
+| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | AR Environment Probes that have been added. |
+| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | AR Environment Probes that have been updated. |
+| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | AR Environment Probes that have been removed. |

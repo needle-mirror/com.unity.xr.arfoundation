@@ -7,6 +7,10 @@ using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 
+#if MODULE_URP_ENABLED
+using UnityEngine.Experimental.Rendering;
+#endif
+
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -176,10 +180,13 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// A custom material for rendering the background.
+        /// A custom <c>Material</c> for rendering the background with your own shader.
         /// </summary>
+        /// <remarks>
+        /// Set this property to use your own shader to render the background. AR Foundation uses the <c>Material</c> from the active provider plug-in by default, but you can override the default with your own <c>Material</c>.
+        /// </remarks>
         /// <value>
-        /// A custom material for rendering the background.
+        /// A custom <c>Material</c> for rendering the background with your own shader.
         /// </value>
         public Material customMaterial
         {
@@ -548,6 +555,13 @@ namespace UnityEngine.XR.ARFoundation
         {
             commandBuffer.IssuePluginEvent(s_BeforeBackgroundRenderHandlerFuncPtr, 0);
         }
+        
+#if MODULE_URP_ENABLED
+        internal static void AddBeforeBackgroundRenderHandler(RasterCommandBuffer commandBuffer)
+        {
+            commandBuffer.IssuePluginEvent(s_BeforeBackgroundRenderHandlerFuncPtr, 0);
+        }
+#endif
 
         /// <summary>
         /// Callback for the camera frame event.

@@ -19,6 +19,6 @@ Triggers when AR Tracked Objects have changed. AR Tracked Objects can be added, 
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [List](xref:System.Collections.Generic.List`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | List of AR Tracked Objects that have been added. |
-| **Updated** | [List](xref:System.Collections.Generic.List`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | List of AR Tracked Objects that have been updated. |
-| **Removed** | [List](xref:System.Collections.Generic.List`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | List of AR Tracked Objects that have been removed. |
+| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been added. |
+| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been updated. |
+| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been removed. |

@@ -98,17 +98,7 @@ For the best experience using AR Foundation with visual scripting, it is recomme
 
 **Collections**
 
-* `List of AR Plane`
-* `List of AR Tracked Image`
-* `List of AR Tracked Object`
-* `List of AR Face`
-* `List of AR Human Body`
-* `List of AR Point Cloud`
-* `List of AR Raycast`
 * `List of AR Raycast Hit`
-* `List of AR Anchor`
-* `List of AR Environment Probe`
-* `List of AR Participant`
 
 After adding the recommended Type Options, click **Regenerate Nodes** again.
 

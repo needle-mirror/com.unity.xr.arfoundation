@@ -1,11 +1,14 @@
+using System;
+using System.Collections.Generic;
+
 namespace UnityEngine.XR.ARFoundation.VisualScripting
 {
     static class Constants
     {
-        public const string k_ARFoundation_Unit_Category = "AR Foundation";
-        public const string k_Event_Unit_Category = "Events/AR Foundation";
+        internal const string k_ARFoundation_Unit_Category = "AR Foundation";
+        internal const string k_Event_Unit_Category = "Events/AR Foundation";
 
-        public enum ARFoundationFeatureOrder
+        internal enum ARFoundationFeatureOrder
         {
             Session,
             DeviceTracking,
@@ -24,7 +27,8 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             Participants,
         }
 
-        public static class EventHookNames
+        // These Event Hook Names can be deleted once the deprecated units that use them are deleted
+        internal static class DeprecatedEventHookNames
         {
             public const string planesChanged = nameof(planesChanged);
             public const string trackedImagesChanged = nameof(trackedImagesChanged);
@@ -35,9 +39,23 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             public const string pointCloudsChanged = nameof(pointCloudsChanged);
             public const string environmentProbesChanged = nameof(environmentProbesChanged);
             public const string participantsChanged = nameof(participantsChanged);
-            public const string sessionStateChanged = nameof(sessionStateChanged);
-            public const string faceUpdated = nameof(faceUpdated);
-            public const string cameraFrameReceived = nameof(cameraFrameReceived);
         }
+
+        internal static readonly Dictionary<Type, string> EventHookNames = new()
+        {
+            { typeof(ARTrackablesChangedEventArgs<ARPlane>), "ARPlanesChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARTrackedImage>), "ARTrackedImagesChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARTrackedObject>), "ARTrackedObjectsChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARFace>), "ARFacesChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARHumanBody>), "ARHumanBodiesChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARPointCloud>), "ARPointCloudsChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARRaycast>), "ARRaycastsChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARAnchor>), "ARAnchorsChanged" },
+            { typeof(ARTrackablesChangedEventArgs<AREnvironmentProbe>), "AREnvironmentProbesChanged" },
+            { typeof(ARTrackablesChangedEventArgs<ARParticipant>), "ARParticipantsChanged" },
+            { typeof(ARSessionStateChangedEventArgs), "ARSessionStateChanged" },
+            { typeof(ARFaceUpdatedEventArgs), "ARFaceUpdated" },
+            { typeof(ARCameraFrameEventArgs), "ARCameraFrameReceived" },
+        };
     }
 }

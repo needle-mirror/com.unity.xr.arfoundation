@@ -51,6 +51,9 @@ namespace UnityEngine.XR.Simulation
             double m_LastFrameTimestamp = 0;
 
             XRSupportedCameraBackgroundRenderingMode m_RequestedBackgroundRenderingMode = XRSupportedCameraBackgroundRenderingMode.BeforeOpaques;
+            
+            Feature m_RequestedLightEstimation = Feature.None;
+            SimulatedLight m_MainLight;
 
             public override XRCpuImage.Api cpuImageApi => SimulationXRCpuImageApi.instance;
             public override Feature currentCamera => Feature.WorldFacingCamera;
@@ -69,6 +72,12 @@ namespace UnityEngine.XR.Simulation
             }
 
             public override Feature currentLightEstimation => base.currentLightEstimation;
+
+            public override Feature requestedLightEstimation
+            {
+                get => m_RequestedLightEstimation;
+                set => m_RequestedLightEstimation = value;
+            }
 
             public override Material cameraMaterial => m_CameraMaterial;
 
@@ -140,6 +149,8 @@ namespace UnityEngine.XR.Simulation
 
                 m_XRCameraConfiguration = new XRCameraConfiguration(IntPtr.Zero, new Vector2Int(m_Camera.pixelWidth, m_Camera.pixelHeight));
                 m_XRCameraIntrinsics = new XRCameraIntrinsics();
+                
+                BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
             }
 
             public override void Stop()
@@ -149,6 +160,8 @@ namespace UnityEngine.XR.Simulation
                     m_CameraTextureProvider.cameraFrameReceived -= CameraFrameReceived;
                     m_CameraTextureProvider.onTextureReadbackFulfilled -= SimulationXRCpuImageApi.OnCameraDataReceived;
                 }
+                
+                BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentSetupFinished;
             }
 
             public override void Destroy()
@@ -157,6 +170,27 @@ namespace UnityEngine.XR.Simulation
                 {
                     Object.Destroy(m_CameraTextureProvider.gameObject);
                     m_CameraTextureProvider = null;
+                }
+            }
+
+            void OnEnvironmentSetupFinished()
+            {
+                m_MainLight = null;
+                
+                foreach (var light in SimulatedLight.instances)
+                {
+                    if (light.simulatedLight.type == LightType.Directional)
+                    {
+                        if (m_MainLight == null)
+                        {
+                            m_MainLight = light;
+                        }
+                        else if (m_MainLight.simulatedLight.intensity < light.simulatedLight.intensity)
+                        {
+                            Debug.LogWarning("Multiple directional lights were detected in the XR Simulation environment. The light with the highest intensity will be used as the main light.");
+                            m_MainLight = light;
+                        }
+                    }
                 }
             }
 
@@ -234,6 +268,35 @@ namespace UnityEngine.XR.Simulation
                     m_LastFrameTimestamp = timeStamp;
                     return false;
                 }
+                
+                if (SimulatedLight.instances.Count > 0)
+                {
+                    averageBrightness = CalculateAverageBrightness();
+                    properties |= XRCameraFrameProperties.AverageBrightness;
+
+                    if (GraphicsSettings.lightsUseLinearIntensity && CalculateAverageColorTemperature(out averageColorTemperature))
+                    {
+                        properties |= XRCameraFrameProperties.AverageColorTemperature;
+                    }
+
+                    averageIntensityInLumens = CalculateAverageIntensityInLumens();
+                    properties |= XRCameraFrameProperties.AverageIntensityInLumens;
+
+                    if (m_MainLight != null)
+                    {
+                        colorCorrection = m_MainLight.simulatedLight.color;
+                        properties |= XRCameraFrameProperties.ColorCorrection;
+                        
+                        mainLightIntensityInLumens = UnitConversionUtility.ConvertBrightnessToLumens(m_MainLight.simulatedLight.intensity);
+                        properties |= XRCameraFrameProperties.MainLightIntensityLumens;
+
+                        mainLightColor = m_MainLight.simulatedLight.color;
+                        properties |= XRCameraFrameProperties.MainLightColor;
+
+                        mainLightDirection = m_MainLight.transform.forward;
+                        properties |= XRCameraFrameProperties.MainLightDirection;
+                    }
+                }
 
                 m_LastFrameTimestamp = timeStamp;
 
@@ -260,6 +323,44 @@ namespace UnityEngine.XR.Simulation
                 return true;
             }
 
+            static float CalculateAverageBrightness()
+            {
+                float sum = 0.0f;
+                foreach (var light in SimulatedLight.instances)
+                {
+                    sum += light.simulatedLight.intensity;
+                }
+                return sum / SimulatedLight.instances.Count;
+            }
+
+            static bool CalculateAverageColorTemperature(out float result)
+            {
+                float sum = 0.0f;
+                bool usesColorTemperature = false;
+                
+                foreach (var light in SimulatedLight.instances)
+                {
+                    if (light.simulatedLight.useColorTemperature)
+                    {
+                        sum += light.simulatedLight.colorTemperature;
+                        usesColorTemperature = true;
+                    }
+                }
+                
+                result = sum / SimulatedLight.instances.Count;
+                return usesColorTemperature;
+            }
+            
+            static float CalculateAverageIntensityInLumens()
+            {
+                float sum = 0.0f;
+                foreach (var light in SimulatedLight.instances)
+                {
+                    sum += UnitConversionUtility.ConvertBrightnessToLumens(light.simulatedLight.intensity);
+                }
+                return sum / SimulatedLight.instances.Count;
+            }
+
             public override bool TryGetIntrinsics(out XRCameraIntrinsics cameraIntrinsics)
             {
                 cameraIntrinsics = m_XRCameraIntrinsics;
@@ -276,6 +377,10 @@ namespace UnityEngine.XR.Simulation
                 subsystemTypeOverride = typeof(SimulationCameraSubsystem),
                 supportsCameraConfigurations = true,
                 supportsCameraImage = true,
+                supportsAverageColorTemperature = true,
+                supportsColorCorrection = true,
+                supportsAverageBrightness = true,
+                supportsAverageIntensityInLumens = true,
             };
 
             XRCameraSubsystemDescriptor.Register(cInfo);

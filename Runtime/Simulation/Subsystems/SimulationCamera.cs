@@ -4,29 +4,52 @@ using Unity.XR.CoreUtils;
 namespace UnityEngine.XR.Simulation
 {
     /// <summary>
-    /// Takes mouse and keyboard input and uses it to compute a new camera transform
+    /// Takes updates from InputSystem bindings and uses it to compute a new camera transform
     /// which is passed to our InputSubsystem in native code.
     /// </summary>
     class SimulationCamera : MonoBehaviour
     {
         static SimulationCamera s_Instance;
 
+        bool m_InputHandlerEnabled;
         CameraFPSModeHandler m_FPSModeHandler;
 
         void OnEnable()
         {
-            if (Application.isPlaying)
-                m_FPSModeHandler = new CameraFPSModeHandler();
+            ToggleControls(true);
         }
 
-        void Update()
+        void OnDisable()
         {
-            if (Application.isPlaying && XRSimulationPreferences.Instance.enableNavigation)
-                m_FPSModeHandler.HandleGameInput();
+            ToggleControls(false);
+        }
 
-            if (!m_FPSModeHandler.moveActive)
+        void Awake()
+        {
+            m_FPSModeHandler = new CameraFPSModeHandler();
+        }
+
+        void ToggleControls(bool active)
+        {
+            if (m_FPSModeHandler == null || active == m_InputHandlerEnabled)
                 return;
 
+            if (active)
+            {
+                InputSystem.InputSystem.onAfterUpdate += OnInputUpdate;
+                m_FPSModeHandler.OnEnable();
+            }
+            else
+            {
+                InputSystem.InputSystem.onAfterUpdate -= OnInputUpdate;
+                m_FPSModeHandler.OnDisable();
+            }
+
+            m_InputHandlerEnabled = active;
+        }
+
+        void OnInputUpdate()
+        {
             var pose = m_FPSModeHandler.CalculateMovement(transform.GetWorldPose(), true);
             UpdatePose(pose);
         }
@@ -40,7 +63,7 @@ namespace UnityEngine.XR.Simulation
                 localPose.rotation.x, localPose.rotation.y, localPose.rotation.z, localPose.rotation.w);
         }
 
-        public void SetSimulationEnvironment(SimulationEnvironment simulationEnvironment)
+        internal void SetSimulationEnvironment(SimulationEnvironment simulationEnvironment)
         {
             if (simulationEnvironment != null)
             {
@@ -65,7 +88,7 @@ namespace UnityEngine.XR.Simulation
         }
 
         [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_SetCameraPose")]
-        public static extern void SetCameraPose(float pos_x, float pos_y, float pos_z,
+        static extern void SetCameraPose(float pos_x, float pos_y, float pos_z,
         float rot_x, float rot_y, float rot_z, float rot_w);
     }
 }

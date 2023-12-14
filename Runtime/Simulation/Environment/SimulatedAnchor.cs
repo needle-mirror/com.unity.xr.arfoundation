@@ -13,8 +13,20 @@ namespace UnityEngine.XR.Simulation
     {
         internal static readonly HashSet<SimulatedAnchor> instances = new();
 
-        void OnEnable() => instances.Add(this);
+        void OnEnable()
+        {
+            if (SimulationUtils.IsInSimulationEnvironment(gameObject))
+            {
+                instances.Add(this);
+            }
+        }
 
-        void OnDisable() => instances.Remove(this);
+        void OnDisable()
+        {
+            if (SimulationUtils.IsInSimulationEnvironment(gameObject))
+            {
+                instances.Remove(this);
+            }
+        }
     }
 }

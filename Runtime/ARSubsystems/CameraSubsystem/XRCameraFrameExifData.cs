@@ -155,18 +155,6 @@ namespace UnityEngine.XR.ARSubsystems
         XRCameraFrameExifDataMeteringMode m_MeteringMode;
         XRCameraFrameExifDataProperties m_Properties;
 
-        bool hasApertureValue => (m_Properties & XRCameraFrameExifDataProperties.ApertureValue) != 0;
-        bool hasBrightnessValue => (m_Properties & XRCameraFrameExifDataProperties.BrightnessValue) != 0;
-        bool hasExposureTime => (m_Properties & XRCameraFrameExifDataProperties.ExposureTime) != 0;
-        bool hasShutterSpeedValue => (m_Properties & XRCameraFrameExifDataProperties.ShutterSpeedValue) != 0;
-        bool hasExposureBiasValue => (m_Properties & XRCameraFrameExifDataProperties.ExposureBiasValue) != 0;
-        bool hasFNumber => (m_Properties & XRCameraFrameExifDataProperties.FNumber) != 0;
-        bool hasFocalLength => (m_Properties & XRCameraFrameExifDataProperties.FocalLength) != 0;
-        bool hasFlash => (m_Properties & XRCameraFrameExifDataProperties.Flash) != 0;
-        bool hasColorSpace => (m_Properties & XRCameraFrameExifDataProperties.ColorSpace) != 0;
-        bool hasPhotographicSensitivity => (m_Properties & XRCameraFrameExifDataProperties.PhotographicSensitivity) != 0;
-        bool hasMeteringMode => (m_Properties & XRCameraFrameExifDataProperties.MeteringMode) != 0;
-
         /// <summary>
         /// Points to a provider-specific data structure in unmanaged memory that you can use to access additional EXIF properties.
         /// Refer to your provider's documentation to learn how to use this pointer.
@@ -223,132 +211,187 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get the lens aperture of the frame if possible.
         /// </summary>
         /// <param name="apertureValue">The lens aperture of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the lens aperture of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasApertureValue"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the lens aperture of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetApertureValue(out double apertureValue)
         {
-            apertureValue = m_ApertureValue;
-            return hasApertureValue;
+            if ((m_Properties & XRCameraFrameExifDataProperties.ApertureValue) != 0)
+            {
+                apertureValue = m_ApertureValue;
+                return true;
+            }
+
+            apertureValue = default;
+            return false;
         }
 
         /// <summary>
         /// Get the brightness of the frame if possible.
         /// </summary>
         /// <param name="brightnessValue">The brightness of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the brightness of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasBrightnessValue"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the brightness of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetBrightnessValue(out double brightnessValue)
         {
-            brightnessValue = m_BrightnessValue;
-            return hasBrightnessValue;
+            if ((m_Properties & XRCameraFrameExifDataProperties.BrightnessValue) != 0)
+            {
+                brightnessValue = m_BrightnessValue;
+                return true;
+            }
+
+            brightnessValue = default;
+            return false;
         }
 
         /// <summary>
         /// Get the exposure time of the frame if possible.
         /// </summary>
         /// <param name="exposureTime">The exposure time of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the exposure time of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasExposureTime"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the exposure time of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetExposureTime(out double exposureTime)
         {
-            exposureTime = m_ExposureTime;
-            return hasExposureTime;
+            if ((m_Properties & XRCameraFrameExifDataProperties.ExposureTime) != 0)
+            {
+                exposureTime = m_ExposureTime;
+                return true;
+            }
+
+            exposureTime = default;
+            return false;
         }
 
         /// <summary>
         /// Get the shutter speed of the frame if possible.
         /// </summary>
         /// <param name="shutterSpeedValue">The shutter speed of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the shutter speed of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasShutterSpeedValue"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the shutter speed of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetShutterSpeedValue(out double shutterSpeedValue)
         {
-            shutterSpeedValue = m_ShutterSpeedValue;
-            return hasShutterSpeedValue;
+            if ((m_Properties & XRCameraFrameExifDataProperties.ShutterSpeedValue) != 0)
+            {
+                shutterSpeedValue = m_ShutterSpeedValue;
+                return true;
+            }
+
+            shutterSpeedValue = default;
+            return false;
         }
 
         /// <summary>
         /// Get the exposure bias of the frame if possible.
         /// </summary>
         /// <param name="exposureBiasValue">The exposure bias of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the exposure bias of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasExposureBiasValue"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the exposure bias of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetExposureBiasValue(out float exposureBiasValue)
         {
-            exposureBiasValue = m_ExposureBiasValue;
-            return hasExposureBiasValue;
+            if ((m_Properties & XRCameraFrameExifDataProperties.ExposureBiasValue) != 0)
+            {
+                exposureBiasValue = m_ExposureBiasValue;
+                return true;
+            }
+
+            exposureBiasValue = default;
+            return false;
         }
 
         /// <summary>
         /// Get the F number of the frame if possible.
         /// </summary>
         /// <param name="fNumber">The F number of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the F number of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasFNumber"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the F number of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetFNumber(out float fNumber)
         {
-            fNumber = m_FNumber;
-            return hasFNumber;
+            if ((m_Properties & XRCameraFrameExifDataProperties.FNumber) != 0)
+            {
+                fNumber = m_FNumber;
+                return true;
+            }
+
+            fNumber = default;
+            return false;
         }
 
         /// <summary>
         /// Get the lens focal length of the frame if possible.
         /// </summary>
         /// <param name="focalLength">The lens focal length of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the lens focal length of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasFocalLength"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the lens focal length of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetFocalLength(out float focalLength)
         {
-            focalLength = m_FocalLength;
-            return hasFocalLength;
+            if ((m_Properties & XRCameraFrameExifDataProperties.FocalLength) != 0)
+            {
+                focalLength = m_FocalLength;
+                return true;
+            }
+
+            focalLength = default;
+            return false;
         }
 
         /// <summary>
         /// Get the flash status of the frame if possible.
         /// </summary>
         /// <param name="flash">The flash status of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the flash status of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasFlash"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the flash status of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetFlash(out short flash)
         {
-            flash = m_Flash;
-            return hasFlash;
+            if ((m_Properties & XRCameraFrameExifDataProperties.Flash) != 0)
+            {
+                flash = m_Flash;
+                return true;
+            }
+
+            flash = default;
+            return false;
         }
 
         /// <summary>
         /// Get the color space of the frame if possible.
         /// </summary>
         /// <param name="colorSpace">The color space of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the color space of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasColorSpace"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the color space of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetColorSpace(out XRCameraFrameExifDataColorSpace colorSpace)
         {
-            colorSpace = m_ColorSpace;
-            return hasColorSpace;
+            if ((m_Properties & XRCameraFrameExifDataProperties.ColorSpace) != 0)
+            {
+                colorSpace = m_ColorSpace;
+                return true;
+            }
+
+            colorSpace = default;
+            return false;
         }
 
         /// <summary>
         /// Get the photographic sensitivity of the frame if possible.
         /// </summary>
         /// <param name="photographicSensitivity">The photographic sensitivity of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the photographic sensitivity of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasPhotographicSensitivity"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the photographic sensitivity of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetPhotographicSensitivity(out short photographicSensitivity)
         {
-            photographicSensitivity = m_PhotographicSensitivity;
-            return hasPhotographicSensitivity;
+            if ((m_Properties & XRCameraFrameExifDataProperties.PhotographicSensitivity) != 0)
+            {
+                photographicSensitivity = m_PhotographicSensitivity;
+                return true;
+            }
+
+            photographicSensitivity = default;
+            return false;
         }
 
         /// <summary>
         /// Get the metering mode of the frame if possible.
         /// </summary>
         /// <param name="meteringMode">The metering mode of the camera frame.</param>
-        /// <returns><see langword="true"/> if the EXIF data contains the metering mode of the frame. Otherwise, <see langword="false"/>.
-        /// Equal to <see cref="hasMeteringMode"/>.</returns>
+        /// <returns><see langword="true"/> if the EXIF data contains the metering mode of the frame. Otherwise, <see langword="false"/>.</returns>
         public bool TryGetMeteringMode(out XRCameraFrameExifDataMeteringMode meteringMode)
         {
-            meteringMode = m_MeteringMode;
-            return hasMeteringMode;
+            if ((m_Properties & XRCameraFrameExifDataProperties.MeteringMode) != 0)
+            {
+                meteringMode = m_MeteringMode;
+                return true;
+            }
+
+            meteringMode = default;
+            return false;
         }
 
         /// <summary>

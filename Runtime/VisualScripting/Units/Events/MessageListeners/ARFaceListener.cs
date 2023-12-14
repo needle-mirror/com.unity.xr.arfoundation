@@ -14,8 +14,10 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     {
         ARFace m_Face;
 
+        static readonly Type k_HookNameKey = typeof(ARFaceUpdatedEventArgs);
+
         void OnFaceUpdated(ARFaceUpdatedEventArgs args)
-            => EventBus.Trigger(Constants.EventHookNames.faceUpdated, gameObject, args);
+            => EventBus.Trigger(Constants.EventHookNames[k_HookNameKey], gameObject, args);
 
         void OnEnable()
         {

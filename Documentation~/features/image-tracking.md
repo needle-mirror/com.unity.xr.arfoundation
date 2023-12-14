@@ -28,12 +28,13 @@ You can specify the following information:
 
 |**Field**|**Description**|
 |------|-------|
+|Texture2D asset| A Texture2D asset created from the reference image file. Refer to [Importing Textures](https://docs.unity3d.com/Manual/ImportingTextures.html) for more information about creating Texture2D assets from image files.|
 |**Name**|A string name that is available at runtime. This name isn't used by the subsystem, but it can be useful to identify which reference image has been detected. There is no check for duplicate name conflicts.|
 |**Specify Size**|If enabled, you can specify the physical size you expect the image to be in the real world. This field is mandatory for some providers and optional for others. For more information, see your provider's documentation. If you specify this field, the dimensions must be greater than zero. Editing one dimension (for example, width) causes the other dimension (height) to change automatically based on the image's aspect ratio.|
 |**Keep Texture at Runtime**|If enabled, `XRReferenceImage.texture` contains a reference to the source texture. This can be useful if you need access to the source texture at runtime. By default, this is unchecked to reduce the built Player size. When unchecked, `XRReferenceImage.texture` is null.|
 
 >[!TIP]
-> You can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
+> You can include an `XRReferenceImageLibrary` in an AssetBundle and use it in an app that was not built with that reference image library present.
 
 ## Reference image library
 
@@ -58,9 +59,26 @@ RuntimeReferenceImageLibrary runtimeLibrary = trackedImageManager.CreateRuntimeL
 > [!NOTE]
 > The ordering of the [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage)s in the `RuntimeReferenceImageLibrary` is undefined; that is, it might not match the order in which the images appeared in the source `XRReferenceImageLibrary`. Each reference image does have a string name that you assign it, and a randomly assigned [Guid](xref:System.Guid). The `Guid` are the same between the source `XRReferenceImageLibrary` and its corresponding `RuntimeReferenceImageLibrary`.
 
-## Use reference image libraries with asset bundles
+## Use reference image libraries with AssetBundles
 
-Prior to AR Foundation 4.2, reference image libraries had to be built into the Player; that is, the `XRReferenceImageLibrary` served only as a means to look up data that was expected to be packaged in the app. This meant that you could not, for example, download a novel reference image library to an already released app. As of AR Foundation 4.2, platform-specific data is attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:AssetBundlesIntro). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
+To include an `XRReferenceImageLibrary` in an [AssetBundle](https://docs.unity3d.com/Manual/AssetBundlesIntro.html), AR Foundation requires that you first call [ARBuildProcessor.PreprocessBuild](xref:UnityEditor.XR.ARSubsystems.ARBuildProcessor.PreprocessBuild*) before you build the AssetBundles. Platform-specific data is attached to `XRReferenceImageLibrary` assets during this preprocessor step.
+
+Refer to the code sample below to understand how to build AssetBundles that contain reference image libraries:
+
+[!code-cs[export_assetbundles_function](../../Tests/Editor/CodeSamples/AssetBundlesSamples.cs#export_assetbundles_function)]
+
+### Build AssetBundles window
+
+Alternatively, you can use the menu option **Assets** > **AR Foundation** > **Build AssetBundles...** to export your AssetBundles to the chosen directory.
+
+![Build AssetBundles window shown in the Editor](../images/build-assetbundles.png)<br/>*Build AssetBundles window*
+
+| Element | Description |
+| :--- | :--- |
+| **Build for Target** | Specifies the target platform for the AssetBundles. |
+| **Output Directory** | The directory in which to save the built AssetBundles. You can either type this into the text field or click the folder icon to open a file picker. |
+| **Clean Output Directory** | If enabled, all files in the output directory will be deleted before the AssetBundles are built. |
+| **Build AssetBundles** | Build the AssetBundles to the chosen directory. |
 
 ## Respond to detected images
 
