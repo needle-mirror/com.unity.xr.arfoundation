@@ -34,9 +34,13 @@ RuntimeReferenceImageLibrary runtimeLibrary = trackedImageManager.CreateRuntimeL
 > [!NOTE]
 > The ordering of the [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage)s in the `RuntimeReferenceImageLibrary` is undefined; that is, it might not match the order in which the images appeared in the source `XRReferenceImageLibrary`. Each reference image does have a string name that you assign it, and a randomly assigned [Guid](xref:System.Guid). The `Guid` are the same between the source `XRReferenceImageLibrary` and its corresponding `RuntimeReferenceImageLibrary`.
 
-## Using reference image libraries with asset bundles
+## Use reference image libraries with AssetBundles
 
-Prior to AR Foundation 4.2, reference image libraries had to be built into the Player; that is, the `XRReferenceImageLibrary` served only as a means to look up data that was expected to be packaged in the app. This meant that you could not, for example, download a novel reference image library to an already released app. As of AR Foundation 4.2, platform-specific data is attached to the `XRReferenceImageLibrary` asset when building a Player or [asset bundle](xref:AssetBundlesIntro). This means that you can include an `XRReferenceImageLibrary` in an asset bundle and use it in an app that was not built with that reference image library present.
+To include an `XRReferenceImageLibrary` in an [AssetBundle](https://docs.unity3d.com/Manual/AssetBundlesIntro.html), AR Foundation requires that you first call [ARBuildProcessor.PreprocessBuild](xref:UnityEditor.XR.ARSubsystems.ARBuildProcessor.PreprocessBuild*) before you build the AssetBundles. Platform-specific data is attached to `XRReferenceImageLibrary` assets during this preprocessor step.
+
+Refer to the code sample below to understand how to build AssetBundles that contain reference image libraries:
+
+[!code-cs[export_assetbundles_function](../Tests/Editor/CodeSamples/AssetBundlesSamples.cs#export_assetbundles_function)]
 
 ## Responding to detected images
 
