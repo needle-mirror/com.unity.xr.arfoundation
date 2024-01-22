@@ -5,7 +5,7 @@ using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
 {
-    internal static class SimulationUtility
+    static class SimulationUtils
     {
         internal static async Task RunWithoutCancellationExceptions(Task task)
         {
@@ -28,6 +28,15 @@ namespace UnityEngine.XR.Simulation
         {
             Guid.NewGuid().Decompose(out var sub1, out var sub2);
             return new TrackableId(sub1, sub2);
+        }
+
+        /// <summary>
+        /// Returns <see langword="true"/> if <paramref name="gameObject"/> is in the simulation environment scene.
+        /// Otherwise, returns <see langword="false"/>.
+        /// </summary>
+        internal static bool IsInSimulationEnvironment(GameObject gameObject)
+        {
+            return gameObject.scene == SimulationSessionSubsystem.simulationSceneManager.environmentScene;
         }
     }
 }

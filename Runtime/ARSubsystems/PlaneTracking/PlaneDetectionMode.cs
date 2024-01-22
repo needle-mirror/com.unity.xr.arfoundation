@@ -9,17 +9,17 @@ namespace UnityEngine.XR.ARSubsystems
     public enum PlaneDetectionMode
     {
         /// <summary>
-        /// Plane detection is disabled.
+        /// No planes can be detected.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// Plane detection will only detect horizontal planes.
+        /// Horizontally aligned planes can be detected.
         /// </summary>
         Horizontal = 1 << 0,
 
         /// <summary>
-        /// Plane detection will only detect vertical planes.
+        /// Vertically aligned planes can be detected.
         /// </summary>
         Vertical = 1 << 1
     }

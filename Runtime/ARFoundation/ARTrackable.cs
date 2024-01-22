@@ -32,7 +32,7 @@ namespace UnityEngine.XR.ARFoundation
         where TTrackable : ARTrackable<TSessionRelativeData, TTrackable>
     {
         [SerializeField]
-        [Tooltip("If true, this component's GameObject will be removed immediately when this trackable is removed.")]
+        [Tooltip("If true, this component's GameObject is destroyed when this trackable is removed.")]
         bool m_DestroyOnRemoval = true;
 
         /// <summary>

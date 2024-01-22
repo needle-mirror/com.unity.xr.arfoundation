@@ -8,6 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.2] - 2024-01-22
+
+### Changed
+
+- Changed the [Use reference image libraries with AssetBundles](xref:arfoundation-image-tracking#use-reference-image-libraries-with-assetbundles) section of the Image tracking documentation to mention that `ARBuildProcessor.PreprocessBuild` must be called before building AssetBundles.
+- Changed the [Plane detection](xref:arfoundation-plane-detection) documentation to contain more information and better organization.
+- Changed the AR Foundation documentation [manual](xref:arfoundation-manual) to include platform support information for Apple visionOS.
+
+### Fixed
+
+- Fixed issue in XR Simulation where a warning was logged stating that saving had no effect because of a missing FilePathAttribute.
+- Fixed an issue where `SimulatedAnchor` components could incorrectly affect XR Simulation when used in scenes other than the XR simulation environment.
+- Fixed an issue where disabling and re-enabling the [ARDebugMenu](xref:arfoundation-debug-menu) component would cause the origin toggle to become unresponsive.
+- Fixed an issue where `SimulationPlaneSubsystem` would not respect the currently set `PlaneDetectionMode`, detecting updates only from planes that match the current mode.
+- Fixed an issue where calling `ARSession.Reset` could cause XR Simulation plane detection to fail to discover planes for a period of time before resuming.
+
 ## [5.1.1] - 2023-11-14
 
 ### Fixed

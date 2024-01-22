@@ -15,8 +15,9 @@ Unity officially supports the following provider plug-ins:
 
 * [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) on Android
 * [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html) on iOS
+* [Apple visionOS XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.visionos@0.6/manual/index.html) on visionOS
 * [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html) on HoloLens 2
-* [Meta OpenXR Feature](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@0.1/manual/index.html) on Meta Quest
+* [Unity OpenXR: Meta](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@1.0/manual/index.html) on Meta Quest
 
 > [!NOTE]
 > AR Foundation will not work on a target platform unless you also install the provider plug-in package for that platform. See [Install AR Foundation](xref:arfoundation-install) for detailed setup instructions.
@@ -30,7 +31,7 @@ AR Foundation supports the following features:
 | [Session](xref:arfoundation-session) | Enable, disable, and configure AR on the target platform. |
 | [Device tracking](xref:arfoundation-device-tracking) | Track the device's position and rotation in physical space. |
 | [Camera](xref:arfoundation-camera) | Render images from device cameras and perform light estimation. |
-| [Plane detection](xref:arfoundation-plane-detection) | Detect and track surfaces. |
+| [Plane detection](xref:arfoundation-plane-detection) | Detect and track flat surfaces. |
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
 | [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |
@@ -49,23 +50,141 @@ AR Foundation provider plug-ins rely on platform implementations of AR features,
 
 The table below lists the available features in each Unity-supported provider plug-in:
 
-| Feature                                                                                       | ARCore | ARKit | HoloLens (OpenXR) | Meta Quest (OpenXR) |
-| :-------------------------------------------------------------------------------------------- | :----: | :---: | :---------------: | :------------: |
-| [Session](xref:arfoundation-session)                                                          |  Yes   |  Yes  |        Yes        |      Yes       |
-| [Device tracking](xref:arfoundation-device-tracking)                                          |  Yes   |  Yes  |        Yes        |      Yes       |
-| [Camera](xref:arfoundation-camera)                                                            |  Yes   |  Yes  |                   |      Yes       |
-| [Plane detection](xref:arfoundation-plane-detection)                                          |  Yes   |  Yes  |        Yes        |      Yes       |
-| [Image tracking](xref:arfoundation-image-tracking)                                            |  Yes   |  Yes  |                   |                |
-| [Object tracking](xref:arfoundation-object-tracking)                                          |        |  Yes  |                   |                |
-| [Face tracking](xref:arfoundation-face-tracking)                                              |  Yes   |  Yes  |                   |                |
-| [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager)                          |        |  Yes  |                   |                |
-| [Point clouds](xref:arfoundation-point-clouds)                                                |  Yes   |  Yes  |                   |                |
-| [Raycasts](xref:arfoundation-raycasts)                                                        |  Yes   |  Yes  |        Yes        |      Yes       |
-| [Anchors](xref:arfoundation-anchors)                                                          |  Yes   |  Yes  |        Yes        |      Yes       |
-| [Meshing](xref:arfoundation-meshing)                                                          |        |  Yes  |        Yes        |                |
-| [Environment probes](xref:arfoundation-environment-probes)                                    |  Yes   |  Yes  |                   |                |
-| [Occlusion](xref:arfoundation-occlusion)                                                      |  Yes   |  Yes  |                   |                |
-| [Participants](xref:arfoundation-participant-tracking)                                        |        |  Yes  |                   |                |
+<table>
+  <tr>
+  	<td rowspan="2" style="vertical-align: bottom; background-color: #ffffff;"><strong>Feature</strong></td>
+  	<td style="text-align: center">ARCore</td>
+  	<td colspan="2" style="text-align: center">ARKit</td>
+  	<td colspan="2" style="text-align: center">OpenXR</td>
+  </tr>
+  <tr style="border-bottom: 2px solid #dddddd">
+  	<th style="text-align: center">Android</th>
+  	<th style="text-align: center">iOS</th>
+  	<th style="text-align: center">visionOS</th>
+  	<th style="text-align: center">HoloLens</th>
+  	<th style="text-align: center">Meta Quest</th>
+  </tr>
+  <tr>
+  	<td><a href="features/session.md">Session</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center">Yes</td> <!-- visionOS -->
+  	<td style="text-align: center">Yes</td> <!-- HoloLens -->
+  	<td style="text-align: center">Yes</td> <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/device-tracking.md">Device tracking</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center">Yes</td> <!-- visionOS -->
+  	<td style="text-align: center">Yes</td> <!-- HoloLens -->
+  	<td style="text-align: center">Yes</td> <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/Camera/camera.md">Camera</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center">Yes</td> <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/plane-detection/plane-detection.md">Plane detection</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center">Yes</td> <!-- visionOS -->
+  	<td style="text-align: center">Yes</td> <!-- HoloLens -->
+  	<td style="text-align: center">Yes</td> <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/image-tracking.md">Image tracking</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center">Yes</td> <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/object-tracking.md">Object tracking</a></td>
+  	<td style="text-align: center"></td>    <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/face-tracking.md">Face tracking</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/body-tracking.md">Body tracking</a></td>
+  	<td style="text-align: center"></td>    <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/point-clouds.md">Point clouds</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/raycasts.md">Raycasts</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center">Yes</td> <!-- HoloLens -->
+  	<td style="text-align: center">Yes</td> <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/anchors.md">Anchors</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center">Yes</td> <!-- visionOS -->
+  	<td style="text-align: center">Yes</td> <!-- HoloLens -->
+  	<td style="text-align: center">Yes</td> <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/meshing.md">Meshing</a></td>
+  	<td style="text-align: center"></td>    <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center">Yes</td> <!-- visionOS -->
+  	<td style="text-align: center">Yes</td> <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/environment-probes.md">Environment probes</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/occlusion.md">Occlusion</a></td>
+  	<td style="text-align: center">Yes</td> <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+  <tr>
+  	<td><a href="features/participant-tracking.md">Participants</a></td>
+  	<td style="text-align: center"></td>    <!-- Android -->
+  	<td style="text-align: center">Yes</td> <!-- iOS -->
+  	<td style="text-align: center"></td>    <!-- visionOS -->
+  	<td style="text-align: center"></td>    <!-- HoloLens -->
+  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  </tr>
+</table>
 
 # Samples
 

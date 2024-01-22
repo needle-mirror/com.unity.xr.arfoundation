@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
-using static UnityEngine.XR.Simulation.SimulationUtility;
+using static UnityEngine.XR.Simulation.SimulationUtils;
 
 namespace UnityEngine.XR.Simulation
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;
-using static UnityEngine.XR.Simulation.SimulationUtility;
+using static UnityEngine.XR.Simulation.SimulationUtils;
 
 namespace UnityEngine.XR.Simulation
 {

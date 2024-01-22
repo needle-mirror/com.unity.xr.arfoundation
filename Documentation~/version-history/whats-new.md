@@ -14,4 +14,8 @@ The most significant updates in this release include:
 - Added the ability for camera subsystem providers to include [EXIF](https://en.wikipedia.org/wiki/Exif) data with the `XRCameraFrame`.
 - Added a set of custom [visual scripting](xref:arfoundation-visual-scripting) nodes to help you use AR Foundation in visual scripting projects.
 
+## Fixed
+
+- Fixed an issue where `SimulationPlaneSubsystem` would not respect the currently set `PlaneDetectionMode`, detecting updates only from planes that match the current mode.
+
 For a full list of changes and updates in this version, see the [AR Foundation package changelog](xref:arfoundation-changelog).

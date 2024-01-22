@@ -792,15 +792,32 @@ namespace UnityEngine.XR.ARFoundation
 
         void DeregisterUIListeners()
         {
-            m_DisplayInfoMenuButton.onClick.RemoveAllListeners();
-            m_DisplayConfigurationsMenuButton.onClick.RemoveAllListeners();
-            m_DisplayDebugOptionsMenuButton.onClick.RemoveAllListeners();
-            m_DisplayCameraConfigurationsMenuButton.onClick.RemoveAllListeners();
-            m_CameraConfigurationDropdown.onValueChanged.RemoveAllListeners();
+            if (m_DisplayInfoMenuButton)
+                m_DisplayInfoMenuButton.onClick.RemoveAllListeners();
+            
+            if (m_DisplayConfigurationsMenuButton)
+                m_DisplayConfigurationsMenuButton.onClick.RemoveAllListeners();
 
-            m_ShowPlanesButton.onValueChanged.RemoveAllListeners();
-            m_ShowAnchorsButton.onValueChanged.RemoveAllListeners();
-            m_ShowPointCloudsButton.onValueChanged.RemoveAllListeners();
+            if (m_DisplayDebugOptionsMenuButton)
+                m_DisplayDebugOptionsMenuButton.onClick.RemoveAllListeners();
+
+            if (m_DisplayCameraConfigurationsMenuButton)
+                m_DisplayCameraConfigurationsMenuButton.onClick.RemoveAllListeners();
+
+            if (m_CameraConfigurationDropdown)
+                m_CameraConfigurationDropdown.onValueChanged.RemoveAllListeners();
+
+            if (m_ShowOriginButton)
+                m_ShowOriginButton.onValueChanged.RemoveAllListeners();
+
+            if (m_ShowPlanesButton)
+                m_ShowPlanesButton.onValueChanged.RemoveAllListeners();
+
+            if (m_ShowAnchorsButton)
+                m_ShowAnchorsButton.onValueChanged.RemoveAllListeners();
+
+            if (m_ShowPointCloudsButton)
+                m_ShowPointCloudsButton.onValueChanged.RemoveAllListeners();
         }
 
         void ShowMenu(GameObject menu)

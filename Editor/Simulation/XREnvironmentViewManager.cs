@@ -165,8 +165,6 @@ namespace UnityEditor.XR.Simulation
             m_EnvironmentCameras.Clear();
             m_EditorSimulationSceneManager = null;
             m_XRayManager = null;
-
-            Save(true);
         }
 
         internal void EnableEnvironmentView(SceneView sceneView)

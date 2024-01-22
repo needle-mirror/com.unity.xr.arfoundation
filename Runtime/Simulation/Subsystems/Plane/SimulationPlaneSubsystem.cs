@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 
@@ -102,7 +101,7 @@ namespace UnityEngine.XR.Simulation
                 m_SimulationEnvironmentScanner = SimulationEnvironmentScanner.GetOrCreate();
                 m_PlaneFindingParams = XRSimulationRuntimeSettings.Instance.planeFindingParams;
 
-                m_LastPlaneUpdateTime = Time.timeSinceLevelLoad;
+                m_LastPlaneUpdateTime = 0f;
                 m_PlaneRaycaster = new PlaneRaycaster(GetPlanesReadOnly);
 
                 BaseSimulationSceneManager.environmentSetupFinished += CreateVoxelGrids;
@@ -162,10 +161,14 @@ namespace UnityEngine.XR.Simulation
 
                 DestroyVoxelGrids();
                 CreateVoxelGrids();
-                m_LastPlaneUpdateTime = Time.realtimeSinceStartup;
+                m_LastPlaneUpdateTime = 0f;
             }
 
+            /// <inheritdoc/>
             public override PlaneDetectionMode requestedPlaneDetectionMode { get; set; }
+
+            /// <inheritdoc/>
+            public override PlaneDetectionMode currentPlaneDetectionMode => requestedPlaneDetectionMode;
 
             public override TrackableChanges<BoundedPlane> GetChanges(BoundedPlane defaultPlane, Allocator allocator)
             {
@@ -263,7 +266,6 @@ namespace UnityEngine.XR.Simulation
 #if ENABLE_SIMULATION_DEBUG_VISUALS
                 prePlaneUpdating?.Invoke();
 #endif
-
                 foreach (var voxelGrid in m_VoxelGrids)
                 {
                     voxelGrid.FindPlanes(m_AddedPlanes, m_UpdatedPlanes, m_RemovedPlanes);
@@ -322,24 +324,32 @@ namespace UnityEngine.XR.Simulation
 
                         var normal = normals[i];
                         var position = points[i];
+                        bool allowHorizontal = (currentPlaneDetectionMode & PlaneDetectionMode.Horizontal) > 0;
+                        bool allowVertical = (currentPlaneDetectionMode & PlaneDetectionMode.Vertical) > 0;
 
-                        if (Vector3.Angle(normal, Vector3.up) <= m_PlaneFindingParams.normalToleranceAngle)
-                            upGridPoints[upPointCount++] = position;
+                        if (allowHorizontal)
+                        {
+                            if (Vector3.Angle(normal, Vector3.up) <= m_PlaneFindingParams.normalToleranceAngle)
+                                upGridPoints[upPointCount++] = position;
 
-                        if (Vector3.Angle(normal, Vector3.down) <= m_PlaneFindingParams.normalToleranceAngle)
-                            downGridPoints[downPointCount++] = position;
+                            if (Vector3.Angle(normal, Vector3.down) <= m_PlaneFindingParams.normalToleranceAngle)
+                                downGridPoints[downPointCount++] = position;
+                        }
 
-                        if (Vector3.Angle(normal, Vector3.forward) <= m_PlaneFindingParams.normalToleranceAngle)
-                            forwardGridPoints[forwardPointCount++] = position;
+                        if (allowVertical)
+                        {
+                            if (Vector3.Angle(normal, Vector3.forward) <= m_PlaneFindingParams.normalToleranceAngle)
+                                forwardGridPoints[forwardPointCount++] = position;
 
-                        if (Vector3.Angle(normal, Vector3.back) <= m_PlaneFindingParams.normalToleranceAngle)
-                            backGridPoints[backPointCount++] = position;
+                            if (Vector3.Angle(normal, Vector3.back) <= m_PlaneFindingParams.normalToleranceAngle)
+                                backGridPoints[backPointCount++] = position;
 
-                        if (Vector3.Angle(normal, Vector3.right) <= m_PlaneFindingParams.normalToleranceAngle)
-                            rightGridPoints[rightPointCount++] = position;
+                            if (Vector3.Angle(normal, Vector3.right) <= m_PlaneFindingParams.normalToleranceAngle)
+                                rightGridPoints[rightPointCount++] = position;
 
-                        if (Vector3.Angle(normal, Vector3.left) <= m_PlaneFindingParams.normalToleranceAngle)
-                            leftGridPoints[leftPointCount++] = position;
+                            if (Vector3.Angle(normal, Vector3.left) <= m_PlaneFindingParams.normalToleranceAngle)
+                                leftGridPoints[leftPointCount++] = position;
+                        }
                     }
 
                     m_VoxelGrids[0].AddPoints(upGridPoints.Slice(0, upPointCount));

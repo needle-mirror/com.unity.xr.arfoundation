@@ -21,7 +21,7 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARPlane : ARTrackable<BoundedPlane, ARPlane>
     {
         [SerializeField]
-        [Tooltip("The largest value by which a plane's vertex may change before the boundaryChanged event is invoked. Units are in meters.")]
+        [Tooltip("The largest value by which a plane's vertex position may change before the boundaryChanged event is invoked. Units are in meters.")]
         float m_VertexChangedThreshold = 0.01f;
 
         NativeArray<Vector2> m_Boundary;

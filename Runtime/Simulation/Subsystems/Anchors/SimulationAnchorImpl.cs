@@ -312,7 +312,7 @@ namespace UnityEngine.XR.Simulation
 
         void CreateAndAddAnchor(Pose pose, TrackingState trackingState, out XRAnchor anchor)
         {
-            var id = SimulationUtility.GenerateTrackableId();
+            var id = SimulationUtils.GenerateTrackableId();
             anchor = new XRAnchor(id, pose, trackingState, IntPtr.Zero, m_SessionId);
             m_Added.Add(anchor.trackableId, anchor);
         }
