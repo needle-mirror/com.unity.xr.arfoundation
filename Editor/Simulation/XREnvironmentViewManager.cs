@@ -5,7 +5,6 @@ using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.XR.Simulation;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 
 namespace UnityEditor.XR.Simulation
 {
@@ -108,10 +107,10 @@ namespace UnityEditor.XR.Simulation
 
             var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
             AREditorAnalytics.simulationUIAnalyticsEvent.Send(
-                new SimulationUIAnalyticsArgs(
-                    eventName: SimulationUIAnalyticsArgs.EventName.WindowUsed,
+                new SimulationUIAnalyticsEvent.EventPayload(
+                    eventName: SimulationUIAnalyticsEvent.Context.WindowUsed,
                     environmentGuid: assetGuid,
-                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = XREnvironmentToolbarOverlay.toolbarDisplayName, isActive = true }));
+                    windowUsed: new SimulationUIAnalyticsEvent.WindowUsed { name = XREnvironmentToolbarOverlay.toolbarDisplayName, isActive = true }));
 
             sceneView.Show();
             sceneView.Focus();
@@ -189,7 +188,7 @@ namespace UnityEditor.XR.Simulation
 
             if (CheckRemoveNotifications(sceneView))
                 sceneView.RemoveNotification();
-            
+
             if (!SimulationEditorUtilities.simulationSubsystemEnabled)
             {
                 sceneView.ShowNotification(s_SimulationSubsystemNotLoadedContent);
@@ -243,7 +242,7 @@ namespace UnityEditor.XR.Simulation
             if (!m_Initialized)
                 return;
 
-            if (!m_EnvironmentViews.Contains(sceneView) || activeSceneManager == null 
+            if (!m_EnvironmentViews.Contains(sceneView) || activeSceneManager == null
                 || PrefabStageUtility.GetCurrentPrefabStage() != null)
             {
                 DoSceneViewXRay();
@@ -285,7 +284,7 @@ namespace UnityEditor.XR.Simulation
             {
                 m_EditorSimulationSceneManager.SetupEnvironment();
                 m_CurrentSceneMask = EditorSceneManager.GetSceneCullingMask(m_EditorSimulationSceneManager.environmentScene);
-                
+
                 if (PrefabStageUtility.GetCurrentPrefabStage() != null)
                     return;
 
@@ -300,7 +299,7 @@ namespace UnityEditor.XR.Simulation
         {
             // When called from OnEnable the scene view may not be fully initialized
             // Do not change the view if in prefab stage
-            if (sceneView == null || sceneView.camera == null 
+            if (sceneView == null || sceneView.camera == null
                 || PrefabStageUtility.GetCurrentPrefabStage() != null
                 || activeSceneManager == null)
                 return;
@@ -349,7 +348,7 @@ namespace UnityEditor.XR.Simulation
             var camera = Camera.main;
             if (camera == null)
             {
-                var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+                var xrOrigin = FindAnyObjectByType<XROrigin>();
                 if (xrOrigin != null)
                     camera = xrOrigin.Camera;
             }
@@ -481,8 +480,8 @@ namespace UnityEditor.XR.Simulation
 
         bool EnvironmentSceneLoaded()
         {
-            return activeSceneManager != null 
-                && activeSceneManager.environmentScene != default 
+            return activeSceneManager != null
+                && activeSceneManager.environmentScene != default
                 && activeSceneManager.environmentScene.isLoaded;
         }
 
@@ -490,7 +489,7 @@ namespace UnityEditor.XR.Simulation
         {
             if (sceneView == null)
                 return null;
-            
+
             if (sceneView.TryGetOverlay(XREnvironmentToolbarOverlay.overlayId, out var environmentOverlay))
             {
                 if (!environmentOverlay.displayed)

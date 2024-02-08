@@ -19,6 +19,6 @@ Triggers when AR Tracked Images have changed. AR Tracked Images can be added, up
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | AR Tracked Images that have been added. |
-| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | AR Tracked Images that have been updated. |
-| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | AR Tracked Images that have been removed. |
+| **Added** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | AR Tracked Images that have been added. |
+| **Updated** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | AR Tracked Images that have been updated. |
+| **Removed** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of `KeyValuePair<TrackableId, ARTrackedImage>` | AR Tracked Images that have been removed. |

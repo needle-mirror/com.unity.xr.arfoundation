@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 using static UnityEngine.XR.Simulation.SimulationUtils;
 
@@ -134,7 +133,7 @@ namespace UnityEngine.XR.Simulation
             m_ReferenceImagesForImages.Clear();
             m_PreviousLibraryCount = 0;
 
-            var origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+            var origin = Object.FindAnyObjectByType<XROrigin>();
 
             if (origin == null)
                 throw new NullReferenceException($"{nameof(SimulationImageTrackingSubsystem)} requires that the current scene contains an {nameof(XROrigin)}, but none was found.");

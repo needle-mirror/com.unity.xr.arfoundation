@@ -8,6 +8,7 @@
         "Unity.XR.Management",
         "Unity.XR.Management.Editor",
         "Unity.XR.CoreUtils",
+        "Unity.XR.CoreUtils.Editor",
         "Unity.InputSystem",
         "Unity.XR.ARAnalytics.Editor",
         "Unity.XR.ARFoundation.InternalUtils"

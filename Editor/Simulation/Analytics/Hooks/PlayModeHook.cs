@@ -39,8 +39,8 @@ namespace UnityEditor.XR.Simulation
             var durationSpan = DateTime.UtcNow - s_StartTime;
 
             AREditorAnalytics.simulationSessionAnalyticsEvent.Send(
-                new SimulationSessionAnalyticsArgs(
-                    eventName: SimulationSessionAnalyticsArgs.EventName.SimulationEnded,
+                new SimulationSessionAnalyticsEvent.EventPayload(
+                    eventName: SimulationSessionAnalyticsEvent.Context.SimulationEnded,
                     environmentGuid: new GUID(environmentGuid),
                     arSubsystemsInfo: subsystemIds,
                     duration: durationSpan.TotalSeconds));

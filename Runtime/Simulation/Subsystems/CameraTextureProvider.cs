@@ -7,9 +7,9 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
 using UnityEngine.Rendering.Universal;
-#endif // end MODULE_URP_ENABLED
+#endif // URP_7_OR_NEWER
 
 using ImageType = UnityEngine.XR.Simulation.SimulationXRCpuImageApi.ImageType;
 
@@ -62,9 +62,9 @@ namespace UnityEngine.XR.Simulation
 
         bool m_Initialized;
         CommandBuffer m_ReadbackCommandBuffer;
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
         SimulationCameraTextureReadbackPass m_SimulationReadbackRenderPass;
-#endif // end MODULE_URP_ENABLED
+#endif // URP_7_OR_NEWER
 
         SimulationOcclusionSubsystem m_OcclusionSubsystem;
 
@@ -136,11 +136,11 @@ namespace UnityEngine.XR.Simulation
             m_XrCamera.ResetProjectionMatrix();
             CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationRenderCamera);
 
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
             if (!ARRenderingUtils.useLegacyRenderPipeline)
                 ConfigureTextureReadbackForURP();
             else
-#endif // end MODULE_URP_ENABLED
+#endif // URP_7_OR_NEWER
                 ConfigureBuiltInCommandBufferIfNeeded();
 
             DoCameraRender(m_SimulationRenderCamera);
@@ -179,13 +179,13 @@ namespace UnityEngine.XR.Simulation
             Graphics.CopyTexture(m_SimulationRenderDepthTexture, m_SimulationProviderDepthTexture);
         }
 
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
         void ConfigureTextureReadbackForURP()
         {
             var universalAdditionalCameraData = m_SimulationRenderCamera.GetUniversalAdditionalCameraData();
             universalAdditionalCameraData.scriptableRenderer.EnqueuePass(m_SimulationReadbackRenderPass);
         }
-#endif // end MODULE_URP_ENABLED
+#endif
 
         void ConfigureBuiltInCommandBufferIfNeeded()
         {
@@ -276,10 +276,10 @@ namespace UnityEngine.XR.Simulation
             }
 
             BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
             if (!ARRenderingUtils.useLegacyRenderPipeline)
                 m_SimulationReadbackRenderPass ??= new SimulationCameraTextureReadbackPass(this);
-#endif // end MODULE_URP_ENABLED
+#endif // URP_7_OR_NEWER
 
             m_Initialized = true;
         }
@@ -381,7 +381,9 @@ namespace UnityEngine.XR.Simulation
             if (m_EnableDepthReadback != useDepth)
             {
                 m_EnableDepthReadback = useDepth;
+#if !URP_7_OR_NEWER
                 ConfigureBuiltInCommandBuffer();
+#endif
             }
         }
 

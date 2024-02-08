@@ -11,7 +11,7 @@ The [ARPlaneManager](xref:UnityEngine.XR.ARFoundation.ARPlaneManager) component 
 | :------- | :---------- |
 | **trackablesChanged** | Invoked when trackables have changed (been added, updated, or removed). |
 | **Plane Prefab** | If not `null`, this prefab is instantiated for each detected plane. If the prefab does not contain an [AR Plane component](xref:arfoundation-plane-arplane), `ARPlaneManager` will add one. |
-| **Detection Mode** | The types of planes to detect. There are four options: <ul><li><strong>Nothing:</strong> No planes can be detected.</li><li><strong>Everything:</strong> Planes of any alignment can be detected.</li><li><strong>Horizontal:</strong> Horizontally aligned planes can be detected.</li><li><strong>Vertical:</strong> Vertically aligned planes can be detected</li></ul> |
+| **Detection Mode** | The types of planes to detect. There are four options: <ul><li><strong>Nothing:</strong> No planes can be detected.</li><li><strong>Everything:</strong> Planes of any alignment can be detected.</li><li><strong>Horizontal:</strong> Horizontally aligned planes can be detected.</li><li><strong>Vertical:</strong> Vertically aligned planes can be detected</li><li><strong>NotAxisAligned:</strong> Planes that are not axis-aligned can be detected.</li></ul> |
 
 ## Getting started
 
@@ -51,12 +51,11 @@ You can subscribe to `trackablesChanged` in one of two ways:
 
 By default, the AR Plane Manager does not render a textured mesh in the scene when planes are detected. To enable plane visualization, set a prefab as the AR Plane Manager's **Plane Prefab**.
 
-The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository contains two prefabs that you could use to get started:
+The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository contains a prefab that you could use to get started:
 
 | Prefab | Description |
 | :----- | :---------- |
 | [AR Plane Debug Visualizer](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Prefabs/AR%20Plane%20Debug%20Visualizer.prefab) | Visualize plane meshes with a solid color, and optionally visualize additional information such as the plane's [trackableId](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackableId), [trackingState](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackingState), [classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications), and normal vector. You can configure the visualization options via the Inspector. |
-| [AR Feathered Plane](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Prefabs/AR%20Feathered%20Plane.prefab) | Visualize plane meshes with a stylized polka dot pattern that fades to become transparent at the edges of the plane's boundary. |
 
 #### Custom plane visualizers
 

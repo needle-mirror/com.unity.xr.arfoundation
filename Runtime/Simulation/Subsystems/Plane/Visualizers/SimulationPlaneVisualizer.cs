@@ -50,7 +50,7 @@ namespace UnityEngine.XR.Simulation
                 return;
             }
 
-            var origin = FindObjectsUtility.FindObjectOfType<XROrigin>();
+            var origin = FindObjectOfType<XROrigin>();
             if (origin == null)
             {
                 Disable("Cannot find XROrigin in the scene.");

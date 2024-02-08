@@ -21,6 +21,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Vertically aligned planes can be detected.
         /// </summary>
-        Vertical = 1 << 1
+        Vertical = 1 << 1,
+        
+        /// <summary>
+        /// Planes that are not axis-aligned can be detected.
+        /// </summary>
+        NotAxisAligned = 1 << 2,
     }
 }

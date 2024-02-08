@@ -16,7 +16,7 @@ Unity officially supports the following provider plug-ins:
 * [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/index.html) on Android
 * [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/index.html) on iOS
 * [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html) on HoloLens 2
-* [Meta OpenXR Feature](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@latest) on Meta Quest
+* [Unity OpenXR: Meta](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@latest) on Meta Quest
 
 > [!NOTE]
 > AR Foundation will not work on a target platform unless you also install the provider plug-in package for that platform. See [Install AR Foundation](xref:arfoundation-install) for detailed setup instructions.
@@ -66,6 +66,8 @@ The table below lists the available features in each Unity-supported provider pl
 | [Environment probes](xref:arfoundation-environment-probes)                                    |  Yes   |  Yes  |                   |                |
 | [Occlusion](xref:arfoundation-occlusion)                                                      |  Yes   |  Yes  |                   |                |
 | [Participants](xref:arfoundation-participant-tracking)                                        |        |  Yes  |                   |                |
+
+[!include[](snippets/arf-docs-tip.md)]
 
 # Samples
 

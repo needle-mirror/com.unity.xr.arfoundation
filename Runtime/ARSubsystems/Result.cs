@@ -1,35 +1,39 @@
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// Represents the result of an operation.
+    /// Represents the result of a completed operation that attempted to create an object of type <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T">The result type.</typeparam>
     public struct Result<T>
     {
-        bool m_WasSuccessful;
-        T m_Result;
+        /// <summary>
+        /// The status of the completed operation. You should check whether the operation was successful before you
+        /// access the result <see cref="value"/>.
+        /// </summary>
+        public XRResultStatus status => m_Status;
+        XRResultStatus m_Status;
 
         /// <summary>
-        /// Constructor.
+        /// The result value of the completed operation. Only valid if <see cref="XRResultStatus.IsSuccess">status.IsSuccess()</see>
+        /// is <see langword="true"/>.
         /// </summary>
-        /// <param name="wasSuccessful"><see langword="true"/> if the operation was successful. Otherwise, <see langword="false"/>.</param>
-        /// <param name="result">The result. Only valid if <paramref name="wasSuccessful"/> is <see langword="true"/>.</param>
-        public Result(bool wasSuccessful, T result)
-        {
-            m_WasSuccessful = wasSuccessful;
-            m_Result = result;
-        }
+        /// <remarks>
+        /// > [!IMPORTANT]
+        /// > If the operation was unsuccessful, you should not access this value. It may be <see langword="null"/> or
+        /// > could contain default data.
+        /// </remarks>
+        public T value => m_Value;
+        T m_Value;
 
         /// <summary>
-        /// Attempts to get the result of the operation. If this method returns <see langword="false"/>, the
-        /// operation failed, and the <paramref name="result"/> value is invalid.
+        /// Construct an instance with a given status and value.
         /// </summary>
-        /// <param name="result">The result. Only valid if this method returns <see langword="true"/>.</param>
-        /// <returns><see langword="true"/> if the async operation was successful. Otherwise, <see langword="false"/>.</returns>
-        public bool TryGetResult(out T result)
+        /// <param name="status">The status.</param>
+        /// <param name="value">The result value.</param>
+        public Result(XRResultStatus status, T value)
         {
-            result = m_Result;
-            return m_WasSuccessful;
+            m_Status = status;
+            m_Value = value;
         }
     }
 }

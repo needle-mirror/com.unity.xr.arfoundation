@@ -483,7 +483,7 @@ namespace UnityEditor.XR.Simulation
             "current simulation environment. When toggled off, the Scene View displays the active editing context.";
 
         public EditorWindow containerWindow { get; set; }
-        
+
         bool m_Value;
 
         public override bool value
@@ -493,14 +493,14 @@ namespace UnityEditor.XR.Simulation
             {
                 if (m_Value == value)
                     return;
-                
+
                 m_Value = value;
                 var sceneView = containerWindow as SceneView;
                 if (value)
                     XREnvironmentViewManager.instance.EnableEnvironmentView(sceneView);
                 else
                     XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
-                
+
                 SetValueWithoutNotify(value);
             }
         }
@@ -576,10 +576,10 @@ namespace UnityEditor.XR.Simulation
             var assetGuid = SimulationEnvironmentAssetsManager.GetActiveEnvironmentAssetGuid();
 
             AREditorAnalytics.simulationUIAnalyticsEvent.Send(
-                new SimulationUIAnalyticsArgs(
-                    eventName: SimulationUIAnalyticsArgs.EventName.WindowUsed,
+                new SimulationUIAnalyticsEvent.EventPayload(
+                    eventName: SimulationUIAnalyticsEvent.Context.WindowUsed,
                     environmentGuid: assetGuid,
-                    windowUsed: new SimulationUIAnalyticsArgs.WindowUsed { name = XREnvironmentToolbarOverlay.toolbarDisplayName, isActive = value }));
+                    windowUsed: new SimulationUIAnalyticsEvent.WindowUsed { name = XREnvironmentToolbarOverlay.toolbarDisplayName, isActive = value }));
         }
     }
 }

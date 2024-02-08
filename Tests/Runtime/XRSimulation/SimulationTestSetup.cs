@@ -3,15 +3,17 @@ using Unity.XR.CoreUtils;
 using UnityEngine.XR.Management;
 using UnityEngine.InputSystem;
 using UnityEditor.XR.ARFoundation;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.TestTooling;
 
 namespace UnityEngine.XR.Simulation.Tests
 {
     abstract class SimulationTestSetup : LoaderTestSetup<SimulationLoader>
     {
-        static bool noXrmOrActiveSimulationLoader => XRGeneralSettings.Instance == null || XRGeneralSettings.Instance.Manager == null ||
-                                    XRGeneralSettings.Instance.Manager.activeLoader == null || XRGeneralSettings.Instance.Manager.activeLoader is not SimulationLoader;
+        static bool noXrmOrActiveSimulationLoader =>
+            XRGeneralSettings.Instance == null ||
+            XRGeneralSettings.Instance.Manager == null ||
+            XRGeneralSettings.Instance.Manager.activeLoader == null ||
+            XRGeneralSettings.Instance.Manager.activeLoader is not SimulationLoader;
 
         /// <summary>
         /// Set up the <c>SimulationLoader</c> for runtime test.
@@ -50,7 +52,7 @@ namespace UnityEngine.XR.Simulation.Tests
 
         protected void RemoveXROrigin()
         {
-            var xrOrigin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+            var xrOrigin = Object.FindAnyObjectByType<XROrigin>();
 
             if (xrOrigin != null)
                 Object.Destroy(xrOrigin.gameObject);

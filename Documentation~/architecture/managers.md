@@ -82,21 +82,7 @@ The `trackables` property returns a `TrackableCollection`, which can be enumerat
 
 ### Trackable life cycle
 
-A trackable's life cycle is managed by its tracking subsystem, and has three phases: added, updated, and removed. A trackable must first be added, then on subsequent frames it can be updated, removed, or have no changes. Each frame, managers query their subsystems to determine whether any changes to their trackables have occurred since the previous frame. Each trackable manager has an event to which you can subscribe to be notified of these changes, as shown below:
-
-| **Trackable Manager** | **Event** |
-| --------------------- | --------- |
-| [ARPlaneManager](xref:arfoundation-plane-detection#ar-plane-manager-component) | `planesChanged` |
-| [ARTrackedImageManager](xref:arfoundation-image-tracking#ar-tracked-image-manager-component) | `trackedImagesChanged` |
-| [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) | `trackedObjectsChanged` |
-| [ARFaceManager](xref:arfoundation-face-tracking#ar-face-manager-component) | `facesChanged` |
-| [ARHumanBodyManager](xref:arfoundation-body-tracking#ar-human-body-manager-component) | `humanBodiesChanged` |
-| [ARPointCloudManager](xref:arfoundation-point-clouds#ar-point-cloud-manager-component) | `pointCloudsChanged` |
-| [ARAnchorManager](xref:arfoundation-anchors#ar-anchor-manager-component) | `anchorsChanged` |
-| [AREnvironmentProbeManager](xref:arfoundation-environment-probes#ar-environment-probe-manager-component) | `environmentProbesChanged` |
-| [ARParticipantManager](xref:arfoundation-participant-tracking#ar-participant-manager-component) | `participantsChanged` |
-
-See each manager's documentation for more information about responding to these events.
+A trackable's life cycle is managed by its tracking subsystem, and has three phases: added, updated, and removed. A trackable must first be added, then on subsequent frames it can be updated, removed, or have no changes. Each frame, managers query their subsystems to determine whether any changes to their trackables have occurred since the previous frame. Subscribe to the manager's [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event to be notified of these changes.
 
 #### Adding trackables
 
@@ -132,7 +118,7 @@ Many trackables, such as planes, images, objects, and point clouds, do not suppo
 
 ![AR Plane component with Destroy On Removal field](../images/ar-plane.png "AR Plane component with Destroy on Removal field")<br/>*AR Plane component with Destroy on Removal field*
 
-Your application can respond to the removal of any trackable by subscribing to the relevant event of that trackable's manager. For example, when an [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) is removed, the [ARPlaneManager](xref:UnityEngine.XR.ARFoundation.ARPlaneManager) invokes its `planesChanged` event with an [ARPlanesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARPlanesChangedEventArgs) struct containing that plane in its list of `removed` planes. See each trackable manager's documentation for more information about its trackable life cycle events.
+Your application can respond to the removal of any trackable by subscribing to the [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event of that trackable's manager. For example, when an [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) is removed, the AR Plane Manager component invokes its `trackablesChanged` event with an [ARTrackablesChangedEventArgs\<ARPlane\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1) struct containing that plane in its collection of `removed` planes.
 
 #### Monitoring tracking state
 

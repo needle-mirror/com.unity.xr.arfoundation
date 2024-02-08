@@ -26,7 +26,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// type will forward casted calls to its provider.
         /// </summary>
         /// <value>The subsystem implementation type.
-        ///   If <see langword="null"/>, <see cref="XRCameraSubsystem"/> will be instantiated.</value>
+        /// If <see langword="null"/>, <see cref="XRCameraSubsystem"/> will be instantiated.</value>
         public Type subsystemTypeOverride { get; set; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.averageBrightness">XRCameraFrame.averageBrightness</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide average brightness.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageBrightness { get; set; }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.averageColorTemperature">XRCameraFrame.averageColorTemperature</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide average camera temperature.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageColorTemperature { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.averageIntensityInLumens">XRCameraFrame.averageIntensityInLumens</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide average intensity in lumens.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageIntensityInLumens { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsCameraGrain { get; set; }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.colorCorrection">XRCameraFrame.colorCorrection</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide color correction.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsColorCorrection { get; set; }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.displayMatrix">XRCameraFrame.displayMatrix</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a display matrix.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsDisplayMatrix { get; set; }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.projectionMatrix">XRCameraFrame.projectionMatrix</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a projection matrix.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsProjectionMatrix { get; set; }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.timestampNs">XRCameraFrame.timestampNs</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a timestamp.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsTimestamp { get; set; }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see langword="null"/>, and the <c>set</c> accessor must throw a <see cref="NotSupportedException"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports camera configurations.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsCameraConfigurations { get; set; }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// must throw a <see cref="NotSupportedException"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide camera images.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsCameraImage { get; set; }
 
         /// <summary>
@@ -138,14 +138,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// must be <see langword="false"/> while face tracking is enabled.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports ambient intensity while face tracking is enabled.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsFaceTrackingAmbientIntensityLightEstimation { get; set; }
 
         /// <summary>
         /// Indicates whether the provider implementation supports HDR light estimation while face tracking is enabled.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports HDR light estimation while face tracking is enabled.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsFaceTrackingHDRLightEstimation { get; set; }
 
         /// <summary>
@@ -155,21 +155,21 @@ namespace UnityEngine.XR.ARSubsystems
         /// must be <see langword="false"/> while world tracking.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports ambient intensity while world tracking.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsWorldTrackingAmbientIntensityLightEstimation { get; set; }
 
         /// <summary>
         /// Indicates whether the provider implementation supports HDR light estimation while world tracking.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports HDR light estimation while world tracking.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsWorldTrackingHDRLightEstimation { get; set; }
 
         /// <summary>
         /// Indicates whether the provider implementation supports EXIF data.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports EXIF data.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsExifData { get; set; }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.averageBrightness">XRCameraFrame.averageBrightness</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide average brightness.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageBrightness { get; private set; }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value>
         /// <see langword="true"/> if the implementation can provide average camera temperature.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageColorTemperature { get; private set; }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.averageIntensityInLumens">XRCameraFrame.averageIntensityInLumens</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide average intensity in lumens.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageIntensityInLumens { get; private set; }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsCameraGrain { get; private set; }
 
         /// <summary>
@@ -310,7 +310,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.colorCorrection">XRCameraFrame.colorCorrection</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide color correction.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsColorCorrection { get; private set; }
 
         /// <summary>
@@ -318,7 +318,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.displayMatrix">XRCameraFrame.displayMatrix</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a display matrix.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsDisplayMatrix { get; private set; }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.projectionMatrix">XRCameraFrame.projectionMatrix</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a projection matrix.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsProjectionMatrix { get; private set; }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.timestampNs">XRCameraFrame.timestampNs</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a timestamp.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsTimestamp { get; private set; }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see langword="null"/>, and the <c>set</c> accessor must throw a <see cref="NotSupportedException"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports camera configurations.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsCameraConfigurations { get; private set; }
 
         /// <summary>
@@ -354,7 +354,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// must throw a <see cref="NotSupportedException"/>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide camera images.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsCameraImage { get; private set; }
 
         /// <summary>
@@ -363,7 +363,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraSubsystem.autoFocusRequested">XRCameraSubsystem.autoFocusRequested</see> will have no effect.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports focus modes.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsFocusModes { get; private set; }
 
         /// <summary>
@@ -386,14 +386,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// must be <see langword="false"/> while face tracking is enabled.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports ambient intensity while face tracking is enabled.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsFaceTrackingAmbientIntensityLightEstimation { get; private set; }
 
         /// <summary>
         /// Indicates whether the provider implementation supports HDR light estimation while face tracking is enabled.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports HDR light estimation while face tracking is enabled.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsFaceTrackingHDRLightEstimation { get; private set; }
 
         /// <summary>
@@ -403,21 +403,21 @@ namespace UnityEngine.XR.ARSubsystems
         /// must be <see langword="false"/> while world tracking.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports ambient intensity while world tracking.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsWorldTrackingAmbientIntensityLightEstimation { get; private set; }
 
         /// <summary>
         /// Indicates whether the provider implementation supports HDR light estimation while world tracking.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports HDR light estimation while world tracking.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsWorldTrackingHDRLightEstimation { get; private set; }
 
         /// <summary>
         /// Indicates whether the provider implementation supports EXIF data.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports EXIF data.
-        ///   Otherwise, <see langword="false"/>.</value>
+        /// Otherwise, <see langword="false"/>.</value>
         public bool supportsExifData { get; private set; }
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// type will forward casted calls to its provider.
             /// </summary>
             /// <value>The subsystem implementation type.
-            ///   If <see langword="null"/>, <see cref="XRCameraSubsystem"/> will be instantiated.</value>
+            /// If <see langword="null"/>, <see cref="XRCameraSubsystem"/> will be instantiated.</value>
             public Type subsystemTypeOverride { get; set; }
 
             /// <summary>
@@ -450,7 +450,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.averageBrightness">XRCameraFrame.averageBrightness</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide average brightness.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsAverageBrightness { get; set; }
 
             /// <summary>
@@ -458,7 +458,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.averageColorTemperature">XRCameraFrame.averageColorTemperature</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide average camera temperature.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsAverageColorTemperature { get; set; }
 
             /// <summary>
@@ -466,7 +466,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.averageIntensityInLumens">XRCameraFrame.averageIntensityInLumens</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide average intensity in lumens.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsAverageIntensityInLumens { get; set; }
 
             /// <summary>
@@ -474,7 +474,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsCameraGrain { get; set; }
 
             /// <summary>
@@ -482,7 +482,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.colorCorrection">XRCameraFrame.colorCorrection</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide color correction.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsColorCorrection { get; set; }
 
             /// <summary>
@@ -490,7 +490,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.displayMatrix">XRCameraFrame.displayMatrix</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide a display matrix.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsDisplayMatrix { get; set; }
 
             /// <summary>
@@ -498,7 +498,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.projectionMatrix">XRCameraFrame.projectionMatrix</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide a projection matrix.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsProjectionMatrix { get; set; }
 
             /// <summary>
@@ -506,7 +506,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRCameraFrame.timestampNs">XRCameraFrame.timestampNs</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide a timestamp.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsTimestamp { get; set; }
 
             /// <summary>
@@ -516,7 +516,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see langword="null"/>, and the <c>set</c> accessor must throw a <see cref="NotSupportedException"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports camera configurations.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsCameraConfigurations { get; set; }
 
             /// <summary>
@@ -526,7 +526,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// must throw a <see cref="NotSupportedException"/>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide camera images.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsCameraImage { get; set; }
 
             /// <summary>
@@ -554,14 +554,14 @@ namespace UnityEngine.XR.ARSubsystems
             /// must be <see langword="false"/> while face tracking is enabled.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports ambient intensity while face tracking is enabled.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsFaceTrackingAmbientIntensityLightEstimation { get; set; }
 
             /// <summary>
             /// Indicates whether the provider implementation supports HDR light estimation while face tracking is enabled.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports HDR light estimation while face tracking is enabled.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsFaceTrackingHDRLightEstimation { get; set; }
 
             /// <summary>
@@ -571,21 +571,21 @@ namespace UnityEngine.XR.ARSubsystems
             /// must be <see langword="false"/> while world tracking.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports ambient intensity while world tracking.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsWorldTrackingAmbientIntensityLightEstimation { get; set; }
 
             /// <summary>
             /// Indicates whether the provider implementation supports HDR light estimation while world tracking.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports HDR light estimation while world tracking.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsWorldTrackingHDRLightEstimation { get; set; }
 
             /// <summary>
             /// Indicates whether the provider implementation supports EXIF data.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports EXIF data.
-            ///   Otherwise, <see langword="false"/>.</value>
+            /// Otherwise, <see langword="false"/>.</value>
             public bool supportsExifData { get; set; }
 
             /// <summary>
@@ -720,29 +720,29 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        /// <param name="cameraSubsystemParams">The parameters required to initialize the descriptor.</param>
-        XRCameraSubsystemDescriptor(Cinfo cameraSubsystemParams)
+        /// <param name="cinfo">The parameters required to initialize the descriptor.</param>
+        XRCameraSubsystemDescriptor(Cinfo cinfo)
         {
-            id = cameraSubsystemParams.id;
-            providerType = cameraSubsystemParams.providerType;
-            subsystemTypeOverride = cameraSubsystemParams.subsystemTypeOverride;
-            supportsAverageBrightness = cameraSubsystemParams.supportsAverageBrightness;
-            supportsAverageColorTemperature = cameraSubsystemParams.supportsAverageColorTemperature;
-            supportsColorCorrection = cameraSubsystemParams.supportsColorCorrection;
-            supportsDisplayMatrix = cameraSubsystemParams.supportsDisplayMatrix;
-            supportsProjectionMatrix = cameraSubsystemParams.supportsProjectionMatrix;
-            supportsTimestamp = cameraSubsystemParams.supportsTimestamp;
-            supportsCameraConfigurations = cameraSubsystemParams.supportsCameraConfigurations;
-            supportsCameraImage = cameraSubsystemParams.supportsCameraImage;
-            supportsAverageIntensityInLumens = cameraSubsystemParams.supportsAverageIntensityInLumens;
-            supportsFocusModes = cameraSubsystemParams.supportsFocusModes;
-            supportsFaceTrackingAmbientIntensityLightEstimation = cameraSubsystemParams.supportsFaceTrackingAmbientIntensityLightEstimation;
-            supportsFaceTrackingHDRLightEstimation = cameraSubsystemParams.supportsFaceTrackingHDRLightEstimation;
-            supportsWorldTrackingAmbientIntensityLightEstimation = cameraSubsystemParams.supportsWorldTrackingAmbientIntensityLightEstimation;
-            supportsWorldTrackingHDRLightEstimation = cameraSubsystemParams.supportsWorldTrackingHDRLightEstimation;
-            supportsCameraGrain = cameraSubsystemParams.supportsCameraGrain;
-            m_SupportsImageStabilizationDelegate = cameraSubsystemParams.supportsImageStabilizationDelegate;
-            supportsExifData = cameraSubsystemParams.supportsExifData;
+            id = cinfo.id;
+            providerType = cinfo.providerType;
+            subsystemTypeOverride = cinfo.subsystemTypeOverride;
+            supportsAverageBrightness = cinfo.supportsAverageBrightness;
+            supportsAverageColorTemperature = cinfo.supportsAverageColorTemperature;
+            supportsColorCorrection = cinfo.supportsColorCorrection;
+            supportsDisplayMatrix = cinfo.supportsDisplayMatrix;
+            supportsProjectionMatrix = cinfo.supportsProjectionMatrix;
+            supportsTimestamp = cinfo.supportsTimestamp;
+            supportsCameraConfigurations = cinfo.supportsCameraConfigurations;
+            supportsCameraImage = cinfo.supportsCameraImage;
+            supportsAverageIntensityInLumens = cinfo.supportsAverageIntensityInLumens;
+            supportsFocusModes = cinfo.supportsFocusModes;
+            supportsFaceTrackingAmbientIntensityLightEstimation = cinfo.supportsFaceTrackingAmbientIntensityLightEstimation;
+            supportsFaceTrackingHDRLightEstimation = cinfo.supportsFaceTrackingHDRLightEstimation;
+            supportsWorldTrackingAmbientIntensityLightEstimation = cinfo.supportsWorldTrackingAmbientIntensityLightEstimation;
+            supportsWorldTrackingHDRLightEstimation = cinfo.supportsWorldTrackingHDRLightEstimation;
+            supportsCameraGrain = cinfo.supportsCameraGrain;
+            m_SupportsImageStabilizationDelegate = cinfo.supportsImageStabilizationDelegate;
+            supportsExifData = cinfo.supportsExifData;
         }
     }
 }

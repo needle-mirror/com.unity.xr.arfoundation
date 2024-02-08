@@ -1,31 +1,35 @@
+using System;
+using Unity.XR.CoreUtils.Editor.Analytics;
+using UnityEngine;
 using UnityEngine.Analytics;
 
 namespace UnityEditor.XR.ARAnalytics
 {
-    class AREditorAnalyticsEvent<T> : ARAnalyticsEvent<T>
-        where T : struct
+    /// <typeparam name="TContext">The <see cref="Enum"/> type used to define options for the <see cref="AREditorAnalyticsEvent{TContext}.Payload.eventName"/> field within the data payload.</typeparam>
+    abstract class AREditorAnalyticsEvent<TContext> : EditorAnalyticsEvent<AREditorAnalyticsEvent<TContext>.Payload> where TContext : Enum
     {
-        internal AREditorAnalyticsEvent(string tableName, int version = ARAnalyticsConstants.defaultVersion, int maxEventsPerHour = k_DefaultMaxEventsPerHour, int maxElementCount = k_DefaultMaxElementCount)
-        : base(tableName, version, maxEventsPerHour, maxElementCount) { }
+        internal AREditorAnalyticsEvent(string eventName, int eventVersion = ARAnalyticsConstants.defaultVersion) :
+            base(eventName, eventVersion) { }
 
-        protected override AnalyticsResult RegisterWithAnalyticsServer() => EditorAnalytics.RegisterEventWithLimit(
-            k_TableName,
-            m_MaxEventsPerHour,
-            m_MaxElementCount,
-            ARAnalyticsConstants.arFoundationVendorKey,
-            k_Version
-        );
+        protected override AnalyticsResult SendToAnalyticsServer(Payload payload) => EditorAnalytics.SendAnalytic(this);
+        protected override AnalyticsResult RegisterWithAnalyticsServer() => AnalyticsResult.Ok;
 
-        protected override bool SendEvent(T eventArgs)
+        /// <summary>
+        /// Maintains common data properties sent with AR analytics events.
+        /// </summary>
+        internal abstract class Payload : IAnalytic.IData
         {
-            // The event shouldn't be able to report if user has disabled analytics
-            // but if we know it won't be reported then lets not waste time gathering
-            // all the data.
-            if (!EditorAnalytics.enabled)
-                return false;
+            /// <summary>
+            /// The contextual event name used to further classify the event within its analytics data table.
+            /// Not to be confused with <see cref="AREditorAnalyticsEvent{TContext}.EventName"/>.
+            /// </summary>
+            [SerializeField]
+            protected string eventName;
 
-            var result = EditorAnalytics.SendEventWithLimit(k_TableName, eventArgs, k_Version);
-            return result == AnalyticsResult.Ok;
+            internal Payload(TContext eventContext)
+            {
+                eventName = eventContext.ToString();
+            }
         }
     }
 }

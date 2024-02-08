@@ -19,6 +19,6 @@ Triggers when AR Human Bodies have changed. AR Human Bodies can be added, update
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been added. |
-| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been updated. |
-| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been removed. |
+| **Added** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been added. |
+| **Updated** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | AR Human Bodies that have been updated. |
+| **Removed** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of `KeyValuePair<TrackableId, ARHumanBody>` | AR Human Bodies that have been removed. |

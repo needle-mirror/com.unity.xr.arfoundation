@@ -9,9 +9,17 @@ uid: arfoundation-whats-new
 
 - Added support for Image Stabilization, which helps stabilize shaky video from the camera. Refer to [AR Camera Manager component](xref:arfoundation-camera-components#ar-camera-manager-component) for more information.
 
-### XR Simulation Occlusion
+### XR Simulation occlusion
 
-- Added support for Occlusion to XR Simulation, allowing you to test occlusion without deploying to device.
+- Added support for occlusion to XR Simulation, allowing you to test occlusion without deploying to device.
+
+### XR Simulation light estimation
+
+- Added support for light estimation in [SimulationCameraSubsystem](xref:UnityEngine.XR.Simulation.SimulationCameraSubsystem). Add the new [SimulatedLight](xref:UnityEngine.XR.ARFoundation.SimulatedLight) component to any lights in your simulation environment.
+
+### Build AssetBundles window
+
+- Added an editor window in **Assets** > **AR Foundation** > **Build AssetBundles** that you can use to build AssetBundles containing [XRReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary) objects.
 
 ### Asynchronous anchor creation
 
@@ -27,10 +35,24 @@ uid: arfoundation-whats-new
 
 ### Generic `trackablesChanged` event
 
-- Added a generic [ARTrackableManager.trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event to replace all previous trackables-changed events (`ARPlaneManager.planesChanged`, etc). This simplifies the code needed to work across all managers. The new event is also accessible from the Inspector.
+- Added a generic [ARTrackableManager.trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event to replace all previous trackables-changed events (`ARPlaneManager.planesChanged`, etc). This simplifies the code needed to work across all managers.
+  - This new event can be used in the Inspector.
+  - This new event also fixes an issue where destroying an `ARAnchor` or `AREnvironmentProbe` component would not result in a respective `anchorsChanged` or `environmentProbesChanged` event invocation.
 - Added a generic [ARTrackablesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1) to replace all previous trackables-changed event arguments structs.
 
-### API design improvements
+### Platform-specific error codes and success codes
+
+- Added [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus), a new way for AR Foundation to provide status information for completed operations. Provider plug-ins can add extension methods to this type to give users access to platform-specific error codes and success codes.
+
+### More consistent image tracking in XR Simulation
+
+- Added `SimulatedTrackedImage.imageAssetGuid` API to make it possible for XR Simulation to identify images even if **Keep Texture at Runtime** is disabled in the reference image library.
+
+### Support for concave plane boundary meshes
+
+- Added new API [ARPlaneMeshGenerator.TryGenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerator.TryGenerateMesh) to support generating meshes of simple polygons, i.e. concave and convex polygons.
+
+### Other API design improvements
 
 - Added the following subsystem descriptor registration methods for consistency with other descriptors:
   - [XRCameraSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.Register*)
@@ -40,33 +62,35 @@ uid: arfoundation-whats-new
   - [XRObjectTrackingSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystemDescriptor.Register*)
   - [XRParticipantSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor.Register*)
 - Added [XRCameraSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.GetShaderKeywords) and [XROcclusionSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.GetShaderKeywords). Both return a new read-only [ShaderKeywords](xref:UnityEngine.XR.ARSubsystems.ShaderKeywords) struct.
-
-### More consistent image tracking in XR Simulation
-
-- Added `SimulatedTrackedImage.imageAssetGuid` API to make it possible for XR Simulation to identify images even if **Keep Texture at Runtime** is disabled in the reference image library.
+- Added `NotAxisAligned` Plane Detection Mode.
 
 ## Changed
 
 ### Minimum Unity Editor version
 
-- Upgraded minimum Unity Editor version from 2021.2 to 2023.2.
+- Upgraded minimum Unity Editor version from 2021.2 to 2023.3.
 
 ### XR Simulation image tracking workflow
 
 - Changed the `SimulatedTrackedImage` component to render a textured mesh of its image, allowing you to see the image in the Scene view and Game view without requiring additional GameObjects.
 - Removed now-unnecessary Quad GameObjects from the DefaultSimulationEnvironment.
 
+### Navigation Input Actions in XR Simulation
+
+- Changed XR Simulation navigation controls to be bound to configurable Input Actions instead of hard-coded to WASD keys. You can configure these Input Actions in the XR Simulation Preferences window.
+
 ### ARAnchor life cycle
 
 - Changed the life cycle behavior of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) in the event that adding the anchor to the `XRAnchorSubsystem` failed. Instead of retrying the add operation every frame, the `ARAnchor` component now disables itself after the first failed attempt.
 
-### API design improvements
+### Other API design improvements
 
 - Changed `ARTrackable` to now implement the `ITrackable` interface, enabling generic API designs when dealing with trackables.
 - Changed `Promise<T>.OnKeepWaiting()` to `virtual` instead of `abstract`.
 - Changed `XRPlaneSubsystem.Provider.requestedPlaneDetectionMode` from `virtual` to `abstract`, as `ARPlaneManager` requires a concrete implementation.
 - Changed `SubsystemLifecycleManager.GetActiveSubsystemInstance()` from `protected` to `protected static`, as it does not use any instance members of `SubsystemLifecycleManager`.
-- Changed the behavior of `SimulationSessionSubsystem.sessionId` to now return a non-empty unique value when the subsystem is running. You can access the session id using `XRSessionSubsystem.sessionId`.
+- Changed the behavior of `SimulationSessionSubsystem.sessionId` to now return a non-empty, unique value when the subsystem is running. You can access the session id using `XRSessionSubsystem.sessionId`.
+- Changed `SimulationPlaneSubsystem` to respect the currently set `PlaneDetectionMode`, detecting updates only from planes that match the current mode.
 
 ## Deprecated
 
@@ -174,6 +198,10 @@ All deprecated APIs are replaced by new API additions.
   - `XRCameraFrame.hasCameraGrain` to `XRCameraFrame.TryGetCameraGrain`
   - `XRCameraFrame.noiseIntensity` to `XRCameraFrame.TryGetNoiseIntensity`
   - `XRCameraFrame.hasNoiseIntensity` to `XRCameraFrame.TryGetNoiseIntensity`
+- Deprecated and replaced [ARPlaneMeshGenerators](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators) with `ARPlaneMeshGenerator`.
+  - [ARPlaneMeshGenerators.GenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateMesh)
+  - [ARPlaneMeshGenerators.GenerateUvs](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateUvs)
+  - [ARPlaneMeshGenerators.GenerateIndices](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateIndices)
 
 ## Removed
 

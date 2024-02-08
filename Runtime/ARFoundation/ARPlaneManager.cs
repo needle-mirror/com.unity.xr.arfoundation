@@ -283,5 +283,12 @@ namespace UnityEngine.XR.ARFoundation
             if (raycastManager != null)
                 raycastManager.UnregisterRaycaster(this);
         }
+
+#if UNITY_EDITOR
+        void OnValidate()
+        {
+             requestedDetectionMode = m_DetectionMode;
+        }
+#endif //#if UNITY_EDITOR
     }
 }

@@ -8,6 +8,32 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0-pre.6] - 2024-02-08
+
+### Added
+
+- Added [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus), a new way for AR Foundation to provide status information for completed operations. Provider plug-ins can add extension methods to this type to give users access to platform-specific error codes and success codes.
+
+### Changed
+
+- Changed `SimulationPlaneSubsystem` to respect the currently set `PlaneDetectionMode`, detecting updates only from planes that match the current mode.
+- Upgraded `com.unity.xr.core-utils` dependency version from `2.2.3` to `2.3.0`.
+- Changed [ARTrackablesChangedEventArgs\<TTrackable\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1):
+  - `added`, `updated`, and `removed` now return [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) instead of `IReadOnlyCollection`, removing an unnecessary heap allocation when each collection is enumerated.
+  - `removed` now uses `KeyValuePair<TrackableId, TTrackable>` instead of `TTrackable`, allowing `ARTrackableManager` to send notifications of removed trackables even if you already destroyed them (for example, by destroying an `ARAnchor`).
+- Changed [Result\<T\>](xref:UnityEngine.XR.ARSubsystems.Result`1):
+  - Removed `bool TryGetResult(out T)` and the constructor that took `(bool, T)` as parameters.
+  - Added `status`, `value`, and a constructor that takes `(XRResultStatus, T)` as parameters.
+- Updated Universal Render Pipeline documentation to reflect recent changes to URP concepts and setup.
+- Changed minimum Unity Editor version to `2023.3`.
+
+### Fixed
+
+- Fixed an issue where calling `ARSession.Reset` could cause XR Simulation plane detection to fail to discover planes for a period of time before resuming.
+- Fixed an issue where the `SimulationEnvironmentProbeSubsystem` could destroy environment probe GameObjects when they were removed, even if their **Destroy on Removal** property was set to false.
+- Fixed an issue where `EditorAnalytics` would throw obsolete warnings during project import in Unity 2023.2 or newer.
+- Fixed an issue in XR Simulation where a command buffer for the Built-in Render Pipeline was added to a camera even when URP was active.
+
 ## [6.0.0-pre.5] - 2023-12-14
 
 ### Added
@@ -31,6 +57,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added [Custom background shaders](xref:arfoundation-custom-background-shaders) manual page.
 - Added [SimulatedTrackedImage](xref:arfoundation-simulation-environments#simulated-tracked-image-component) as a public class. This class has been present since AR Foundation 5.0, but previously was not public.
 - Added settings in the XR Simulation Preferences window for configuring navigation `InputAction`s and navigation speed.
+- Added `NotAxisAligned` [PlaneDetectionMode](xref:UnityEngine.XR.ARSubsystems.PlaneDetectionMode).
 
 ### Changed
 
@@ -59,15 +86,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Fixed an issue in XR Simulation where a warning was logged stating that saving had no effect because of a missing FilePathAttribute.
 - Fixed an issue in XR Simulation where if the AR Occlusion Manager component was disabled at the start of a scene, occlusion would not work correctly if you later enabled the component.
-- Fixed an issue where the [ARTrackableManager.trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged) event was initialized to `null`.
+- Fixed an issue where the [ARTrackableManager.trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event was initialized to `null`.
 - Fixed an issue where `SimulatedAnchor` components could incorrectly affect XR Simulation when used in scenes other than the XR simulation environment.
+- Fixed an issue where disabling and re-enabling the [ARDebugMenu](xref:arfoundation-debug-menu) component would cause the origin toggle to become unresponsive.
 
 ## [6.0.0-pre.4] - 2023-10-18
 
 ### Added
 
-- Added `UnityEvent` [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged) to `ARTrackableManager`.
-- Added struct [ARTrackablesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs) for the `trackablesChanged` event argument.
+- Added `UnityEvent` [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) to `ARTrackableManager`.
+- Added struct [ARTrackablesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1) for the `trackablesChanged` event argument.
 - Added support for lighting estimation in [SimulationCameraSubsystem](xref:UnityEngine.XR.Simulation.SimulationCameraSubsystem).
 - Added 'InvisibleWallFace' semantic label to [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications).
 

@@ -19,6 +19,6 @@ Triggers when AR Anchors have changed. AR Anchors can be added, updated, and/or 
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been added. |
-| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been updated. |
-| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been removed. |
+| **Added** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been added. |
+| **Updated** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | AR Anchors that have been updated. |
+| **Removed** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of `KeyValuePair<TrackableId, ARAnchor>` | AR Anchors that have been removed. |

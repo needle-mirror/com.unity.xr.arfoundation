@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Unity.XR.CoreUtils.Collections;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -8,22 +9,23 @@ namespace UnityEngine.XR.ARFoundation
     /// Event arguments for the `ARTrackableManager.trackablesChanged` event.
     /// </summary>
     /// <typeparam name="TTrackable">A trackable that is an <see cref="ARTrackable"/></typeparam>
-    public struct ARTrackablesChangedEventArgs<TTrackable> : IEquatable<ARTrackablesChangedEventArgs<TTrackable>> where TTrackable : ARTrackable
+    public readonly struct ARTrackablesChangedEventArgs<TTrackable> : IEquatable<ARTrackablesChangedEventArgs<TTrackable>>
+        where TTrackable : ARTrackable
     {
         /// <summary>
         /// The collection of <see cref="TTrackable"/>s added since the last event.
         /// </summary>
-        public IReadOnlyCollection<TTrackable> added { get; }
+        public ReadOnlyList<TTrackable> added { get; }
 
         /// <summary>
-        /// The collection of <see cref="TTrackable"/>s udpated since the last event.
+        /// The collection of <see cref="TTrackable"/>s updated since the last event.
         /// </summary>
-        public IReadOnlyCollection<TTrackable> updated { get; }
+        public ReadOnlyList<TTrackable> updated { get; }
 
         /// <summary>
-        /// The collection of <see cref="TTrackable"/>s removed since the last event.
+        /// The collection of removed trackables since the last event.
         /// </summary>
-        public IReadOnlyCollection<TTrackable> removed { get; }
+        public ReadOnlyList<KeyValuePair<TrackableId, TTrackable>> removed { get; }
 
         /// <summary>
         /// Constructs an <see cref="ARTrackablesChangedEventArgs&lt;TTrackable&gt;"/>.
@@ -32,13 +34,14 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="updated">The collection of <see cref="TTrackable"/>s updated since the last event.</param>
         /// <param name="removed">The collection of <see cref="TTrackable"/>s removed since the last event.</param>
         public ARTrackablesChangedEventArgs(
-            IReadOnlyCollection<TTrackable> added,
-            IReadOnlyCollection<TTrackable> updated,
-            IReadOnlyCollection<TTrackable> removed)
+            ReadOnlyList<TTrackable> added,
+            ReadOnlyList<TTrackable> updated,
+            ReadOnlyList<KeyValuePair<TrackableId, TTrackable>> removed)
         {
-            this.added = added ?? new List<TTrackable>();
-            this.updated = updated ?? new List<TTrackable>();
-            this.removed = removed ?? new List<TTrackable>();
+            this.added = added ?? new ReadOnlyList<TTrackable>(new List<TTrackable>(0));
+            this.updated = updated ?? new ReadOnlyList<TTrackable>(new List<TTrackable>(0));
+            this.removed = removed ?? new ReadOnlyList<KeyValuePair<TrackableId, TTrackable>>(
+                new List<KeyValuePair<TrackableId, TTrackable>>(0));
         }
 
         /// <summary>
@@ -54,8 +57,10 @@ namespace UnityEngine.XR.ARFoundation
         /// Tests for equality.
         /// </summary>
         /// <param name="obj">The `object` to compare against.</param>
-        /// <returns>Returns <see langword="true"/> if <paramref name="obj"/> is of type <see cref="ARTrackablesChangedEventArgs&lt;TTrackable&gt;"/> and
-        /// <see cref="Equals(ARTrackablesChangedEventArgs&lt;TTrackable&gt;)"/> also returns <see langword="true"/>; otherwise returns <see langword="false"/>.</returns>
+        /// <returns>Returns <see langword="true"/> if <paramref name="obj"/> is of type
+        /// <see cref="ARTrackablesChangedEventArgs&lt;TTrackable&gt;"/> and
+        /// <see cref="Equals(ARTrackablesChangedEventArgs&lt;TTrackable&gt;)"/> also returns <see langword="true"/>.
+        /// Otherwise, returns <see langword="false"/>.</returns>
         public override bool Equals(object obj)
         {
             return obj is ARTrackablesChangedEventArgs<TTrackable> args && Equals(args);
@@ -74,13 +79,14 @@ namespace UnityEngine.XR.ARFoundation
         /// Tests for equality.
         /// </summary>
         /// <param name="other">The other <see cref="ARTrackablesChangedEventArgs&lt;TTrackable&gt;"/> to compare against.</param>
-        /// <returns>Returns <see langword="true"/> if every field in <paramref name="other"/> is equal to this <see cref="ARTrackablesChangedEventArgs&lt;TTrackable&gt;"/>, otherwise returns <see langword="false"/>.</returns>
+        /// <returns>Returns <see langword="true"/> if every field in <paramref name="other"/> is equal to this
+        /// <see cref="ARTrackablesChangedEventArgs&lt;TTrackable&gt;"/>, otherwise returns <see langword="false"/>.</returns>
         public bool Equals(ARTrackablesChangedEventArgs<TTrackable> other)
         {
             return
-                (added == other.added) &&
-                (updated == other.updated) &&
-                (removed == other.removed);
+                added == other.added &&
+                updated == other.updated &&
+                removed == other.removed;
         }
 
         /// <summary>
@@ -88,7 +94,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns>Returns <see langword="true"/> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise returns <see langword="false"/>.</returns>
+        /// <returns>Returns <see langword="true"/> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>.
+        /// Otherwise, returns <see langword="false"/>.</returns>
         public static bool operator ==(ARTrackablesChangedEventArgs<TTrackable> lhs, ARTrackablesChangedEventArgs<TTrackable> rhs)
         {
             return lhs.Equals(rhs);
@@ -99,7 +106,8 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns>Returns <see langword="true"/> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise returns <see langword="false"/>.</returns>
+        /// <returns>Returns <see langword="true"/> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>.
+        /// Otherwise, returns <see langword="false"/>.</returns>
         public static bool operator !=(ARTrackablesChangedEventArgs<TTrackable> lhs, ARTrackablesChangedEventArgs<TTrackable> rhs)
         {
             return !lhs.Equals(rhs);

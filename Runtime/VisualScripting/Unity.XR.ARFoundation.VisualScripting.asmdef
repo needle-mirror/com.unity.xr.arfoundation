@@ -5,7 +5,8 @@
         "Unity.XR.ARSubsystems",
         "Unity.XR.ARFoundation",
         "Unity.VisualScripting.Core",
-        "Unity.VisualScripting.Flow"
+        "Unity.VisualScripting.Flow",
+        "Unity.XR.CoreUtils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

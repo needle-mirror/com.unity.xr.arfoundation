@@ -19,6 +19,6 @@ Triggers when AR Faces have changed. AR Faces can be added, updated, and/or remo
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | AR Faces that have been added. |
-| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | AR Faces that have been updated. |
-| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | AR Faces that have been removed. |
+| **Added** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | AR Faces that have been added. |
+| **Updated** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | AR Faces that have been updated. |
+| **Removed** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of `KeyValuePair<TrackableId, ARFace>` | AR Faces that have been removed. |

@@ -1,7 +1,9 @@
 {
     "name": "Unity.XR.ARAnalytics.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Unity.XR.CoreUtils.Editor"
+    ],
     "includePlatforms": [
         "Editor"
     ],

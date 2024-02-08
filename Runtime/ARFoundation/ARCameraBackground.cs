@@ -6,8 +6,7 @@ using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
-
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
 using UnityEngine.Experimental.Rendering;
 #endif
 
@@ -555,13 +554,13 @@ namespace UnityEngine.XR.ARFoundation
         {
             commandBuffer.IssuePluginEvent(s_BeforeBackgroundRenderHandlerFuncPtr, 0);
         }
-        
-#if MODULE_URP_ENABLED
+
+#if URP_7_OR_NEWER
         internal static void AddBeforeBackgroundRenderHandler(RasterCommandBuffer commandBuffer)
         {
             commandBuffer.IssuePluginEvent(s_BeforeBackgroundRenderHandlerFuncPtr, 0);
         }
-#endif
+#endif // URP_7_OR_NEWER
 
         /// <summary>
         /// Callback for the camera frame event.

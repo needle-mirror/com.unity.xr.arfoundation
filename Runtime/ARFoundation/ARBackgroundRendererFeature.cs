@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.Rendering;
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
 using System;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.XR.ARSubsystems;
 #else
 using ScriptableRendererFeature = UnityEngine.ScriptableObject;
-#endif
+#endif // URP_7_OR_NEWER
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     public class ARBackgroundRendererFeature : ScriptableRendererFeature
     {
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
         /// <summary>
         /// The scriptable render pass to be added to the renderer when the camera background is to be rendered.
         /// </summary>
@@ -283,6 +283,6 @@ namespace UnityEngine.XR.ARFoundation
             protected override XRCameraBackgroundRenderingMode renderingMode
                 => XRCameraBackgroundRenderingMode.AfterOpaques;
         }
-#endif // MODULE_URP_ENABLED
+#endif // URP_7_OR_NEWER
     }
 }

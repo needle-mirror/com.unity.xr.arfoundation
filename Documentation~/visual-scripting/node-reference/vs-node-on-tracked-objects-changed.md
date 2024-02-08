@@ -19,6 +19,6 @@ Triggers when AR Tracked Objects have changed. AR Tracked Objects can be added, 
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been added. |
-| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been updated. |
-| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been removed. |
+| **Added** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been added. |
+| **Updated** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | AR Tracked Objects that have been updated. |
+| **Removed** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of `KeyValuePair<TrackableId, ARTrackedObject>` | AR Tracked Objects that have been removed. |

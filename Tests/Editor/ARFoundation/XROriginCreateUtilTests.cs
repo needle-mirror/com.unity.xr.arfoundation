@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 
 namespace UnityEditor.XR.ARFoundation.Tests
 {
@@ -42,17 +41,17 @@ namespace UnityEditor.XR.ARFoundation.Tests
             var origin = XROriginCreateUtil.CreateXROriginWithParent(null);
             Assert.IsNotNull(origin);
             Undo.PerformUndo();
-            origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+            origin = Object.FindAnyObjectByType<XROrigin>();
             Assert.IsTrue(origin == null); // using Unity's overload for the == operator
             Undo.PerformRedo();
-            origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+            origin = Object.FindAnyObjectByType<XROrigin>();
             Assert.IsNotNull(origin);
             Object.DestroyImmediate(origin);
         }
 
         static void DestroyAllGameObjects()
         {
-            foreach (var g in FindObjectsUtility.FindObjectsByType<GameObject>())
+            foreach (var g in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
             {
                 // Don't destroy GameObjects that are children within a Prefab instance
                 if (g == null || (PrefabUtility.IsPartOfAnyPrefab(g) && !PrefabUtility.IsAnyPrefabInstanceRoot(g)))

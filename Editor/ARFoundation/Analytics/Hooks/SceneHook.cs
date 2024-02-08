@@ -14,17 +14,17 @@ namespace UnityEditor.XR.ARFoundation
 
         static void OnSceneOpened(Scene scene, OpenSceneMode openSceneMode)
         {
-            SendARUsageAnalyticsEvent(ARUsageAnalyticsArgs.EventName.SceneOpen, scene);
+            SendARUsageAnalyticsEvent(ARUsageAnalyticsEvent.Context.SceneOpen, scene);
         }
 
         static void OnSceneSaved(Scene scene)
         {
-            SendARUsageAnalyticsEvent(ARUsageAnalyticsArgs.EventName.SceneSave, scene);
+            SendARUsageAnalyticsEvent(ARUsageAnalyticsEvent.Context.SceneSave, scene);
         }
 
-        static void SendARUsageAnalyticsEvent(ARUsageAnalyticsArgs.EventName eventName, Scene scene)
+        static void SendARUsageAnalyticsEvent(ARUsageAnalyticsEvent.Context eventName, Scene scene)
         {
-            AREditorAnalytics.arUsageAnalyticEvent.Send(new ARUsageAnalyticsArgs(
+            AREditorAnalytics.arUsageAnalyticsEvent.Send(new ARUsageAnalyticsEvent.EventPayload(
                 eventName: eventName,
                 sceneGuid: AssetDatabase.GUIDFromAssetPath(scene.path),
                 arManagersInfo: ARSceneAnalysis.GetARManagersInfo(scene)));

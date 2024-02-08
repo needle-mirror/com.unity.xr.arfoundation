@@ -31,17 +31,17 @@ namespace UnityEngine.XR.Simulation
         bool m_IsEnvironmentSceneInitialized;
         bool m_IsStarted;
 
-        public bool isReady => m_IsEnvironmentSceneInitialized && m_IsStarted;
+        internal bool isReady => m_IsEnvironmentSceneInitialized && m_IsStarted;
 
-        public bool hasAnyChanges => m_Added.Count > 0 || m_Updated.Count > 0 || m_Removed.Count > 0;
+        internal bool hasAnyChanges => m_Added.Count > 0 || m_Updated.Count > 0 || m_Removed.Count > 0;
 
-        public IReadOnlyCollection<XRAnchor> added => m_Added.Values;
+        internal IReadOnlyCollection<XRAnchor> added => m_Added.Values;
 
-        public IReadOnlyCollection<XRAnchor> updated => m_Updated.Values;
+        internal IReadOnlyCollection<XRAnchor> updated => m_Updated.Values;
 
-        public IReadOnlyCollection<TrackableId> removed => m_Removed;
+        internal IReadOnlyCollection<TrackableId> removed => m_Removed;
 
-        public void Start()
+        internal void Start()
         {
             if (m_IsStarted)
                 return;
@@ -51,7 +51,7 @@ namespace UnityEngine.XR.Simulation
                 m_SessionId = m_SessionSubsystem.sessionId;
 
             SubsystemUtils.TryGetLoadedSubsystem<XRPlaneSubsystem, SimulationPlaneSubsystem>(out m_PlaneSubsystem);
-            m_Origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
+            m_Origin = Object.FindAnyObjectByType<XROrigin>();
             if(m_Origin == null || m_PlaneSubsystem == null || m_SessionSubsystem == null)
             {
                 Debug.LogWarning("SimulationAnchorImpl could not be started because the XROrigin, SimulationPlaneSubsystem, or SimulationSessionSubsystem could not be found.");
@@ -64,7 +64,7 @@ namespace UnityEngine.XR.Simulation
             m_IsStarted = true;
         }
 
-        public void Stop()
+        internal void Stop()
         {
             if (!m_IsStarted)
                 return;
@@ -82,7 +82,7 @@ namespace UnityEngine.XR.Simulation
             m_IsStarted = false;
         }
 
-        public void Update()
+        internal void Update()
         {
             if(!m_IsStarted)
                 return;
@@ -233,7 +233,7 @@ namespace UnityEngine.XR.Simulation
 
         void OnEnvironmentTeardownStarted() => ClearEnvironmentSimulatedAnchors();
 
-        public void Reset()
+        internal void Reset()
         {
             if (!m_IsStarted)
                 return;
@@ -256,20 +256,20 @@ namespace UnityEngine.XR.Simulation
             m_IsEnvironmentSceneInitialized = false;
         }
 
-        public void ClearChangeBuffers()
+        internal void ClearChangeBuffers()
         {
             m_Added.Clear();
             m_Updated.Clear();
             m_Removed.Clear();
         }
 
-        public void AddPoseAnchor(Pose pose, out XRAnchor anchor)
+        internal void AddPoseAnchor(Pose pose, out XRAnchor anchor)
         {
             CreateAndAddAnchor(pose, TrackingState.Tracking, out anchor);
             m_PoseAnchorDataLookup.Add(anchor.trackableId, anchor);
         }
 
-        public bool TryAttachAnchor(TrackableId attachedToId, Pose pose, out XRAnchor anchor)
+        internal bool TryAttachAnchor(TrackableId attachedToId, Pose pose, out XRAnchor anchor)
         {
             anchor = XRAnchor.defaultValue;
 
@@ -318,7 +318,7 @@ namespace UnityEngine.XR.Simulation
             m_Added.Add(anchor.trackableId, anchor);
         }
 
-        public bool TryRemoveAnchor(TrackableId anchorId)
+        internal bool TryRemoveAnchor(TrackableId anchorId)
         {
             if (TryRemoveAnchorFrom(m_AttachedAnchorDataLookup, anchorId)
                 || TryRemoveAnchorFrom(m_PoseAnchorDataLookup, anchorId))

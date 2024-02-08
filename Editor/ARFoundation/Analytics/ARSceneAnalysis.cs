@@ -30,7 +30,7 @@ namespace UnityEditor.XR.ARFoundation
         static readonly List<GameObject> k_RootObjects = new();
         static readonly List<MonoBehaviour> k_ArManagers = new();
 
-        public static ARUsageAnalyticsArgs.ARManagerInfo[] GetARManagersInfo(Scene scene)
+        public static ARUsageAnalyticsEvent.ARManagerInfo[] GetARManagersInfo(Scene scene)
         {
             // Static collections used below are cleared by the methods that use them
             GetComponentsWithTypes(scene, k_ArManagerTypes, k_ArManagers);
@@ -39,11 +39,11 @@ namespace UnityEditor.XR.ARFoundation
             if (arManagerCount == 0)
                 return null;
 
-            var arManagersInfo = new ARUsageAnalyticsArgs.ARManagerInfo[arManagerCount];
+            var arManagersInfo = new ARUsageAnalyticsEvent.ARManagerInfo[arManagerCount];
             for (var i = 0; i < arManagerCount; ++i)
             {
                 var arManager = k_ArManagers[i];
-                arManagersInfo[i] = new ARUsageAnalyticsArgs.ARManagerInfo
+                arManagersInfo[i] = new ARUsageAnalyticsEvent.ARManagerInfo
                 {
                     name = arManager.GetType().Name,
                     active = arManager.isActiveAndEnabled

@@ -13,8 +13,8 @@ namespace UnityEditor.XR.ARFoundation
             if (report == null)
                 return;
 
-            AREditorAnalytics.arUsageAnalyticEvent.Send(new ARUsageAnalyticsArgs(
-                eventName: ARUsageAnalyticsArgs.EventName.BuildPlayer,
+            AREditorAnalytics.arUsageAnalyticsEvent.Send(new ARUsageAnalyticsEvent.EventPayload(
+                eventName: ARUsageAnalyticsEvent.Context.BuildPlayer,
                 buildGuid: report.summary.guid,
                 targetPlatform: report.summary.platform,
                 sceneGuid: AssetDatabase.GUIDFromAssetPath(scene.path),

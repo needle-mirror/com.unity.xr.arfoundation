@@ -19,6 +19,6 @@ Triggers when AR Participants have changed. AR Participants can be added, update
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been added. |
-| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been updated. |
-| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been removed. |
+| **Added** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been added. |
+| **Updated** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | AR Participants that have been updated. |
+| **Removed** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of `KeyValuePair<TrackableId, ARParticipant>` | AR Participants that have been removed. |

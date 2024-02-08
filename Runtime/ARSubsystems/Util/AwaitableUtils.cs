@@ -8,8 +8,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// An `Awaitable` equivalent to C#'s `Task.FromResult`.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Awaitable<Result<T>> FromResult(
-            AwaitableCompletionSource<Result<T>> completionSource, Result<T> result)
+        internal static Awaitable<T> FromResult(
+            AwaitableCompletionSource<T> completionSource, T result)
         {
             var awaitable = completionSource.Awaitable;
             completionSource.SetResult(result);

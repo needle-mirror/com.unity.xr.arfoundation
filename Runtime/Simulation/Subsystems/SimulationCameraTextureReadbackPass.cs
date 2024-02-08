@@ -1,4 +1,4 @@
-#if MODULE_URP_ENABLED
+#if URP_7_OR_NEWER
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -28,4 +28,4 @@ class SimulationCameraTextureReadbackPass : ScriptableRenderPass
         }
     }
 }
-#endif // end MODULE_URP_ENABLED
+#endif // URP_7_OR_NEWER

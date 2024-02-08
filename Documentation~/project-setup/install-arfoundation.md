@@ -7,10 +7,7 @@ AR Foundation is an official Unity package available via the [Package Manager](h
 
 ## Editor compatibility
 
-AR Foundation 6.0 is compatible with Unity 2023.2 and up.
-
-> [!NOTE]
-> AR Foundation 6.0 is compatible with Unity 2023.2, but it does not appear in the Package Manager window of this Editor version. See [access AR Foundation 6.0 in Unity 2023.2](xref:arfoundation-edit-your-project-manifest) to learn how to edit your project manifest.
+AR Foundation 6.0 is compatible with Unity 2023.3 and up.
 
 ### Older Editor versions
 

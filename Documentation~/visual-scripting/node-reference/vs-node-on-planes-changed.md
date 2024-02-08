@@ -19,6 +19,6 @@ Triggers when AR Planes have changed. AR Planes can be added, updated, and/or re
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Added** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | AR Planes that have been added. |
-| **Updated** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | AR Planes that have been updated. |
-| **Removed** | [IReadOnlyCollection](xref:System.Collections.Generic.IReadOnlyCollection`1) of [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | AR Planes that have been removed. |
+| **Added** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | AR Planes that have been added. |
+| **Updated** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | AR Planes that have been updated. |
+| **Removed** | [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) of `KeyValuePair<TrackableId, ARPlane>` | AR Planes that have been removed. |
