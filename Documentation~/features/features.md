@@ -11,6 +11,7 @@ AR Foundation supports the following features:
 | [Device tracking](xref:arfoundation-device-tracking) | Track the device's position and rotation in physical space. |
 | [Camera](xref:arfoundation-camera) | Render images from device cameras and perform light estimation. |
 | [Plane detection](xref:arfoundation-plane-detection) | Detect and track flat surfaces. |
+| [Bounding Box detection](xref:arfoundation-bounding-box-detection) | Detect and track bounding boxes of 3D objects. |
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
 | [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |

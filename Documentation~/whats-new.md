@@ -5,6 +5,10 @@ uid: arfoundation-whats-new
 
 ## New features
 
+### Bounding boxes
+
+- Added an API for provider plug-ins to implement the detection and tracking of 3D bounding boxes. Refer to [Bounding box detection](xref:arfoundation-bounding-box-detection) for more information.
+
 ### Image Stabilization
 
 - Added support for Image Stabilization, which helps stabilize shaky video from the camera. Refer to [AR Camera Manager component](xref:arfoundation-camera-components#ar-camera-manager-component) for more information.
@@ -51,6 +55,10 @@ uid: arfoundation-whats-new
 ### Support for concave plane boundary meshes
 
 - Added new API [ARPlaneMeshGenerator.TryGenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerator.TryGenerateMesh) to support generating meshes of simple polygons, i.e. concave and convex polygons.
+
+### Render graph
+
+- Added support for the Universal Render Pipeline Render Graph introduced in URP 17.
 
 ### Other API design improvements
 

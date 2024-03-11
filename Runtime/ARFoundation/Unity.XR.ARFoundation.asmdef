@@ -27,6 +27,11 @@
             "name": "com.unity.xr.legacyinputhelpers",
             "expression": "1.0.0",
             "define": "USE_LEGACY_INPUT_HELPERS"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "17.0.0",
+            "define": "URP_17_OR_NEWER"
         }
     ],
     "noEngineReferences": false

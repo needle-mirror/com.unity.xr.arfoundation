@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARSubsystems
         None = 0,
 
         /// <summary>
-        /// The plane is horizontal with an upward facing normal (for example, a floor).
+        /// The plane is classified as a wall.
         /// </summary>
         Wall,
 

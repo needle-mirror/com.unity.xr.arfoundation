@@ -31,5 +31,35 @@ namespace UnityEngine.XR.ARFoundation.Tests
             manager.trackablesChanged.AddListener(OnTrackablesChanged);
         }
         #endregion
+
+        #region BoundingBoxesChanged
+        public void OnTrackablesChanged(ARTrackablesChangedEventArgs<ARBoundingBox> changes)
+        {
+            foreach (var boundingBox in changes.added)
+            {
+                // handle added bounding boxes
+            }
+
+            foreach (var boundingBox in changes.updated)
+            {
+                // handle updated bounding boxes
+            }
+
+            foreach (var boundingBox in changes.removed)
+            {
+                // handle removed bounding boxes
+            }
+        }
+        #endregion
+
+        #region BoundingBoxSubscribe
+        void SubscribeToBoundingBoxesChanged()
+        {
+            // This is inefficient. You should re-use a saved reference instead.
+            var manager = Object.FindAnyObjectByType<ARBoundingBoxManager>();
+
+            manager.trackablesChanged.AddListener(OnTrackablesChanged);
+        }
+        #endregion
     }
 }

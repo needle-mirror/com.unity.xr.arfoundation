@@ -5,12 +5,10 @@ using Unity.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 #if URP_7_OR_NEWER
 using UnityEngine.Rendering.Universal;
 #endif // URP_7_OR_NEWER
-
 using ImageType = UnityEngine.XR.Simulation.SimulationXRCpuImageApi.ImageType;
 
 namespace UnityEngine.XR.Simulation
@@ -48,11 +46,11 @@ namespace UnityEngine.XR.Simulation
         static Material s_DepthCopyShader;
 
         Camera m_XrCamera;
-        Camera m_SimulationRenderCamera;
-        RenderTexture m_SimulationRenderTexture;
-        RenderTexture m_SimulationRenderDepthTexture;
-        Texture2D m_SimulationProviderTexture;
-        Texture2D m_SimulationProviderDepthTexture;
+        Camera m_SimulationCamera;
+        RenderTexture m_SimulationCameraRenderTexture;
+        RenderTexture m_SimulationCameraDepthRenderTexture;
+        Texture2D m_SimulationReadbackTexture;
+        Texture2D m_SimulationReadbackDepthTexture;
         CameraTextureFrameEventArgs? m_CameraFrameEventArgs;
         SimulationXRayManager m_XRayManager;
 
@@ -92,21 +90,98 @@ namespace UnityEngine.XR.Simulation
                 s_DepthCopyShader = new Material(Shader.Find("Hidden/DepthCopy"));
         }
 
+        void InitializeProvider(Camera xrCamera, Camera simulationCamera)
+        {
+            if (m_Initialized)
+                return;
+
+            m_XRayManager = new SimulationXRayManager();
+
+            m_XrCamera = xrCamera;
+            m_SimulationCamera = simulationCamera;
+            CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationCamera);
+
+            var descriptor = new RenderTextureDescriptor(m_XrCamera.scaledPixelWidth, m_XrCamera.scaledPixelHeight);
+
+            // Need to make sure we set the graphics format to our valid format
+            // or we will get an out of range value for the render texture format
+            // when we try creating the render texture
+            descriptor.graphicsFormat = SystemInfo.GetGraphicsFormat(DefaultFormat.LDR);
+            // Need to enable depth buffer if the target camera did not already have it.
+            if (descriptor.depthBufferBits < 24)
+                descriptor.depthBufferBits = 24;
+
+            m_SimulationCameraRenderTexture = new RenderTexture(descriptor)
+            {
+                name = "XR Camera Render Texture",
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+
+            if (m_SimulationCameraRenderTexture.Create())
+                m_SimulationCamera.targetTexture = m_SimulationCameraRenderTexture;
+
+            if (m_SimulationReadbackTexture == null)
+            {
+                m_SimulationReadbackTexture = new Texture2D(
+                    width: descriptor.width,
+                    height: descriptor.height,
+                    format: descriptor.graphicsFormat,
+                    mipCount: 1,
+                    flags: TextureCreationFlags.None)
+                {
+                    name = "Simulation Readback Texture",
+                    hideFlags = HideFlags.HideAndDontSave
+                };
+            }
+
+            descriptor.graphicsFormat = GraphicsFormat.R32_SFloat;
+
+            m_SimulationCameraDepthRenderTexture = new RenderTexture(descriptor)
+            {
+                name = "XR Camera Depth Render Texture",
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+
+            m_SimulationCameraDepthRenderTexture.Create();
+
+            if (m_SimulationReadbackDepthTexture == null)
+            {
+                m_SimulationReadbackDepthTexture = new Texture2D(
+                    width: descriptor.width,
+                    height: descriptor.height,
+                    format: descriptor.graphicsFormat,
+                    mipCount: 1,
+                    flags: TextureCreationFlags.None)
+                {
+                    name = "Simulation Readback Depth Texture",
+                    hideFlags = HideFlags.HideAndDontSave
+                };
+            }
+
+            BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
+#if URP_7_OR_NEWER
+            if (!ARRenderingUtils.useLegacyRenderPipeline)
+                m_SimulationReadbackRenderPass ??= new SimulationCameraTextureReadbackPass(this);
+#endif // URP_7_OR_NEWER
+
+            m_Initialized = true;
+        }
+
         void OnDestroy()
         {
             BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentSetupFinished;
 
-            if (m_SimulationRenderCamera != null)
-                m_SimulationRenderCamera.targetTexture = null;
+            if (m_SimulationCamera != null)
+                m_SimulationCamera.targetTexture = null;
 
-            if (m_SimulationRenderTexture != null)
-                m_SimulationRenderTexture.Release();
+            if (m_SimulationCameraRenderTexture != null)
+                m_SimulationCameraRenderTexture.Release();
 
-            if (m_SimulationRenderDepthTexture != null)
-                m_SimulationRenderDepthTexture.Release();
+            if (m_SimulationCameraDepthRenderTexture != null)
+                m_SimulationCameraDepthRenderTexture.Release();
 
-            DestroyTextureIfExists(ref m_SimulationProviderTexture);
-            DestroyTextureIfExists(ref m_SimulationProviderDepthTexture);
+            DestroyTextureIfExists(ref m_SimulationReadbackTexture);
+            DestroyTextureIfExists(ref m_SimulationReadbackDepthTexture);
         }
 
         static void DestroyTextureIfExists(ref Texture2D texture)
@@ -134,7 +209,7 @@ namespace UnityEngine.XR.Simulation
 
             // Currently assuming the main camera is being set to the correct settings for rendering to the target device
             m_XrCamera.ResetProjectionMatrix();
-            CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationRenderCamera);
+            CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationCamera);
 
 #if URP_7_OR_NEWER
             if (!ARRenderingUtils.useLegacyRenderPipeline)
@@ -143,20 +218,18 @@ namespace UnityEngine.XR.Simulation
 #endif // URP_7_OR_NEWER
                 ConfigureBuiltInCommandBufferIfNeeded();
 
-            DoCameraRender(m_SimulationRenderCamera);
+            DoCameraRender(m_SimulationCamera);
 
-            if (!m_SimulationRenderTexture.IsCreated()
-                && !m_SimulationRenderTexture.Create())
+            if (!m_SimulationCameraRenderTexture.IsCreated()
+                && !m_SimulationCameraRenderTexture.Create())
                 return;
 
             EnsureTextureSizesMatch(
-                m_SimulationProviderTexture,
-                m_SimulationRenderTexture);
-
-            Graphics.CopyTexture(m_SimulationRenderTexture, m_SimulationProviderTexture);
+                m_SimulationReadbackTexture,
+                m_SimulationCameraRenderTexture);
 
             m_CameraImagePlanes.Clear();
-            m_CameraImagePlanes.Add(m_SimulationProviderTexture);
+            m_CameraImagePlanes.Add(m_SimulationReadbackTexture);
 
             m_CameraFrameEventArgs = new CameraTextureFrameEventArgs
             {
@@ -168,24 +241,23 @@ namespace UnityEngine.XR.Simulation
             cameraFrameReceived?.Invoke(m_CameraFrameEventArgs.Value);
 
             if (!m_EnableDepthReadback
-                || !m_SimulationRenderDepthTexture.IsCreated()
-                && !m_SimulationRenderDepthTexture.Create())
+                || !m_SimulationCameraDepthRenderTexture.IsCreated()
+                && !m_SimulationCameraDepthRenderTexture.Create())
                 return;
 
             EnsureTextureSizesMatch(
-                m_SimulationProviderDepthTexture,
-                m_SimulationRenderDepthTexture);
-
-            Graphics.CopyTexture(m_SimulationRenderDepthTexture, m_SimulationProviderDepthTexture);
+                m_SimulationReadbackDepthTexture,
+                m_SimulationCameraDepthRenderTexture);
         }
 
 #if URP_7_OR_NEWER
         void ConfigureTextureReadbackForURP()
         {
-            var universalAdditionalCameraData = m_SimulationRenderCamera.GetUniversalAdditionalCameraData();
+            var universalAdditionalCameraData = m_SimulationCamera.GetUniversalAdditionalCameraData();
+            universalAdditionalCameraData.requiresDepthOption = CameraOverrideOption.On;
             universalAdditionalCameraData.scriptableRenderer.EnqueuePass(m_SimulationReadbackRenderPass);
         }
-#endif
+#endif  // URP_7_OR_NEWER
 
         void ConfigureBuiltInCommandBufferIfNeeded()
         {
@@ -198,96 +270,19 @@ namespace UnityEngine.XR.Simulation
         void ConfigureBuiltInCommandBuffer()
         {
             if (m_ReadbackCommandBuffer != null)
-                m_SimulationRenderCamera.RemoveCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
+                m_SimulationCamera.RemoveCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
 
             m_ReadbackCommandBuffer = new CommandBuffer { name = "Simulation Environment Readback Command Buffer" };
             if (TryConfigureReadbackCommandBuffer(m_ReadbackCommandBuffer))
             {
-                m_SimulationRenderCamera.AddCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
+                m_SimulationCamera.AddCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
             }
-        }
-
-        void InitializeProvider(Camera xrCamera, Camera simulationCamera)
-        {
-            if (m_Initialized)
-                return;
-
-            m_XRayManager = new SimulationXRayManager();
-
-            m_XrCamera = xrCamera;
-            m_SimulationRenderCamera = simulationCamera;
-            CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationRenderCamera);
-
-            var descriptor = new RenderTextureDescriptor(m_XrCamera.scaledPixelWidth, m_XrCamera.scaledPixelHeight);
-
-            // Need to make sure we set the graphics format to our valid format
-            // or we will get an out of range value for the render texture format
-            // when we try creating the render texture
-            descriptor.graphicsFormat = SystemInfo.GetGraphicsFormat(DefaultFormat.LDR);
-            // Need to enable depth buffer if the target camera did not already have it.
-            if (descriptor.depthBufferBits < 24)
-                descriptor.depthBufferBits = 24;
-
-            m_SimulationRenderTexture = new RenderTexture(descriptor)
-            {
-                name = "XR Render Camera",
-                hideFlags = HideFlags.HideAndDontSave,
-            };
-
-            if (m_SimulationRenderTexture.Create())
-                m_SimulationRenderCamera.targetTexture = m_SimulationRenderTexture;
-
-            if (m_SimulationProviderTexture == null)
-            {
-                m_SimulationProviderTexture = new Texture2D(
-                    width: descriptor.width,
-                    height: descriptor.height,
-                    format: descriptor.graphicsFormat,
-                    mipCount: 1,
-                    flags: TextureCreationFlags.None)
-                {
-                    name = "Simulated Native Camera Texture",
-                    hideFlags = HideFlags.HideAndDontSave
-                };
-            }
-
-            descriptor.graphicsFormat = GraphicsFormat.R32_SFloat;
-
-            m_SimulationRenderDepthTexture = new RenderTexture(descriptor)
-            {
-                name = "XR Render Camera Depth",
-                hideFlags = HideFlags.HideAndDontSave,
-            };
-
-            m_SimulationRenderDepthTexture.Create();
-
-            if (m_SimulationProviderDepthTexture == null)
-            {
-                m_SimulationProviderDepthTexture = new Texture2D(
-                    width: descriptor.width,
-                    height: descriptor.height,
-                    format: descriptor.graphicsFormat,
-                    mipCount:1,
-                    flags: TextureCreationFlags.None)
-                {
-                    name = "Simulated Native Camera Depth Texture",
-                    hideFlags = HideFlags.HideAndDontSave
-                };
-            }
-
-            BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
-#if URP_7_OR_NEWER
-            if (!ARRenderingUtils.useLegacyRenderPipeline)
-                m_SimulationReadbackRenderPass ??= new SimulationCameraTextureReadbackPass(this);
-#endif // URP_7_OR_NEWER
-
-            m_Initialized = true;
         }
 
         void OnEnvironmentSetupFinished()
         {
             var simulationSceneManager = SimulationSessionSubsystem.simulationSceneManager;
-            m_SimulationRenderCamera.scene = simulationSceneManager.environmentScene;
+            m_SimulationCamera.scene = simulationSceneManager.environmentScene;
         }
 
         static void CopyLimitedSettingsToCamera(Camera source, Camera destination)
@@ -328,16 +323,67 @@ namespace UnityEngine.XR.Simulation
             postRenderCamera?.Invoke(renderCamera);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        bool TryRequestReadbackForImageType(CommandBuffer commandBuffer, ImageType imageType, Texture2D texture)
+        internal bool TryConfigureReadbackCommandBuffer(CommandBuffer commandBuffer)
         {
-            if (texture == null)
+            commandBuffer.Clear();
+            commandBuffer.name = "Simulation Background Pre-Render";
+            // Must default to true so if depth isn't needed, this function still returns true.
+            bool canReadbackDepth = true;
+            if (m_EnableDepthReadback)
+            {
+                var colorRenderBuffer = m_SimulationCamera.activeTexture.colorBuffer;
+                var depthRenderBuffer = m_SimulationCamera.activeTexture.depthBuffer;
+                commandBuffer.Blit(m_SimulationCameraRenderTexture, m_SimulationCameraDepthRenderTexture, s_DepthCopyShader);
+                commandBuffer.CopyTexture(m_SimulationCameraDepthRenderTexture, m_SimulationReadbackDepthTexture);
+                commandBuffer.SetRenderTarget(colorRenderBuffer, depthRenderBuffer);
+                canReadbackDepth = TryRequestReadbackForImageType(
+                    commandBuffer,
+                    ImageType.Depth,
+                    m_SimulationReadbackDepthTexture);
+            }
+
+            commandBuffer.CopyTexture(m_SimulationCameraRenderTexture, m_SimulationReadbackTexture);
+            return TryRequestReadbackForImageType(commandBuffer, ImageType.Camera, m_SimulationReadbackTexture) && canReadbackDepth;
+        }
+
+        internal bool TryConfigureRenderGraphReadbackCommandBuffer(CommandBuffer commandBuffer)
+        {
+            bool canReadbackDepth = m_SimulationReadbackDepthTexture != null;
+            if (m_EnableDepthReadback && canReadbackDepth)
+            {
+                commandBuffer.Blit(m_SimulationCameraRenderTexture, m_SimulationCameraDepthRenderTexture, s_DepthCopyShader);
+                commandBuffer.CopyTexture(m_SimulationCameraDepthRenderTexture, m_SimulationReadbackDepthTexture);
+                canReadbackDepth = TryRequestReadbackForImageType(
+                    commandBuffer,
+                    ImageType.Depth,
+                    m_SimulationReadbackDepthTexture);
+
+                if (!canReadbackDepth)
+                    throw new ArgumentNullException("m_SimulationReadbackDepthTexture must not be null!");
+            }
+
+            commandBuffer.CopyTexture(m_SimulationCameraRenderTexture, m_SimulationReadbackTexture);
+            bool canReadbackColor = TryRequestReadbackForImageType(
+                commandBuffer,
+                ImageType.Camera,
+                m_SimulationReadbackTexture);
+
+            if (!canReadbackColor)
+                throw new ArgumentNullException("m_SimulationReadbackTexture must not be null!");
+
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        bool TryRequestReadbackForImageType(CommandBuffer commandBuffer, ImageType imageType, Texture2D readbackTexture)
+        {
+            if (readbackTexture == null)
                 return false;
 
-            var textureDimensions = new Vector2Int(texture.width, texture.height);
-            var textureFormat = texture.format;
+            var textureDimensions = new Vector2Int(readbackTexture.width, readbackTexture.height);
+            var textureFormat = readbackTexture.format;
             commandBuffer.RequestAsyncReadback(
-                texture,
+                readbackTexture,
                 request =>
                 {
                     OnTextureReadbackComplete(
@@ -387,42 +433,20 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
-        internal bool TryConfigureReadbackCommandBuffer(CommandBuffer commandBuffer)
-        {
-            commandBuffer.Clear();
-            commandBuffer.name = "Simulation Background Pre-Render";
-            // Must default to true so if depth isn't needed, this function still returns true.
-            bool depthReabackReturn = true;
-            if (m_EnableDepthReadback)
-            {
-                var colorTarget = m_SimulationRenderCamera.activeTexture.colorBuffer;
-                var depthTarget = m_SimulationRenderCamera.activeTexture.depthBuffer;
-                commandBuffer.Blit(m_SimulationRenderTexture, m_SimulationRenderDepthTexture, s_DepthCopyShader);
-                commandBuffer.SetRenderTarget(colorTarget, depthTarget);
-                depthReabackReturn = TryRequestReadbackForImageType(
-                    commandBuffer,
-                    ImageType.Depth,
-                    m_SimulationProviderDepthTexture);
-            }
-
-            return TryRequestReadbackForImageType(commandBuffer, ImageType.Camera, m_SimulationProviderTexture) &&
-                depthReabackReturn;
-        }
-
         internal void TryGetTextureDescriptors(out NativeArray<XRTextureDescriptor> planeDescriptors,
             Allocator allocator)
         {
-            Shader.SetGlobalTexture(SimulationCameraSubsystem.textureSinglePropertyNameId, m_SimulationProviderTexture);
+            Shader.SetGlobalTexture(SimulationCameraSubsystem.textureSinglePropertyNameId, m_SimulationReadbackTexture);
             var isValid = TryGetLatestImagePtr(out var nativePtr);
             var descriptors = new XRTextureDescriptor[1];
             if (isValid)
             {
                 descriptors[0] = new XRTextureDescriptor(
                     nativeTexture: nativePtr,
-                    width: m_SimulationProviderTexture.width,
-                    height: m_SimulationProviderTexture.height,
-                    mipmapCount: m_SimulationProviderTexture.mipmapCount,
-                    format: m_SimulationProviderTexture.format,
+                    width: m_SimulationReadbackTexture.width,
+                    height: m_SimulationReadbackTexture.height,
+                    mipmapCount: m_SimulationReadbackTexture.mipmapCount,
+                    format: m_SimulationReadbackTexture.format,
                     propertyNameId: SimulationCameraSubsystem.textureSinglePropertyNameId,
                     depth: 0,
                     dimension: TextureDimension.Tex2D);
@@ -436,17 +460,17 @@ namespace UnityEngine.XR.Simulation
         internal void TryGetDepthTextureDescriptors(out NativeArray<XRTextureDescriptor> planeDescriptors,
             Allocator allocator)
         {
-            Shader.SetGlobalTexture(SimulationOcclusionSubsystem.textureSingleDepthPropertyNameId, m_SimulationProviderDepthTexture);
+            Shader.SetGlobalTexture(SimulationOcclusionSubsystem.textureSingleDepthPropertyNameId, m_SimulationReadbackDepthTexture);
             var isValid = TryGetLatestDepthImagePtr(out var nativePtr);
             var descriptors = new XRTextureDescriptor[1];
             if (isValid)
             {
                 descriptors[0] = new XRTextureDescriptor(
                     nativeTexture: nativePtr,
-                    width: m_SimulationProviderDepthTexture.width,
-                    height: m_SimulationProviderDepthTexture.height,
-                    mipmapCount: m_SimulationProviderDepthTexture.mipmapCount,
-                    format: m_SimulationProviderDepthTexture.format,
+                    width: m_SimulationReadbackDepthTexture.width,
+                    height: m_SimulationReadbackDepthTexture.height,
+                    mipmapCount: m_SimulationReadbackDepthTexture.mipmapCount,
+                    format: m_SimulationReadbackDepthTexture.format,
                     propertyNameId: SimulationOcclusionSubsystem.textureSingleDepthPropertyNameId,
                     depth: 1,
                     dimension: TextureDimension.Tex2D);
@@ -462,10 +486,10 @@ namespace UnityEngine.XR.Simulation
         internal bool TryGetLatestImagePtr(out IntPtr nativePtr)
         {
             if (m_CameraImagePlanes is { Count: > 0 }
-                && m_SimulationProviderTexture != null
-                && m_SimulationProviderTexture.isReadable)
+                && m_SimulationReadbackTexture != null
+                && m_SimulationReadbackTexture.isReadable)
             {
-                nativePtr =  m_SimulationProviderTexture.GetNativeTexturePtr();
+                nativePtr =  m_SimulationReadbackTexture.GetNativeTexturePtr();
                 return true;
             }
 
@@ -475,10 +499,10 @@ namespace UnityEngine.XR.Simulation
 
         internal bool TryGetLatestDepthImagePtr(out IntPtr nativePtr)
         {
-            if (m_SimulationProviderDepthTexture != null
-                && m_SimulationProviderDepthTexture.isReadable)
+            if (m_SimulationReadbackDepthTexture != null
+                && m_SimulationReadbackDepthTexture.isReadable)
             {
-                nativePtr = m_SimulationProviderDepthTexture.GetNativeTexturePtr();
+                nativePtr = m_SimulationReadbackDepthTexture.GetNativeTexturePtr();
                 return true;
             }
 

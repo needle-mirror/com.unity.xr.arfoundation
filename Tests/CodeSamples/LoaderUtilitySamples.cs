@@ -19,5 +19,19 @@ namespace UnityEngine.XR.ARFoundation.Tests
             #endregion
         }
 
+        class BoundingBoxCheck
+        {
+            #region CheckIfBoundingBoxLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRBoundingBoxSubsystem>() != null)
+                {
+                    // XRBoundingBoxSubsystem was loaded. The platform supports bounding box detection.
+                }
+            }
+            #endregion
+        }
     }
 }

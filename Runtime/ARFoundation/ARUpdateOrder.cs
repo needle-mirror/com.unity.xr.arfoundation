@@ -21,6 +21,18 @@ namespace UnityEngine.XR.ARFoundation
         /// <see cref="ARPlaneManager"/>.
         /// </summary>
         public const int k_Plane = k_PlaneManager + 1;
+        
+        /// <summary>
+        /// The <see cref="ARBoundingBoxManager"/>'s update order. Should come after
+        /// the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_BoundingBoxManager = k_Session + 1;
+        
+        /// <summary>
+        /// The <see cref="ARBoundingBox"/>'s update order. Should come after the
+        /// <see cref="ARBoundingBoxManager"/>.
+        /// </summary>
+        public const int k_BoundingBox = k_BoundingBoxManager + 1;
 
         /// <summary>
         /// The <see cref="ARPointCloudManager"/>'s update order. Should come

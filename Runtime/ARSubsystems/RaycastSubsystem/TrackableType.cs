@@ -97,6 +97,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// Refers to a point in the depth map.
         /// </summary>
         Depth = 1 << 7,
+        
+        /// <summary>
+        /// Refers to a 3D bounding box
+        /// </summary>
+        BoundingBox = 1 << 8,
 
         /// <summary>
         /// Deprecated in favor of <see cref="TrackableType.AllTypes"/>. Refers to all trackable types except

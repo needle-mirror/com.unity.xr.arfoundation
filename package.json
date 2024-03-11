@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.0.0-pre.6",
+  "version": "6.0.0-pre.7",
   "unity": "2023.3",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus), a new way for AR Foundation to provide status information for completed operations. Provider plug-ins can add extension methods to this type to give users access to platform-specific error codes and success codes.\n\n### Changed\n\n- Changed `SimulationPlaneSubsystem` to respect the currently set `PlaneDetectionMode`, detecting updates only from planes that match the current mode.\n- Upgraded `com.unity.xr.core-utils` dependency version from `2.2.3` to `2.3.0`.\n- Changed [ARTrackablesChangedEventArgs\\<TTrackable\\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1):\n  - `added`, `updated`, and `removed` now return [ReadOnlyList](xref:Unity.XR.CoreUtils.Collections.ReadOnlyList`1) instead of `IReadOnlyCollection`, removing an unnecessary heap allocation when each collection is enumerated.\n  - `removed` now uses `KeyValuePair<TrackableId, TTrackable>` instead of `TTrackable`, allowing `ARTrackableManager` to send notifications of removed trackables even if you already destroyed them (for example, by destroying an `ARAnchor`).\n- Changed [Result\\<T\\>](xref:UnityEngine.XR.ARSubsystems.Result`1):\n  - Removed `bool TryGetResult(out T)` and the constructor that took `(bool, T)` as parameters.\n  - Added `status`, `value`, and a constructor that takes `(XRResultStatus, T)` as parameters.\n- Updated Universal Render Pipeline documentation to reflect recent changes to URP concepts and setup.\n- Changed minimum Unity Editor version to `2023.3`.\n\n### Fixed\n\n- Fixed an issue where calling `ARSession.Reset` could cause XR Simulation plane detection to fail to discover planes for a period of time before resuming.\n- Fixed an issue where the `SimulationEnvironmentProbeSubsystem` could destroy environment probe GameObjects when they were removed, even if their **Destroy on Removal** property was set to false.\n- Fixed an issue where `EditorAnalytics` would throw obsolete warnings during project import in Unity 2023.2 or newer.\n- Fixed an issue in XR Simulation where a command buffer for the Built-in Render Pipeline was added to a camera even when URP was active."
+    "changelog": "### Added\n\n- Added an API for provider plug-ins to implement the detection and tracking of 3D bounding boxes. Refer to [Bounding box detection](xref:arfoundation-bounding-box-detection) for more information.\n\n### Changed\n\n- Changed [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) to more easily allow for a wide range of platforms to use the type:\n  - Renamed the `value` property to `nativeStatusCode`.\n  - Added a cross-platform `statusCode` property and corresponding constructors.\n  - Removed the implicit conversion operators between `int` and `XRResultStatus`. Use a constructor instead.\n\n### Fixed\n\n- Fixed an issue where destroying and recreating the `SimulationSessionSubsystem` could result in the creation of a `SimulationMeshSubsystem` instance, even if the `XRLoader` did not initially create it.\n- Fixed an issue where the TvOS build target would have compile errors in `Simulation.InputLayoutLoader`."
   },
   "upmCi": {
-    "footprint": "aee38bc714eb74a6db8616f776306fd1f57b1612"
+    "footprint": "1883ef626f770545d55b5de46bfd8c4d0be7d70d"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "0722154ddda749e748b2afe75edeaf21515c3808"
+    "revision": "1e2168bb454e00d591e973a00d9a6559eb77590e"
   }
 }

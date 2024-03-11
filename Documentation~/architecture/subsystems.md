@@ -13,20 +13,21 @@ With the exception of [Device tracking](xref:arfoundation-device-tracking), the 
 
 | Feature | Subsystem |
 | :------ | :-------- |
-| [Session](xref:arfoundation-session)                       | [XRSessionSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem) |
-| [Camera](xref:arfoundation-camera)                         | [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem) |
-| [Plane detection](xref:arfoundation-plane-detection)       | [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem) |
-| [Image tracking](xref:arfoundation-image-tracking)         | [XRImageTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem) |
-| [Object tracking](xref:arfoundation-object-tracking)       | [XRObjectTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystem) |
-| [Face tracking](xref:arfoundation-face-tracking)           | [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) |
-| [Body tracking](xref:arfoundation-body-tracking)           | [XRHumanBodySubsystem](xref:UnityEngine.XR.ARSubsystems.XRHumanBodySubsystem) |
-| [Point clouds](xref:arfoundation-point-clouds)             | [XRPointCloudSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPointCloudSubsystem) |
-| [Raycasts](xref:arfoundation-raycasts)                     | [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) |
-| [Anchors](xref:arfoundation-anchors)                       | [XRAnchorSubsystem](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem) |
-| [Meshing](xref:arfoundation-meshing)                       | [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) |
-| [Environment Probes](xref:arfoundation-environment-probes) | [XREnvironmentProbeSubsystem](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystem) |
-| [Occlusion](xref:arfoundation-occlusion)                   | [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) |
-| [Participants](xref:arfoundation-participant-tracking)     | [XRParticipantSubsystem](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystem) |
+| [Session](xref:arfoundation-session)                              | [XRSessionSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem) |
+| [Camera](xref:arfoundation-camera)                                | [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem) |
+| [Plane detection](xref:arfoundation-plane-detection)              | [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem) |
+| [Bounding Box detection](xref:arfoundation-bounding-box-detection)| [XRBoundingBoxSubsystem](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystem) |
+| [Image tracking](xref:arfoundation-image-tracking)                | [XRImageTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem) |
+| [Object tracking](xref:arfoundation-object-tracking)              | [XRObjectTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystem) |
+| [Face tracking](xref:arfoundation-face-tracking)                  | [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) |
+| [Body tracking](xref:arfoundation-body-tracking)                  | [XRHumanBodySubsystem](xref:UnityEngine.XR.ARSubsystems.XRHumanBodySubsystem) |
+| [Point clouds](xref:arfoundation-point-clouds)                    | [XRPointCloudSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPointCloudSubsystem) |
+| [Raycasts](xref:arfoundation-raycasts)                            | [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) |
+| [Anchors](xref:arfoundation-anchors)                              | [XRAnchorSubsystem](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem) |
+| [Meshing](xref:arfoundation-meshing)                              | [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) |
+| [Environment Probes](xref:arfoundation-environment-probes)        | [XREnvironmentProbeSubsystem](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystem) |
+| [Occlusion](xref:arfoundation-occlusion)                          | [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) |
+| [Participants](xref:arfoundation-participant-tracking)            | [XRParticipantSubsystem](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystem) |
 
 ## Subsystem life cycle
 

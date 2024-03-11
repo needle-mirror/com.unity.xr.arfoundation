@@ -8,11 +8,30 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0-pre.7] - 2024-03-11
+
+### Added
+
+- Added an API for provider plug-ins to implement the detection and tracking of 3D bounding boxes. Refer to [Bounding box detection](xref:arfoundation-bounding-box-detection) for more information.
+
+### Changed
+
+- Changed [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) to more easily allow for a wide range of platforms to use the type:
+  - Renamed the `value` property to `nativeStatusCode`.
+  - Added a cross-platform `statusCode` property and corresponding constructors.
+  - Removed the implicit conversion operators between `int` and `XRResultStatus`. Use a constructor instead.
+
+### Fixed
+
+- Fixed an issue where destroying and recreating the `SimulationSessionSubsystem` could result in the creation of a `SimulationMeshSubsystem` instance, even if the `XRLoader` did not initially create it.
+- Fixed an issue where the TvOS build target would have compile errors in `Simulation.InputLayoutLoader`.
+
 ## [6.0.0-pre.6] - 2024-02-08
 
 ### Added
 
 - Added [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus), a new way for AR Foundation to provide status information for completed operations. Provider plug-ins can add extension methods to this type to give users access to platform-specific error codes and success codes.
+- Added support for the Universal Render Pipeline Render Graph introduced in URP 17.
 
 ### Changed
 
