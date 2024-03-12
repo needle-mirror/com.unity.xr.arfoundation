@@ -186,6 +186,8 @@ The table below lists the available features in each Unity-supported provider pl
   </tr>
 </table>
 
+[!include[](snippets/arf-docs-tip.md)]
+
 # Samples
 
 For pre-configured sample scenes that demonstrate how to use each feature, see the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository.

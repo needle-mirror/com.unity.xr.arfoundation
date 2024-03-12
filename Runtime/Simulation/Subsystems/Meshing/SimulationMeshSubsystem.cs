@@ -39,6 +39,8 @@ namespace UnityEngine.XR.Simulation
                 var loader = XRGeneralSettings.Instance.Manager.activeLoader;
                 if (loader != null)
                     activeSubsystem = loader.GetLoadedSubsystem<XRMeshSubsystem>();
+                if (activeSubsystem != null && activeSubsystem.subsystemDescriptor.id != k_SubsystemId)
+                    activeSubsystem = null;
             }
 
             return activeSubsystem;
@@ -270,7 +272,7 @@ namespace UnityEngine.XR.Simulation
 
                 if (!m_NativeArrays.TryGetValue(mesh.trackableId, out var nativeArrays))
                     continue;
-                
+
                 Array.ForEach(nativeArrays, x => x.Dispose());
                 m_NativeArrays.Remove(mesh.trackableId);
             }

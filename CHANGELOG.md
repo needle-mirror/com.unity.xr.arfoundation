@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.3] - 2024-03-12
+
+### Fixed
+
+- Fixed an issue where destroying and recreating the `SimulationSessionSubsystem` could result in the creation of a `SimulationMeshSubsystem` instance, even if the `XRLoader` did not initially create it.
+- Fixed an issue where the TvOS build target would have compile errors in `Simulation.InputLayoutLoader`.
+
 ## [5.1.2] - 2024-01-22
 
 ### Changed
