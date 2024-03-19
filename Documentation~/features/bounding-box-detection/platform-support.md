@@ -9,7 +9,10 @@ Bounding box detection is only supported on the Meta OpenXR platform, as shown i
 | :--------------- | :------------------------------: | :--------------------- |
 | Google ARCore XR Plug-in | | |
 | Apple ARKit XR Plug-in | | |
+| Apple visionOS XR Plug-in | | |
+| HoloLens | | |
 | Unity OpenXR: Meta | Yes | N/A |
+| XR Simulation | | |
 
 ## Check for bounding box detection support
 
@@ -19,12 +22,6 @@ Use the example code below to check whether the device supports bounding box det
 
 [!code-cs[CheckIfBoundingBoxLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfBoundingBoxLoaded)]
 
-> [!NOTE]
-> This example code assumes that your app has already initialized XR.
-
-> By default XR initializes automatically when your app starts, but this is configurable via **Project Settings** > **XR Plug-in Management** > **Initialize XR on Startup**.
-
-> Refer to the XR Plug-in Management [End-user documentation](https://docs.unity3d.com/Packages/com.unity.xr.management@latest?subfolder=/manual/EndUser.html) for more detailed information about managing the XR Plug-in life cycle.
 
 ## Optional features
 

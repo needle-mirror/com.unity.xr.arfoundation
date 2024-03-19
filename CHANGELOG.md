@@ -8,11 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0-pre.8] - 2024-03-19
+
+### Changed
+
+- Rebuilt simulation plugin for linux on Ubuntu 20.04 (glibc-2.31).
+
+### Fixed
+
+- Fixed an issue where the AR Debug Menu script would not spawn a Point Cloud prefab.
+
 ## [6.0.0-pre.7] - 2024-03-11
 
 ### Added
 
 - Added an API for provider plug-ins to implement the detection and tracking of 3D bounding boxes. Refer to [Bounding box detection](xref:arfoundation-bounding-box-detection) for more information.
+- Added support for the Universal Render Pipeline Render Graph introduced in URP 17.
 
 ### Changed
 
@@ -31,7 +42,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Added [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus), a new way for AR Foundation to provide status information for completed operations. Provider plug-ins can add extension methods to this type to give users access to platform-specific error codes and success codes.
-- Added support for the Universal Render Pipeline Render Graph introduced in URP 17.
 
 ### Changed
 

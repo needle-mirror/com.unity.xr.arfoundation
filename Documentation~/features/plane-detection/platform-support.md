@@ -1,15 +1,18 @@
 ---
 uid: arfoundation-plane-platform-support
 ---
-# Platform support
+# Plane detection platform support
 
-Plane detection is supported on the ARCore, ARKit, and Meta OpenXR platforms, as shown in the table below:
+Plane detection is supported on the ARCore, ARKit, Meta OpenXR and XR Simulation platforms, as shown in the table below:
 
 | Provider plug-in | Plane detection supported | Provider documentation |
 | :--------------- | :-----------------------: | :--------------------- |
 | Google ARCore XR Plug-in | Yes | [Plane detection](xref:arcore-plane-detection) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Plane detection](xref:arkit-plane-detection) (ARKit) |
+| Apple visionOS XR Plug-in | | |
+| HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Plane detection](xref:meta-openxr-plane-detection) (Meta OpenXR) |
+| XR Simulation | Yes | N/A |
 
 ## Check for plane detection support
 
@@ -19,10 +22,7 @@ Use the example code below to check whether the device supports plane detection:
 
 [!code-cs[CheckIfPlanesLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfPlanesLoaded)]
 
-> [!NOTE]
-> This example code assumes that your app has already initialized XR.
->
-> By default XR initializes automatically when your app starts, but this is configurable via **Project Settings** > **XR Plug-in Management** > **Initialize XR on Startup**. Refer to the XR Plug-in Management [End-user documentation](https://docs.unity3d.com/Packages/com.unity.xr.management@latest?subfolder=/manual/EndUser.html) for more detailed information about managing the XR Plug-in life cycle.
+[!include[](../../snippets/initialization.md)]
 
 ## Optional features
 

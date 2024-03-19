@@ -463,7 +463,7 @@ namespace UnityEngine.XR.ARFoundation
 
         GameObject m_PlaneVisualizers;
 
-        GameObject m_PointCloudVisualizerGO;
+        ParticleSystem m_PointCloudVisualizer;
 
         GameObject m_AnchorVisualizers;
 
@@ -611,7 +611,7 @@ namespace UnityEngine.XR.ARFoundation
                     HighlightCurrentConfiguration(m_CurrentConfiguration.descriptor);
                 }
             }
-            
+
             if(m_CameraManager != null)
             {
                 var cameraConfig = m_CameraManager.currentConfiguration;
@@ -776,12 +776,8 @@ namespace UnityEngine.XR.ARFoundation
             var pointCloudManager = m_Origin.GetComponent<ARPointCloudManager>();
             if(m_ShowPointCloudsButton && m_PointCloudParticleSystem && pointCloudManager)
             {
-                if (m_PointCloudParticleSystem == null)
-                {
-                    m_PointCloudParticleSystem = Instantiate(m_PointCloudParticleSystem, m_Origin.TrackablesParent);
-                }
-               
-                var renderer = m_PointCloudParticleSystem.GetComponent<Renderer>();
+                m_PointCloudVisualizer = Instantiate(m_PointCloudParticleSystem, m_Origin.TrackablesParent);
+                var renderer = m_PointCloudVisualizer.GetComponent<Renderer>();
                 renderer.enabled = false;
                 pointCloudManager.trackablesChanged.AddListener(OnPointCloudChanged);
                 m_ShowPointCloudsButton.interactable = true;
@@ -793,7 +789,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (m_DisplayInfoMenuButton)
                 m_DisplayInfoMenuButton.onClick.RemoveAllListeners();
-            
+
             if (m_DisplayConfigurationsMenuButton)
                 m_DisplayConfigurationsMenuButton.onClick.RemoveAllListeners();
 
@@ -1288,14 +1284,14 @@ namespace UnityEngine.XR.ARFoundation
                 m_Particles[i].remainingLifetime = -1f;
             }
 
-            m_PointCloudParticleSystem.SetParticles(m_Particles, Math.Max(m_Points.Count, m_NumParticles));
+            m_PointCloudVisualizer.SetParticles(m_Particles, Math.Max(m_Points.Count, m_NumParticles));
             m_NumParticles = m_Points.Count;
         }
 
         void SetParticlePosition(int index, Vector3 position)
         {
-            m_Particles[index].startColor = m_PointCloudParticleSystem.main.startColor.color;
-            m_Particles[index].startSize = m_PointCloudParticleSystem.main.startSize.constant;
+            m_Particles[index].startColor = m_PointCloudVisualizer.main.startColor.color;
+            m_Particles[index].startSize = m_PointCloudVisualizer.main.startSize.constant;
             m_Particles[index].position = position;
             m_Particles[index].remainingLifetime = 1f;
         }

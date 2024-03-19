@@ -5,16 +5,6 @@ uid: arfoundation-camera-components
 
 AR Foundation uses two primary components to control device camera functionality in your AR scene: [ARCameraManager](xref:UnityEngine.XR.ARFoundation.ARCameraManager) and [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground). Your scene should contain at most one of each of these components enabled at a time. After initial [scene setup](xref:arfoundation-scene-setup) you can find AR Camera Manager and AR Camera Background components in the XR Origin GameObject hierarchy at **XR Origin** > **Camera Offset** > **Main Camera**.
 
-## Platform support
-
-AR Foundation cameras are supported on iOS and Android as indicated by the table below. On platforms that don't support the camera feature, the AR Camera Manager and AR Camera Background components will simply disable themselves in their OnEnable implementation.
-
-| Provider plug-in         | Camera supported | Provider documentation |
-| :----------------------- | :--------------: | :--------------------- |
-| Google ARCore XR Plug-in |        Yes       | [Camera](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/arcore-camera.html) (ARCore) |
-| Apple ARKit XR Plug-in   |        Yes       | [Camera](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/arkit-camera.html) (ARKit) |
-| OpenXR Plug-in           |        No        | |
-
 # AR Camera Manager component
 
 The [ARCameraManager](xref:UnityEngine.XR.ARFoundation.ARCameraManager) component is a [manager](xref:arfoundation-managers) that enables or disables the device camera when the component is enabled or disabled, respectively, and gives you a scripting interface for camera-related features.

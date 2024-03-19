@@ -18,6 +18,20 @@ namespace UnityEngine.XR.ARFoundation.Tests
             }
             #endregion
         }
+        class CameraCheck
+        {
+            #region CheckIfCameraLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRCameraSubsystem>() != null)
+                {
+                    // XRCameraSubsystem was loaded. The platform supports the camera subsystem.
+                }
+            }
+            #endregion
+        }
 
         class BoundingBoxCheck
         {

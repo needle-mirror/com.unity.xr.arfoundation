@@ -55,7 +55,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Indicates whether the provider implementation can provide a value for
-        /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
+        /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGrain</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
         /// Otherwise, <see langword="false"/>.</value>
@@ -299,7 +299,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Indicates whether the provider implementation can provide a value for
-        /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
+        /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGrain</see>.
         /// </summary>
         /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
         /// Otherwise, <see langword="false"/>.</value>
@@ -471,7 +471,7 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Indicates whether the provider implementation can provide a value for
-            /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGain</see>.
+            /// <see cref="XRCameraFrame.cameraGrain">XRCameraFrame.cameraGrain</see>.
             /// </summary>
             /// <value><see langword="true"/> if the implementation can provide a camera grain texture.
             /// Otherwise, <see langword="false"/>.</value>

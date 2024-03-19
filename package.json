@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.0.0-pre.7",
+  "version": "6.0.0-pre.8",
   "unity": "2023.3",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added an API for provider plug-ins to implement the detection and tracking of 3D bounding boxes. Refer to [Bounding box detection](xref:arfoundation-bounding-box-detection) for more information.\n\n### Changed\n\n- Changed [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) to more easily allow for a wide range of platforms to use the type:\n  - Renamed the `value` property to `nativeStatusCode`.\n  - Added a cross-platform `statusCode` property and corresponding constructors.\n  - Removed the implicit conversion operators between `int` and `XRResultStatus`. Use a constructor instead.\n\n### Fixed\n\n- Fixed an issue where destroying and recreating the `SimulationSessionSubsystem` could result in the creation of a `SimulationMeshSubsystem` instance, even if the `XRLoader` did not initially create it.\n- Fixed an issue where the TvOS build target would have compile errors in `Simulation.InputLayoutLoader`."
+    "changelog": "### Changed\n\n- Rebuilt simulation plugin for linux on Ubuntu 20.04 (glibc-2.31).\n\n### Fixed\n\n- Fixed an issue where the AR Debug Menu script would not spawn a Point Cloud prefab."
   },
   "upmCi": {
-    "footprint": "1883ef626f770545d55b5de46bfd8c4d0be7d70d"
+    "footprint": "368703e2b9f671c89b7558904bba5ff56d968bca"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "1e2168bb454e00d591e973a00d9a6559eb77590e"
+    "revision": "5114dc3da5fd97fe3fc289900d3d7333d8f21762"
   }
 }

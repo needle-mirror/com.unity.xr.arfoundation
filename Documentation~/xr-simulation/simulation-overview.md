@@ -11,29 +11,13 @@ When you enter Play Mode with XR Simulation enabled, AR Foundation loads your XR
 
 AR Foundation includes a variety of preconfigured sample environments that you can optionally install and use, and you can also create your own environments.
 
-You can currently test the following AR features using XR Simulation:
+To understand the AR features you can test using XR Simulation, refer to the following table:
 
-| Feature                                                                                       | Supported |
-| :-------------------------------------------------------------------------------------------- |:-:|
-| [Session](xref:arfoundation-session)                                                          | Yes |
-| [Device tracking](xref:arfoundation-device-tracking)                                          | Yes |
-| [Camera](xref:arfoundation-camera)                                                            | Yes |
-| [Plane detection](xref:arfoundation-plane-detection)                                          | Yes |
-| [Image tracking](xref:arfoundation-image-tracking)                                            | Yes |
-| [Object tracking](xref:arfoundation-object-tracking)                                          |   |
-| [Face tracking](xref:arfoundation-face-tracking)                                              |   |
-| [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager)                          |   |
-| [Point clouds](xref:arfoundation-point-clouds)                                                | Yes |
-| [Raycasts](xref:arfoundation-raycasts)                                                        | Yes |
-| [Anchors](xref:arfoundation-anchors)                                                          | Yes |
-| [Meshing](xref:arfoundation-meshing)                                                          | Yes |
-| [Environment Probes](xref:arfoundation-environment-probes)                                    | Yes |
-| [Occlusion](xref:arfoundation-occlusion)                                                      | Yes |
-| [Participants](xref:arfoundation-participant-tracking)                                        |   |
+[!include[](../snippets/simulation-features-table.md)]
 
 ## Architecture
 
-AR Foundation defines its AR features using [subsystems](xref:arfoundation-subsystems). Subsystem implementations are called *providers*. XR Simulation includes Editor-only providers for certain subsystems as shown above, allowing you test your app in Play Mode with no changes necessary to your scene or build settings.
+AR Foundation defines its AR features using [subsystems](xref:arfoundation-subsystems). Subsystem implementations are called *providers*. XR Simulation includes Editor-only providers for certain subsystems as shown in the features table, allowing you test your app in Play Mode with no changes necessary to your scene or build settings.
 
 > [!NOTE]
 > AR Foundation only uses the XR Simulation providers when you run your app in the Editor. The appropriate platform provider, such as the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/index.html) on Android and the [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/index.html) on iOS, is always used when you build and run on a device.
