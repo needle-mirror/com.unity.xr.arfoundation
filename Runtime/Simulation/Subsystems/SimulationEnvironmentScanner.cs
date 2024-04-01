@@ -58,7 +58,7 @@ namespace UnityEngine.XR.Simulation
             return s_Instance;
         }
 
-        public void Initialize(SimulationCamera simulationCamera, PhysicsScene physicsScene, GameObject environmentRoot)
+        public void Initialize(SimulationCameraPoseProvider simulationCameraPoseProvider, PhysicsScene physicsScene, GameObject environmentRoot)
         {
             if (!physicsScene.IsValid())
                 throw new InvalidOperationException("The physics scene loaded for simulation is not valid.");
@@ -66,8 +66,8 @@ namespace UnityEngine.XR.Simulation
             m_PhysicsScene = physicsScene;
             m_EnvironmentRoot = environmentRoot;
 
-            m_SimulationCameraTransform = simulationCamera.transform;
-            m_Camera = simulationCamera.GetComponent<Camera>();
+            m_SimulationCameraTransform = simulationCameraPoseProvider.transform;
+            m_Camera = simulationCameraPoseProvider.GetComponent<Camera>();
 
             m_PreviousCameraPose = m_SimulationCameraTransform.GetWorldPose();
 

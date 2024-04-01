@@ -21,7 +21,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Constructs a <see cref="XRCameraBackgroundRenderingParams"/> from a mesh and transform.
         /// </summary>
         /// <param name="mesh">The geometry that should be used to render the camera background. Cannot be null.</param>
-        /// <param name="transform">The transform that should be used to render the camera background./// </param>
+        /// <param name="transform">The transform that should be used to render the camera background. </param>
         public XRCameraBackgroundRenderingParams(Mesh mesh, Matrix4x4 transform)
         {
             if (mesh == null)

@@ -4,12 +4,16 @@ using Unity.XR.CoreUtils;
 namespace UnityEngine.XR.Simulation
 {
     /// <summary>
-    /// Takes updates from InputSystem bindings and uses it to compute a new camera transform
-    /// which is passed to our InputSubsystem in native code.
+    /// This component takes updates from Unity Input System bindings and uses it to compute a new camera pose,
+    /// which it then passes to the XR Input subsystem in native code.
     /// </summary>
-    class SimulationCamera : MonoBehaviour
+    /// <remarks>
+    /// The <see cref="SimulationCameraSubsystem"/> is responsible to create this component at runtime.
+    /// </remarks>
+    [AddComponentMenu("")]
+    public class SimulationCameraPoseProvider : MonoBehaviour
     {
-        static SimulationCamera s_Instance;
+        static SimulationCameraPoseProvider s_Instance;
 
         bool m_InputHandlerEnabled;
         CameraFPSModeHandler m_FPSModeHandler;
@@ -70,16 +74,19 @@ namespace UnityEngine.XR.Simulation
                 m_FPSModeHandler.movementBounds = simulationEnvironment.cameraMovementBounds;
                 m_FPSModeHandler.useMovementBounds = true;
 
-                UpdatePose(simulationEnvironment.cameraStartingPose);
+                if (m_InputHandlerEnabled)
+                {
+                    UpdatePose(simulationEnvironment.cameraStartingPose);
+                }
             }
         }
 
-        internal static SimulationCamera GetOrCreateSimulationCamera()
+        internal static SimulationCameraPoseProvider GetOrCreateSimulationCameraPoseProvider()
         {
             if (!s_Instance)
             {
                 var go = GameObjectUtils.Create("SimulationCamera");
-                s_Instance = go.AddComponent<SimulationCamera>();
+                s_Instance = go.AddComponent<SimulationCameraPoseProvider>();
                 var camera = go.AddComponent<Camera>();
                 camera.enabled = false;
             }

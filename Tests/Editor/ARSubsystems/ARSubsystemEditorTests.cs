@@ -24,5 +24,35 @@ namespace UnityEditor.XR.ARSubsystems.Tests
             var recomposedGuid = GuidUtil.Compose(low, high);
             Assert.AreEqual(guid, recomposedGuid);
         }
+
+        [Test]
+        public void SerializableGuidToTrackableIdConversion()
+        {
+            var guid = Guid.NewGuid();
+            guid.Decompose(out var low, out var high);
+            SerializableGuid serializableGuid = new(low, high);
+            TrackableId serializableGuidToTrackableId = serializableGuid;
+            SerializableGuid trackableIdToSerializableGuid = serializableGuidToTrackableId;
+            Assert.AreEqual(serializableGuid, trackableIdToSerializableGuid);
+        }
+
+        [Test]
+        public void TrackableIdToSerializableGuidConversion()
+        {
+            var guid = Guid.NewGuid();
+            guid.Decompose(out var low, out var high);
+            TrackableId trackableId = new(low, high);
+            SerializableGuid trackableIdToSerializableGuid = trackableId;
+            TrackableId serializableGuidToTrackableId = trackableIdToSerializableGuid;
+            Assert.AreEqual(trackableId, serializableGuidToTrackableId);
+        }
+
+        [Test]
+        public void SerializableGuidCreatedWithGuid()
+        {
+            var guid = Guid.NewGuid();
+            var serializableGuid = new SerializableGuid(guid);
+            Assert.AreEqual(guid, serializableGuid.guid);
+        }
     }
 }

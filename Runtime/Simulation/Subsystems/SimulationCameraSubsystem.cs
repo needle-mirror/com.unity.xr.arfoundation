@@ -138,8 +138,8 @@ namespace UnityEngine.XR.Simulation
                     return;
                 }
 
-                var simulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
-                m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simulationCamera.GetComponent<Camera>(), xrCamera);
+                var simCameraPoseProvider = SimulationCameraPoseProvider.GetOrCreateSimulationCameraPoseProvider();
+                m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simCameraPoseProvider.GetComponent<Camera>(), xrCamera);
                 m_CameraTextureProvider.onTextureReadbackFulfilled += SimulationXRCpuImageApi.OnCameraDataReceived;
                 m_CameraTextureProvider.cameraFrameReceived += CameraFrameReceived;
                 if (m_CameraTextureProvider != null && m_CameraTextureProvider.CameraFrameEventArgs != null)
@@ -268,7 +268,7 @@ namespace UnityEngine.XR.Simulation
                     m_LastFrameTimestamp = timeStamp;
                     return false;
                 }
-                
+
                 if (SimulatedLight.instances.Count > 0)
                 {
                     averageBrightness = CalculateAverageBrightness();
@@ -286,7 +286,7 @@ namespace UnityEngine.XR.Simulation
                     {
                         colorCorrection = m_MainLight.simulatedLight.color;
                         properties |= XRCameraFrameProperties.ColorCorrection;
-                        
+
                         mainLightIntensityInLumens = UnitConversionUtility.ConvertBrightnessToLumens(m_MainLight.simulatedLight.intensity);
                         properties |= XRCameraFrameProperties.MainLightIntensityLumens;
 
@@ -337,7 +337,7 @@ namespace UnityEngine.XR.Simulation
             {
                 float sum = 0.0f;
                 bool usesColorTemperature = false;
-                
+
                 foreach (var light in SimulatedLight.instances)
                 {
                     if (light.simulatedLight.useColorTemperature)
@@ -346,11 +346,11 @@ namespace UnityEngine.XR.Simulation
                         usesColorTemperature = true;
                     }
                 }
-                
+
                 result = sum / SimulatedLight.instances.Count;
                 return usesColorTemperature;
             }
-            
+
             static float CalculateAverageIntensityInLumens()
             {
                 float sum = 0.0f;

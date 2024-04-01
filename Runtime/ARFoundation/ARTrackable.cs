@@ -82,7 +82,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The session-relative data associated with this trackable.
         /// </summary>
-        protected TSessionRelativeData sessionRelativeData { get; private set; }
+        protected internal TSessionRelativeData sessionRelativeData { get; private set; }
 
         /// <summary>
         /// Invoked just after the session-relative data has been set.
@@ -90,8 +90,7 @@ namespace UnityEngine.XR.ARFoundation
         /// You may override this method to perform further updates specific
         /// to the derived trackable.
         /// </summary>
-        protected internal virtual void OnAfterSetSessionRelativeData()
-        { }
+        protected internal virtual void OnAfterSetSessionRelativeData() { }
 
         internal void SetSessionRelativeData(TSessionRelativeData data) => sessionRelativeData = data;
     }

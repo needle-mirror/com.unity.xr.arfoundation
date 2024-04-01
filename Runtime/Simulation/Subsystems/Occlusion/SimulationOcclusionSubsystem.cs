@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.XR.CoreUtils;
-using UnityEngine.Rendering;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -30,9 +28,21 @@ namespace UnityEngine.XR.Simulation
 
         class SimulationProvider : Provider
         {
+            const string k_SimulationOcclusionEnabledMaterialKeyword = "SIMULATION_OCCLUSION_ENABLED";
+
+            static readonly List<string> k_EnabledMaterialKeywords = new() { k_SimulationOcclusionEnabledMaterialKeyword };
+            
+            static readonly ShaderKeywords k_SimulationOcclusionEnabledShaderKeywords =
+                new(k_EnabledMaterialKeywords?.AsReadOnly(), null);
+
+            static readonly ShaderKeywords k_SimulationOcclusionDisabledShaderKeywords =
+                new(null, k_EnabledMaterialKeywords?.AsReadOnly());
+
             CameraTextureProvider m_CameraTextureProvider;
 
             NativeArray<XRTextureDescriptor> m_TextureDescriptors;
+
+            bool m_Running;
 
             public override void Start()
             {
@@ -54,22 +64,22 @@ namespace UnityEngine.XR.Simulation
                     return;
                 }
 
-                var simulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
-                var simCamera = simulationCamera.GetComponent<Camera>();
+                var simCameraPoseProvider = SimulationCameraPoseProvider.GetOrCreateSimulationCameraPoseProvider();
+                var simCamera = simCameraPoseProvider.GetComponent<Camera>();
                 simCamera.depthTextureMode = DepthTextureMode.Depth;
                 m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simCamera, xrCamera);
 
+                m_Running = true;
                 m_CameraTextureProvider.SetEnableDepthReadback(true);
             }
 
             public override void Stop()
             {
+                m_Running = false;
                 m_CameraTextureProvider.SetEnableDepthReadback(false);
             }
 
-            public override void Destroy()
-            {
-            }
+            public override void Destroy() { }
 
             public override bool TryGetEnvironmentDepth(out XRTextureDescriptor environmentDepthDescriptor)
             {
@@ -95,6 +105,11 @@ namespace UnityEngine.XR.Simulation
                     m_TextureDescriptors.IsCreated;
 
                 return success ? m_TextureDescriptors : default;
+            }
+
+            public override ShaderKeywords GetShaderKeywords()
+            {
+                return m_Running? k_SimulationOcclusionEnabledShaderKeywords : k_SimulationOcclusionDisabledShaderKeywords;
             }
         }
 

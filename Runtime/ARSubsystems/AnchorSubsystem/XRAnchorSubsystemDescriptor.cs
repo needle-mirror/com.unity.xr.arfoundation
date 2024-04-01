@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine.SubsystemsImplementation;
 
 namespace UnityEngine.XR.ARSubsystems
@@ -18,12 +19,59 @@ namespace UnityEngine.XR.ARSubsystems
         public bool supportsTrackableAttachments { get; }
 
         /// <summary>
-        /// Indicates whether the provider implementation supports synchronously adding anchors via
+        /// Indicates whether the provider implementation supports the ability to synchronously add anchors via
         /// <see cref="XRAnchorSubsystem.TryAddAnchor">XRAnchorSubsystem.TryAddAnchor</see>.
         /// If <see langword="false"/>, `TryAddAnchor` must always return false. In this case, use
         /// <see cref="XRAnchorSubsystem.TryAddAnchorAsync">XRAnchorSubsystem.TryAddAnchorAsync</see> instead.
         /// </summary>
         public bool supportsSynchronousAdd { get; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports the ability to persistently save anchors via
+        /// <see cref="XRAnchorSubsystem.TrySaveAnchorAsync">XRAnchorSubsystem.TrySaveAnchorAsync</see>.
+        /// </summary>
+        /// <value>
+        /// If <see langword="false"/>, `TrySaveAnchorAsync` will throw a <see cref="NotImplementedException"/>.
+        /// </value>
+        public bool supportsSaveAnchor { get; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports the ability to load persistently saved anchors via
+        /// <see cref="XRAnchorSubsystem.TryLoadAnchorAsync">XRAnchorSubsystem.TryLoadAnchorAsync</see>.
+        /// </summary>
+        /// <value>
+        /// If <see langword="false"/>, `TryLoadAnchorAsync` will throw a <see cref="NotImplementedException"/>.
+        /// </value>
+        public bool supportsLoadAnchor { get; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports the ability to erase the persistent saved data
+        /// associated with an anchor via
+        /// <see cref="XRAnchorSubsystem.TryEraseAnchorAsync">XRAnchorSubsystem.TryEraseAnchorAsync</see>.
+        /// </summary>
+        /// <value>
+        /// If <see langword="false"/>, `TryEraseAnchorAsync` will throw a <see cref="NotImplementedException"/>.
+        /// </value>
+        public bool supportsEraseAnchor { get; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports the ability to get all saved persistent anchor GUIDs
+        /// via <see cref="XRAnchorSubsystem.TryGetSavedAnchorIdsAsync">XRAnchorSubsystem.TryGetSavedAnchorIdsAsync</see>.
+        /// </summary>
+        /// <value>
+        /// If <see langword="false"/>, `TryGetSavedAnchorIdsAsync` will throw a <see cref="NotImplementedException"/>.
+        /// </value>
+        public bool supportsGetSavedAnchorIds { get; }
+
+        /// <summary>
+        /// Indicates whether the provider implementation supports cancelling async operations in progress using a
+        /// <see cref="CancellationToken"/>.
+        /// </summary>
+        /// <value>
+        /// If <see langword="false"/>, <see cref="XRAnchorSubsystem"/> APIs that take a `CancellationToken` as input
+        /// will ignore the input cancellation token.
+        /// </value>
+        public bool supportsAsyncCancellation { get; }
 
         /// <summary>
         /// Contains the parameters necessary to construct a new <see cref="XRAnchorSubsystemDescriptor"/> instance.
@@ -63,6 +111,38 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="XRAnchorSubsystem.TryAddAnchorAsync">XRAnchorSubsystem.TryAddAnchorAsync</see> instead.
             /// </summary>
             public bool supportsSynchronousAdd { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation supports the ability to persistently save anchors via
+            /// <see cref="XRAnchorSubsystem.TrySaveAnchorAsync">XRAnchorSubsystem.TrySaveAnchorAsync</see>.
+            /// </summary>
+            public bool supportsSaveAnchor { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation supports the ability to load persistently saved anchors via
+            /// <see cref="XRAnchorSubsystem.TryLoadAnchorAsync">XRAnchorSubsystem.TryLoadAnchorAsync</see>.
+            /// </summary>
+            public bool supportsLoadAnchor { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation supports the ability to erase the persistent saved data
+            /// associated with an anchor via
+            /// <see cref="XRAnchorSubsystem.TryEraseAnchorAsync">XRAnchorSubsystem.TryEraseAnchorAsync</see>.
+            /// </summary>
+            public bool supportsEraseAnchor { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation supports the ability to get all saved persistent anchor GUIDs
+            /// via <see cref="XRAnchorSubsystem.TryGetSavedAnchorIdsAsync">XRAnchorSubsystem.TryGetSavedAnchorIdsAsync</see>.
+            /// </summary>
+            public bool supportsGetSavedAnchorIds { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation supports cancelling async operations in progress using
+            /// <see cref="CancellationToken"/>s. If <see langword="false"/>, <see cref="XRAnchorSubsystem"/> APIs that
+            /// take a `CancellationToken` as input will ignore the input cancellation token.
+            /// </summary>
+            public bool supportsAsyncCancellation { get; set; }
 
             /// <summary>
             /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -149,6 +229,11 @@ namespace UnityEngine.XR.ARSubsystems
             subsystemTypeOverride = cinfo.subsystemTypeOverride;
             supportsTrackableAttachments = cinfo.supportsTrackableAttachments;
             supportsSynchronousAdd = cinfo.supportsSynchronousAdd;
+            supportsSaveAnchor = cinfo.supportsSaveAnchor;
+            supportsLoadAnchor = cinfo.supportsLoadAnchor;
+            supportsEraseAnchor = cinfo.supportsEraseAnchor;
+            supportsGetSavedAnchorIds = cinfo.supportsGetSavedAnchorIds;
+            supportsAsyncCancellation = cinfo.supportsAsyncCancellation;
         }
     }
 }

@@ -9,6 +9,14 @@ uid: arfoundation-whats-new
 
 - Added an API for provider plug-ins to implement the detection and tracking of 3D bounding boxes. Refer to [Bounding box detection](xref:arfoundation-bounding-box-detection) for more information.
 
+### Persistent anchors
+
+- Added AR Foundation API definitions for persistent anchors. Provider plug-ins can implement these methods, which allow you to save anchors during an AR session and re-load them during subsequent sessions:
+  - [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorAsync(UnityEngine.XR.ARSubsystems.TrackableId,System.Threading.CancellationToken))
+  - [ARAnchorManager.TryLoadAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryLoadAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))
+  - [ARAnchorManager.TryEraseAnchorAsync](UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))
+  - [ARAnchorManager.TryGetSavedAnchorIdsAsync](UnityEngine.XR.ARFoundation.ARAnchorManager.TryGetSavedAnchorIdsAsync(Unity.Collections.Allocator,System.Threading.CancellationToken))
+
 ### Image Stabilization
 
 - Added support for Image Stabilization, which helps stabilize shaky video from the camera. Refer to [AR Camera Manager component](xref:arfoundation-camera-components#ar-camera-manager-component) for more information.
@@ -71,12 +79,13 @@ uid: arfoundation-whats-new
   - [XRParticipantSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor.Register*)
 - Added [XRCameraSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.GetShaderKeywords) and [XROcclusionSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.GetShaderKeywords). Both return a new read-only [ShaderKeywords](xref:UnityEngine.XR.ARSubsystems.ShaderKeywords) struct.
 - Added `NotAxisAligned` Plane Detection Mode.
+- Added a constructor to [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid) allowing the creation of `SerializableGuid`s with a `System.Guid`.
 
 ## Changed
 
 ### Minimum Unity Editor version
 
-- Upgraded minimum Unity Editor version from 2021.2 to 2023.3.
+- Upgraded minimum Unity Editor version from 2021.2 to 6000.0. Refer to the official [Unity 6 New Naming Convention](https://forum.unity.com/threads/unity-6-new-naming-convention.1558592/) announcement for more information.
 
 ### XR Simulation image tracking workflow
 
@@ -99,6 +108,7 @@ uid: arfoundation-whats-new
 - Changed `SubsystemLifecycleManager.GetActiveSubsystemInstance()` from `protected` to `protected static`, as it does not use any instance members of `SubsystemLifecycleManager`.
 - Changed the behavior of `SimulationSessionSubsystem.sessionId` to now return a non-empty, unique value when the subsystem is running. You can access the session id using `XRSessionSubsystem.sessionId`.
 - Changed `SimulationPlaneSubsystem` to respect the currently set `PlaneDetectionMode`, detecting updates only from planes that match the current mode.
+- Changed the behavior of `ARMeshManager` to recalculate normals on a mesh if normals were requested and the provider did not calculate them.
 
 ## Deprecated
 

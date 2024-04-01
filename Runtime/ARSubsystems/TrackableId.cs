@@ -81,6 +81,16 @@ namespace UnityEngine.XR.ARSubsystems
                 throw new FormatException($"cannot parse trackable ID '{idString}'", e);
             }
         }
+        
+        /// <summary>
+        /// Convert from <see cref="SerializableGuid"/> to `TrackableId` using the <see cref="TrackableId(ulong, ulong)"/> constructor.
+        /// </summary>
+        /// <param name="serializableGuid">The SerializableGuid to convert.</param>
+        /// <returns>The TrackableId.</returns>
+        public static implicit operator TrackableId(SerializableGuid serializableGuid)
+        {
+            return new TrackableId(serializableGuid.guidLow, serializableGuid.guidHigh);
+        }
 
         /// <summary>
         /// Generates a string representation of the id suitable for debugging.
@@ -88,9 +98,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>A string representation of the id.</returns>
         public override string ToString()
         {
-            return string.Format("{0}-{1}",
-                m_SubId1.ToString("X16"),
-                m_SubId2.ToString("X16"));
+            return $"{m_SubId1:X16}-{m_SubId2:X16}";
         }
 
         /// <summary>

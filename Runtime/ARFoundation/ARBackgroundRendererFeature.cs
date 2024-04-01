@@ -2,6 +2,7 @@ using UnityEngine.Rendering;
 #if URP_7_OR_NEWER
 using UnityEngine.Rendering.Universal;
 using UnityEngine.XR.ARSubsystems;
+using System;
 #if URP_17_OR_NEWER
 using UnityEngine.Rendering.RenderGraphModule;
 #else
@@ -44,12 +45,13 @@ namespace UnityEngine.XR.ARFoundation
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
             var currentCamera = renderingData.cameraData.camera;
-            if ((currentCamera != null) && (currentCamera.cameraType == CameraType.Game))
+            if (currentCamera != null && currentCamera.cameraType == CameraType.Game)
             {
                 var cameraBackground = currentCamera.gameObject.GetComponent<ARCameraBackground>();
-                if ((cameraBackground != null) && cameraBackground.backgroundRenderingEnabled
-                    && (cameraBackground.material != null)
-                    && TrySelectRenderPassForBackgroundRenderMode(cameraBackground.currentRenderingMode, out var renderPass))
+                if (cameraBackground != null &&
+                    cameraBackground.backgroundRenderingEnabled &&
+                    cameraBackground.material != null &&
+                    TrySelectRenderPassForBackgroundRenderMode(cameraBackground.currentRenderingMode, out var renderPass))
                 {
                     var invertCulling = cameraBackground.GetComponent<ARCameraManager>()?.subsystem?.invertCulling ?? false;
                     renderPass.Setup(cameraBackground, invertCulling);
@@ -94,8 +96,10 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         abstract class ARCameraBackgroundRenderPass : ScriptableRenderPass
         {
-            // Data provided for the static ExecuteRenderPass function
-            private class PassData
+            /// <summary>
+            /// Data provided for the <see cref="ExecuteRasterRenderGraphPass"/> function.
+            /// </summary>
+            class PassData
             {
                 internal Matrix4x4 worldToCameraMatrix;
                 internal Matrix4x4 projectionMatrix;
@@ -105,15 +109,12 @@ namespace UnityEngine.XR.ARFoundation
             }
 
 #if URP_17_OR_NEWER
-            // Name of our Render Graph render pass
-            const string k_RenderPassName = "AR Background Render Pass (Render Graph Enabled)";
-#else
-            // Name of our non-Render Graph render pass
-            const string k_RenderPassName = "AR Background Render Pass (Render Graph Disabled)";
+            // Name of our RenderGraph render pass.
+            const string k_RenderGraphPassName = "AR Background Render Pass (Render Graph Enabled)";
 #endif  // URP_17_OR_NEWER
 
             /// <summary>
-            /// The data that is passed to the render pass execute functions
+            /// The data that is passed to the render pass execute functions.
             /// </summary>
             PassData m_RenderPassData = new();
 
@@ -123,6 +124,9 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             Material m_BackgroundMaterial;
 
+            /// <summary>
+            /// The geometry and transform of the camera background for a given platform.
+            /// </summary>
             XRCameraBackgroundRenderingParams m_CameraBackgroundRenderingParams;
 
             /// <summary>
@@ -132,21 +136,21 @@ namespace UnityEngine.XR.ARFoundation
             bool m_InvertCulling;
 
             /// <summary>
-            /// The default platform rendering parameters for the camera background.
+            /// The default platform geometry and transform for the camera background.
             /// </summary>
             XRCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams
                 => ARCameraBackgroundRenderingUtils.SelectDefaultBackgroundRenderParametersForRenderMode(renderingMode);
 
             /// <summary>
-            /// The rendering mode for the camera background.
+            /// The rendering mode for the camera background. Options are None, BeforeOpaques, and AfterOpaques.
             /// </summary>
             protected abstract XRCameraBackgroundRenderingMode renderingMode { get; }
 
             /// <summary>
             /// Set up the background render pass.
             /// </summary>
-            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/> component that provides the <see cref="Material"/>
-            /// and any additional rendering information required by the render pass.</param>
+            /// <param name="cameraBackground">The <c>ARCameraBackground</c> component that provides the 
+            /// <see cref="Material"/> and any additional rendering information required by the render pass.</param>
             /// <param name="invertCulling">Whether the culling mode should be inverted.</param>
             public void Setup(ARCameraBackground cameraBackground, bool invertCulling)
             {
@@ -160,14 +164,15 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             /// <summary>
-            /// Provides inheritors an opportunity to perform any specialized setup during <see cref="ScriptableRenderPass.Setup"/>.
+            /// Provides inheritors an opportunity to perform any specialized setup during 
+            /// <see cref="ScriptableRenderPass.Setup"/>.
             /// </summary>
-            /// <param name="cameraBackground">The <see cref="ARCameraBackground"/> component that provides the <see cref="Material"/>
-            /// and any additional rendering information required by the render pass.</param>
+            /// <param name="cameraBackground">The <c>ARCameraBackground</c> component that provides the 
+            /// <see cref="Material"/> and any additional rendering information required by the render pass.</param>
             protected virtual void SetupInternal(ARCameraBackground cameraBackground) { }
 
             /// <summary>
-            /// Execute the commands to render the camera background with Render Graph disabled.
+            /// Execute the commands to render the camera background with RenderGraph disabled.
             /// </summary>
             /// <param name="context">The render context for executing the render commands.</param>
             /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
@@ -182,14 +187,19 @@ namespace UnityEngine.XR.ARFoundation
                 m_RenderPassData.cameraBackgroundRenderingParams = m_CameraBackgroundRenderingParams;
                 m_RenderPassData.backgroundMaterial = m_BackgroundMaterial;
 
-                var cmd = CommandBufferPool.Get(k_RenderPassName);
+                var cmd = CommandBufferPool.Get("AR Background Render Pass (Render Graph Disabled)");
                 ExecuteRenderPass(CommandBufferHelpers.GetRasterCommandBuffer(cmd), m_RenderPassData);
                 context.ExecuteCommandBuffer(cmd);
                 CommandBufferPool.Release(cmd);
             }
 
-            // Execute the commands to render the camera background. This function is used for both Render Graph and non Render Graph
-            // paths. 
+            /// <summary>
+            /// Execute the commands to render the camera background. This function is used for both RenderGraph and
+            /// non-RenderGraph paths. 
+            /// </summary>
+            /// <param name="rasterCommandBuffer">The <c>RasterCommandBuffer</c> object that allows us to enqueue 
+            /// rendering instructions to the native <see cref="CommandBuffer"/> for this render pass.</param>
+            /// <param name="passData">The data that is passed to the function that executes this render pass.</param>
             static void ExecuteRenderPass(RasterCommandBuffer rasterCommandBuffer, PassData passData)
             {
                 ARCameraBackground.AddBeforeBackgroundRenderHandler(rasterCommandBuffer);
@@ -200,24 +210,42 @@ namespace UnityEngine.XR.ARFoundation
                     passData.cameraBackgroundRenderingParams.backgroundGeometry,
                     passData.cameraBackgroundRenderingParams.backgroundTransform,
                     passData.backgroundMaterial);
-                rasterCommandBuffer.SetViewProjectionMatrices(passData.worldToCameraMatrix,
+                rasterCommandBuffer.SetViewProjectionMatrices(
+                    passData.worldToCameraMatrix,
                     passData.projectionMatrix);
             }
 
 #if URP_17_OR_NEWER
-            static void ExecuteRenderGraphPass(PassData data, RasterGraphContext rasterContext)
+            /// <summary>
+            /// This is part of the RenderGraph path. It calls <see cref="ExecuteRenderPass"/>, which is shared by both the 
+            /// RenderGraph and non-RenderGraph paths.
+            /// </summary>
+            /// <param name="passData">The data that is passed to the function that executes this render pass.</param>
+            /// <param name="rasterContext">The <c>RasterGraphContext</c> object that allows us to access the 
+            /// <see cref="RasterCommandBuffer"/> and native <see cref="CommandBuffer"/> to enqueue rendering instructions 
+            /// for this render pass.</param>
+            static void ExecuteRasterRenderGraphPass(PassData passData, RasterGraphContext rasterContext)
             {
-                ExecuteRenderPass(rasterContext.cmd, data);
+                ExecuteRenderPass(rasterContext.cmd, passData);
             }
 
+            /// <summary>
+            /// Create and add the raster pass to RenderGraph, as well as storing all the data needed to execute the pass.
+            /// </summary>
+            /// <param name="renderGraph">The <c>RenderGraph</c> object that we add the raster render pass to.</param>
+            /// <param name="frameData">A <c>ContextContainer</c> object that gives us access to the camera and render
+            /// texture data for this RenderGraph raster pass.</param>
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
             {
-                using (var builder = renderGraph.AddRasterRenderPass<PassData>(k_RenderPassName, out m_RenderPassData, profilingSampler))
+                using (var builder = renderGraph.AddRasterRenderPass<PassData>(
+                    k_RenderGraphPassName,
+                    out m_RenderPassData,
+                    profilingSampler))
                 {
                     UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
                     UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
 
-                    // Populate struct to send to ExecuteRenderGraphPass
+                    // Populate struct to send to ExecuteRasterRenderGraphPass
                     m_RenderPassData.worldToCameraMatrix = cameraData.camera.worldToCameraMatrix;
                     m_RenderPassData.projectionMatrix = cameraData.camera.projectionMatrix;
                     m_RenderPassData.invertCulling = m_InvertCulling;
@@ -228,21 +256,32 @@ namespace UnityEngine.XR.ARFoundation
                     builder.AllowGlobalStateModification(true);
                     builder.AllowPassCulling(false);
 
-                    // The render graph render target is the main camera's active color buffer and
-                    // the render graph depth target is the main camera's active depth buffer.
+                    // The RenderGraph render target is the main camera's active color TextureHandle
                     builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
+
+                    // The RenderGraph depth target is the main camera's active depth TextureHandle
                     builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
-                    builder.SetRenderFunc<PassData>(ExecuteRenderGraphPass);
+                    builder.SetRenderFunc<PassData>(ExecuteRasterRenderGraphPass);
                 }
             }
 #endif  // URP_17_OR_NEWER
 
             /// <summary>
-            /// Clean up any resources for the render pass.
+            /// Called upon finish rendering a camera. Releases any resources created by this render pass or 
+            /// otherwise executes any cleanup code.
             /// </summary>
-            /// <param name="commandBuffer">The command buffer for frame cleanup.</param>
-            public override void FrameCleanup(CommandBuffer commandBuffer) { }
+            /// <param name="cmd">Use this <c>CommandBuffer</c> to cleanup any generated data</param>
+            public override void OnCameraCleanup(CommandBuffer cmd)
+            {
+                if (cmd == null)
+                    throw new ArgumentNullException(nameof(cmd));
+
+                // If invert culling is true, we must make sure it is only enabled for the minimum amount of time
+                // in code where it is needed, since other systems won't necessarily work when it is enabled.
+                if (m_InvertCulling)
+                    cmd.SetInvertCulling(false);
+            }
         }
 
         /// <summary>

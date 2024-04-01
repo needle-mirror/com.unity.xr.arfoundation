@@ -183,7 +183,7 @@ The table below lists the available features in each Unity-supported provider pl
   	<td style="text-align: center">Yes</td> <!-- iOS -->
   	<td style="text-align: center"></td> <!-- visionOS -->
   	<td style="text-align: center">Yes</td> <!-- HoloLens -->
-  	<td style="text-align: center"></td>    <!-- Meta Quest -->
+  	<td style="text-align: center">Yes</td>    <!-- Meta Quest -->
 	<td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>

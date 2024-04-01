@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Unity.Collections;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
+using SerializableGuid = UnityEngine.XR.ARSubsystems.SerializableGuid;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -26,7 +29,7 @@ namespace UnityEngine.XR.ARFoundation
         XRAnchor,
         ARAnchor>
     {
-        UnityEngine.Pool.ObjectPool<AwaitableCompletionSource<Result<ARAnchor>>> m_AsyncCompletionSources = new(
+        UnityEngine.Pool.ObjectPool<AwaitableCompletionSource<Result<ARAnchor>>> m_AnchorCompletionSources = new(
             createFunc: () => new AwaitableCompletionSource<Result<ARAnchor>>(),
             actionOnGet: null,
             actionOnRelease: null,
@@ -93,7 +96,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <returns>The result of the async operation.</returns>
         public async Awaitable<Result<ARAnchor>> TryAddAnchorAsync(Pose pose)
         {
-            var completionSource = m_AsyncCompletionSources.Get();
+            var completionSource = m_AnchorCompletionSources.Get();
             var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
             var subsystemResult = await subsystem.TryAddAnchorAsync(sessionRelativePose);
 
@@ -103,7 +106,7 @@ namespace UnityEngine.XR.ARFoundation
             var resultAwaitable = completionSource.Awaitable;
 
             completionSource.Reset();
-            m_AsyncCompletionSources.Release(completionSource);
+            m_AnchorCompletionSources.Release(completionSource);
             return await resultAwaitable;
         }
 
@@ -133,8 +136,17 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
-        internal bool TryRemoveAnchor(ARAnchor anchor)
+        /// <summary>
+        /// Attempts to remove an anchor.
+        /// </summary>
+        /// <param name="anchor">The <see cref="ARAnchor"/> to remove.</param>
+        /// <returns><see langword="True"/> if successful, otherwise <see langword="False"/></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public bool TryRemoveAnchor(ARAnchor anchor)
         {
+            if (!enabled)
+                throw new InvalidOperationException("Cannot remove an anchor from a disabled anchor manager.");
+
             if (anchor == null)
                 throw new ArgumentNullException(nameof(anchor));
 
@@ -143,13 +155,8 @@ namespace UnityEngine.XR.ARFoundation
 
             if (subsystem.TryRemoveAnchor(anchor.trackableId))
             {
-                if (m_PendingAdds.ContainsKey(anchor.trackableId))
-                {
-                    m_PendingAdds.Remove(anchor.trackableId);
-                    m_Trackables.Remove(anchor.trackableId);
-                }
-
                 anchor.pending = false;
+                DestroyPendingTrackable(anchor.trackableId);
                 return true;
             }
 
@@ -180,6 +187,82 @@ namespace UnityEngine.XR.ARFoundation
         /// The name to assign to the GameObject instantiated for each <see cref="ARAnchor"/>.
         /// </summary>
         protected override string gameObjectName => "Anchor";
+
+        /// <summary>
+        /// Attempts to persistently save the given anchor so that it can be loaded in a future AR session. Use the
+        /// `SerializableGuid` returned by this method as an input parameter to <see cref="TryLoadAnchorAsync"/> or
+        /// <see cref="TryEraseAnchorAsync"/>.
+        /// </summary>
+        /// <param name="anchor">The anchor to save. You can create an anchor using <see cref="TryAddAnchorAsync"/>.</param>
+        /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
+        /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
+        /// <returns>The result of the async operation, containing a new persistent anchor GUID if the operation
+        /// succeeded. You are responsible to <see langword="await"/> this result.</returns>
+        /// <seealso cref="XRAnchorSubsystemDescriptor.supportsSaveAnchor"/>
+        public Awaitable<Result<SerializableGuid>> TrySaveAnchorAsync(
+            ARAnchor anchor, CancellationToken cancellationToken = default)
+        {
+            if (anchor == null)
+                throw new ArgumentNullException(nameof(anchor));
+
+            return subsystem.TrySaveAnchorAsync(anchor.trackableId, cancellationToken);
+        }
+
+        /// <summary>
+        /// Attempts to load an anchor given its persistent anchor GUID.
+        /// </summary>
+        /// <param name="savedAnchorGuid">A persistent anchor GUID created by <see cref="TrySaveAnchorAsync"/>.</param>
+        /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
+        /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
+        /// <returns>The result of the async operation, containing the newly added anchor if the operation succeeded.
+        /// You are responsible to <see langword="await"/> this result.</returns>
+        /// <seealso cref="XRAnchorSubsystemDescriptor.supportsLoadAnchor"/>
+        public async Awaitable<Result<ARAnchor>> TryLoadAnchorAsync(
+            SerializableGuid savedAnchorGuid, CancellationToken cancellationToken = default)
+        {
+            var completionSource = m_AnchorCompletionSources.Get();
+            var subsystemResult = await subsystem.TryLoadAnchorAsync(savedAnchorGuid, cancellationToken);
+
+            completionSource.SetResult(new Result<ARAnchor>(
+                subsystemResult.status, 
+                subsystemResult.status.IsSuccess() ? CreateTrackableImmediate(subsystemResult.value) : null));
+
+            var resultAwaitable = completionSource.Awaitable;
+
+            completionSource.Reset();
+            m_AnchorCompletionSources.Release(completionSource);
+            return await resultAwaitable;
+        }
+
+        /// <summary>
+        /// Attempts to erase the persistent saved data associated with an anchor given its persistent anchor GUID.
+        /// </summary>
+        /// <param name="savedAnchorGuid">A persistent anchor GUID created by <see cref="TrySaveAnchorAsync"/>.</param>
+        /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
+        /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
+        /// <returns>The result of the async operation. You are responsible to <see langword="await"/> this result.</returns>
+        /// <seealso cref="XRAnchorSubsystemDescriptor.supportsEraseAnchor"/>
+        public Awaitable<XRResultStatus> TryEraseAnchorAsync(
+            SerializableGuid savedAnchorGuid, CancellationToken cancellationToken = default)
+        {
+            return subsystem.TryEraseAnchorAsync(savedAnchorGuid, cancellationToken);
+        }
+
+        /// <summary>
+        /// Attempts to get a `NativeArray` containing all saved persistent anchor GUIDs.
+        /// </summary>
+        /// <param name="allocator">The allocation strategy to use for the resulting `NativeArray`.</param>
+        /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
+        /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
+        /// <returns>The result of the async operation, containing a `NativeArray` of persistent anchor GUIDs
+        /// allocated with the given <paramref name="allocator"/> if the operation succeeded.
+        /// You are responsible to <see langword="await"/> this result.</returns>
+        /// <seealso cref="XRAnchorSubsystemDescriptor.supportsGetSavedAnchorIds"/>
+        public Awaitable<Result<NativeArray<SerializableGuid>>> TryGetSavedAnchorIdsAsync(
+            Allocator allocator, CancellationToken cancellationToken = default)
+        {
+            return subsystem.TryGetSavedAnchorIdsAsync(allocator, cancellationToken);
+        }
 
         /// <summary>
         /// Invoked when the base class detects trackable changes.

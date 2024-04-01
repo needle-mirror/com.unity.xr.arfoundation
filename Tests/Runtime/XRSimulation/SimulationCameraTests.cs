@@ -30,8 +30,8 @@ namespace UnityEngine.XR.Simulation.Tests
             var xrCamera = xrOrigin.Camera;
             Assert.IsNotNull(xrCamera);
 
-            var poseProvider = Object.FindAnyObjectByType<SimulationCamera>();
-            Assert.IsNotNull(poseProvider, $"No active {nameof(SimulationCamera)} is available.");
+            var poseProvider = Object.FindAnyObjectByType<SimulationCameraPoseProvider>();
+            Assert.IsNotNull(poseProvider, $"No active {nameof(SimulationCameraPoseProvider)} is available.");
         }
     }
 }

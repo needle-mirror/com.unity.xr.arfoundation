@@ -254,7 +254,6 @@ namespace UnityEngine.XR.Simulation
         void ConfigureTextureReadbackForURP()
         {
             var universalAdditionalCameraData = m_SimulationCamera.GetUniversalAdditionalCameraData();
-            universalAdditionalCameraData.requiresDepthOption = CameraOverrideOption.On;
             universalAdditionalCameraData.scriptableRenderer.EnqueuePass(m_SimulationReadbackRenderPass);
         }
 #endif  // URP_7_OR_NEWER
@@ -323,6 +322,12 @@ namespace UnityEngine.XR.Simulation
             postRenderCamera?.Invoke(renderCamera);
         }
 
+        /// <summary>
+        /// Performs the Simulation camera render texture (color and/or depth texture) async readback with RenderGraph disabled.
+        /// </summary>
+        /// <returns><c>true</c> if async readback is successful, <c>false</c> otherwise.</returns>
+        /// <param name="cmd">The <c>CommandBuffer</c> object to enqueue rendering commands.</param>
+        /// <seealso cref="SimulationCameraTextureReadbackPass.Execute"/>
         internal bool TryConfigureReadbackCommandBuffer(CommandBuffer commandBuffer)
         {
             commandBuffer.Clear();
@@ -346,32 +351,43 @@ namespace UnityEngine.XR.Simulation
             return TryRequestReadbackForImageType(commandBuffer, ImageType.Camera, m_SimulationReadbackTexture) && canReadbackDepth;
         }
 
-        internal bool TryConfigureRenderGraphReadbackCommandBuffer(CommandBuffer commandBuffer)
+        /// <summary>
+        /// Performs the Simulation camera render texture (color and/or depth texture) async readback with RenderGraph enabled.
+        /// </summary>
+        /// <param name="cmd">The <c>CommandBuffer</c> object to enqueue rendering commands.</param>
+        /// <seealso cref="SimulationCameraTextureReadbackPass.ExecuteRenderGraphReadbackPass"/>
+        internal void TryConfigureRenderGraphReadbackCommandBuffer(CommandBuffer commandBuffer)
         {
             bool canReadbackDepth = m_SimulationReadbackDepthTexture != null;
             if (m_EnableDepthReadback && canReadbackDepth)
             {
+                // Populates the GPU formatted depth RenderTexture using the color RenderTexture. s_DepthCopyShader
+                // simply samples the shader variable _CameraDepthTexture at each pixel and stores it in
+                // m_SimulationCameraDepthRenderTexture
                 commandBuffer.Blit(m_SimulationCameraRenderTexture, m_SimulationCameraDepthRenderTexture, s_DepthCopyShader);
+                // Converts the GPU formatted RenderTexture into the CPU formatted Texture2D. Async readback can only be
+                // done using a CPU formatted Texture2D.
                 commandBuffer.CopyTexture(m_SimulationCameraDepthRenderTexture, m_SimulationReadbackDepthTexture);
+                // Performs the readback using the Texture2D variable m_SimulationReadbackDepthTexture.
                 canReadbackDepth = TryRequestReadbackForImageType(
                     commandBuffer,
                     ImageType.Depth,
                     m_SimulationReadbackDepthTexture);
 
                 if (!canReadbackDepth)
-                    throw new ArgumentNullException("m_SimulationReadbackDepthTexture must not be null!");
+                    throw new ArgumentNullException(nameof(m_SimulationReadbackDepthTexture));
             }
-
+            // Converts the GPU formatted RenderTexture into the CPU formatted Texture2D. Async readback can only be
+            // done using a CPU formatted Texture2D.
             commandBuffer.CopyTexture(m_SimulationCameraRenderTexture, m_SimulationReadbackTexture);
+            // Performs the readback using the Texture2D variable m_SimulationReadbackTexture.
             bool canReadbackColor = TryRequestReadbackForImageType(
                 commandBuffer,
                 ImageType.Camera,
                 m_SimulationReadbackTexture);
 
             if (!canReadbackColor)
-                throw new ArgumentNullException("m_SimulationReadbackTexture must not be null!");
-
-            return true;
+                throw new ArgumentNullException(nameof(m_SimulationReadbackTexture));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -384,42 +400,27 @@ namespace UnityEngine.XR.Simulation
             var textureFormat = readbackTexture.format;
             commandBuffer.RequestAsyncReadback(
                 readbackTexture,
-                request =>
+                asyncGPUReadbackRequest =>
                 {
-                    OnTextureReadbackComplete(
-                        request,
-                        imageType,
-                        (long)(Time.time * 1e9),
-                        textureDimensions,
-                        textureFormat);
+                    if (asyncGPUReadbackRequest.hasError)
+                    {
+                        Debug.LogError("Error reading back texture");
+                        return;
+                    }
+
+                    using var textureData = asyncGPUReadbackRequest.GetData<byte>();
+                    if (textureData.IsCreated)
+                    {
+                        onTextureReadbackFulfilled?.Invoke(
+                            new TextureReadbackEventArgs(
+                                imageType,
+                                textureData,
+                                textureDimensions,
+                                textureFormat,
+                                (long)(Time.time * 1e9)));
+                    }
                 });
             return true;
-        }
-
-        void OnTextureReadbackComplete(
-            AsyncGPUReadbackRequest request,
-            ImageType imageType,
-            long timestampNs,
-            Vector2Int textureDimensions,
-            TextureFormat textureFormat)
-        {
-            if (request.hasError)
-            {
-                Debug.LogError("Error reading back texture");
-                return;
-            }
-
-            using var textureData = request.GetData<byte>();
-            if (textureData.IsCreated)
-            {
-                onTextureReadbackFulfilled?.Invoke(
-                    new TextureReadbackEventArgs(
-                        imageType,
-                        textureData,
-                        textureDimensions,
-                        textureFormat,
-                        timestampNs));
-            }
         }
 
         internal void SetEnableDepthReadback(bool useDepth)

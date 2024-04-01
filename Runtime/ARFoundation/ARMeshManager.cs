@@ -279,8 +279,30 @@ namespace UnityEngine.XR.ARFoundation
             // Invoke user callbacks
             try
             {
-                if (meshesChanged != null && (m_Added.Count + m_Updated.Count + m_Removed.Count > 0))
+                if (m_Added.Count + m_Updated.Count + m_Removed.Count > 0)
                 {
+                    // If normals were requested, compute the normals before invoking meshesChanged
+                    if (m_Normals)
+                    {
+                        foreach (var meshFilter in m_Added)
+                        {
+                            var mesh = (meshFilter.sharedMesh != null) ? meshFilter.sharedMesh : meshFilter.mesh;
+
+                            // Calculate normals if they weren't populated by the provider.
+                            if (mesh.normals.Length == 0)
+                                mesh.RecalculateNormals();
+                        }
+
+                        foreach (var meshFilter in m_Updated)
+                        {
+                            var mesh = (meshFilter.sharedMesh != null) ? meshFilter.sharedMesh : meshFilter.mesh;
+                            
+                            // Calculate normals if they weren't populated by the provider.
+                            if (mesh.normals.Length == 0)
+                                mesh.RecalculateNormals();
+                        }
+                    }
+
                     meshesChanged?.Invoke(new ARMeshesChangedEventArgs(m_Added, m_Updated, m_Removed));
                 }
             }

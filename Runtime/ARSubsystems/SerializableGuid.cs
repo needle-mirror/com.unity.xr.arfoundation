@@ -10,6 +10,16 @@ namespace UnityEngine.XR.ARSubsystems
     [Serializable]
     public struct SerializableGuid : IEquatable<SerializableGuid>
     {
+        [SerializeField]
+        ulong m_GuidLow;
+
+        internal ulong guidLow => m_GuidLow;
+
+        [SerializeField]
+        ulong m_GuidHigh;
+
+        internal ulong guidHigh => m_GuidHigh;
+
         /// <summary>
         /// Constructs a <see cref="SerializableGuid"/> from two 64-bit <c>ulong</c>s.
         /// </summary>
@@ -19,6 +29,17 @@ namespace UnityEngine.XR.ARSubsystems
         {
             m_GuidLow = guidLow;
             m_GuidHigh = guidHigh;
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="SerializableGuid"/> from a <see cref="System.Guid"/>.
+        /// </summary>
+        /// <param name="guid">The <c>Guid</c> used to create the <c>SerializableGuid</c></param>
+        public SerializableGuid(Guid guid)
+        {
+            var guidParts = GuidUtil.Decompose(guid);
+            m_GuidLow = guidParts.low;
+            m_GuidHigh = guidParts.high;
         }
 
         static readonly SerializableGuid k_Empty = new SerializableGuid(0, 0);
@@ -32,6 +53,16 @@ namespace UnityEngine.XR.ARSubsystems
         /// Reconstructs the <c>Guid</c> from the serialized data.
         /// </summary>
         public Guid guid => GuidUtil.Compose(m_GuidLow, m_GuidHigh);
+
+        /// <summary>
+        /// Convert from <see cref="TrackableId"/> to `SerializableGuid` using the <see cref="SerializableGuid(ulong, ulong)"/> constructor.
+        /// </summary>
+        /// <param name="trackableId">The TrackableId to convert.</param>
+        /// <returns>The SerializableGuid.</returns>
+        public static implicit operator SerializableGuid(TrackableId trackableId)
+        {
+            return new SerializableGuid(trackableId.subId1, trackableId.subId2);
+        }
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -53,7 +84,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// for more details.
         /// </summary>
         /// <returns>A string representation of the <c>Guid</c>.</returns>
-        public override string ToString() => guid.ToString();
+        public override string ToString()
+        {
+            return $"{m_GuidLow:X16}-{m_GuidHigh:X16}";
+        }
 
         /// <summary>
         /// Generates a string representation of the <c>Guid</c>. Same as <see cref="guid"/><c>.ToString(format)</c>.
@@ -101,11 +135,5 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
         public static bool operator !=(SerializableGuid lhs, SerializableGuid rhs) => !lhs.Equals(rhs);
-
-        [SerializeField]
-        ulong m_GuidLow;
-
-        [SerializeField]
-        ulong m_GuidHigh;
     }
 }

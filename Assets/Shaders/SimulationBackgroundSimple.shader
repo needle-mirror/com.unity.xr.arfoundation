@@ -30,6 +30,7 @@
             #pragma vertex vert
             #pragma fragment frag
 
+            #pragma multi_compile_local __ SIMULATION_OCCLUSION_ENABLED
             #include "UnityCG.cginc"
 
             struct appdata
@@ -82,8 +83,16 @@
                 fixed4 col = tex2D(_TextureSingle, i.uv);
                 fragment_output o;
                 o.color = col;
+#if SIMULATION_OCCLUSION_ENABLED
                 float depth = tex2D(_TextureSingleDepth, i.uv).x;
                 o.depth = 1 - ConvertDistanceToDepth(depth);
+#else
+#if defined(UNITY_REVERSED_Z)
+                o.depth = 0.0f;
+#else
+                o.depth = 1.0f;
+#endif
+#endif
                 return o;
             }
             ENDCG

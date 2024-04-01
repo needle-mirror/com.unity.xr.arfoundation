@@ -9,32 +9,64 @@ namespace UnityEngine.XR.Simulation
 {
     class SimulationCameraTextureReadbackPass : ScriptableRenderPass
     {
-        static CameraTextureProvider s_Provider;
-
 #if URP_17_OR_NEWER
-        // Data provided for the Render Graph render pass. 
+        /// <summary>
+        /// Data provided for the <see cref="ExecuteRenderGraphReadbackPass"/> function.
+        /// </summary>
         class PassData {}
 
-        // Name of our Render Graph render pass
-        static readonly string k_UnsafePassName = "SimulationCameraTextureReadbackPass (Render Graph Unsafe Pass)";
+        /// <summary>
+        /// Name of our RenderGraph render pass.
+        /// </summary>
+        static readonly string k_RenderGraphPassName = "SimulationCameraTextureReadbackPass (Render Graph Enabled)";
 #endif  // URP_17_OR_NEWER
 
+        /// <summary>
+        /// The CameraTextureProvider class object that will execute the async readback logic.
+        /// </summary>
+        static CameraTextureProvider s_Provider;
+
+        /// <summary>
+        /// Constructs a <c>SimulationCameraTextureReadbackPass</c> class instance.
+        /// </summary>
+        /// <param name="cameraTextureProvider">The <c>CameraTextureProvider</c> <c>MonoBehaviour</c> object that 
+        /// implements the asynchronous readback logic.</param>
         public SimulationCameraTextureReadbackPass(CameraTextureProvider cameraTextureProvider)
         {
+            // Initialize the CameraTextureProvider object that will execute the async readback logic.
             s_Provider = cameraTextureProvider;
+            // Specify that the async readback pass will occur after all effects are rendered.
             renderPassEvent = RenderPassEvent.AfterRendering;
+            // Configure the camera's texture input types for both the RenderGraph and non-RenderGraph async readback
+            // passes.
+            ConfigureInput(ScriptableRenderPassInput.Color | ScriptableRenderPassInput.Depth);
         }
 
+        /// <summary>
+        /// Called by the renderer before rendering a camera. Configures the camera's texture input types, color and
+        /// depth, for the non-RenderGraph async readback pass.
+        /// </summary>
+        /// <param name="cmd">The <see cref="CommandBuffer"/> object to enqueue rendering commands.</param>
+        /// <param name="renderingData">Current rendering state information.</param>
+        /// <seealso cref="ScriptableRenderPass.ConfigureInput"/>
 #pragma warning disable CS0672
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ConfigureInput(ScriptableRenderPassInput.Color | ScriptableRenderPassInput.Depth);
         }
 
+        /// <summary>
+        /// Queries the <see cref="CameraTextureProvider"/> object to perform Simulation camera texture async readback 
+        /// with RenderGraph disabled. 
+        /// </summary>
+        /// <param name="context">The <c>ScriptableRenderContext</c> object that lets us execute the rendering commands on 
+        /// the <see cref="CommandBuffer"/> object for this render pass.</param>
+        /// <param name="renderingData">Current rendering state information. Unused for this render pass.</param>
+        /// <seealso cref="CameraTextureProvider.TryConfigureReadbackCommandBuffer"/>
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
 #pragma warning restore CS0672
         {
-            using var commandBuffer = CommandBufferPool.Get("SimulationCameraTextureReadbackPass");
+            using var commandBuffer = CommandBufferPool.Get("SimulationCameraTextureReadbackPass (Render Graph Disabled)");
             if (s_Provider.TryConfigureReadbackCommandBuffer(commandBuffer))
             {
                 context.ExecuteCommandBuffer(commandBuffer);
@@ -42,35 +74,42 @@ namespace UnityEngine.XR.Simulation
         }
 
 #if URP_17_OR_NEWER
-        // The render function that Render Graph uses as a callback for RecordRenderGraph below. It needs to be static
-        // because passing any non-static functions that rely on instance data or on local variables would cause the
-        // Render Graph’s render function lambda to capture those, which will cause GC allocations.
-        static void ExecuteRenderGraphPass(PassData passData, UnsafeGraphContext unsafeContext)
+        /// <summary>
+        /// Queries the <see cref="CameraTextureProvider"/> object to perform Simulation camera texture async readback 
+        /// with RenderGraph enabled.
+        /// </summary>
+        /// <param name="passData">The data that is passed to the function that executes this RenderGraph pass.</param>
+        /// <param name="unsafeContext">The <c>UnsafeGraphContext</c> object that gives us access to the native 
+        /// <see cref="CommandBuffer"/> object to enqueue rendering instructions for this RenderGraph pass.</param>
+        /// <seealso cref="CameraTextureProvider.TryConfigureRenderGraphReadbackCommandBuffer"/>
+        static void ExecuteRenderGraphReadbackPass(PassData passData, UnsafeGraphContext unsafeContext)
         {
             var nativeCommandBuffer = CommandBufferHelpers.GetNativeCommandBuffer(unsafeContext.cmd);
-
-            if (!s_Provider.TryConfigureRenderGraphReadbackCommandBuffer(nativeCommandBuffer))
-            {
-                Debug.LogError("SimulationCameraTextureReadbackPass.ExecuteRenderGraphPass() - " +
-                    "TryConfigureRenderGraphReadbackCommandBuffer() failed");
-            }
+            s_Provider.TryConfigureRenderGraphReadbackCommandBuffer(nativeCommandBuffer);
         }
 
-        // This function needs to add an unsafe render pass to Render Graph because a raster render pass, which is typically
-        // used for rendering with Render Graph, cannot perform the texture readback operations performed with the command
-        // buffer in CameraTextureProvider. Rendering Simulation camera textures is a special case. Unsafe passes can do
-        // certain operations that raster render passes cannot do and have access to the full command buffer API.
+        /// <summary>
+        /// Add the unsafe pass to the RenderGraph object in order to perform async readback on the camera's color and/or 
+        /// depth render textures.
+        /// </summary>
+        /// <remarks>
+        /// This function needs to add an unsafe render pass to RenderGraph because a raster render pass, which is typically 
+        /// used for rendering with RenderGraph, cannot perform the texture readback operations performed with the 
+        /// <see cref="CommandBuffer"/> in <see cref="CameraTextureProvider"/>. Rendering Simulation camera textures is a 
+        /// special case. Unsafe passes can do certain operations that raster render passes cannot do and have access to 
+        /// the full command buffer API.
+        /// </remarks>
+        /// <param name="renderGraph">The RenderGraph object that we add the unsafe render pass to.</param>
+        /// <param name="frameData">A <c>ContextContainer</c> object that is unused for this RenderGraph pass.</param>
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
-            using (var builder = renderGraph.AddUnsafePass<PassData>(k_UnsafePassName, out PassData passData, profilingSampler))
+            using (var builder = renderGraph.AddUnsafePass<PassData>(
+                k_RenderGraphPassName, 
+                out PassData passData, 
+                profilingSampler))
             {
                 builder.AllowPassCulling(false);
-
-                UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
-                builder.UseTexture(resourceData.activeColorTexture);
-                builder.UseTexture(resourceData.activeDepthTexture);
-
-                builder.SetRenderFunc<PassData>(ExecuteRenderGraphPass);
+                builder.SetRenderFunc<PassData>(ExecuteRenderGraphReadbackPass);
             }
         }
 #endif // URP_17_OR_NEWER

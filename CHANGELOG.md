@@ -8,6 +8,34 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.1] - 2024-04-01
+
+### Added
+
+- Added AR Foundation API definitions for persistent anchors. Provider plug-ins can implement these methods, which allow you to save anchors during an AR session and re-load them during subsequent sessions:
+  - [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorAsync(UnityEngine.XR.ARSubsystems.TrackableId,System.Threading.CancellationToken))
+  - [ARAnchorManager.TryLoadAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryLoadAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))
+  - [ARAnchorManager.TryEraseAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))
+  - [ARAnchorManager.TryGetSavedAnchorIdsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryGetSavedAnchorIdsAsync(Unity.Collections.Allocator,System.Threading.CancellationToken))
+- Added an implicit conversion operator between [TrackableId](xref:UnityEngine.XR.ARSubsystems.TrackableId) and [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid).
+- Added a constructor to [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid) allowing the creation of `SerializableGuid`s with a `System.Guid`.
+- Added [ARAnchorManager.TryRemoveAnchor](xref:UnityEngine.XR.ARFoundation.TryRemoveAnchor) API for removing anchors. You can either use this new method or disable the `ARAnchor` component to remove an anchor.
+- Added XR Simulation's `SimulationCameraPoseProvider` as a public component.
+
+### Changed
+
+- Changed documentation to indicate that Meshing is now a supported feature in the Unity OpenXR: Meta provider plug-in.
+- Changed the behavior of `ARMeshManager` to recalculate normals on a mesh if normals were requested and the provider did not calculate them.
+- Changed the minimum Unity version from 2023.3 to 6000.0, reflecting the new version number of Unity 6. Refer to the official [Unity 6 New Naming Convention](https://forum.unity.com/threads/unity-6-new-naming-convention.1558592/) announcement for more information.
+
+### Fixed
+
+- Fixed [issue ARFB-421](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-421) which caused `ARMeshManager` to crash the Editor in XR Simulation when its **Normals** property was not enabled.
+- Fixed [issue ARFB-380](https://issuetracker.unity3d.com/issues/android-elements-of-ui-toolkit-arent-displayed-when-ar-foundation-camera-facing-direction-is-set-to-user) where UI toolkit elements disappeared after one frame when running an XR scene with a user-facing camera on Android devices.
+- Fixed an issue where disabling the `AROcclusionManager` component in XR Simulation would not stop the simulation background shader from sampling the depth texture.
+- Fixed an issue where XR Simulation camera pose data could leak between multiple AR sessions.
+- Corrected a previous fix for an issue where the tvOS build target would have compile errors in `Simulation.InputLayoutLoader`.
+
 ## [6.0.0-pre.8] - 2024-03-19
 
 ### Changed
@@ -35,7 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Fixed an issue where destroying and recreating the `SimulationSessionSubsystem` could result in the creation of a `SimulationMeshSubsystem` instance, even if the `XRLoader` did not initially create it.
-- Fixed an issue where the TvOS build target would have compile errors in `Simulation.InputLayoutLoader`.
+- Fixed an issue where the tvOS build target would have compile errors in `Simulation.InputLayoutLoader`.
 
 ## [6.0.0-pre.6] - 2024-02-08
 

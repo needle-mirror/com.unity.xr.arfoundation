@@ -90,7 +90,7 @@
                 {
                     "name": "up",
                     "id": "913ad212-56cd-4193-a5a5-14823e59e4b3",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -101,7 +101,7 @@
                 {
                     "name": "down",
                     "id": "60e710c6-958e-4c19-85a0-c4742adcb178",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
