@@ -8,6 +8,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.4] - 2024-04-29
+
+### Fixed
+
+- Fixed an issue where the AR Debug Menu script would not spawn a Point Cloud prefab.
+- Fixed an issue where the tvOS build target would have compile errors in `Simulation.InputLayoutLoader`.
+- Fixed [issue ARFB-421](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-421) which caused `ARMeshManager` to crash the Editor in XR Simulation when its **Normals** property was not enabled.
+- Fixed an issue where XR Simulation camera pose data could leak between multiple AR sessions.
+
 ## [5.1.3] - 2024-03-12
 
 ### Fixed

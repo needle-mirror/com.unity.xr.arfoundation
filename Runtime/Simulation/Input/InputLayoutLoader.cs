@@ -18,13 +18,13 @@ namespace UnityEngine.XR.Simulation
 #if UNITY_EDITOR
         static InputLayoutLoader()
         {
-#if ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE)
+#if ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE) && !UNITY_FORCE_INPUTSYSTEM_XR_OFF || PACKAGE_DOCS_GENERATION
             RegisterLayouts();
-#endif // ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE)
+#endif // ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE) && !UNITY_FORCE_INPUTSYSTEM_XR_OFF || PACKAGE_DOCS_GENERATION
         }
-#endif //UNITY_EDITOR
+#endif // UNITY_EDITOR
 
-#if ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE)
+#if ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE) && !UNITY_FORCE_INPUTSYSTEM_XR_OFF || PACKAGE_DOCS_GENERATION
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterLayouts()
         {
@@ -37,6 +37,6 @@ namespace UnityEngine.XR.Simulation
                     .WithProduct("(XR Simulation)")
                 );
         }
-#endif // ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE)
+#endif // ENABLE_INPUT_SYSTEM && (ENABLE_VR || UNITY_GAMECORE) && !UNITY_FORCE_INPUTSYSTEM_XR_OFF || PACKAGE_DOCS_GENERATION
     }
 }
