@@ -81,6 +81,6 @@ namespace UnityEngine.XR.ARFoundation
 
         ARPointCloud m_PointCloud;
 
-        static List<Vector3> s_Vertices = new List<Vector3>();
+        static List<Vector3> s_Vertices = new ();
     }
 }

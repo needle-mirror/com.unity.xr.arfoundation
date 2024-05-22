@@ -219,7 +219,8 @@ namespace UnityEngine.XR.Simulation
             if (!m_IsEnvironmentSceneInitialized)
                 return;
 
-            foreach (var simulatedAnchor in SimulatedAnchor.instances)
+            var simulationEnvironmentAnchors = sceneManager.simulationEnvironmentAnchors;
+            foreach (var simulatedAnchor in simulationEnvironmentAnchors)
             {
                 var simulatedWorldPose = simulatedAnchor.transform.GetWorldPose();
                 var sessionPose = m_Origin.transform.InverseTransformPose(simulatedWorldPose);

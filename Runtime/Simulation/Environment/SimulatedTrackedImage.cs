@@ -1,5 +1,6 @@
 using System;
 using Unity.XR.CoreUtils;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -45,7 +46,7 @@ namespace UnityEngine.XR.Simulation
         [ReadOnly, ShowInDebugInspectorOnly]
         SerializableGuid m_SerializableImageAssetGuid;
 
-        static Material s_QuadBaseMaterial;
+        Material s_QuadBaseMaterial;
 
         /// <summary>
         /// The tracked image's texture. If the user does not provide a texture at edit time, a new texture will
@@ -174,6 +175,9 @@ namespace UnityEngine.XR.Simulation
             m_QuadMesh.UploadMeshData(false);
             m_QuadMeshFilter.mesh = m_QuadMesh;
 
+            // we lazy create the base material to use for the tracking image's material
+            // as needed. if play-mode is re-run without a domain reload, the base material
+            // will get nullified and recreated here.
             if (s_QuadBaseMaterial == null)
                 s_QuadBaseMaterial = new Material(Shader.Find(k_QuadShader));
 

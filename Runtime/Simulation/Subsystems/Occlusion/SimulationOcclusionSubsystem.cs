@@ -8,7 +8,6 @@ namespace UnityEngine.XR.Simulation
 {
     /// <summary>
     /// Simulation implementation of <see cref="UnityEngine.XR.ARSubsystems.XROcclusionSubsystem"/>.
-    /// Do not create this directly. Use the <see cref="UnityEngine.SubsystemManager"/> instead.
     /// </summary>
     public sealed class SimulationOcclusionSubsystem : XROcclusionSubsystem
     {
@@ -18,14 +17,8 @@ namespace UnityEngine.XR.Simulation
         /// The shader property name for the depth component of the camera video frame.
         /// </summary>
         /// <value>The shader depth property name</value>
-        const string k_TextureSingleDepthPropertyName = "_TextureSingleDepth";
-
-        /// <summary>
-        /// The shader property name identifier for the depth component of the camera video frame.
-        /// </summary>
-        internal static readonly int textureSingleDepthPropertyNameId =
-            Shader.PropertyToID(k_TextureSingleDepthPropertyName);
-
+        internal const string k_TextureSingleDepthPropertyName = "_TextureSingleDepth";
+        
         class SimulationProvider : Provider
         {
             const string k_SimulationOcclusionEnabledMaterialKeyword = "SIMULATION_OCCLUSION_ENABLED";

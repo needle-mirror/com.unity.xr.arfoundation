@@ -10,7 +10,7 @@ Bounding box detection is only supported on the Meta OpenXR platform, as shown i
 | Google ARCore XR Plug-in | | |
 | Apple ARKit XR Plug-in | | |
 | Apple visionOS XR Plug-in | | |
-| HoloLens | | |
+| Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | N/A |
 | XR Simulation | | |
 

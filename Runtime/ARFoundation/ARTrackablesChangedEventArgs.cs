@@ -8,31 +8,31 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Event arguments for the `ARTrackableManager.trackablesChanged` event.
     /// </summary>
-    /// <typeparam name="TTrackable">A trackable that is an <see cref="ARTrackable"/></typeparam>
+    /// <typeparam name="TTrackable">The trackable type.</typeparam>
     public readonly struct ARTrackablesChangedEventArgs<TTrackable> : IEquatable<ARTrackablesChangedEventArgs<TTrackable>>
         where TTrackable : ARTrackable
     {
         /// <summary>
-        /// The collection of <see cref="TTrackable"/>s added since the last event.
+        /// The collection of trackables that have been added.
         /// </summary>
         public ReadOnlyList<TTrackable> added { get; }
 
         /// <summary>
-        /// The collection of <see cref="TTrackable"/>s updated since the last event.
+        /// The collection of trackables that have been updated.
         /// </summary>
         public ReadOnlyList<TTrackable> updated { get; }
 
         /// <summary>
-        /// The collection of removed trackables since the last event.
+        /// The collection of trackables that have been removed.
         /// </summary>
         public ReadOnlyList<KeyValuePair<TrackableId, TTrackable>> removed { get; }
 
         /// <summary>
         /// Constructs an <see cref="ARTrackablesChangedEventArgs&lt;TTrackable&gt;"/>.
         /// </summary>
-        /// <param name="added">The collection of <see cref="TTrackable"/>s added since the last event.</param>
-        /// <param name="updated">The collection of <see cref="TTrackable"/>s updated since the last event.</param>
-        /// <param name="removed">The collection of <see cref="TTrackable"/>s removed since the last event.</param>
+        /// <param name="added">The collection of trackables that have been added.</param>
+        /// <param name="updated">The collection of trackables that have been updated.</param>
+        /// <param name="removed">The collection of trackables that have been removed.</param>
         public ARTrackablesChangedEventArgs(
             ReadOnlyList<TTrackable> added,
             ReadOnlyList<TTrackable> updated,

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
 #if UNITY_EDITOR
 using System.Linq;
 using UnityEditor;
@@ -10,13 +9,12 @@ using UnityEditor;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// A reference image library is a collection of images to search for in
-    /// the physical environment when image tracking is enabled.
+    /// A reference image library is a collection of images to search for in the physical environment when image
+    /// tracking is enabled.
     /// </summary>
     /// <remarks>
-    /// Image libraries are immutable at runtime. To create and manipulate
-    /// an image library via Editor scripts, see the extension methods in
-    /// <see cref="UnityEditor.XR.ARSubsystems.XRReferenceImageLibraryExtensions"/>.
+    /// Image libraries are immutable at runtime. To create and manipulate an image library via Editor scripts, use the
+    /// extension methods in [XRReferenceImageLibraryExtensions](UnityEditor.XR.ARSubsystems.XRReferenceImageLibraryExtensions).
     /// If you need to mutate the library at runtime, see <see cref="MutableRuntimeReferenceImageLibrary"/>.
     /// </remarks>
     [CreateAssetMenu(fileName="ReferenceImageLibrary", menuName="XR/Reference Image Library", order=1001)]

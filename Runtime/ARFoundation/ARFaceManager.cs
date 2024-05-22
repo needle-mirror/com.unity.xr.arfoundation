@@ -80,7 +80,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Attempts to retrieve an <see cref="ARFace"/>.
         /// </summary>
         /// <param name="faceId">The <c>TrackableId</c> associated with the <see cref="ARFace"/>.</param>
-        /// <returns>The <see cref="ARFace"/>if found. <c>null</c> otherwise.</returns>
+        /// <returns>The <see cref="ARFace"/> if found. <c>null</c> otherwise.</returns>
         public ARFace TryGetFace(TrackableId faceId)
         {
             m_Trackables.TryGetValue(faceId, out ARFace face);
@@ -97,7 +97,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Invoked just after a <see cref="ARFace"/> has been updated.
+        /// Invoked just after an <see cref="ARFace"/> has been updated.
         /// </summary>
         /// <param name="face"></param>
         /// <param name="sessionRelativeData"></param>

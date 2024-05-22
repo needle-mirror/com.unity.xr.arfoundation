@@ -129,6 +129,8 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             XRCameraBackgroundRenderingParams m_CameraBackgroundRenderingParams;
 
+            ARDefaultCameraBackgroundRenderingParams m_DefaultCameraBackgroundRenderingParams;
+
             /// <summary>
             /// Whether the culling mode should be inverted.
             /// ([CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html)).
@@ -139,7 +141,7 @@ namespace UnityEngine.XR.ARFoundation
             /// The default platform geometry and transform for the camera background.
             /// </summary>
             XRCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams
-                => ARCameraBackgroundRenderingUtils.SelectDefaultBackgroundRenderParametersForRenderMode(renderingMode);
+                => m_DefaultCameraBackgroundRenderingParams.SelectDefaultBackgroundRenderParametersForRenderMode(renderingMode);
 
             /// <summary>
             /// The rendering mode for the camera background. Options are None, BeforeOpaques, and AfterOpaques.
@@ -156,6 +158,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 SetupInternal(cameraBackground);
 
+                m_DefaultCameraBackgroundRenderingParams = cameraBackground.defaultCameraBackgroundRenderingParams;
                 if (!cameraBackground.TryGetRenderingParameters(out m_CameraBackgroundRenderingParams))
                     m_CameraBackgroundRenderingParams = defaultCameraBackgroundRenderingParams;
 

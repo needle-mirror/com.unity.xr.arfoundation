@@ -61,5 +61,35 @@ namespace UnityEngine.XR.ARFoundation.Tests
             manager.trackablesChanged.AddListener(OnTrackablesChanged);
         }
         #endregion
+
+        #region FacesChanged
+        public void OnTrackablesChanged(ARTrackablesChangedEventArgs<ARFace> changes)
+        {
+            foreach (var face in changes.added)
+            {
+                // handle added faces
+            }
+
+            foreach (var face in changes.updated)
+            {
+                // handle updated faces
+            }
+
+            foreach (var face in changes.removed)
+            {
+                // handle removed faces
+            }
+        }
+        #endregion
+
+        #region FaceSubscribe
+        void SubscribeToFacesChanged()
+        {
+            // This is inefficient. You should re-use a saved reference instead.
+            var manager = Object.FindAnyObjectByType<ARFaceManager>();
+
+            manager.trackablesChanged.AddListener(OnTrackablesChanged);
+        }
+        #endregion
     }
 }

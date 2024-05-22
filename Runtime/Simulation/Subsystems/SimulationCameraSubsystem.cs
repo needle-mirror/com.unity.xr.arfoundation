@@ -29,15 +29,7 @@ namespace UnityEngine.XR.Simulation
         /// <value>
         /// The shader property name for the  simple RGB component of the camera video frame.
         /// </value>
-        const string k_TextureSinglePropertyName = "_TextureSingle";
-
-        /// <summary>
-        /// The shader property name identifier for the simple RGB component of the camera video frame.
-        /// </summary>
-        /// <value>
-        /// The shader property name identifier for the simple RGB component of the camera video frame.
-        /// </value>
-        internal static readonly int textureSinglePropertyNameId = Shader.PropertyToID(k_TextureSinglePropertyName);
+        internal const string k_TextureSinglePropertyName = "_TextureSingle";
 
         class SimulationProvider : Provider
         {
@@ -177,7 +169,8 @@ namespace UnityEngine.XR.Simulation
             {
                 m_MainLight = null;
                 
-                foreach (var light in SimulatedLight.instances)
+                var simulationEnvironmentLights = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironmentLights;
+                foreach (var light in simulationEnvironmentLights)
                 {
                     if (light.simulatedLight.type == LightType.Directional)
                     {
@@ -269,7 +262,8 @@ namespace UnityEngine.XR.Simulation
                     return false;
                 }
 
-                if (SimulatedLight.instances.Count > 0)
+                var simulationEnvironmentLights = SimulationSessionSubsystem.simulationSceneManager?.simulationEnvironmentLights;
+                if (simulationEnvironmentLights?.Count > 0)
                 {
                     averageBrightness = CalculateAverageBrightness();
                     properties |= XRCameraFrameProperties.AverageBrightness;
@@ -325,20 +319,32 @@ namespace UnityEngine.XR.Simulation
 
             static float CalculateAverageBrightness()
             {
+                if (SimulationSessionSubsystem.simulationSceneManager == null)
+                    return 0.0f;
+
                 float sum = 0.0f;
-                foreach (var light in SimulatedLight.instances)
+
+                var simulationEnvironmentLights = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironmentLights;
+                foreach (var light in simulationEnvironmentLights)
                 {
                     sum += light.simulatedLight.intensity;
                 }
-                return sum / SimulatedLight.instances.Count;
+                return sum / Math.Max(simulationEnvironmentLights.Count, 1);
             }
 
             static bool CalculateAverageColorTemperature(out float result)
             {
+                if (SimulationSessionSubsystem.simulationSceneManager == null)
+                {
+                    result = 0.0f;
+                    return false;
+                }
+
                 float sum = 0.0f;
                 bool usesColorTemperature = false;
 
-                foreach (var light in SimulatedLight.instances)
+                var simulationEnvironmentLights = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironmentLights;
+                foreach (var light in simulationEnvironmentLights)
                 {
                     if (light.simulatedLight.useColorTemperature)
                     {
@@ -347,18 +353,23 @@ namespace UnityEngine.XR.Simulation
                     }
                 }
 
-                result = sum / SimulatedLight.instances.Count;
+                result = sum / Math.Max(simulationEnvironmentLights.Count, 1);
                 return usesColorTemperature;
             }
 
             static float CalculateAverageIntensityInLumens()
             {
+                if (SimulationSessionSubsystem.simulationSceneManager == null)
+                    return 0.0f;
+                
                 float sum = 0.0f;
-                foreach (var light in SimulatedLight.instances)
+
+                var simulationEnvironmentLights = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironmentLights;
+                foreach (var light in simulationEnvironmentLights)
                 {
                     sum += UnitConversionUtility.ConvertBrightnessToLumens(light.simulatedLight.intensity);
                 }
-                return sum / SimulatedLight.instances.Count;
+                return sum / Math.Max(simulationEnvironmentLights.Count, 1);
             }
 
             public override bool TryGetIntrinsics(out XRCameraIntrinsics cameraIntrinsics)

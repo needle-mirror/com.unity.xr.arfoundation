@@ -82,7 +82,7 @@ Alternatively, you can use the menu option **Assets** > **AR Foundation** > **Bu
 
 ## Respond to detected images
 
-Subscribe to the ARTrackedImageManager's [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.trackablesChanged) event to be notified whenever an image is added (that is, first detected), updated, or removed:
+Subscribe to the ARTrackedImageManager's [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event to be notified whenever an image is added (that is, first detected), updated, or removed:
 
 [!code-cs[trackedimage_subscribe_to_events](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_subscribe_to_events)]
 
@@ -124,7 +124,7 @@ To add an image to a [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.A
 
 If you use the [extension method](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob(UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary,UnityEngine.Texture2D,System.String,System.Nullable{System.Single},Unity.Jobs.JobHandle)) which accepts a [Texture2D](xref:UnityEngine.Texture2D), you do not need to manage any memory.
 
-If you use the version of [ScheduleAddImageJob](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary.ScheduleAddImageJob(Unity.Collections.NativeSlice{System.Byte},UnityEngine.Vector2Int,UnityEngine.TextureFormat,UnityEngine.XR.ARSubsystems.XRReferenceImage,Unity.Jobs.JobHandle)) that accepts a [NativeSlice](xref:Unity.Collections.NativeSlice`1) or pointer, you are responsible for managing the memory, that is, freeing it when the job completes. You can do this by scheduling a dependent job that frees the memory:
+If you use the version of [ScheduleAddImageJobImpl](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary.ScheduleAddImageJobImpl(Unity.Collections.NativeSlice{System.Byte},UnityEngine.Vector2Int,UnityEngine.TextureFormat,UnityEngine.XR.ARSubsystems.XRReferenceImage,Unity.Jobs.JobHandle)) that accepts a [NativeSlice](xref:Unity.Collections.NativeSlice`1) or pointer, you are responsible for managing the memory, that is, freeing it when the job completes. You can do this by scheduling a dependent job that frees the memory:
 
 [!code-cs[trackedimage_DeallocateOnJobCompletion](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_DeallocateOnJobCompletion)]
 

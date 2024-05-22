@@ -5,7 +5,6 @@ namespace UnityEngine.XR.Simulation
 {
     /// <summary>
     /// Simulation implementation of <see cref="UnityEngine.XR.ARSubsystems.XRAnchorSubsystem"/>.
-    /// Do not create this directly. Use the <see cref="UnityEngine.SubsystemManager"/> instead.
     /// </summary>
     public sealed class SimulationAnchorSubsystem : XRAnchorSubsystem
     {

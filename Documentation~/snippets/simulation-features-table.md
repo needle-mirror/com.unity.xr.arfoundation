@@ -13,5 +13,5 @@
 | [Anchors](xref:arfoundation-anchors)                                                          | Yes |
 | [Meshing](xref:arfoundation-meshing)                                                          | Yes |
 | [Environment Probes](xref:arfoundation-environment-probes)                                    | Yes |
-| [Occlusion](xref:arfoundation-occlusion)                                                      | Yes |
+| [Occlusion](xref:arfoundation-simulation-occlusion)                                           | Yes |
 | [Participants](xref:arfoundation-participant-tracking)                                        |   |

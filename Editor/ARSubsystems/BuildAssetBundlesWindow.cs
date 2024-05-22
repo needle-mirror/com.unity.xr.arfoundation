@@ -177,6 +177,12 @@ namespace UnityEditor.XR.ARSubsystems
                 m_OutputDirectory,
                 BuildAssetBundleOptions.ForceRebuildAssetBundle,
                 m_BuildForTarget);
+            if (manifest == null)
+            {
+                Debug.LogWarning("Cannot build AssetBundles because no Assets in the project are assigned to an AssetBundle.");
+                return;
+            }
+
             var count = manifest.GetAllAssetBundles()?.Length ?? 0;
 
             // Refresh the Project window in case AssetBundles were exported within unity project.

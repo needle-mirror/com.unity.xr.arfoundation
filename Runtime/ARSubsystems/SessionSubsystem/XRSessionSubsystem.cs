@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRSessionSubsystem
         : SubsystemWithProvider<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {
-        static readonly ConfigurationChooser DefaultConfigurationChooser = new DefaultConfigurationChooser();
+        static readonly ConfigurationChooser s_DefaultConfigurationChooser = new DefaultConfigurationChooser();
 
         ConfigurationChooser m_ConfigurationChooser;
 
@@ -59,7 +59,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         public XRSessionSubsystem()
         {
-            m_ConfigurationChooser = DefaultConfigurationChooser;
+            m_ConfigurationChooser = s_DefaultConfigurationChooser;
         }
 
         /// <summary>
@@ -228,25 +228,13 @@ namespace UnityEngine.XR.ARSubsystems
         public Feature currentTrackingMode => provider.currentTrackingMode.TrackingModes();
 
         /// <summary>
-        /// Get or set the <see cref="ConfigurationChooser"/> used by
-        /// <see cref="XRSessionSubsystem.DetermineConfiguration(Feature)"/>.
-        /// If set to <c>null</c>, the <see cref="DefaultConfigurationChooser"/>
-        /// is used.
+        /// Get or set the <see cref="ConfigurationChooser"/> used by <see cref="XRSessionSubsystem.DetermineConfiguration(Feature)"/>.
+        /// If set to <see langword="null"/>, the <see cref="DefaultConfigurationChooser"/> is used.
         /// </summary>
         public ConfigurationChooser configurationChooser
         {
             get => m_ConfigurationChooser;
-            set
-            {
-                if (ReferenceEquals(value, null))
-                {
-                    m_ConfigurationChooser = DefaultConfigurationChooser;
-                }
-                else
-                {
-                    m_ConfigurationChooser = value;
-                }
-            }
+            set { m_ConfigurationChooser = value ?? s_DefaultConfigurationChooser; }
         }
 
         /// <summary>

@@ -7,12 +7,9 @@ uid: arfoundation-vs-project-setup
 
 To use AR Foundation's built-in visual scripting support, your project must meet the following requirements:
 
-* AR Foundation 5.1 or newer
-* Unity 2021.2 or newer
 * Visual Scripting 1.8.0 or newer
 
-> [!IMPORTANT]
-> Check your Visual Scripting version in the [Package Manager](https://learn.unity.com/tutorial/the-package-manager). If you don't see the option to upgrade to Visual Scripting 1.8.0, this is because this package version was released some time after your project's Editor version. You can [edit your project manifest](xref:arfoundation-edit-your-project-manifest#edit-your-project-manifest) to access newer versions of packages.
+If your project doesn't contain the Visual Scripting package, refer to [Install a UPM package from a registry](https://docs.unity3d.com/Manual/upm-ui-install.html) to learn how to install it.
 
 ## Version control
 

@@ -11,13 +11,11 @@ namespace UnityEngine.XR.Simulation
     [DisallowMultipleComponent]
     public class SimulatedAnchor : MonoBehaviour
     {
-        internal static readonly HashSet<SimulatedAnchor> instances = new();
-
         void OnEnable()
         {
             if (SimulationUtils.IsInSimulationEnvironment(gameObject))
             {
-                instances.Add(this);
+                SimulationSessionSubsystem.simulationSceneManager.TrackAnchor(this);
             }
         }
 
@@ -25,7 +23,7 @@ namespace UnityEngine.XR.Simulation
         {
             if (SimulationUtils.IsInSimulationEnvironment(gameObject))
             {
-                instances.Remove(this);
+                SimulationSessionSubsystem.simulationSceneManager.UntrackAnchor(this);
             }
         }
     }

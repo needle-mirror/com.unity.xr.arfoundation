@@ -73,7 +73,7 @@ namespace UnityEngine.XR.ARSubsystems
                     trackableId, action, shouldBeInDictionary ? "not" : "already"));
         }
 
-        static HashSet<TrackableId> s_IdSet = new HashSet<TrackableId>();
+        static HashSet<TrackableId> s_IdSet = new ();
 
         static readonly string k_AddedAction = "added";
 
@@ -81,6 +81,6 @@ namespace UnityEngine.XR.ARSubsystems
 
         static readonly string k_RemovedAction = "removed";
 
-        HashSet<TrackableId> m_Trackables = new HashSet<TrackableId>();
+        HashSet<TrackableId> m_Trackables = new ();
     }
 }

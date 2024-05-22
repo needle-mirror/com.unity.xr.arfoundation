@@ -12,11 +12,11 @@ namespace UnityEngine.XR.Simulation
         const string k_FlipXRayDirectionKeyword = "SIMULATION_XRAY_FLIP_DEPTH";
 
         // Shader IDs for the same properties
-        static readonly int k_RoomCenterShaderID = Shader.PropertyToID("_SimulationRoomCenter");
-        static readonly int k_FloorHeightShaderID = Shader.PropertyToID("_SimulationFloorHeight");
-        static readonly int k_CeilingHeightShaderID = Shader.PropertyToID("_SimulationCeilingHeight");
-        static readonly int k_ClipOffsetShaderID = Shader.PropertyToID("_SimulationRoomClipOffset");
-        static readonly int k_XRayScaleID = Shader.PropertyToID("_SimulationXRayScale");
+        readonly int k_RoomCenterShaderID;
+        readonly int k_FloorHeightShaderID;
+        readonly int k_CeilingHeightShaderID;
+        readonly int k_ClipOffsetShaderID;
+        readonly int k_XRayScaleID;
 
         XRayRegion m_LastXRay;
 
@@ -26,6 +26,15 @@ namespace UnityEngine.XR.Simulation
         float m_XRayThickness = k_DefaultThickness;
         float m_XRayScale = k_DefaultScale;
 
+        internal SimulationXRayManager()
+        {
+            k_RoomCenterShaderID = Shader.PropertyToID("_SimulationRoomCenter");
+            k_FloorHeightShaderID = Shader.PropertyToID("_SimulationFloorHeight");
+            k_CeilingHeightShaderID = Shader.PropertyToID("_SimulationCeilingHeight");
+            k_ClipOffsetShaderID = Shader.PropertyToID("_SimulationRoomClipOffset");
+            k_XRayScaleID = Shader.PropertyToID("_SimulationXRayScale");
+        }
+        
         internal void UpdateXRayShader(bool useXRay, XRayRegion activeXRay)
         {
             if (!useXRay || !XRSimulationRuntimeSettings.Instance.useXRay)

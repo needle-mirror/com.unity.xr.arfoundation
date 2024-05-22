@@ -9,7 +9,6 @@ namespace UnityEngine.XR.Simulation
 {
     class SimulationEnvironmentProbeDiscoverer : IDisposable
     {
-        const string k_EnvironmentProbeShaderPropertyName = "_SimulationEnvironmentProbe";
         const string k_ManualProbePrefix = "XRSimManualEnvironmentProbe";
         const string k_RenderCameraName = "XRSimulationEnvironmentProbeRenderCamera";
 
@@ -18,9 +17,6 @@ namespace UnityEngine.XR.Simulation
 
         const int k_InitialListCacheCapacity = 16;
         const int k_FrustumPlaneCount = 6;
-
-        static readonly int k_EnvironmentProbeShaderPropertyId
-            = Shader.PropertyToID(k_EnvironmentProbeShaderPropertyName);
 
         // cached and reused to prevent GC
         static readonly Plane[] s_CameraPlanes = new Plane[k_FrustumPlaneCount];
@@ -63,6 +59,10 @@ namespace UnityEngine.XR.Simulation
         {
             if (m_IsStarted)
                 return;
+            
+            s_NeedsGeneratedCubemaps.Clear();
+            s_HasGeneratedCubemaps.Clear();
+            s_CollectedProbes.Clear();
 
             SetupRendering();
 
@@ -488,7 +488,7 @@ namespace UnityEngine.XR.Simulation
                     height: simProbe.cubemap.height,
                     mipmapCount: simProbe.cubemap.mipmapCount,
                     format: simProbe.cubemap.format,
-                    propertyNameId: k_EnvironmentProbeShaderPropertyId,
+                    propertyNameId: simProbe.environmentProbeShaderPropertyId,
                     depth: 1,
                     dimension: simProbe.cubemap.dimension);
 

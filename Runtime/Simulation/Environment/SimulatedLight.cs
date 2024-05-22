@@ -9,8 +9,6 @@ namespace UnityEngine.XR.Simulation
     [DisallowMultipleComponent]
     public class SimulatedLight : MonoBehaviour
     {
-        internal static readonly HashSet<SimulatedLight> instances = new();
-
         [SerializeField, HideInInspector]
         Light m_SimulatedLight;
 
@@ -33,7 +31,7 @@ namespace UnityEngine.XR.Simulation
         {
             if (SimulationUtils.IsInSimulationEnvironment(gameObject))
             {
-                instances.Add(this);
+                SimulationSessionSubsystem.simulationSceneManager.TrackLight(this);
             }
         }
 
@@ -41,7 +39,7 @@ namespace UnityEngine.XR.Simulation
         {
             if (SimulationUtils.IsInSimulationEnvironment(gameObject))
             {
-                instances.Remove(this);
+                SimulationSessionSubsystem.simulationSceneManager.UntrackLight(this);
             }
         }
     }

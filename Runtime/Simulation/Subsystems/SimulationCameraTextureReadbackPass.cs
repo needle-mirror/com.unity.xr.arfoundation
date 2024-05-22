@@ -9,22 +9,25 @@ namespace UnityEngine.XR.Simulation
 {
     class SimulationCameraTextureReadbackPass : ScriptableRenderPass
     {
+        /// <summary>
+        /// The CameraTextureProvider class object that will execute the async readback logic.
+        /// </summary>
+        CameraTextureProvider m_Provider;
+
 #if URP_17_OR_NEWER
         /// <summary>
         /// Data provided for the <see cref="ExecuteRenderGraphReadbackPass"/> function.
         /// </summary>
-        class PassData {}
+        class PassData 
+        {
+            internal CameraTextureProvider cameraTextureProvider;
+        }
 
         /// <summary>
         /// Name of our RenderGraph render pass.
         /// </summary>
         static readonly string k_RenderGraphPassName = "SimulationCameraTextureReadbackPass (Render Graph Enabled)";
 #endif  // URP_17_OR_NEWER
-
-        /// <summary>
-        /// The CameraTextureProvider class object that will execute the async readback logic.
-        /// </summary>
-        static CameraTextureProvider s_Provider;
 
         /// <summary>
         /// Constructs a <c>SimulationCameraTextureReadbackPass</c> class instance.
@@ -34,7 +37,7 @@ namespace UnityEngine.XR.Simulation
         public SimulationCameraTextureReadbackPass(CameraTextureProvider cameraTextureProvider)
         {
             // Initialize the CameraTextureProvider object that will execute the async readback logic.
-            s_Provider = cameraTextureProvider;
+            m_Provider = cameraTextureProvider;
             // Specify that the async readback pass will occur after all effects are rendered.
             renderPassEvent = RenderPassEvent.AfterRendering;
             // Configure the camera's texture input types for both the RenderGraph and non-RenderGraph async readback
@@ -67,7 +70,7 @@ namespace UnityEngine.XR.Simulation
 #pragma warning restore CS0672
         {
             using var commandBuffer = CommandBufferPool.Get("SimulationCameraTextureReadbackPass (Render Graph Disabled)");
-            if (s_Provider.TryConfigureReadbackCommandBuffer(commandBuffer))
+            if (m_Provider.TryConfigureReadbackCommandBuffer(commandBuffer))
             {
                 context.ExecuteCommandBuffer(commandBuffer);
             }
@@ -85,7 +88,7 @@ namespace UnityEngine.XR.Simulation
         static void ExecuteRenderGraphReadbackPass(PassData passData, UnsafeGraphContext unsafeContext)
         {
             var nativeCommandBuffer = CommandBufferHelpers.GetNativeCommandBuffer(unsafeContext.cmd);
-            s_Provider.TryConfigureRenderGraphReadbackCommandBuffer(nativeCommandBuffer);
+            passData.cameraTextureProvider.TryConfigureRenderGraphReadbackCommandBuffer(nativeCommandBuffer);
         }
 
         /// <summary>
@@ -108,6 +111,8 @@ namespace UnityEngine.XR.Simulation
                 out PassData passData, 
                 profilingSampler))
             {
+                passData.cameraTextureProvider = m_Provider;
+                    
                 builder.AllowPassCulling(false);
                 builder.SetRenderFunc<PassData>(ExecuteRenderGraphReadbackPass);
             }

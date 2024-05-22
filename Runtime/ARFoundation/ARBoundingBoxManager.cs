@@ -44,7 +44,7 @@ namespace UnityEngine.XR.ARFoundation
         BoundingBoxRaycaster m_BoundingBoxRaycaster;
 
         /// <summary>
-        /// Saves a reference to the XR Origin component and initializes a BoundingBoxRaycaster with a collection of bounding box <see cref="trackables"/>.
+        /// Saves a reference to the XR Origin component and initializes the `BoundingBoxRaycaster`.
         /// </summary>
         protected override void Awake()
         {
@@ -73,7 +73,6 @@ namespace UnityEngine.XR.ARFoundation
         /// A new <c>NativeArray</c> of raycast results allocated with <paramref name="allocator"/>.
         /// The caller owns the memory and is responsible for calling <c>Dispose</c> on the <c>NativeArray</c>.
         /// </returns>
-        /// <seealso cref="ARRaycastManager.Raycast(Ray, List{ARRaycastHit}, TrackableType)"/>
         public NativeArray<XRRaycastHit> Raycast(
             Ray ray,
             TrackableType trackableTypeMask,

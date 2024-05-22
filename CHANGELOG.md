@@ -8,18 +8,27 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.2] - 2024-05-22
+
+### Fixed
+
+- Fixed an issue where the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**) threw a `NullReferenceException` if no AssetBundles were built.
+- Fixed an issue where XR Simulation's `CameraTextureProvider` component could throw a `MissingReferenceException` when an AR scene is unloaded.
+- Fixed XR Simulation components so they now behave correctly if you disable the **Reload Domain** option in [Configurable Enter Play Mode](https://docs.unity3d.com/Manual/ConfigurableEnterPlayMode.html) settings.
+- Fixed the native XR Simulation Input provider so that it now explicitly sets **Device** mode as its only supported [Tracking Origin Mode](xref:Unity.XR.CoreUtils.XROrigin.TrackingOriginMode). The [XR Origin component](xref:xr-core-utils-xr-origin-reference) will always use **Device** mode as its Tracking Origin Mode and apply the [XROrigin.CameraYOffset](xref:Unity.XR.CoreUtils.XROrigin.CameraYOffset) value.
+
 ## [6.0.1] - 2024-04-01
 
 ### Added
 
 - Added AR Foundation API definitions for persistent anchors. Provider plug-ins can implement these methods, which allow you to save anchors during an AR session and re-load them during subsequent sessions:
-  - [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorAsync(UnityEngine.XR.ARSubsystems.TrackableId,System.Threading.CancellationToken))
-  - [ARAnchorManager.TryLoadAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryLoadAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))
-  - [ARAnchorManager.TryEraseAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))
-  - [ARAnchorManager.TryGetSavedAnchorIdsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryGetSavedAnchorIdsAsync(Unity.Collections.Allocator,System.Threading.CancellationToken))
+  - [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorAsync*)
+  - [ARAnchorManager.TryLoadAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryLoadAnchorAsync*)
+  - [ARAnchorManager.TryEraseAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorAsync*)
+  - [ARAnchorManager.TryGetSavedAnchorIdsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryGetSavedAnchorIdsAsync*)
 - Added an implicit conversion operator between [TrackableId](xref:UnityEngine.XR.ARSubsystems.TrackableId) and [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid).
 - Added a constructor to [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid) allowing the creation of `SerializableGuid`s with a `System.Guid`.
-- Added [ARAnchorManager.TryRemoveAnchor](xref:UnityEngine.XR.ARFoundation.TryRemoveAnchor) API for removing anchors. You can either use this new method or disable the `ARAnchor` component to remove an anchor.
+- Added [ARAnchorManager.TryRemoveAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryRemoveAnchor*) API for removing anchors. You can either use this new method or disable the `ARAnchor` component to remove an anchor.
 - Added XR Simulation's `SimulationCameraPoseProvider` as a public component.
 
 ### Changed
@@ -108,7 +117,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `OnPointCloudsChanged`
   - `OnTrackedImagesChanged`
   - `OnTrackedObjectsChanged`
-- Added new API [ARPlaneMeshGenerator.TryGenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerator.TryGenerateMesh) to support generating meshes of simple polygons, i.e. concave and convex polygons.
+- Added new API [ARPlaneMeshGenerator.TryGenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerator.TryGenerateMesh*) to support generating meshes of simple polygons, i.e. concave and convex polygons.
 - Added documentation:
   - Added [Display matrix format and derivation](xref:arfoundation-display-matrix-format-and-derivation) manual page.
   - Added [Custom background shaders](xref:arfoundation-custom-background-shaders) manual page.
@@ -128,10 +137,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Deprecated
 
-- [ARPlaneMeshGenerators](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators)
-  - [ARPlaneMeshGenerators.GenerateMesh](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateMesh)
-  - [ARPlaneMeshGenerators.GenerateUvs](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateUvs)
-  - [ARPlaneMeshGenerators.GenerateIndices](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators.GenerateIndices)
+- Deprecated [ARPlaneMeshGenerators](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators).
 
 ### Removed
 
@@ -173,24 +179,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `AROcclusionFrameEventArgs.disabledMaterialKeywords` to `AROcclusionFrameEventArgs.disabledShaderKeywords`
 - Deprecated the following APIs:
   - [ARAnchorManager.anchorsChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorsChanged)
-  - [ARAnchorManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.OnTrackablesChanged)
+  - [ARAnchorManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.OnTrackablesChanged*)
   - [AREnvironmentProbeManager.environmenProbesChanged](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.environmentProbesChanged)
-  - [AREnvironmentProbeManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.OnTrackablesChanged)
+  - [AREnvironmentProbeManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.OnTrackablesChanged*)
   - [ARFaceManager.facesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.facesChanged)
-  - [ARFaceManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.OnTrackablesChanged)
+  - [ARFaceManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.OnTrackablesChanged*)
   - [ARHumanBodyManager.humanBodiesChanged](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager.humanBodiesChanged)
-  - [ARHumanBodyManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager.OnTrackablesChanged)
+  - [ARHumanBodyManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager.OnTrackablesChanged*)
   - [ARParticipantManager.participantsChanged](xref:UnityEngine.XR.ARFoundation.ARParticipantManager.participantsChanged)
-  - [ARParticipantManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARParticipantManager.OnTrackablesChanged)
+  - [ARParticipantManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARParticipantManager.OnTrackablesChanged*)
   - [ARPlaneManager.planesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.planesChanged)
-  - [ARPlaneManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.OnTrackablesChanged)
+  - [ARPlaneManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.OnTrackablesChanged*)
   - [ARPointCloudManager.pointCloudsChanged](xref:UnityEngine.XR.ARFoundation.ARPointCloudManager.pointCloudsChanged)
-  - [ARPointCloudManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARPointCloudManager.OnTrackablesChanged)
+  - [ARPointCloudManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARPointCloudManager.OnTrackablesChanged*)
   - [ARTrackedImageManager.trackedImagesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagesChanged)
-  - [ARTrackedImageManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.OnTrackablesChanged)
+  - [ARTrackedImageManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.OnTrackablesChanged*)
   - [ARTrackedObjectManager.trackedObjectsChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.trackedObjectsChanged)
-  - [ARTrackedObjectManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.OnTrackablesChanged)
-  - [ARTrackableManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager.OnTrackablesChanged)
+  - [ARTrackedObjectManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.OnTrackablesChanged*)
+  - [ARTrackableManager.OnTrackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.OnTrackablesChanged*)
 - Deprecated the following structs:
   - [ARAnchorsChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARAnchorsChangedEventArgs)
   - [AREnvironmentProbesChangedEvent](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbesChangedEvent)
@@ -262,15 +268,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added support for Occlusion to XR Simulation.
 - Added support for planes to have multiple semantic labels via the [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications) flags enum, [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications), and [BoundedPlane.classifications](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.classifications).
 - Added the following subsystem descriptor registration methods for consistency with other subsystem descriptors:
-  - [XRCameraSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.Register)
-  - [XREnvironmentProbeSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor.Register)
-  - [XRHumanBodySubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRHumanBodySubsystemDescriptor.Register)
-  - [XROcclusionSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.Register)
+  - [XRCameraSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.Register*)
+  - [XREnvironmentProbeSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor.Register*)
+  - [XRHumanBodySubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XRHumanBodySubsystemDescriptor.Register*)
+  - [XROcclusionSubsystemDescriptor.Register](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.Register*)
 - Added [XRCameraSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.GetShaderKeywords) and [XROcclusionSubsystem.GetShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.GetShaderKeywords). Both return a new read-only [ShaderKeywords](xref:UnityEngine.XR.ARSubsystems.ShaderKeywords) struct.
 
 ### Changed
 
-- Changed [ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageWithValidationJob) to check if the `ARSession.state` has reached the ready state before scheduling the add image operation.
+- Changed [ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageWithValidationJob*) to check if the `ARSession.state` has reached the ready state before scheduling the add image operation.
 - Changed `ARTrackable` to now implement the `ITrackable` interface, enabling generic API designs when dealing with trackables.
 - Changed `XRPlaneSubsystem.Provider.requestedPlaneDetectionMode` to `abstract` from `virtual`.
 - Changed `Promise<T>.OnKeepWaiting()` to `virtual` instead of `abstract`.
@@ -282,8 +288,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Deprecated the following APIs:
   - [PlaneClassification](xref:UnityEngine.XR.ARSubsystems.PlaneClassification)
   - [ARPlane.classification](xref:UnityEngine.XR.ARFoundation.ARPlane.classification)
-  - [BoundedPlane constructor](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.#ctor(UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.Pose,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.XR.ARSubsystems.PlaneAlignment,UnityEngine.XR.ARSubsystems.TrackingState,System.IntPtr,UnityEngine.XR.ARSubsystems.PlaneClassification))
-  - [BoundedPlane.classification](xref:UnityEngine.XR.ARFoundation.BoundedPlane.classifications)
+  - [BoundedPlane constructor](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.#ctor(UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.Pose,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.XR.ARSubsystems.PlaneAlignment,UnityEngine.XR.ARSubsystems.TrackingState,IntPtr,UnityEngine.XR.ARSubsystems.PlaneClassification))
+  - [BoundedPlane.classification](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.classification)
 - Deprecated the structs `XRObjectTrackingSubsystemDescriptor.Capabilities` and `XRParticipantSubsystemDescriptor.Capabilities`.
 - Deprecated the `XRObjectTrackingSubsystemDescriptor.Register` and `XRParticipantSubsystemDescriptor.Register` methods that use the now-deprecated `Capabilities` struct.
 - Deprecated and replaced the following APIs for consistency with other subsystems:
@@ -362,7 +368,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Fixed [ScheduleAddImageJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob) and [ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageWithValidationJob) documentation to describe the correct exceptions thrown if `library` is null.
+- Fixed [ScheduleAddImageJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob*) and [ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageWithValidationJob*) documentation to describe the correct exceptions thrown if `library` is null.
 - Fixed an issue in XR Simulation where disabling and re-enabling the AR Plane Manager component would cause duplicate planes to be detected where planes had already been detected previously.
 
 ## [5.1.0-pre.10] - 2023-07-21
@@ -527,7 +533,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added automatic refresh of AR environment list upon importing or deleting a prefab with the `SimulationEnvironment` component.
 - Added analytics to anonymously collect usage data of some AR Foundation features. These analytics are captured only in the Unity Editor and not added to the player builds. See [Unity manual on Editor Analytics](https://docs.unity3d.com/Manual/EditorAnalytics.html) for more details.
-- Added support for changing the Camera Background rendering order so that the background can be rendered either `BeforeOpaques` or `AfterOpaques` by setting the `ARCameraManager.requestedRenderingMode` in the editor or at runtime and then checking `ARCameraManager.currentRenderingMode` at runtime for the real rendering mode. See [migration guide](xref:arfoundation-migration-guide-5-x) for more information.
+- Added support for changing the Camera Background rendering order so that the background can be rendered either `BeforeOpaques` or `AfterOpaques` by setting the `ARCameraManager.requestedRenderingMode` in the editor or at runtime and then checking `ARCameraManager.currentRenderingMode` at runtime for the real rendering mode. See migration guide for more information.
 - Added support for changing the Camera Background rendering order in simulation so that the background can be rendered either `BeforeOpaques` or `AfterOpaques` by setting the `SimulationCameraSubsystem.requestedRenderingMode`.
 - Added support for the following subsystems in simulation.
   - Point cloud subsystem
@@ -559,7 +565,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Deprecated
 
-- Deprecated the depth subsystem abstraction, `XRDepthSubsystem` and `XRDepthSubsystemDescriptor`, in favor of `XRPointCloudSubsystem` and `XRPointCloudSubsystemDescriptor` respectively. This is just a rename of the subsystem without any significant changes to the APIs. Unity's API Updater should automatically convert any deprecated depth subsystem API references to the point cloud subsystem APIs when the project is loaded into the Editor again. See [migration guide](xref:arfoundation-migration-guide-5-x) for more details.
+- Deprecated the depth subsystem abstraction, `XRDepthSubsystem` and `XRDepthSubsystemDescriptor`, in favor of `XRPointCloudSubsystem` and `XRPointCloudSubsystemDescriptor` respectively. This is just a rename of the subsystem without any significant changes to the APIs. Unity's API Updater should automatically convert any deprecated depth subsystem API references to the point cloud subsystem APIs when the project is loaded into the Editor again. See migration guide for more details.
   - `XRDepthSubsystem` renamed to `XRPointCloudSubsystem`
   - `XRDepthSubsystemDescriptor` renamed to `XRPointCloudSubsystemDescriptor`
 
@@ -629,7 +635,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Deprecated
 
-- Deprecated the [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem%601). If you implement a custom subsystem by extending `XRSubsystem` then update it to use [SubsystemWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemWithProvider) instead. This is the new Subsystem base class in Unity core. See the [migration guide](xref:arfoundation-migration-guide-5-x#xrsubsystem) for details.
+- Deprecated the `XRSubsystem`. If you implement a custom subsystem by extending `XRSubsystem` then update it to use [SubsystemWithProvider](xref:UnityEngine.SubsystemsImplementation.SubsystemWithProvider) instead. This is the new Subsystem base class in Unity core. See the migration guide for details.
 
 ### Removed
 
@@ -768,8 +774,8 @@ InvalidOperationException: Can't call "GetChanges" without "Start"ing the anchor
 
 ### Changed
 
-- **Anchors:** Previously, [ARAnchors](xref:UnityEngine.XR.ARFoundation.ARAnchor) were added and removed by calling [AddAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.AddAnchor(UnityEngine.Pose)) and [RemoveAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.RemoveAnchor(UnityEngine.XR.ARFoundation.ARAnchor)), respectively. Now, you can add an anchor by simply adding an `ARAnchor` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an anchor by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `ARAnchor` component (or its GameObject). See the [manual entry for anchors](xref:arfoundation-anchors) for more details.
-- **Environment Probes:** Previously, [environment probes](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) were added and removed by calling [AddEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.AddEnvironmentProbe(UnityEngine.Pose,UnityEngine.Vector3,UnityEngine.Vector3)) and [RemoveEnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.RemoveEnvironmentProbe(UnityEngine.XR.ARFoundation.AREnvironmentProbe)), respectively. Now, you can add an anchor by simply adding an `AREnvironmentProbe` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an environment probe by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `AREnvironmentProbe` component (or its GameObject). See the [manual entry for environment probes](xref:arfoundation-environment-probes) for more details.
+- **Anchors:** Previously, [ARAnchors](xref:UnityEngine.XR.ARFoundation.ARAnchor) were added and removed by calling `AddAnchor` and `RemoveAnchor`, respectively. Now, you can add an anchor by simply adding an `ARAnchor` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an anchor by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `ARAnchor` component (or its GameObject). See the [manual entry for anchors](xref:arfoundation-anchors) for more details.
+- **Environment Probes:** Previously, [environment probes](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) were added and removed by calling `AddEnvironmentProbe` and `RemoveEnvironmentProbe`, respectively. Now, you can add an anchor by simply adding an `AREnvironmentProbe` component to any GameObject, e.g., by calling [AddComponent](xref:UnityEngine.GameObject.AddComponent(System.Type)). The GameObject may exist anywhere in your scene hierarchy; it need not be under the [ARSessionOrigin](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Similarly, remove an environment probe by [destroying](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) the `AREnvironmentProbe` component (or its GameObject). See the [manual entry for environment probes](xref:arfoundation-environment-probes) for more details.
 
 ### Fixed
 
@@ -861,11 +867,11 @@ No changes
 ### Added
 
 - The `ARCameraManager` now invokes `XRCameraSubsystem.OnBeforeBackgroundRender` immediately before rendering the camera background.
-- Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the [migration guide](xref:arfoundation-migration-guide-4-x#xr-plug-in-management) explaining how to use it.
+- Added a helper utility, `LoaderUtility`, for interacting with `XR Management` and added a section to the migration guide explaining how to use it.
 
 ### Changed
 
-- Changed `XRCameraImage` to `XRCpuImage` along with APIs that used this type (e.g., `ARCameraManager.TryGetLatestImage`). See the [migration guide](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/migration-guide-3.html#xrcameraimage-is-now-xrcpuimage) for more details.
+- Changed `XRCameraImage` to `XRCpuImage` along with APIs that used this type (e.g., `ARCameraManager.TryGetLatestImage`). See the migration guide for more details.
 - The `ARMeshManager` no longer creates and destroys an [`XRMeshSubsystem`](https://docs.unity3d.com/ScriptReference/XR.XRMeshSubsystem.html). Instead, it relies on [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html) to create and destroy the subsystem. The `ARMeshManager` still starts and stops it.
 
 ### Fixed
@@ -899,7 +905,7 @@ No changes
 
 ### Changed
 
-- See the [Migration Guide](xref:arfoundation-migration-guide-4-x).
+- See the Migration Guide.
 - AR Foundation now relies on [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@3.2/manual/index.html) to initialize subsystems. If your project's configuration does not enable an XR Loader appropriate for your target platforms then the underlying subsystems AR Foundation depends on will not be available. Previously AR Foundation would attempt to initialize subsystems itself in the absence of a valid XR Management configuration.
 
 ## [3.1.3] - 2020-04-13
@@ -998,7 +1004,7 @@ No changes
 
 ### Changed
 
-- Some properties on `ARPointCloud` changed from `NativeArray`s to nullable `NativeSlice`s. See the [migration guide](xref:arfoundation-migration-guide-3-x#point-clouds) for more details.
+- Some properties on `ARPointCloud` changed from `NativeArray`s to nullable `NativeSlice`s. See the migration guide for more details.
 - The `ARFaceManager.supported` property has been removed. If face tracking is not supported, the manager's subsystem will be null. This was done for consistency as no other manager has this property. If a manager's subsystem is null after enabling the manager, that generally means the subsystem is not supported.
 
 ### Fixed
@@ -1082,7 +1088,7 @@ No changes
 
 ### Changed
 
-- See the [Migration Guide](xref:arfoundation-migration-guide-2-x).
+- See the Migration Guide.
 
 ### Fixed
 

@@ -67,6 +67,9 @@ namespace UnityEngine.XR.Simulation
         SimulationOcclusionSubsystem m_OcclusionSubsystem;
 
         bool m_EnableDepthReadback;
+        
+        int m_TextureSingleDepthPropertyNameId;
+        int m_TextureSinglePropertyNameId;
 
         internal static CameraTextureProvider AddTextureProviderToCamera(Camera simulationCamera, Camera xrCamera)
         {
@@ -88,6 +91,9 @@ namespace UnityEngine.XR.Simulation
         {
             if (s_DepthCopyShader == null)
                 s_DepthCopyShader = new Material(Shader.Find("Hidden/DepthCopy"));
+
+            m_TextureSingleDepthPropertyNameId = Shader.PropertyToID(SimulationOcclusionSubsystem.k_TextureSingleDepthPropertyName);
+            m_TextureSinglePropertyNameId = Shader.PropertyToID(SimulationCameraSubsystem.k_TextureSinglePropertyName);
         }
 
         void InitializeProvider(Camera xrCamera, Camera simulationCamera)
@@ -268,6 +274,9 @@ namespace UnityEngine.XR.Simulation
 
         void ConfigureBuiltInCommandBuffer()
         {
+            if (m_SimulationCamera == null)
+                return;
+
             if (m_ReadbackCommandBuffer != null)
                 m_SimulationCamera.RemoveCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
 
@@ -437,7 +446,7 @@ namespace UnityEngine.XR.Simulation
         internal void TryGetTextureDescriptors(out NativeArray<XRTextureDescriptor> planeDescriptors,
             Allocator allocator)
         {
-            Shader.SetGlobalTexture(SimulationCameraSubsystem.textureSinglePropertyNameId, m_SimulationReadbackTexture);
+            Shader.SetGlobalTexture(m_TextureSinglePropertyNameId, m_SimulationReadbackTexture);
             var isValid = TryGetLatestImagePtr(out var nativePtr);
             var descriptors = new XRTextureDescriptor[1];
             if (isValid)
@@ -448,7 +457,7 @@ namespace UnityEngine.XR.Simulation
                     height: m_SimulationReadbackTexture.height,
                     mipmapCount: m_SimulationReadbackTexture.mipmapCount,
                     format: m_SimulationReadbackTexture.format,
-                    propertyNameId: SimulationCameraSubsystem.textureSinglePropertyNameId,
+                    propertyNameId: m_TextureSinglePropertyNameId,
                     depth: 0,
                     dimension: TextureDimension.Tex2D);
             }
@@ -461,7 +470,7 @@ namespace UnityEngine.XR.Simulation
         internal void TryGetDepthTextureDescriptors(out NativeArray<XRTextureDescriptor> planeDescriptors,
             Allocator allocator)
         {
-            Shader.SetGlobalTexture(SimulationOcclusionSubsystem.textureSingleDepthPropertyNameId, m_SimulationReadbackDepthTexture);
+            Shader.SetGlobalTexture(m_TextureSingleDepthPropertyNameId, m_SimulationReadbackDepthTexture);
             var isValid = TryGetLatestDepthImagePtr(out var nativePtr);
             var descriptors = new XRTextureDescriptor[1];
             if (isValid)
@@ -472,7 +481,7 @@ namespace UnityEngine.XR.Simulation
                     height: m_SimulationReadbackDepthTexture.height,
                     mipmapCount: m_SimulationReadbackDepthTexture.mipmapCount,
                     format: m_SimulationReadbackDepthTexture.format,
-                    propertyNameId: SimulationOcclusionSubsystem.textureSingleDepthPropertyNameId,
+                    propertyNameId: m_TextureSingleDepthPropertyNameId,
                     depth: 1,
                     dimension: TextureDimension.Tex2D);
             }

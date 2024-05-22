@@ -47,5 +47,35 @@ namespace UnityEngine.XR.ARFoundation.Tests
             }
             #endregion
         }
+
+        class OcclusionCheck
+        {
+            #region CheckIfOcclusionLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XROcclusionSubsystem>() != null)
+                {
+                    // XROcclusionSubsystem was loaded. The platform supports occlusion.
+                }
+            }
+            #endregion
+        }
+      
+        class FaceCheck
+        {
+            #region CheckIfFaceLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRFaceSubsystem>() != null)
+                {
+                    // XRFaceSubsystem was loaded. The platform supports face detection.
+                }
+            }
+            #endregion
+        }
     }
 }

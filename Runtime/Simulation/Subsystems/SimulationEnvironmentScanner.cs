@@ -94,6 +94,7 @@ namespace UnityEngine.XR.Simulation
         public void Stop()
         {
             m_Running = false;
+            s_EnvironmentMeshes.Clear();
         }
 
         public void Dispose()

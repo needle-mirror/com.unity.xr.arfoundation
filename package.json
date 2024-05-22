@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added AR Foundation API definitions for persistent anchors. Provider plug-ins can implement these methods, which allow you to save anchors during an AR session and re-load them during subsequent sessions:\n  - [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorAsync(UnityEngine.XR.ARSubsystems.TrackableId,System.Threading.CancellationToken))\n  - [ARAnchorManager.TryLoadAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryLoadAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))\n  - [ARAnchorManager.TryEraseAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,System.Threading.CancellationToken))\n  - [ARAnchorManager.TryGetSavedAnchorIdsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryGetSavedAnchorIdsAsync(Unity.Collections.Allocator,System.Threading.CancellationToken))\n- Added an implicit conversion operator between [TrackableId](xref:UnityEngine.XR.ARSubsystems.TrackableId) and [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid).\n- Added a constructor to [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid) allowing the creation of `SerializableGuid`s with a `System.Guid`.\n- Added [ARAnchorManager.TryRemoveAnchor](xref:UnityEngine.XR.ARFoundation.TryRemoveAnchor) API for removing anchors. You can either use this new method or disable the `ARAnchor` component to remove an anchor.\n- Added XR Simulation's `SimulationCameraPoseProvider` as a public component.\n\n### Changed\n\n- Changed documentation to indicate that Meshing is now a supported feature in the Unity OpenXR: Meta provider plug-in.\n- Changed the behavior of `ARMeshManager` to recalculate normals on a mesh if normals were requested and the provider did not calculate them.\n- Changed the minimum Unity version from 2023.3 to 6000.0, reflecting the new version number of Unity 6. Refer to the official [Unity 6 New Naming Convention](https://forum.unity.com/threads/unity-6-new-naming-convention.1558592/) announcement for more information.\n\n### Fixed\n\n- Fixed [issue ARFB-421](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-421) which caused `ARMeshManager` to crash the Editor in XR Simulation when its **Normals** property was not enabled.\n- Fixed [issue ARFB-380](https://issuetracker.unity3d.com/issues/android-elements-of-ui-toolkit-arent-displayed-when-ar-foundation-camera-facing-direction-is-set-to-user) where UI toolkit elements disappeared after one frame when running an XR scene with a user-facing camera on Android devices.\n- Fixed an issue where disabling the `AROcclusionManager` component in XR Simulation would not stop the simulation background shader from sampling the depth texture.\n- Fixed an issue where XR Simulation camera pose data could leak between multiple AR sessions.\n- Corrected a previous fix for an issue where the tvOS build target would have compile errors in `Simulation.InputLayoutLoader`."
+    "changelog": "### Fixed\n\n- Fixed an issue where the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**) threw a `NullReferenceException` if no AssetBundles were built.\n- Fixed an issue where XR Simulation's `CameraTextureProvider` component could throw a `MissingReferenceException` when an AR scene is unloaded.\n- Fixed XR Simulation components so they now behave correctly if you disable the **Reload Domain** option in [Configurable Enter Play Mode](https://docs.unity3d.com/Manual/ConfigurableEnterPlayMode.html) settings.\n- Fixed the native XR Simulation Input provider so that it now explicitly sets **Device** mode as its only supported [Tracking Origin Mode](xref:Unity.XR.CoreUtils.XROrigin.TrackingOriginMode). The [XR Origin component](xref:xr-core-utils-xr-origin-reference) will always use **Device** mode as its Tracking Origin Mode and apply the [XROrigin.CameraYOffset](xref:Unity.XR.CoreUtils.XROrigin.CameraYOffset) value."
   },
   "upmCi": {
-    "footprint": "5a07874215cc3facef92d641a1137f74516eb4a4"
+    "footprint": "e309f4e230fb04c892a30a0e3f6c3163c645b6fc"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "ab1d4a9449006f78f8ac4b3cd32ab363fbd763c3"
+    "revision": "03bcccd104761b6777cf28a41bd02d3a1966ea20"
   }
 }

@@ -414,6 +414,7 @@ namespace UnityEngine.XR.ARFoundation
 
         void UpdateMeshInfos()
         {
+            s_MeshInfos.Clear();
             if (m_Subsystem.TryGetMeshInfos(s_MeshInfos))
             {
                 foreach (var meshInfo in s_MeshInfos)

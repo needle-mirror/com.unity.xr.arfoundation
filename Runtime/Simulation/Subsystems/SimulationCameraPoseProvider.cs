@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using Unity.XR.CoreUtils;
 
@@ -31,6 +32,15 @@ namespace UnityEngine.XR.Simulation
         void Awake()
         {
             m_FPSModeHandler = new CameraFPSModeHandler();
+
+            if (s_Instance == null)
+                s_Instance = this;
+        }
+
+        void OnDestroy()
+        {
+            if (s_Instance == this)
+                s_Instance = null;
         }
 
         void ToggleControls(bool active)
@@ -83,12 +93,14 @@ namespace UnityEngine.XR.Simulation
 
         internal static SimulationCameraPoseProvider GetOrCreateSimulationCameraPoseProvider()
         {
-            if (!s_Instance)
+            if (s_Instance == null)
             {
                 var go = GameObjectUtils.Create("SimulationCamera");
-                s_Instance = go.AddComponent<SimulationCameraPoseProvider>();
-                var camera = go.AddComponent<Camera>();
-                camera.enabled = false;
+                // s_Instance gets assigned in the Awake() event handler.  This way whether the component
+                // is added through some other means, or added as a result of this method call, then the
+                // s_Instance static member will get set.
+                go.AddComponent<SimulationCameraPoseProvider>();
+                go.AddComponent<Camera>().enabled = false;
             }
 
             return s_Instance;

@@ -99,6 +99,6 @@ namespace UnityEngine.XR.ARFoundation
 
         int m_NumParticles;
 
-        static List<Vector3> s_Vertices = new List<Vector3>();
+        static List<Vector3> s_Vertices = new ();
     }
 }

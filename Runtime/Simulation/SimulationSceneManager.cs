@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine.SceneManagement;
 
@@ -9,10 +10,38 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     class SimulationSceneManager : BaseSimulationSceneManager
     {
-        static readonly CreateSceneParameters k_EnvironmentSceneParameters = new CreateSceneParameters(LocalPhysicsMode.Physics3D);
+        static readonly CreateSceneParameters k_EnvironmentSceneParameters = new (LocalPhysicsMode.Physics3D);
 
+        readonly HashSet<SimulatedLight> lightInstances = new();
+        internal IReadOnlyCollection<SimulatedLight> simulationEnvironmentLights => lightInstances;
+
+        readonly HashSet<SimulatedAnchor> anchorInstances = new();
+        internal IReadOnlyCollection<SimulatedAnchor> simulationEnvironmentAnchors => anchorInstances;
+
+        internal void TrackLight(SimulatedLight light)
+        {
+            lightInstances.Add(light);
+        }
+
+        internal void UntrackLight(SimulatedLight light)
+        {
+            lightInstances.Remove(light);
+        }
+        
+        internal void TrackAnchor(SimulatedAnchor anchor)
+        {
+            anchorInstances.Add(anchor);
+        }
+
+        internal void UntrackAnchor(SimulatedAnchor anchor)
+        {
+            anchorInstances.Remove(anchor);
+        }
+        
         protected override Scene CreateEnvironmentScene()
         {
+            ClearTrackedObjects();
+            
             var scene = SceneManager.CreateScene(GenerateUniqueSceneName(), k_EnvironmentSceneParameters);
             if (!scene.IsValid())
                 throw new InvalidOperationException("Environment scene could not be created.");
@@ -22,6 +51,8 @@ namespace UnityEngine.XR.Simulation
 
         protected override void DestroyEnvironmentScene()
         {
+            ClearTrackedObjects();
+
             if (environmentScene.IsValid() && environmentScene != default)
                 SceneManager.UnloadSceneAsync(environmentScene);
         }
@@ -29,6 +60,12 @@ namespace UnityEngine.XR.Simulation
         protected override GameObject InstantiateEnvironment(GameObject environmentPrefab)
         {
             return GameObjectUtils.Instantiate(environmentPrefab);
+        }
+
+        void ClearTrackedObjects()
+        {
+            lightInstances.Clear();
+            anchorInstances.Clear();
         }
     }
 }

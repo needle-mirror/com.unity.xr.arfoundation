@@ -54,9 +54,9 @@ namespace UnityEngine.XR.ARFoundation
         const string k_CustomRenderPassName = "AR Background Pass (LegacyRP)";
 
         /// <summary>
-        /// Name of the main texture parameter for the material.
+        /// Name of the shader parameter for the camera forward scale.
         /// </summary>
-        const string k_MainTexName = "_MainTex";
+        const string k_CameraForwardScaleName = "_UnityCameraForwardScale";
 
         /// <summary>
         /// Name of the shader parameter for the display transform matrix.
@@ -64,19 +64,14 @@ namespace UnityEngine.XR.ARFoundation
         const string k_DisplayTransformName = "_UnityDisplayTransform";
 
         /// <summary>
-        /// Property ID for the shader parameter for the main texture.
-        /// </summary>
-        static readonly int k_MainTexId = Shader.PropertyToID(k_MainTexName);
-
-        /// <summary>
         /// Property ID for the shader parameter for the display transform matrix.
         /// </summary>
-        static readonly int k_DisplayTransformId = Shader.PropertyToID(k_DisplayTransformName);
+        int m_DisplayTransformId;
 
         /// <summary>
         /// The Property ID for the shader parameter for the forward vector's scaled length.
         /// </summary>
-        static readonly int k_CameraForwardScaleId = Shader.PropertyToID("_UnityCameraForwardScale");
+        int m_CameraForwardScaleId;
 
         /// <summary>
         /// The camera to which the projection matrix is set on each frame event.
@@ -218,6 +213,9 @@ namespace UnityEngine.XR.ARFoundation
 
         XRCameraBackgroundRenderingMode m_CommandBufferRenderOrderState = XRCameraBackgroundRenderingMode.None;
 
+        ARDefaultCameraBackgroundRenderingParams m_DefaultCameraBackgroundRenderingParams;
+        internal ARDefaultCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams => m_DefaultCameraBackgroundRenderingParams;
+        
         /// <summary>
         /// A function that can be invoked by
         /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
@@ -289,6 +287,9 @@ namespace UnityEngine.XR.ARFoundation
             m_Camera = GetComponent<Camera>();
             m_CameraManager = GetComponent<ARCameraManager>();
             m_OcclusionManager = GetComponent<AROcclusionManager>();
+            m_DefaultCameraBackgroundRenderingParams = new ARDefaultCameraBackgroundRenderingParams();
+            m_DisplayTransformId = Shader.PropertyToID(k_DisplayTransformName);
+            m_CameraForwardScaleId = Shader.PropertyToID(k_CameraForwardScaleName);
         }
 
         void OnEnable()
@@ -458,7 +459,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (!TryGetRenderingParameters(out var backgroundRenderingParams))
             {
-                backgroundRenderingParams = ARCameraBackgroundRenderingUtils.SelectDefaultBackgroundRenderParametersForRenderMode(currentRenderingMode);
+                backgroundRenderingParams = m_DefaultCameraBackgroundRenderingParams.SelectDefaultBackgroundRenderParametersForRenderMode(currentRenderingMode);
             }
 
             var clearFlags = currentRenderingMode == XRCameraBackgroundRenderingMode.AfterOpaques
@@ -618,7 +619,7 @@ namespace UnityEngine.XR.ARFoundation
 
                 if (eventArgs.displayMatrix.HasValue)
                 {
-                    mat.SetMatrix(k_DisplayTransformId, eventArgs.displayMatrix.Value);
+                    mat.SetMatrix(m_DisplayTransformId, eventArgs.displayMatrix.Value);
                 }
 
                 SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
@@ -680,7 +681,7 @@ namespace UnityEngine.XR.ARFoundation
                 // forward vector, i.e., how much farther from the camera are things than with unit scale.
                 var forward = transform.localToWorldMatrix.GetColumn(2);
                 var scale = forward.magnitude;
-                mat.SetFloat(k_CameraForwardScaleId, scale);
+                mat.SetFloat(m_CameraForwardScaleId, scale);
             }
         }
 
