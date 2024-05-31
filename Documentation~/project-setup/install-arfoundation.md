@@ -27,11 +27,13 @@ The AR Foundation package contains interfaces for AR features, but doesn't imple
 
 Unity officially supports the following provider plug-ins with this version of AR Foundation:
 
-| AR Platform | Provider plug-in                                                                                        | Version |
-| :---------- | :------------------------------------------------------------------------------------------------------ | :------ |
-| Android     | [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) |   5.1   |
-| iOS         | [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html)    |   5.1   |
-| HoloLens 2  | [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html)           |   1.5   |
+| AR Platform | Provider plug-in                                                                                            | Version |
+| :---------- | :---------------------------------------------------------------------------------------------------------- | :------ |
+| Android     | [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html)     |   5.1   |
+| iOS         | [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html)        |   5.1   |
+| visionOS    | [Apple visionOS XR Plug-in ](https://docs.unity3d.com/Packages/com.unity.xr.visionos@1.1/manual/index.html) |   1.1   |
+| HoloLens 2  | [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html)               |   1.5   |
+| Meta Quest  | [Unity OpenXR: Meta](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@1.0/manual/index.html)      |   1.0   |
 
 To use AR Foundation on a device, you must install at least one provider plug-in, either from the Package Manager or by going to **Project Settings** > **XR Plug-in Management** as shown below.
 
