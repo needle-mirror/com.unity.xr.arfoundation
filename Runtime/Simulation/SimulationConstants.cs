@@ -1,4 +1,4 @@
-﻿namespace UnityEngine.XR.Simulation
+namespace UnityEngine.XR.Simulation
 {
     static class SimulationConstants
     {

@@ -43,7 +43,7 @@ namespace UnityEngine.XR.Simulation
             double m_LastFrameTimestamp = 0;
 
             XRSupportedCameraBackgroundRenderingMode m_RequestedBackgroundRenderingMode = XRSupportedCameraBackgroundRenderingMode.BeforeOpaques;
-            
+
             Feature m_RequestedLightEstimation = Feature.None;
             SimulatedLight m_MainLight;
 
@@ -141,7 +141,7 @@ namespace UnityEngine.XR.Simulation
 
                 m_XRCameraConfiguration = new XRCameraConfiguration(IntPtr.Zero, new Vector2Int(m_Camera.pixelWidth, m_Camera.pixelHeight));
                 m_XRCameraIntrinsics = new XRCameraIntrinsics();
-                
+
                 BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
             }
 
@@ -152,7 +152,7 @@ namespace UnityEngine.XR.Simulation
                     m_CameraTextureProvider.cameraFrameReceived -= CameraFrameReceived;
                     m_CameraTextureProvider.onTextureReadbackFulfilled -= SimulationXRCpuImageApi.OnCameraDataReceived;
                 }
-                
+
                 BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentSetupFinished;
             }
 
@@ -168,7 +168,7 @@ namespace UnityEngine.XR.Simulation
             void OnEnvironmentSetupFinished()
             {
                 m_MainLight = null;
-                
+
                 var simulationEnvironmentLights = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironmentLights;
                 foreach (var light in simulationEnvironmentLights)
                 {
@@ -361,7 +361,7 @@ namespace UnityEngine.XR.Simulation
             {
                 if (SimulationSessionSubsystem.simulationSceneManager == null)
                     return 0.0f;
-                
+
                 float sum = 0.0f;
 
                 var simulationEnvironmentLights = SimulationSessionSubsystem.simulationSceneManager.simulationEnvironmentLights;
@@ -382,7 +382,8 @@ namespace UnityEngine.XR.Simulation
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
-            var cInfo = new XRCameraSubsystemDescriptor.Cinfo {
+            var cInfo = new XRCameraSubsystemDescriptor.Cinfo
+            {
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),
                 subsystemTypeOverride = typeof(SimulationCameraSubsystem),

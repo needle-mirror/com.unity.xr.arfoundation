@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Unity.Collections;
 
-namespace UnityEngine.XR.ARFoundation
+namespace UnityEngine.XR.ARFoundation.Tests
 {
     [TestFixture]
     class PoseExtensionsTestFixture

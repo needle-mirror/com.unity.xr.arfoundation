@@ -149,9 +149,9 @@ namespace UnityEngine.XR.ARFoundation
 
                 var extents = sessionRelativeData.extents;
                 m_Boundary[0] = new Vector2(-extents.x, -extents.y);
-                m_Boundary[1] = new Vector2(-extents.x,  extents.y);
-                m_Boundary[2] = new Vector2( extents.x,  extents.y);
-                m_Boundary[3] = new Vector2( extents.x, -extents.y);
+                m_Boundary[1] = new Vector2(-extents.x, extents.y);
+                m_Boundary[2] = new Vector2(extents.x, extents.y);
+                m_Boundary[3] = new Vector2(extents.x, -extents.y);
             }
 
             if (boundaryChanged != null)

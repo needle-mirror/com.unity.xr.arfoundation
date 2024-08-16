@@ -6,15 +6,15 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// An `IDisposable` [profiler](https://docs.unity3d.com/ScriptReference/Profiling.Profiler.html)
     /// object that will begin a profiler sample on instantiation and end the same when disposed.
-    /// <para>Example:
+    /// </summary>
+    /// <example>
     /// <code>
     /// using (new ScopedProfiler("MySample"))
     /// {
     ///     CodeToProfile();
     /// }
     /// </code>
-    /// </para>
-    /// </summary>
+    /// </example>
     public struct ScopedProfiler : IDisposable
     {
         /// <summary>

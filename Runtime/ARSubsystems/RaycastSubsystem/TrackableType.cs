@@ -97,7 +97,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Refers to a point in the depth map.
         /// </summary>
         Depth = 1 << 7,
-        
+
         /// <summary>
         /// Refers to a 3D bounding box
         /// </summary>

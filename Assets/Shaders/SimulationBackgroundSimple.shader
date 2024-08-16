@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Simulation Background Simple"
+Shader "Unlit/Simulation Background Simple"
 {
     Properties
     {

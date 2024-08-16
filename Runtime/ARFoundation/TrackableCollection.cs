@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Creates an <c>Enumerator</c> for this collection.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An <c>Enumerator</c>.</returns>
         public Enumerator GetEnumerator()
         {
             return new Enumerator(m_Trackables);
@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Constructs a <see cref="TrackableCollection{TTrackable}"/>.
         /// </summary>
-        /// <param name="trackables"></param>
+        /// <param name="trackables">A <c>Dictionary</c> of <c>TTrackable</c>s.</param>
         public TrackableCollection(Dictionary<TrackableId, TTrackable> trackables)
         {
             if (trackables == null)
@@ -51,7 +51,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Retrieves a <c>TTrackable</c>s by <c>TrackableId</c>.
         /// </summary>
         /// <param name="trackableId">The trackable id associated with the trackable to retrieve.</param>
-        /// <returns>The <c>TTrackable</c>s if present. Throws <c>KeyNotFoundException</c> if the <paramref name="trackableId"/> is not found.</returns>
+        /// <value>The <c>TTrackable</c>s if present. Throws <c>KeyNotFoundException</c> if the <paramref name="trackableId"/> is not found.</value>
         public TTrackable this[TrackableId trackableId]
         {
             get

@@ -16,8 +16,9 @@ namespace UnityEngine.XR.ARSubsystems
         int count { get; }
 
         /// <summary>
-        /// Get the <see cref="XRReferenceImage"/> image at <c>index</c>.
+        /// Get the <see cref="XRReferenceImage"/> at the given <paramref name="index"/>.
         /// </summary>
+        /// <param name="index">The index.</param>
         XRReferenceImage this[int index] { get; }
     }
 }

@@ -34,7 +34,7 @@ namespace UnityEngine.XR.Simulation
             k_ClipOffsetShaderID = Shader.PropertyToID("_SimulationRoomClipOffset");
             k_XRayScaleID = Shader.PropertyToID("_SimulationXRayScale");
         }
-        
+
         internal void UpdateXRayShader(bool useXRay, XRayRegion activeXRay)
         {
             if (!useXRay || !XRSimulationRuntimeSettings.Instance.useXRay)

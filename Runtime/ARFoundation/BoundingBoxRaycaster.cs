@@ -261,8 +261,8 @@ namespace UnityEngine.XR.ARFoundation
             if (!infiniteFacePlane.Raycast(ray, out var distance))
                 return false;
 
-            // rotate the hit pose so the up vector aligns with the normal of the plane 
-            // and the forward vector matches the bounding box forward for the top face or 
+            // rotate the hit pose so the up vector aligns with the normal of the plane
+            // and the forward vector matches the bounding box forward for the top face or
             // mirrors it for the bottom face.
             var hitPose = new Pose(
                 ray.origin + ray.direction * distance,

@@ -134,6 +134,9 @@ namespace UnityEngine.XR.Simulation
 
             public override void Reset()
             {
+                if (!m_Initialized)
+                    return;
+
                 m_SessionId = Guid.NewGuid();
                 s_SimulationSessionReset?.Invoke();
             }

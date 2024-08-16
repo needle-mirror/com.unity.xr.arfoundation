@@ -22,7 +22,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The 2D size of the image. This is the dimensions of the image.
         /// </summary>
-        /// <value></value>
         public Vector2 size
         {
             get { return sessionRelativeData.size; }

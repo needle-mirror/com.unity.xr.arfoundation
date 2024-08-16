@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;

@@ -30,14 +30,14 @@ namespace UnityEditor.XR.ARFoundation
 
             var offsetGo = ObjectFactory.CreateGameObject("Camera Offset");
             CreateUtils.Place(offsetGo, originGo.transform);
-            
+
             var arCamera = CreateARMainCamera();
             CreateUtils.Place(arCamera.gameObject, offsetGo.transform);
 
             var origin = originGo.GetComponent<XROrigin>();
             origin.CameraFloorOffsetObject = offsetGo;
             origin.Camera = arCamera;
-            
+
             Undo.RegisterCreatedObjectUndo(originGo, "Create XR Origin");
             return origin;
         }

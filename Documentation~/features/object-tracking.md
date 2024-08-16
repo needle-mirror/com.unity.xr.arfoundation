@@ -10,7 +10,7 @@ The [ARTrackedObjectManager](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectMan
 The tracked object manager creates a GameObject for each object detected in the environment. Before a real-world object can be detected, you must scan it to create a reference object. You can then add the reference object to the tracked object manager's reference object library.
 
 > [!NOTE]
-> * Currently, the [Apple ARKit XR Plug-in](xref:arkit-object-tracking) is the only Unity-supported provider plug-in that implements object tracking. 
+> * Currently, the [Apple ARKit XR Plug-in](xref:arkit-object-tracking) is the only Unity-supported provider plug-in that implements object tracking.
 > * The [Scanning and Detecting 3D Objects](https://developer.apple.com/documentation/arkit/scanning_and_detecting_3d_objects) page on Apple's developer website allows you to download an app that you can use on an iOS device to produce such a scan. Note that this is a third-party application, and Unity is not involved in its development.
 
 ## Terminology
@@ -22,7 +22,7 @@ The tracked object manager creates a GameObject for each object detected in the 
 
 ## Create a reference object library
 
-In a typical object tracking workflow, you create a reference object library in the Editor and then populate the library with reference objects. You must add a provider-specific entry for each provider plug-in your project that supports object tracking. 
+In a typical object tracking workflow, you create a reference object library in the Editor and then populate the library with reference objects. You must add a provider-specific entry for each provider plug-in your project that supports object tracking.
 
 To create a reference object library, right click in the Project window and select **Assets** &gt; **Create** &gt; **XR** &gt; **Reference Object Library**.
 
@@ -30,7 +30,7 @@ This creates a new `ReferenceObjectLibrary` asset in your project. To add a refe
 
 ![A reference object library](../images/reference-object-library-inspector.png "A reference object library")<br/>*A reference object library*
 
-Each reference object has a **Name**, followed by a list of provider-specific entries, which are required in order for object detection to work on device. In the example above, each object has one entry for the ARKit provider. 
+Each reference object has a **Name**, followed by a list of provider-specific entries, which are required in order for object detection to work on device. In the example above, each object has one entry for the ARKit provider.
 
 The asset format for a reference object entry depends on the provider implementation. The [Apple ARKit XR Plug-in](xref:arkit-object-tracking) uses the `.arobject` format defined by Apple. See the [Scanning and Detecting 3D Objects](https://developer.apple.com/documentation/arkit/scanning_and_detecting_3d_objects) page on Apple's developer website for more information.
 

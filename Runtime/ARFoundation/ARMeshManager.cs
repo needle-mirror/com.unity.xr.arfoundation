@@ -197,7 +197,7 @@ namespace UnityEngine.XR.ARFoundation
                     "Hierarchy not allowed",
                     $"An {nameof(ARMeshManager)} must be a child of an {nameof(XROrigin)}.",
                     "Remove Component");
-                UnityEditor.EditorApplication.delayCall += ()=>
+                UnityEditor.EditorApplication.delayCall += () =>
                 {
                     DestroyImmediate(this);
                 };
@@ -296,7 +296,7 @@ namespace UnityEngine.XR.ARFoundation
                         foreach (var meshFilter in m_Updated)
                         {
                             var mesh = (meshFilter.sharedMesh != null) ? meshFilter.sharedMesh : meshFilter.mesh;
-                            
+
                             // Calculate normals if they weren't populated by the provider.
                             if (mesh.normals.Length == 0)
                                 mesh.RecalculateNormals();

@@ -233,7 +233,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value>The ambient spherical harmonic coefficients.</value>
         /// <remarks>
-        /// See <see href="https://docs.unity3d.com/ScriptReference/Rendering.SphericalHarmonicsL2.html">Rendering.SphericalHarmonicsL2</see>
+        /// See <a href="https://docs.unity3d.com/ScriptReference/Rendering.SphericalHarmonicsL2.html">Rendering.SphericalHarmonicsL2</a>
         /// for further details.
         /// </remarks>
         [Obsolete("ambientSphericalHarmonics has been deprecated in AR Foundation version 6.0. Use TryGetAmbientSphericalHarmonics instead.")]

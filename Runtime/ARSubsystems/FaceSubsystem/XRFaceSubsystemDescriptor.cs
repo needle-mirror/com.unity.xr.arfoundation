@@ -213,7 +213,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-        public static bool operator==(FaceSubsystemParams lhs, FaceSubsystemParams rhs) => lhs.Equals(rhs);
+        public static bool operator ==(FaceSubsystemParams lhs, FaceSubsystemParams rhs) => lhs.Equals(rhs);
 
         /// <summary>
         /// Tests for inequality. Same as `!`<see cref="Equals(FaceSubsystemParams)"/>.
@@ -221,7 +221,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-        public static bool operator!=(FaceSubsystemParams lhs, FaceSubsystemParams rhs) => lhs.Equals(rhs);
+        public static bool operator !=(FaceSubsystemParams lhs, FaceSubsystemParams rhs) => lhs.Equals(rhs);
     }
 
     /// <summary>
@@ -444,7 +444,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Creates a subsystem descriptor. Used to register an implementation of the <see cref="XRFaceSubsystem"/>.
         /// </summary>
         /// <param name="descriptorParams">Parameters describing the <see cref="XRFaceSubsystem"/>.</param>
-        [Obsolete("Create(FaceSubsystemParams) has been deprecated in AR Foundation version 6.0. Use Register(XRFaceSubsystemDescriptor.Cinfo) instead (UnityUpgradable) -> Register(*)", false)]   
+        [Obsolete("Create(FaceSubsystemParams) has been deprecated in AR Foundation version 6.0. Use Register(XRFaceSubsystemDescriptor.Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void Create(FaceSubsystemParams descriptorParams)
         {
             var FaceSubsystemInfo = new XRFaceSubsystemDescriptor.Cinfo()

@@ -91,5 +91,67 @@ namespace UnityEngine.XR.ARFoundation.Tests
             manager.trackablesChanged.AddListener(OnTrackablesChanged);
         }
         #endregion
+
+        #region AnchorsChanged
+        public void OnTrackablesChanged(
+            ARTrackablesChangedEventArgs<ARAnchor> changes)
+        {
+            foreach (var anchor in changes.added)
+            {
+                // handle added anchors
+            }
+
+            foreach (var anchor in changes.updated)
+            {
+                // handle updated anchors
+            }
+
+            foreach (var anchor in changes.removed)
+            {
+                // handle removed anchors
+            }
+        }
+        #endregion
+
+        #region AnchorsSubscribe
+        void SubscribeToAnchorsChanged()
+        {
+            // This is inefficient. You should re-use a saved reference instead.
+            var manager = Object.FindAnyObjectByType<ARAnchorManager>();
+
+            manager.trackablesChanged.AddListener(OnTrackablesChanged);
+        }
+        #endregion
+
+        #region RaycastsChanged
+        public void OnTrackablesChanged(
+            ARTrackablesChangedEventArgs<ARRaycast> changes)
+        {
+            foreach (var raycast in changes.added)
+            {
+                // handle added raycasts
+            }
+
+            foreach (var raycast in changes.updated)
+            {
+                // handle updated raycasts
+            }
+
+            foreach (var raycast in changes.removed)
+            {
+                // handle removed raycasts
+            }
+        }
+        #endregion
+
+        #region RaycastsSubscribe
+        void SubscribeToRaycastsChanged()
+        {
+            // This is inefficient. You should re-use a saved reference instead.
+            var manager = Object.FindAnyObjectByType<ARRaycastManager>();
+
+            manager.trackablesChanged.AddListener(OnTrackablesChanged);
+        }
+        #endregion
     }
 }

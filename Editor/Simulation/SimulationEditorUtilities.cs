@@ -26,7 +26,7 @@ namespace UnityEditor.XR.Simulation
                 var manager = instance.Manager;
                 if (manager == null)
                     return false;
-                
+
                 return manager.activeLoader is SimulationLoader;
             }
 

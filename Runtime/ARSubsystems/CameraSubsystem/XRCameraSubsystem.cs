@@ -53,7 +53,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Get or set the requested camera facing direction, that is, the <see cref="Feature.AnyCamera"/> bits.
             /// </summary>
-            /// <value>The requested camera facing direction</value>.
+            /// <value>The requested camera facing direction.</value>
             public virtual Feature requestedCamera
             {
                 get => Feature.None;

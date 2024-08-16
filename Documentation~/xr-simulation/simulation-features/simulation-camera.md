@@ -32,6 +32,6 @@ XR Simulation implements the following optional features of AR Foundation's [XRC
 | **Exif data** | [supportsExifData](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsExifData) | |
 
 > [!NOTE]
-> Refer to AR Foundation [Camera platform support](xref:arfoundation-camera-platform-support) for more information 
+> Refer to AR Foundation [Camera platform support](xref:arfoundation-camera-platform-support) for more information
 > on the optional features of the camera subsystem.
 

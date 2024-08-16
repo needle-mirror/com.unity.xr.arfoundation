@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
@@ -67,7 +67,7 @@ namespace UnityEngine.XR.Simulation
         SimulationOcclusionSubsystem m_OcclusionSubsystem;
 
         bool m_EnableDepthReadback;
-        
+
         int m_TextureSingleDepthPropertyNameId;
         int m_TextureSinglePropertyNameId;
 
@@ -499,7 +499,7 @@ namespace UnityEngine.XR.Simulation
                 && m_SimulationReadbackTexture != null
                 && m_SimulationReadbackTexture.isReadable)
             {
-                nativePtr =  m_SimulationReadbackTexture.GetNativeTexturePtr();
+                nativePtr = m_SimulationReadbackTexture.GetNativeTexturePtr();
                 return true;
             }
 

@@ -120,7 +120,8 @@ namespace UnityEngine.XR.ARFoundation
             return null;
         }
 
-        internal protected override void OnAfterSetSessionRelativeData()
+        /// <inheritdoc/>
+        protected internal override void OnAfterSetSessionRelativeData()
         {
             var trackablesParent = GetTrackablesParent();
             if (trackablesParent && transform.parent != trackablesParent)

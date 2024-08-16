@@ -168,7 +168,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Registers a subsystem descriptor with the <c>SubsystemManager</c>.
         /// </summary>
-        /// <param name="cinfo"></param>
+        /// <param name="cinfo">Parameters describing the <see cref="XRParticipantSubsystem"/>.</param>
         public static void Register(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRParticipantSubsystemDescriptor(cinfo));

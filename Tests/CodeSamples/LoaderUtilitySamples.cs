@@ -4,20 +4,6 @@ namespace UnityEngine.XR.ARFoundation.Tests
 {
     class LoaderUtilitySamples
     {
-        class PlaneCheck
-        {
-            #region CheckIfPlanesLoaded
-            void Start()
-            {
-                if (LoaderUtility
-                        .GetActiveLoader()?
-                        .GetLoadedSubsystem<XRPlaneSubsystem>() != null)
-                {
-                    // XRPlaneSubsystem was loaded. The platform supports plane detection.
-                }
-            }
-            #endregion
-        }
         class CameraCheck
         {
             #region CheckIfCameraLoaded
@@ -33,9 +19,24 @@ namespace UnityEngine.XR.ARFoundation.Tests
             #endregion
         }
 
-        class BoundingBoxCheck
+        class PlanesCheck
         {
-            #region CheckIfBoundingBoxLoaded
+            #region CheckIfPlanesLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRPlaneSubsystem>() != null)
+                {
+                    // XRPlaneSubsystem was loaded. The platform supports plane detection.
+                }
+            }
+            #endregion
+        }
+
+        class BoundingBoxesCheck
+        {
+            #region CheckIfBoundingBoxesLoaded
             void Start()
             {
                 if (LoaderUtility
@@ -43,6 +44,21 @@ namespace UnityEngine.XR.ARFoundation.Tests
                         .GetLoadedSubsystem<XRBoundingBoxSubsystem>() != null)
                 {
                     // XRBoundingBoxSubsystem was loaded. The platform supports bounding box detection.
+                }
+            }
+            #endregion
+        }
+
+        class AnchorsCheck
+        {
+            #region CheckIfAnchorsLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRAnchorSubsystem>() != null)
+                {
+                    // XRAnchorSubsystem was loaded. The platform supports anchors.
                 }
             }
             #endregion
@@ -62,7 +78,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
             }
             #endregion
         }
-      
+
         class FaceCheck
         {
             #region CheckIfFaceLoaded
@@ -73,6 +89,21 @@ namespace UnityEngine.XR.ARFoundation.Tests
                         .GetLoadedSubsystem<XRFaceSubsystem>() != null)
                 {
                     // XRFaceSubsystem was loaded. The platform supports face detection.
+                }
+            }
+            #endregion
+        }
+
+        class RaycastCheck
+        {
+            #region CheckIfRaycastLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRRaycastSubsystem>() != null)
+                {
+                    // XRRaycastSubsystem was loaded. The platform supports ray casts.
                 }
             }
             #endregion

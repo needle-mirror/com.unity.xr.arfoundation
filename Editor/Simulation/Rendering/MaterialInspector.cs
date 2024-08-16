@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 #if INCLUDE_RENDER_PIPELINES_UNIVERSAL
 using UnityEditor.Rendering.Universal.ShaderGUI;

@@ -3,22 +3,22 @@ uid: arfoundation-display-matrix-format-and-derivation
 ---
 # Display matrix format and derivation
 
-The display matrix maps the CPU side image to be rendered onto the device's screen, i.e. it maps the CPU side image texture coordinates onto the device's screen coordinates. It is row-major and includes a y-axis flip of the CPU side image texture coordinates (as the image would be upside down when rendered without that y-axis flip). The display matrix is defined as: 
+The display matrix maps the CPU side image to be rendered onto the device's screen, i.e. it maps the CPU side image texture coordinates onto the device's screen coordinates. It is row-major and includes a y-axis flip of the CPU side image texture coordinates (as the image would be upside down when rendered without that y-axis flip). The display matrix is defined as:
 
 ![Figure 1. A 4 by 4, row major display matrix that flips the y-axis, named "D row y flip." Row one entries are "r dot x" minus "t dot x", "r dot y" minus "t dot y", 0, 0. Row two entries are "t dot x" minus "u dot x", "t dot y" minus "u dot y", 0, 0. Row three entries are "u dot x", "u dot y", 1, 0. Row four entries are 0, 0, 0, 1](https://media.github.cds.internal.unity3d.com/user/7904/files/aeaefd83-1c0a-4ce6-b3da-68d9be86dc37)<br/>*Figure 1 - a row major display matrix that flips the y-axis*
 
 
-The 2D vector "r" corresponds to the right basis vector of the CPU side image coordinates, i.e. the vector that represents the horizontal axis of the image's texture coordinates, 
+The 2D vector "r" corresponds to the right basis vector of the CPU side image coordinates, i.e. the vector that represents the horizontal axis of the image's texture coordinates,
 
 ![Figure 2. A 2 by 1 vector named "r." The first component is "r dot x". The second component is "r dot y"](https://media.github.cds.internal.unity3d.com/user/7904/files/5b1b4f40-6f76-49bc-b5e5-bb726c4c50aa)<br/>*Figure 2 - The right basis vector of the image's texture coordinates*
 
 
-The 2D vector "u" corresponds to the up basis vector of the CPU side image coordinates, i.e. the vector that represents the vertical axis of the image's texture coordinates, 
+The 2D vector "u" corresponds to the up basis vector of the CPU side image coordinates, i.e. the vector that represents the vertical axis of the image's texture coordinates,
 
 ![Figure 3. A 2 by 1 vector named "u." The first component is "u dot x". The second component is "u dot y"](https://media.github.cds.internal.unity3d.com/user/7904/files/7846c540-4173-4d4b-ba7d-9aa75df8668c)<br/>*Figure 3 - The up basis vector of the image's texture coordinates*
 
 
-The 2D vector "t" corresponds to the offset, or translation, of the above basis vectors, i.e. the location of the origin of the image's texture coordinates, 
+The 2D vector "t" corresponds to the offset, or translation, of the above basis vectors, i.e. the location of the origin of the image's texture coordinates,
 
 ![Figure 4. A 2 by 1 vector named "t." The first component is "t dot x". The second component is "t dot y"](https://media.github.cds.internal.unity3d.com/user/7904/files/a7e0d70a-b152-43af-9791-e0ad34948e48)<br/>*Figure 4 - the location of the origin of the image's texture coordinates*
 

@@ -104,7 +104,7 @@ namespace UnityEditor.XR.Simulation
         {
             if (!s_RenderingOverrideEnabled)
                 return;
-            
+
             // Due to the way XREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
             // But scene view camera is already the current camera when we reach this step.
             if (!XREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
@@ -120,7 +120,7 @@ namespace UnityEditor.XR.Simulation
         {
             if (!s_RenderingOverrideEnabled)
                 return;
-            
+
             // Due to the way XREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
             // But scene view camera is already the current camera when we reach this step.
             if (!XREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
@@ -136,10 +136,10 @@ namespace UnityEditor.XR.Simulation
                 return;
 
             // Do not set scene manager override lighting in prefab stage
-            if (!s_SimulationSceneManager.environmentScene.IsValid() 
+            if (!s_SimulationSceneManager.environmentScene.IsValid()
                 || PrefabStageUtility.GetCurrentPrefabStage() != null)
                 return;
-            
+
             if (!s_LightingOverrideActive)
                 s_SimulationRenderSettings.UseSceneRenderSettings();
 
@@ -172,7 +172,7 @@ namespace UnityEditor.XR.Simulation
         internal static VisualElement TrackStandAloneXRSettingsChange()
         {
             var trackerElement = new VisualElement();
-            
+
             var property = GetLoadersArrayProperty();
             if (property == null)
                 return null;
@@ -241,7 +241,7 @@ namespace UnityEditor.XR.Simulation
             var standaloneSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Standalone);
             if (standaloneSettings == null)
                 return null;
-            
+
             var standAloneSettingsSerializedObject = new SerializedObject(standaloneSettings);
             var managerInstanceProp = standAloneSettingsSerializedObject.FindProperty("m_LoaderManagerInstance");
             var managerInstanceSerializedObject = new SerializedObject(managerInstanceProp.objectReferenceValue);
@@ -259,7 +259,7 @@ namespace UnityEditor.XR.Simulation
          static void BeforeAssemblyReload()
          {
              RestoreBaseLighting();
-             
+
              s_RenderingOverrideEnabled = false;
              s_SimulationSceneManager = null;
              s_HasEnvironmentSettings = false;

@@ -195,7 +195,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
         /// interface. Invoked before serialization.
         /// </summary>
-        public void OnBeforeSerialize() {}
+        public void OnBeforeSerialize() { }
 
         /// <summary>
         /// Part of the [ISerializationCallbackReceiver](https://docs.unity3d.com/ScriptReference/ISerializationCallbackReceiver.html)
@@ -446,11 +446,11 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.TryGetCameraGrain(out var cameraGrain))
             {
-                if(m_CameraGrainInfo.texture == null && ARTextureInfo.IsSupported(cameraGrain))
+                if (m_CameraGrainInfo.texture == null && ARTextureInfo.IsSupported(cameraGrain))
                 {
                     m_CameraGrainInfo = new ARTextureInfo(cameraGrain);
                 }
-                else if(m_CameraGrainInfo.texture != null && ARTextureInfo.IsSupported(cameraGrain))
+                else if (m_CameraGrainInfo.texture != null && ARTextureInfo.IsSupported(cameraGrain))
                 {
                     m_CameraGrainInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CameraGrainInfo, cameraGrain);
                 }
@@ -458,9 +458,9 @@ namespace UnityEngine.XR.ARFoundation
                 eventArgs.cameraGrainTexture = m_CameraGrainInfo.texture;
             }
 
-            if(frame.TryGetNoiseIntensity(out var noiseIntensity))
-                 eventArgs.noiseIntensity = noiseIntensity;
-            
+            if (frame.TryGetNoiseIntensity(out var noiseIntensity))
+                eventArgs.noiseIntensity = noiseIntensity;
+
             if (frame.TryGetExifData(out XRCameraFrameExifData exifData))
                 eventArgs.exifData = exifData;
 

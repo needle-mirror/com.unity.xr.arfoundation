@@ -4,7 +4,7 @@ using UnityEngine.XR.ARSubsystems;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// An interface for performing raycasts against trackables. Generally implemented by 
+    /// An interface for performing raycasts against trackables. Generally implemented by
     /// derived classes of <see cref="ARTrackableManager{TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable}"/>.
     /// </summary>
     internal interface IRaycaster

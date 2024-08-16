@@ -11,12 +11,12 @@ namespace UnityEngine.XR.ARFoundation
         internal ARDefaultCameraBackgroundRenderingParams()
         {
             m_DefaultRenderParamsAfterOpaques = new(
-                BuildFullscreenMesh(-1f), 
+                BuildFullscreenMesh(-1f),
                 Matrix4x4.Ortho(0f, 1f, 0f, 1f, 0f, 1f));
 
-            m_DefaultRenderParamsBeforeOpaques = new (
-                BuildFullscreenMesh(0.1f), 
-                Matrix4x4.Ortho(0f, 1f, 0f, 1f, -0.1f, 9.9f)); 
+            m_DefaultRenderParamsBeforeOpaques = new(
+                BuildFullscreenMesh(0.1f),
+                Matrix4x4.Ortho(0f, 1f, 0f, 1f, -0.1f, 9.9f));
         }
 
         static Mesh BuildFullscreenMesh(float zVal)

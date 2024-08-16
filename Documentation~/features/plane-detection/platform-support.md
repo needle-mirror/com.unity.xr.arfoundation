@@ -9,7 +9,7 @@ Plane detection is supported on the ARCore, ARKit, Meta OpenXR and XR Simulation
 | :--------------- | :-----------------------: | :--------------------- |
 | Google ARCore XR Plug-in | Yes | [Plane detection](xref:arcore-plane-detection) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Plane detection](xref:arkit-plane-detection) (ARKit) |
-| Apple visionOS XR Plug-in | | |
+| Apple visionOS XR Plug-in | Yes | N/A |
 | Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Plane detection](xref:meta-openxr-planes) (Meta OpenXR) |
 | XR Simulation | Yes | N/A |

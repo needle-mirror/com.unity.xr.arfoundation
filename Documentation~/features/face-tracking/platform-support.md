@@ -24,7 +24,7 @@ Your app can check at runtime whether a provider plug-in supports face tracking 
 
 ## Optional features
 
-The following table lists the optional features of the face subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRFaceSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported. 
+The following table lists the optional features of the face subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRFaceSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
 | Feature | Descriptor Property | Description |
 | :------ | :--------------- | :----------------- |
@@ -38,7 +38,7 @@ The following table lists the optional features of the face subsystem. Each opti
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature | ARCore | ARKit | 
+| Feature | ARCore | ARKit |
 | :------ | :----: | :---: |
 | **Face pose** | Yes | Yes |
 | **Face mesh vertices and indices** | Yes | Yes |

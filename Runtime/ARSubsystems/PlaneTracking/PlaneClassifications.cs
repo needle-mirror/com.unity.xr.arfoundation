@@ -6,13 +6,13 @@ namespace UnityEngine.XR.ARSubsystems
     /// Represents the semantic classifications of a plane.
     /// </summary>
     /// <remarks>
-    /// An XR provider might not support plane classification. You can check 
-    /// <see cref='XRPlaneSubsystemDescriptor.supportsClassification'/> to determine whether 
+    /// An XR provider might not support plane classification. You can check
+    /// <see cref='XRPlaneSubsystemDescriptor.supportsClassification'/> to determine whether
     /// the current provider can classify planes.
     ///
     /// An XR provider might not support all of the classifications in this list.
     ///
-    /// Different XR providers might assign different semantic classifications in the same situation. 
+    /// Different XR providers might assign different semantic classifications in the same situation.
     /// </remarks>
     [Flags]
     public enum PlaneClassifications : uint
@@ -35,7 +35,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The plane is classified as the floor.
         /// </summary>
-        Floor = 1u << 2, 
+        Floor = 1u << 2,
 
         /// <summary>
         /// The plane is classified as wall art.
@@ -81,5 +81,5 @@ namespace UnityEngine.XR.ARSubsystems
         /// The plane is classified as other.
         /// </summary>
         Other = 1u << 31
-    }        
+    }
 }

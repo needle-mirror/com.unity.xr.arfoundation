@@ -39,7 +39,7 @@ namespace UnityEngine.XR.ARFoundation
             s_UnusedVertices.Clear();
             s_CurrentUnusedVertexNode = null;
             s_ReflexVertices.Clear();
-            
+
             Initialize(boundaryVertices);
             Triangulate();
 

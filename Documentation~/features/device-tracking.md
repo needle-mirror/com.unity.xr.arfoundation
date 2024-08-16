@@ -5,6 +5,8 @@ uid: arfoundation-device-tracking
 
 After following the AR Foundation [scene setup](xref:arfoundation-scene-setup) instructions, your scene contains a preconfigured GameObject named "XR Origin". The XR Origin GameObject automatically handles device tracking and transforming trackables into Unity's coordinate system via its [XROrigin](xref:xr-core-utils-xr-origin-reference) component and GameObject hierarchy with a Camera and [TrackedPoseDriver](xref:UnityEngine.InputSystem.XR.TrackedPoseDriver), as detailed below.
 
+<a id="xr-origin-component"/>
+
 # XR Origin component
 
 The [XROrigin](xref:xr-core-utils-xr-origin-reference) component transforms trackable features, such as planar surfaces and feature points, into their final position, rotation, and scale in a scene.

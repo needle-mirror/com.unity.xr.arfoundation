@@ -12,9 +12,9 @@ namespace UnityEngine.XR.ARSubsystems
         SubsystemDescriptorWithProvider<XRAnchorSubsystem, XRAnchorSubsystem.Provider>
     {
         /// <summary>
-        /// Indicates whether the provider implementation supports attachments (that is, the ability to attach an anchor to a trackable).
-        /// If <see langword="false"/>, <see cref="XRAnchorSubsystem.TryAttachAnchor">XRAnchorSubsystem.TryAttachAnchor</see>
-        /// must always return <see langword="false"/>.
+        /// Indicates whether the provider implementation supports the ability to attach an anchor to a trackable via
+        /// <see cref="XRAnchorSubsystem.TryAttachAnchor">XRAnchorSubsystem.TryAttachAnchor</see>.
+        /// If <see langword="false"/>, `TryAttachAnchor` must always return <see langword="false"/>.
         /// </summary>
         public bool supportsTrackableAttachments { get; }
 

@@ -123,6 +123,11 @@ namespace UnityEngine.XR.Simulation
                 subsystemTypeOverride = typeof(SimulationAnchorSubsystem),
                 supportsTrackableAttachments = true,
                 supportsSynchronousAdd = true,
+                supportsSaveAnchor = false,
+                supportsLoadAnchor = false,
+                supportsEraseAnchor = false,
+                supportsGetSavedAnchorIds = false,
+                supportsAsyncCancellation = false,
             });
         }
     }

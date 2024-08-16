@@ -27,7 +27,7 @@ namespace UnityEngine.XR.Simulation
         {
             lightInstances.Remove(light);
         }
-        
+
         internal void TrackAnchor(SimulatedAnchor anchor)
         {
             anchorInstances.Add(anchor);
@@ -37,11 +37,11 @@ namespace UnityEngine.XR.Simulation
         {
             anchorInstances.Remove(anchor);
         }
-        
+
         protected override Scene CreateEnvironmentScene()
         {
             ClearTrackedObjects();
-            
+
             var scene = SceneManager.CreateScene(GenerateUniqueSceneName(), k_EnvironmentSceneParameters);
             if (!scene.IsValid())
                 throw new InvalidOperationException("Environment scene could not be created.");

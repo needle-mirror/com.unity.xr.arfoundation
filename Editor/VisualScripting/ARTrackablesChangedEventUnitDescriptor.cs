@@ -54,7 +54,7 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
         /// </summary>
         protected virtual string removedPortDescription => s_RemovedPortDescription;
         static string s_RemovedPortDescription = $"{typeof(TTrackable).DisplayName()}s that have been removed.";
-        
+
         /// <inheritdoc/>
         protected ARTrackablesChangedEventUnitDescriptor(
             ARTrackablesChangedEventUnit<TManager, TTrackable, TListener> target)

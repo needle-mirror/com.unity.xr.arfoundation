@@ -6,9 +6,9 @@ namespace UnityEngine.XR.ARSubsystems
     /// Represents the semantic classifications of a 3D bounding box.
     /// </summary>
     /// <remarks>
-    /// An XR provider might not support 3D bounding box classifications. You can check 
-    /// <see cref='XRBoundingBoxSubsystemDescriptor.supportsClassifications'/> to determine whether 
-    /// the current provider can classify 3D bounding boxes. 
+    /// An XR provider might not support 3D bounding box classifications. You can check
+    /// <see cref='XRBoundingBoxSubsystemDescriptor.supportsClassifications'/> to determine whether
+    /// the current provider can classify 3D bounding boxes.
     /// </remarks>
     [Flags]
     public enum BoundingBoxClassifications : uint

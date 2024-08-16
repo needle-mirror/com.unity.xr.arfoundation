@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// resulting value from <see cref="Promise{T}.result"/>.
     /// </remarks>
     /// <example>
-    /// Example usage in a coroutine:
+    /// <para>Example usage in a coroutine:</para>
     /// <code>
     /// IEnumerator MyCoroutine()
     /// {

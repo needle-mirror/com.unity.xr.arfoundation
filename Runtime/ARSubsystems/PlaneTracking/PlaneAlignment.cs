@@ -1,4 +1,4 @@
-﻿namespace UnityEngine.XR.ARSubsystems
+namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
     /// Represents the alignment of a plane (for example, whether it is horizontal or vertical).

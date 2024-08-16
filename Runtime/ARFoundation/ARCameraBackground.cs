@@ -13,12 +13,13 @@ using UnityEngine.Experimental.Rendering;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// <para>Add this component to a <c>Camera</c> to copy the color camera's texture onto the background.</para>
-    /// <para>If you are using the Universal Render Pipeline (version 7.0.0 or later), you must also add the
-    /// <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable renderer.</para>
+    /// Add this component to a <c>Camera</c> to copy the color camera's texture onto the background.
+    ///
+    /// If you are using the Universal Render Pipeline (version 7.0.0 or later), you must also add the
+    /// <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable renderer.
+    ///
     /// </summary>
     /// <remarks>
-    /// <para>
     /// To add the <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable
     /// renderer:
     /// <list type="bullet">
@@ -32,15 +33,16 @@ namespace UnityEngine.XR.ARFoundation
     /// <item><description>In forward renderer data's Inspector window, ensure the Render Features list
     /// contains a <see cref="ARBackgroundRendererFeature"/>.</description></item>
     /// </list>
-    /// </para>
-    /// <para>To customize background rendering with the legacy render pipeline, you can override the
+    ///
+    /// To customize background rendering with the legacy render pipeline, you can override the
     /// <see cref="legacyCameraEvents"/> property and the
     /// <see cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/> method to modify the given
     /// <c>CommandBuffer</c> with rendering commands and to inject the given <c>CommandBuffer</c> into the Camera's
-    /// rendering.</para>
-    /// <para>To customize background rendering with a scriptable render pipeline, create a
+    /// rendering.
+    ///
+    /// To customize background rendering with a scriptable render pipeline, create a
     /// <c>ScriptableRendererFeature</c> with the background rendering commands, and insert the
-    /// <c>ScriptableRendererFeature</c> into the list of render features for the scriptable renderer.</para>
+    /// <c>ScriptableRendererFeature</c> into the list of render features for the scriptable renderer.
     /// </remarks>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
@@ -215,7 +217,7 @@ namespace UnityEngine.XR.ARFoundation
 
         ARDefaultCameraBackgroundRenderingParams m_DefaultCameraBackgroundRenderingParams;
         internal ARDefaultCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams => m_DefaultCameraBackgroundRenderingParams;
-        
+
         /// <summary>
         /// A function that can be invoked by
         /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).

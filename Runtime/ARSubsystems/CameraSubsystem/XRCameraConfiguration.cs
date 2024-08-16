@@ -131,7 +131,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Converts the configuration to a string, suitable for debug logging.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string representation of the configuration.</returns>
         public override string ToString()
         {
             var supportsDepthText = depthSensorSupported switch

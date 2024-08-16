@@ -8,6 +8,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.3] - 2024-08-16
+
+### Changed
+
+- Updated documentation to reflect that the Apple visionOS XR Plug-in now supports AR Foundation 6.
+
+### Fixed
+
+- Fixed the `SimulationRaycastSubsystem` to correctly state via `XRRaycastSubsystemDescriptor.supportedTrackableTypes` that casting rays against planes is supported in XR Simulation.
+- Fixed the `SimulationSessionSubsystem` so it doesn't log an error if you call `ARSession.Reset` before the session is initialized.
+
 ## [6.0.2] - 2024-05-22
 
 ### Fixed
@@ -280,7 +291,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed `ARTrackable` to now implement the `ITrackable` interface, enabling generic API designs when dealing with trackables.
 - Changed `XRPlaneSubsystem.Provider.requestedPlaneDetectionMode` to `abstract` from `virtual`.
 - Changed `Promise<T>.OnKeepWaiting()` to `virtual` instead of `abstract`.
-- Changed `SubsystemLifecycleManager.GetActiveSubsystemInstance()` to `protected static` from `protected`, as it does not use any instance members of the `SubsystemLifecycleManager` class. 
+- Changed `SubsystemLifecycleManager.GetActiveSubsystemInstance()` to `protected static` from `protected`, as it does not use any instance members of the `SubsystemLifecycleManager` class.
 - Changed the life cycle behavior of [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) in the event that adding the anchor to the `XRAnchorSubsystem` failed. Instead of retrying the add operation every frame, the `ARAnchor` component now disables itself after the first failed attempt.
 
 ### Deprecated
@@ -447,7 +458,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
-- Removed a warning that was previously logged when your AR Foundation project build contained a scene with an `XROrigin` but not an `ARCameraBackground` or `ARCameraManager`. There are valid reasons to set up a scene this way, such as building for OpenXR, so the warning was not helpful. 
+- Removed a warning that was previously logged when your AR Foundation project build contained a scene with an `XROrigin` but not an `ARCameraBackground` or `ARCameraManager`. There are valid reasons to set up a scene this way, such as building for OpenXR, so the warning was not helpful.
 
 ### Fixed
 

@@ -11,8 +11,8 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     /// <remarks>
     /// While you can request any of these simultaneously, support for each varies among devices.
-    /// Some platforms might not be able to simultaneously provide all options, 
-    /// or it might depend on other features (for example, camera <strong>Facing Direction</strong>).
+    /// Some platforms might not be able to simultaneously provide all options,
+    /// or it might depend on other features (for example, camera **Facing Direction**).
     /// </remarks>
     public struct ARLightEstimationData : IEquatable<ARLightEstimationData>
     {
@@ -100,7 +100,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         public float? averageMainLightBrightness
         {
-            get 
+            get
             {
                 if (m_MainLightBrightness.HasValue)
                     return m_MainLightBrightness;
@@ -193,7 +193,7 @@ namespace UnityEngine.XR.ARFoundation
                 }
             }
 
-            return $"(Avg. Brightness: {averageBrightness}, Avg. Color Temperature: {averageColorTemperature}, " 
+            return $"(Avg. Brightness: {averageBrightness}, Avg. Color Temperature: {averageColorTemperature}, "
                 + $"Color Correction: {colorCorrection}, Avg. Intensity in Lumens: {averageIntensityInLumens}, "
                 + $"Est. Main Light Direction: {mainLightDirection}, Est. Main Light Channel Intensity: {mainLightColor}, "
                 + $"Est. Main Light Intensity in Lumens: {mainLightIntensityLumens}, Est. Ambient Spherical Harmonics:\n{sphericalHarmonicsCoefficientsStr}";

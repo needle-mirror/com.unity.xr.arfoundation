@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine.XR.Management;
 using UnityEngine.XR.Simulation;

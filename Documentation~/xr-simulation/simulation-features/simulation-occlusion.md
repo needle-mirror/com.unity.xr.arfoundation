@@ -20,5 +20,5 @@ XR Simulation implements the following optional features of AR Foundation's [XRO
 | **Human Segmentation Depth Image** | [humanSegmentationDepthImageSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.humanSegmentationDepthImageSupported) |  |
 
 > [!NOTE]
-> Refer to AR Foundation [Occlusion platform support](xref:arfoundation-occlusion-platform-support) for more information 
+> Refer to AR Foundation [Occlusion platform support](xref:arfoundation-occlusion-platform-support) for more information
 > on the optional features of the occlusion subsystem.

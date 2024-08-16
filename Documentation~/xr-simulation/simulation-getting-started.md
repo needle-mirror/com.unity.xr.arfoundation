@@ -14,7 +14,7 @@ To run your app in a simulated environment:
    3. Under **Plug-in Providers**, enable **XR Simulation**.
 
 2. Select an XR Simulation environment:
-   
+
    1. Go to **Window** > **XR** > **AR Foundation** > **XR Environment** to open the [XR Environment view](xref:arfoundation-simulation-xr-environment-view).
    2. Select a simulation environment using the Environment dropdown in the center of the XR Environment overlay. At first your project only contains one environment, but you can [Install the sample environments](#install-the-sample-environments) to add more.
 

@@ -7,7 +7,7 @@ using System;
 using UnityEngine.Rendering.RenderGraphModule;
 #else
 using UnityEngine.Experimental.Rendering;
-#endif // URP_17_OR_NEWER 
+#endif // URP_17_OR_NEWER
 #else
 using ScriptableRendererFeature = UnityEngine.ScriptableObject;
 #endif // URP_7_OR_NEWER
@@ -151,7 +151,7 @@ namespace UnityEngine.XR.ARFoundation
             /// <summary>
             /// Set up the background render pass.
             /// </summary>
-            /// <param name="cameraBackground">The <c>ARCameraBackground</c> component that provides the 
+            /// <param name="cameraBackground">The <c>ARCameraBackground</c> component that provides the
             /// <see cref="Material"/> and any additional rendering information required by the render pass.</param>
             /// <param name="invertCulling">Whether the culling mode should be inverted.</param>
             public void Setup(ARCameraBackground cameraBackground, bool invertCulling)
@@ -167,10 +167,10 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             /// <summary>
-            /// Provides inheritors an opportunity to perform any specialized setup during 
+            /// Provides inheritors an opportunity to perform any specialized setup during
             /// <see cref="ScriptableRenderPass.Setup"/>.
             /// </summary>
-            /// <param name="cameraBackground">The <c>ARCameraBackground</c> component that provides the 
+            /// <param name="cameraBackground">The <c>ARCameraBackground</c> component that provides the
             /// <see cref="Material"/> and any additional rendering information required by the render pass.</param>
             protected virtual void SetupInternal(ARCameraBackground cameraBackground) { }
 
@@ -198,9 +198,9 @@ namespace UnityEngine.XR.ARFoundation
 
             /// <summary>
             /// Execute the commands to render the camera background. This function is used for both RenderGraph and
-            /// non-RenderGraph paths. 
+            /// non-RenderGraph paths.
             /// </summary>
-            /// <param name="rasterCommandBuffer">The <c>RasterCommandBuffer</c> object that allows us to enqueue 
+            /// <param name="rasterCommandBuffer">The <c>RasterCommandBuffer</c> object that allows us to enqueue
             /// rendering instructions to the native <see cref="CommandBuffer"/> for this render pass.</param>
             /// <param name="passData">The data that is passed to the function that executes this render pass.</param>
             static void ExecuteRenderPass(RasterCommandBuffer rasterCommandBuffer, PassData passData)
@@ -220,12 +220,12 @@ namespace UnityEngine.XR.ARFoundation
 
 #if URP_17_OR_NEWER
             /// <summary>
-            /// This is part of the RenderGraph path. It calls <see cref="ExecuteRenderPass"/>, which is shared by both the 
+            /// This is part of the RenderGraph path. It calls <see cref="ExecuteRenderPass"/>, which is shared by both the
             /// RenderGraph and non-RenderGraph paths.
             /// </summary>
             /// <param name="passData">The data that is passed to the function that executes this render pass.</param>
-            /// <param name="rasterContext">The <c>RasterGraphContext</c> object that allows us to access the 
-            /// <see cref="RasterCommandBuffer"/> and native <see cref="CommandBuffer"/> to enqueue rendering instructions 
+            /// <param name="rasterContext">The <c>RasterGraphContext</c> object that allows us to access the
+            /// <see cref="RasterCommandBuffer"/> and native <see cref="CommandBuffer"/> to enqueue rendering instructions
             /// for this render pass.</param>
             static void ExecuteRasterRenderGraphPass(PassData passData, RasterGraphContext rasterContext)
             {
@@ -271,7 +271,7 @@ namespace UnityEngine.XR.ARFoundation
 #endif  // URP_17_OR_NEWER
 
             /// <summary>
-            /// Called upon finish rendering a camera. Releases any resources created by this render pass or 
+            /// Called upon finish rendering a camera. Releases any resources created by this render pass or
             /// otherwise executes any cleanup code.
             /// </summary>
             /// <param name="cmd">Use this <c>CommandBuffer</c> to cleanup any generated data</param>

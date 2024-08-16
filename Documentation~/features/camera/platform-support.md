@@ -27,7 +27,7 @@ Your app can check at runtime whether a provider plug-in supports camera compone
 
 ## Optional features
 
-The following table lists the optional features of the camera subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRCameraSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. The **Description** column lists the optional API that may or may not be implemented on each platform. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported. 
+The following table lists the optional features of the camera subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRCameraSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. The **Description** column lists the optional API that may or may not be implemented on each platform. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
 > [!TIP]
 > Check the API documentation to understand how each API behaves when the provider does not support a feature. For example, some properties throw an exception if you try to set the value when the feature is not supported.
@@ -54,7 +54,7 @@ The following table lists the optional features of the camera subsystem. Each op
 
 ### Optional feature platform support
 
-The following table lists whether certain XR plug-in providers support each optional feature.
+To understand the optional features that are implemented in each supported XR plug-in provider, refer to the following table:
 
 | Feature | ARCore | ARKit | Meta OpenXR | XR Simulation |
 | :------ | :----: | :---: | :---------: | :-----------: |

@@ -144,7 +144,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Registers a new descriptor. Should be called by provider implementations.
         /// </summary>
-        /// <param name="cinfo"></param>
+        /// <param name="cinfo">Parameters describing the <see cref="XRRaycastSubsystem"/>.</param>
         [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void RegisterDescriptor(Cinfo cinfo)
         {
@@ -154,7 +154,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Registers a new descriptor. Should be called by provider implementations.
         /// </summary>
-        /// <param name="cinfo"></param>
+        /// <param name="cinfo">Parameters describing the <see cref="XRRaycastSubsystem"/>.</param>
         public static void Register(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRRaycastSubsystemDescriptor(cinfo));

@@ -36,7 +36,7 @@ namespace UnityEditor.XR.ARFoundation
         {
             var arSession = ObjectFactory.CreateGameObject(
                 "AR Session", typeof(ARSession), typeof(ARInputManager));
-            
+
             CreateUtils.Place(arSession, parent);
             Undo.RegisterCreatedObjectUndo(arSession, "Create AR Session");
             return arSession;
@@ -111,7 +111,7 @@ namespace UnityEditor.XR.ARFoundation
             //self shadowing doesn't look good on the default face
             meshRenderer.receiveShadows = false;
             meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
-            
+
             CreateUtils.Place(go, parent);
             Undo.RegisterCreatedObjectUndo(go, "Create AR Default Face");
             return go;

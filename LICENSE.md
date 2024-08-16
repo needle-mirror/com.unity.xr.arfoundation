@@ -1,4 +1,4 @@
-AR Foundation © 2024 Unity Technologies
+com.unity.xr.arfoundation copyright © 2024 Unity Technologies
 
 Licensed under the Unity Companion License for Unity-dependent projects (see [Unity Companion License](https://unity3d.com/legal/licenses/unity_companion_license)).
 

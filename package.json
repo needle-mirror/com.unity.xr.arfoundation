@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed an issue where the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**) threw a `NullReferenceException` if no AssetBundles were built.\n- Fixed an issue where XR Simulation's `CameraTextureProvider` component could throw a `MissingReferenceException` when an AR scene is unloaded.\n- Fixed XR Simulation components so they now behave correctly if you disable the **Reload Domain** option in [Configurable Enter Play Mode](https://docs.unity3d.com/Manual/ConfigurableEnterPlayMode.html) settings.\n- Fixed the native XR Simulation Input provider so that it now explicitly sets **Device** mode as its only supported [Tracking Origin Mode](xref:Unity.XR.CoreUtils.XROrigin.TrackingOriginMode). The [XR Origin component](xref:xr-core-utils-xr-origin-reference) will always use **Device** mode as its Tracking Origin Mode and apply the [XROrigin.CameraYOffset](xref:Unity.XR.CoreUtils.XROrigin.CameraYOffset) value."
+    "changelog": "### Changed\n\n- Updated documentation to reflect that the Apple visionOS XR Plug-in now supports AR Foundation 6.\n\n### Fixed\n\n- Fixed the `SimulationRaycastSubsystem` to correctly state via `XRRaycastSubsystemDescriptor.supportedTrackableTypes` that casting rays against planes is supported in XR Simulation.\n- Fixed the `SimulationSessionSubsystem` so it doesn't log an error if you call `ARSession.Reset` before the session is initialized."
   },
   "upmCi": {
-    "footprint": "e309f4e230fb04c892a30a0e3f6c3163c645b6fc"
+    "footprint": "6b576859e00df79c715422b9c563759f6e3a5740"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "03bcccd104761b6777cf28a41bd02d3a1966ea20"
+    "revision": "c6a307e1c416028a42136ead52020a78c98c540f"
   }
 }

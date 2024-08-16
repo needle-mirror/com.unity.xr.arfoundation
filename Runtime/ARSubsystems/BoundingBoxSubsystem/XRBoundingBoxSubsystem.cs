@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// This is a base class with an abstract provider type to be implemented by provider plug-in packages.
     /// This class itself does not implement bounding box detection.
     /// </remarks>
-    public class XRBoundingBoxSubsystem : 
+    public class XRBoundingBoxSubsystem :
         TrackingSubsystem<XRBoundingBox, XRBoundingBoxSubsystem, XRBoundingBoxSubsystemDescriptor, XRBoundingBoxSubsystem.Provider>
     {
 #if DEVELOPMENT_BUILD || UNITY_EDITOR

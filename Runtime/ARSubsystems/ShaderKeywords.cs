@@ -24,8 +24,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="enabledKeywords">The enabled shader keywords.</param>
         /// <param name="disabledKeywords">The disabled shader keywords.</param>
-        public ShaderKeywords(ReadOnlyCollection<string> enabledKeywords = null, ReadOnlyCollection<string> disabledKeywords = null) 
-        { 
+        public ShaderKeywords(ReadOnlyCollection<string> enabledKeywords = null, ReadOnlyCollection<string> disabledKeywords = null)
+        {
             this.enabledKeywords = enabledKeywords;
             this.disabledKeywords = disabledKeywords;
         }

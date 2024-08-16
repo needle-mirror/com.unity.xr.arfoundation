@@ -7,6 +7,9 @@ AR Foundation enables you to create multi-platform augmented reality (AR) apps w
 
 ![A screenshot from a mobile device shows an interior office environment. Yellow polygons indicate that planes have been detected on the floor, seats, and other surfaces. The user has placed a magenta cube on one of the planes via raycasting.](images/sample-simple-ar.png)<br/>*The [Simple AR sample](https://github.com/Unity-Technologies/arfoundation-samples#simple-ar) scene shows you how to get started with plane detection and raycasting*
 
+> [!TIP]
+> AR Foundation is an important tool for building an AR app with Unity, but your app may require other tools as well. For more information about Unity's AR tools and support, refer to the [Augmented reality](https://unity.com/solutions/xr/ar) homepage.
+
 # Required packages
 
 The AR Foundation package contains interfaces for AR features, but doesn't implement any features itself. To use AR Foundation on a target platform, you also need a separate *provider plug-in* package for that platform.
@@ -19,8 +22,8 @@ Unity officially supports the following provider plug-ins:
 * [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.9/manual/index.html) on HoloLens 2
 * [Unity OpenXR: Meta](xref:meta-openxr-manual) on Meta Quest
 
-> [!NOTE]
-> AR Foundation will not work on a target platform unless you also install the provider plug-in package for that platform. See [Install AR Foundation](xref:arfoundation-install) for detailed setup instructions.
+> [!IMPORTANT]
+> AR Foundation will not work on a target platform unless you also install the provider plug-in package for that platform. Refer to [Install AR Foundation](xref:arfoundation-install) for detailed setup instructions.
 
 # Features
 
@@ -38,7 +41,7 @@ AR Foundation supports the following features:
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |
 | [Body tracking](xref:arfoundation-body-tracking) | Detect and track a human body. |
 | [Point clouds](xref:arfoundation-point-clouds) | Detect and track feature points. |
-| [Raycasts](xref:arfoundation-raycasts) | Cast rays against tracked items. |
+| [Ray casts](xref:arfoundation-raycasts) | Cast rays against tracked items. |
 | [Anchors](xref:arfoundation-anchors) | Track arbitrary points in space. |
 | [Meshing](xref:arfoundation-meshing) | Generate meshes of the environment. |
 | [Environment probes](xref:arfoundation-environment-probes) | Generate cubemaps of the environment. |
@@ -49,7 +52,7 @@ AR Foundation supports the following features:
 
 AR Foundation provider plug-ins rely on platform implementations of AR features, such as Google's ARCore on Android and Apple's ARKit on iOS. Not all features are available on all platforms.
 
-Some AR Foundation features are available in [XR Simulation](xref:arfoundation-simulation-overview) to test your AR app in the Unity Editor. 
+Some AR Foundation features are available in [XR Simulation](xref:arfoundation-simulation-overview) to test your AR app in the Unity Editor.
 
 The table below lists the available features in each Unity-supported provider plug-in:
 
@@ -59,7 +62,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">ARCore</td>
     <td colspan="2" style="text-align: center">ARKit</td>
     <td colspan="2" style="text-align: center">OpenXR</td>
-  <td colspan="1" style="text-align: center">XR Simulation</td>
+    <td colspan="1" style="text-align: center">XR Simulation</td>
   </tr>
   <tr style="border-bottom: 2px solid #dddddd">
     <th style="text-align: center">Android</th>
@@ -73,7 +76,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td><a href="features/session.md">Session</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
@@ -82,7 +85,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td><a href="features/device-tracking.md">Device tracking</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
@@ -100,25 +103,25 @@ The table below lists the available features in each Unity-supported provider pl
     <td><a href="features/plane-detection.md">Plane detection</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/bounding-box-detection.md">Bounding Box detection</a></td>
-    <td style="text-align: center"></td>    <!-- Android -->
-    <td style="text-align: center"></td>    <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
-    <td style="text-align: center"></td>    <!-- HoloLens -->
+    <td style="text-align: center"></td> <!-- Android -->
+    <td style="text-align: center"></td> <!-- iOS -->
+    <td style="text-align: center"></td> <!-- visionOS -->
+    <td style="text-align: center"></td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
-    <td style="text-align: center"></td>    <!-- Unity Editor -->
+    <td style="text-align: center"></td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/image-tracking.md">Image tracking</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
@@ -151,7 +154,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- Unity Editor -->
   </tr>
   <tr>
-  	<td><a href="features/point-clouds.md">Point clouds</a></td>
+    <td><a href="features/point-clouds.md">Point clouds</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
     <td style="text-align: center"></td>    <!-- visionOS -->
@@ -160,7 +163,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
-    <td><a href="features/raycasts.md">Raycasts</a></td>
+    <td><a href="features/raycasts.md">Ray casts</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
     <td style="text-align: center"></td>    <!-- visionOS -->
@@ -172,7 +175,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td><a href="features/anchors.md">Anchors</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
@@ -181,7 +184,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td><a href="features/meshing.md">Meshing</a></td>
     <td style="text-align: center"></td>    <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
@@ -190,7 +193,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td><a href="features/environment-probes.md">Environment probes</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
@@ -217,11 +220,8 @@ The table below lists the available features in each Unity-supported provider pl
 
 [!include[](snippets/arf-docs-tip.md)]
 
-> [!NOTE]
-> visionOS support requires AR Foundation 5.1 and is not yet compatible with AR Foundation 6.0.
-
 # Samples
 
-For pre-configured sample scenes that demonstrate how to use each feature, see the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository.
+For pre-configured sample scenes that demonstrate how to use each feature, check out the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository.
 
 [!include[](snippets/apple-arkit-trademark.md)]

@@ -20,7 +20,7 @@ Your app can check at runtime whether a provider plug-in supports bounding box d
 
 Use the example code below to check whether the device supports bounding box detection:
 
-[!code-cs[CheckIfBoundingBoxLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfBoundingBoxLoaded)]
+[!code-cs[CheckIfBoundingBoxesLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfBoundingBoxesLoaded)]
 
 
 ## Optional features

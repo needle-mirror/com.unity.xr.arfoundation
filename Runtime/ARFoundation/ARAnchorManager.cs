@@ -16,7 +16,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <remarks>
     /// An anchor is a pose (position and rotation) in the physical environment that is tracked by an XR device.
     /// Anchors are updated as the device refines its understanding of the environment, allowing you to reliably place
-    /// virtual content at a physical pose.
+    /// mixed reality content at a physical pose.
+    ///
+    /// Related information: <a href="xref:arfoundation-anchors">Anchors</a>
     /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]
     [DisallowMultipleComponent]
@@ -39,7 +41,7 @@ namespace UnityEngine.XR.ARFoundation
             maxSize: 1024);
 
         [SerializeField]
-        [Tooltip("If not null, instantiates this prefab for each instantiated anchor.")]
+        [Tooltip("If not null, this prefab is instantiated for each detected 3D bounding box.")]
         [FormerlySerializedAs("m_ReferencePointPrefab")]
         GameObject m_AnchorPrefab;
 
@@ -85,11 +87,11 @@ namespace UnityEngine.XR.ARFoundation
         /// Attempts to create a new anchor at the given <paramref name="pose"/>.
         /// </summary>
         /// <example>
-        /// Use this API with C# async/await syntax as shown below:
+        /// <para>Use this API with C# async/await syntax as shown below:</para>
         /// <code>
         ///     var result = await TryAddAnchorAsync(pose);
-        ///     if (result.TryGetResult(out var anchor))
-        ///         DoSomethingWith(anchor);
+        ///     if (result.status.IsSuccess())
+        ///         DoSomethingWith(result.value);
         /// </code>
         /// </example>
         /// <param name="pose">The pose, in Unity world space, of the anchor.</param>
@@ -141,7 +143,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="anchor">The <see cref="ARAnchor"/> to remove.</param>
         /// <returns><see langword="True"/> if successful, otherwise <see langword="False"/></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="anchor"/> is `null`</exception>
         public bool TryRemoveAnchor(ARAnchor anchor)
         {
             if (!enabled)
@@ -224,7 +226,7 @@ namespace UnityEngine.XR.ARFoundation
             var subsystemResult = await subsystem.TryLoadAnchorAsync(savedAnchorGuid, cancellationToken);
 
             completionSource.SetResult(new Result<ARAnchor>(
-                subsystemResult.status, 
+                subsystemResult.status,
                 subsystemResult.status.IsSuccess() ? CreateTrackableImmediate(subsystemResult.value) : null));
 
             var resultAwaitable = completionSource.Awaitable;

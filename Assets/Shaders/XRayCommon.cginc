@@ -1,4 +1,4 @@
-﻿#ifndef XRAY_COMMON_INCLUDED
+#ifndef XRAY_COMMON_INCLUDED
 #define XRAY_COMMON_INCLUDED
 
 static const half _FloorEdgeFadeScale = 10;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine.SceneManagement;
@@ -59,7 +59,7 @@ namespace UnityEngine.XR.Simulation
         {
             if (m_IsStarted)
                 return;
-            
+
             s_NeedsGeneratedCubemaps.Clear();
             s_HasGeneratedCubemaps.Clear();
             s_CollectedProbes.Clear();
@@ -165,7 +165,7 @@ namespace UnityEngine.XR.Simulation
         {
             var probeTransform = probe.transform;
             m_ProbeCameraData.transform.SetPositionAndRotation(probeTransform.position, probeTransform.rotation);
-            
+
 #if UNITY_2022_1_OR_NEWER
             var cubemap = new Cubemap(
                 m_ProbeParams.cubemapFaceSize,

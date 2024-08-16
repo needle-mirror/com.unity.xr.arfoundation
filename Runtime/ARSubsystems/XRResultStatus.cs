@@ -67,7 +67,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// The platform-specific status code.
-        /// 
+        ///
         /// If <see cref="statusCode"/> is <see cref="StatusCode.PlatformQualifiedSuccess"/> or
         /// <see cref="StatusCode.PlatformError"/>, this property contains platform-specific status information
         /// that you can use to help debug issues on that platform. Refer to the provider plug-in documentation for your
@@ -80,7 +80,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Construct an instance with a given status code. This constructor assumes that there is no platform-specific
         /// status information.
         /// </summary>
-        /// <param name="statusCode"></param>
+        /// <param name="statusCode">The platform-agnostic status code.</param>
         public XRResultStatus(StatusCode statusCode)
         {
             m_StatusCode = statusCode;

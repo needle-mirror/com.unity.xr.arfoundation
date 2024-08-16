@@ -21,7 +21,7 @@ Whenever your app doesn't need face tracking functionality, disable the AR Face 
 
 ## Respond to detected faces
 
-While enabled, the AR Face Manager component will get changes reported by the [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) every frame. If any faces were added, updated, or removed, the [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event is invoked with the relevant information. 
+While enabled, the AR Face Manager component will get changes reported by the [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) every frame. If any faces were added, updated, or removed, the [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event is invoked with the relevant information.
 
 When a face is detected, a GameObject is instantiated with an attached `ARFace` component, which contains data about the detected face. Refer to [AR Face component](xref:arfoundation-face-tracking-arface) to learn more about the trackable life cycle.
 

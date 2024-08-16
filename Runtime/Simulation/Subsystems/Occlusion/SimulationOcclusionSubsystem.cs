@@ -18,13 +18,13 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         /// <value>The shader depth property name</value>
         internal const string k_TextureSingleDepthPropertyName = "_TextureSingleDepth";
-        
+
         class SimulationProvider : Provider
         {
             const string k_SimulationOcclusionEnabledMaterialKeyword = "SIMULATION_OCCLUSION_ENABLED";
 
             static readonly List<string> k_EnabledMaterialKeywords = new() { k_SimulationOcclusionEnabledMaterialKeyword };
-            
+
             static readonly ShaderKeywords k_SimulationOcclusionEnabledShaderKeywords =
                 new(k_EnabledMaterialKeywords?.AsReadOnly(), null);
 
@@ -102,7 +102,7 @@ namespace UnityEngine.XR.Simulation
 
             public override ShaderKeywords GetShaderKeywords()
             {
-                return m_Running? k_SimulationOcclusionEnabledShaderKeywords : k_SimulationOcclusionDisabledShaderKeywords;
+                return m_Running ? k_SimulationOcclusionEnabledShaderKeywords : k_SimulationOcclusionDisabledShaderKeywords;
             }
         }
 

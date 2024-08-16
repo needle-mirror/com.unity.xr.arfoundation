@@ -7,7 +7,7 @@ using ImageType = UnityEngine.XR.Simulation.SimulationXRCpuImageApi.ImageType;
 
 namespace UnityEngine.XR.Simulation
 {
-    
+
     [StructLayout(LayoutKind.Sequential)]
     struct SimulationPlatformInterface
     {
@@ -18,7 +18,7 @@ namespace UnityEngine.XR.Simulation
             public delegate void ReleaseImageDelegate(IntPtr imageHandle);
             public delegate void LogDelegate(IntPtr messagePtr);
             public delegate int GetAcquiredImageCountDelegate();
-            
+
 
             public TryGetImageDataDelegate TryGetImageData;
             public AcquireImageDelegate AcquireImage;

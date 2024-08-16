@@ -1,4 +1,4 @@
-﻿#ifndef XRAY_URP_FORWARD_LIT_PASS_INCLUDED
+#ifndef XRAY_URP_FORWARD_LIT_PASS_INCLUDED
 #define XRAY_URP_FORWARD_LIT_PASS_INCLUDED
 
  // Used in URPv7.2.x+ for 'positionWS' in `Varyings`

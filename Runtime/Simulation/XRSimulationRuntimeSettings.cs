@@ -25,7 +25,7 @@ namespace UnityEngine.XR.Simulation
         [SerializeField]
         EnvironmentProbeParams m_EnvironmentProbeDiscoveryParams = new();
 
-        [SerializeField] 
+        [SerializeField]
         AnchorDiscoveryParams m_AnchorDiscoveryParams = new();
 
         [Header("X-Ray Options")]

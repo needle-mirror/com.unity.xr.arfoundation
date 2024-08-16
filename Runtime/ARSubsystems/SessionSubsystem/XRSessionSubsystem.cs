@@ -368,7 +368,8 @@ namespace UnityEngine.XR.ARSubsystems
             /// Attempt to update or install necessary XR software. Will only be called if
             /// <see cref="XRSessionSubsystemDescriptor.supportsInstall"/> is true.
             /// </summary>
-            /// <returns></returns>
+            /// <returns>A <see cref="Promise{SessionInstallationStatus}"/> which can be used to determine when the
+            /// installation completes and to retrieve the result.</returns>
             public virtual Promise<SessionInstallationStatus> InstallAsync()
             {
                 return Promise<SessionInstallationStatus>.CreateResolvedPromise(SessionInstallationStatus.ErrorInstallNotSupported);

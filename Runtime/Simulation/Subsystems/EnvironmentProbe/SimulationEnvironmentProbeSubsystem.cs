@@ -1,4 +1,4 @@
-﻿using Unity.Collections;
+using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -11,7 +11,7 @@ namespace UnityEngine.XR.Simulation
     public class SimulationEnvironmentProbeSubsystem : XREnvironmentProbeSubsystem
     {
         internal const string k_SubsystemId = "XRSimulation-EnvironmentProbe";
-        
+
         class SimulationProvider : Provider, ISimulationSessionResetHandler
         {
             SimulationEnvironmentProbeDiscoverer m_ProbeDiscoverer;

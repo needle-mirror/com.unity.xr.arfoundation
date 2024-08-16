@@ -215,7 +215,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Registers a subsystem implementation with the <c>SubsystemManager</c>.
         /// </summary>
-        /// <param name="descriptorParams"></param>
+        /// <param name="descriptorParams">Parameters describing the <see cref="XRPointCloudSubsystem"/>.</param>
         [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
         public static void RegisterDescriptor(Cinfo descriptorParams)
         {
@@ -225,7 +225,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Registers a subsystem descriptor with the <c>SubsystemManager</c>.
         /// </summary>
-        /// <param name="cinfo"></param>
+        /// <param name="cinfo">Parameters describing the <see cref="XRPointCloudSubsystem"/>.</param>
         public static void Register(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRPointCloudSubsystemDescriptor(cinfo));

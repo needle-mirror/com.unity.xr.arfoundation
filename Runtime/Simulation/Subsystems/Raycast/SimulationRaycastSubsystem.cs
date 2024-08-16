@@ -72,7 +72,7 @@ namespace UnityEngine.XR.Simulation
                 subsystemTypeOverride = typeof(SimulationRaycastSubsystem),
                 supportsViewportBasedRaycast = false,
                 supportsWorldBasedRaycast = true,
-                supportedTrackableTypes = TrackableType.FeaturePoint,
+                supportedTrackableTypes = TrackableType.FeaturePoint | TrackableType.Planes,
                 supportsTrackedRaycasts = false
             });
         }

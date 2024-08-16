@@ -18,7 +18,7 @@ namespace UnityEngine.XR.Simulation
         /// <c>projectionMatrix.HasValue</c> to determine if this data is available.
         /// </summary>
         public Matrix4x4? projectionMatrix { get; set; }
-        
+
         /// <summary>
         /// The textures associated with this camera frame. These are generally
         /// external textures, which exist only on the GPU. To use them on the

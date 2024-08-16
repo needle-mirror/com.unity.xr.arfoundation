@@ -45,6 +45,8 @@ public class MyComponent {
 
 If you set **Attempt Update** to **true**, the device tries to install AR software if possible. Support for this feature is platform-dependent.
 
+<a id="session-state"/>
+
 ### Session state
 
 Use [ARSession.state](xref:UnityEngine.XR.ARFoundation.ARSession.state) to get the current session state. You can also subscribe to the [ARSession.stateChanged](xref:UnityEngine.XR.ARFoundation.ARSession.stateChanged) event to receive a callback when the state changes. Refer to the table below for a list of all possible states:

@@ -9,8 +9,9 @@ namespace UnityEngine.XR.ARSubsystems
     public abstract class RuntimeReferenceImageLibrary : IReferenceImageLibrary
     {
         /// <summary>
-        /// Gets the <see cref="XRReferenceImage"/> at the given <paramref name="index"/>.
+        /// Get the <see cref="XRReferenceImage"/> at the given <paramref name="index"/>.
         /// </summary>
+        /// <param name="index">The index.</param>
         public XRReferenceImage this[int index]
         {
             get
