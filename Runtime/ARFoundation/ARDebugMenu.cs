@@ -17,6 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     /// Menu that is added to a scene to surface tracking data and visualize trackables in order to aid in debugging.
     /// </summary>
     [RequireComponent(typeof(Canvas))]
+    [HelpURL("debug-ar-scenes")]
     public class ARDebugMenu : MonoBehaviour
     {
 

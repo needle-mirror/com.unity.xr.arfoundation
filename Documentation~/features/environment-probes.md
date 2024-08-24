@@ -1,7 +1,7 @@
 ---
 uid: arfoundation-environment-probes
 ---
-# Environment Probes
+# Environment probes
 
 Environment probes capture real-world imagery from a camera and organize that information into an environment texture, such as a cube map, that contains the view in all directions from a certain point in the scene. Rendering 3D objects using this environment texture allows for real-world imagery to be reflected in the rendered objects, which creates realistic reflections and lighting of virtual objects as influenced by the real-world views.
 

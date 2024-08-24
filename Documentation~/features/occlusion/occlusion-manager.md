@@ -19,7 +19,7 @@ The types of depth images supported are:
 | **Human Depth** | Distance from the device to any part of a human recognized within the camera field of view. |
 | **Human Stencil** | Value designating, for each pixel, whether that pixel contains a recognized human. |
 
-## AR Occlusion Manager settings
+## AR Occlusion Manager properties
 
 The following table describes the properties of the AR Occlusion Manager component:
 

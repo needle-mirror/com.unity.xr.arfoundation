@@ -22,6 +22,7 @@ Use the example code below to check whether the device supports bounding box det
 
 [!code-cs[CheckIfBoundingBoxesLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfBoundingBoxesLoaded)]
 
+[!include[](../../snippets/initialization.md)]
 
 ## Optional features
 

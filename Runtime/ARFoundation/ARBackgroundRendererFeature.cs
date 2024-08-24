@@ -172,7 +172,15 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="cameraBackground">The <c>ARCameraBackground</c> component that provides the
             /// <see cref="Material"/> and any additional rendering information required by the render pass.</param>
-            protected virtual void SetupInternal(ARCameraBackground cameraBackground) { }
+            protected virtual void SetupInternal(ARCameraBackground cameraBackground)
+            {
+                if (cameraBackground.occlusionManager != null && cameraBackground.occlusionManager.enabled)
+                {
+                    // If an occlusion texture is being provided, rendering will need
+                    // to compare it against the depth texture created by the camera.
+                    ConfigureInput(ScriptableRenderPassInput.Depth);
+                }
+            }
 
             /// <summary>
             /// Execute the commands to render the camera background with RenderGraph disabled.
@@ -343,17 +351,6 @@ namespace UnityEngine.XR.ARFoundation
 #pragma warning disable CS0618
                 ConfigureClear(ClearFlag.None, Color.clear);
 #pragma warning restore CS0618
-            }
-
-            /// <inheritdoc />
-            protected override void SetupInternal(ARCameraBackground cameraBackground)
-            {
-                if (cameraBackground.GetComponent<AROcclusionManager>()?.enabled ?? false)
-                {
-                    // If an occlusion texture is being provided, rendering will need
-                    // to compare it against the depth texture created by the camera.
-                    ConfigureInput(ScriptableRenderPassInput.Depth);
-                }
             }
 
             protected override XRCameraBackgroundRenderingMode renderingMode

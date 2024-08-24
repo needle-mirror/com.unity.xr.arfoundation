@@ -18,6 +18,9 @@ namespace UnityEngine.XR.Simulation
         readonly HashSet<SimulatedAnchor> anchorInstances = new();
         internal IReadOnlyCollection<SimulatedAnchor> simulationEnvironmentAnchors => anchorInstances;
 
+        readonly HashSet<SimulatedBoundingBox> boundingBoxInstances = new();
+        internal IReadOnlyCollection<SimulatedBoundingBox> simulationEnvironmentBoundingBoxes => boundingBoxInstances;
+
         internal void TrackLight(SimulatedLight light)
         {
             lightInstances.Add(light);
@@ -36,6 +39,16 @@ namespace UnityEngine.XR.Simulation
         internal void UntrackAnchor(SimulatedAnchor anchor)
         {
             anchorInstances.Remove(anchor);
+        }
+
+        internal void TrackBoundingBox(SimulatedBoundingBox box)
+        {
+            boundingBoxInstances.Add(box);
+        }
+
+        internal void UntrackBoundingBox(SimulatedBoundingBox box)
+        {
+            boundingBoxInstances.Remove(box);
         }
 
         protected override Scene CreateEnvironmentScene()
@@ -66,6 +79,7 @@ namespace UnityEngine.XR.Simulation
         {
             lightInstances.Clear();
             anchorInstances.Clear();
+            boundingBoxInstances.Clear();
         }
     }
 }

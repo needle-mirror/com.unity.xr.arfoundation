@@ -15,9 +15,13 @@ namespace UnityEngine.XR.ARFoundation
     /// respectively.
     /// </para>
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-session">AR Session component</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
-    [HelpURL(typeof(ARSession))]
+    [AddComponentMenu("XR/AR Foundation/AR Session")]
+    [HelpURL("features/session")]
     public sealed class ARSession :
         SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {

@@ -21,6 +21,7 @@ namespace UnityEditor.XR.Simulation
         SerializedProperty m_PlaneFindingParamsProperty;
         SerializedProperty m_ProbesParamsProperty;
         SerializedProperty m_AnchorParamsProperty;
+        SerializedProperty m_BoundingBoxDiscoveryParamsProperty;
 
         void OnEnable()
         {
@@ -31,6 +32,7 @@ namespace UnityEditor.XR.Simulation
             m_PlaneFindingParamsProperty = m_SerializedObject.FindProperty("m_PlaneFindingParams");
             m_ProbesParamsProperty = m_SerializedObject.FindProperty("m_EnvironmentProbeDiscoveryParams");
             m_AnchorParamsProperty = m_SerializedObject.FindProperty("m_AnchorDiscoveryParams");
+            m_BoundingBoxDiscoveryParamsProperty = m_SerializedObject.FindProperty("m_BoundingBoxDiscoveryParams");
         }
 
         public override void OnInspectorGUI()
@@ -60,6 +62,7 @@ namespace UnityEditor.XR.Simulation
                 EditorGUILayout.PropertyField(m_ImageDiscoveryPramsProperty);
                 EditorGUILayout.PropertyField(m_ProbesParamsProperty);
                 EditorGUILayout.PropertyField(m_AnchorParamsProperty);
+                EditorGUILayout.PropertyField(m_BoundingBoxDiscoveryParamsProperty);
 
                 EditorGUIUtility.labelWidth = previousLabelWidth;
 

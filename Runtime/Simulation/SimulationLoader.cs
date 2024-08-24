@@ -20,6 +20,7 @@ namespace UnityEngine.XR.Simulation
         static List<XREnvironmentProbeSubsystemDescriptor> s_ProbeSubsystemDescriptors = new();
         static List<XRAnchorSubsystemDescriptor> s_AnchorSubsystemDescriptors = new();
         static List<XROcclusionSubsystemDescriptor> s_OcclusionSubsystemDescriptors = new();
+        static List<XRBoundingBoxSubsystemDescriptor> s_BoundingBoxSubsystemDescriptors = new();
 
         /// <summary>
         /// Initializes the loader.
@@ -38,6 +39,7 @@ namespace UnityEngine.XR.Simulation
             CreateSubsystem<XREnvironmentProbeSubsystemDescriptor, XREnvironmentProbeSubsystem>(s_ProbeSubsystemDescriptors, SimulationEnvironmentProbeSubsystem.k_SubsystemId);
             CreateSubsystem<XRAnchorSubsystemDescriptor, XRAnchorSubsystem>(s_AnchorSubsystemDescriptors, SimulationAnchorSubsystem.k_SubsystemId);
             CreateSubsystem<XROcclusionSubsystemDescriptor, XROcclusionSubsystem>(s_OcclusionSubsystemDescriptors, SimulationOcclusionSubsystem.k_SubsystemId);
+            CreateSubsystem<XRBoundingBoxSubsystemDescriptor, XRBoundingBoxSubsystem>(s_BoundingBoxSubsystemDescriptors, SimulationBoundingBoxSubsystem.k_SubsystemId);
 
             var sessionSubsystem = GetLoadedSubsystem<XRSessionSubsystem>();
             if (sessionSubsystem == null)
@@ -52,6 +54,7 @@ namespace UnityEngine.XR.Simulation
         /// <returns>Always returns `true`.</returns>
         public override bool Deinitialize()
         {
+            DestroySubsystem<XRBoundingBoxSubsystem>();
             DestroySubsystem<XROcclusionSubsystem>();
             DestroySubsystem<XRAnchorSubsystem>();
             DestroySubsystem<XREnvironmentProbeSubsystem>();

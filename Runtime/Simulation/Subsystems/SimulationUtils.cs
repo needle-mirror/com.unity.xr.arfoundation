@@ -24,6 +24,15 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
+        internal static async Awaitable RunWithoutCancellationExceptions(Awaitable awaitable)
+        {
+            try
+            {
+                await awaitable;
+            }
+            catch (OperationCanceledException) { }
+        }
+
         internal static TrackableId GenerateTrackableId()
         {
             Guid.NewGuid().Decompose(out var sub1, out var sub2);
@@ -36,7 +45,10 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         internal static bool IsInSimulationEnvironment(GameObject gameObject)
         {
-            return gameObject.scene == SimulationSessionSubsystem.simulationSceneManager.environmentScene;
+            if (gameObject == null)
+                return false;
+
+            return gameObject.scene == SimulationSessionSubsystem.simulationSceneManager?.environmentScene;
         }
     }
 }

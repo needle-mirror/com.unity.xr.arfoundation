@@ -7,6 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     /// Script that handles button highlighting in menus when button is selected.
     /// </summary>
     [RequireComponent(typeof(Image))]
+    [HelpURL(typeof(ToolButton))]
     public class ToolButton : MonoBehaviour
     {
         [SerializeField]

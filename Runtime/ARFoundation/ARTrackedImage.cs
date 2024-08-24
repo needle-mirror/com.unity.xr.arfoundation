@@ -6,6 +6,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Represents a tracked image in the physical environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-image-tracking">AR Tracked Image Manager component</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImage)]
     [HelpURL(typeof(ARTrackedImage))]

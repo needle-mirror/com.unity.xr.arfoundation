@@ -7,7 +7,7 @@ AR Foundation is an official Unity package available via the [Package Manager](h
 
 ## Editor compatibility
 
-AR Foundation 6.0 is compatible with Unity 6 (6000.0).
+AR Foundation 6.1 is compatible with Unity 6 (6000.0).
 
 > [!NOTE]
 > You can visit the Unity Forum for more information on the [Unity 6 New Naming Convention](https://forum.unity.com/threads/unity-6-new-naming-convention.1558592/).
@@ -29,8 +29,8 @@ Unity officially supports the following provider plug-ins with this version of A
 
 | AR Platform | Provider plug-in                                                                                        | Version |
 | :---------- | :------------------------------------------------------------------------------------------------------ | :------ |
-| Android     | [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/index.html) |   6.0   |
-| iOS         | [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/index.html)    |   6.0   |
+| Android     | [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.1/manual/index.html) |   6.1   |
+| iOS         | [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/manual/index.html)    |   6.1   |
 | HoloLens 2  | [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.8/manual/index.html)           |   1.8   |
 
 To use AR Foundation on a device, you must install at least one provider plug-in, either from the Package Manager or by going to **Project Settings** > **XR Plug-in Management** as shown below.
@@ -46,8 +46,8 @@ Some provider plug-ins require that you set specific project settings for AR to 
 
 | Provider plug-in | Setup instructions |
 | :--------------- | :----------------- |
-| [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.0/manual/project-configuration-arcore.html) |
-| [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/project-configuration-arkit.html) |
+| [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.1/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.1/manual/project-configuration-arcore.html) |
+| [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/manual/project-configuration-arkit.html) |
 
 
 ## Third-party plug-ins

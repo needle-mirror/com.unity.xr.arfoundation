@@ -5,7 +5,7 @@ using Unity.XR.CoreUtils;
 namespace UnityEngine.XR.Simulation
 {
     /// <summary>
-    /// This component takes updates from Unity Input System bindings and uses it to compute a new camera pose,
+    /// This component takes updates from Unity InputSystem bindings and uses it to compute a new camera pose,
     /// which it then passes to the XR Input subsystem in native code.
     /// </summary>
     /// <remarks>

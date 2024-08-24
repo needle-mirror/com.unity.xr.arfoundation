@@ -9,10 +9,14 @@ namespace UnityEngine.XR.ARFoundation
     /// A manager for <see cref="ARParticipant"/>s. Creates, updates, and removes
     /// <c>GameObject</c>s in response to other users in a multi-user collaborative session.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-participant-tracking">AR Participant Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_ParticipantManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(typeof(ARParticipantManager))]
+    [AddComponentMenu("XR/AR Foundation/AR Participant Manager")]
+    [HelpURL("features/participant-tracking")]
     public sealed class ARParticipantManager : ARTrackableManager<
         XRParticipantSubsystem,
         XRParticipantSubsystemDescriptor,

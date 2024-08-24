@@ -31,7 +31,7 @@ The following code sets up a [command buffer](https://docs.unity3d.com/ScriptRef
 To access the device camera image on the CPU, first call [ARCameraManager.TryAcquireLatestCpuImage](xref:UnityEngine.XR.ARFoundation.ARCameraManager.TryAcquireLatestCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) to obtain an `XRCpuImage`.
 
 > [!NOTE]
-> On iOS 16 or newer, you can also use [ARKitCameraSubsystem.TryAcquireHighResolutionCpuImage](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/api/UnityEngine.XR.ARKit.ARKitCameraSubsystem.html#UnityEngine_XR_ARKit_ARKitCameraSubsystem_TryAcquireHighResolutionCpuImage). See [High resolution CPU image](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/arkit-camera.html#high-resolution-cpu-image) to learn more.
+> On iOS 16 or newer, you can also use [ARKitCameraSubsystem.TryAcquireHighResolutionCpuImage](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/api/UnityEngine.XR.ARKit.ARKitCameraSubsystem.html#UnityEngine_XR_ARKit_ARKitCameraSubsystem_TryAcquireHighResolutionCpuImage). See [High resolution CPU image](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.0/manual/arkit-camera.html#high-resolution-cpu-image) to learn more.
 
 [XRCpuImage](xref:UnityEngine.XR.ARSubsystems.XRCpuImage) is a struct that represents a native pixel array. When your app no longer needs this resource, you must call [XRCpuImage.Dispose](xref:UnityEngine.XR.ARSubsystems.XRCpuImage.Dispose) to release the associated memory back to the AR platform. You should call `Dispose` as soon as possible, as failure to `Dispose` too many `XRCpuImage` instances can cause the AR platform to run out of memory and prevent you from capturing new camera images.
 

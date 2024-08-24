@@ -10,6 +10,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [DefaultExecutionOrder(ARUpdateOrder.k_InputManager)]
     [DisallowMultipleComponent]
+    [AddComponentMenu("XR/AR Foundation/AR Input Manager")]
     [HelpURL(typeof(ARInputManager))]
     public sealed class ARInputManager : MonoBehaviour
     {

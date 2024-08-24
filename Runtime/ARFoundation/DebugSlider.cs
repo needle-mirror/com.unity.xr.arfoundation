@@ -6,6 +6,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Slider used for debug options in <see cref="ARDebugMenu"/>.
     /// </summary>
+    [HelpURL(typeof(ARDebugMenu))]
     public class DebugSlider: Slider
     {
         /// <summary>

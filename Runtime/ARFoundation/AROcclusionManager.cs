@@ -10,9 +10,13 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// The manager for the occlusion subsystem.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-occlusion">Occlusion</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_OcclusionManager)]
-    [HelpURL(typeof(AROcclusionManager))]
+    [AddComponentMenu("XR/AR Foundation/AR Occlusion Manager")]
+    [HelpURL("features/occlusion")]
     public sealed class AROcclusionManager :
         SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
     {

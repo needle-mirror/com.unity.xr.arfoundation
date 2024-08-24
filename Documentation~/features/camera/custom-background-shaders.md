@@ -31,3 +31,6 @@ outputTextureCoord = mul(float3(v.texcoord, 1.0f), _UnityDisplayTransform).xy;
 where `_UnityDisplayTransform` is the display matrix and `v` are the 2D texture coordinates of the image.
 
 Note, the HLSL function `mul()` is overloaded to use a row vector when a matrix is premultiplied by a vector and to still perform the operation without the `0` in the last index of the row vector, as it is not necessary for the final output texture coordinates. Refer to this doc for more information: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-mul
+
+> [!NOTE]
+> If your project uses the ARCore plugin and needs to support both OpenGLES and Vulkan Graphics APIs, then you need to supply both `GLSLPROGRAM` and `HLSLPROGRAM` via the subshaders and `#pragma only_renderers` preprocessor directives. Because OpenGLES is dependent on the `GL_OES_EGL_image_external_essl3` extension which is incompatible with Vulkan (requires HLSL).

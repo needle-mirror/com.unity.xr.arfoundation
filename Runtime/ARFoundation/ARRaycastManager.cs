@@ -11,10 +11,14 @@ namespace UnityEngine.XR.ARFoundation
     /// to raycast against trackables (that is, detected features in the physical environment) when they do not have
     /// a presence in the Physics world.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-raycasts">AR Raycast Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_RaycastManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(typeof(ARRaycastManager))]
+    [AddComponentMenu("XR/AR Foundation/AR Raycast Manager")]
+    [HelpURL("features/raycasts")]
     public sealed class ARRaycastManager : ARTrackableManager<
         XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
         XRRaycastSubsystem.Provider,

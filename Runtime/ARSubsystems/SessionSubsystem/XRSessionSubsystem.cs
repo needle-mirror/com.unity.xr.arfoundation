@@ -1,5 +1,6 @@
 using System;
 using Unity.Collections;
+using UnityEngine.Rendering;
 using UnityEngine.SubsystemsImplementation;
 
 namespace UnityEngine.XR.ARSubsystems
@@ -270,6 +271,32 @@ namespace UnityEngine.XR.ARSubsystems
         public int frameRate => provider.frameRate;
 
         /// <summary>
+        /// Invoked when using the Universal Rendering Pipeline in conjunction with
+        /// the ARCommandBufferSupportRendererFeature to provide subsystem awareness
+        /// that the render pipeline's render pass is enabled.
+        /// </summary>
+
+        /// <seealso cref="OnCommandBufferExecute"/>
+        /// <seealso cref="requiresCommandBuffer"/>
+        public void OnCommandBufferSupportEnabled() => provider.OnCommandBufferSupportEnabled();
+
+        /// <summary>
+        /// Invoked by the ARCommandBufferSupportRendererFeature.ExecuteRenderPass()
+        /// method to provide subsystem access to the render pipeline's render pass command buffers.
+        /// </summary>
+        /// <param name="commandBuffer">The command buffer about to be executed.</param>
+        /// <seealso cref="OnCommandBufferSupportEnabled"/>
+        /// <seealso cref="requiresCommandBuffer"/>
+        public void OnCommandBufferExecute(CommandBuffer commandBuffer) => provider.OnCommandBufferExecute(commandBuffer);
+
+        /// <summary>
+        /// If the underlying subsystem provider requires access to the rendering pipeline
+        /// then that provider will return <see langword="true"/> here.
+        /// </summary>
+        /// <value><see langword="true"/> if the session provider overrides and handles <see cref="OnCommandBufferSupportEnabled"/> and <see cref="OnCommandBufferExecute"/> calls.  Otherwise, <see langword="false"/>.</value>
+        public bool requiresCommandBuffer => provider.requiresCommandBuffer;
+
+        /// <summary>
         /// The API this subsystem uses to interop with
         /// different provider implementations.
         /// </summary>
@@ -348,6 +375,31 @@ namespace UnityEngine.XR.ARSubsystems
             /// Invoked when the application is resumed.
             /// </summary>
             public virtual void OnApplicationResume() { }
+
+            /// <summary>
+            /// Invoked by the ARCommandBufferSupportRendererFeature render pass creation
+            /// and render graph recording (if applicable) to provide subsystem awareness
+            /// that the render pipeline's render pass is enabled.
+            /// </summary>
+            /// <seealso cref="OnCommandBufferExecute"/>
+            /// <seealso cref="requiresCommandBuffer"/>
+            public virtual void OnCommandBufferSupportEnabled() {}
+
+            /// <summary>
+            /// Invoked by the ARCommandBufferSupportRendererFeature.ExecuteRenderPass()
+            /// method to provide subsystem access to the render pipeline's render pass command buffers.
+            /// </summary>
+            /// <param name="commandBuffer">The command buffer about to be executed.</param>
+            /// <seealso cref="OnCommandBufferSupportEnabled"/>
+            /// <seealso cref="requiresCommandBuffer"/>
+            public virtual void OnCommandBufferExecute(CommandBuffer commandBuffer) {}
+
+            /// <summary>
+            /// If the underlying subsystem provider requires access to the rendering pipeline
+            /// then that provider will return <see langword="true"/> here.
+            /// </summary>
+            /// <value><see langword="true"/> if the session provider overrides and handles <see cref="OnCommandBufferSupportEnabled"/> and <see cref="OnCommandBufferExecute"/> calls.  Otherwise, <see langword="false"/>.</value>
+            public virtual bool requiresCommandBuffer => false;
 
             /// <summary>
             /// Get a pointer to an object associated with the session.

@@ -50,6 +50,10 @@ AR Foundation contains the following components and shaders you can use to creat
    <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated tracked image for image tracking purposes.</td>
   </tr>
   <tr>
+   <td colspan="2" ><a href="#simulated-bounding-box-component">Simulated Bounding Box component</a></td>
+   <td>Add to a GameObject in an XR Simulation environment to add a simulated bounding box to it, for bounding box discovery purposes.</td>
+  </tr>
+  <tr>
    <td colspan="2" ><a href="#simulated-environment-probe-component">Simulated Environment Probe component</a></td>
    <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated environment probe. At runtime this GameObject will appear as an automatically placed environment probe.</td>
   </tr>
@@ -76,8 +80,6 @@ AR Foundation contains the following components and shaders you can use to creat
    <td>Shaders that clip exterior surfaces, allowing the camera to easily see into interior rooms from outside the walls.</td>
   </tr>
 </table>
-
-<!-- uncomment and add to table above when documentation is added | [Simulated Bounded Plane component](#simulated-bounded-plane-component) || | -->
 
 <!-- uncomment and add to table above when documentation is added | [Simulated Mesh Classification component](#simulated-mesh-classification-component) || | -->
 
@@ -130,6 +132,20 @@ To help you visualize simulated tracked images in your XR Simulation environment
 > [!NOTE]
 > Visually representing a simulated tracked image in an XR Simulation environment is optional. XR Simulation only uses the Simulated Tracked Image component to detect and track images. It does not use textured meshes rendered in the environment for this purpose. You can disable the Mesh Renderer component on the image GameObject if you prefer not to render the image mesh.
 
+## Simulated Bounding Box component
+
+Add a Simulated Bounding Box component to a GameObject in your XR simulation environment to designate it as a simulated bounding box. Simulated Bounding Boxes simulate AR Foundation's [bounding box detection](xref:arfoundation-bounding-box-detection) feature.
+
+![Simulated Bounding Box component](../images/simulated-bounding-box-image.png)<br/>*Simulated Bounding Box component*
+
+When you add a Simulated Bounding Box component to a GameObject, if that GameObject has an attached Collider or Renderer component, the Simulated Bounding Box will automatically calibrate its **Size** and **Center** properties to match. Otherwise, you can manually set the **Size** and **Center** properties to your desired bounds. Use the white outline Gizmo to visualize the resulting bounding box.
+
+| Property | Description |
+| :------- | :---------- |
+| **Size** | The size of the bounding box in local space. |
+| **Center** | The offset of the bounding box in local space. |
+| **Classifications** | The Classifications flags of the bounding box. |
+
 ## Simulated Environment Probe component
 
 Add a Simulated Environment Probe component to a GameObject in your XR Simulation environment to designate it as a simulated environment probe. Simulated environment probes simulate [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes.
@@ -145,7 +161,7 @@ Add a Simulated Environment Probe component to a GameObject in your XR Simulatio
 
 Add a Simulated Anchor component to a GameObject in your XR Simulation to designate the GameObject as a simulated anchor.
 
-Simulated anchors simulate [loading existing anchors](xref:arfoundation-anchors-persistent#load-anchor) using automatically supplied AR data outside of the users control.
+Simulated anchors simulate [loading existing anchors](xref:arfoundation-anchors-persistent#load-anchor) using automatically supplied AR data outside of the user's control.
 
 A simulated anchor requires no additional configuration. Anchor [Pose](xref:UnityEngine.Pose) data comes from its GameObject's [Transform](xref:UnityEngine.Transform) component.
 
@@ -158,11 +174,6 @@ XR Simulation environments can provide a snapshot of mesh data, which is generat
 ![Simulated Mesh Classification component](images/simulated-mesh-classification.png)<br/>*Simulated Mesh Classification component*
 
 The Simulated Mesh Classification component has a single property, **Classification Type**. Set this property to a string, such as "table", "wall", "seat", or "floor". In Play Mode, the XR Simulation [meshing](xref:arfoundation-mesh-manager) feature uses this value to classify all meshes referenced by Mesh Filter components on this GameObject and its child GameObjects.
--->
-
-<!-- Uncomment when documentation is available...
-<a name="simulated-bounded-plane-component"></a>
-### Simulated Bounded Plane component
 -->
 
 ## Simulated Light component

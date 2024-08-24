@@ -14,11 +14,14 @@ namespace UnityEngine.XR.ARFoundation
     /// When enabled, this component subscribes to <see cref="ARFaceManager.facesChanged"/> event to update face data.
     /// If this component is disabled, and there are no other subscribers to those events,
     /// face detection will be disabled on the device.
+    ///
+    /// Related information: <a href="xref:arfoundation-face-tracking">AR Face Manager component</a>
     /// </remarks>
     [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_FaceManager)]
-    [HelpURL(typeof(ARFaceManager))]
+    [AddComponentMenu("XR/AR Foundation/AR Face Manager")]
+    [HelpURL("features/face-tracking")]
     public sealed class ARFaceManager : ARTrackableManager<
         XRFaceSubsystem,
         XRFaceSubsystemDescriptor,

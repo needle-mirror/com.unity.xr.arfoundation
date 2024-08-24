@@ -16,11 +16,11 @@ The AR Foundation package contains interfaces for AR features, but doesn't imple
 
 Unity officially supports the following provider plug-ins:
 
-* [Google ARCore XR Plug-in](xref:arcore-manual) on Android
-* [Apple ARKit XR Plug-in](xref:arkit-manual) on iOS
+* [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.1/manual/index.html) on Android
+* [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/manual/index.html) on iOS
 * [Apple visionOS XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.visionos@1.1/manual/index.html) on visionOS
-* [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.9/manual/index.html) on HoloLens 2
-* [Unity OpenXR: Meta](xref:meta-openxr-manual) on Meta Quest
+* [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html) on HoloLens 2
+* [Unity OpenXR: Meta](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@latest) on Meta Quest
 
 > [!IMPORTANT]
 > AR Foundation will not work on a target platform unless you also install the provider plug-in package for that platform. Refer to [Install AR Foundation](xref:arfoundation-install) for detailed setup instructions.
@@ -39,7 +39,7 @@ AR Foundation supports the following features:
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
 | [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |
-| [Body tracking](xref:arfoundation-body-tracking) | Detect and track a human body. |
+| [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager) | Detect and track a human body. |
 | [Point clouds](xref:arfoundation-point-clouds) | Detect and track feature points. |
 | [Ray casts](xref:arfoundation-raycasts) | Cast rays against tracked items. |
 | [Anchors](xref:arfoundation-anchors) | Track arbitrary points in space. |
@@ -115,7 +115,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td> <!-- visionOS -->
     <td style="text-align: center"></td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
-    <td style="text-align: center"></td> <!-- Unity Editor -->
+    <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/image-tracking.md">Image tracking</a></td>
@@ -124,7 +124,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center">Yes</td> <!-- Unity Editor -->
+   <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/object-tracking.md">Object tracking</a></td>
@@ -133,7 +133,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td>    <!-- Unity Editor -->
+    <td style="text-align: center"></td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/face-tracking.md">Face tracking</a></td>
@@ -142,7 +142,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td>    <!-- Unity Editor -->
+    <td style="text-align: center"></td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/body-tracking.md">Body tracking</a></td>
@@ -151,7 +151,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td>    <!-- Unity Editor -->
+    <td style="text-align: center"></td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/point-clouds.md">Point clouds</a></td>
@@ -186,14 +186,14 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- iOS -->
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
-    <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td>    <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/environment-probes.md">Environment probes</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center">Yes</td> <!-- visionOS -->
+    <td style="text-align: center">Yes</td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
@@ -214,7 +214,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td>    <!-- Unity Editor -->
+    <td style="text-align: center"></td> <!-- Unity Editor -->
   </tr>
 </table>
 

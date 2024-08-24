@@ -8,25 +8,35 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [6.0.3] - 2024-08-16
+## [6.1.0-pre.1] - 2024-08-24
+
+### Added
+
+- Added an **XR/AR Foundation** section to the **Component** menu to make it easier to add AR Foundation components to a GameObject.
+- Added a project validation rule to validate **Script Compilation During Play** setting for XR simulation.
+- Added support for simulated bounding box detection to XR Environment via the [SimulatedBoundingBox](xref:UnityEngine.XR.Simulation.SimulatedBoundingBox) component.
+- Added three new APIs to the `XRSessionSubsystem` and provider class which can be extended by AR session providers to handle Universal Render Pipeline rendering events signaled by the `ARCommandBufferSupportRendererFeature` when it is included in the renderer features list for the `Universal Renderer` asset.
+  - [XRSessionSubsystem.requiresCommandBuffer](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.requiresCommandBuffer*)
+  - [XRSessionSubsystem.OnCommandBufferSupportEnabled](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.OnCommandBufferSupportEnabled*)
+  - [XRSessionSubsystem.OnCommandBufferExecute](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.OnCommandBufferExecute*)
+- Added a new `ARCommandBufferSupportRendererFeature` which calls the newly exposed `XRSessionSubsystem` APIs for integration into **Universal Render Pipeline** command buffer execution.
+- Changed documentation for Universal Render Pipeline setup to indicate that the `ARCommandBufferSupportRendererFeature` is required when using the Vulkan Graphics API.
 
 ### Changed
 
 - Updated documentation to reflect that the Apple visionOS XR Plug-in now supports AR Foundation 6.
-
-### Fixed
-
-- Fixed the `SimulationRaycastSubsystem` to correctly state via `XRRaycastSubsystemDescriptor.supportedTrackableTypes` that casting rays against planes is supported in XR Simulation.
-- Fixed the `SimulationSessionSubsystem` so it doesn't log an error if you call `ARSession.Reset` before the session is initialized.
-
-## [6.0.2] - 2024-05-22
+- Changed: Removed a 1mm depth offset from `DepthCopy.shader`. To avoid z-fighting issues with other shaders, use the [Offset](https://docs.unity3d.com/Manual/SL-Offset.html) command instead.
+- Changed [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) to add additional labels provided by Apple RoomPlan.
 
 ### Fixed
 
 - Fixed an issue where the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**) threw a `NullReferenceException` if no AssetBundles were built.
-- Fixed an issue where XR Simulation's `CameraTextureProvider` component could throw a `MissingReferenceException` when an AR scene is unloaded.
 - Fixed XR Simulation components so they now behave correctly if you disable the **Reload Domain** option in [Configurable Enter Play Mode](https://docs.unity3d.com/Manual/ConfigurableEnterPlayMode.html) settings.
 - Fixed the native XR Simulation Input provider so that it now explicitly sets **Device** mode as its only supported [Tracking Origin Mode](xref:Unity.XR.CoreUtils.XROrigin.TrackingOriginMode). The [XR Origin component](xref:xr-core-utils-xr-origin-reference) will always use **Device** mode as its Tracking Origin Mode and apply the [XROrigin.CameraYOffset](xref:Unity.XR.CoreUtils.XROrigin.CameraYOffset) value.
+- Fixed the `SimulationSessionSubsystem` so it doesn't log an error if you call `ARSession.Reset` before the session is initialized.
+- Fixed the `SimulationRaycastSubsystem` to correctly state via `XRRaycastSubsystemDescriptor.supportedTrackableTypes` that casting rays against planes is supported in XR Simulation.
+- Fixed `SimulatedAnchor` and `SimulatedLight` so it is no longer possible for these components to log a non-deterministic error when you unload an XR Simulation environment.
+- Fixed XR Simulation occlusion on Apple silicon Macs so that occlusion now renders correctly regardless of whether URP Render Graph is enabled or disabled.
 
 ## [6.0.1] - 2024-04-01
 
@@ -55,6 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed an issue where disabling the `AROcclusionManager` component in XR Simulation would not stop the simulation background shader from sampling the depth texture.
 - Fixed an issue where XR Simulation camera pose data could leak between multiple AR sessions.
 - Corrected a previous fix for an issue where the tvOS build target would have compile errors in `Simulation.InputLayoutLoader`.
+- Fixed an issue where XR Simulation's `CameraTextureProvider` component could throw a `MissingReferenceException` when an AR scene is unloaded.
 
 ## [6.0.0-pre.8] - 2024-03-19
 

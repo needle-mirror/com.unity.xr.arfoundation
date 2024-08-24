@@ -10,10 +10,14 @@ namespace UnityEngine.XR.ARFoundation
     /// Manages the life cycle of the <see cref="XRCameraSubsystem"/>. Add one of these to a <c>Camera</c> in your scene
     /// if you want camera texture and light estimation information to be available.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-camera-components">Camera components</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_CameraManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [HelpURL(typeof(ARCameraManager))]
+    [AddComponentMenu("XR/AR Foundation/AR Camera Manager")]
+    [HelpURL("features/camera/camera-components")]
     public sealed class ARCameraManager :
         SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>,
         ISerializationCallbackReceiver

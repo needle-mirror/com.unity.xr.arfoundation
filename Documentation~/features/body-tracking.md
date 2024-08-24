@@ -1,7 +1,7 @@
 ---
 uid: arfoundation-body-tracking
 ---
-# Body Tracking
+# Body tracking
 
 To enable body tracking in an AR scene, add an [ARHumanBodyManager](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager) component to the XR Origin.
 

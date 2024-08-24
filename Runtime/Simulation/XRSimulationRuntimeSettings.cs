@@ -28,6 +28,9 @@ namespace UnityEngine.XR.Simulation
         [SerializeField]
         AnchorDiscoveryParams m_AnchorDiscoveryParams = new();
 
+        [SerializeField]
+        BoundingBoxDiscoveryParams m_BoundingBoxDiscoveryParams = new();
+
         [Header("X-Ray Options")]
         [SerializeField, Tooltip("Use x-ray visuals on the simulation environments.")]
         bool m_UseXRay = true;
@@ -49,6 +52,8 @@ namespace UnityEngine.XR.Simulation
         public EnvironmentProbeParams environmentProbeDiscoveryParams => m_EnvironmentProbeDiscoveryParams;
 
         public AnchorDiscoveryParams anchorDiscoveryParams => m_AnchorDiscoveryParams;
+
+        public BoundingBoxDiscoveryParams boundingBoxDiscoveryParams => m_BoundingBoxDiscoveryParams;
 
         /// <summary>
         /// Use x-ray visuals on the simulation environments.

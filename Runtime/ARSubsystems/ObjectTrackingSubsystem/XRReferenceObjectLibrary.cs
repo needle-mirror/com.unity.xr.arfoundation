@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <seealso cref="XRReferenceObject"/>
     /// <seealso cref="XRReferenceObjectEntry"/>
     [CreateAssetMenu(fileName = "ReferenceObjectLibrary" , menuName = "XR/Reference Object Library", order = 3)]
-    [HelpURL("arsubsystems/object-tracking")]
+    [HelpURL("features/object-tracking")]
     public class XRReferenceObjectLibrary : ScriptableObject, IEnumerable<XRReferenceObject>
     {
         /// <summary>

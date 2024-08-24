@@ -11,10 +11,14 @@ namespace UnityEngine.XR.ARFoundation
     /// flat surfaces in the physical environment. Add this component to your XR Origin GameObject to enable plane
     /// detection in your app.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-plane-arplanemanager">AR Plane Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_PlaneManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
-    [HelpURL(typeof(ARPlaneManager))]
+    [AddComponentMenu("XR/AR Foundation/AR Plane Manager")]
+    [HelpURL("features/plane-detection/arplanemanager")]
     public sealed class ARPlaneManager : ARTrackableManager<
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,

@@ -4,8 +4,8 @@ namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
     /// A <c>Guid</c> that can be serialized by Unity. The 128-bit <c>Guid</c>
-    /// is stored as two 64-bit <c>ulong</c>s. See also the creation utility at
-    /// <c>UnityEditor.XR.ARSubsystems.SerializableGuidUtil</c>.
+    /// is stored as two 64-bit <c>ulong</c>s. Refer to the creation utility at
+    /// <see cref="UnityEditor.XR.ARSubsystems.SerializableGuidUtil"/> for more information.
     /// </summary>
     [Serializable]
     public struct SerializableGuid : IEquatable<SerializableGuid>

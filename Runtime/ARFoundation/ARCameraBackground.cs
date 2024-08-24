@@ -43,11 +43,14 @@ namespace UnityEngine.XR.ARFoundation
     /// To customize background rendering with a scriptable render pipeline, create a
     /// <c>ScriptableRendererFeature</c> with the background rendering commands, and insert the
     /// <c>ScriptableRendererFeature</c> into the list of render features for the scriptable renderer.
+    ///
+    /// Related information: <a href="xref:arfoundation-camera-components">Camera components</a>
     /// </remarks>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(ARCameraManager))]
-    [HelpURL(typeof(ARCameraBackground))]
+    [AddComponentMenu("XR/AR Foundation/AR Camera Background")]
+    [HelpURL("features/camera/camera-components", "ar-camera-background-component")]
     public class ARCameraBackground : MonoBehaviour
     {
         /// <summary>
@@ -155,7 +158,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The occlusion manager, which might not exist, from which occlusion information is pulled.
         /// </summary>
-        protected AROcclusionManager occlusionManager => m_OcclusionManager;
+        protected internal AROcclusionManager occlusionManager => m_OcclusionManager;
 
         /// <summary>
         /// The current <c>Material</c> used for background rendering.

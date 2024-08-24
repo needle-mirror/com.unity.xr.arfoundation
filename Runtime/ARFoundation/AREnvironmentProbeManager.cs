@@ -9,9 +9,13 @@ namespace UnityEngine.XR.ARFoundation
     /// <c>XREnvironmentProbeSubsystem</c> provides updates from environment probes as they are detected in the
     /// environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-camera-components">Environment probes</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbeManager)]
-    [HelpURL(typeof(AREnvironmentProbeManager))]
+    [AddComponentMenu("XR/AR Foundation/AR Environment Probe Manager")]
+    [HelpURL("features/environment-probes", "ar-environment-probe-manager-component")]
     public sealed class AREnvironmentProbeManager : ARTrackableManager<
         XREnvironmentProbeSubsystem,
         XREnvironmentProbeSubsystemDescriptor,

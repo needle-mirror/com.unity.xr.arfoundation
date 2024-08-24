@@ -46,7 +46,7 @@ Shader "Hidden/DepthCopy"
             float frag (v2f i) : SV_Target
             {
                 // Adding small value to offset the depth to avoid occluding the meshes of simulation environments
-                float depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv)) + 0.001f;
+                float depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv));
                 return depth;
             }
             ENDCG

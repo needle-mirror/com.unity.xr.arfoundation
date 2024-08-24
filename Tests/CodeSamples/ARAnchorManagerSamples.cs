@@ -137,7 +137,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
             var cts = new CancellationTokenSource();
 
             // Use one of the other methods in the persistent anchor API
-            var task = manager.TryGetSavedAnchorIdsAsync(Allocator.Temp, cts.Token);
+            var awaitable = manager.TryGetSavedAnchorIdsAsync(Allocator.Temp, cts.Token);
 
             // Cancel the async operation before it completes
             cts.Cancel();
