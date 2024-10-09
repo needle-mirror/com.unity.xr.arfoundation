@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARSubsystems
         : TrackingSubsystem<XRFace, XRFaceSubsystem, XRFaceSubsystemDescriptor, XRFaceSubsystem.Provider>
     {
         /// <summary>
-        /// Constructs a face subsystem. Do not invoked directly; call <c>Create</c> on the <see cref="XRFaceSubsystemDescriptor"/> instead.
+        /// Constructs a face subsystem. Do not invoke directly; call <c>Create</c> on the <see cref="XRFaceSubsystemDescriptor"/> instead.
         /// </summary>
         public XRFaceSubsystem() { }
 

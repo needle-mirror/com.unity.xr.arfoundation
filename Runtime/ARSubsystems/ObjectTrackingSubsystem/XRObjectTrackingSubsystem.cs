@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Constructs an object tracking subsystem. Do not invoked directly; call <c>Create</c> on the <see cref="XRObjectTrackingSubsystemDescriptor"/> instead.
+        /// Constructs an object tracking subsystem. Do not invoke directly; call <c>Create</c> on the <see cref="XRObjectTrackingSubsystemDescriptor"/> instead.
         /// </summary>
         public XRObjectTrackingSubsystem() { }
 

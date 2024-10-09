@@ -32,4 +32,5 @@ The following table describes the properties of the AR Occlusion Manager compone
 | **Occlusion Preference Mode** | If both environment texture and human stencil & depth textures are available, this mode specifies which should be used for occlusion. There are three options: <ul><li><strong>Prefer Environment Occlusion </li><li><strong>Prefer Human Occlusion</li><li><strong>No Occlusion</strong></li></ul> |
 
 > [!NOTE]
-> Use **Occlusion Preference Mode** to choose the type of depth image to use on ARKit. Human stencil depth images are only supported on ARKit. Environment and depth images are never simultaneously enabled.
+> Use **Occlusion Preference Mode** to choose the type of depth image to use on ARKit. Human stencil depth images are only supported on ARKit. Environment and depth images are never simultaneously enabled.<br/>
+> ARCore only supports **Disabled** and **Fastest** modes for **Environment Depth Mode**. Using the other modes would not further improve depth texture quality or increase frame computation.

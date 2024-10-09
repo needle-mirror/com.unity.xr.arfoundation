@@ -20,7 +20,7 @@ namespace UnityEditor.XR.ARSubsystems
 
                 s_RemoveButtonContent = new GUIContent(
                     string.Empty,
-                    EditorGUIUtility.FindTexture("d_winbtn_win_close"),
+                    EditorGUIUtility.FindTexture("d_Toolbar Minus"),
                     "Remove this image from the database");
             }
 

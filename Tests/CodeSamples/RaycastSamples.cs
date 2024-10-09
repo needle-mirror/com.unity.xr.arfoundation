@@ -32,12 +32,23 @@ namespace UnityEngine.XR.ARFoundation
 
             List<ARRaycastHit> m_Hits = new List<ARRaycastHit>();
 
+            void OnEnable()
+            {
+                InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
+            }
+
+            void OnDisable()
+            {
+                InputSystem.EnhancedTouch.EnhancedTouchSupport.Disable();
+            }
+
             void Update()
             {
-                if (Input.touchCount == 0)
+                var activeTouches = InputSystem.EnhancedTouch.Touch.activeTouches;
+                if (activeTouches.Count == 0)
                     return;
 
-                if (m_RaycastManager.Raycast(Input.GetTouch(0).position, m_Hits))
+                if (m_RaycastManager.Raycast(activeTouches[0].screenPosition, m_Hits))
                 {
                     // Only returns true if there is at least one hit
                 }

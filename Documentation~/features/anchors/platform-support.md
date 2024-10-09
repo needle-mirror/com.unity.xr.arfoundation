@@ -7,8 +7,8 @@ Anchors are supported on the ARCore, ARKit, HoloLens, Meta OpenXR, and XR Simula
 
 | Provider plug-in | Anchors supported | Provider documentation |
 | :--------------- | :---------------: | :--------------------- |
-| Google ARCore XR Plug-in | Yes | [Anchors](arcore-anchors) (ARCore) |
-| Apple ARKit XR Plug-in | Yes | [Anchors](arkit-anchors) (ARKit) |
+| Google ARCore XR Plug-in | Yes | [Anchors](xref:arcore-anchors) (ARCore) |
+| Apple ARKit XR Plug-in | Yes | [Anchors](xref:arkit-anchors) (ARKit) |
 | Apple visionOS XR Plug-in | Yes | N/A |
 | HoloLens | Yes | N/A |
 | Unity OpenXR: Meta | Yes | [Anchors](xref:meta-openxr-anchors) (Meta OpenXR) |
