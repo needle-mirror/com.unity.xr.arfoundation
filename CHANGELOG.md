@@ -8,6 +8,41 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.1.0-pre.3] - 2024-11-14
+
+### Added
+
+- Added `StatusCode.ProviderUninitialized` as an error code to represent an uninitialized state. Methods that return [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) can use this more specific error code instead of `StatusCode.UnknownError` when the provider is uninitialized.
+- Added [SupportedUtils](xref:UnityEngine.XR.ARSubsystems.SupportedUtils) for easier conversion between the types `Supported` and `bool`.
+- Added an API that allows you to turn on the device's camera torch (flash). Refer to [Camera torch mode (flash)](xref:arfoundation-camera-torch-mode) for more information
+- Added support for stereo occlusion, enabling HMD providers to implement the XR occlusion subsystem:
+  - Added [XRTextureType](xref:UnityEngine.XR.ARSubsystems.XRTextureType) enum with extension methods to convert from [TextureDimension](xref:UnityEngine.Rendering.TextureDimension).
+  - Added [XRTextureDescriptor.textureType](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor.textureType) property to get a texture descriptor's type.
+  - Added the following structs to represent data used for occlusion: [XRFov](xref:UnityEngine.XR.ARSubsystems.XRFov), [XRNearFarPlanes](xref:UnityEngine.XR.ARSubsystems.XRNearFarPlanes), [XROcclusionFrame](xref:UnityEngine.XR.ARSubsystems.XROcclusionFrame), and [ARGpuTexture](xref:UnityEngine.XR.ARFoundation.ARGpuTexture).
+  - Added the following members to [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem): `depthViewProjectionMatricesPropertyId` and `TryGetFrame(Allocator, out XROcclusionFrame)`.
+  - Added more data to [AROcclusionFrameEventArgs](xref:UnityEngine.XR.ARFoundation.AROcclusionFrameEventArgs).
+  - Added the [ARShaderOcclusion](xref:arfoundation-shader-occlusion) component to write depth textures to global shader memory.
+
+### Changed
+
+- Changed the type of `XRResultStatus` from `struct` to `readonly struct`.
+- Changed the Simulation Environment to be visibile in the scene hierarchy.
+
+### Deprecated
+
+- Deprecated and replaced the following APIs:
+  - `XRTextureDescriptor.dimension` to `XRTextureDescriptor.textureType`
+  - `XRTextureDescriptor` constructor with `dimension` parameter to `XRTextureType` parameter.
+  - `AROcclusionFrameEventArgs.propertyNameIds` to `AROcclusionFrameEventArgs.gpuTextures`.
+  - `AROcclusionFrameEventArgs.textures` to `AROcclusionFrameEventArgs.gpuTextures`.
+  - `AROcclusionManager.environmentDepthConfidenceTexture` to `AROcclusionManager.TryGetEnvironmentDepthConfidenceTexture`.
+  - `AROcclusionManager.environmentDepthTexture` to `AROcclusionManager.TryGetEnvironmentDepthTexture`.
+
+### Fixed
+
+- Fixed XR Simulation occlusion on Apple silicon Macs so that occlusion now renders correctly regardless of whether URP Render Graph is enabled or disabled. (The previous fix for this issue in 6.1.0-pre.1 was later determined to be insufficient.)
+- Fixed the XR Simulation point clouds implementation so that it no longer logs an error when the AR Point Cloud Manager component is disabled and then re-enabled. ([ARFB-487](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-487))
+
 ## [6.1.0-pre.2] - 2024-10-09
 
 ### Added

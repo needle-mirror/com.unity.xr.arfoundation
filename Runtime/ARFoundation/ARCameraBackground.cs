@@ -1,7 +1,6 @@
 using AOT;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
@@ -17,7 +16,6 @@ namespace UnityEngine.XR.ARFoundation
     ///
     /// If you are using the Universal Render Pipeline (version 7.0.0 or later), you must also add the
     /// <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable renderer.
-    ///
     /// </summary>
     /// <remarks>
     /// To add the <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable
@@ -59,14 +57,34 @@ namespace UnityEngine.XR.ARFoundation
         const string k_CustomRenderPassName = "AR Background Pass (LegacyRP)";
 
         /// <summary>
-        /// Name of the shader parameter for the camera forward scale.
+        /// A delegate representation of <see cref="BeforeBackgroundRenderHandler(int)"/>. This maintains a strong
+        /// reference to the delegate, which is converted to an IntPtr by <see cref="s_BeforeBackgroundRenderHandlerFuncPtr"/>.
         /// </summary>
-        const string k_CameraForwardScaleName = "_UnityCameraForwardScale";
+        /// <seealso cref="AddBeforeBackgroundRenderHandler(CommandBuffer)"/>
+        static Action<int> s_BeforeBackgroundRenderHandler = BeforeBackgroundRenderHandler;
 
         /// <summary>
-        /// Name of the shader parameter for the display transform matrix.
+        /// A pointer to a method to be called immediately before rendering that is implemented in the XRCameraSubsystem implementation.
+        /// It is called via [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
         /// </summary>
-        const string k_DisplayTransformName = "_UnityDisplayTransform";
+        static readonly IntPtr s_BeforeBackgroundRenderHandlerFuncPtr = Marshal.GetFunctionPointerForDelegate(s_BeforeBackgroundRenderHandler);
+
+        /// <summary>
+        /// Static reference to the active XRCameraSubsystem. Necessary here for access from a static delegate.
+        /// </summary>
+        static XRCameraSubsystem s_CameraSubsystem;
+
+        /// <summary>
+        /// A delegate for capturing when the <see cref="currentRenderingMode"/> has changed. Use to change make any changes
+        /// to the parameters of the <see cref="ARCameraBackground"/> (IE. changing custom materials out) before configuring
+        /// the command buffer for background rendering.
+        /// </summary>
+        public static Action<XRCameraBackgroundRenderingMode> OnCameraRenderingModeChanged;
+
+        /// <summary>
+        /// Whether an <see cref="ARShaderOcclusion"/> component is enabled on this GameObject.
+        /// </summary>
+        bool m_IsShaderOcclusionComponentEnabled;
 
         /// <summary>
         /// Property ID for the shader parameter for the display transform matrix.
@@ -79,41 +97,9 @@ namespace UnityEngine.XR.ARFoundation
         int m_CameraForwardScaleId;
 
         /// <summary>
-        /// The camera to which the projection matrix is set on each frame event.
-        /// </summary>
-        Camera m_Camera;
-
-        /// <summary>
-        /// The camera manager from which frame information is pulled.
-        /// </summary>
-        ARCameraManager m_CameraManager;
-
-        /// <summary>
-        /// The occlusion manager, which might not exist, from which occlusion information is pulled.
-        /// </summary>
-        AROcclusionManager m_OcclusionManager;
-
-        /// <summary>
         /// Command buffer for any custom rendering commands.
         /// </summary>
         CommandBuffer m_CommandBuffer;
-
-        /// <summary>
-        /// Whether to use the custom material for rendering the background.
-        /// </summary>
-        [SerializeField, FormerlySerializedAs("m_OverrideMaterial")]
-        bool m_UseCustomMaterial;
-
-        /// <summary>
-        /// A custom material for rendering the background.
-        /// </summary>
-        [SerializeField, FormerlySerializedAs("m_Material")]
-        Material m_CustomMaterial;
-
-        /// <summary>
-        /// The default material for rendering the background.
-        /// </summary>
-        Material m_DefaultMaterial;
 
         /// <summary>
         /// The previous clear flags for the camera, if any.
@@ -131,86 +117,6 @@ namespace UnityEngine.XR.ARFoundation
         DepthTextureMode m_PreviousCameraDepthMode;
 
         /// <summary>
-        /// True if background rendering is enabled, false otherwise.
-        /// </summary>
-        bool m_BackgroundRenderingEnabled;
-
-        /// <summary>
-        /// The camera to which the projection matrix is set on each frame event.
-        /// </summary>
-        /// <value>
-        /// The camera to which the projection matrix is set on each frame event.
-        /// </value>
-#if UNITY_EDITOR
-        protected new Camera camera => m_Camera;
-#else // UNITY_EDITOR
-        protected Camera camera => m_Camera;
-#endif // UNITY_EDITOR
-
-        /// <summary>
-        /// The camera manager from which frame information is pulled.
-        /// </summary>
-        /// <value>
-        /// The camera manager from which frame information is pulled.
-        /// </value>
-        protected ARCameraManager cameraManager => m_CameraManager;
-
-        /// <summary>
-        /// The occlusion manager, which might not exist, from which occlusion information is pulled.
-        /// </summary>
-        protected internal AROcclusionManager occlusionManager => m_OcclusionManager;
-
-        /// <summary>
-        /// The current <c>Material</c> used for background rendering.
-        /// </summary>
-        public Material material => (useCustomMaterial && (customMaterial != null)) ? customMaterial : defaultMaterial;
-
-        /// <summary>
-        /// Whether to use the custom material for rendering the background.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the custom material should be used for rendering the camera background. Otherwise,
-        /// <c>false</c>.
-        /// </value>
-        public bool useCustomMaterial
-        {
-            get => m_UseCustomMaterial;
-            set => m_UseCustomMaterial = value;
-        }
-
-        /// <summary>
-        /// A custom <c>Material</c> for rendering the background with your own shader.
-        /// </summary>
-        /// <remarks>
-        /// Set this property to use your own shader to render the background. AR Foundation uses the <c>Material</c> from the active provider plug-in by default, but you can override the default with your own <c>Material</c>.
-        /// </remarks>
-        /// <value>
-        /// A custom <c>Material</c> for rendering the background with your own shader.
-        /// </value>
-        public Material customMaterial
-        {
-            get => m_CustomMaterial;
-            set => m_CustomMaterial = value;
-        }
-
-        /// <summary>
-        /// Whether background rendering is enabled.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if background rendering is enabled and if at least one camera frame has been received.
-        /// Otherwise, <c>false</c>.
-        /// </value>
-        public bool backgroundRenderingEnabled => m_BackgroundRenderingEnabled;
-
-        /// <summary>
-        /// The default material for rendering the background.
-        /// </summary>
-        /// <value>
-        /// The default material for rendering the background.
-        /// </value>
-        Material defaultMaterial => cameraManager.cameraMaterial;
-
-        /// <summary>
         /// Stores the previous culling state (XRCameraSubsystem.invertCulling).
         /// If the requested culling state changes, the command buffer must be rebuilt.
         /// </summary>
@@ -218,8 +124,98 @@ namespace UnityEngine.XR.ARFoundation
 
         XRCameraBackgroundRenderingMode m_CommandBufferRenderOrderState = XRCameraBackgroundRenderingMode.None;
 
-        ARDefaultCameraBackgroundRenderingParams m_DefaultCameraBackgroundRenderingParams;
         internal ARDefaultCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams => m_DefaultCameraBackgroundRenderingParams;
+        ARDefaultCameraBackgroundRenderingParams m_DefaultCameraBackgroundRenderingParams;
+
+        /// <summary>
+        /// The camera to which the projection matrix is set on each frame event.
+        /// </summary>
+        /// <value>The camera to which the projection matrix is set on each frame event.</value>
+#if UNITY_EDITOR
+        protected new Camera camera => m_Camera;
+#else // UNITY_EDITOR
+        protected Camera camera => m_Camera;
+#endif // UNITY_EDITOR
+        Camera m_Camera;
+
+        /// <summary>
+        /// The camera manager from which frame information is pulled.
+        /// </summary>
+        /// <value>The camera manager.</value>
+        protected ARCameraManager cameraManager => m_CameraManager;
+        ARCameraManager m_CameraManager;
+
+        /// <summary>
+        /// The occlusion manager, which might not exist, from which occlusion information is pulled.
+        /// </summary>
+        protected internal AROcclusionManager occlusionManager => m_OcclusionManager;
+        AROcclusionManager m_OcclusionManager;
+
+        /// <summary>
+        /// Whether culling should be inverted. Used during command buffer configuration,
+        /// see [CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html).
+        /// </summary>
+        /// <seealso cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/>
+        protected bool shouldInvertCulling
+        {
+            get
+            {
+                if (m_CameraManager == null || m_CameraManager.subsystem == null)
+                    return false;
+
+                return m_CameraManager.subsystem.invertCulling;
+            }
+        }
+
+        /// <summary>
+        /// Whether to use the custom material for rendering the background.
+        /// </summary>
+        /// <value><see langword="true"/> if the custom material should be used for rendering the camera background.
+        /// Otherwise,<see langword="false"/>.</value>
+        public bool useCustomMaterial
+        {
+            get => m_UseCustomMaterial;
+            set => m_UseCustomMaterial = value;
+        }
+        [SerializeField, FormerlySerializedAs("m_OverrideMaterial")]
+        bool m_UseCustomMaterial;
+
+        /// <summary>
+        /// A custom <c>Material</c> for rendering the background with your own shader.
+        /// </summary>
+        /// <remarks>
+        /// Set this property to use your own shader to render the background.
+        /// AR Foundation uses the <c>Material</c> from the active provider plug-in by default, but you can override the
+        /// default with your own <c>Material</c>.
+        /// </remarks>
+        /// <value>The custom material.</value>
+        public Material customMaterial
+        {
+            get => m_CustomMaterial;
+            set => m_CustomMaterial = value;
+        }
+        [SerializeField, FormerlySerializedAs("m_Material")]
+        Material m_CustomMaterial;
+
+        /// <summary>
+        /// Get whether background rendering is enabled and at least one camera frame has been received.
+        /// </summary>
+        /// <value><see langword="true"/> if background rendering is enabled and at least one camera frame has been received.
+        /// Otherwise, <see langword="false"/>.</value>
+        public bool backgroundRenderingEnabled => m_BackgroundRenderingEnabled;
+        bool m_BackgroundRenderingEnabled;
+
+        /// <summary>
+        /// The current <c>Material</c> used for background rendering.
+        /// </summary>
+        /// <value>The material.</value>
+        public Material material => useCustomMaterial && customMaterial != null ? customMaterial : cameraManager.cameraMaterial;
+
+        /// <summary>
+        /// The current <see cref="XRCameraBackgroundRenderingMode"/>. Determines which render order to use.
+        /// </summary>
+        public XRCameraBackgroundRenderingMode currentRenderingMode =>
+            m_CameraManager == null ? XRCameraBackgroundRenderingMode.None : m_CameraManager.currentRenderingMode;
 
         /// <summary>
         /// A function that can be invoked by
@@ -233,68 +229,14 @@ namespace UnityEngine.XR.ARFoundation
             s_CameraSubsystem?.OnBeforeBackgroundRender(eventId);
         }
 
-        /// <summary>
-        /// A delegate representation of <see cref="BeforeBackgroundRenderHandler(int)"/>. This maintains a strong
-        /// reference to the delegate, which is converted to an IntPtr by <see cref="s_BeforeBackgroundRenderHandlerFuncPtr"/>.
-        /// </summary>
-        /// <seealso cref="AddBeforeBackgroundRenderHandler(CommandBuffer)"/>
-        static Action<int> s_BeforeBackgroundRenderHandler = BeforeBackgroundRenderHandler;
-
-        /// <summary>
-        /// A delegate for capturing when the <see cref="currentRenderingMode"/> has changed. Use to change make any changes
-        /// to the parameters of the <see cref="ARCameraBackground"/> (IE. changing custom materials out) before configuring
-        /// the command buffer for background rendering.
-        /// </summary>
-        public static Action<XRCameraBackgroundRenderingMode> OnCameraRenderingModeChanged;
-
-        /// <summary>
-        /// A pointer to a method to be called immediately before rendering that is implemented in the XRCameraSubsystem implementation.
-        /// It is called via [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
-        /// </summary>
-        static readonly IntPtr s_BeforeBackgroundRenderHandlerFuncPtr = Marshal.GetFunctionPointerForDelegate(s_BeforeBackgroundRenderHandler);
-
-        /// <summary>
-        /// Static reference to the active XRCameraSubsystem. Necessary here for access from a static delegate.
-        /// </summary>
-        static XRCameraSubsystem s_CameraSubsystem;
-
-        /// <summary>
-        /// Whether culling should be inverted. Used during command buffer configuration,
-        /// see [CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html).
-        /// </summary>
-        /// <seealso cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/>
-        protected bool shouldInvertCulling
-        {
-            get
-            {
-                // Use Unity == operator overload for comparing UnityEngine.Object with null
-                if (m_CameraManager == null || m_CameraManager.subsystem == null)
-                    return false;
-
-                return m_CameraManager.subsystem.invertCulling;
-            }
-        }
-
-        /// <summary>
-        /// The current <see cref="XRCameraBackgroundRenderingMode"/>. Determines which render order to use.
-        /// </summary>
-        public XRCameraBackgroundRenderingMode currentRenderingMode
-        {
-            get
-            {
-                // Use Unity == operator overload for comparing UnityEngine.Object with null
-                return m_CameraManager == null ? XRCameraBackgroundRenderingMode.None : m_CameraManager.currentRenderingMode;
-            }
-        }
-
         void Awake()
         {
             m_Camera = GetComponent<Camera>();
             m_CameraManager = GetComponent<ARCameraManager>();
             m_OcclusionManager = GetComponent<AROcclusionManager>();
             m_DefaultCameraBackgroundRenderingParams = new ARDefaultCameraBackgroundRenderingParams();
-            m_DisplayTransformId = Shader.PropertyToID(k_DisplayTransformName);
-            m_CameraForwardScaleId = Shader.PropertyToID(k_CameraForwardScaleName);
+            m_DisplayTransformId = Shader.PropertyToID(RenderingUtility.k_DisplayTransformName);
+            m_CameraForwardScaleId = Shader.PropertyToID(RenderingUtility.k_CameraForwardScaleName);
         }
 
         void OnEnable()
@@ -303,26 +245,41 @@ namespace UnityEngine.XR.ARFoundation
             m_BackgroundRenderingEnabled = false;
             cameraManager.frameReceived += OnCameraFrameReceived;
             if (occlusionManager != null)
-            {
                 occlusionManager.frameReceived += OnOcclusionFrameReceived;
-            }
 
             m_PreviousCameraDepthMode = camera.depthTextureMode;
+
+            var shaderOcclusion = GetComponent<ARShaderOcclusion>();
+            m_IsShaderOcclusionComponentEnabled = shaderOcclusion != null && shaderOcclusion.enabled;
+            ARShaderOcclusion.shaderOcclusionComponentEnabled += OnShaderOcclusionComponentEnabled;
+            ARShaderOcclusion.shaderOcclusionComponentDisabled += OnShaderOcclusionComponentDisabled;
+        }
+
+        void OnShaderOcclusionComponentEnabled(GameObject shaderGameObject)
+        {
+            if (shaderGameObject == gameObject)
+                m_IsShaderOcclusionComponentEnabled = true;
+        }
+
+        void OnShaderOcclusionComponentDisabled(GameObject shaderGameObject)
+        {
+            if (shaderGameObject == gameObject)
+                m_IsShaderOcclusionComponentEnabled = false;
         }
 
         void OnDisable()
         {
             if (occlusionManager != null)
-            {
                 occlusionManager.frameReceived -= OnOcclusionFrameReceived;
-            }
 
             cameraManager.frameReceived -= OnCameraFrameReceived;
             DisableBackgroundRendering();
 
-            // We are no longer setting the projection matrix so tell the camera to resume its normal projection matrix
-            // calculations.
+            // We are no longer setting the projection matrix, so tell the camera to resume its normal calculations.
             camera.ResetProjectionMatrix();
+
+            ARShaderOcclusion.shaderOcclusionComponentEnabled -= OnShaderOcclusionComponentEnabled;
+            ARShaderOcclusion.shaderOcclusionComponentDisabled -= OnShaderOcclusionComponentDisabled;
         }
 
         /// <summary>
@@ -338,11 +295,9 @@ namespace UnityEngine.XR.ARFoundation
             s_CameraSubsystem = m_CameraManager ? m_CameraManager.subsystem : null;
 
             DisableBackgroundClearFlags();
-
             m_PreviousCameraFieldOfView = m_Camera.fieldOfView;
-
-            if (ARRenderingUtils.useLegacyRenderPipeline && defaultMaterial != null)
-                EnableLegacyRenderPipelineBackgroundRendering();
+            if (ARRenderingUtils.useLegacyRenderPipeline && cameraManager.cameraMaterial != null)
+                EnableBuiltInRenderPipelineBackgroundRendering();
         }
 
         /// <summary>
@@ -352,9 +307,7 @@ namespace UnityEngine.XR.ARFoundation
         void DisableBackgroundRendering()
         {
             m_BackgroundRenderingEnabled = false;
-
-            DisableLegacyRenderPipelineBackgroundRendering();
-
+            DisableBuiltInRenderPipelineBackgroundRendering();
             RestoreBackgroundClearFlags();
 
             if (m_PreviousCameraFieldOfView.HasValue)
@@ -372,7 +325,8 @@ namespace UnityEngine.XR.ARFoundation
         void DisableBackgroundClearFlags()
         {
             m_PreviousCameraClearFlags = m_Camera.clearFlags;
-            m_Camera.clearFlags = currentRenderingMode == XRCameraBackgroundRenderingMode.AfterOpaques ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
+            m_Camera.clearFlags = currentRenderingMode == XRCameraBackgroundRenderingMode.AfterOpaques ?
+                CameraClearFlags.Depth : CameraClearFlags.Nothing;
         }
 
         /// <summary>
@@ -381,30 +335,8 @@ namespace UnityEngine.XR.ARFoundation
         void RestoreBackgroundClearFlags()
         {
             if (m_PreviousCameraClearFlags != null)
-            {
                 m_Camera.clearFlags = m_PreviousCameraClearFlags.Value;
-            }
         }
-
-        /// <summary>
-        /// The list of [CameraEvent](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.html)s
-        /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
-        /// when rendering before opaques.
-        /// </summary>
-        static readonly CameraEvent[] s_DefaultBeforeOpaqueCameraEvents = {
-            CameraEvent.BeforeForwardOpaque,
-            CameraEvent.BeforeGBuffer
-        };
-
-        /// <summary>
-        /// The list of [CameraEvent](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.html)s
-        /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
-        /// when rendering after opaques.
-        /// </summary>
-        static readonly CameraEvent[] s_DefaultAfterOpaqueCameraEvents = {
-            CameraEvent.AfterForwardOpaque,
-            CameraEvent.AfterGBuffer
-        };
 
         /// <summary>
         /// The list of [CameraEvent](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.html)s
@@ -426,18 +358,8 @@ namespace UnityEngine.XR.ARFoundation
         ///
         /// Override to use different camera events.
         /// </summary>
-        protected virtual IEnumerable<CameraEvent> legacyCameraEvents
-        {
-            get
-            {
-                return m_CommandBufferRenderOrderState switch
-                {
-                    XRCameraBackgroundRenderingMode.BeforeOpaques => s_DefaultBeforeOpaqueCameraEvents,
-                    XRCameraBackgroundRenderingMode.AfterOpaques => s_DefaultAfterOpaqueCameraEvents,
-                    _ => default(IEnumerable<CameraEvent>)
-                };
-            }
-        }
+        protected virtual IEnumerable<CameraEvent> legacyCameraEvents =>
+            RenderingUtility.BuiltInRendering.GetBuiltInRenderingCameraEvents(m_CommandBufferRenderOrderState);
 
         /// <summary>
         /// Attempts to read the platform specific rendering parameters from the camera subsystem.
@@ -447,9 +369,8 @@ namespace UnityEngine.XR.ARFoundation
         /// The platform specific rendering parameters if they are available. Otherwise, a default value built from the
         /// <see cref="currentRenderingMode"/>.
         /// </param>
-        /// <returns>
-        /// <c>true</c> if the platform specific rendering parameters are available. Otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><see langword="true"/> if the platform-specific rendering parameters are available.
+        /// Otherwise, <see langword="false"/>.</returns>
         internal bool TryGetRenderingParameters(out XRCameraBackgroundRenderingParams renderingParams)
         {
             renderingParams = default;
@@ -482,11 +403,8 @@ namespace UnityEngine.XR.ARFoundation
                 Matrix4x4.identity,
                 Matrix4x4.identity);
 
-#if UNITY_2023_1_OR_NEWER
             commandBuffer.ClearRenderTarget(clearFlags, Color.clear);
-#else
-            commandBuffer.ClearRenderTarget(clearFlags, Color.clear, 1.0f, 0);
-#endif
+
             commandBuffer.DrawMesh(
                 backgroundRenderingParams.backgroundGeometry,
                 backgroundRenderingParams.backgroundTransform,
@@ -497,7 +415,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Enable background rendering getting a command buffer, and configure it for rendering the background.
         /// </summary>
-        void EnableLegacyRenderPipelineBackgroundRendering()
+        void EnableBuiltInRenderPipelineBackgroundRendering()
         {
             if (m_CommandBuffer == null)
             {
@@ -505,47 +423,19 @@ namespace UnityEngine.XR.ARFoundation
                 m_CommandBuffer.name = k_CustomRenderPassName;
 
                 ConfigureLegacyCommandBuffer(m_CommandBuffer);
-                AddCommandBufferToCameraEvent();
+                RenderingUtility.BuiltInRendering.AddCommandBufferToCameraEvent(camera, legacyCameraEvents, m_CommandBuffer);
             }
         }
 
         /// <summary>
         /// Disable background rendering by removing the command buffer from the camera.
         /// </summary>
-        void DisableLegacyRenderPipelineBackgroundRendering()
+        void DisableBuiltInRenderPipelineBackgroundRendering()
         {
             if (m_CommandBuffer != null)
             {
-                RemoveCommandBufferFromCameraEvents();
+                RenderingUtility.BuiltInRendering.RemoveCommandBufferFromCameraEvents(camera, legacyCameraEvents, m_CommandBuffer);
                 m_CommandBuffer = null;
-            }
-        }
-
-        /// <summary>
-        /// Adds the AR Camera Background <see cref="CommandBuffer"/> to the <see cref="legacyCameraEvents"/>.
-        /// </summary>
-        /// <exception cref="NullReferenceException">
-        /// If the AR Camera Background <see cref="CommandBuffer"/> is <see langword="null"/>.
-        /// </exception>
-        void AddCommandBufferToCameraEvent()
-        {
-            if (m_CommandBuffer == null)
-                throw new NullReferenceException();
-
-            foreach (var cameraEvent in legacyCameraEvents)
-            {
-                camera.AddCommandBuffer(cameraEvent, m_CommandBuffer);
-            }
-        }
-
-        /// <summary>
-        /// Removes the AR Camera Background <see cref="CommandBuffer"/> from the camera rendering events.
-        /// </summary>
-        void RemoveCommandBufferFromCameraEvents()
-        {
-            foreach (var cameraEvent in legacyCameraEvents)
-            {
-                camera.RemoveCommandBuffer(cameraEvent, m_CommandBuffer);
             }
         }
 
@@ -590,7 +480,7 @@ namespace UnityEngine.XR.ARFoundation
                     var renderModeChanged = false;
                     if (m_CommandBufferRenderOrderState != activeRenderingMode)
                     {
-                        RemoveCommandBufferFromCameraEvents();
+                        RenderingUtility.BuiltInRendering.RemoveCommandBufferFromCameraEvents(camera, legacyCameraEvents, m_CommandBuffer);
                         RestoreBackgroundClearFlags();
 
                         OnCameraRenderingModeChanged?.Invoke(activeRenderingMode);
@@ -604,7 +494,7 @@ namespace UnityEngine.XR.ARFoundation
                     if (renderModeChanged)
                     {
                         DisableBackgroundClearFlags();
-                        AddCommandBufferToCameraEvent();
+                        RenderingUtility.BuiltInRendering.AddCommandBufferToCameraEvent(camera, legacyCameraEvents, m_CommandBuffer);
                     }
                 }
             }
@@ -623,11 +513,9 @@ namespace UnityEngine.XR.ARFoundation
                 }
 
                 if (eventArgs.displayMatrix.HasValue)
-                {
                     mat.SetMatrix(m_DisplayTransformId, eventArgs.displayMatrix.Value);
-                }
 
-                SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
+                RenderingUtility.SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
             }
 
             if (eventArgs.projectionMatrix.HasValue)
@@ -671,48 +559,25 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="eventArgs">The occlusion frame event arguments.</param>
         void OnOcclusionFrameReceived(AROcclusionFrameEventArgs eventArgs)
         {
+            if (m_IsShaderOcclusionComponentEnabled && m_CommandBufferRenderOrderState != XRCameraBackgroundRenderingMode.AfterOpaques)
+                return;
+
             var mat = material;
             if (mat != null)
             {
-                var count = eventArgs.textures.Count;
+                var count = eventArgs.gpuTextures.Count;
                 for (int i = 0; i < count; ++i)
                 {
-                    mat.SetTexture(eventArgs.propertyNameIds[i], eventArgs.textures[i]);
+                    mat.SetTexture(eventArgs.gpuTextures[i].propertyId, eventArgs.gpuTextures[i].texture);
                 }
 
-                SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
+                RenderingUtility.SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
 
                 // Set scale: this computes the affect the camera's localToWorld has on the the length of the
                 // forward vector, i.e., how much farther from the camera are things than with unit scale.
                 var forward = transform.localToWorldMatrix.GetColumn(2);
                 var scale = forward.magnitude;
                 mat.SetFloat(m_CameraForwardScaleId, scale);
-            }
-        }
-
-        static void SetShaderKeywords(Material material, ReadOnlyCollection<string> enabledShaderKeywords,
-            ReadOnlyCollection<string> disabledShaderKeywords)
-        {
-            if (enabledShaderKeywords != null)
-            {
-                foreach (var shaderKeyword in enabledShaderKeywords)
-                {
-                    if (!material.IsKeywordEnabled(shaderKeyword))
-                    {
-                        material.EnableKeyword(shaderKeyword);
-                    }
-                }
-            }
-
-            if (disabledShaderKeywords != null)
-            {
-                foreach (var shaderKeyword in disabledShaderKeywords)
-                {
-                    if (material.IsKeywordEnabled(shaderKeyword))
-                    {
-                        material.DisableKeyword(shaderKeyword);
-                    }
-                }
             }
         }
     }

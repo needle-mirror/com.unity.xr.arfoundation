@@ -14,9 +14,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Specifies the human segmentation stencil mode.
         /// </summary>
-        /// <value>
-        /// The human segmentation stencil mode.
-        /// </value>
+        /// <value>The human segmentation stencil mode.</value>
         /// <exception cref="System.NotSupportedException">Thrown when setting the human segmentation stencil mode to
         /// `enabled` if the implementation does not support human segmentation.</exception>
         public HumanSegmentationStencilMode requestedHumanStencilMode
@@ -33,9 +31,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Specifies the human segmentation depth mode.
         /// </summary>
-        /// <value>
-        /// The human segmentation depth mode.
-        /// </value>
+        /// <value>The human segmentation depth mode.</value>
         /// <exception cref="System.NotSupportedException">Thrown when setting the human segmentation depth mode to
         /// `enabled` if the implementation does not support human segmentation.</exception>
         public HumanSegmentationDepthMode requestedHumanDepthMode
@@ -52,9 +48,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Specifies the environment depth mode.
         /// </summary>
-        /// <value>
-        /// The environment depth mode.
-        /// </value>
+        /// <value>The environment depth mode.</value>
         public EnvironmentDepthMode requestedEnvironmentDepthMode
         {
             get => provider.requestedEnvironmentDepthMode;
@@ -67,10 +61,11 @@ namespace UnityEngine.XR.ARSubsystems
         public EnvironmentDepthMode currentEnvironmentDepthMode => provider.currentEnvironmentDepthMode;
 
         /// <summary>
-        /// Whether temporal smoothing should be applied to the environment depth image. Query for support with
+        /// Get or set whether temporal smoothing should be applied to the environment depth image. Query for support with
         /// <see cref="XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported"/>.
         /// </summary>
-        /// <value>When `true`, temporal smoothing is applied to the environment depth image. Otherwise, no temporal smoothing is applied.</value>
+        /// <value><see langword="true"/> if temporal smoothing is requested for the environment depth image.
+        /// Otherwise, <see langword="false"/>.</value>
         public bool environmentDepthTemporalSmoothingRequested
         {
             get => provider.environmentDepthTemporalSmoothingRequested;
@@ -78,18 +73,17 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Whether temporal smoothing is applied to the environment depth image. Query for support with
+        /// Get whether temporal smoothing is applied to the environment depth image. Query for support with
         /// <see cref="XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported"/>.
         /// </summary>
-        /// <value>Read Only.</value>
+        /// <value><see langword="true"/> if temporal smoothing is enabled for the environment depth image.
+        /// Otherwise, <see langword="false"/>.</value>
         public bool environmentDepthTemporalSmoothingEnabled => provider.environmentDepthTemporalSmoothingEnabled;
 
         /// <summary>
         /// Specifies the requested occlusion preference mode.
         /// </summary>
-        /// <value>
-        /// The requested occlusion preference mode.
-        /// </value>
+        /// <value>The requested occlusion preference mode.</value>
         public OcclusionPreferenceMode requestedOcclusionPreferenceMode
         {
             get => provider.requestedOcclusionPreferenceMode;
@@ -99,8 +93,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Get the occlusion preference mode currently in use by the provider.
         /// </summary>
+        /// <value>The current occlusion preference mode.</value>
         public OcclusionPreferenceMode currentOcclusionPreferenceMode => provider.currentOcclusionPreferenceMode;
-
 
         /// <summary>
         /// Construct the subsystem by creating the functionality provider.
@@ -112,9 +106,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="humanStencilDescriptor">The human stencil texture descriptor to be populated, if available
         /// from the provider.</param>
-        /// <returns>
-        /// <c>true</c> if the human stencil texture descriptor is available and is returned. Otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><see langword="true"/> if the human stencil texture descriptor is available and returned.
+        /// Otherwise, <see langword="false"/>.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human stencil
         /// texture.</exception>
         public bool TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor)
@@ -123,10 +116,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Tries to acquire the latest human stencil CPU image.
         /// </summary>
-        /// <param name="cpuImage">If this method returns `true`, an acquired <see cref="XRCpuImage"/>. The CPU image
+        /// <param name="cpuImage">An acquired `XRCpuImage`, if this method returns <see langword="true"/>. The CPU image
         /// must be disposed by the caller.</param>
-        /// <returns>Returns `true` if an <see cref="XRCpuImage"/> was successfully acquired.
-        /// Returns `false` otherwise.</returns>
+        /// <returns><see langword="true"/> if an image was successfully acquired. Otherwise, <see langword="false"/>.</returns>
         public bool TryAcquireHumanStencilCpuImage(out XRCpuImage cpuImage)
         {
             if (provider.humanStencilCpuImageApi != null && provider.TryAcquireHumanStencilCpuImage(out var cinfo))
@@ -134,11 +126,9 @@ namespace UnityEngine.XR.ARSubsystems
                 cpuImage = new XRCpuImage(provider.humanStencilCpuImageApi, cinfo);
                 return true;
             }
-            else
-            {
-                cpuImage = default;
-                return false;
-            }
+
+            cpuImage = default;
+            return false;
         }
 
         /// <summary>
@@ -146,9 +136,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="humanDepthDescriptor">The human depth texture descriptor to be populated, if available from
         /// the provider.</param>
-        /// <returns>
-        /// <c>true</c> if the human depth texture descriptor is available and is returned. Otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><see langword="true"/> if the human depth texture descriptor is available and returned.
+        /// Otherwise, <see langword="false"/>.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human depth
         /// texture.</exception>
         public bool TryGetHumanDepth(out XRTextureDescriptor humanDepthDescriptor)
@@ -157,10 +146,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Tries to acquire the latest human depth CPU image.
         /// </summary>
-        /// <param name="cpuImage">If this method returns `true`, an acquired <see cref="XRCpuImage"/>. The CPU image
+        /// <param name="cpuImage">An acquired `XRCpuImage`, if this method returns <see langword="true"/>. The CPU image
         /// must be disposed by the caller.</param>
-        /// <returns>Returns `true` if an <see cref="XRCpuImage"/> was successfully acquired.
-        /// Returns `false` otherwise.</returns>
+        /// <returns><see langword="true"/> if an image was successfully acquired. Otherwise, <see langword="false"/>.</returns>
         public bool TryAcquireHumanDepthCpuImage(out XRCpuImage cpuImage)
         {
             if (provider.humanDepthCpuImageApi != null && provider.TryAcquireHumanDepthCpuImage(out var cinfo))
@@ -168,26 +156,21 @@ namespace UnityEngine.XR.ARSubsystems
                 cpuImage = new XRCpuImage(provider.humanDepthCpuImageApi, cinfo);
                 return true;
             }
-            else
-            {
-                cpuImage = default;
-                return false;
-            }
+
+            cpuImage = default;
+            return false;
         }
 
         /// <summary>
         /// Gets the environment depth texture descriptor.
         /// </summary>
         /// <remarks>
-        /// Whether the depth image is smoothed or raw depends on the value of
-        /// <see cref="environmentDepthTemporalSmoothingEnabled"/>.
+        /// Whether the depth image is smoothed or raw depends on the value of <see cref="environmentDepthTemporalSmoothingEnabled"/>.
         /// </remarks>
         /// <param name="environmentDepthDescriptor">The environment depth texture descriptor to be populated, if
         /// available from the provider.</param>
-        /// <returns>
-        /// <c>true</c> if the environment depth texture descriptor is available and is returned. Otherwise,
-        /// <c>false</c>.
-        /// </returns>
+        /// <returns><see langword="true"/> if the environment depth texture descriptor is available and returned.
+        /// Otherwise, <see langword="false"/>.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support environment depth
         /// texture.</exception>
         public bool TryGetEnvironmentDepth(out XRTextureDescriptor environmentDepthDescriptor)
@@ -197,13 +180,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// Tries to acquire the latest environment depth CPU image.
         /// </summary>
         /// <remarks>
-        /// Whether the depth image is smoothed or raw depends on the value of
-        /// <see cref="environmentDepthTemporalSmoothingEnabled"/>.
+        /// Whether the depth image is smoothed or raw depends on the value of <see cref="environmentDepthTemporalSmoothingEnabled"/>.
         /// </remarks>
-        /// <param name="cpuImage">If this method returns `true`, an acquired <see cref="XRCpuImage"/>. The CPU image
+        /// <param name="cpuImage">An acquired `XRCpuImage`, if this method returns <see langword="true"/>. The CPU image
         /// must be disposed by the caller.</param>
-        /// <returns>Returns `true` if an <see cref="XRCpuImage"/> was successfully acquired.
-        /// Returns `false` otherwise.</returns>
+        /// <returns><see langword="true"/> if an image was successfully acquired. Otherwise, <see langword="false"/>.</returns>
         /// <seealso cref="environmentDepthTemporalSmoothingEnabled"/>
         /// <seealso cref="environmentDepthTemporalSmoothingRequested"/>
         public bool TryAcquireEnvironmentDepthCpuImage(out XRCpuImage cpuImage)
@@ -213,11 +194,9 @@ namespace UnityEngine.XR.ARSubsystems
                 cpuImage = new XRCpuImage(provider.environmentDepthCpuImageApi, cinfo);
                 return true;
             }
-            else
-            {
-                cpuImage = default;
-                return false;
-            }
+
+            cpuImage = default;
+            return false;
         }
 
         /// <summary>
@@ -228,9 +207,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// acquire the raw depth image, whereas the image provided by <see cref="TryAcquireEnvironmentDepthCpuImage"/>
         /// depends on the value of <see cref="environmentDepthTemporalSmoothingEnabled"/>.
         /// </remarks>
-        /// <param name="cpuImage">If this method returns `true`, an acquired <see cref="XRCpuImage"/>. The CPU image
+        /// <param name="cpuImage">An acquired `XRCpuImage`, if this method returns <see langword="true"/>. The CPU image
         /// must be disposed by the caller.</param>
-        /// <returns>Returns `true` if the raw environment depth CPU image was acquired. Returns `false` otherwise.</returns>
+        /// <returns><see langword="true"/> if the raw environment depth CPU image was acquired.
+        /// Otherwise, <see langword="false"/>.</returns>
         public bool TryAcquireRawEnvironmentDepthCpuImage(out XRCpuImage cpuImage)
         {
             if (provider.TryAcquireRawEnvironmentDepthCpuImage(out var cinfo))
@@ -255,9 +235,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// The type of smoothing applied is implementation dependent; refer to the documentation for the specific
         /// provider in use.
         /// </remarks>
-        /// <param name="cpuImage">If this method returns `true`, an acquired <see cref="XRCpuImage"/>. The CPU image
+        /// <param name="cpuImage">An acquired `XRCpuImage`, if this method returns <see langword="true"/>. The CPU image
         /// must be disposed by the caller.</param>
-        /// <returns>Returns `true` if the smoothed environment depth CPU image was acquired. Returns `false` otherwise.</returns>
+        /// <returns><see langword="true"/> if the smoothed environment depth CPU image was acquired.
+        /// Otherwise, <see langword="false"/>.</returns>
         public bool TryAcquireSmoothedEnvironmentDepthCpuImage(out XRCpuImage cpuImage)
         {
             if (provider.TryAcquireSmoothedEnvironmentDepthCpuImage(out var cinfo))
@@ -275,10 +256,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="environmentDepthConfidenceDescriptor">The environment depth confidence texture descriptor to
         /// be populated, if available from the provider.</param>
-        /// <returns>
-        /// <c>true</c> if the environment depth confidence texture descriptor is available and is returned. Otherwise,
-        /// <c>false</c>.
-        /// </returns>
+        /// <returns><see langword="true"/> if the environment depth confidence texture descriptor is available and returned.
+        /// Otherwise, <see langword="false"/>.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support environment depth
         /// confidence texture.</exception>
         public bool TryGetEnvironmentDepthConfidence(out XRTextureDescriptor environmentDepthConfidenceDescriptor)
@@ -287,10 +266,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Tries to acquire the latest environment depth confidence CPU image.
         /// </summary>
-        /// <param name="cpuImage">If this method returns `true`, an acquired <see cref="XRCpuImage"/>. The CPU image
+        /// <param name="cpuImage">An acquired `XRCpuImage`, if this method returns <see langword="true"/>. The CPU image
         /// must be disposed by the caller.</param>
-        /// <returns>Returns `true` if an <see cref="XRCpuImage"/> was successfully acquired.
-        /// Returns `false` otherwise.</returns>
+        /// <returns><see langword="true"/> if the image was successfully acquired. Otherwise, <see langword="false"/>.</returns>
         public bool TryAcquireEnvironmentDepthConfidenceCpuImage(out XRCpuImage cpuImage)
         {
             if (provider.environmentDepthConfidenceCpuImageApi != null && provider.TryAcquireEnvironmentDepthConfidenceCpuImage(out var cinfo))
@@ -298,12 +276,16 @@ namespace UnityEngine.XR.ARSubsystems
                 cpuImage = new XRCpuImage(provider.environmentDepthConfidenceCpuImageApi, cinfo);
                 return true;
             }
-            else
-            {
-                cpuImage = default;
-                return false;
-            }
+
+            cpuImage = default;
+            return false;
         }
+
+        /// <summary>
+        /// Shader property ID for the depth view-projection matrix array.
+        /// Any `ARShaderOcclusion` components in your scene will write to this property.
+        /// </summary>
+        public int depthViewProjectionMatricesPropertyId => provider.depthViewProjectionMatricesPropertyId;
 
         /// <summary>
         /// Gets the occlusion texture descriptors associated with the current AR frame.
@@ -314,7 +296,22 @@ namespace UnityEngine.XR.ARSubsystems
         /// The caller owns the returned <c>NativeArray</c> and is responsible for calling <c>Dispose</c> on it.
         /// </remarks>
         public NativeArray<XRTextureDescriptor> GetTextureDescriptors(Allocator allocator)
-            => provider.GetTextureDescriptors(default(XRTextureDescriptor), allocator);
+            => provider.GetTextureDescriptors(default, allocator);
+
+        /// <summary>
+        /// Get the current occlusion frame.
+        /// </summary>
+        /// <param name="allocator">The allocator to use for any <see cref="NativeArray{T}"/>s contained in the frame.</param>
+        /// <param name="frame">The output occlusion frame, if this method returned <see langword="true"/>.</param>
+        /// <returns><see langword="true"/> if the method successfully got a frame. Otherwise, <see langword="false"/>.</returns>
+        public bool TryGetFrame(Allocator allocator, out XROcclusionFrame frame)
+        {
+            if (running && provider.TryGetFrame(allocator, out frame).IsSuccess())
+                return true;
+
+            frame = default;
+            return false;
+        }
 
         /// <summary>
         /// Get the enabled and disabled shader keywords for the material.
@@ -337,9 +334,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="occlusionSubsystemCinfo">The occlusion subsystem implementation construction information.
         /// </param>
-        /// <returns>
-        /// <c>true</c> if the descriptor was registered. Otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the descriptor was registered. Otherwise, <c>false</c>.</returns>
         [Obsolete("XROcclusionSubsystem.Register(XROcclusionSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XROcclusionSubsystemDescriptor.Register(XROcclusionSubsystemDescriptor.Cinfo) instead.")]
         public static bool Register(XROcclusionSubsystemCinfo occlusionSubsystemCinfo)
         {
@@ -378,8 +373,8 @@ namespace UnityEngine.XR.ARSubsystems
                 {
                     if (value.Enabled())
                     {
-                        throw new NotSupportedException("Setting human segmentation stencil to enabled is not "
-                                                        + "supported by this implementation");
+                        throw new NotSupportedException(
+                            "Setting human segmentation stencil to enabled is not supported by this implementation");
                     }
                 }
             }
@@ -404,8 +399,8 @@ namespace UnityEngine.XR.ARSubsystems
                 {
                     if (value.Enabled())
                     {
-                        throw new NotSupportedException("Setting human segmentation depth to enabled is not supported "
-                                                        + "by this implementation");
+                        throw new NotSupportedException(
+                            "Setting human segmentation depth to enabled is not supported by this implementation");
                     }
                 }
             }
@@ -413,14 +408,13 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Property to be implemented by the provider to get the human segmentation depth mode currently in use.
             /// </summary>
+            /// <value>The current human segmentation depth mode.</value>
             public virtual HumanSegmentationDepthMode currentHumanDepthMode => HumanSegmentationDepthMode.Disabled;
 
             /// <summary>
             /// Property to be implemented by the provider to get or set the environment depth mode.
             /// </summary>
-            /// <value>
-            /// The requested environment depth mode.
-            /// </value>
+            /// <value>The requested environment depth mode.</value>
             public virtual EnvironmentDepthMode requestedEnvironmentDepthMode
             {
                 get => EnvironmentDepthMode.Disabled;
@@ -430,50 +424,64 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Property to be implemented by the provider to get the environment depth mode currently in use.
             /// </summary>
+            /// <value>The current environment depth mode.</value>
             public virtual EnvironmentDepthMode currentEnvironmentDepthMode => EnvironmentDepthMode.Disabled;
 
             /// <summary>
             /// Property to be implemented by the provider to get whether temporal smoothing has been requested for the
             /// environment depth image.
             /// </summary>
+            /// <value><see langword="true"/> if environment depth temporal smoothing is requested.
+            /// Otherwise, <see langword="false"/>.</value>
             public virtual bool environmentDepthTemporalSmoothingRequested
             {
                 get => false;
-                set { }
+                set {}
             }
 
             /// <summary>
             /// Property to be implemented by the provider to get whether temporal smoothing is currently applied to the
             /// environment depth image.
             /// </summary>
+            /// <value><see langword="true"/> if environment depth temporal smoothing is enabled.
+            /// Otherwise, <see langword="false"/>.</value>
             public virtual bool environmentDepthTemporalSmoothingEnabled => false;
 
             /// <summary>
             /// Specifies the requested occlusion preference mode.
             /// </summary>
-            /// <value>
-            /// The requested occlusion preference mode.
-            /// </value>
+            /// <value>The requested occlusion preference mode.</value>
             public virtual OcclusionPreferenceMode requestedOcclusionPreferenceMode
             {
-                get => default(OcclusionPreferenceMode);
+                get => default;
                 set {}
             }
 
             /// <summary>
             /// Get the occlusion preference mode currently in use by the provider.
             /// </summary>
-            public virtual OcclusionPreferenceMode currentOcclusionPreferenceMode => default(OcclusionPreferenceMode);
+            /// <value>The current occlusion preference mode.</value>
+            public virtual OcclusionPreferenceMode currentOcclusionPreferenceMode => default;
+
+            /// <summary>
+            /// Get the current occlusion frame.
+            /// </summary>
+            /// <param name="allocator">The allocator to use for any <see cref="NativeArray{T}"/>s contained in the frame.</param>
+            /// <param name="frame">The output occlusion frame, if this method returned <see langword="true"/>.</param>
+            /// <returns><see langword="true"/> if the method successfully got a frame. Otherwise, <see langword="false"/>.</returns>
+            public virtual XRResultStatus TryGetFrame(Allocator allocator, out XROcclusionFrame frame)
+            {
+                frame = default;
+                return false;
+            }
 
             /// <summary>
             /// Method to be implemented by the provider to get the human stencil texture descriptor.
             /// </summary>
             /// <param name="humanStencilDescriptor">The human stencil texture descriptor to be populated, if
             /// available.</param>
-            /// <returns>
-            /// <c>true</c> if the human stencil texture descriptor is available and is returned. Otherwise,
-            /// <c>false</c>.
-            /// </returns>
+            /// <returns><see langword="true"/> if the human stencil texture descriptor is available and returned.
+            /// Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human
             /// stencil texture.</exception>
             public virtual bool TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor)
@@ -484,27 +492,24 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="cinfo">If this method returns `true`, this should be populated with construction
             /// information for an <see cref="XRCpuImage"/>.</param>
-            /// <returns>Returns `true` if the human stencil CPU image was acquired. Returns `false` otherwise.</returns>
+            /// <returns><see langword="true"/> if the human stencil CPU image was acquired. Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human
             /// stencil CPU images.</exception>
             public virtual bool TryAcquireHumanStencilCpuImage(out XRCpuImage.Cinfo cinfo)
                 => throw new NotSupportedException("Human stencil CPU images are not supported by this implementation.");
 
             /// <summary>
-            /// The <see cref="XRCpuImage.Api"/> for interacting with an <see cref="XRCpuImage"/> acquired with
-            /// <see cref="TryAcquireHumanStencilCpuImage"/>.
+            /// The API for interacting with an <see cref="XRCpuImage"/> acquired with <see cref="TryAcquireHumanStencilCpuImage"/>.
             /// </summary>
+            /// <value>The human stencil CPU image API.</value>
             public virtual XRCpuImage.Api humanStencilCpuImageApi => null;
 
             /// <summary>
             /// Method to be implemented by the provider to get the human depth texture descriptor.
             /// </summary>
-            /// <param name="humanDepthDescriptor">The human depth texture descriptor to be populated, if available.
-            /// </param>
-            /// <returns>
-            /// <c>true</c> if the human depth texture descriptor is available and is returned. Otherwise,
-            /// <c>false</c>.
-            /// </returns>
+            /// <param name="humanDepthDescriptor">The human depth texture descriptor to be populated, if available.</param>
+            /// <returns><see langword="true"/> if the human depth texture descriptor is available and returned.
+            /// Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human
             /// depth texture.</exception>
             public virtual bool TryGetHumanDepth(out XRTextureDescriptor humanDepthDescriptor)
@@ -513,18 +518,19 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Tries to acquire the latest human depth CPU image.
             /// </summary>
-            /// <param name="cinfo">If this method returns `true`, this should be populated with construction
-            /// information for an <see cref="XRCpuImage"/>.</param>
-            /// <returns>Returns `true` if the human depth CPU image was acquired. Returns `false` otherwise.</returns>
+            /// <param name="cinfo">The construction information for an <see cref="XRCpuImage"/>, if this method
+            /// returns <see langword="true"/>.</param>
+            /// <returns><see langword="true"/> if the human depth CPU image was acquired.
+            /// Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human
             /// depth CPU images.</exception>
             public virtual bool TryAcquireHumanDepthCpuImage(out XRCpuImage.Cinfo cinfo)
                 => throw new NotSupportedException("Human depth CPU images are not supported by this implementation.");
 
             /// <summary>
-            /// The <see cref="XRCpuImage.Api"/> for interacting with an <see cref="XRCpuImage"/> acquired with
-            /// <see cref="TryAcquireHumanDepthCpuImage"/>.
+            /// The API for interacting with an <see cref="XRCpuImage"/> acquired with <see cref="TryAcquireHumanDepthCpuImage"/>.
             /// </summary>
+            /// <value>The human depth CPU image API.</value>
             public virtual XRCpuImage.Api humanDepthCpuImageApi => null;
 
             /// <summary>
@@ -532,10 +538,8 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="environmentDepthDescriptor">The environment depth texture descriptor to be populated, if
             /// available.</param>
-            /// <returns>
-            /// <c>true</c> if the environment depth texture descriptor is available and is returned. Otherwise,
-            /// <c>false</c>.
-            /// </returns>
+            /// <returns><see langword="true"/> if the environment depth texture descriptor is available and returned.
+            /// Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support environment
             /// depth texture.</exception>
             public virtual bool TryGetEnvironmentDepth(out XRTextureDescriptor environmentDepthDescriptor)
@@ -544,10 +548,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Tries to acquire the latest environment depth CPU image.
             /// </summary>
-            /// <param name="cinfo">If this method returns `true`, this should be populated with construction
-            /// information for an <see cref="XRCpuImage"/>.</param>
-            /// <returns>Returns `true` if the environment depth CPU image was acquired.
-            /// Returns `false` otherwise.</returns>
+            /// <param name="cinfo">Construction information for an <see cref="XRCpuImage"/>, if this method returns
+            /// <see langword="true"/>.</param>
+            /// <returns><see langword="true"/> if the environment depth CPU image was acquired.
+            /// Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support environment
             /// CPU images.</exception>
             public virtual bool TryAcquireEnvironmentDepthCpuImage(out XRCpuImage.Cinfo cinfo)
@@ -561,10 +565,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// acquire the raw depth image, whereas the image provided by <see cref="TryAcquireEnvironmentDepthCpuImage"/>
             /// depends on the value of <see cref="environmentDepthTemporalSmoothingEnabled"/>.
             /// </remarks>
-            /// <param name="cinfo">If this method returns `true`, this should be populated with construction
-            /// information for an <see cref="XRCpuImage"/>.</param>
-            /// <returns>Returns `true` if the raw environment depth CPU image was acquired.
-            /// Returns `false` otherwise.</returns>
+            /// <param name="cinfo">Construction information for an <see cref="XRCpuImage"/>, if this method returns
+            /// <see langword="true"/>.</param>
+            /// <returns><see langword="true"/> if the raw environment depth CPU image was acquired.
+            /// Otherwise, <see langword="false"/>.</returns>
             public virtual bool TryAcquireRawEnvironmentDepthCpuImage(out XRCpuImage.Cinfo cinfo)
             {
                 cinfo = default;
@@ -580,10 +584,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// <see cref="TryAcquireEnvironmentDepthCpuImage"/> depends on the value of
             /// <see cref="environmentDepthTemporalSmoothingEnabled"/>.
             /// </remarks>
-            /// <param name="cinfo">If this method returns `true`, this should be populated with construction
-            /// information for an <see cref="XRCpuImage"/>.</param>
-            /// <returns>Returns `true` if the smoothed environment depth CPU image was acquired.
-            /// Returns `false` otherwise.</returns>
+            /// <param name="cinfo">Construction information for an `XRCpuImage`, if this method returns
+            /// <see langword="true"/>.</param>
+            /// <returns><see langword="true"/> if the smoothed environment depth CPU image was acquired.
+            /// Otherwise, <see langword="false"/>.</returns>
             public virtual bool TryAcquireSmoothedEnvironmentDepthCpuImage(out XRCpuImage.Cinfo cinfo)
             {
                 cinfo = default;
@@ -591,9 +595,9 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// The <see cref="XRCpuImage.Api"/> for interacting with an <see cref="XRCpuImage"/> acquired with
-            /// <see cref="TryAcquireEnvironmentDepthCpuImage"/>.
+            /// The API for interacting with an <see cref="XRCpuImage"/> acquired with <see cref="TryAcquireEnvironmentDepthCpuImage"/>.
             /// </summary>
+            /// <value>The environment depth CPU image API.</value>
             public virtual XRCpuImage.Api environmentDepthCpuImageApi => null;
 
             /// <summary>
@@ -601,10 +605,8 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="environmentDepthConfidenceDescriptor">The environment depth texture descriptor to be
             /// populated, if available.</param>
-            /// <returns>
-            /// <c>true</c> if the environment depth confidence texture descriptor is available and is returned.
-            /// Otherwise, <c>false</c>.
-            /// </returns>
+            /// <returns><see langword="true"/> if the environment depth confidence texture descriptor is available and returned.
+            /// Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support environment
             /// depth confidence texture.</exception>
             public virtual bool TryGetEnvironmentDepthConfidence(out XRTextureDescriptor environmentDepthConfidenceDescriptor)
@@ -613,20 +615,29 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Tries to acquire the latest environment depth confidence CPU image.
             /// </summary>
-            /// <param name="cinfo">If this method returns `true`, this should be populated with construction
-            /// information for an <see cref="XRCpuImage"/>.</param>
-            /// <returns>Returns `true` if the environment depth confidence CPU image was acquired.
-            /// Returns `false` otherwise.</returns>
+            /// <param name="cinfo">Construction information for an <see cref="XRCpuImage"/>, if this method returns
+            /// <see langword="true"/>.</param>
+            /// <returns><see langword="true"/> if the environment depth confidence CPU image was acquired.
+            /// Otherwise, <see langword="false"/>.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support environment
             /// depth confidence CPU images.</exception>
             public virtual bool TryAcquireEnvironmentDepthConfidenceCpuImage(out XRCpuImage.Cinfo cinfo)
                 => throw new NotSupportedException("Environment depth CPU images are not supported by this implementation.");
 
             /// <summary>
-            /// The <see cref="XRCpuImage.Api"/> for interacting with an <see cref="XRCpuImage"/> acquired with
-            /// <see cref="TryAcquireEnvironmentDepthConfidenceCpuImage"/>.
+            /// The API for interacting with an <see cref="XRCpuImage"/> acquired with <see cref="TryAcquireEnvironmentDepthConfidenceCpuImage"/>.
             /// </summary>
+            /// <value>The environment depth confidence CPU image API.</value>
             public virtual XRCpuImage.Api environmentDepthConfidenceCpuImageApi => null;
+
+            const string k_defaultDepthViewProjectionMatricesPropertyName = "_DepthVPMatrices";
+            int m_depthViewProjectionMatricesPropertyId = Shader.PropertyToID(k_defaultDepthViewProjectionMatricesPropertyName);
+
+            /// <summary>
+            /// Shader property ID for the depth view-projection matrix array.
+            /// Any `ARShaderOcclusion` components in your scene will write to this property.
+            /// </summary>
+            public virtual int depthViewProjectionMatricesPropertyId => m_depthViewProjectionMatricesPropertyId;
 
             /// <summary>
             /// Method to be implemented by the provider to get the occlusion texture descriptors associated with the
@@ -635,13 +646,12 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="defaultDescriptor">The default descriptor value.</param>
             /// <param name="allocator">The allocator to use when creating the returned <c>NativeArray</c>.</param>
             /// <returns>An array of the occlusion texture descriptors.</returns>
-            public virtual NativeArray<XRTextureDescriptor> GetTextureDescriptors(XRTextureDescriptor defaultDescriptor,
-                                                                                  Allocator allocator)
-                => new NativeArray<XRTextureDescriptor>(0, allocator);
+            public virtual NativeArray<XRTextureDescriptor> GetTextureDescriptors(
+                XRTextureDescriptor defaultDescriptor, Allocator allocator)
+                => new(0, allocator);
 
             /// <summary>
-            /// Method to be implemented by the provider to get the enabled and disabled shader keywords for the
-            /// material.
+            /// Method to be implemented by the provider to get the enabled and disabled shader keywords for the material.
             /// </summary>
             /// <param name="enabledKeywords">The keywords to enable for the material.</param>
             /// <param name="disabledKeywords">The keywords to disable for the material.</param>

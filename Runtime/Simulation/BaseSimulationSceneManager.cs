@@ -69,7 +69,7 @@ namespace UnityEngine.XR.Simulation
 
             m_EnvironmentScene = CreateEnvironmentScene();
 
-            var prefab = XRSimulationPreferences.Instance.activeEnvironmentPrefab;
+            var prefab = GetOrCreateEnvironmentPrefab();
             if (prefab == null)
                 throw new InvalidOperationException("No environment prefab set. Pick an environment in a Scene View with Overlays -> XR Environment.");
 
@@ -80,7 +80,6 @@ namespace UnityEngine.XR.Simulation
             EnsureLightMasking(m_EnvironmentRoot);
 
             m_EnvironmentRoot.SetLayerRecursively(XRSimulationRuntimeSettings.Instance.environmentLayer);
-            m_EnvironmentRoot.SetHideFlagsRecursively(HideFlags.HideInHierarchy);
 
             s_Initialized = true;
             s_ActiveSceneName = m_EnvironmentScene.name;
@@ -110,6 +109,13 @@ namespace UnityEngine.XR.Simulation
         protected abstract Scene CreateEnvironmentScene();
         protected abstract void DestroyEnvironmentScene();
         protected abstract GameObject InstantiateEnvironment(GameObject environmentPrefab);
+
+        protected abstract GameObject GetOrCreateEnvironmentPrefab();
+
+        protected GameObject GetPreferencesEnvironmentPrefab()
+        {
+            return XRSimulationPreferences.Instance.activeEnvironmentPrefab;
+        }
 
         static void EnsureLightMasking(GameObject root)
         {

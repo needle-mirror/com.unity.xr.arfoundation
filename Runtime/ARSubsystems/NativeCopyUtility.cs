@@ -42,11 +42,12 @@ namespace UnityEngine.XR.ARSubsystems
 
             // Then overwrite with the source data, which may have a different size
             UnsafeUtility.MemCpyStride(
-                array.GetUnsafePtr(),
-                UnsafeUtility.SizeOf<T>(),
-                source,
-                sourceElementSize,
-                sourceElementSize, length);
+                destination: array.GetUnsafePtr(),
+                destinationStride: UnsafeUtility.SizeOf<T>(),
+                source: source,
+                sourceStride: sourceElementSize,
+                elementSize: sourceElementSize,
+                count: length);
 
             return array;
         }

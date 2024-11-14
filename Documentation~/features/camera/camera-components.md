@@ -22,6 +22,8 @@ The [ARCameraManager](xref:UnityEngine.XR.ARFoundation.ARCameraManager) componen
 > [!NOTE]
 > <strong>After Opaques</strong> has slightly different rendering behavior beyond its render order. <strong>After Opaques</strong> also causes `ARCameraBackground` to render a fullscreen quad at the Camera's [farClipPlane](xref:UnityEngine.Camera.farClipPlane) to ensure that depth testing properly culls fragments that are behind opaque geometry.
 
+<a id="ar-camera-background-component"/>
+
 # AR Camera Background component
 
 The [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) component renders video from the device camera as the background of the scene. Enable this component to render the AR background, and disable it to disable background rendering.

@@ -421,6 +421,13 @@ namespace UnityEngine.XR.ARSubsystems
         public bool supportsExifData { get; private set; }
 
         /// <summary>
+        /// Indicates whether the provider implementation is capable of supporting camera torch mode. Not all cameras have a torch. Use <see cref="XRCameraSubsystem.DoesCurrentCameraSupportTorch"/> to check your device's currently active camera.
+        /// </summary>
+        /// <value><see langword="true"/> if the implementation supports camera torch mode.
+        /// Otherwise, <see langword="false"/>.</value>
+        public bool supportsCameraTorchMode { get; private set; }
+
+        /// <summary>
         /// Contains the parameters for creating a new <see cref="XRCameraSubsystemDescriptor"/>.
         /// </summary>
         public struct Cinfo : IEquatable<Cinfo>
@@ -589,6 +596,13 @@ namespace UnityEngine.XR.ARSubsystems
             public bool supportsExifData { get; set; }
 
             /// <summary>
+            /// Indicates whether the provider implementation is capable of supporting camera torch mode on any available cameras. Use <see cref="XRCameraSubsystem.DoesCurrentCameraSupportTorch"/> to check your device's currently active camera.
+            /// </summary>
+            /// <value><see langword="true"/> if the implementation supports camera torch mode.
+            /// Otherwise, <see langword="false"/>.</value>
+            public bool supportsCameraTorchMode { get; set; }
+
+            /// <summary>
             /// Tests for equality.
             /// </summary>
             /// <param name="other">The other <see cref="Cinfo"/> to compare against.</param>
@@ -615,7 +629,8 @@ namespace UnityEngine.XR.ARSubsystems
                     supportsFocusModes.Equals(other.supportsFocusModes) &&
                     supportsCameraGrain.Equals(other.supportsCameraGrain) &&
                     supportsImageStabilizationDelegate.Equals(other.supportsImageStabilizationDelegate) &&
-                    supportsExifData.Equals(other.supportsExifData);
+                    supportsExifData.Equals(other.supportsExifData) &&
+                    supportsCameraTorchMode.Equals(other.supportsCameraTorchMode);
             }
 
             /// <summary>
@@ -674,6 +689,7 @@ namespace UnityEngine.XR.ARSubsystems
                     hashCode = (hashCode * 486187739) + supportsCameraGrain.GetHashCode();
                     hashCode = (hashCode * 486187739) + supportsImageStabilizationDelegate.GetHashCode();
                     hashCode = (hashCode * 486187739) + supportsExifData.GetHashCode();
+                    hashCode = (hashCode * 486187739) + supportsCameraTorchMode.GetHashCode();
                 }
                 return hashCode;
             }
@@ -743,6 +759,7 @@ namespace UnityEngine.XR.ARSubsystems
             supportsCameraGrain = cinfo.supportsCameraGrain;
             m_SupportsImageStabilizationDelegate = cinfo.supportsImageStabilizationDelegate;
             supportsExifData = cinfo.supportsExifData;
+            supportsCameraTorchMode = cinfo.supportsCameraTorchMode;
         }
     }
 }

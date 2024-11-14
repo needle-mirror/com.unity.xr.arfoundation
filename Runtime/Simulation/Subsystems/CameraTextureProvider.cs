@@ -260,6 +260,7 @@ namespace UnityEngine.XR.Simulation
         void ConfigureTextureReadbackForURP()
         {
             var universalAdditionalCameraData = m_SimulationCamera.GetUniversalAdditionalCameraData();
+            universalAdditionalCameraData.requiresDepthOption = CameraOverrideOption.On;
             universalAdditionalCameraData.scriptableRenderer.EnqueuePass(m_SimulationReadbackRenderPass);
         }
 #endif  // URP_7_OR_NEWER
@@ -459,7 +460,7 @@ namespace UnityEngine.XR.Simulation
                     format: m_SimulationReadbackTexture.format,
                     propertyNameId: m_TextureSinglePropertyNameId,
                     depth: 0,
-                    dimension: TextureDimension.Tex2D);
+                    textureType: XRTextureType.Texture2D);
             }
             else
                 descriptors[0] = default;
@@ -483,7 +484,7 @@ namespace UnityEngine.XR.Simulation
                     format: m_SimulationReadbackDepthTexture.format,
                     propertyNameId: m_TextureSingleDepthPropertyNameId,
                     depth: 1,
-                    dimension: TextureDimension.Tex2D);
+                    textureType: XRTextureType.Texture2D);
             }
             else
             {

@@ -15,7 +15,7 @@ namespace UnityEngine.XR.Simulation
 
         class SimulationProvider : Provider, ISimulationSessionResetHandler
         {
-            readonly SimulationTrackedImageDiscoverer m_Discoverer = new();
+            internal readonly SimulationTrackedImageDiscoverer m_Discoverer = new();
 
             XRTrackedImage[] m_Added;
             int m_NumAdded;

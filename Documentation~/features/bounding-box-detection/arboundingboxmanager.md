@@ -54,7 +54,7 @@ The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-s
 
 | Prefab | Description |
 | :----- | :---------- |
-| [AR Bounding Box Debug Visualizer](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Prefabs/AR%20BoundingBox%20Debug%20Visualizer.prefab) | Visualize bounding box meshes with a solid color, and optionally visualize additional information such as the bounding box's [trackableId](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackableId), [trackingState](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackingState), [classifications](xref:UnityEngine.XR.ARFoundation.ARBoundingBox.classifications), and orientation. You can configure the visualization options via the **Inspector**. |
+| [AR Bounding Box Debug Visualizer](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Prefabs/AR%20Bounding%20Box%20Debug%20Visualizer.prefab) | Visualize bounding box meshes with a solid color, and optionally visualize additional information such as the bounding box's [trackableId](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackableId), [trackingState](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackingState), [classifications](xref:UnityEngine.XR.ARFoundation.ARBoundingBox.classifications), and orientation. You can configure the visualization options via the **Inspector**. |
 
 #### Custom bounding box visualizers
 

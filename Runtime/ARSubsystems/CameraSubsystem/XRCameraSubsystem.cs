@@ -95,6 +95,34 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
+            /// Get whether the current session configuration allows the camera torch to be turned on or off.
+            /// </summary>
+            /// <returns> true if supported. </returns>
+            public virtual bool DoesCurrentCameraSupportTorch()
+            {
+                return false;
+            }
+
+            /// <summary>
+            /// Gets the current camera torch mode
+            /// </summary>
+            /// <value>The current <see cref="XRCameraTorchMode"/>.</value>
+            public virtual XRCameraTorchMode currentCameraTorchMode
+            {
+                get => XRCameraTorchMode.Off;
+            }
+
+            /// <summary>
+            /// Get or set the requested camera torch mode.
+            /// </summary>
+            /// <value><see langword="true"/> if the torch is requested to be on. Otherwise, <see langword="false"/>.</value>
+            public virtual XRCameraTorchMode requestedCameraTorchMode
+            {
+                get => XRCameraTorchMode.Off;
+                set { }
+            }
+
+            /// <summary>
             /// Get the current light estimation mode in use by the subsystem.
             /// </summary>
             /// <value>The current light estimation mode.</value>
@@ -378,6 +406,34 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Get or set the requested camera torch mode.
+        /// </summary>
+        /// <value><see langword="true"/> if the torch is requested to be on. Otherwise, <see langword="false"/>.</value>
+        public XRCameraTorchMode requestedCameraTorchMode
+        {
+            get => provider.requestedCameraTorchMode;
+            set => provider.requestedCameraTorchMode = value;
+        }
+
+        /// <summary>
+        /// Gets the current camera torch mode.
+        /// </summary>
+        /// <value>The camera torch mode.</value>
+        public XRCameraTorchMode currentCameraTorchMode
+        {
+            get => provider.currentCameraTorchMode;
+        }
+
+        /// <summary>
+        /// Get whether the current session configuration allows the camera torch to be turned on or off.
+        /// </summary>
+        /// <returns> true if supported. </returns>
+        public bool DoesCurrentCameraSupportTorch()
+        {
+            return provider.DoesCurrentCameraSupportTorch();
+        }
+
+        /// <summary>
         /// Get the current light estimation mode in use by the provider.
         /// </summary>
         /// <value>The current light estimation mode.</value>
@@ -462,12 +518,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <returns>An array of texture descriptors.</returns>
         /// <param name="allocator">The allocator to use when creating the returned <c>NativeArray</c>.</param>
-        public NativeArray<XRTextureDescriptor> GetTextureDescriptors(
-            Allocator allocator)
+        public NativeArray<XRTextureDescriptor> GetTextureDescriptors(Allocator allocator)
         {
-            return provider.GetTextureDescriptors(
-                default(XRTextureDescriptor),
-                allocator);
+            return provider.GetTextureDescriptors(default, allocator);
         }
 
         /// <summary>
@@ -596,7 +649,7 @@ namespace UnityEngine.XR.ARSubsystems
                 supportsWorldTrackingHDRLightEstimation = cameraSubsystemParams.supportsWorldTrackingHDRLightEstimation,
                 supportsCameraGrain = cameraSubsystemParams.supportsCameraGrain,
                 supportsImageStabilizationDelegate = cameraSubsystemParams.supportsImageStabilizationDelegate,
-                supportsExifData = cameraSubsystemParams.supportsExifData
+                supportsExifData = cameraSubsystemParams.supportsExifData,
             };
             XRCameraSubsystemDescriptor.Register(cameraSubsystemCinfo);
             return true;

@@ -26,6 +26,14 @@ namespace UnityEngine.XR.Simulation
         readonly List<TrackingState> m_TrackingStatesOfImages = new();
         readonly List<XRReferenceImage?> m_ReferenceImagesForImages = new();
 
+        /// <summary>
+        /// This property allows for a class to override the ITrackedImageDiscoveryParams to use
+        /// by this discoverer.  The discovery params, if set, will implement the parameters needed
+        /// by the discoverer.  If no params are set, then the default behavior of this discoverer
+        /// is to use the XRSimulationRuntimeSettings.
+        /// </summary>
+        internal static ITrackedImageDiscoveryParams trackedImageDiscoveryParams { get; set; }
+
         public SimulationRuntimeImageLibrary simulationRuntimeImageLibrary
         {
             set => m_SimulationRuntimeImageLibrary = value;
@@ -153,8 +161,10 @@ namespace UnityEngine.XR.Simulation
                 throw new InvalidOperationException("The physics scene loaded for simulation is not valid.");
 
             m_ImageDiscoveryStrategy = new TrackedImageDiscoveryStrategy(camera, simPhysicsScene);
+            var discoveryParams = trackedImageDiscoveryParams ??
+                                  XRSimulationRuntimeSettings.Instance.trackedImageDiscoveryParams;
             var trackingUpdateIntervalMilliseconds =
-                (int)(XRSimulationRuntimeSettings.Instance.trackedImageDiscoveryParams.trackingUpdateInterval * 1000);
+                (int)(discoveryParams.trackingUpdateInterval * 1000);
 
             if (trackingUpdateIntervalMilliseconds > 0)
                 m_TrackingUpdateIntervalMilliseconds = trackingUpdateIntervalMilliseconds;
@@ -169,10 +179,17 @@ namespace UnityEngine.XR.Simulation
                     m_TrackingStatesOfImages.Add(TrackingState.None);
                     if (m_SimulationRuntimeImageLibrary != null)
                     {
-                        m_SimulationRuntimeImageLibrary.TryGetReferenceImageWithGuid(
-                            image.imageAssetGuid,
-                            out var foundImage);
-                        m_ReferenceImagesForImages.Add(foundImage);
+                        // note: since the reference images container is a map to Nullable
+                        // reference images, and the XRReferenceImage is a struct, we need
+                        // to explicitly put in a 'null' in the case of failure since otherwise
+                        // the reference image will have *never* get updated if/when the
+                        // real reference image gets added at runtime.
+                        if (m_SimulationRuntimeImageLibrary.TryGetReferenceImageWithGuid(
+                                image.imageAssetGuid,
+                                out var foundImage))
+                            m_ReferenceImagesForImages.Add(foundImage);
+                        else
+                            m_ReferenceImagesForImages.Add(null);
                     }
                 }
             }

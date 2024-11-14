@@ -1,6 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -50,5 +53,14 @@ namespace UnityEngine.XR.Simulation
 
             return gameObject.scene == SimulationSessionSubsystem.simulationSceneManager?.environmentScene;
         }
+
+#if UNITY_EDITOR
+        internal static Guid GetTextureGuid(Texture texture)
+        {
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(texture.GetInstanceID(), out string assetGuidString, out var _);
+            var guid = new Guid(assetGuidString);
+            return guid;
+        }
+#endif
     }
 }

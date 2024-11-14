@@ -490,7 +490,7 @@ namespace UnityEngine.XR.Simulation
                     format: simProbe.cubemap.format,
                     propertyNameId: simProbe.environmentProbeShaderPropertyId,
                     depth: 1,
-                    dimension: simProbe.cubemap.dimension);
+                    textureType: simProbe.cubemap.dimension.ToXRTextureType());
 
                 return new XREnvironmentProbe(
                     trackableId: GenerateTrackableId(),

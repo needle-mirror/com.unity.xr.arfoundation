@@ -17,6 +17,14 @@ namespace UnityEngine.XR.Simulation
 
         static SimulationSceneManager s_SimulationSceneManager;
 
+        /// <summary>
+        /// This property allows for a class to establish a scene manager factory to use
+        /// by this subsystem.  The scene manager factory, if set, will supply the scene
+        /// manager to use by the subsystem.  If no factory is set, then the default
+        /// behavior of the subsystem is to use the SimulationSceneManager.
+        /// </summary>
+        internal static Func<SimulationSceneManager> simulationSceneManagerFactory { get; set; }
+
         internal static SimulationSceneManager simulationSceneManager => s_SimulationSceneManager;
 
         internal static event Action s_SimulationSessionReset;
@@ -46,7 +54,7 @@ namespace UnityEngine.XR.Simulation
 
             bool Initialize()
             {
-                s_SimulationSceneManager ??= new SimulationSceneManager();
+                s_SimulationSceneManager ??= simulationSceneManagerFactory?.Invoke() ?? new SimulationSceneManager();
                 m_SimulationCameraPoseProvider = SimulationCameraPoseProvider.GetOrCreateSimulationCameraPoseProvider();
 
                 if (SimulationMeshSubsystem.GetActiveSubsystemInstance() != null)

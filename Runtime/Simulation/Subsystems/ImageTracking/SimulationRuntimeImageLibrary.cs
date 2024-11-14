@@ -27,11 +27,22 @@ namespace UnityEngine.XR.Simulation
         readonly List<(IntPtr texPtr, Texture2D texture)> m_ValidatedTextures = new();
         readonly int m_MutableStartIndex;
 
+        /// <summary>
+        /// by default, the 'supportsValidation' property will return 'true' and validate the aspects
+        /// of textures that are added to the runtime image library.  however, in some situations
+        /// -- such as when running headless with no graphics system -- textures will not have
+        /// pixels or native handles and so on.  in those situations, we still want to functionality
+        /// of the library to work, but not validate aspects that require a working graphics
+        /// system.  in that case, a function which specifies whether to validate or not can be
+        /// assigned here before any 'ScheduleAddImageWithValidationJob()' calls are made.
+        /// </summary>
+        internal Func<bool> validationOverride { get; set; }
+
         /// <inheritdoc/>
         public override int count => m_Images.Count;
 
         /// <inheritdoc/>
-        public override bool supportsValidation => true;
+        public override bool supportsValidation => validationOverride?.Invoke() ?? true;
 
         /// <inheritdoc/>
         public override int supportedTextureFormatCount => k_TextureFormats.Length;
@@ -85,9 +96,18 @@ namespace UnityEngine.XR.Simulation
             var tex = referenceImage.texture;
             try
             {
+                var textureGuid = referenceImage.textureGuid;
+
+#if UNITY_EDITOR
+                if (tex != null && textureGuid == Guid.Empty)
+                {
+                    textureGuid = SimulationUtils.GetTextureGuid(tex);
+                }
+#endif
+
                 m_Images.Add(new XRReferenceImage(
                     SerializableGuidUtility.AsSerializedGuid(referenceImage.guid),
-                    SerializableGuidUtility.AsSerializedGuid(referenceImage.textureGuid),
+                    SerializableGuidUtility.AsSerializedGuid(textureGuid),
                     referenceImage.size,
                     referenceImage.name, tex));
             }

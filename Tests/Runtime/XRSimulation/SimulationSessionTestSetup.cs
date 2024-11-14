@@ -29,7 +29,7 @@ namespace UnityEngine.XR.Simulation.Tests
             StopSubsystem<XRInputSubsystem, XRInputSubsystem>();
         }
 
-        void StartSubsystem<TXRSubsystem, TSubsystem>()
+        protected void StartSubsystem<TXRSubsystem, TSubsystem>()
             where TXRSubsystem : class, ISubsystem, new()
             where TSubsystem : class, ISubsystem, new()
         {
@@ -43,7 +43,7 @@ namespace UnityEngine.XR.Simulation.Tests
             Assert.IsTrue(xrSubsystem.running);
         }
 
-        void StopSubsystem<TXRSubsystem, TSubsystem>()
+        protected void StopSubsystem<TXRSubsystem, TSubsystem>()
             where TXRSubsystem : class, ISubsystem, new()
             where TSubsystem : class, ISubsystem, new()
         {

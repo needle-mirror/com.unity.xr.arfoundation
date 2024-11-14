@@ -1,9 +1,5 @@
 using System;
 using Unity.XR.CoreUtils;
-using UnityEngine.Serialization;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.ARFoundation.InternalUtils;
 using GuidUtil = UnityEngine.XR.ARSubsystems.GuidUtil;
@@ -147,6 +143,15 @@ namespace UnityEngine.XR.Simulation
             if (m_SerializableImageAssetGuid.guid == Guid.Empty)
                 SetSerializedGuid();
 #endif
+
+            if (SimulationUtils.IsInSimulationEnvironment(gameObject))
+                SimulationSessionSubsystem.simulationSceneManager.TrackImage(this);
+        }
+
+        void OnDisable()
+        {
+            if (SimulationUtils.IsInSimulationEnvironment(gameObject))
+                SimulationSessionSubsystem.simulationSceneManager.UntrackImage(this);
         }
 
         void CreateQuadMesh()
@@ -220,8 +225,7 @@ namespace UnityEngine.XR.Simulation
             if (m_Image == null)
                 return;
 
-            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(m_Image.GetInstanceID(), out string assetGuidString, out var _);
-            var guid = new Guid(assetGuidString);
+            var guid = SimulationUtils.GetTextureGuid(m_Image);
             guid.Decompose(out var low, out var high);
             m_SerializableImageAssetGuid = new SerializableGuid(low, high);
 #endif

@@ -17,43 +17,32 @@ namespace UnityEngine.XR.ARSubsystems
     public struct XRCameraConfiguration : IEquatable<XRCameraConfiguration>
     {
         Vector2Int m_Resolution;
-
         int m_Framerate;
-
         IntPtr m_NativeConfigurationHandle;
-
         Supported m_DepthSensorSupported;
 
         /// <summary>
         /// The width of the camera resolution.
         /// </summary>
-        /// <value>
-        /// The width, in pixels, of the camera resolution.
-        /// </value>
+        /// <value>The width, in pixels, of the camera resolution.</value>
         public int width => m_Resolution.x;
 
         /// <summary>
         /// The height of the camera resolution.
         /// </summary>
-        /// <value>
-        /// The height, in pixels, of the camera resolution.
-        /// </value>
+        /// <value>The height, in pixels, of the camera resolution.</value>
         public int height => m_Resolution.y;
 
         /// <summary>
         /// The camera resolution.
         /// </summary>
-        /// <value>
-        /// The camera resolution in pixels.
-        /// </value>
+        /// <value>The camera resolution in pixels.</value>
         public Vector2Int resolution => m_Resolution;
 
         /// <summary>
         /// The framerate, if this camera configuration specifies one.
         /// </summary>
-        /// <value>
-        /// The framerate, if this camera configuration specifies one. Otherwise, <c>null</c>.
-        /// </value>
+        /// <value>The framerate, if this camera configuration specifies one. Otherwise, <c>null</c>.</value>
         /// <remarks>
         /// On some platforms, different resolutions might affect the available framerate.
         /// </remarks>

@@ -169,6 +169,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// Image Stabilization enabled.
         /// </summary>
         ImageStabilization = 1 << 27,
+
+        /// <summary>
+        /// Camera torch mode enabled.
+        /// </summary>
+        CameraTorch = 1 << 28,
     }
 
     /// <summary>

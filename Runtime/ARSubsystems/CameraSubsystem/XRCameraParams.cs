@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using UnityEngine;
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -13,9 +12,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Distance from the camera to the near plane.
         /// </summary>
-        /// <value>
-        /// Distance from the camera to the near plane.
-        /// </value>
+        /// <value>Distance from the camera to the near plane.</value>
         public float zNear
         {
             get => m_ZNear;
@@ -26,9 +23,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Distance from the camera to the far plane.
         /// </summary>
-        /// <value>
-        /// Distance from the camera to the far plane.
-        /// </value>
+        /// <value>Distance from the camera to the far plane.</value>
         public float zFar
         {
             get => m_ZFar;
@@ -39,9 +34,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Width, in pixels, of the screen resolution.
         /// </summary>
-        /// <value>
-        /// Width, in pixels, of the screen resolution.
-        /// </value>
+        /// <value>Width, in pixels, of the screen resolution.</value>
         public float screenWidth
         {
             get => m_ScreenWidth;
@@ -52,9 +45,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Height, in pixels, of the screen resolution.
         /// </summary>
-        /// <value>
-        /// Height, in pixels, of the screen resolution.
-        /// </value>
+        /// <value>Height, in pixels, of the screen resolution.</value>
         public float screenHeight
         {
             get => m_ScreenHeight;
@@ -65,9 +56,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The orientation of the screen.
         /// </summary>
-        /// <value>
-        /// The orientation of the screen.
-        /// </value>
+        /// <value>The orientation of the screen.</value>
         public ScreenOrientation screenOrientation
         {
             get => m_ScreenOrientation;

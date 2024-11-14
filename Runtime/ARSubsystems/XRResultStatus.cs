@@ -1,3 +1,4 @@
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 using System;
 
 namespace UnityEngine.XR.ARSubsystems
@@ -6,7 +7,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// Represents the status of a completed operation as a cross-platform <see cref="statusCode"/> and a
     /// platform-specific <see cref="nativeStatusCode"/>.
     /// </summary>
-    public struct XRResultStatus : IEquatable<XRResultStatus>, IComparable<XRResultStatus>
+    public readonly struct XRResultStatus : IEquatable<XRResultStatus>, IComparable<XRResultStatus>
     {
         /// <summary>
         /// Indicates whether the operation succeeded or failed as well as whether additional status information is
@@ -56,6 +57,13 @@ namespace UnityEngine.XR.ARSubsystems
             /// Indicates that the operation failed with an unknown error, and no additional information is available.
             /// </summary>
             UnknownError = -2,
+
+            /// <summary>
+            /// Indicates that the operation failed because the provider was uninitialized.
+            /// This may be because XR Plug-in Management has not yet initialized an XR loader, or because a
+            /// platform-specific resource is not yet available.
+            /// </summary>
+            ProviderUninitialized = -3,
         }
 
         /// <summary>
@@ -63,7 +71,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value>The status code.</value>
         public StatusCode statusCode => m_StatusCode;
-        StatusCode m_StatusCode;
+        readonly StatusCode m_StatusCode;
 
         /// <summary>
         /// The platform-specific status code.
@@ -74,7 +82,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// target platform(s) to further understand how to interpret this integer value.
         /// </summary>
         public int nativeStatusCode => m_NativeStatusCode;
-        int m_NativeStatusCode;
+        readonly int m_NativeStatusCode;
 
         /// <summary>
         /// Construct an instance with a given status code. This constructor assumes that there is no platform-specific

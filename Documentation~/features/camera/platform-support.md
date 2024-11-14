@@ -51,6 +51,7 @@ The following table lists the optional features of the camera subsystem. Each op
 | **Camera grain** | [supportsCameraGrain](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsCameraGrain) | Indicates whether the provider implementation can provide a value for [XRCameraFrame.cameraGrain](xref:UnityEngine.XR.ARSubsystems.XRCameraFrame.cameraGrain). |
 | **Image stabilization** | [supportsImageStabilization](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsImageStabilization) | Indicates whether the provider implementation supports the ability to set the camera's [Image Stabilization mode](xref:UnityEngine.XR.ARSubsystems.Feature.ImageStabilization). |
 | **Exif data** | [supportsExifData](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsExifData) | Indicates whether the provider implementation supports [EXIF data](xref:UnityEngine.XR.ARSubsystems.XRCameraFrameExifData). |
+| **Camera torch mode** | [supportsCameraTorchMode](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsCameraTorchMode) | Indicates whether the provider implementation supports camera torch mode |
 
 ### Optional feature platform support
 
@@ -75,6 +76,7 @@ To understand the optional features that are implemented in each supported XR pl
 | **Camera grain**  | | iOS 13+ | | |
 | **Image stabilization** | | | | |
 | **EXIF data** | Yes | iOS 16+ | | |
+| **Camera torch mode** | Yes | | | |
 
 <a id="check-feature-support"></a>
 

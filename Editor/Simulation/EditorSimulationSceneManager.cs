@@ -16,6 +16,11 @@ namespace UnityEditor.XR.Simulation
             return scene;
         }
 
+        protected override GameObject GetOrCreateEnvironmentPrefab()
+        {
+            return GetPreferencesEnvironmentPrefab();
+        }
+
         protected override void DestroyEnvironmentScene()
         {
             if (environmentScene != default)

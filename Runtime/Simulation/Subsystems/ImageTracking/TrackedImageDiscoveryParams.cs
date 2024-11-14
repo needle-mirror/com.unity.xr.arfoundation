@@ -6,7 +6,7 @@ namespace UnityEngine.XR.Simulation
     /// User-accessible settings for the <see cref="SimulationImageTrackingSubsystem"/>.
     /// </summary>
     [Serializable]
-    class TrackedImageDiscoveryParams
+    class TrackedImageDiscoveryParams : ITrackedImageDiscoveryParams
     {
         [SerializeField]
         [Range(SimulationConstants.oneHundredTwentyFps, 1)]

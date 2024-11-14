@@ -171,24 +171,23 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Applies the texture data in the <c>XRTextureDescriptor</c> to the reflection probe settings.
         /// </summary>
-        /// <param name="textureDescriptor">The environment texture data to apply to the reflection probe baked
-        /// texture.</param>
-        void UpdateEnvironmentTexture(XRTextureDescriptor textureDescriptor)
+        /// <param name="descriptor">The environment texture data to apply to the reflection probe baked texture.</param>
+        void UpdateEnvironmentTexture(XRTextureDescriptor descriptor)
         {
-            if(m_ReflectionProbe.customBakedTexture == null)
+            if (m_ReflectionProbe.customBakedTexture == null)
             {
-                m_CustomBakedTextureInfo = new ARTextureInfo(textureDescriptor);
+                m_CustomBakedTextureInfo = new ARTextureInfo(descriptor);
             }
             else
             {
-                m_CustomBakedTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CustomBakedTextureInfo, textureDescriptor);
+                m_CustomBakedTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CustomBakedTextureInfo, descriptor);
             }
 
             m_CustomBakedTextureInfo.texture.filterMode = m_EnvironmentTextureFilterMode;
             m_ReflectionProbe.customBakedTexture = m_CustomBakedTextureInfo.texture as Cubemap;
 
             // Update the current environment texture metadata.
-            m_CurrentTextureDescriptor = textureDescriptor;
+            m_CurrentTextureDescriptor = descriptor;
         }
 
         /// <summary>

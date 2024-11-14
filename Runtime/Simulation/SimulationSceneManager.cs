@@ -21,6 +21,9 @@ namespace UnityEngine.XR.Simulation
         readonly HashSet<SimulatedBoundingBox> boundingBoxInstances = new();
         internal IReadOnlyCollection<SimulatedBoundingBox> simulationEnvironmentBoundingBoxes => boundingBoxInstances;
 
+        private readonly HashSet<SimulatedTrackedImage> imageInstances = new();
+        internal IReadOnlyCollection<SimulatedTrackedImage> simulationEnvironmentImages => imageInstances;
+
         internal void TrackLight(SimulatedLight light)
         {
             lightInstances.Add(light);
@@ -51,6 +54,16 @@ namespace UnityEngine.XR.Simulation
             boundingBoxInstances.Remove(box);
         }
 
+        internal void TrackImage(SimulatedTrackedImage image)
+        {
+            imageInstances.Add(image);
+        }
+
+        internal void UntrackImage(SimulatedTrackedImage image)
+        {
+            imageInstances.Remove(image);
+        }
+
         protected override Scene CreateEnvironmentScene()
         {
             ClearTrackedObjects();
@@ -60,6 +73,11 @@ namespace UnityEngine.XR.Simulation
                 throw new InvalidOperationException("Environment scene could not be created.");
 
             return scene;
+        }
+
+        protected override GameObject GetOrCreateEnvironmentPrefab()
+        {
+            return GetPreferencesEnvironmentPrefab();
         }
 
         protected override void DestroyEnvironmentScene()

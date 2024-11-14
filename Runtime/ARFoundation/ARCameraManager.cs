@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
-using UnityEngine.XR.ARSubsystems;
 using UnityEngine.Rendering;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -51,7 +51,7 @@ namespace UnityEngine.XR.ARFoundation
         bool m_AutoFocus = true;
 
         /// <summary>
-        /// Get or set whether auto focus is requested.
+        /// Get or set whether autofocus is requested.
         /// </summary>
         public bool autoFocusRequested
         {
@@ -60,16 +60,14 @@ namespace UnityEngine.XR.ARFoundation
             {
                 m_AutoFocus = value;
                 if (enabled && subsystem != null)
-                {
                     subsystem.autoFocusRequested = value;
-                }
             }
         }
 
         /// <summary>
         /// Get the current focus mode in use by the subsystem.
         /// </summary>
-        /// <value><see langword="true"/> if auto focus is enabled. <see langword="false"/> if fixed focus is enabled
+        /// <value><see langword="true"/> if autofocus is enabled. <see langword="false"/> if fixed focus is enabled
         /// or if there is no loaded <see cref="XRCameraSubsystem"/>.</value>
         public bool autoFocusEnabled => subsystem?.autoFocusEnabled ?? false;
 
@@ -87,9 +85,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 m_ImageStabilization = value;
                 if (enabled && subsystem != null)
-                {
                     subsystem.imageStabilizationRequested = value;
-                }
             }
         }
 
@@ -99,6 +95,39 @@ namespace UnityEngine.XR.ARFoundation
         /// <value><see langword="true"/> if EIS is enabled. <see langword="false"/> if EIS is not enabled
         /// or if there is no loaded <see cref="XRCameraSubsystem"/>.</value>
         public bool imageStabilizationEnabled => subsystem?.imageStabilizationEnabled ?? false;
+
+        /// <summary>
+        /// Get or set the requested camera torch mode.
+        /// </summary>
+        public XRCameraTorchMode requestedCameraTorchMode
+        {
+            get => subsystem?.requestedCameraTorchMode ?? XRCameraTorchMode.Off;
+            set
+            {
+                if (subsystem != null)
+                    subsystem.requestedCameraTorchMode = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the current camera torch mode.
+        /// </summary>
+        /// <value>The camera torch mode.</value>
+        public XRCameraTorchMode currentCameraTorchMode
+        {
+            get => subsystem?.currentCameraTorchMode ?? XRCameraTorchMode.Off;
+        }
+
+        /// <summary>
+        /// Get whether the current session configuration allows the camera torch to be turned on or off.
+        /// </summary>
+        /// <returns><see langword="true"/> if camera torch mode is supported. Otherwise, <see langword="false"/>.</returns>
+        public bool DoesCurrentCameraSupportTorch()
+        {
+            if (subsystem == null)
+                return false;
+            return subsystem.DoesCurrentCameraSupportTorch();
+        }
 
         [SerializeField]
         [Tooltip("The light estimation mode for the AR camera.")]
@@ -115,9 +144,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 m_LightEstimation = value;
                 if (enabled && subsystem != null)
-                {
                     subsystem.requestedLightEstimation = value.ToFeature();
-                }
             }
         }
 
@@ -141,9 +168,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 m_FacingDirection = value;
                 if (enabled && subsystem != null)
-                {
                     subsystem.requestedCamera = value.ToFeature();
-                }
             }
         }
 
@@ -170,9 +195,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 m_RenderMode = value;
                 if (enabled && subsystem != null)
-                {
                     subsystem.requestedCameraBackgroundRenderingMode = value.ToXRSupportedCameraBackgroundRenderingMode();
-                }
             }
         }
 
@@ -472,8 +495,8 @@ namespace UnityEngine.XR.ARFoundation
             s_PropertyIds.Clear();
             foreach (var textureInfo in m_TextureInfos)
             {
-                DebugAssert.That(textureInfo.descriptor.dimension == TextureDimension.Tex2D)?.
-                    WithMessage($"Camera Texture needs to be a Texture 2D, but instead is {textureInfo.descriptor.dimension.ToString()}.");
+                DebugAssert.That(textureInfo.descriptor.textureType == XRTextureType.Texture2D)?.
+                    WithMessage($"Camera Texture needs to be a Texture 2D, but instead is {textureInfo.descriptor.textureType.ToString()}.");
 
                 s_Textures.Add((Texture2D)textureInfo.texture);
                 s_PropertyIds.Add(textureInfo.descriptor.propertyNameId);
