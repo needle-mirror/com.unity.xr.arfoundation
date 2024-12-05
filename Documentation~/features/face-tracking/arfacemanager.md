@@ -31,7 +31,7 @@ You can subscribe to `trackablesChanged` in one of two ways:
 
     a. Create a public method on a `MonoBehavior` or `ScriptableObject` with a single parameter of type [ARTrackablesChangedEventArgs\<ARFace\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1), as shown in the following example code:
 
-    [!code-cs[FacesChanged](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#FacesChanged)]
+    [!code-cs[FacesChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#FacesChanged)]
 
     b. Select your XR Origin GameObject, then click the **Add (+)** button on the AR Face Manger component's **trackablesChanged** property.
 
@@ -47,5 +47,5 @@ You can subscribe to `trackablesChanged` in one of two ways:
 
     b. Use the following example code to subscribe to the `trackablesChanged` event:
 
-    [!code-cs[FacesSubscribe](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#FaceSubscribe)]
+    [!code-cs[FacesSubscribe](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#FaceSubscribe)]
 

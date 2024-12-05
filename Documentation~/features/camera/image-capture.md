@@ -24,7 +24,7 @@ Camera Textures are usually [external Textures](https://docs.unity3d.com/ScriptR
 
 The following code sets up a [command buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html) that performs a GPU copy or ["blit"](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.Blit.html) to a Render Texture of your choice immediately. The code clears the the render texture before the copy by calling [ClearRenderTarget](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.ClearRenderTarget.html).
 
-[!code-cs[GPU_Blit](../../../Tests/CodeSamples/CpuImageSamples.cs#GPU_Blit)]
+[!code-cs[GPU_Blit](../../../Tests/Runtime/CodeSamples/CpuImageSamples.cs#GPU_Blit)]
 
 # Access images via CPU
 
@@ -66,7 +66,7 @@ The example code below executes the following steps:
 2. Synchronously convert to an `RGBA32` color format
 3. Apply the converted pixel data to a texture
 
-[!code-cs[Synchronous_Conversion](../../../Tests/CodeSamples/CpuImageSamples.cs#Synchronous_Conversion)]
+[!code-cs[Synchronous_Conversion](../../../Tests/Runtime/CodeSamples/CpuImageSamples.cs#Synchronous_Conversion)]
 
 The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples#cpu-images) GitHub repository contains a similar [example](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scripts/CpuImageSample.cs) that you can run on your device.
 
@@ -101,11 +101,11 @@ Asynchronous requests typically complete within one frame, but can take longer i
 
 ### Examples
 
-[!code-cs[Asynchronous_Conversion](../../../Tests/CodeSamples/CpuImageSamples.cs#Asynchronous_Conversion)]
+[!code-cs[Asynchronous_Conversion](../../../Tests/Runtime/CodeSamples/CpuImageSamples.cs#Asynchronous_Conversion)]
 
 There is also an overload of `ConvertAsync` that accepts a delegate and does not return an `XRCpuImage.AsyncConversion`, as shown in the example below:
 
-[!code-cs[Asynchronous_Conversion_With_Delegate](../../../Tests/CodeSamples/CpuImageSamples.cs#Asynchronous_Conversion_With_Delegate)]
+[!code-cs[Asynchronous_Conversion_With_Delegate](../../../Tests/Runtime/CodeSamples/CpuImageSamples.cs#Asynchronous_Conversion_With_Delegate)]
 
 If you need the data to persist beyond the lifetime of your delegate, make a copy. See [NativeArray\<T\>.CopyFrom](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.CopyFrom.html).
 

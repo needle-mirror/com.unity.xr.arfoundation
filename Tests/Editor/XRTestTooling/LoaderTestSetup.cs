@@ -1,11 +1,11 @@
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using UnityEditor;
+using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.XR.Management;
 
-namespace UnityEngine.XR.TestTooling
+namespace UnityEditor.XR.TestTooling
 {
     abstract class LoaderTestSetup<TXRLoader> : ManagementTestSetup, IPrebuildSetup, IPostBuildCleanup
         where TXRLoader : XRLoader

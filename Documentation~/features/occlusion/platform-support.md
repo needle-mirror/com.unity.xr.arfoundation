@@ -20,7 +20,7 @@ Your app can check at runtime whether a provider plug-in supports occlusion on t
 
 Use the example code below to check whether the device supports occlusion:
 
-[!code-cs[CheckIfOcclusionLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfOcclusionLoaded)]
+[!code-cs[CheckIfOcclusionLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfOcclusionLoaded)]
 
 [!include[](../../snippets/initialization.md)]
 
@@ -56,6 +56,6 @@ Your app can check at runtime whether an occlusion provider supports any optiona
 
 Refer to the following example code to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/AROcclusionManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/AROcclusionManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

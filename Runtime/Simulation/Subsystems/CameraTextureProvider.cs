@@ -260,6 +260,7 @@ namespace UnityEngine.XR.Simulation
         void ConfigureTextureReadbackForURP()
         {
             var universalAdditionalCameraData = m_SimulationCamera.GetUniversalAdditionalCameraData();
+            universalAdditionalCameraData.requiresDepthOption = CameraOverrideOption.On;
             universalAdditionalCameraData.scriptableRenderer.EnqueuePass(m_SimulationReadbackRenderPass);
         }
 #endif  // URP_7_OR_NEWER

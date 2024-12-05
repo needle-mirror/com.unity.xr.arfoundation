@@ -1,10 +1,11 @@
 using System;
 using System.IO;
-using UnityEditor;
 using UnityEditor.XR.Management;
+using UnityEngine;
 using UnityEngine.XR.Management;
+using Object = UnityEngine.Object;
 
-namespace UnityEngine.XR.TestTooling
+namespace UnityEditor.XR.TestTooling
 {
     abstract class ManagementTestSetup
     {
@@ -18,7 +19,7 @@ namespace UnityEngine.XR.TestTooling
         protected XRGeneralSettings m_XrGeneralSettings = null;
         protected XRGeneralSettingsPerBuildTarget m_BuildTargetSettings = null;
 
-        Object m_CurrentSettings = null;
+        Object m_CurrentSettings;
 
         /// <summary>
         /// When true, AssetDatabase.AddObjectToAsset will not be called to add XRManagerSettings to XRGeneralSettings.

@@ -65,7 +65,7 @@ To include an `XRReferenceImageLibrary` in an [AssetBundle](https://docs.unity3d
 
 Refer to the code sample below to understand how to build AssetBundles that contain reference image libraries:
 
-[!code-cs[export_assetbundles_function](../../Tests/Editor/CodeSamples/AssetBundlesSamples.cs#export_assetbundles_function)]
+[!code-cs[export_assetbundles_function](../../Tests/Editor/Runtime/CodeSamples/AssetBundlesSamples.cs#export_assetbundles_function)]
 
 ### Build AssetBundles window
 
@@ -84,17 +84,17 @@ Alternatively, you can use the menu option **Assets** > **AR Foundation** > **Bu
 
 Subscribe to the ARTrackedImageManager's [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event to be notified whenever an image is added (that is, first detected), updated, or removed:
 
-[!code-cs[trackedimage_subscribe_to_events](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_subscribe_to_events)]
+[!code-cs[trackedimage_subscribe_to_events](../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_subscribe_to_events)]
 
 Note that images also have a [tracking state](#tracking-state) which can provide additional information about the tracking quality. An image that goes out of view, for example, might not be "removed", but its tracking state likely changes.
 
 You can also get all the currently tracked images with the ARTrackedImageManager's [trackables](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackables) property. This acts like an [IEnumerable](xref:System.Collections.IEnumerable) collection, so you can use it in a `foreach` statement:
 
-[!code-cs[trackedimage_enumerate_trackables](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_enumerate_trackables)]
+[!code-cs[trackedimage_enumerate_trackables](../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_enumerate_trackables)]
 
 Or access a specific image by its [TrackableId](xref:UnityEngine.XR.ARSubsystems.TrackableId):
 
-[!code-cs[trackedimage_get_by_trackableId](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_get_by_trackableId)]
+[!code-cs[trackedimage_get_by_trackableId](../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_get_by_trackableId)]
 
 ## Tracked Image Prefab
 
@@ -108,15 +108,15 @@ If you would like to [instantiate](xref:UnityEngine.Object.Instantiate(UnityEngi
 
 Some subsystems might support image libraries that are modifiable at runtime. In this case, the subsystem produces a `RuntimeReferenceImageLibrary` that is a `MutableRuntimeReferenceImageLibrary`. To use it, you need to cast the `RuntimeReferenceImageLibrary` to a `MutableRuntimeReferenceImageLibrary`:
 
-[!code-cs[trackedimage_ScheduleAddImageJob](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_ScheduleAddImageJob)]
+[!code-cs[trackedimage_ScheduleAddImageJob](../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_ScheduleAddImageJob)]
 
 To create an empty library that you can add images to later, you can call `CreateRuntimeLibrary` without arguments:
 
-[!code-cs[trackedimage_CreateRuntimeLibrary](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_CreateRuntimeLibrary)]
+[!code-cs[trackedimage_CreateRuntimeLibrary](../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_CreateRuntimeLibrary)]
 
 You can check whether a particular tracked image manager supports mutable libraries with its descriptor:
 
-[!code-cs[trackedimage_supportsMutableLibrary](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_supportsMutableLibrary)]
+[!code-cs[trackedimage_supportsMutableLibrary](../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_supportsMutableLibrary)]
 
 You can add images to mutable libraries allow images at any time. Adding an image can be computationally resource-intensive, and might take a few frames to complete. The [Unity Job System](https://docs.unity3d.com/Manual/JobSystem.html) is used to process images asynchronously.
 
@@ -126,7 +126,7 @@ If you use the [extension method](xref:UnityEngine.XR.ARFoundation.MutableRuntim
 
 If you use the version of [ScheduleAddImageJobImpl](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary.ScheduleAddImageJobImpl(Unity.Collections.NativeSlice{System.Byte},UnityEngine.Vector2Int,UnityEngine.TextureFormat,UnityEngine.XR.ARSubsystems.XRReferenceImage,Unity.Jobs.JobHandle)) that accepts a [NativeSlice](xref:Unity.Collections.NativeSlice`1) or pointer, you are responsible for managing the memory, that is, freeing it when the job completes. You can do this by scheduling a dependent job that frees the memory:
 
-[!code-cs[trackedimage_DeallocateOnJobCompletion](../../Tests/CodeSamples/TrackedImageSamples.cs#trackedimage_DeallocateOnJobCompletion)]
+[!code-cs[trackedimage_DeallocateOnJobCompletion](../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_DeallocateOnJobCompletion)]
 
 Multiple add image jobs can be processed concurrently. Whether or not `MutableRuntimeReferenceImageLibrary` is currently in use for image tracking has no effect on this.
 

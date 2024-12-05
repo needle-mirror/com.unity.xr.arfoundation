@@ -20,7 +20,7 @@ The viewport based [Raycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.R
 
 You can, for example, pass a touch position directly:
 
-[!code-cs[raycast_using_touch](../../../Tests/CodeSamples/RaycastSamples.cs#raycast_using_touch)]
+[!code-cs[raycast_using_touch](../../../Tests/Runtime/CodeSamples/RaycastSamples.cs#raycast_using_touch)]
 
 ## World based ray cast
 
@@ -43,4 +43,4 @@ If the ray cast hits something, `hitResults` is populated with a `List` of [ARRa
 
 Use the [hitType](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.hitType) to determine what kind of thing the ray cast hit. If it hit a [trackable](xref:UnityEngine.XR.ARFoundation.ARTrackable), such as a [plane](xref:UnityEngine.XR.ARFoundation.ARPlane), then the [ARRaycastHit.trackable](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.trackable) property can be cast to that type of trackable:
 
-[!code-cs[raycasthit_trackable](../../../Tests/CodeSamples/RaycastSamples.cs#raycasthit_trackable)]
+[!code-cs[raycasthit_trackable](../../../Tests/Runtime/CodeSamples/RaycastSamples.cs#raycasthit_trackable)]

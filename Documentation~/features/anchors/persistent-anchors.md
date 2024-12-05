@@ -33,7 +33,7 @@ The save operation takes an anchor as input, saves that anchor to persistent sto
 
 To save an anchor, use [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorAsync(UnityEngine.XR.ARFoundation.ARAnchor,CancellationToken)) as shown in the following code example:
 
-[!code-cs[TrySaveAnchorAsync](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#TrySaveAnchorAsync)]
+[!code-cs[TrySaveAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TrySaveAnchorAsync)]
 
 > [!IMPORTANT]
 > Keep track of the persistent anchor GUIDs returned to you by `TrySaveAnchorAsync`. Not all platforms support the ability to get your saved persistent anchor GUIDs should you lose them.
@@ -46,7 +46,7 @@ The load operation takes a persistent anchor GUID returned by [Save anchor](#sav
 
 The following example code demonstrates how to load an anchor:
 
-[!code-cs[TryLoadAnchorAsync](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#TryLoadAnchorAsync)]
+[!code-cs[TryLoadAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryLoadAnchorAsync)]
 
 ## Erase anchor
 
@@ -57,7 +57,7 @@ The erase operation takes a persistent anchor GUID returned by [Save anchor](#sa
 
 The following example code demonstrates how to erase an anchor:
 
-[!code-cs[TryEraseAnchorAsync](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#TryEraseAnchorAsync)]
+[!code-cs[TryEraseAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryEraseAnchorAsync)]
 
 ## Get saved anchor IDs
 
@@ -65,7 +65,7 @@ Some platforms support the ability to get a list of your currently saved anchors
 
 The following example code demonstrates how to get saved anchor IDs:
 
-[!code-cs[TryGetSavedAnchorIdsAsync](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#TryGetSavedAnchorIdsAsync)]
+[!code-cs[TryGetSavedAnchorIdsAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryGetSavedAnchorIdsAsync)]
 
 ## Async cancellation
 
@@ -73,4 +73,4 @@ AR Foundation's persistent anchors API is entirely asynchronous. If your target 
 
 The following example code demonstrates how to cancel an async operation:
 
-[!code-cs[AsyncCancellation](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#AsyncCancellation)]
+[!code-cs[AsyncCancellation](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#AsyncCancellation)]

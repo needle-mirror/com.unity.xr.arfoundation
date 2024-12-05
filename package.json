@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Changed\n\n- Updated documentation to reflect that the Apple visionOS XR Plug-in now supports AR Foundation 6.\n\n### Fixed\n\n- Fixed the `SimulationRaycastSubsystem` to correctly state via `XRRaycastSubsystemDescriptor.supportedTrackableTypes` that casting rays against planes is supported in XR Simulation.\n- Fixed the `SimulationSessionSubsystem` so it doesn't log an error if you call `ARSession.Reset` before the session is initialized."
+    "changelog": "### Fixed\n\n- Fixed XR Simulation occlusion on Apple silicon Macs so that occlusion now renders correctly regardless of whether URP Render Graph is enabled or disabled.\n- Fixed the XR Simulation point clouds implementation so that it no longer logs an error when the AR Point Cloud Manager component is disabled and then re-enabled. ([ARFB-487](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-487))"
   },
   "upmCi": {
-    "footprint": "6b576859e00df79c715422b9c563759f6e3a5740"
+    "footprint": "917dd97cafcd1f0b0d775287fa8cd6c670ceeace"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.0/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "c6a307e1c416028a42136ead52020a78c98c540f"
+    "revision": "678f748f9ba38582f85380bff7e80a97d86dbb56"
   }
 }

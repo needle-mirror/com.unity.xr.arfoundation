@@ -20,7 +20,7 @@ Your app can check at runtime whether a provider plug-in supports bounding box d
 
 Use the example code below to check whether the device supports bounding box detection:
 
-[!code-cs[CheckIfBoundingBoxesLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfBoundingBoxesLoaded)]
+[!code-cs[CheckIfBoundingBoxesLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfBoundingBoxesLoaded)]
 
 
 ## Optional features
@@ -37,6 +37,6 @@ Your app can check at runtime whether a bounding box detection provider supports
 
 Refer to example code below to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARBoundingBoxManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARBoundingBoxManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

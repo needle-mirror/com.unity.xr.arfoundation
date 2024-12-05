@@ -18,7 +18,7 @@ The AR Foundation [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsy
 
 Your app can check at runtime whether a provider plug-in supports face tracking on the user's device. Use the following example code to check whether the device supports face components:
 
-[!code-cs[CheckIfFaceLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfFaceLoaded)]
+[!code-cs[CheckIfFaceLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfFaceLoaded)]
 
 [!include[](../../snippets/initialization.md)]
 
@@ -54,6 +54,6 @@ Your app can check at runtime whether a face tracking provider supports any opti
 
 Refer to the following example code to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARFaceManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARFaceManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

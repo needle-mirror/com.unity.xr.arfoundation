@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.4] - 2024-12-05
+
+### Fixed
+
+- Fixed XR Simulation occlusion on Apple silicon Macs so that occlusion now renders correctly regardless of whether URP Render Graph is enabled or disabled.
+- Fixed the XR Simulation point clouds implementation so that it no longer logs an error when the AR Point Cloud Manager component is disabled and then re-enabled. ([ARFB-487](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-487))
+
 ## [6.0.3] - 2024-08-16
 
 ### Changed

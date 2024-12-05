@@ -28,13 +28,13 @@ While enabled, the AR Anchor Manager component allows you to create anchors in f
 
     On all platforms that support anchors, you can use [TryAddAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryAddAnchorAsync(UnityEngine.Pose)) with C# async/await syntax as shown in the follwing code example:
 
-    [!code-cs[TryAddAnchorAsync](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#TryAddAnchorAsync)]
+    [!code-cs[TryAddAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryAddAnchorAsync)]
 
 2. **C# scripting — AttachAnchor**
 
     Some platforms [support](xref:arfoundation-anchors-platform-support#optional-features-support-table) the ability to attach anchors to other trackables such as planes. The following code sample demonstrates how to check for support, then attach an anchor to a pose on a plane's surface with [AttachAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.AttachAnchor(UnityEngine.XR.ARFoundation.ARPlane,UnityEngine.Pose)).
 
-    [!code-cs[AttachAnchor](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#AttachAnchor)]
+    [!code-cs[AttachAnchor](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#AttachAnchor)]
 
 3. **C# scripting — TryLoadAnchorAsync**
 
@@ -65,7 +65,7 @@ You can subscribe to `trackablesChanged` using either the Inspector or C# script
 
     a. Create a public method on a `MonoBehaviour` or `ScriptableObject` with a single paramater of type [ARTrackablesChangedEventArgs\<ARAnchor\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1), as shown in the following example code:
 
-    [!code-cs[AnchorsChanged](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#AnchorsChanged)]
+    [!code-cs[AnchorsChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#AnchorsChanged)]
 
     b. Select your XR Origin GameObject, then click the **Add (+)** button on the AR Anchor Manager component's **trackables Changed** property.
 
@@ -81,7 +81,7 @@ You can subscribe to `trackablesChanged` using either the Inspector or C# script
 
     b. Use the following example code to subscribe to the `trackablesChanged` event:
 
-    [!code-cs[AnchorsSubscribe](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#AnchorsSubscribe)]
+    [!code-cs[AnchorsSubscribe](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#AnchorsSubscribe)]
 
 <a id="remove-an-anchor"/>
 

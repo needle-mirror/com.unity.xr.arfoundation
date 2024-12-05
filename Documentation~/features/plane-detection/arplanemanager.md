@@ -29,7 +29,7 @@ You can subscribe to `trackablesChanged` in one of two ways:
 
     a. Create a public method on a `MonoBehavior` or `ScriptableObject` with a single parameter of type [ARTrackablesChangedEventArgs\<ARPlane\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1), as shown in the example code below:
 
-    [!code-cs[PlanesChanged](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#PlanesChanged)]
+    [!code-cs[PlanesChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#PlanesChanged)]
 
     b. Select your XR Origin GameObject, then Click the **Add (+)** button on the AR Plane Manger component's **trackablesChanged** property.
 
@@ -45,7 +45,7 @@ You can subscribe to `trackablesChanged` in one of two ways:
 
     b. Use the example code below to subscribe to the `trackablesChanged` event:
 
-    [!code-cs[PlanesSubscribe](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#PlanesSubscribe)]
+    [!code-cs[PlanesSubscribe](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#PlanesSubscribe)]
 
 ### Visualize planes in the scene
 
