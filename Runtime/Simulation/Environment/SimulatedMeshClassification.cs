@@ -1,4 +1,4 @@
-﻿namespace UnityEngine.XR.Simulation
+namespace UnityEngine.XR.Simulation
 {
     /// <summary>
     /// Marks an object in a simulation environment with a classification type to apply to the tracked mesh

@@ -4,10 +4,9 @@ using NUnit.Framework;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
-namespace UnityEngine.XR.ARFoundation
+namespace UnityEngine.XR.ARFoundation.Tests
 {
-    [TestFixture]
-    public class ARSessionTestFixture
+    class ARSessionTestFixture
     {
         enum SupportsInstall
         {

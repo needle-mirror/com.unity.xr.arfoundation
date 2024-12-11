@@ -17,7 +17,7 @@ Your app can check at runtime whether a provider plug-in supports plane detectio
 
 Use the example code below to check whether the device supports plane detection:
 
-[!code-cs[CheckIfPlanesLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfPlanesLoaded)]
+[!code-cs[CheckIfPlanesLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfPlanesLoaded)]
 
 > [!NOTE]
 > This example code assumes that your app has already initialized XR.
@@ -42,6 +42,6 @@ Your app can check at runtime whether a plane detection provider supports any op
 
 Refer to example code below to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARPlaneManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARPlaneManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

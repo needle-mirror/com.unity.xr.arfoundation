@@ -9,6 +9,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// The manager for the human body subsystem.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-body-tracking">Body tracking</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBodyManager)]
     [HelpURL(typeof(ARHumanBodyManager))]

@@ -50,7 +50,7 @@ namespace UnityEngine.XR.Simulation
                 m_SessionId = sessionSubsystem.sessionId;
 
             SubsystemsUtility.TryGetLoadedSubsystem<XRPlaneSubsystem, SimulationPlaneSubsystem>(out m_PlaneSubsystem);
-            
+
             m_Origin = FindObjectsUtility.FindAnyObjectByType<XROrigin>();
             if(m_Origin == null || m_PlaneSubsystem == null || sessionSubsystem == null)
             {
@@ -413,5 +413,5 @@ namespace UnityEngine.XR.Simulation
 
             public XRAnchor GetAnchor() => anchor;
         }
-    } 
+    }
 }

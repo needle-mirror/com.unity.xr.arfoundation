@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Unity.XR.CoreUtils;
@@ -122,9 +122,9 @@ namespace UnityEditor.XR.Simulation
                 var selectedEnvironmentPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(environmentPath);
                 if (selectedEnvironmentPrefab == null)
                 {
-                    Debug.LogError($"Failed to load environment prefab '{environmentPath}'. " + 
+                    Debug.LogError($"Failed to load environment prefab '{environmentPath}'. " +
                                    $"Try refreshing environments by going to {k_RefreshMenuItemCategory} > {k_RefreshMenuItemName}.");
-                    
+
                     return;
                 }
 
@@ -307,7 +307,7 @@ namespace UnityEditor.XR.Simulation
             var existingIndex = m_EnvironmentPrefabPaths.IndexOf(environmentAssetPath);
             if (existingIndex >= 0)
                 return existingIndex;
-            
+
             var envCount = environmentsCount;
             var countMinusFallback = m_FallbackAtEndOfList && envCount > 0 ? envCount - 1 : envCount;
             var environmentIndex = countMinusFallback;
@@ -362,7 +362,7 @@ namespace UnityEditor.XR.Simulation
         class EnvironmentAssetPostprocessor : AssetPostprocessor
         {
             static bool s_NeedsRefresh;
-            
+
             void OnPostprocessPrefab(GameObject g)
             {
                 if (g.GetComponent<SimulationEnvironment>() != null)

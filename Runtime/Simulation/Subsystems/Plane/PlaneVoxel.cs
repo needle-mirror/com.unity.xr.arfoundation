@@ -1,4 +1,3 @@
-﻿
 namespace UnityEngine.XR.Simulation
 {
     struct PlaneVoxel

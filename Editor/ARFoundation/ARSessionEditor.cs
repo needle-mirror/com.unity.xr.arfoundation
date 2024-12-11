@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
 namespace UnityEditor.XR.ARFoundation

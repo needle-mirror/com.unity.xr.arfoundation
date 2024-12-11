@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine.SceneManagement;
@@ -43,6 +43,7 @@ namespace UnityEngine.XR.Simulation
         int m_DiscoveredAutomaticCount;
         bool m_IsSceneInitialized;
         bool m_IsStarted;
+        bool m_AutomaticPlacementEnabled;
 
         public IReadOnlyList<XREnvironmentProbe> added => m_Added;
         public IReadOnlyList<XREnvironmentProbe> updated => m_Updated;
@@ -51,6 +52,12 @@ namespace UnityEngine.XR.Simulation
         public bool IsReady => m_IsSceneInitialized && m_IsStarted;
 
         public bool HasAnyChanges => m_Added.Count > 0 || m_Updated.Count > 0 || m_Removed.Count > 0;
+
+        internal bool automaticPlacementEnabled
+        {
+            get { return m_AutomaticPlacementEnabled; }
+            set { m_AutomaticPlacementEnabled = value; }
+        }
 
         public void Dispose()
         {
@@ -64,6 +71,10 @@ namespace UnityEngine.XR.Simulation
         {
             if (m_IsStarted)
                 return;
+
+            s_NeedsGeneratedCubemaps.Clear();
+            s_HasGeneratedCubemaps.Clear();
+            s_CollectedProbes.Clear();
 
             SetupRendering();
 
@@ -166,7 +177,7 @@ namespace UnityEngine.XR.Simulation
         {
             var probeTransform = probe.transform;
             m_ProbeCameraData.transform.SetPositionAndRotation(probeTransform.position, probeTransform.rotation);
-            
+
 #if UNITY_2022_1_OR_NEWER
             var cubemap = new Cubemap(
                 m_ProbeParams.cubemapFaceSize,
@@ -274,7 +285,7 @@ namespace UnityEngine.XR.Simulation
         void ScanForUndiscoveredProbes()
         {
             var automaticProbesCount = m_AutomaticProbes.Count;
-            if (m_DiscoveredAutomaticCount == automaticProbesCount)
+            if (m_DiscoveredAutomaticCount == automaticProbesCount || !m_AutomaticPlacementEnabled)
                 return;
 
             GeometryUtility.CalculateFrustumPlanes(m_OriginCameraData.camera, s_CameraPlanes);

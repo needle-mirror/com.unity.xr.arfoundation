@@ -107,7 +107,7 @@ namespace UnityEngine.XR.Simulation
                 m_NumAdded = 0;
                 Array.Clear(m_Added, 0, m_Added.Length);
                 m_Updated.Clear();
-                
+
                 m_Discoverer.Restart();
             }
 

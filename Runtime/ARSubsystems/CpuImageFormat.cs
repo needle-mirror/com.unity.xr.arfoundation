@@ -21,10 +21,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// <para>This format consists of three image planes. The first is the Y (luminocity) plane, with 8 bits per
             /// pixel. The second and third are the U and V (chromaticity) planes, respectively. Each 2x2 block of pixels
             /// share the same chromaticity value, so a given (x, y) pixel's chromaticity value is given by
-            /// <code>
+            /// <c>
             /// u = UPlane[(y / 2) * rowStride + (x / 2) * pixelStride];
             /// v = VPlane[(y / 2) * rowStride + (x / 2) * pixelStride];
-            /// </code></para>
+            /// </c></para>
             /// </summary>
             AndroidYuv420_888 = 1,
 
@@ -37,15 +37,15 @@ namespace UnityEngine.XR.ARSubsystems
             /// pixel. The second plane is the UV (chromaticity) plane. The U and V chromaticity values are interleaved
             /// (u0, v0, u1, v1, etc.). Each 2x2 block of pixels share the same chromaticity values, so a given (x, y)
             /// pixel's chromaticity value is given by
-            /// <code>
+            /// <c>
             /// u = UvPlane[(y / 2) * rowStride + (x / 2) * pixelStride];
             /// v = UvPlane[(y / 2) * rowStride + (x / 2) * pixelStride + 1];
-            /// </code>
+            /// </c>
             /// pixelStride is always 2 for this format, so this can be optimized to
-            /// <code>
+            /// <c>
             /// u = UvPlane[(y >> 1) * rowStride + x &amp; ~1];
             /// v = UvPlane[(y >> 1) * rowStride + x | 1];
-            /// </code></para>
+            /// </c></para>
             /// </summary>
             IosYpCbCr420_8BiPlanarFullRange = 2,
 

@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
     public class XRPointCloudSubsystemTestFixture
     {
         const string k_TestSubsystemId = "Test-PointCloud";
-        
+
         [OneTimeSetUp]
         public void RegisterTestDescriptor()
         {

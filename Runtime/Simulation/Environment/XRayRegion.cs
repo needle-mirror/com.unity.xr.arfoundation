@@ -1,4 +1,4 @@
-﻿namespace UnityEngine.XR.Simulation
+namespace UnityEngine.XR.Simulation
 {
     /// <summary>
     ///  Defines a region of space that can be cut into dynamically to view the contents

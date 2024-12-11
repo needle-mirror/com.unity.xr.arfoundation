@@ -1,10 +1,9 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace UnityEngine.XR.ARFoundation
+namespace UnityEngine.XR.ARFoundation.Tests
 {
-    [TestFixture]
-    public class ARLightEstimationDataTestFixture
+    class ARLightEstimationDataTestFixture
     {
         [Test]
         public void ARLightEstimationData_TestBrightnessConversion()

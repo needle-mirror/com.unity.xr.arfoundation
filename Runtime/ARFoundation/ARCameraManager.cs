@@ -41,7 +41,7 @@ namespace UnityEngine.XR.ARFoundation
         // If a user has an old project from 2019 lying around, OnAfterDeserialize will auto-upgrade them to the new API.
         LightEstimationMode m_LightEstimationMode = LightEstimationMode.Disabled;
 #pragma warning restore CS0618
-        
+
         [SerializeField]
         [Tooltip("When enabled, auto focus will be requested on the (physical) AR camera.")]
         bool m_AutoFocus = true;
@@ -466,7 +466,7 @@ namespace UnityEngine.XR.ARFoundation
 
             if(frame.hasNoiseIntensity)
                  eventArgs.noiseIntensity = frame.noiseIntensity;
-            
+
             if (frame.TryGetExifData(out XRCameraFrameExifData exifData))
                 eventArgs.exifData = exifData;
 

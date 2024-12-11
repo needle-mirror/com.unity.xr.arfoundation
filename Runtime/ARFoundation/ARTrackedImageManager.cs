@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEngine.Serialization;
@@ -11,6 +11,9 @@ namespace UnityEngine.XR.ARFoundation
     /// A manager for <see cref="ARTrackedImage"/>s. Uses the <c>XRImageTrackingSubsystem</c>
     /// to recognize and track 2D images in the physical environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-image-tracking">AR Tracked Image Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImageManager)]
     [RequireComponent(typeof(XROrigin))]
     [HelpURL(typeof(ARTrackedImageManager))]

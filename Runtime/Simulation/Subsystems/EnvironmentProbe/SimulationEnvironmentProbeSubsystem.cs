@@ -1,4 +1,4 @@
-﻿using Unity.Collections;
+using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -11,16 +11,22 @@ namespace UnityEngine.XR.Simulation
     public class SimulationEnvironmentProbeSubsystem : XREnvironmentProbeSubsystem
     {
         internal const string k_SubsystemId = "XRSimulation-EnvironmentProbe";
-        
+
         class SimulationProvider : Provider, ISimulationSessionResetHandler
         {
             SimulationEnvironmentProbeDiscoverer m_ProbeDiscoverer;
             EnvironmentProbeParams m_EnvironmentProbeParams;
             float m_LastUpdateTime;
 
-            public override bool automaticPlacementRequested { get; set; }
+            public override bool automaticPlacementRequested {
+                get { return m_ProbeDiscoverer?.automaticPlacementEnabled ?? false; }
+                set {
+                    if (m_ProbeDiscoverer != null)
+                        m_ProbeDiscoverer.automaticPlacementEnabled = value;
+                }
+            }
 
-            public override bool automaticPlacementEnabled => true;
+            public override bool automaticPlacementEnabled => automaticPlacementRequested;
 
             public override bool environmentTextureHDREnabled => true;
 
@@ -29,6 +35,7 @@ namespace UnityEngine.XR.Simulation
             protected override bool TryInitialize()
             {
                 m_ProbeDiscoverer = new SimulationEnvironmentProbeDiscoverer();
+                m_ProbeDiscoverer.automaticPlacementEnabled = automaticPlacementRequested;
                 m_EnvironmentProbeParams = XRSimulationRuntimeSettings.Instance.environmentProbeDiscoveryParams;
                 return base.TryInitialize();
             }

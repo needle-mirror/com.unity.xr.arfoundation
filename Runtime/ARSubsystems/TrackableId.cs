@@ -22,7 +22,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Regular expression that matches a valid trackable identifier.
         /// </summary>
         static readonly Regex s_TrackableIdRegex = new Regex(@"^(?<part1>[a-fA-F\d]{16})-(?<part2>[a-fA-F\d]{16})$",
-                                                             RegexOptions.Compiled|RegexOptions.CultureInvariant|RegexOptions.Singleline|RegexOptions.ExplicitCapture);
+                                                             RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture);
 
         /// <summary>
         /// Get the invalid id.
@@ -120,7 +120,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-        public static bool operator==(TrackableId lhs, TrackableId rhs) =>
+        public static bool operator ==(TrackableId lhs, TrackableId rhs) =>
             (lhs.m_SubId1 == rhs.m_SubId1) &&
             (lhs.m_SubId2 == rhs.m_SubId2);
 
@@ -130,7 +130,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-        public static bool operator!=(TrackableId lhs, TrackableId rhs) =>
+        public static bool operator !=(TrackableId lhs, TrackableId rhs) =>
             (lhs.m_SubId1 != rhs.m_SubId1) ||
             (lhs.m_SubId2 != rhs.m_SubId2);
 

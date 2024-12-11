@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -483,7 +483,7 @@ namespace UnityEditor.XR.Simulation
             "current simulation environment. When toggled off, the Scene View displays the active editing context.";
 
         public EditorWindow containerWindow { get; set; }
-        
+
         bool m_Value;
 
         public override bool value
@@ -493,14 +493,14 @@ namespace UnityEditor.XR.Simulation
             {
                 if (m_Value == value)
                     return;
-                
+
                 m_Value = value;
                 var sceneView = containerWindow as SceneView;
                 if (value)
                     XREnvironmentViewManager.instance.EnableEnvironmentView(sceneView);
                 else
                     XREnvironmentViewManager.instance.DisableEnvironmentView(sceneView);
-                
+
                 SetValueWithoutNotify(value);
             }
         }

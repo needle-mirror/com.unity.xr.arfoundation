@@ -3,7 +3,7 @@
 using System;
 using Unity.VisualScripting;
 
-namespace UnityEngine.XR.ARFoundation.VisualScripting 
+namespace UnityEngine.XR.ARFoundation.VisualScripting
 {
     /// <summary>
     /// Uses <see cref="ARSession.stateChanged"/> to listen for an AR Session state changed event, then fires the same event

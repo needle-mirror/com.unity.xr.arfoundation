@@ -8,6 +8,18 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.6] - 2024-12-11
+
+### Fixed
+
+- Fixed the `SimulationRaycastSubsystem` to correctly state via `XRRaycastSubsystemDescriptor.supportedTrackableTypes` that casting rays against planes is supported in XR Simulation.
+- Fixed the `SimulationSessionSubsystem` so it doesn't log an error if you call `ARSession.Reset` before the session is initialized.
+- Fixed the XR Simulation point clouds implementation so that it no longer logs an error when the AR Point Cloud Manager component is disabled and then re-enabled. ([ARFB-487](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-487))
+- Fixed the `SimulationEnvironmentProbeSubsystem` so that [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes can be enabled or disabled, as is possible on other AR platforms.
+- Fixed the AR Environment Probe Manager component so that it can no longer throw an `ArgumentNullException` when you unload a scene containing one or more environment probes.
+- Fixed the AR Environment Probe Manager component so that it can no longer throw an `InvalidOperationException` when you unload a scene containing one or more environment probes. ([ARFB-521](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-521))
+- Fixed `XRFaceSubsystem` so that it no longer creates duplicate profiler markers for its `GetChanges` implementation.
+
 ## [5.1.5] - 2024-05-31
 
 No changes
@@ -131,7 +143,7 @@ No changes
 
 ### Removed
 
-- Removed a warning that was previously logged when your AR Foundation project build contained a scene with an `XROrigin` but not an `ARCameraBackground` or `ARCameraManager`. There are valid reasons to set up a scene this way, such as building for OpenXR, so the warning was not helpful. 
+- Removed a warning that was previously logged when your AR Foundation project build contained a scene with an `XROrigin` but not an `ARCameraBackground` or `ARCameraManager`. There are valid reasons to set up a scene this way, such as building for OpenXR, so the warning was not helpful.
 
 ### Fixed
 

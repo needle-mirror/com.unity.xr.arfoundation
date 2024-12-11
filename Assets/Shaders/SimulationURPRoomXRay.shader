@@ -1,4 +1,4 @@
-﻿Shader "Simulation/URP/Room X-Ray"
+Shader "Simulation/URP/Room X-Ray"
 {
     // A standard shader variant that takes the global room properties and applies them to cut out a view into the geometry based on camera location
     Properties

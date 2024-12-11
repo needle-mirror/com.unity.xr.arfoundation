@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 
@@ -78,7 +78,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Generates a `List` of UVs from the given parameters.
         /// </summary>
         /// <param name="Uvs">The `List` to write results to.</param>
-        /// /// <param name="pose">The session-space pose of the mesh.</param>
+        /// <param name="pose">The session-space pose of the mesh.</param>
         /// <param name="vertices">The vertices of the plane's boundary, in plane-space.</param>
         public static void GenerateUvs(List<Vector2> Uvs, Pose pose, List<Vector3> vertices)
         {

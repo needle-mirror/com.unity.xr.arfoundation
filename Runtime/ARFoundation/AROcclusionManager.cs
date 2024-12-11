@@ -10,6 +10,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// The manager for the occlusion subsystem.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-occlusion">Occlusion</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_OcclusionManager)]
     [HelpURL(typeof(AROcclusionManager))]
@@ -516,7 +519,7 @@ namespace UnityEngine.XR.ARFoundation
             m_HumanDepthTextureInfo.Reset();
             m_EnvironmentDepthTextureInfo.Reset();
             m_EnvironmentDepthConfidenceTextureInfo.Reset();
-            
+
             for (int i = 0; i < m_TextureInfos.Count; ++i)
             {
                 m_TextureInfos[i].Reset();

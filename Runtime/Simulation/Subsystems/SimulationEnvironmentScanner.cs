@@ -14,7 +14,7 @@ namespace UnityEngine.XR.Simulation
     class SimulationEnvironmentScanner : IDisposable
     {
         static SimulationEnvironmentScanner s_Instance;
-        
+
         // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use.
         // Reference type collections must also be cleared after use
         static readonly List<MeshRenderer> s_EnvironmentMeshes = new();

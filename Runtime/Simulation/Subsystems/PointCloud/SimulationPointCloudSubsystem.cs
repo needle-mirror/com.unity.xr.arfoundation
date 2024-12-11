@@ -87,6 +87,7 @@ namespace UnityEngine.XR.Simulation
                 m_Raycaster.Stop();
                 m_Raycaster = null;
                 m_Identifiers.Dispose();
+                m_PointCount = 0;
                 m_Positions.Dispose();
                 m_ConfidenceValues.Dispose();
             }

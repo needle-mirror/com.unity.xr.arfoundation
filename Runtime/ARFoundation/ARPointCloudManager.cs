@@ -13,6 +13,9 @@ namespace UnityEngine.XR.ARFoundation
     /// A manager for <see cref="ARTrackedObject"/>s. Uses the <c>XRPointCloudSubsystem</c>
     /// to recognize and track point cloud data in the physical environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-point-clouds">AR Point Cloud Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloudManager)]
     [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]

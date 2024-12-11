@@ -168,7 +168,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <value><see langword="true"/> if the implementation supports EXIF data.
         ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsExifData { get; set; }
-        
+
         /// <summary>
         /// Tests for equality.
         /// </summary>
@@ -420,7 +420,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <value><see langword="true"/> if the implementation supports HDR light estimation while world tracking.
         ///   Otherwise, <see langword="false"/>.</value>
         public bool supportsWorldTrackingHDRLightEstimation { get; private set; }
-        
+
         /// <summary>
         /// Indicates whether the provider implementation supports EXIF data.
         /// </summary>

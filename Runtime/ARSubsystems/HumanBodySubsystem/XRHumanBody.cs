@@ -77,9 +77,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Get the default human body data.
         /// </summary>
-        /// <returns>
+        /// <value>
         /// The default human body data.
-        /// </returns>
+        /// </value>
         public static XRHumanBody defaultValue => s_Default;
 
         static readonly XRHumanBody s_Default = new XRHumanBody

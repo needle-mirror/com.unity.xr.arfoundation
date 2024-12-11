@@ -25,7 +25,7 @@ The first method takes a two-dimensional pixel position on the screen.
 
 You can, for example, pass a touch position directly:
 
-[!code-cs[raycast_using_touch](../../Tests/CodeSamples/RaycastSamples.cs#raycast_using_touch)]
+[!code-cs[raycast_using_touch](../../Tests/Runtime/CodeSamples/RaycastSamples.cs#raycast_using_touch)]
 
 The second method takes an arbitrary [Ray](xref:UnityEngine.Ray) (a position and direction):
 
@@ -44,7 +44,7 @@ If the raycast hits something, `hitResults` will be populated with a `List` of [
 
 Use the [hitType](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.hitType) to determine what kind of thing the raycast hit. If it hit a [trackable](xref:UnityEngine.XR.ARFoundation.ARTrackable), such as a [plane](xref:UnityEngine.XR.ARFoundation.ARPlane), then the [ARRaycastHit.trackable](xref:UnityEngine.XR.ARFoundation.ARRaycastHit.trackable) property can be cast to that type of trackable:
 
-[!code-cs[raycasthit_trackable](../../Tests/CodeSamples/RaycastSamples.cs#raycasthit_trackable)]
+[!code-cs[raycasthit_trackable](../../Tests/Runtime/CodeSamples/RaycastSamples.cs#raycasthit_trackable)]
 
 ## Persistent raycasts
 

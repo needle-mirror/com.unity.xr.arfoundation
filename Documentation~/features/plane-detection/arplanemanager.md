@@ -26,11 +26,11 @@ Subscribe to the `planesChanged` event by following the instructions below:
 
 1. Create a public method on a `MonoBehavior` or `ScriptableObject` with a single parameter of type [ARPlanesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARPlanesChangedEventArgs), as shown in the example code below:
 
-    [!code-cs[PlanesChanged](../../../Tests/CodeSamples/ARPlaneManagerSamples.cs#PlanesChanged)]
+    [!code-cs[PlanesChanged](../../../Tests/Runtime/CodeSamples/ARPlaneManagerSamples.cs#PlanesChanged)]
 
 2. Use the example code below to subscribe to the `planesChanged` event:
 
-    [!code-cs[PlanesSubscribe](../../../Tests/CodeSamples/ARPlaneManagerSamples.cs#PlanesSubscribe)]
+    [!code-cs[PlanesSubscribe](../../../Tests/Runtime/CodeSamples/ARPlaneManagerSamples.cs#PlanesSubscribe)]
 
 ### Visualize planes in the scene
 

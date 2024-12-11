@@ -1,10 +1,11 @@
 using System;
 using System.IO;
-using UnityEditor;
+using UnityEngine;
 using UnityEditor.XR.Management;
 using UnityEngine.XR.Management;
+using Object = UnityEngine.Object;
 
-namespace UnityEngine.XR.TestTooling
+namespace UnityEditor.XR.TestTooling
 {
     abstract class ManagementTestSetup
     {

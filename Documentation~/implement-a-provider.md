@@ -18,24 +18,24 @@ class MyRaycastSubsystem : XRRaycastSubsystem
     class MyProvider : Provider
     {
         // ...
-        // XRRaycastSubsystem.Provider is a nested abstract class for you 
+        // XRRaycastSubsystem.Provider is a nested abstract class for you
         // to implement
-        // ... 
+        // ...
     }
 
     // This method registers the subsystem descriptor with the SubsystemManager
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void RegisterDescriptor()
     {
-        // In this case XRRaycastSubsystemDescriptor provides a registration 
-        // helper method. See each subsystem descriptor's API documentation 
+        // In this case XRRaycastSubsystemDescriptor provides a registration
+        // helper method. See each subsystem descriptor's API documentation
         // for more information.
         XRRaycastSubsystemDescriptor.RegisterDescriptor(new XRImageTrackingSubsystemDescriptor.Cinfo
         {
             providerType = typeof(MyProvider),
             subsystemTypeOverride = typeof(MyRaycastSubsystem),
             // ...
-            // You populate all required fields based on the details of 
+            // You populate all required fields based on the details of
             // your provider implementation
             // ...
         });

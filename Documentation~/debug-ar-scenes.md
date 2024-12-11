@@ -16,7 +16,7 @@ You can add the AR Foundation Debug menu to an AR scene to add a menu of trackin
     - Anchors
     - Point Clouds
 
-The AR Debug menu works with any scene that contains an [`ARSession`](xref:UnityEngine.XR.ARFoundation.ARSession), an [`XROrigin`](xref:Unity.XR.CoreUtils.XROrigin), and a [`Camera`](https://docs.unity3d.com/Manual/class-Camera.html). 
+The AR Debug menu works with any scene that contains an [`ARSession`](xref:UnityEngine.XR.ARFoundation.ARSession), an [`XROrigin`](xref:Unity.XR.CoreUtils.XROrigin), and a [`Camera`](https://docs.unity3d.com/Manual/class-Camera.html).
 
 The Debug menu is a Prefab object containing the [`ARDebugMenu`](xref:UnityEngine.XR.ARFoundation.ARDebugMenu) script and a set of GameObjects and components that provide the UI. See [Setting up the menu](#setting-up-the-menu) for instructions to add the Debug menu to a scene.
 

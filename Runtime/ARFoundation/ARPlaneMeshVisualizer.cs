@@ -21,6 +21,8 @@ namespace UnityEngine.XR.ARFoundation
     ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
     /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
     /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
+    ///
+    /// Related information: <a href="xref:arfoundation-plane-arplanemanager#custom-plane-visualizers">Custom plane visualizers</a>
     /// </remarks>
     [RequireComponent(typeof(ARPlane))]
     [HelpURL(typeof(ARPlaneMeshVisualizer))]

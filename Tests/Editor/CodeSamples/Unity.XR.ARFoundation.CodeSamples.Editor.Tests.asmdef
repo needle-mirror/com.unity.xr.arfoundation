@@ -1,11 +1,11 @@
 {
-    "name": "Unity.XR.TestTooling",
+    "name": "Unity.XR.ARFoundation.CodeSamples.Editor.Tests",
     "rootNamespace": "",
     "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "Unity.XR.Management",
-        "Unity.XR.Management.Editor"
+        "Unity.XR.ARFoundation",
+        "Unity.XR.ARFoundation.Editor",
+        "Unity.XR.ARSubsystems",
+        "Unity.XR.ARSubsystems.Editor"
     ],
     "includePlatforms": [
         "Editor"
@@ -16,7 +16,7 @@
     "precompiledReferences": [
         "nunit.framework.dll"
     ],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],

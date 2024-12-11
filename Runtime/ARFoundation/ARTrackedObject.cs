@@ -6,6 +6,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Represents a tracked object in the physical environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-object-tracking">AR Tracked Object Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedObject)]
     [DisallowMultipleComponent]
     [HelpURL(typeof(ARTrackedObject))]

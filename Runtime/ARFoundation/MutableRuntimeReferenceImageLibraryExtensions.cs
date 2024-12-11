@@ -54,12 +54,13 @@ namespace UnityEngine.XR.ARFoundation
         /// Asynchronously adds <paramref name="texture"/> to <paramref name="library"/>.
         /// </summary>
         /// <remarks>
-        /// <para>The bytes of the <paramref name="texture"/> are copied, so the texture may be safely
-        /// destroyed after this method returns.</para>
+        /// The bytes of the <paramref name="texture"/> are copied, so the texture may be safely
+        /// destroyed after this method returns.
+        ///
         /// > [!TIP]
         /// > Do not call this method on your app's first frame. <see cref="ARSession.state">ARSession.state</see> should
         /// > be <see cref="ARSessionState.SessionInitializing"/> or <see cref="ARSessionState.SessionTracking"/> before you schedule an add image job. You can implement a
-        /// > <c>MonoBehaviour</c>'s <see href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html">Start</see>
+        /// > <c>MonoBehaviour</c>'s <a href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html">Start</a>
         /// > method as a coroutine and `yield` until the AR Session state is <c>SessionTracking</c>.
         /// </remarks>
         /// <param name="library">The <see cref="MutableRuntimeReferenceImageLibrary"/> being extended.</param>

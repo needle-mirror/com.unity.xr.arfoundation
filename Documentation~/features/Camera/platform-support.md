@@ -18,7 +18,7 @@ The AR Foundation [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraS
 
 Your app can check at runtime whether a provider plug-in supports camera components on the user's device. Use the following example code to check whether the device supports camera components:
 
-[!code-cs[CheckIfCameraLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfCameraLoaded)]
+[!code-cs[CheckIfCameraLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfCameraLoaded)]
 
 [!include[](../../snippets/initialization.md)]
 
@@ -27,7 +27,7 @@ Your app can check at runtime whether a provider plug-in supports camera compone
 
 ## Optional features
 
-The following table lists the optional features of the camera subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRCameraSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. The **Description** column lists the optional API that may or may not be implemented on each platform. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported. 
+The following table lists the optional features of the camera subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRCameraSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. The **Description** column lists the optional API that may or may not be implemented on each platform. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
 > [!TIP]
 > Check the API documentation to understand how each API behaves when the provider does not support a feature. For example, some properties throw an exception if you try to set the value when the feature is not supported.
@@ -83,6 +83,6 @@ Your app can check at runtime whether a camera provider supports any optional fe
 
 Refer to the following example code to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARCameraManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARCameraManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

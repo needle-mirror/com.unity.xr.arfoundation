@@ -221,7 +221,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Registers a subsystem implementation with the <c>SubsystemManager</c>.
         /// </summary>
-        /// <param name="descriptorParams"></param>
+        /// <param name="descriptorParams">Parameters describing the <see cref="XRPointCloudSubsystem"/>.</param>
         public static void RegisterDescriptor(Cinfo descriptorParams)
         {
             var descriptor = new XRPointCloudSubsystemDescriptor(descriptorParams);

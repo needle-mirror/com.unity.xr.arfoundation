@@ -10,6 +10,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Represents a detected point cloud. These are also known as feature points.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-point-clouds">AR Point Cloud Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloud)]
     [DisallowMultipleComponent]
     [HelpURL(typeof(ARPointCloud))]

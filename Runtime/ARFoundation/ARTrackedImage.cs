@@ -6,6 +6,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Represents a tracked image in the physical environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-image-tracking">AR Tracked Image Manager component</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImage)]
     [HelpURL(typeof(ARTrackedImage))]
@@ -22,7 +25,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The 2D size of the image. This is the dimensions of the image.
         /// </summary>
-        /// <value></value>
         public Vector2 size
         {
             get { return sessionRelativeData.size; }

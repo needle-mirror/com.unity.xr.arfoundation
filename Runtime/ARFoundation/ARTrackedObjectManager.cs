@@ -9,6 +9,9 @@ namespace UnityEngine.XR.ARFoundation
     /// A manager for <see cref="ARTrackedObject"/>s. Uses the <c>XRObjectTrackingSubsystem</c>
     /// to recognize and track 3D objects in the physical environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-object-tracking">AR Tracked Object Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedObjectManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]

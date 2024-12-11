@@ -6,6 +6,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Renders an <see cref="ARPointCloud"/> as a <c>Mesh</c> with <c>MeshTopology.Points</c>.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-point-clouds">AR Point Cloud Manager component</a>
+    /// </remarks>
     [RequireComponent(typeof(ARPointCloud))]
     [HelpURL(typeof(ARPointCloudMeshVisualizer))]
     public sealed class ARPointCloudMeshVisualizer : MonoBehaviour

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace UnityEngine.XR.Simulation
 {
@@ -14,7 +14,7 @@ namespace UnityEngine.XR.Simulation
         [Tooltip("Maximum distance in meters from the camera at which automatically placed environment probes can be discovered.")]
         [Range(1.0f, 20.0f)]
         float m_MaxDiscoveryDistance = 3.0f;
-        
+
         [SerializeField]
         [Tooltip("Time in seconds after an environment probe is discovered before it is added as a trackable.")]
         [Range(0.0f, 5.0f)]

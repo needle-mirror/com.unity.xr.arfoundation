@@ -124,7 +124,13 @@ namespace UnityEngine.XR.Simulation
                 m_Initialized = false;
             }
 
-            public override void Reset() => s_SimulationSessionReset?.Invoke();
+            public override void Reset()
+            {
+                if (!m_Initialized)
+                    return;
+
+                s_SimulationSessionReset?.Invoke();
+            }
 
             public override void Update(XRSessionUpdateParams updateParams)
             {
@@ -140,7 +146,7 @@ namespace UnityEngine.XR.Simulation
 #if UNITY_EDITOR
             static void OnBeforeAssemblyReload()
             {
-                const string domainReloadOptions = 
+                const string domainReloadOptions =
                     "either <b>Recompile After Finished Playing</b> or <b>Stop Playing and Recompile</b>";
 
                 Debug.LogError(

@@ -19,7 +19,7 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
             $"Target GameObject should have an enabled {nameof(ARCameraManager)} component.\n" +
             $" If you do not connect this port, this node searches for an enabled {nameof(ARCameraManager)} component" +
             " instead, and throws an exception if none is found.";
-        
+
         static readonly string k_FrameEventArgsPortDescription =
             $"The output {nameof(ARCameraFrameEventArgs)}. You can connect this to an Expose node to access its contents.";
 

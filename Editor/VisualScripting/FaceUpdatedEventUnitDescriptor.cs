@@ -19,7 +19,7 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
 
         static readonly string k_TargetPortDescription =
             $"Target GameObject must have an enabled {nameof(ARFace)} component, otherwise this node throws an exception.";
-        
+
         static readonly string k_FaceOutPortDescription =
             $"The updated {nameof(ARFace)}. You can connect this to an Expose node to access its contents.";
 

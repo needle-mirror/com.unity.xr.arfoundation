@@ -21,14 +21,14 @@ Whenever your app doesn't need face tracking functionality, disable the AR Face 
 
 ## Respond to detected faces
 
-While enabled, the AR Face Manager component will get changes reported by the [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) every frame. If any faces were added, updated, or removed, the [facesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.facesChanged) event is invoked with the relevant information. 
+While enabled, the AR Face Manager component will get changes reported by the [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) every frame. If any faces were added, updated, or removed, the [facesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.facesChanged) event is invoked with the relevant information.
 
 Subscribe to the `facesChanged` event by following these instructions:
 
 1. Create a public method on a `MonoBehavior` or `ScriptableObject` with a single parameter of type [ARFacesChangedEventArgs](xref:UnityEngine.XR.ARFoundation.ARFacesChangedEventArgs), as shown in the following example code:
 
-    [!code-cs[FacesChanged](../../../Tests/CodeSamples/ARFaceManagerSamples.cs#FacesChanged)]
+    [!code-cs[FacesChanged](../../../Tests/Runtime/CodeSamples/ARFaceManagerSamples.cs#FacesChanged)]
 
 2. Use the following example code to subscribe to the `facesChanged` event:
 
-    [!code-cs[FacesSubscribe](../../../Tests/CodeSamples/ARFaceManagerSamples.cs#FacesSubscribe)]
+    [!code-cs[FacesSubscribe](../../../Tests/Runtime/CodeSamples/ARFaceManagerSamples.cs#FacesSubscribe)]

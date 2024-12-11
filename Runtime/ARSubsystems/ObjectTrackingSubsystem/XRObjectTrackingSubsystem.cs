@@ -23,7 +23,7 @@ namespace UnityEngine.XR.ARSubsystems
         public abstract class Provider : SubsystemProvider<XRObjectTrackingSubsystem>
         {
             /// <summary>
-            /// Get the changes to <see cref="XRTrackedObject"/>s (added, updated, and removed) 
+            /// Get the changes to <see cref="XRTrackedObject"/>s (added, updated, and removed)
             /// since the last call to this method. This is typically invoked once per frame.
             /// </summary>
             /// <param name="template">A 'template' <see cref="XRTrackedObject"/>. <see cref="XRTrackedObject"/>

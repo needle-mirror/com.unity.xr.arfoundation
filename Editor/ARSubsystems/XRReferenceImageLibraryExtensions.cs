@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
 
@@ -112,7 +112,7 @@ namespace UnityEditor.XR.ARSubsystems
         /// </summary>
         /// <param name="library">The <c>XRReferenceImageLibrary</c> being extended.</param>
         /// <param name="index">The index of the reference image within the library to modify.</param>
-        /// <param name="size"></param>
+        /// <param name="size">The size that the reference image is being set to.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="library"/> is <c>null</c>.</exception>
         /// <exception cref="System.IndexOutOfRangeException">Thrown if <paramref name="index"/> is not between 0 and <paramref name="library"/><c>.count - 1</c>.</exception>
         public static void SetSize(this XRReferenceImageLibrary library, int index, Vector2 size)
@@ -130,7 +130,7 @@ namespace UnityEditor.XR.ARSubsystems
         /// </summary>
         /// <param name="library">The <c>XRReferenceImageLibrary</c> being extended.</param>
         /// <param name="index">The index of the reference image within the library to modify.</param>
-        /// <param name="name"></param>
+        /// <param name="name">The name being applied to the reference image.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="library"/> is <c>null</c>.</exception>
         /// <exception cref="System.IndexOutOfRangeException">Thrown if <paramref name="index"/> is not between 0 and <paramref name="library"/><c>.count - 1</c>.</exception>
         public static void SetName(this XRReferenceImageLibrary library, int index, string name)

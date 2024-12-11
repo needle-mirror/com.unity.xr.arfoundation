@@ -1,9 +1,9 @@
-﻿namespace UnityEngine.XR.Simulation
+namespace UnityEngine.XR.Simulation
 {
     /// <summary>
     /// Marks an object in a simulation environment as a source from which to provide an environment probe.
     /// This component is required by the <see cref="SimulationEnvironmentProbeSubsystem"/> on all GameObjects
-    /// which represent tracked reflection probes in an environment.
+    /// that represent tracked reflection probes in an environment.
     /// </summary>
     [DisallowMultipleComponent]
     public class SimulatedEnvironmentProbe : MonoBehaviour
@@ -25,11 +25,9 @@
         bool m_HasChanged;
 
         /// <summary>
-        /// Get whether the Probes cubemap value or size have been changed since the last Simulation probe subsystem update.
+        /// Get whether the <see cref="cubemap"/> value or size have changed since the last <see cref="SimulationEnvironmentProbeSubsystem"/> update.
         /// </summary>
-        /// <returns>
-        /// Returns <see langword="true"/> if the Probes cubemap value or size have been changed. Otherwise, returns <see langword="false"/>
-        /// </returns>
+        /// <value><see langword="true"/> if the `cubemap` value or size have changed. Otherwise, <see langword="false"/>.</value>
         public bool hasChanged
         {
             get => m_HasChanged;
@@ -37,11 +35,9 @@
         }
 
         /// <summary>
-        /// Gets either a user-assigned cubemap reference or a generated one if loaded into the <see cref="SimulationEnvironmentProbeSubsystem"/>
+        /// Get either a user-assigned cubemap reference or a generated one if loaded into the <see cref="SimulationEnvironmentProbeSubsystem"/>.
         /// </summary>
-        /// <returns>
-        /// Returns the <see cref="Cubemap"/> for this probe.
-        /// </returns>
+        /// <value>The <see cref="Cubemap"/> for this probe.</value>
         public Cubemap cubemap
         {
             get => m_Cubemap;
@@ -55,9 +51,7 @@
         /// <summary>
         /// Get the size of the simulated probe area.
         /// </summary>
-        /// <summary>
-        /// Returns the <see cref="Vector3"/> size of the simulated probe area.
-        /// </summary>
+        /// <value>The size.</value>
         public Vector3 size
         {
             get => m_Size;

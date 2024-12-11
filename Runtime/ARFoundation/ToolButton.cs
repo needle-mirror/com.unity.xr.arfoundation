@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
             get => m_buttonHighlights;
             set => m_buttonHighlights = value;
         }
-        
+
         void Start()
         {
             m_Image = GetComponent<Image>();
@@ -35,7 +35,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         public void HighlightButton()
         {
-            if(m_Image.enabled)
+            if (m_Image.enabled)
             {
                 m_Image.enabled = false;
             }

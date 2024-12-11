@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
             }
             #endregion
         }
-        
+
         class FaceCheck
         {
             #region CheckIfFaceLoaded

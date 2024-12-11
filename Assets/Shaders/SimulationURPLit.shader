@@ -1,4 +1,4 @@
-﻿Shader "Simulation/URP/Lit"
+Shader "Simulation/URP/Lit"
 {
     Properties
     {

@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation.InternalUtils
                 subsystem = null;
                 return false;
             }
-            
+
             var loader = XRGeneralSettings.Instance.Manager.activeLoader;
             var asBaseSubsystem = loader != null ? loader.GetLoadedSubsystem<TSubsystemBase>() : null;
             subsystem = asBaseSubsystem as TSubsystemConcrete;

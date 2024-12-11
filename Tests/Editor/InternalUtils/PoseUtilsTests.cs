@@ -27,7 +27,7 @@ namespace UnityEditor.XR.ARFoundation.InternalUtils.Tests
 
             Assert.That(bPrime.position.Equals(b.position),
                 $"bPrime.position ({bPrime.position}) != b.Position ({b.position}).");
-            
+
             Assert.That(bPrime.rotation == b.rotation,
                 $"bPrime.rotation ({bPrime.rotation.eulerAngles}) != b.Rotation ({b.rotation.eulerAngles}).");
         }

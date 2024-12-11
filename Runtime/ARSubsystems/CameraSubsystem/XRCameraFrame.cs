@@ -101,7 +101,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         [Description("NoiseIntensity")]
         NoiseIntensity = (1 << 14),
-        
+
         /// <summary>
         /// EXIF data for the frame is included.
         /// </summary>
@@ -238,7 +238,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value>The ambient spherical harmonic coefficients.</value>
         /// <remarks>
-        /// See <see href="https://docs.unity3d.com/ScriptReference/Rendering.SphericalHarmonicsL2.html">Rendering.SphericalHarmonicsL2</see>
+        /// See <a href="https://docs.unity3d.com/ScriptReference/Rendering.SphericalHarmonicsL2.html">Rendering.SphericalHarmonicsL2</a>
         /// for further details.
         /// </remarks>
         public SphericalHarmonicsL2 ambientSphericalHarmonics => m_AmbientSphericalHarmonics;
@@ -257,7 +257,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <value>The noise intensity.</value>
         public float noiseIntensity => m_NoiseIntensity;
         float m_NoiseIntensity;
-        
+
         /// <summary>
         /// The frame's EXIF data.
         /// </summary>
@@ -361,7 +361,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value><see langword="true"/> if the frame has EXIF data. Otherwise, <see langword="false"/>.</value>
         bool hasExifData => (m_Properties & XRCameraFrameProperties.ExifData) != 0;
-        
+
         /// <summary>
         /// Creates a <see cref="XRCameraFrame"/>.
         /// </summary>
@@ -423,7 +423,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_NoiseIntensity = noiseIntensity;
             m_ExifData = default;
         }
-        
+
         /// <summary>
         /// Creates a <see cref="XRCameraFrame"/> with EXIF data.
         /// </summary>
@@ -465,11 +465,11 @@ namespace UnityEngine.XR.ARSubsystems
             SphericalHarmonicsL2 ambientSphericalHarmonics,
             XRTextureDescriptor cameraGrain,
             float noiseIntensity,
-            XRCameraFrameExifData exifData) 
-        : this(timestamp, averageBrightness, averageColorTemperature, 
-            colorCorrection, projectionMatrix, displayMatrix, 
-            trackingState, nativePtr, properties, 
-            averageIntensityInLumens, exposureDuration, exposureOffset, 
+            XRCameraFrameExifData exifData)
+        : this(timestamp, averageBrightness, averageColorTemperature,
+            colorCorrection, projectionMatrix, displayMatrix,
+            trackingState, nativePtr, properties,
+            averageIntensityInLumens, exposureDuration, exposureOffset,
             mainLightIntensityInLumens, mainLightColor, mainLightDirection,
             ambientSphericalHarmonics, cameraGrain, noiseIntensity)
         {
@@ -548,7 +548,7 @@ namespace UnityEngine.XR.ARSubsystems
             averageIntensityInLumens = this.averageIntensityInLumens;
             return hasAverageIntensityInLumens;
         }
-        
+
         /// <summary>
         /// Get the frame's EXIF data, if possible.
         /// </summary>

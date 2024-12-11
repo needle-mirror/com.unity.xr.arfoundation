@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -50,7 +50,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// Gets an enumerator which can be used to iterate over the reference images in this library.
         /// </summary>
         /// <example>
+        /// <para>
         /// This examples iterates over the reference images contained in the library.
+        /// </para>
         /// <code>
         /// XRReferenceImageLibrary imageLibrary = ...
         /// foreach (var referenceImage in imageLibrary)
@@ -78,7 +80,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get an image by index.
         /// </summary>
         /// <param name="index">The index of the image in the library. Must be between 0 and count - 1.</param>
-        /// <returns>The <see cref="XRReferenceImage"/> at <paramref name="index"/>.</returns>
+        /// <value>The <see cref="XRReferenceImage"/> at <paramref name="index"/>.</value>
         /// <exception cref="System.IndexOutOfRangeException">Thrown if <paramref name="index"/> is not between 0 and <see cref="count"/><c> - 1</c>.</exception>
         public XRReferenceImage this[int index]
         {

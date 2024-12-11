@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -40,7 +40,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>Same as <see cref="Equals(UnityEngine.XR.ARFoundation.ARRaycastUpdatedEventArgs)"/></returns>
         public static bool operator ==(ARRaycastUpdatedEventArgs lhs, ARRaycastUpdatedEventArgs rhs) => lhs.Equals(rhs);
-        
+
         /// <summary>
         /// Tests for inequality. Same as !<see cref="Equals(UnityEngine.XR.ARFoundation.ARRaycastUpdatedEventArgs)"/>
         /// </summary>

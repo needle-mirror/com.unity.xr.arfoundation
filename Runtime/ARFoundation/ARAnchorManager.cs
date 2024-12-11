@@ -10,12 +10,11 @@ namespace UnityEngine.XR.ARFoundation
     /// Manages anchors.
     /// </summary>
     /// <remarks>
-    /// <para>Use this component to programmatically add, remove, or query for
-    /// anchors. Anchors are <c>Pose</c>s in the world
-    /// which will be periodically updated by an AR device as its understanding
-    /// of the world changes.</para>
-    /// <para>Subscribe to changes (added, updated, and removed) via the
-    /// <see cref="ARAnchorManager.anchorsChanged"/> event.</para>
+    /// An anchor is a pose (position and rotation) in the physical environment that is tracked by an XR device.
+    /// Anchors are updated as the device refines its understanding of the environment, allowing you to reliably place
+    /// mixed reality content at a physical pose.
+    ///
+    /// Related information: <a href="xref:arfoundation-anchors">Anchors</a>
     /// </remarks>
     /// <seealso cref="ARTrackableManager{TSubsystem,TSubsystemDescriptor,TProvider,TSessionRelativeData,TTrackable}"/>
     [DefaultExecutionOrder(ARUpdateOrder.k_AnchorManager)]

@@ -1,4 +1,4 @@
-﻿using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
 using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.Simulation

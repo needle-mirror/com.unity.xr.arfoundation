@@ -18,13 +18,13 @@ The AR Foundation [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsy
 
 Your app can check at runtime whether a provider plug-in supports face tracking on the user's device. Use the following example code to check whether the device supports face components:
 
-[!code-cs[CheckIfFaceLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfFaceLoaded)]
+[!code-cs[CheckIfFaceLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfFaceLoaded)]
 
 [!include[](../../snippets/initialization.md)]
 
 ## Optional features
 
-The following table lists the optional features of the face subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRFaceSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported. 
+The following table lists the optional features of the face subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRFaceSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
 | Feature | Descriptor Property | Description |
 | :------ | :--------------- | :----------------- |
@@ -38,7 +38,7 @@ The following table lists the optional features of the face subsystem. Each opti
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature | ARCore | ARKit | 
+| Feature | ARCore | ARKit |
 | :------ | :----: | :---: |
 | **Face pose** | Yes | Yes |
 | **Face mesh vertices and indices** | Yes | Yes |
@@ -54,6 +54,6 @@ Your app can check at runtime whether a face tracking provider supports any opti
 
 Refer to the following example code to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARFaceManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARFaceManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

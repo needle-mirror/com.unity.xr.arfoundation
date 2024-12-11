@@ -16,7 +16,7 @@ To use AR Foundation's built-in visual scripting support, your project must meet
 
 ## Version control
 
-The Visual Scripting package generates some large binary files as part of its setup process. If your project uses version control, you should ignore these files. Refer to the Visual Scripting package's [Version control systems](https://docs.unity3d.com/Packages/com.unity.visualscripting@1.8/manual/vs-version-control.html) documentation for an example `.gitignore` template. 
+The Visual Scripting package generates some large binary files as part of its setup process. If your project uses version control, you should ignore these files. Refer to the Visual Scripting package's [Version control systems](https://docs.unity3d.com/Packages/com.unity.visualscripting@1.8/manual/vs-version-control.html) documentation for an example `.gitignore` template.
 
 ## Project settings
 

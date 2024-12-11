@@ -40,11 +40,11 @@ A typical use case for anchors is to place virtual content in the physical world
 
 To make existing content an anchor:
 
-[!code-cs[anchor_existing_content](../../Tests/CodeSamples/AnchorSamples.cs#anchor_existing_content)]
+[!code-cs[anchor_existing_content](../../Tests/Runtime/CodeSamples/AnchorSamples.cs#anchor_existing_content)]
 
 To instantiate a prefab as an anchor:
 
-[!code-cs[anchor_prefab_content](../../Tests/CodeSamples/AnchorSamples.cs#anchor_prefab_content)]
+[!code-cs[anchor_prefab_content](../../Tests/Runtime/CodeSamples/AnchorSamples.cs#anchor_prefab_content)]
 
 ## Attaching anchors
 

@@ -36,7 +36,7 @@ In a typical AR Foundation scene, any [managers](xref:arfoundation-managers) pre
 
 ## Subsystem descriptors
 
-Each subsystem has a corresponding [SubsystemDescriptor](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) whose properties describe the range of the subystem's capabilities. Providers might assign different values to these properties at runtime based on different platform or device limitations. 
+Each subsystem has a corresponding [SubsystemDescriptor](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) whose properties describe the range of the subystem's capabilities. Providers might assign different values to these properties at runtime based on different platform or device limitations.
 
 Wherever you use a capability described in a subsystem descriptor, you should check its property value at runtime first to confirm whether that capability is supported on the target device, as shown in the example below:
 

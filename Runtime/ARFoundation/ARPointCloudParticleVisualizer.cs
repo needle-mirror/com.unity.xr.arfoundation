@@ -7,6 +7,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Renders an <see cref="ARPointCloud"/> as a <c>ParticleSystem</c>.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-point-clouds">AR Point Cloud Manager component</a>
+    /// </remarks>
     [RequireComponent(typeof(ARPointCloud))]
     [RequireComponent(typeof(ParticleSystem))]
     [HelpURL(typeof(ARPointCloudParticleVisualizer))]

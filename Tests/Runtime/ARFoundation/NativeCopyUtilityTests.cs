@@ -71,11 +71,11 @@ namespace UnityEngine.XR.ARSubsystems.Tests
             }
             finally
             {
-                if(dst.IsCreated)
+                if (dst.IsCreated)
                     dst.Dispose();
             }
         }
-        
+
         [TestCase(Allocator.Temp)]
         [TestCase(Allocator.TempJob)]
         [TestCase(Allocator.Persistent)]
@@ -106,7 +106,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
                     dst.Dispose();
             }
         }
-        
+
         [TestCase(Allocator.Temp)]
         [TestCase(Allocator.TempJob)]
         [TestCase(Allocator.Persistent)]

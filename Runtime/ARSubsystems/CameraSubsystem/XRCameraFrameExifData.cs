@@ -5,8 +5,8 @@ using System.Text;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// The color space, as defined by the EXIF specification.
-    /// <seealso href="https://web.archive.org/web/20190624045241if_/http://www.cipa.jp:80/std/documents/e/DC-008-Translation-2019-E.pdf"/>
+    /// The color space, as defined by the
+    /// <a href="https://web.archive.org/web/20190624045241if_/http://www.cipa.jp:80/std/documents/e/DC-008-Translation-2019-E.pdf">EXIF specification</a>.
     /// </summary>
     public enum XRCameraFrameExifDataColorSpace : ushort
     {
@@ -22,8 +22,8 @@ namespace UnityEngine.XR.ARSubsystems
     }
 
     /// <summary>
-    /// The metering mode, as defined by the EXIF specification.
-    /// <seealso href="https://web.archive.org/web/20190624045241if_/http://www.cipa.jp:80/std/documents/e/DC-008-Translation-2019-E.pdf"/>
+    /// The metering mode, as defined by the
+    /// <a href="https://web.archive.org/web/20190624045241if_/http://www.cipa.jp:80/std/documents/e/DC-008-Translation-2019-E.pdf">EXIF specification</a>.
     /// </summary>
     public enum XRCameraFrameExifDataMeteringMode : ushort
     {
@@ -36,32 +36,32 @@ namespace UnityEngine.XR.ARSubsystems
         /// Average metering.
         /// </summary>
         Average = 1,
-        
+
         /// <summary>
         /// Center-weighted metering.
         /// </summary>
         CenterWeightedAverage = 2,
-        
+
         /// <summary>
         /// Spot metering.
         /// </summary>
         Spot = 3,
-        
+
         /// <summary>
         /// MultiSpot metering.
         /// </summary>
         MultiSpot = 4,
-        
+
         /// <summary>
         /// Pattern metering.
         /// </summary>
         Pattern = 5,
-        
+
         /// <summary>
         /// Partial metering.
         /// </summary>
         Partial = 6,
-        
+
         /// <summary>
         /// Other.
         /// </summary>
@@ -366,17 +366,17 @@ namespace UnityEngine.XR.ARSubsystems
         public bool Equals(XRCameraFrameExifData other)
         {
             return m_NativePtr.Equals(other.m_NativePtr) &&
-                m_ApertureValue.Equals(other.m_ApertureValue) && 
-                m_BrightnessValue.Equals(other.m_BrightnessValue) && 
+                m_ApertureValue.Equals(other.m_ApertureValue) &&
+                m_BrightnessValue.Equals(other.m_BrightnessValue) &&
                 m_ExposureTime.Equals(other.m_ExposureTime) &&
-                m_ShutterSpeedValue.Equals(other.m_ShutterSpeedValue) && 
-                m_ExposureBiasValue.Equals(other.m_ExposureBiasValue) && 
-                m_FNumber.Equals(other.m_FNumber) && 
-                m_FocalLength.Equals(other.m_FocalLength) && 
-                m_Flash.Equals(other.m_Flash) && 
-                m_ColorSpace.Equals(other.m_ColorSpace) && 
-                m_PhotographicSensitivity.Equals(other.m_PhotographicSensitivity) && 
-                m_MeteringMode.Equals(other.m_MeteringMode) && 
+                m_ShutterSpeedValue.Equals(other.m_ShutterSpeedValue) &&
+                m_ExposureBiasValue.Equals(other.m_ExposureBiasValue) &&
+                m_FNumber.Equals(other.m_FNumber) &&
+                m_FocalLength.Equals(other.m_FocalLength) &&
+                m_Flash.Equals(other.m_Flash) &&
+                m_ColorSpace.Equals(other.m_ColorSpace) &&
+                m_PhotographicSensitivity.Equals(other.m_PhotographicSensitivity) &&
+                m_MeteringMode.Equals(other.m_MeteringMode) &&
                 m_Properties == other.m_Properties;
         }
 

@@ -24,7 +24,7 @@ To access AR Foundation 5.1 in Unity 2021.2 or 2021.3, edit your project manifes
 
 When Unity loads a project, the Package Manager reads the [project manifest](https://docs.unity3d.com/Manual/upm-manifestPrj.html) located under the root folder of your project at `Packages/manifest.json` so that it can compute a list of which packages to retrieve and load.
 
-When you edit your project manifest, you control which package versions Unity loads into your project. There are two ways to edit your project manifest: add a package by name, or manually edit the project manifest file. 
+When you edit your project manifest, you control which package versions Unity loads into your project. There are two ways to edit your project manifest: add a package by name, or manually edit the project manifest file.
 
 ### Add a package by name in the Package Manager window
 
@@ -34,8 +34,8 @@ To access AR Foundation 5.1 in Unity 2021.2 or 2021.3 this way, follow the steps
 
 1. In the Package Manger window, add `com.unity.xr.arfoundation` by name and type your desired version number into the **Version (optional)** field.
 
-	> [!NOTE]
-	> The latest version of AR Foundation is listed in the dropdown on the top left of this page above the table of contents. See [Install AR Foundation](xref:arfoundation-install) to confirm Editor compatibility requirements.
+    > [!NOTE]
+    > The latest version of AR Foundation is listed in the dropdown on the top left of this page above the table of contents. See [Install AR Foundation](xref:arfoundation-install) to confirm Editor compatibility requirements.
 
 2. If your project targets Android and/or iOS devices, add `com.unity.xr.arcore` and/or `com.unity.xr.arkit`, respectively, with the same version number as AR Foundation.
 
@@ -51,9 +51,9 @@ If you prefer to use a text editor, you can follow the steps below to manually e
 
 2. Find the line containing `"com.unity.xr.arfoundation"`.
 
-	![A sample project manifest is shown in a text editor. The line containing "com.unity.xr.arfoundation" is called out.](../images/project-manifest.png)
+    ![A sample project manifest is shown in a text editor. The line containing "com.unity.xr.arfoundation" is called out.](../images/project-manifest.png)
 
-	If you haven't [installed AR Foundation](xref:arfoundation-install) in your project, this line will not appear in your project manifest. In this case you can manually type it in yourself.
+    If you haven't [installed AR Foundation](xref:arfoundation-install) in your project, this line will not appear in your project manifest. In this case you can manually type it in yourself.
 
 3. Edit the AR Foundation version number to your desired version.
 

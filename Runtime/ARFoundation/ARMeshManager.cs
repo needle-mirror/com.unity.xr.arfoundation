@@ -17,6 +17,9 @@ namespace UnityEngine.XR.ARFoundation
     /// [`MeshCollider`](https://docs.unity3d.com/ScriptReference/MeshCollider.html), then a physics mesh is generated
     /// asynchronously, without blocking the main thread.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-meshing">AR Mesh Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_MeshManager)]
     [DisallowMultipleComponent]
     [HelpURL(typeof(ARMeshManager))]
@@ -197,7 +200,7 @@ namespace UnityEngine.XR.ARFoundation
                     "Hierarchy not allowed",
                     $"An {nameof(ARMeshManager)} must be a child of an {nameof(XROrigin)}.",
                     "Remove Component");
-                UnityEditor.EditorApplication.delayCall += ()=>
+                UnityEditor.EditorApplication.delayCall += () =>
                 {
                     DestroyImmediate(this);
                 };

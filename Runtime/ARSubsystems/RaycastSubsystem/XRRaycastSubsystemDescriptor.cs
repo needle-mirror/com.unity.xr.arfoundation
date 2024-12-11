@@ -150,7 +150,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Registers a new descriptor. Should be called by provider implementations.
         /// </summary>
-        /// <param name="cinfo"></param>
+        /// <param name="cinfo">Parameters describing the <see cref="XRRaycastSubsystem"/>.</param>
         public static void RegisterDescriptor(Cinfo cinfo)
         {
             SubsystemDescriptorStore.RegisterDescriptor(new XRRaycastSubsystemDescriptor(cinfo));

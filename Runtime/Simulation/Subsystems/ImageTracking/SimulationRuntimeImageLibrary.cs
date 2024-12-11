@@ -104,7 +104,7 @@ namespace UnityEngine.XR.Simulation
 
         /// <inheritdoc/>
         protected override JobHandle ScheduleAddImageJobImpl(
-            NativeSlice<byte> imageBytes, Vector2Int sizeInPixels, TextureFormat format, 
+            NativeSlice<byte> imageBytes, Vector2Int sizeInPixels, TextureFormat format,
             XRReferenceImage referenceImage, JobHandle inputDependencies) =>
             ScheduleAddImageWithValidationJobImpl(imageBytes, sizeInPixels, format, referenceImage, inputDependencies).jobHandle;
 

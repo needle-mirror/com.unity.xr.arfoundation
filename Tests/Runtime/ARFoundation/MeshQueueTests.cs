@@ -3,10 +3,9 @@ using NUnit.Framework;
 using UnityEngine.XR.ARSubsystems;
 using LegacyMeshId = UnityEngine.XR.MeshId;
 
-namespace UnityEngine.XR.ARFoundation
+namespace UnityEngine.XR.ARFoundation.Tests
 {
-    [TestFixture]
-    public class MeshQueueTestFixture
+    class MeshQueueTestFixture
     {
         [Test]
         public void HighPriorityItemsTakePrecedence()

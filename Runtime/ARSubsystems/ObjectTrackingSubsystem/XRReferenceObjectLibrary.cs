@@ -27,7 +27,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Gets an enumerator which can be used to iterate over the reference objects in this library.
         /// </summary>
         /// <example>
-        /// This examples iterates over the reference objects contained in the library.
+        /// <para>This examples iterates over the reference objects contained in the library.</para>
         /// <code>
         /// XRReferenceObjectLibrary library = ...
         /// foreach (var referenceObject in library)
@@ -56,7 +56,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="index">The index in the array of reference objects.
         /// Must be greater than or equal to 0 and less than <see cref="count"/>.</param>
-        /// <returns>The <see cref="XRReferenceObject"/> at <paramref name="index"/>.</returns>
+        /// <value>The <see cref="XRReferenceObject"/> at <paramref name="index"/>.</value>
         public XRReferenceObject this[int index] => m_ReferenceObjects[index];
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿Shader "Simulation/Standard Lit"
+Shader "Simulation/Standard Lit"
 {
     Properties
     {

@@ -134,9 +134,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Property to be implemented by the provider to set whether human body pose 2D estimation is requested.
             /// </summary>
-            /// <returns>
+            /// <value>
             /// <c>true</c> if human body pose 2D estimation has been requested. Otherwise, <c>false</c>.
-            /// </returns>
+            /// </value>
             /// <exception cref="System.NotSupportedException">Thrown when setting the human body pose 2D estimation to
             /// <c>true</c> if the implementation does not support human body pose 2D estimation.</exception>
             public virtual bool pose2DRequested
@@ -160,9 +160,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Property to be implemented by the provider to set whether human body pose 3D estimation is requested.
             /// </summary>
-            /// <returns>
+            /// <value>
             /// <c>true</c> if the human body pose 3D estimation has been requested. Otherwise, <c>false</c>.
-            /// </returns>
+            /// </value>
             /// <exception cref="System.NotSupportedException">Thrown when setting the human body pose 3D estimation to
             /// <c>true</c> if the implementation does not support human body pose 3D estimation.</exception>
             public virtual bool pose3DRequested
@@ -186,9 +186,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Property to be implemented by the provider to get or set whether 3D human body scale estimation is requested.
             /// </summary>
-            /// <returns>
+            /// <value>
             /// <c>true</c> if the 3D human body scale estimation is set to the given value. Otherwise, <c>false</c>.
-            /// </returns>
+            /// </value>
             /// <exception cref="System.NotSupportedException">Thrown when setting the 3D human body scale estimation to
             /// <c>true</c> if the implementation does not support 3D human body scale estimation.</exception>
             public virtual bool pose3DScaleEstimationRequested

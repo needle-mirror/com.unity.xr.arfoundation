@@ -100,7 +100,7 @@ namespace UnityEngine.XR.ARFoundation
             exifData = this.exifData;
             return this.exifData.hasAnyProperties;
         }
-        
+
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
@@ -145,7 +145,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("lightEstimation: " + lightEstimation.ToString());
-            stringBuilder.Append("\ntimestamp: "  + timestampNs);
+            stringBuilder.Append("\ntimestamp: " + timestampNs);
             if (timestampNs.HasValue)
                 stringBuilder.Append("ns");
             stringBuilder.Append("\nprojectionMatrix: " + projectionMatrix);

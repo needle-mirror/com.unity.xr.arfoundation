@@ -15,6 +15,10 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRFaceSubsystem
         : TrackingSubsystem<XRFace, XRFaceSubsystem, XRFaceSubsystemDescriptor, XRFaceSubsystem.Provider>
     {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        ValidationUtility<XRFace> m_ValidationUtility = new();
+#endif
+
         /// <summary>
         /// Constructs a face subsystem. Do not invoked directly; call <c>Create</c> on the <see cref="XRFaceSubsystemDescriptor"/> instead.
         /// </summary>
@@ -58,14 +62,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// </returns>
         public override TrackableChanges<XRFace> GetChanges(Allocator allocator)
         {
-            using (new ScopedProfiler("GetChanges"))
-            {
-                var changes = provider.GetChanges(XRFace.defaultValue, allocator);
+            var changes = provider.GetChanges(XRFace.defaultValue, allocator);
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
 #endif
-                return changes;
-            }
+            return changes;
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace UnityEngine.XR.ARSubsystems
                 throw new InvalidOperationException("Allocator.None is not a valid allocator.");
 
             using (new ScopedProfiler("GetFaceMesh"))
-            provider.GetFaceMesh(faceId, allocator, ref faceMesh);
+                provider.GetFaceMesh(faceId, allocator, ref faceMesh);
         }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace UnityEngine.XR.ARSubsystems
             public virtual void GetFaceMesh(TrackableId faceId, Allocator allocator, ref XRFaceMesh faceMesh)
             {
                 faceMesh.Dispose();
-                faceMesh = default(XRFaceMesh);
+                faceMesh = default;
             }
 
             /// <summary>
@@ -160,10 +161,5 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             public virtual int currentMaximumFaceCount => 1;
         }
-
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-        ValidationUtility<XRFace> m_ValidationUtility =
-            new ValidationUtility<XRFace>();
-#endif
     }
 }

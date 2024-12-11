@@ -11,6 +11,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <c>GameObject</c>s in response to detected surfaces in the physical
     /// environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-plane-arplanemanager">AR Plane Manager component</a>
+    /// </remarks>
     [DefaultExecutionOrder(ARUpdateOrder.k_PlaneManager)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]

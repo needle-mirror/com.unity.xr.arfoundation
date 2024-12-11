@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
     /// A Handheld AR device layout that represents a mobile AR device, for use with the
-    /// [Input System package](xref:https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/api/index.html).
+    /// [Input System package](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/api/index.html).
     /// </summary>
     [Preserve]
     [InputControlLayout(displayName = "AR Handheld Device", isGenericTypeOfDevice = true)]
@@ -19,6 +19,7 @@ namespace UnityEngine.XR.ARSubsystems
         [Preserve]
         [InputControl]
         public Vector3Control devicePosition { get; private set; }
+
         /// <summary>
         /// The rotation in 3D space of the device.
         /// </summary>

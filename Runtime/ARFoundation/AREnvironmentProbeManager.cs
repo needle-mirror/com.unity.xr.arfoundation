@@ -13,6 +13,9 @@ namespace UnityEngine.XR.ARFoundation
     /// <c>XREnvironmentProbeSubsystem</c> provides updates from environment probes as they are detected in the
     /// environment.
     /// </summary>
+    /// <remarks>
+    /// Related information: <a href="xref:arfoundation-camera-components">Environment probes</a>
+    /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbeManager)]
     [HelpURL(typeof(AREnvironmentProbeManager))]
@@ -77,6 +80,7 @@ namespace UnityEngine.XR.ARFoundation
             get => m_EnvironmentTextureFilterMode;
             set => m_EnvironmentTextureFilterMode = value;
         }
+
         [SerializeField]
         [Tooltip("The texture filter mode to be used with the reflection probe environment texture.")]
         FilterMode m_EnvironmentTextureFilterMode = FilterMode.Trilinear;
@@ -93,6 +97,7 @@ namespace UnityEngine.XR.ARFoundation
             get => m_EnvironmentTextureHDR;
             set => environmentTextureHDRRequested = value;
         }
+
         [SerializeField]
         [Tooltip("Whether the environment textures should be returned as HDR textures.")]
         bool m_EnvironmentTextureHDR = true;
@@ -102,7 +107,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Get or set whether high dynamic range environment textures are requested.
         /// </summary>
-        /// <value></value>
+        /// <value><see langword="true"/> if HDR environment textures are requested. Otherwise, <see langword="false"/>.</value>
         public bool environmentTextureHDRRequested
         {
             get => supportsEnvironmentTextureHDR ? subsystem.environmentTextureHDRRequested : m_EnvironmentTextureHDR;
@@ -134,6 +139,7 @@ namespace UnityEngine.XR.ARFoundation
             get => m_DebugPrefab;
             set => m_DebugPrefab = value;
         }
+
         [SerializeField]
         [Tooltip("A debug prefab that allows for these environment probes to be more readily visualized.")]
         GameObject m_DebugPrefab;
@@ -289,19 +295,16 @@ namespace UnityEngine.XR.ARFoundation
 
         internal bool TryRemoveEnvironmentProbe(AREnvironmentProbe probe)
         {
-            if (probe == null)
-                throw new ArgumentNullException(nameof(probe));
-
-            if (subsystem == null)
+            if (probe == null || subsystem == null)
                 return false;
 
             var desc = descriptor;
 
-            if ((probe.placementType == AREnvironmentProbePlacementType.Manual) && !desc.supportsRemovalOfManual)
-                throw new InvalidOperationException("Removal of manually placed environment probes is not supported by this subsystem.");
+            if (probe.placementType == AREnvironmentProbePlacementType.Manual && !desc.supportsRemovalOfManual)
+                return false;
 
-            if ((probe.placementType == AREnvironmentProbePlacementType.Automatic) && !desc.supportsRemovalOfAutomatic)
-                throw new InvalidOperationException("Removal of automatically placed environment probes is not supported by this subsystem.");
+            if (probe.placementType == AREnvironmentProbePlacementType.Automatic && !desc.supportsRemovalOfAutomatic)
+                return false;
 
             if (subsystem.RemoveEnvironmentProbe(probe.trackableId))
             {
@@ -338,6 +341,13 @@ namespace UnityEngine.XR.ARFoundation
             SetAutomaticPlacementStateOnSubsystem();
             SetEnvironmentTextureHDRStateOnSubsystem();
         }
+
+#if UNITY_EDITOR
+        void OnValidate()
+        {
+            SetAutomaticPlacementStateOnSubsystem();
+        }
+#endif // UNITY_EDITOR
 
         /// <summary>
         /// Destroys any game objects created by this environment probe manager for each environment probe, and clears
