@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 
@@ -18,23 +17,39 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         internal const string k_DisplayTransformName = "_UnityDisplayTransform";
 
-        internal static void SetShaderKeywords(
-            Material material,
-            ReadOnlyCollection<string> enabledShaderKeywords,
-            ReadOnlyCollection<string> disabledShaderKeywords)
+        internal static void SetShaderKeywords(Material material, XRShaderKeywords keywords)
         {
-            if (enabledShaderKeywords != null)
+            if (keywords.enabledKeywords != null)
             {
-                foreach (var shaderKeyword in enabledShaderKeywords)
+                foreach (var shaderKeyword in keywords.enabledKeywords)
                     material.EnableKeyword(shaderKeyword);
             }
 
-            if (disabledShaderKeywords != null)
+            if (keywords.disabledKeywords != null)
             {
-                foreach (var shaderKeyword in disabledShaderKeywords)
+                foreach (var shaderKeyword in keywords.disabledKeywords)
                 {
                     if (material.IsKeywordEnabled(shaderKeyword))
                         material.DisableKeyword(shaderKeyword);
+                }
+            }
+        }
+
+
+        internal static void SetShaderKeywordsGlobal(XRShaderKeywords keywords)
+        {
+            if (keywords.enabledKeywords != null)
+            {
+                foreach (var shaderKeyword in keywords.enabledKeywords)
+                    Shader.EnableKeyword(shaderKeyword);
+            }
+
+            if (keywords.disabledKeywords != null)
+            {
+                foreach (var shaderKeyword in keywords.disabledKeywords)
+                {
+                    if (Shader.IsKeywordEnabled(shaderKeyword))
+                        Shader.DisableKeyword(shaderKeyword);
                 }
             }
         }

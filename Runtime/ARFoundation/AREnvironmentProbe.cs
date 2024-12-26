@@ -180,7 +180,8 @@ namespace UnityEngine.XR.ARFoundation
             }
             else
             {
-                m_CustomBakedTextureInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CustomBakedTextureInfo, descriptor);
+                // always succeeds for Cubemap
+                m_CustomBakedTextureInfo.TryUpdateTextureInfo(descriptor);
             }
 
             m_CustomBakedTextureInfo.texture.filterMode = m_EnvironmentTextureFilterMode;

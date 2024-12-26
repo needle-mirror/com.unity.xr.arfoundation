@@ -8,6 +8,63 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.1.0-pre.4] - 2024-12-26
+
+### Added
+
+- Added camera torch mode support to XR Simulation.
+- Added APIs for batch save, load, and erase of persistent anchors. Refer to [Persistent anchors](xref:arfoundation-anchors-persistent) for more information.
+- Added [XROcclusionSubsystem.TryGetSwapchainTextureDescriptors](xref:UnityEngine.XR.ARSubsystems.TryGetSwapchainTextureDescriptors*), which allows AR Foundation to make optimizations for occlusion providers that store textures in fixed-length swapchains.
+- Added overrides for `object.ToString` to the following types for an improved debugging experience:
+  - [ARExternalTexture](xref:UnityEngine.XR.ARFoundation.ARExternalTexture)
+  - [XRFov](xref:UnityEngine.XR.ARSubsystems.XRFov)
+  - [XRNearFarPlanes](xref:UnityEngine.XR.ARSubsystems.XRNearFarPlanes)
+- Added a constructor to [XRTextureDescriptor](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor) that allows you to create an instance with only the property name ID field set.
+- Added a new struct [XRShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XRShaderKeywords) to replace the `ShaderKeywords` struct. `ShaderKeywords` was introduced to make shader keywords read-only, but its collection enumerators perform boxing operations. `XRShaderKeywords` does not allocate memory on the heap when enumerated.
+  - Added support for the `XRShaderKeywords` struct to the XR Simulation camera and occlusion providers.
+- Added a new value to [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus): `ProviderNotStarted`.
+- Added a new enum [AROcclusionShaderMode](xref:UnityEngine.XR.ARFoundation.AROcclusionShaderMode) and property [ARShaderOcclusion.occlusionShaderMode](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.occlusionShaderMode) to enable or disable hard occlusion.
+- Added the following properties to the AR Shader Occlusion component:
+  - `hardOcclusionShaderKeyword`
+  - `environmentDepthProjectionMatricesPropertyId`
+  - `environmentDepthNearFarPlanesPropertyId`
+- Added two new values to the [XRTextureType](xref:UnityEngine.XR.ARSubsystems.XRTextureType) enum: `ColorRenderTextureRef` and `DepthRenderTextureRef`, and updated the `IsRenderTexture` extension method to include these types.
+
+### Changed
+
+- Changed the [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) to add `[RequireComponent(typeof(Camera))]`. Previously, it was logically required that this component was on the same GameObject as your XR Origin's Camera, but this wasn't as clearly enforced.
+- Changed the timing of `AROcclusionManager.frameReceived` so that this event is now invoked during `Application.onBeforeRender` instead of `MonoBehaviour.Update`. This change is required for compatibility with head-mounted-display (HMD) providers, and may result in improved precision of occlusion frames.
+- Changed the [AR Shader Occlusion component](xref:arfoundation-shader-occlusion) to construct view-projection matrices using poses reported by `AROcclusionFrameEventArgs` instead of getting the XR camera's `WorldToCameraMatrix`.
+- Changed the default implementation of the pre-release API `XROcclusionSubsystem.TryGetFrame` to return `true`. As an additive API in AR Foundation 6.1, this method must succeed for providers that don't override it.
+- Renamed the pre-release type `ARGpuTexture` to `ARExternalTexture`, and added support for the `IEquatable<ARExternalTexture>` interface.
+- Changed the XR Simulation Environments version imported by the XR Environment Overlay from 2.0.1 to 2.1.1
+- Changed the dependency version of XR Core Utilities from 2.4.0 to 2.5.1.
+
+### Deprecated
+
+- Deprecated and replaced the following APIs:
+  - `ShaderKeywords` to `XRShaderKeywords`
+  - `XRCameraSubsystem.GetShaderKeywords` to `XRCameraSubsystem.GetShaderKeywords2`
+  - `XRCameraSubsystem.Provider.GetShaderKeywords` to `XRCameraSubsystem.Provider.GetShaderKeywords2`
+  - `XROcclusionSubsystem.GetShaderKeywords` to `XROcclusionSubsystem.GetShaderKeywords2`
+  - `XROcclusionSubsystem.Provider.GetShaderKeywords` to `XROcclusinSubsystem.Provider.GetShaderKeywords2`
+  - `ARCameraFrameEventArgs.disabledShaderKeywords` to `ARCameraFrameEventArgs.shaderKeywords`
+  - `ARCameraFrameEventArgs.enabledShaderKeywords` to `ARCameraFrameEventArgs.shaderKeywords`
+  - `AROcclusionFrameEventArgs.disabledShaderKeywords` to `AROcclusionFrameEventArgs.shaderKeywords`
+  - `AROcclusionFrameEventArgs.enabledShaderKeywords` to `AROcclusionFrameEventArgs.shaderKeywords`
+
+### Removed
+
+- Removed the pre-release APIs `AROcclusionFrameEventArgs.depthViewProjectionMatricesPropertyId` and `XROcclusionSubsystem.depthViewProjectionMatricesId`. The AR Shader Occlusion component now owns this property ID and does not allow providers to override it.
+
+### Fixed
+
+- Fixed the AR Occlusion Manager component so that it correctly allows the `textureType` property of occlusion textures to be `XRTextureType.None` without making debug assertions. This is the expected texture type for the initial frames before occlusion data is available on some providers.
+- Fixed the AR Occlusion Manager component so that it does not invoke the `frameReceived` event if it has not yet created texture resources necessary to use the occlusion data for the frame.
+- Fixed the AR Occlusion Manager component so that it does not invoke a `frameReceived` event with default data in its `OnDisable` implementation.
+- Fixed the AR Occlusion Manager component so that it can re-use RenderTextures for providers that use fixed-length swapchains instead of attempting to create new RenderTextures every frame.
+- Fixed the AR Shader Occlusion component so that it correctly calculates view-projection matrices when the far clip plane is at an infinite distance.
+
 ## [6.1.0-pre.3] - 2024-11-14
 
 ### Added
@@ -62,6 +119,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - [XRSessionSubsystem.OnCommandBufferExecute](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.OnCommandBufferExecute*)
 - Added a new `ARCommandBufferSupportRendererFeature` which calls the newly exposed `XRSessionSubsystem` APIs for integration into **Universal Render Pipeline** command buffer execution.
 - Changed documentation for Universal Render Pipeline setup to indicate that the `ARCommandBufferSupportRendererFeature` is required when using the Vulkan Graphics API.
+- Added support for EXIF data in [SimulationCameraSubsystem](xref:UnityEngine.XR.Simulation.SimulationCameraSubsystem) via the [SimulatedExifData](xref:UnityEngine.XR.Simulation.SimulatedExifData) component.
 
 ### Changed
 

@@ -3,11 +3,9 @@ uid: arfoundation-shader-occlusion
 ---
 # AR Shader Occlusion component
 
-The [ARShaderOcclusion](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion) component exposes depth render texture information directly to global shader memory, instead of working through the [AR Camera Background component](xref:arfoundation-camera-components#ar-camera-background-component). With shader occlusion, you're able to customize occlusion functionality by writing your own shaders. You can use the occlusion and confidence maps to apply techniques such as custom edge smoothing, and visual effects.
+The [ARShaderOcclusion](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion) component sets depth render texture information directly to global shader memory, instead of working through the [AR Camera Background component](xref:arfoundation-camera-components#ar-camera-background-component). With shader occlusion, you're able to customize occlusion functionality by writing your own shaders. You can use the occlusion and confidence textures to apply techniques such as custom edge smoothing and visual effects.
 
-Shader occlusion enables occlusion on devices with a Head-mounted Display (HMD). The AR Shader Occlusion component will only function on [OpenXR platforms](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.13/manual/index.html#runtimes). The AR Shader Occlusion component may make available multiple depth render textures if stereo depth information is provided by the platform.
-
-The component subscribes to [AROcclusionManager.frameReceived](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.frameReceived) to receive depth textures, then uses [Graphics.CopyTexture](xref:UnityEngine.Graphics.CopyTexture(UnityEngine.Texture,UnityEngine.Texture)) to copy the textures from the GPU to the CPU. Once it has done so, it calls [Shader.SetGlobalTexture](xref:UnityEngine.Shader.SetGlobalTexture(System.Int32,UnityEngine.Texture)) to store the textures as a global texture for use in shaders.
+The AR Shader Occlusion component subscribes to [AROcclusionManager.frameReceived](xref:UnityEngine.XR.ARFoundation.AROcclusionManager.frameReceived) to receive depth textures, then uses [Shader.SetGlobalTexture](xref:UnityEngine.Shader.SetGlobalTexture(System.Int32,UnityEngine.Texture)) to make occlusion textures globally available for use in shaders.
 
 ![AR Shader Occlusion component](../../images/ar-shader-occlusion.png)<br/>*AR Shader Occlusion component.*
 

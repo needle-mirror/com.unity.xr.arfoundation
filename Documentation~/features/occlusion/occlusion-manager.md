@@ -15,6 +15,9 @@ To enable occlusion, add the `AROcclusionManager` to your [Camera](xref:arfounda
 
 For ARKit, ARCore, or XR Simulation, you must also add the [AR Camera Background component](xref:arfoundation-camera-components#ar-camera-background-component) to your camera. On [OpenXR platforms](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.13/manual/index.html#runtimes) such as Meta Quest, you must add the [AR Shader Occlusion](xref:arfoundation-shader-occlusion) component to your camera. If both `ARShaderOcclusion` and `ARCameraBackground` are attached to your camera, occlusion functionality is controlled by `ARShaderOcclusion`.
 
+> [!WARNING]
+> AR Shader Occlusion is not yet compatible with ARCore or ARKit. If you are building an app that targets both HMDs and mobile devices, consider either creating separate scenes or adding the AR Shader Occlusion component at runtime on HMD platforms.
+
 ## AR Occlusion Manager properties
 
 The following table describes the properties of the AR Occlusion Manager component:
@@ -40,3 +43,5 @@ The types of depth images supported are:
 | **Environment Depth** | Distance from the device to any part of the environment in the camera field of view. |
 | **Human Depth** | Distance from the device to any part of a human recognized within the camera field of view. |
 | **Human Stencil** | Value designating, for each pixel, whether that pixel contains a recognized human. |
+
+[!include[](../../snippets/apple-arkit-trademark.md)]

@@ -515,7 +515,7 @@ namespace UnityEngine.XR.ARFoundation
                 if (eventArgs.displayMatrix.HasValue)
                     mat.SetMatrix(m_DisplayTransformId, eventArgs.displayMatrix.Value);
 
-                RenderingUtility.SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
+                RenderingUtility.SetShaderKeywords(mat, eventArgs.shaderKeywords);
             }
 
             if (eventArgs.projectionMatrix.HasValue)
@@ -565,15 +565,14 @@ namespace UnityEngine.XR.ARFoundation
             var mat = material;
             if (mat != null)
             {
-                var count = eventArgs.gpuTextures.Count;
-                for (int i = 0; i < count; ++i)
+                foreach (var tex in eventArgs.externalTextures)
                 {
-                    mat.SetTexture(eventArgs.gpuTextures[i].propertyId, eventArgs.gpuTextures[i].texture);
+                    mat.SetTexture(tex.propertyId, tex.texture);
                 }
 
-                RenderingUtility.SetShaderKeywords(mat, eventArgs.enabledShaderKeywords, eventArgs.disabledShaderKeywords);
+                RenderingUtility.SetShaderKeywords(mat, eventArgs.shaderKeywords);
 
-                // Set scale: this computes the affect the camera's localToWorld has on the the length of the
+                // Set scale: this computes the affect the camera's localToWorld has on the length of the
                 // forward vector, i.e., how much farther from the camera are things than with unit scale.
                 var forward = transform.localToWorldMatrix.GetColumn(2);
                 var scale = forward.magnitude;

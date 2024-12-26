@@ -45,7 +45,11 @@ namespace UnityEngine.XR.Simulation
             XRSupportedCameraBackgroundRenderingMode m_RequestedBackgroundRenderingMode = XRSupportedCameraBackgroundRenderingMode.BeforeOpaques;
 
             Feature m_RequestedLightEstimation = Feature.None;
+            XRCameraTorchMode m_RequestedTorchMode = XRCameraTorchMode.Off;
+            XRCameraTorchMode m_CurrentTorchMode = XRCameraTorchMode.Off;
             SimulatedLight m_MainLight;
+            Light m_CameraTorch;
+            SimulatedExifData m_ExifData;
 
             public override XRCpuImage.Api cpuImageApi => SimulationXRCpuImageApi.instance;
             public override Feature currentCamera => Feature.WorldFacingCamera;
@@ -138,11 +142,18 @@ namespace UnityEngine.XR.Simulation
                     m_CameraTextureFrameEventArgs = (CameraTextureFrameEventArgs)m_CameraTextureProvider.CameraFrameEventArgs;
 
                 m_Camera = m_CameraTextureProvider.GetComponent<Camera>();
+                var lightObject = new GameObject("SimulationLight");
+                lightObject.transform.parent = m_Camera.transform;
+                lightObject.layer = m_Camera.gameObject.layer;
+                m_CameraTorch = lightObject.AddComponent<Light>();
+                SetupCameraTorch(m_CameraTorch);
 
                 m_XRCameraConfiguration = new XRCameraConfiguration(IntPtr.Zero, new Vector2Int(m_Camera.pixelWidth, m_Camera.pixelHeight));
                 m_XRCameraIntrinsics = new XRCameraIntrinsics();
 
                 BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
+
+                m_ExifData = m_Camera.GetComponent<SimulatedExifData>();
             }
 
             public override void Stop()
@@ -292,6 +303,54 @@ namespace UnityEngine.XR.Simulation
                     }
                 }
 
+                XRCameraFrameExifData exifData = default;
+                if (m_ExifData != null)
+                {
+                    XRCameraFrameExifDataProperties exifDataProperties = XRCameraFrameExifDataProperties.None;
+
+                    ColorSpace colorSpace = QualitySettings.activeColorSpace;
+                    var camColorSpace = (colorSpace == ColorSpace.Linear) ? XRCameraFrameExifDataColorSpace.Uncalibrated : XRCameraFrameExifDataColorSpace.sRGB;
+                    exifDataProperties |= XRCameraFrameExifDataProperties.ColorSpace;
+
+                    var flashStatus = (short)((m_CameraTorch != null && m_CameraTorch.enabled) ? 1 : 0);
+                    exifDataProperties |= XRCameraFrameExifDataProperties.Flash;
+
+                    var fNumber = (float)(m_ExifData.apertureValue * m_ExifData.apertureValue) / 4;
+                    exifDataProperties |= XRCameraFrameExifDataProperties.FNumber;
+
+                    var exposureTime = Time.deltaTime; // using framerate for exposure time
+                    exifDataProperties |= XRCameraFrameExifDataProperties.ExposureTime;
+
+                    var shutterValue = -Mathf.Log(exposureTime) / Mathf.Log(2);
+                    exifDataProperties |= XRCameraFrameExifDataProperties.ShutterSpeedValue;
+
+                    // inherited from the above averageBrightness
+                    exifDataProperties |= XRCameraFrameExifDataProperties.ApertureValue;
+
+                    // inherited from Simulated Exif Data
+                    exifDataProperties |= XRCameraFrameExifDataProperties.ExposureBiasValue;
+                    exifDataProperties |= XRCameraFrameExifDataProperties.FocalLength;
+                    exifDataProperties |= XRCameraFrameExifDataProperties.PhotographicSensitivity;
+                    exifDataProperties |= XRCameraFrameExifDataProperties.MeteringMode;
+
+                    exifData = new XRCameraFrameExifData(
+                        IntPtr.Zero,
+                        m_ExifData.apertureValue,
+                        averageBrightness,
+                        exposureTime,
+                        shutterValue,
+                        m_ExifData.exposureBiasValue,
+                        fNumber,
+                        m_ExifData.focalLength,
+                        flashStatus,
+                        camColorSpace,
+                        m_ExifData.photographicSensitivity,
+                        m_ExifData.meteringMode,
+                        exifDataProperties
+                    );
+                    properties |= XRCameraFrameProperties.ExifData;
+                }
+
                 m_LastFrameTimestamp = timeStamp;
 
                 cameraFrame = new XRCameraFrame(
@@ -312,9 +371,52 @@ namespace UnityEngine.XR.Simulation
                     mainLightDirection,
                     ambientSphericalHarmonics,
                     cameraGrain,
-                    noiseIntensity);
+                    noiseIntensity,
+                    exifData);
 
                 return true;
+            }
+
+            public override bool DoesCurrentCameraSupportTorch()
+            {
+                return m_CameraTorch != null;
+            }
+
+            public override XRCameraTorchMode currentCameraTorchMode
+            {
+                get => m_CurrentTorchMode;
+            }
+
+            public override XRCameraTorchMode requestedCameraTorchMode
+            {
+                get => m_RequestedTorchMode;
+                set
+                {
+                    m_RequestedTorchMode = value;
+                    if (m_CurrentTorchMode == m_RequestedTorchMode)
+                        return;
+
+                    SetCurrentTorchModeAfterDelay(value);
+                }
+            }
+
+            void SetupCameraTorch(Light torch)
+            {
+                torch.enabled = false;
+                torch.type = LightType.Spot;
+                torch.spotAngle = 62;
+                torch.innerSpotAngle = 50;
+                torch.range = 25;
+                torch.transform.localRotation = Quaternion.identity;
+                torch.transform.localPosition = Vector3.zero;
+                torch.transform.localScale = Vector3.one;
+            }
+
+            async void SetCurrentTorchModeAfterDelay(XRCameraTorchMode value)
+            {
+                await Awaitable.NextFrameAsync();
+                m_CurrentTorchMode = value;
+                m_CameraTorch.enabled = (m_CurrentTorchMode == XRCameraTorchMode.On);
             }
 
             static float CalculateAverageBrightness()
@@ -393,6 +495,8 @@ namespace UnityEngine.XR.Simulation
                 supportsColorCorrection = true,
                 supportsAverageBrightness = true,
                 supportsAverageIntensityInLumens = true,
+                supportsExifData = true,
+                supportsCameraTorchMode = true,
             };
 
             XRCameraSubsystemDescriptor.Register(cInfo);

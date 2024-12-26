@@ -13,7 +13,7 @@ namespace UnityEditor.XR.Simulation
     static class SampleEnvironmentsHelper
     {
         const string k_ContentPackageName = "com.unity.xr-content.xr-sim-environments";
-        const string k_ContentPackageVersion = "2.0.1";
+        const string k_ContentPackageVersion = "2.1.1";
         static readonly string k_ContentPackageFileName = $"{k_ContentPackageName}-{k_ContentPackageVersion}{k_TgzExtension}";
         static readonly string k_ContentPackageUrl =
             $"https://github.com/Unity-Technologies/{k_ContentPackageName}/releases/download/{k_ContentPackageVersion}/{k_ContentPackageFileName}";

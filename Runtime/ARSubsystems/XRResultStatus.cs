@@ -64,6 +64,13 @@ namespace UnityEngine.XR.ARSubsystems
             /// platform-specific resource is not yet available.
             /// </summary>
             ProviderUninitialized = -3,
+
+            /// <summary>
+            /// Indicates that the operation failed because the provider was not started.
+            /// This may be because you haven't enabled a necessary manager component, or because platforms-specific
+            /// requirements to start the provider were not met.
+            /// </summary>
+            ProviderNotStarted = -4,
         }
 
         /// <summary>

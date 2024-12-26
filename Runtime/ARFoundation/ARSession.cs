@@ -25,6 +25,21 @@ namespace UnityEngine.XR.ARFoundation
     public sealed class ARSession :
         SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {
+        // Internal for tests
+        internal static ARSessionState s_State;
+
+        /// <summary>
+        /// The reason AR tracking was lost.
+        /// </summary>
+        public static NotTrackingReason notTrackingReason => s_NotTrackingReason;
+        static NotTrackingReason s_NotTrackingReason;
+
+        static SessionAvailability s_Availability;
+
+        int m_VSyncCount;
+        int m_TargetFrameRate;
+        bool m_WasFrameRateSet;
+
         [SerializeField]
         bool m_AttemptUpdate = true;
 
@@ -47,7 +62,7 @@ namespace UnityEngine.XR.ARFoundation
         /// If <c>true</c>, the underlying subsystem will attempt to synchronize the AR frame rate with Unity's.
         /// </summary>
         /// <seealso cref="matchFrameRateRequested"/>
-        public bool matchFrameRateEnabled => descriptor?.supportsMatchFrameRate == true ? subsystem.matchFrameRateEnabled : false;
+        public bool matchFrameRateEnabled => descriptor?.supportsMatchFrameRate == true && subsystem.matchFrameRateEnabled;
 
         /// <summary>
         /// If <c>true</c>, the session will block execution until a new AR frame is available and set
@@ -87,21 +102,19 @@ namespace UnityEngine.XR.ARFoundation
             {
                 m_TrackingMode = value;
                 if (enabled && subsystem != null)
-                {
                     subsystem.requestedTrackingMode = value.ToFeature();
-                }
             }
         }
 
         /// <summary>
         /// Get the current <c>TrackingMode</c> in use by the session.
         /// </summary>
-        public TrackingMode currentTrackingMode => subsystem?.currentTrackingMode.ToTrackingMode() ?? (TrackingMode)0;
+        public TrackingMode currentTrackingMode => subsystem?.currentTrackingMode.ToTrackingMode() ?? TrackingMode.DontCare;
 
         /// <summary>
         /// Get the number of AR frames produced per second, or null if the frame rate cannot be determined.
         /// </summary>
-        public int? frameRate => (descriptor?.supportsMatchFrameRate ?? false) ? new Nullable<int>(subsystem.frameRate) : null;
+        public int? frameRate => descriptor?.supportsMatchFrameRate ?? false ? new int?(subsystem.frameRate) : null;
 
         /// <summary>
         /// This event is invoked whenever the <see cref="state"/> changes.
@@ -129,17 +142,6 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The reason AR tracking was lost.
-        /// </summary>
-        public static NotTrackingReason notTrackingReason => s_NotTrackingReason;
-
-        int m_VSyncCount;
-
-        int m_TargetFrameRate;
-
-        bool m_WasFrameRateSet;
-
-        /// <summary>
         /// Resets the AR Session.
         /// </summary>
         /// <remarks>
@@ -148,8 +150,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         public void Reset()
         {
-            if (subsystem != null)
-                subsystem.Reset();
+            subsystem?.Reset();
 
             if (state > ARSessionState.Ready)
                 state = ARSessionState.SessionInitializing;
@@ -159,9 +160,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             m_MatchFrameRate = value;
             if (descriptor?.supportsMatchFrameRate == true)
-            {
                 subsystem.matchFrameRateRequested = value;
-            }
         }
 
         /// <summary>
@@ -173,7 +172,7 @@ namespace UnityEngine.XR.ARFoundation
         ///
         /// This method is resource-intensive and should not be called frequently.
         /// </summary>
-        void WarnIfMultipleARSessions()
+        static void WarnIfMultipleARSessions()
         {
             var sessions = FindObjectsByType<ARSession>(FindObjectsSortMode.None);
             if (sessions.Length > 1)
@@ -182,14 +181,12 @@ namespace UnityEngine.XR.ARFoundation
                 string sessionNames = "";
                 foreach (var session in sessions)
                 {
-                    sessionNames += string.Format("\t{0}\n", session.name);
+                    sessionNames += $"\t{session.name}\n";
                 }
 
                 Debug.LogWarningFormat(
-                    "Multiple active AR Sessions found. " +
-                    "These will conflict with each other, so " +
-                    "you should only have one active ARSession at a time. " +
-                    "Found these active sessions:\n{0}", sessionNames);
+                    "Multiple active AR Sessions found. These will conflict with each other, so you should only have " +
+                    "one active ARSession at a time. Found these active sessions:\n{0}", sessionNames);
             }
         }
 
@@ -199,9 +196,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 var loader = XRGeneralSettings.Instance.Manager.activeLoader;
                 if (loader != null)
-                {
                     return loader.GetLoadedSubsystem<XRSessionSubsystem>();
-                }
             }
 
             return null;
@@ -278,7 +273,7 @@ namespace UnityEngine.XR.ARFoundation
         ///     <see cref="ARSessionState.None"/> or <see cref="ARSessionState.Unsupported"/>.</exception>
         public static IEnumerator Install()
         {
-            while ((state == ARSessionState.Installing) || (state == ARSessionState.CheckingAvailability))
+            while (state is ARSessionState.Installing or ARSessionState.CheckingAvailability)
             {
                 yield return null;
             }
@@ -312,7 +307,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 case SessionInstallationStatus.Success:
                     state = ARSessionState.Ready;
-                    s_Availability = (s_Availability | SessionAvailability.Installed);
+                    s_Availability |= SessionAvailability.Installed;
                     break;
                 case SessionInstallationStatus.ErrorUserDeclined:
                     state = ARSessionState.NeedsInstall;
@@ -364,21 +359,16 @@ namespace UnityEngine.XR.ARFoundation
                 yield break;
 
             // Complete install if necessary
-            if (((state == ARSessionState.NeedsInstall) && attemptUpdate) ||
-                (state == ARSessionState.Installing))
+            if ((state == ARSessionState.NeedsInstall && attemptUpdate) || state == ARSessionState.Installing)
             {
                 yield return Install();
             }
 
             // If we're still enabled and everything is ready, then start.
             if (state == ARSessionState.Ready && enabled)
-            {
                 StartSubsystem();
-            }
             else
-            {
                 enabled = false;
-            }
         }
 
         void StartSubsystem()
@@ -395,32 +385,32 @@ namespace UnityEngine.XR.ARFoundation
 
         void Update()
         {
-            if (subsystem?.running == true)
+            if (subsystem == null || !subsystem.running)
+                return;
+
+            m_TrackingMode = subsystem.requestedTrackingMode.ToTrackingMode();
+            if (subsystem.matchFrameRateEnabled && m_MatchFrameRate)
             {
-                m_TrackingMode = subsystem.requestedTrackingMode.ToTrackingMode();
-                if (subsystem.matchFrameRateEnabled && m_MatchFrameRate)
-                {
-                    m_WasFrameRateSet = true;
-                    Application.targetFrameRate = subsystem.frameRate;
-                    QualitySettings.vSyncCount = 0;
-                }
+                m_WasFrameRateSet = true;
+                Application.targetFrameRate = subsystem.frameRate;
+                QualitySettings.vSyncCount = 0;
+            }
 
-                subsystem.Update(new XRSessionUpdateParams
-                {
-                    screenOrientation = Screen.orientation,
-                    screenDimensions = new Vector2Int(Screen.width, Screen.height)
-                });
+            subsystem.Update(new XRSessionUpdateParams
+            {
+                screenOrientation = Screen.orientation,
+                screenDimensions = new Vector2Int(Screen.width, Screen.height)
+            });
 
-                switch (subsystem.trackingState)
-                {
-                    case TrackingState.None:
-                    case TrackingState.Limited:
-                        state = ARSessionState.SessionInitializing;
-                        break;
-                    case TrackingState.Tracking:
-                        state = ARSessionState.SessionTracking;
-                        break;
-                }
+            switch (subsystem.trackingState)
+            {
+                case TrackingState.None:
+                case TrackingState.Limited:
+                    state = ARSessionState.SessionInitializing;
+                    break;
+                case TrackingState.Tracking:
+                    state = ARSessionState.SessionTracking;
+                    break;
             }
         }
 
@@ -430,13 +420,9 @@ namespace UnityEngine.XR.ARFoundation
                 return;
 
             if (paused)
-            {
                 subsystem.OnApplicationPause();
-            }
             else
-            {
                 subsystem.OnApplicationResume();
-            }
         }
 
         /// <summary>
@@ -492,12 +478,5 @@ namespace UnityEngine.XR.ARFoundation
                     break;
             }
         }
-
-        // Internal for tests
-        internal static ARSessionState s_State;
-
-        static NotTrackingReason s_NotTrackingReason;
-
-        static SessionAvailability s_Availability;
     }
 }

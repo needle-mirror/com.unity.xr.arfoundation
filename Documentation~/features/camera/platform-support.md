@@ -18,7 +18,7 @@ The AR Foundation [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraS
 
 Your app can check at runtime whether a provider plug-in supports camera components on the user's device. Use the following example code to check whether the device supports camera components:
 
-[!code-cs[CheckIfCameraLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfCameraLoaded)]
+[!code-cs[CheckIfCameraLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfCameraLoaded)]
 
 [!include[](../../snippets/initialization.md)]
 
@@ -76,7 +76,7 @@ To understand the optional features that are implemented in each supported XR pl
 | **Camera grain**  | | iOS 13+ | | |
 | **Image stabilization** | | | | |
 | **EXIF data** | Yes | iOS 16+ | | |
-| **Camera torch mode** | Yes | | | |
+| **Camera torch mode** | Yes | | | Yes |
 
 <a id="check-feature-support"></a>
 
@@ -86,6 +86,6 @@ Your app can check at runtime whether a camera provider supports any optional fe
 
 Refer to the following example code to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARCameraManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARCameraManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

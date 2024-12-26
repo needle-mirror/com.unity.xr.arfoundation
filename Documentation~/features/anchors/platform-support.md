@@ -20,7 +20,7 @@ Your app can check at runtime whether a provider plug-in supports anchors on the
 
 Use the following example code to check if the device supports anchors:
 
-[!code-cs[CheckIfAnchorsLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfAnchorsLoaded)]
+[!code-cs[CheckIfAnchorsLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfAnchorsLoaded)]
 
 [!include[](../../snippets/initialization.md)]
 
@@ -63,6 +63,6 @@ Your app can check at runtime whether an anchor provider supports any optional f
 
 Refer to the following example code to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARAnchorManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

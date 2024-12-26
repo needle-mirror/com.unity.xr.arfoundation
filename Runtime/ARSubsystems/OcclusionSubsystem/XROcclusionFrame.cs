@@ -127,6 +127,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Get an array of poses from which the frame was rendered, if possible.
+        /// Poses are in Unity world space.
         /// </summary>
         /// <param name="poses">The output array of poses, if this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the frame has poses that were output to <paramref name="poses"/>.

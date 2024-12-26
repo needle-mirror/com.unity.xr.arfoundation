@@ -62,10 +62,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// w | angleDown
         /// </summary>
         /// <returns>This <see cref="XRFov"/> as a <see cref="Vector4"/>.</returns>
-        public Vector4 AsVector4()
-        {
-            return new Vector4(angleLeft, angleRight, angleUp, angleDown);
-        }
+        public Vector4 AsVector4() => new(angleLeft, angleRight, angleUp, angleDown);
 
         /// <summary>
         /// Compares for equality.
@@ -87,10 +84,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="obj">An <c>object</c> to compare against.</param>
         /// <returns><see langword="true"/> if <paramref name="obj"/> is an <see cref="XRFov"/> and
         /// <see cref="Equals(XRFov)"/> is also <see langword="true"/>. Otherwise, <see langword="false"/>.</returns>
-        public override bool Equals(System.Object obj)
-        {
-            return obj is XRFov fov && Equals(fov);
-        }
+        public override bool Equals(System.Object obj) => obj is XRFov fov && Equals(fov);
 
         /// <summary>
         /// Compares <paramref name="lhs"/> and <paramref name="rhs"/> for equality using <see cref="Equals(XRFov)"/>.
@@ -99,10 +93,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="rhs">The right-hand-side <see cref="XRFov"/> of the comparison.</param>
         /// <returns><see langword="true"/> if <paramref name="lhs"/> compares equal to <paramref name="rhs"/>.
         /// Otherwise, <see langword="false"/>.</returns>
-        public static bool operator ==(XRFov lhs, XRFov rhs)
-        {
-            return lhs.Equals(rhs);
-        }
+        public static bool operator ==(XRFov lhs, XRFov rhs) => lhs.Equals(rhs);
 
         /// <summary>
         /// Compares <paramref name="lhs"/> and <paramref name="rhs"/> for inequality using <see cref="Equals(XRFov)"/>.
@@ -111,10 +102,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="rhs">The right-hand-side <see cref="XRFov"/> of the comparison.</param>
         /// <returns><see langword="false"/> if <paramref name="lhs"/> compares equal to <paramref name="rhs"/>.
         /// Otherwise, <see langword="true"/>.</returns>
-        public static bool operator !=(XRFov lhs, XRFov rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        public static bool operator !=(XRFov lhs, XRFov rhs) => !lhs.Equals(rhs);
 
         /// <summary>
         /// Generates a hash code suitable for use in <c>HashSet</c> and <c>Dictionary</c>.
@@ -132,5 +120,12 @@ namespace UnityEngine.XR.ARSubsystems
             }
             return hashCode;
         }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString()
+            => $"{{ left: {m_AngleLeft}, right: {m_AngleRight}, up: {m_AngleUp}, down: {m_AngleDown} }}";
     }
 }

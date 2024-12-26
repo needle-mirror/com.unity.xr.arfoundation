@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
-using UnityEngine.Rendering;
+using Unity.XR.CoreUtils.Collections;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
     {
         static List<Texture2D> s_Textures = new();
         static List<int> s_PropertyIds = new();
-        readonly List<ARTextureInfo> m_TextureInfos = new();
+        ISwapchainStrategy m_SwapchainStrategy = new NoSwapchainStrategy();
 
         Camera m_Camera;
         bool m_PreRenderInvertCullingValue;
@@ -337,13 +337,7 @@ namespace UnityEngine.XR.ARFoundation
         protected override void OnDisable()
         {
             base.OnDisable();
-
-            foreach (var textureInfo in m_TextureInfos)
-            {
-                textureInfo.Dispose();
-            }
-
-            m_TextureInfos.Clear();
+            m_SwapchainStrategy.DestroyTextures();
         }
 
         void Update()
@@ -366,62 +360,19 @@ namespace UnityEngine.XR.ARFoundation
                 screenOrientation = Screen.orientation
             };
 
-            if (subsystem.TryGetLatestFrame(cameraParams, out XRCameraFrame frame))
-            {
-                UpdateTexturesInfos();
-                InvokeFrameReceivedEvent(frame);
-            }
-        }
+            if (!subsystem.TryGetLatestFrame(cameraParams, out XRCameraFrame frame))
+                return;
 
-        /// <summary>
-        /// Pull the texture descriptors from the camera subsystem, and update the texture information maintained by
-        /// this component.
-        /// </summary>
-        void UpdateTexturesInfos()
-        {
-            var textureDescriptors = subsystem.GetTextureDescriptors(Allocator.Temp);
-            try
-            {
-                int numUpdated = Math.Min(m_TextureInfos.Count, textureDescriptors.Length);
-
-                // Update the existing textures that are in common between the two arrays.
-                for (var i = 0; i < numUpdated; ++i)
-                {
-                    m_TextureInfos[i] = ARTextureInfo.GetUpdatedTextureInfo(m_TextureInfos[i], textureDescriptors[i]);
-                }
-
-                // If there are fewer textures in the current frame than we had previously, destroy any remaining unneeded
-                // textures.
-                if (numUpdated < m_TextureInfos.Count)
-                {
-                    for (var i = numUpdated; i < m_TextureInfos.Count; ++i)
-                    {
-                        m_TextureInfos[i].Reset();
-                    }
-                    m_TextureInfos.RemoveRange(numUpdated, (m_TextureInfos.Count - numUpdated));
-                }
-                // Else, if there are more textures in the current frame than we have previously, add new textures for any
-                // additional descriptors.
-                else if (textureDescriptors.Length > m_TextureInfos.Count)
-                {
-                    for (var i = numUpdated; i < textureDescriptors.Length; ++i)
-                    {
-                        m_TextureInfos.Add(new ARTextureInfo(textureDescriptors[i]));
-                    }
-                }
-            }
-            finally
-            {
-                if (textureDescriptors.IsCreated)
-                    textureDescriptors.Dispose();
-            }
+            if (m_SwapchainStrategy.TryUpdateTextureInfosForFrame(
+                    subsystem.GetTextureDescriptors(Allocator.Temp), out var textureInfos))
+                InvokeFrameReceivedEvent(frame, textureInfos);
         }
 
         /// <summary>
         /// Invoke the camera frame received event packing the frame information into the event argument.
         /// </summary>
         /// <param name="frame">The camera frame raising the event.</param>
-        void InvokeFrameReceivedEvent(XRCameraFrame frame)
+        void InvokeFrameReceivedEvent(XRCameraFrame frame, ReadOnlyListSpan<ARTextureInfo> textureInfos)
         {
             if (frameReceived == null)
                 return;
@@ -473,13 +424,14 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.TryGetCameraGrain(out var cameraGrain))
             {
-                if (m_CameraGrainInfo.texture == null && ARTextureInfo.IsSupported(cameraGrain))
+                if (m_CameraGrainInfo == null)
                 {
                     m_CameraGrainInfo = new ARTextureInfo(cameraGrain);
                 }
-                else if (m_CameraGrainInfo.texture != null && ARTextureInfo.IsSupported(cameraGrain))
+                else
                 {
-                    m_CameraGrainInfo = ARTextureInfo.GetUpdatedTextureInfo(m_CameraGrainInfo, cameraGrain);
+                    // always succeeds for Texture2D
+                    m_CameraGrainInfo.TryUpdateTextureInfo(cameraGrain);
                 }
 
                 eventArgs.cameraGrainTexture = m_CameraGrainInfo.texture;
@@ -493,7 +445,7 @@ namespace UnityEngine.XR.ARFoundation
 
             s_Textures.Clear();
             s_PropertyIds.Clear();
-            foreach (var textureInfo in m_TextureInfos)
+            foreach (var textureInfo in textureInfos)
             {
                 DebugAssert.That(textureInfo.descriptor.textureType == XRTextureType.Texture2D)?.
                     WithMessage($"Camera Texture needs to be a Texture 2D, but instead is {textureInfo.descriptor.textureType.ToString()}.");
@@ -502,12 +454,9 @@ namespace UnityEngine.XR.ARFoundation
                 s_PropertyIds.Add(textureInfo.descriptor.propertyNameId);
             }
 
-            ShaderKeywords shaderKeywords = subsystem.GetShaderKeywords();
-
             eventArgs.textures = s_Textures;
             eventArgs.propertyNameIds = s_PropertyIds;
-            eventArgs.enabledShaderKeywords = shaderKeywords.enabledKeywords;
-            eventArgs.disabledShaderKeywords = shaderKeywords.disabledKeywords;
+            eventArgs.shaderKeywords = subsystem.GetShaderKeywords2();
 
             frameReceived(eventArgs);
         }

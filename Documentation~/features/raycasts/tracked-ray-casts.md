@@ -27,7 +27,7 @@ You can subscribe to `trackablesChanged` using either the **Inspector** or C# sc
 
     a. Create a public method on a `MonoBehaviour` or `ScriptableObject` with a single parameter of type [ARTrackablesChangedEventArgs\<ARRaycast\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1), as shown in the following example code:
 
-    [!code-cs[RacyastsChanged](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#RaycastsChanged)]
+    [!code-cs[RacyastsChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#RaycastsChanged)]
 
     b. Select your XR Origin GameObject, then click the **Add (+)** button on the AR Raycast Manager component's **trackables Changed** property.
 
@@ -43,7 +43,7 @@ You can subscribe to `trackablesChanged` using either the **Inspector** or C# sc
 
     b. Use the following example code to subscribe to the `trackablesChanged` event:
 
-    [!code-cs[RaycastsSubscribe](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#RaycastsSubscribe)]
+    [!code-cs[RaycastsSubscribe](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#RaycastsSubscribe)]
 
 ## Remove a ray cast
 

@@ -9,9 +9,9 @@
         "Unity.XR.CoreUtils",
         "Unity.XR.Management",
         "Unity.XR.Simulation",
-        "Unity.XR.TestTooling",
         "Unity.XR.ARFoundation.Editor",
-        "Unity.XR.ARFoundation.InternalUtils"
+        "Unity.XR.ARFoundation.InternalUtils",
+        "Unity.XR.TestTooling.Editor.Tests"
     ],
     "includePlatforms": [
         "Editor",

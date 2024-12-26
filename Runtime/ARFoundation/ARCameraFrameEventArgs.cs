@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using UnityEngine.XR.ARSubsystems;
 
@@ -69,24 +70,33 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The list of keywords to be enabled for the material.
         /// </summary>
-        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use enabledShaderKeywords instead.")]
+        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.")]
         public List<string> enabledMaterialKeywords { get; internal set; }
 
         /// <summary>
         /// The list of keywords to be disabled for the material.
         /// </summary>
-        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use disabledShaderKeywords instead.")]
+        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.")]
         public List<string> disabledMaterialKeywords { get; internal set; }
 
         /// <summary>
         /// The enabled shader keywords.
         /// </summary>
-        public ReadOnlyCollection<string> enabledShaderKeywords { get; internal set; }
+        [Obsolete("enabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead.")]
+        public ReadOnlyCollection<string> enabledShaderKeywords
+            => shaderKeywords.enabledKeywords != null ? new(shaderKeywords.enabledKeywords.ToArray()) : null;
 
         /// <summary>
         /// The disabled shader keywords.
         /// </summary>
-        public ReadOnlyCollection<string> disabledShaderKeywords { get; internal set; }
+        [Obsolete("disabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead")]
+        public ReadOnlyCollection<string> disabledShaderKeywords
+            => shaderKeywords.disabledKeywords != null ? new(shaderKeywords.disabledKeywords.ToArray()) : null;
+
+        /// <summary>
+        /// The enabled and disabled shader keywords.
+        /// </summary>
+        public XRShaderKeywords shaderKeywords { get; internal set; }
 
         /// <summary>
         /// The camera grain texture effect.
@@ -133,8 +143,7 @@ namespace UnityEngine.XR.ARFoundation
                 hash = hash * 486187739 + cameraGrainTexture.GetHashCode();
                 hash = hash * 486187739 + noiseIntensity.GetHashCode();
                 hash = hash * 486187739 + exifData.GetHashCode();
-                hash = hash * 486187739 + (enabledShaderKeywords == null ? 0 : enabledShaderKeywords.GetHashCode());
-                hash = hash * 486187739 + (disabledShaderKeywords == null ? 0 : disabledShaderKeywords.GetHashCode());
+                hash = hash * 486187739 + shaderKeywords.GetHashCode();
                 return hash;
             }
         }
@@ -182,18 +191,15 @@ namespace UnityEngine.XR.ARFoundation
                 && timestampNs == other.timestampNs
                 && projectionMatrix == other.projectionMatrix
                 && displayMatrix == other.displayMatrix
-                && ((textures == null) ? (other.textures == null) : textures.Equals(other.textures))
-                && ((propertyNameIds == null) ? (other.propertyNameIds == null)
+                && (textures == null ? other.textures == null : textures.Equals(other.textures))
+                && (propertyNameIds == null ? other.propertyNameIds == null
                     : propertyNameIds.Equals(other.propertyNameIds))
-                && (exposureDuration == other.exposureDuration)
-                && (exposureOffset == other.exposureOffset)
-                && (cameraGrainTexture == other.cameraGrainTexture)
-                && (noiseIntensity == other.noiseIntensity)
+                && exposureDuration == other.exposureDuration
+                && exposureOffset == other.exposureOffset
+                && cameraGrainTexture == other.cameraGrainTexture
+                && noiseIntensity == other.noiseIntensity
                 && exifData.Equals(other.exifData)
-                && ((enabledShaderKeywords == null) ? (other.enabledShaderKeywords == null)
-                    : enabledShaderKeywords.Equals(other.enabledShaderKeywords))
-                && ((disabledShaderKeywords == null) ? (other.disabledShaderKeywords == null)
-                    : disabledShaderKeywords.Equals(other.disabledShaderKeywords));
+                && shaderKeywords.Equals(other.shaderKeywords);
         }
 
         /// <summary>
@@ -201,7 +207,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        /// <returns>`true` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>. Otherwise, `false`.</returns>
         public static bool operator ==(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs) => lhs.Equals(rhs);
 
         /// <summary>
@@ -209,7 +215,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        /// <returns>`true` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>. Otherwise, `false`.</returns>
         public static bool operator !=(ARCameraFrameEventArgs lhs, ARCameraFrameEventArgs rhs) => !lhs.Equals(rhs);
     }
 }

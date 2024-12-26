@@ -18,7 +18,7 @@ The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycas
 
 Your app can check at runtime whether a provider plug-in supports ray casting on the user's device. Use the following example code to check whether the device supports ray casting:
 
-[!code-cs[CheckIfRaycastLoaded](../../../Tests/CodeSamples/LoaderUtilitySamples.cs#CheckIfRaycastLoaded)]
+[!code-cs[CheckIfRaycastLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfRaycastLoaded)]
 
 [!include[](../../snippets/initialization.md)]
 
@@ -75,6 +75,6 @@ Your app can check at runtime whether a ray casting provider supports any option
 
 Refer to the following example code to learn how to check for optional feature support:
 
-[!code-cs[DescriptorChecks](../../../Tests/CodeSamples/ARRaycastManagerSamples.cs#DescriptorChecks)]
+[!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARRaycastManagerSamples.cs#DescriptorChecks)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

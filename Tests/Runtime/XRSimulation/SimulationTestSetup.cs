@@ -3,7 +3,7 @@ using Unity.XR.CoreUtils;
 using UnityEngine.XR.Management;
 using UnityEngine.InputSystem;
 using UnityEditor.XR.ARFoundation;
-using UnityEngine.XR.TestTooling;
+using UnityEditor.XR.TestTooling;
 
 namespace UnityEngine.XR.Simulation.Tests
 {

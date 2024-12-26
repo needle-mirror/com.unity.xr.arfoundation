@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Unity.Collections;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
+using Unity.XR.CoreUtils.Collections;
 using SerializableGuid = UnityEngine.XR.ARSubsystems.SerializableGuid;
 
 namespace UnityEngine.XR.ARFoundation
@@ -45,6 +47,16 @@ namespace UnityEngine.XR.ARFoundation
         [Tooltip("If not null, this prefab is instantiated for each detected 3D bounding box.")]
         [FormerlySerializedAs("m_ReferencePointPrefab")]
         GameObject m_AnchorPrefab;
+
+        static readonly Pool.ObjectPool<Dictionary<TrackableId, ARAnchor>> s_AnchorByTrackableIdMaps =
+            new(
+                createFunc: () => new Dictionary<TrackableId, ARAnchor>(),
+                actionOnGet: null,
+                actionOnRelease: null,
+                actionOnDestroy: null,
+                collectionCheck: false,
+                defaultCapacity: 8,
+                maxSize: 1024);
 
         /// <summary>
         /// This prefab will be instantiated for each <see cref="ARAnchor"/>. May be <see langword="null"/>.
@@ -193,7 +205,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// Attempts to persistently save the given anchor so that it can be loaded in a future AR session. Use the
-        /// `SerializableGuid` returned by this method as an input parameter to <see cref="TryLoadAnchorAsync"/> or
+        /// `SerializableGuid` returned by this method as an input to <see cref="TryLoadAnchorAsync"/> or
         /// <see cref="TryEraseAnchorAsync"/>.
         /// </summary>
         /// <param name="anchor">The anchor to save. You can create an anchor using <see cref="TryAddAnchorAsync"/>.</param>
@@ -209,6 +221,66 @@ namespace UnityEngine.XR.ARFoundation
                 throw new ArgumentNullException(nameof(anchor));
 
             return subsystem.TrySaveAnchorAsync(anchor.trackableId, cancellationToken);
+        }
+
+        /// <summary>
+        /// Attempts to persistently save the given anchors so that they can be loaded in a future AR session. Use the
+        /// <paramref name="outputSaveAnchorResults"/> from this method as an input to <see cref="TryLoadAnchorsAsync"/> or
+        /// <see cref="TryEraseAnchorsAsync"/>.
+        /// </summary>
+        /// <param name="anchorsToSave">The anchors to save. You can create an anchor using <see cref="TryAddAnchorAsync"/>.</param>
+        /// <param name="outputSaveAnchorResults">The list that will be cleared and then populated with results.</param>
+        /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
+        /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
+        /// <returns>The result of the async operation. You are responsible to <see langword="await"/> this result.</returns>
+        /// <seealso cref="XRAnchorSubsystemDescriptor.supportsSaveAnchor"/>
+        /// <exception cref="NotSupportedException"> Thrown if
+        /// <see cref="XRAnchorSubsystemDescriptor.supportsSaveAnchor"/> is false for this provider.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="anchorsToSave"/> or <paramref name="outputSaveAnchorResults"/> is null.</exception>
+        public async Awaitable TrySaveAnchorsAsync(
+            IEnumerable<ARAnchor> anchorsToSave,
+            List<ARSaveOrLoadAnchorResult> outputSaveAnchorResults,
+            CancellationToken cancellationToken = default)
+        {
+            if (anchorsToSave == null)
+                throw new ArgumentNullException(nameof(anchorsToSave));
+
+            if (outputSaveAnchorResults == null)
+                throw new ArgumentNullException(nameof(outputSaveAnchorResults));
+
+            outputSaveAnchorResults.Clear();
+            if (!anchorsToSave.Any())
+                return;
+
+            var anchorIds = new NativeArray<TrackableId>(anchorsToSave.Count(), Allocator.Temp);
+            var anchorsByTrackableId = s_AnchorByTrackableIdMaps.Get();
+            var index = 0;
+            foreach (var anchor in anchorsToSave)
+            {
+                anchorIds[index] = anchor.trackableId;
+                anchorsByTrackableId.Add(anchor.trackableId, anchor);
+                index += 1;
+            }
+
+            var xrSaveAnchorResults = await subsystem.TrySaveAnchorsAsync(
+                anchorIds,
+                Allocator.Temp,
+                cancellationToken);
+
+            for (var i = 0; i < xrSaveAnchorResults.Length; i += 1)
+            {
+                var saveAnchorResult = new ARSaveOrLoadAnchorResult
+                {
+                    resultStatus =  xrSaveAnchorResults[i].resultStatus,
+                    anchor = anchorsByTrackableId[xrSaveAnchorResults[i].trackableId],
+                    savedAnchorGuid = xrSaveAnchorResults[i].savedAnchorGuid,
+                };
+
+                outputSaveAnchorResults.Add(saveAnchorResult);
+            }
+
+            anchorsByTrackableId.Clear();
+            s_AnchorByTrackableIdMaps.Release(anchorsByTrackableId);
         }
 
         /// <summary>
@@ -238,6 +310,97 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Attempts to load a batch of anchors given their persistent anchor GUIDs.
+        /// </summary>
+        /// <param name="savedAnchorGuidsToLoad">The persistent anchor GUIDs created by <see cref="TrySaveAnchorsAsync"/> or
+        /// <see cref="TrySaveAnchorAsync"/>.</param>
+        /// <param name="outputLoadAnchorResults">The list that will be populated with
+        /// results as the runtime loads the anchors.</param>
+        /// <param name="incrementalResultsCallback">A callback method that will be called when any requested
+        /// anchors are loaded. This callback is invoked at least once if any anchors are successfully
+        /// loaded, and possibly multiple times before the async operation completes. Pass a `null` argument for this
+        /// parameter to ignore it.</param>
+        /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
+        /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
+        /// <returns>The result of the async operation. You are responsible to <see langword="await"/> this result.</returns>
+        /// <exception cref="NotSupportedException"> Thrown if
+        /// <see cref="XRAnchorSubsystemDescriptor.supportsLoadAnchor"/> is false for this provider.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the `NativeArray` of anchor GUIDs to load is empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the `IEnumerable` of saved anchor GUIDS is null or the output list for `LoadAnchorResult`s is null.</exception>
+        /// <remarks>
+        /// The order in which anchors are loaded may not match the enumeration order of <paramref name="savedAnchorGuidsToLoad"/>. To check
+        /// if an anchor loaded successfully, check the <see cref="ARSaveOrLoadAnchorResult.resultStatus"/>.
+        /// </remarks>
+        public async Awaitable TryLoadAnchorsAsync(
+            IEnumerable<SerializableGuid> savedAnchorGuidsToLoad,
+            List<ARSaveOrLoadAnchorResult> outputLoadAnchorResults,
+            Action<ReadOnlyListSpan<ARSaveOrLoadAnchorResult>> incrementalResultsCallback,
+            CancellationToken cancellationToken = default)
+        {
+            if (savedAnchorGuidsToLoad == null)
+                throw new ArgumentNullException(nameof(savedAnchorGuidsToLoad));
+
+            if (outputLoadAnchorResults == null)
+                throw new ArgumentNullException(nameof(outputLoadAnchorResults));
+
+            if (!savedAnchorGuidsToLoad.Any())
+                return;
+
+            var savedAnchorGuids = new NativeArray<SerializableGuid>(
+                savedAnchorGuidsToLoad.Count(),
+                Allocator.Persistent);
+
+            var index = 0;
+            foreach (var savedAnchorGuid in savedAnchorGuidsToLoad)
+            {
+                savedAnchorGuids[index] = savedAnchorGuid;
+                index += 1;
+            }
+
+            var completed = 0;
+            var finalLoadAnchorResults = await subsystem.TryLoadAnchorsAsync(
+                savedAnchorGuids,
+                Allocator.Temp,
+                xrLoadAnchorResults =>
+                {
+                    foreach (var xrLoadAnchorResult in xrLoadAnchorResults)
+                    {
+                        var loadAnchorResult = new ARSaveOrLoadAnchorResult
+                        {
+                            resultStatus = xrLoadAnchorResult.resultStatus,
+                            savedAnchorGuid = xrLoadAnchorResult.savedAnchorGuid,
+                            anchor = CreateTrackableImmediate(xrLoadAnchorResult.xrAnchor),
+                        };
+
+                        outputLoadAnchorResults.Add(loadAnchorResult);
+                    }
+
+                    var loadAnchorResults = new ReadOnlyListSpan<ARSaveOrLoadAnchorResult>(
+                        outputLoadAnchorResults,
+                        completed,
+                        xrLoadAnchorResults.Length);
+
+                    incrementalResultsCallback?.Invoke(loadAnchorResults);
+                    completed = outputLoadAnchorResults.Count;
+                },
+                cancellationToken);
+
+            for (var i = outputLoadAnchorResults.Count; i < finalLoadAnchorResults.Length; i += 1)
+            {
+                var failedAnchorResult = new ARSaveOrLoadAnchorResult
+                {
+                    resultStatus = finalLoadAnchorResults[i].resultStatus,
+                    savedAnchorGuid = finalLoadAnchorResults[i].savedAnchorGuid,
+                    anchor = null,
+                };
+
+                outputLoadAnchorResults.Add(failedAnchorResult);
+            }
+
+            savedAnchorGuids.Dispose();
+        }
+
+        /// <summary>
         /// Attempts to erase the persistent saved data associated with an anchor given its persistent anchor GUID.
         /// </summary>
         /// <param name="savedAnchorGuid">A persistent anchor GUID created by <see cref="TrySaveAnchorAsync"/>.</param>
@@ -249,6 +412,57 @@ namespace UnityEngine.XR.ARFoundation
             SerializableGuid savedAnchorGuid, CancellationToken cancellationToken = default)
         {
             return subsystem.TryEraseAnchorAsync(savedAnchorGuid, cancellationToken);
+        }
+
+        /// <summary>
+        /// Attempts to erase the persistent saved data associated with a batch of anchors given their persistent anchor
+        /// GUIDs.</summary>
+        /// <param name="savedAnchorGuidsToErase">The persistent anchor GUIDs created by <see cref="TrySaveAnchorAsync"/> or
+        /// <see cref="TrySaveAnchorsAsync"/>.</param>
+        /// <param name="outputEraseAnchorResults">The output list that will be cleared and populated with `EraseAnchorResult`s.</param>
+        /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
+        /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
+        /// <returns>The result of the async operation. You are responsible to <see langword="await"/> this result.</returns>
+        /// <exception cref="NotSupportedException">Thrown if
+        /// <see cref="XRAnchorSubsystemDescriptor.supportsEraseAnchor"/> is false for this provider.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the `IEnumerable` of anchor GUIDs to erase is null or the output list of `EraseAnchorResult`s is null.</exception>
+        public async Awaitable TryEraseAnchorsAsync(
+            IEnumerable<SerializableGuid> savedAnchorGuidsToErase,
+            List<XREraseAnchorResult> outputEraseAnchorResults,
+            CancellationToken cancellationToken = default)
+        {
+            if (savedAnchorGuidsToErase == null)
+                throw new ArgumentNullException(nameof(savedAnchorGuidsToErase));
+
+            if (outputEraseAnchorResults == null)
+                throw new ArgumentNullException(nameof(outputEraseAnchorResults));
+
+            if (!savedAnchorGuidsToErase.Any())
+                return;
+
+            var nativeSavedAnchorGuids = new NativeArray<SerializableGuid>(
+                savedAnchorGuidsToErase.Count(),
+                Allocator.Persistent);
+
+            var index = 0;
+            foreach (var savedAnchorGuid in savedAnchorGuidsToErase)
+            {
+                nativeSavedAnchorGuids[index] = savedAnchorGuid;
+                index += 1;
+            }
+
+            var eraseAnchorResults = await subsystem.TryEraseAnchorsAsync(
+                nativeSavedAnchorGuids,
+                Allocator.Temp,
+                cancellationToken);
+
+            outputEraseAnchorResults.Clear();
+            foreach (var eraseAnchorResult in eraseAnchorResults)
+            {
+                outputEraseAnchorResults.Add(eraseAnchorResult);
+            }
+
+            nativeSavedAnchorGuids.Dispose();
         }
 
         /// <summary>

@@ -102,6 +102,30 @@ namespace UnityEngine.XR.ARSubsystems
         public XROcclusionSubsystem() { }
 
         /// <summary>
+        /// Get all the texture descriptors in the provider's swapchain, if possible.
+        /// Must return <see langword="false"/> if the provider does not use a fixed-length swapchain.
+        /// </summary>
+        /// <param name="swapchainDescriptors">All texture descriptors in the provider's swapchain,
+        /// if this method returns <see langword="true"/>. Each texture descriptor represents a possible value used by
+        /// call to <see cref="GetTextureDescriptors"/> on a later frame. Allocator is `Allocator.Temp`.
+        ///
+        /// Texture descriptors are grouped per frame. All texture descriptors that are used within one frame must
+        /// be grouped together in the same inner array.
+        /// </param>
+        /// <returns><see langword="true"/> if the provider uses a fixed-length swapchain and all texture
+        /// descriptors were successfully output. Otherwise, <see langword="false"/>.</returns>
+        /// <remarks>
+        /// This method is used by the [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) during
+        /// `OnBeforeStart` to determine whether the provider uses a fixed-length swapchain of fixed-size textures.
+        /// If so, `AROcclusionManager` is able to create Unity `Texture` objects for the entire swapchain at once and
+        /// re-use them throughout the life cycle of your app.
+        /// </remarks>
+        /// <seealso cref="GetTextureDescriptors"/>
+        public bool TryGetSwapchainTextureDescriptors(
+            out NativeArray<NativeArray<XRTextureDescriptor>> swapchainDescriptors)
+            => provider.TryGetAllTextureDescriptorsInSwapchain(out swapchainDescriptors);
+
+        /// <summary>
         /// Gets the human stencil texture descriptor.
         /// </summary>
         /// <param name="humanStencilDescriptor">The human stencil texture descriptor to be populated, if available
@@ -282,12 +306,6 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Shader property ID for the depth view-projection matrix array.
-        /// Any `ARShaderOcclusion` components in your scene will write to this property.
-        /// </summary>
-        public int depthViewProjectionMatricesPropertyId => provider.depthViewProjectionMatricesPropertyId;
-
-        /// <summary>
         /// Gets the occlusion texture descriptors associated with the current AR frame.
         /// </summary>
         /// <param name="allocator">The allocator to use when creating the returned <c>NativeArray</c>.</param>
@@ -326,8 +344,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get the enabled and disabled shader keywords for the material.
         /// </summary>
         /// <returns>Returns an <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
-        public ShaderKeywords GetShaderKeywords()
-            => provider.GetShaderKeywords();
+        [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
+        public ShaderKeywords GetShaderKeywords() => provider.GetShaderKeywords();
+
+        /// <summary>
+        /// Get the shader keywords that are enabled or disabled by the provider.
+        /// </summary>
+        /// <returns>The enabled and disabled shader keywords.</returns>
+        public XRShaderKeywords GetShaderKeywords2() => provider.GetShaderKeywords2();
 
         /// <summary>
         /// Register the descriptor for the occlusion subsystem implementation.
@@ -338,7 +362,7 @@ namespace UnityEngine.XR.ARSubsystems
         [Obsolete("XROcclusionSubsystem.Register(XROcclusionSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XROcclusionSubsystemDescriptor.Register(XROcclusionSubsystemDescriptor.Cinfo) instead.")]
         public static bool Register(XROcclusionSubsystemCinfo occlusionSubsystemCinfo)
         {
-            var occlusionSubsystemInfo = new XROcclusionSubsystemDescriptor.Cinfo()
+            var occlusionSubsystemInfo = new XROcclusionSubsystemDescriptor.Cinfo
             {
                 id = occlusionSubsystemCinfo.id,
                 providerType = occlusionSubsystemCinfo.providerType,
@@ -349,6 +373,7 @@ namespace UnityEngine.XR.ARSubsystems
                 environmentDepthConfidenceImageSupportedDelegate = occlusionSubsystemCinfo.environmentDepthConfidenceImageSupportedDelegate,
                 environmentDepthTemporalSmoothingSupportedDelegate = occlusionSubsystemCinfo.environmentDepthTemporalSmoothingSupportedDelegate
             };
+
             XROcclusionSubsystemDescriptor.Register(occlusionSubsystemInfo);
             return true;
         }
@@ -464,6 +489,31 @@ namespace UnityEngine.XR.ARSubsystems
             public virtual OcclusionPreferenceMode currentOcclusionPreferenceMode => default;
 
             /// <summary>
+            /// Get all the texture descriptors in the provider's swapchain, if possible.
+            /// Must return <see langword="false"/> if the provider does not use a fixed-length swapchain.
+            /// </summary>
+            /// <param name="swapchainDescriptors">All texture descriptors in the provider's swapchain,
+            /// if this method returns <see langword="true"/>. Each texture descriptor represents a possible value used by
+            /// call to <see cref="GetTextureDescriptors"/> on a later frame. Allocator is `Allocator.Temp`.
+            ///
+            /// Texture descriptors are grouped per frame. All texture descriptors that are used within one frame must
+            /// be grouped together in the same inner array.</param>
+            /// <returns><see langword="true"/> if the provider uses a fixed-length swapchain and all texture
+            /// descriptors were successfully output. Otherwise, <see langword="false"/>.</returns>
+            /// <remarks>
+            /// This method is used by the [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) during
+            /// `OnBeforeStart` to determine whether the provider uses a fixed-length swapchain of fixed-size textures.
+            /// If so, `AROcclusionManager` is able to create Unity `Texture` objects for the entire swapchain at once
+            /// and re-use them throughout the life cycle of your app.
+            /// </remarks>
+            public virtual bool TryGetAllTextureDescriptorsInSwapchain(
+                out NativeArray<NativeArray<XRTextureDescriptor>> swapchainDescriptors)
+            {
+                swapchainDescriptors = default;
+                return false;
+            }
+
+            /// <summary>
             /// Get the current occlusion frame.
             /// </summary>
             /// <param name="allocator">The allocator to use for any <see cref="NativeArray{T}"/>s contained in the frame.</param>
@@ -471,8 +521,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// <returns><see langword="true"/> if the method successfully got a frame. Otherwise, <see langword="false"/>.</returns>
             public virtual XRResultStatus TryGetFrame(Allocator allocator, out XROcclusionFrame frame)
             {
+                // This API was added in AR Foundation 6.1. In order for this to not be a breaking change for providers
+                // that don't implement this method, the default implementation must return `true`.
                 frame = default;
-                return false;
+                return true;
             }
 
             /// <summary>
@@ -630,15 +682,6 @@ namespace UnityEngine.XR.ARSubsystems
             /// <value>The environment depth confidence CPU image API.</value>
             public virtual XRCpuImage.Api environmentDepthConfidenceCpuImageApi => null;
 
-            const string k_defaultDepthViewProjectionMatricesPropertyName = "_DepthVPMatrices";
-            int m_depthViewProjectionMatricesPropertyId = Shader.PropertyToID(k_defaultDepthViewProjectionMatricesPropertyName);
-
-            /// <summary>
-            /// Shader property ID for the depth view-projection matrix array.
-            /// Any `ARShaderOcclusion` components in your scene will write to this property.
-            /// </summary>
-            public virtual int depthViewProjectionMatricesPropertyId => m_depthViewProjectionMatricesPropertyId;
-
             /// <summary>
             /// Method to be implemented by the provider to get the occlusion texture descriptors associated with the
             /// current AR frame.
@@ -666,10 +709,14 @@ namespace UnityEngine.XR.ARSubsystems
             /// Get the enabled and disabled shader keywords for the material.
             /// </summary>
             /// <returns>The enabled and disabled shader keywords for the Material.</returns>
-            public virtual ShaderKeywords GetShaderKeywords()
-            {
-                return default;
-            }
+            [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
+            public virtual ShaderKeywords GetShaderKeywords() => default;
+
+            /// <summary>
+            /// Get the shader keywords that are enabled or disabled by the provider.
+            /// </summary>
+            /// <returns>The enabled and disabled shader keywords.</returns>
+            public virtual XRShaderKeywords GetShaderKeywords2() => default;
         }
     }
 }

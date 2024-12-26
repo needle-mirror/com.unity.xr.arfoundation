@@ -238,8 +238,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// real values. This ensures future additions to this <see langword="struct"/> are backwards compatible.</param>
             /// <param name="allocator">The allocation strategy to use for the returned data.</param>
             /// <returns>The supported camera configurations.</returns>
-            public virtual NativeArray<XRCameraConfiguration> GetConfigurations(XRCameraConfiguration defaultCameraConfiguration,
-                                                                                Allocator allocator)
+            public virtual NativeArray<XRCameraConfiguration> GetConfigurations(
+                XRCameraConfiguration defaultCameraConfiguration,
+                Allocator allocator)
             {
                 return new NativeArray<XRCameraConfiguration>(0, allocator);
             }
@@ -263,7 +264,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="enabledKeywords">The keywords to enable for the Material.</param>
             /// <param name="disabledKeywords">The keywords to disable for the Material.</param>
-            [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.")]
+            [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords2 instead.")]
             public virtual void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
             {
                 enabledKeywords = null;
@@ -274,10 +275,14 @@ namespace UnityEngine.XR.ARSubsystems
             /// Get the enabled and disabled shader keywords for the Material.
             /// </summary>
             /// <returns>Returns an <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
-            public virtual ShaderKeywords GetShaderKeywords()
-            {
-                return default;
-            }
+            [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
+            public virtual ShaderKeywords GetShaderKeywords() => default;
+
+            /// <summary>
+            /// Get the shader keywords that are enabled or disabled by the provider.
+            /// </summary>
+            /// <returns>The enabled and disabled shader keywords.</returns>
+            public virtual XRShaderKeywords GetShaderKeywords2() => default;
 
             /// <summary>
             /// Get the latest native camera image.
@@ -584,7 +589,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="enabledKeywords">The keywords to enable for the material.</param>
         /// <param name="disabledKeywords">The keywords to disable for the material.</param>
-        [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.")]
+        [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords2 instead.")]
         public void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
             => provider.GetMaterialKeywords(out enabledKeywords, out disabledKeywords);
 
@@ -592,8 +597,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get the enabled and disabled shader keywords for the material.
         /// </summary>
         /// <returns>Returns an <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
-        public ShaderKeywords GetShaderKeywords()
-            => provider.GetShaderKeywords();
+        [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
+        public ShaderKeywords GetShaderKeywords() => provider.GetShaderKeywords();
+
+        /// <summary>
+        /// Get the shader keywords that are enabled or disabled by the provider.
+        /// </summary>
+        /// <returns>The enabled and disabled shader keywords.</returns>
+        public XRShaderKeywords GetShaderKeywords2() => provider.GetShaderKeywords2();
 
         /// <summary>
         /// Attempts to acquire the latest camera image. This provides direct access to the raw pixel data, as well as

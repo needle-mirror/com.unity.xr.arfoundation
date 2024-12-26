@@ -49,7 +49,6 @@ Some provider plug-ins require that you set specific project settings for AR to 
 | [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.1/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.1/manual/project-configuration-arcore.html) |
 | [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/manual/index.html) | [Project configuration](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/manual/project-configuration-arkit.html) |
 
-
 ## Third-party plug-ins
 
 It is possible to develop custom provider plug-ins for AR Foundation. If you are using a third-party provider plug-in, see your plug-in documentation for more specific instructions regarding installation and use.

@@ -32,21 +32,12 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Generates a string representation of this instance suitable for debugging purposes.
-        /// </summary>
-        /// <returns>The string.</returns>
-        public override string ToString() => $"{{\n  nearZ: {m_NearZ}\n  farZ: {m_FarZ}\n}}";
-
-        /// <summary>
         /// Indicates whether this instance is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this instance.</param>
         /// <returns><see langword="true"/> if this instance is equal to <paramref name="other"/>.
         /// Otherwise, <see langword="false"/>.</returns>
-        public bool Equals(XRNearFarPlanes other)
-        {
-            return m_NearZ.Equals(other.m_NearZ) && m_FarZ.Equals(other.m_FarZ);
-        }
+        public bool Equals(XRNearFarPlanes other) => m_NearZ.Equals(other.m_NearZ) && m_FarZ.Equals(other.m_FarZ);
 
         /// <summary>
         /// Indicates whether this instance is equal to another object.
@@ -55,18 +46,18 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="obj">An object to compare with this instance.</param>
         /// <returns><see langword="true"/> if this instance is equal to <paramref name="obj"/>.
         /// Otherwise, <see langword="false"/>.</returns>
-        public override bool Equals(object obj)
-        {
-            return obj is XRNearFarPlanes other && Equals(other);
-        }
+        public override bool Equals(object obj) => obj is XRNearFarPlanes other && Equals(other);
 
         /// <summary>
         /// Get a hash code for this instance.
         /// </summary>
         /// <returns>The hash code.</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(m_NearZ, m_FarZ);
-        }
+        public override int GetHashCode() => HashCode.Combine(m_NearZ, m_FarZ);
+
+        /// <summary>
+        /// Generates a string representation of this instance suitable for debugging purposes.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString() => $"{{\n  nearZ: {m_NearZ}\n  farZ: {m_FarZ}\n}}";
     }
 }

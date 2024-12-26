@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine.SubsystemsImplementation;
 using UnityEngine.XR.ARFoundation.InternalUtils;
-using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -24,9 +22,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The descriptor for the subsystem.
         /// </summary>
-        /// <value>
-        /// The descriptor for the subsystem.
-        /// </value>
+        /// <value>The descriptor for the subsystem.</value>
         public TSubsystemDescriptor descriptor => subsystem?.subsystemDescriptor;
 
         /// <summary>
@@ -102,11 +98,5 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected virtual void OnAfterStart()
         { }
-
-        static List<TSubsystemDescriptor> s_SubsystemDescriptors =
-            new List<TSubsystemDescriptor>();
-
-        static List<TSubsystem> s_SubsystemInstances =
-            new List<TSubsystem>();
     }
 }

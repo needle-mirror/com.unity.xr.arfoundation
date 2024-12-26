@@ -101,6 +101,7 @@ namespace UnityEngine.XR.Simulation
                 // s_Instance static member will get set.
                 go.AddComponent<SimulationCameraPoseProvider>();
                 go.AddComponent<Camera>().enabled = false;
+                go.AddComponent<SimulatedExifData>();
             }
 
             return s_Instance;

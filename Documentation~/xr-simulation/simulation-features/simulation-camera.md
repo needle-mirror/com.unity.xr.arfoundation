@@ -29,9 +29,25 @@ XR Simulation implements the following optional features of AR Foundation's [XRC
 | **World tracking HDR light estimation** | [supportsWorldTrackingHDRLightEstimation](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsWorldTrackingHDRLightEstimation) | |
 | **Camera grain** | [supportsCameraGrain](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsCameraGrain) | |
 | **Image stabilization** | [supportsImageStabilization](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsImageStabilization) | |
-| **Exif data** | [supportsExifData](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsExifData) | |
+| **Exif data** | [supportsExifData](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsExifData) | Yes |
+| **Camera torch mode** | [supportsCameraTorchMode](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor.supportsCameraTorchMode) | Yes |
 
 > [!NOTE]
 > Refer to AR Foundation [Camera platform support](xref:arfoundation-camera-platform-support) for more information
 > on the optional features of the camera subsystem.
 
+## EXIF data
+
+In XR Simulation, a Simulated Exif Data component is added to the simulated camera GameObject to simulate AR Foundation's [EXIF data](xref:arfoundation-exif-data) feature.
+
+![Simulated EXIF data component](../../images/simulated-exif-data.png)<br/>*Simulated EXIF data component*
+
+| Property                     | Description                           |
+| :--------------------------- | :------------------------------------ |
+| **Aperture Value**           | The lens aperture.                    |
+| **Exposure Bias Value**      | The exposure bias.                    |
+| **Focal Length**             | The lens focal length in millimeters. |
+| **Metering Mode**            | The metering mode.                    |
+| **Photographic Sensitivity** | The photographic sensitivity (ISO).   |
+
+XR Simulation uses the provided values as the simulated camera’s physical specifications and calculates corresponding EXIF tag values.

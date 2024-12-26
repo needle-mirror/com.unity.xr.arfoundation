@@ -28,7 +28,7 @@ You can subscribe to `trackablesChanged` using either the Inspector window or C#
 
 1. Create a public method on a `MonoBehaviour` or `ScriptableObject` with a single parameter of type [ARTrackablesChangedEventArgs\<ARBoundingBox\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1), as shown in the example code below:
 
-[!code-cs[BoundingBoxesChanged](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#BoundingBoxesChanged)]
+[!code-cs[BoundingBoxesChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#BoundingBoxesChanged)]
 
 2. Select your XR Origin GameObject, then click the **Add (+)** button on the AR Bounding Box Manager component's **trackablesChanged** property.
 
@@ -44,7 +44,7 @@ You can subscribe to `trackablesChanged` using either the Inspector window or C#
 
 2. Use the example code below to subscribe to the `trackablesChanged` event:
 
-[!code-cs[BoundingBoxSubscribe](../../../Tests/CodeSamples/ARTrackableManagerSamples.cs#BoundingBoxSubscribe)]
+[!code-cs[BoundingBoxSubscribe](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#BoundingBoxSubscribe)]
 
 ### Visualize bounding boxes in the scene
 
