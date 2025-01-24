@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.5] - 2025-01-24
+
+### Fixed
+
+- Fixed the `SimulationEnvironmentProbeSubsystem` so that [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes can be enabled or disabled, as is possible on other AR platforms.
+- Fixed the AR Environment Probe Manager component so that it can no longer throw an `ArgumentNullException` when you unload a scene containing one or more environment probes.
+
 ## [6.0.4] - 2024-12-05
 
 ### Fixed

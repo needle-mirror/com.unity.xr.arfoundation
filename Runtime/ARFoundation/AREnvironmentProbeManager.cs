@@ -170,10 +170,7 @@ namespace UnityEngine.XR.ARFoundation
 
         internal bool TryRemoveEnvironmentProbe(AREnvironmentProbe probe)
         {
-            if (probe == null)
-                throw new ArgumentNullException(nameof(probe));
-
-            if (subsystem == null)
+            if (probe == null || subsystem == null)
                 return false;
 
             var desc = descriptor;
@@ -219,6 +216,13 @@ namespace UnityEngine.XR.ARFoundation
             SetAutomaticPlacementStateOnSubsystem();
             SetEnvironmentTextureHDRStateOnSubsystem();
         }
+
+#if UNITY_EDITOR
+        void OnValidate()
+        {
+            SetAutomaticPlacementStateOnSubsystem();
+        }
+#endif // UNITY_EDITOR
 
         /// <summary>
         /// Destroys any game objects created by this environment probe manager for each environment probe, and clears
