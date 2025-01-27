@@ -12,6 +12,7 @@ Occlusion is supported on the ARCore, ARKit, and XR Simulation platforms, as sho
 | Apple visionOS XR Plug-in | | |
 | Microsoft HoloLens | | |
 | Unity OpenXR: Meta | | |
+| Unity OpenXR: Android XR | Yes | [Occlusion](xref:androidxr-openxr-occlusion) (Android XR) |
 | XR Simulation | Yes | [Occlusion](xref:arfoundation-simulation-occlusion) (XR Simulation) |
 
 ## Check for occlusion support
@@ -40,13 +41,13 @@ The following table describes the optional features of the [XROcclusionSubsystem
 
 Occlusion providers may choose whether to implement any of the optional features of AR Foundation's [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem), as indicated in the following table:
 
-| Feature | ARCore | ARKit | XR Simulation |
-| :------ | :----: | :---: | :-----------: |
-| **Environment Depth Image** | Yes | Yes | Yes |
-| **Environment Depth Confidence Image** | Yes | Yes | |
-| **Environment Depth Temporal Smoothing** | Yes | Yes | |
-| **Human Segmentation Stencil Image** | | Yes | |
-| **Human Segmentation Depth Image** | | Yes | |
+| Feature | ARCore | ARKit | Android XR | XR Simulation |
+| :------ | :----: | :---: | :--------: |:-----------: |
+| **Environment Depth Image** | Yes | Yes | Yes | Yes |
+| **Environment Depth Confidence Image** | Yes | Yes | Yes | |
+| **Environment Depth Temporal Smoothing** | Yes | Yes | Yes | |
+| **Human Segmentation Stencil Image** | | Yes | | |
+| **Human Segmentation Depth Image** | | Yes | | |
 
 <a id="check-feature-support"></a>
 

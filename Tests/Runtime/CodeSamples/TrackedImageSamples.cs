@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine.XR.ARSubsystems;
 
-namespace UnityEngine.XR.ARFoundation
+namespace UnityEngine.XR.ARFoundation.Tests
 {
     [TestFixture]
     class TrackedImageSamples
@@ -11,15 +11,59 @@ namespace UnityEngine.XR.ARFoundation
         // Disable "field never assigned to"
         #pragma warning disable CS0649
 
+        #region trackedimage_addmanager_to_gameobject
+        void AddManagerToGameObject(GameObject g, XRReferenceImageLibrary library)
+        {
+            var manager = g.AddComponent<ARTrackedImageManager>();
+            manager.referenceLibrary = library;
+            manager.enabled = true;
+        }
+        #endregion
+
+        #region trackedimage_setlibrary
+        void SetLibrary(ARTrackedImageManager manager, XRReferenceImageLibrary library)
+        {
+            manager.referenceLibrary = library;
+        }
+        #endregion
+
+        #region trackedimage_createruntimelibraryfromserialized
+        void CreateRuntimeLibrary(ARTrackedImageManager m, XRReferenceImageLibrary lib)
+        {
+            var runtimeLibrary = m.CreateRuntimeLibrary(lib);
+        }
+        #endregion
+
+        #region trackedimage_createemptyruntimelibrary
+        void CreateEmptyRuntimeLibrary(ARTrackedImageManager m)
+        {
+            var runtimeLibrary = m.CreateRuntimeLibrary();
+        }
+        #endregion
+
+        #region trackedimage_addtomutablelibrary
+        void AddImage(
+            ARTrackedImageManager m, RuntimeReferenceImageLibrary lib, Texture2D tex)
+        {
+            if (lib is MutableRuntimeReferenceImageLibrary mutableLibrary)
+            {
+                mutableLibrary.ScheduleAddImageWithValidationJob(
+                    tex,
+                    "my new image",
+                    0.5f /* 50 cm */);
+            }
+        }
+        #endregion
+
         class EnumerateTrackables
         {
             #region trackedimage_subscribe_to_events
             [SerializeField]
-            ARTrackedImageManager m_TrackedImageManager;
+            ARTrackedImageManager m_ImageManager;
 
-            void OnEnable() => m_TrackedImageManager.trackablesChanged.AddListener(OnChanged);
+            void OnEnable() => m_ImageManager.trackablesChanged.AddListener(OnChanged);
 
-            void OnDisable() => m_TrackedImageManager.trackablesChanged.RemoveListener(OnChanged);
+            void OnDisable() => m_ImageManager.trackablesChanged.RemoveListener(OnChanged);
 
             void OnChanged(ARTrackablesChangedEventArgs<ARTrackedImage> eventArgs)
             {
@@ -33,131 +77,58 @@ namespace UnityEngine.XR.ARFoundation
                     // Handle updated event
                 }
 
-                foreach (var removedImage in eventArgs.removed)
+                foreach (var removed in eventArgs.removed)
                 {
                     // Handle removed event
+                    TrackableId removedImageTrackableId = removed.Key;
+                    ARTrackedImage removedImage = removed.Value;
                 }
-            }
-            #endregion
-
-            #region trackedimage_enumerate_trackables
-            void ListAllImages()
-            {
-                Debug.Log(
-                    $"There are {m_TrackedImageManager.trackables.count} images being tracked.");
-
-                foreach (var trackedImage in m_TrackedImageManager.trackables)
-                {
-                    Debug.Log($"Image: {trackedImage.referenceImage.name} is at " +
-                              $"{trackedImage.transform.position}");
-                }
-            }
-            #endregion
-
-            #region trackedimage_get_by_trackableId
-            ARTrackedImage GetImageAt(TrackableId trackableId)
-            {
-                return m_TrackedImageManager.trackables[trackableId];
             }
             #endregion
         }
 
-        class ScheduleAddImageJob
+        #region trackedimage_DeallocateOnJobCompletion
+        [SerializeField]
+        ARTrackedImageManager m_Manager;
+
+        struct DeallocateJob : IJob
         {
-            #region trackedimage_ScheduleAddImageJob
-            [SerializeField]
-            ARTrackedImageManager m_TrackedImageManager;
+            [DeallocateOnJobCompletion]
+            public NativeArray<byte> data;
 
-            void AddImage(Texture2D imageToAdd)
-            {
-                if (!(ARSession.state == ARSessionState.SessionInitializing || ARSession.state == ARSessionState.SessionTracking))
-                    return; // Session state is invalid
-
-                if (m_TrackedImageManager.referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
-                {
-                    mutableLibrary.ScheduleAddImageWithValidationJob(
-                        imageToAdd,
-                        "my new image",
-                        0.5f /* 50 cm */);
-                }
-            }
-            #endregion
-
-            #region trackedimage_DeallocateOnJobCompletion
-            struct DeallocateJob : IJob
-            {
-                [DeallocateOnJobCompletion]
-                public NativeArray<byte> data;
-
-                public void Execute() { }
-            }
-
-            void AddImage(NativeArray<byte> grayscaleImageBytes,
-                          int widthInPixels, int heightInPixels,
-                          float widthInMeters)
-            {
-                if (!(ARSession.state == ARSessionState.SessionInitializing || ARSession.state == ARSessionState.SessionTracking))
-                    return; // Session state is invalid
-
-                if (m_TrackedImageManager.referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
-                {
-                    var aspectRatio = (float)widthInPixels / (float)heightInPixels;
-                    var sizeInMeters = new Vector2(widthInMeters, widthInMeters * aspectRatio);
-                    var referenceImage = new XRReferenceImage(
-                        // Guid is assigned after image is added
-                        SerializableGuid.empty,
-                        // No texture associated with this reference image
-                        SerializableGuid.empty,
-                        sizeInMeters, "My Image", null);
-
-                    var jobState = mutableLibrary.ScheduleAddImageWithValidationJob(
-                        grayscaleImageBytes,
-                        new Vector2Int(widthInPixels, heightInPixels),
-                        TextureFormat.R8,
-                        referenceImage);
-
-                    // Schedule a job that deallocates the image bytes after the image
-                    // is added to the reference image library.
-                    new DeallocateJob { data = grayscaleImageBytes }.Schedule(jobState.jobHandle);
-                }
-                else
-                {
-                    // Cannot add the image, so dispose its memory.
-                    grayscaleImageBytes.Dispose();
-                }
-            }
-            #endregion
+            public void Execute() { }
         }
 
-        class CreateRuntimeLibrary
+        void AddImage(NativeArray<byte> grayscaleImageBytes,
+                      int widthInPixels, int heightInPixels, float widthInMeters)
         {
-            [SerializeField]
-            ARTrackedImageManager m_TrackedImageManager;
-
-            #region trackedimage_CreateRuntimeLibrary
-            void AddImage(Texture2D imageToAdd)
+            if (m_Manager.referenceLibrary is MutableRuntimeReferenceImageLibrary lib)
             {
-                if (!(ARSession.state == ARSessionState.SessionInitializing || ARSession.state == ARSessionState.SessionTracking))
-                    return; // Session state is invalid
+                var aspectRatio = (float)widthInPixels / (float)heightInPixels;
+                var sizeInMeters = new Vector2(widthInMeters, widthInMeters * aspectRatio);
+                var referenceImage = new XRReferenceImage(
+                    SerializableGuid.empty, // Guid is assigned after image is added
+                    SerializableGuid.empty, // We don't have a Texture2D
+                    sizeInMeters, "My Image", null);
 
-                var library = m_TrackedImageManager.CreateRuntimeLibrary();
-                if (library is MutableRuntimeReferenceImageLibrary mutableLibrary)
-                {
-                    mutableLibrary.ScheduleAddImageWithValidationJob(
-                        imageToAdd,
-                        "my new image",
-                        0.5f /* 50 cm */);
-                }
+                var jobState = lib.ScheduleAddImageWithValidationJob(
+                    grayscaleImageBytes,
+                    new Vector2Int(widthInPixels, heightInPixels),
+                    TextureFormat.R8,
+                    referenceImage);
+
+                // Schedule a job that deallocates the image bytes after the image
+                // is added to the reference image library.
+                new DeallocateJob { data = grayscaleImageBytes }
+                    .Schedule(jobState.jobHandle);
             }
-            #endregion
-
-            #region trackedimage_supportsMutableLibrary
-            bool DoesSupportMutableImageLibraries()
+            else
             {
-                return m_TrackedImageManager.descriptor.supportsMutableLibrary;
+                // Cannot add the image, so dispose its memory.
+                grayscaleImageBytes.Dispose();
             }
-            #endregion
         }
+        #endregion
 
         #pragma warning restore CS0649
     }

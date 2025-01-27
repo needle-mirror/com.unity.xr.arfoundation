@@ -16,11 +16,12 @@ The AR Foundation package contains interfaces for AR features, but doesn't imple
 
 Unity officially supports the following provider plug-ins:
 
-* [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@6.1/manual/index.html) on Android
-* [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@6.1/manual/index.html) on iOS
-* [Apple visionOS XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.visionos@1.1/manual/index.html) on visionOS
-* [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html) on HoloLens 2
-* [Unity OpenXR: Meta](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@latest) on Meta Quest
+* [Google ARCore XR Plug-in](xref:arcore-manual) on Android
+* [Apple ARKit XR Plug-in](xref:arkit-manual) on iOS
+* [Apple visionOS XR Plug-in](xref:vosxr-manual) on visionOS
+* [OpenXR Plug-in](xref:openxr-manual) on HoloLens 2
+* [Unity OpenXR: Meta](xref:meta-openxr-manual) on Meta Quest
+* [Unity OpenXR: Android XR](xref:androidxr-openxr-manual) on Android XR
 
 > [!IMPORTANT]
 > AR Foundation will not work on a target platform unless you also install the provider plug-in package for that platform. Refer to [Install AR Foundation](xref:arfoundation-install) for detailed setup instructions.
@@ -54,14 +55,14 @@ AR Foundation provider plug-ins rely on platform implementations of AR features,
 
 Some AR Foundation features are available in [XR Simulation](xref:arfoundation-simulation-overview) to test your AR app in the Unity Editor.
 
-The table below lists the available features in each Unity-supported provider plug-in:
+The following table lists the available features in each Unity-supported provider plug-in:
 
 <table>
   <tr>
     <td rowspan="2" style="vertical-align: bottom; background-color: #ffffff;"><strong>Feature</strong></td>
     <td style="text-align: center">ARCore</td>
     <td colspan="2" style="text-align: center">ARKit</td>
-    <td colspan="2" style="text-align: center">OpenXR</td>
+    <td colspan="3" style="text-align: center">OpenXR</td>
     <td colspan="1" style="text-align: center">XR Simulation</td>
   </tr>
   <tr style="border-bottom: 2px solid #dddddd">
@@ -70,6 +71,7 @@ The table below lists the available features in each Unity-supported provider pl
     <th style="text-align: center">visionOS</th>
     <th style="text-align: center">Microsoft HoloLens</th>
     <th style="text-align: center">Meta Quest</th>
+    <th style="text-align: center">Android XR</th>
     <th style="text-align: center">Unity Editor</th>
   </tr>
   <tr>
@@ -79,6 +81,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td> <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -88,6 +91,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -97,6 +101,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td> <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -106,15 +111,17 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td> <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/bounding-box-detection.md">Bounding Box detection</a></td>
-    <td style="text-align: center"></td> <!-- Android -->
-    <td style="text-align: center"></td> <!-- iOS -->
-    <td style="text-align: center"></td> <!-- visionOS -->
-    <td style="text-align: center"></td> <!-- HoloLens -->
+    <td style="text-align: center"></td>    <!-- Android -->
+    <td style="text-align: center"></td>    <!-- iOS -->
+    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -124,7 +131,8 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-   <td style="text-align: center">Yes</td> <!-- Unity Editor -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
+   <td style="text-align: center">Yes</td>  <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/object-tracking.md">Object tracking</a></td>
@@ -133,7 +141,8 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td> <!-- Unity Editor -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
+    <td style="text-align: center"></td>    <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/face-tracking.md">Face tracking</a></td>
@@ -142,7 +151,8 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td> <!-- Unity Editor -->
+    <td style="text-align: center">Yes</td> <!-- Android XR -->
+    <td style="text-align: center"></td>    <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/body-tracking.md">Body tracking</a></td>
@@ -151,7 +161,8 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td> <!-- Unity Editor -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
+    <td style="text-align: center"></td>    <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/point-clouds.md">Point clouds</a></td>
@@ -160,6 +171,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -169,6 +181,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td> <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -178,6 +191,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
     <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td> <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -186,16 +200,18 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center">Yes</td> <!-- iOS -->
     <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center">Yes</td> <!-- HoloLens -->
-    <td style="text-align: center">Yes</td>    <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td> <!-- Meta Quest -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
     <td><a href="features/environment-probes.md">Environment probes</a></td>
     <td style="text-align: center">Yes</td> <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center">Yes</td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -205,6 +221,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
+    <td style="text-align: center">Yes</td> <!-- Android XR -->
     <td style="text-align: center">Yes</td> <!-- Unity Editor -->
   </tr>
   <tr>
@@ -214,7 +231,8 @@ The table below lists the available features in each Unity-supported provider pl
     <td style="text-align: center"></td>    <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
-    <td style="text-align: center"></td> <!-- Unity Editor -->
+    <td style="text-align: center"></td>    <!-- Android XR -->
+    <td style="text-align: center"></td>    <!-- Unity Editor -->
   </tr>
 </table>
 

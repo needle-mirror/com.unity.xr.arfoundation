@@ -293,6 +293,6 @@ namespace UnityEngine.XR.ARFoundation
         {
              requestedDetectionMode = m_DetectionMode;
         }
-#endif //#if UNITY_EDITOR
+#endif // UNITY_EDITOR
     }
 }

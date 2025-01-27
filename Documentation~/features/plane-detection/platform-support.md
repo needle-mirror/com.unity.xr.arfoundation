@@ -12,6 +12,7 @@ Plane detection is supported on the ARCore, ARKit, Meta OpenXR and XR Simulation
 | Apple visionOS XR Plug-in | Yes | N/A |
 | Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Plane detection](xref:meta-openxr-planes) (Meta OpenXR) |
+| Unity OpenXR: Android XR | Yes | [Plane detection](xref:androidxr-openxr-plane-detection) (Android XR) |
 | XR Simulation | Yes | N/A |
 
 ## Check for plane detection support
@@ -28,13 +29,13 @@ Use the example code below to check whether the device supports plane detection:
 
 Plane detection providers may choose whether to implement any of the optional features of AR Foundation's [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem), as indicated in the table below:
 
-| Feature | Description | ARCore | ARKit | Meta OpenXR | XR Simulation |
-| :------ | :---------- | :----: | :---: | :---------: | :-----------: |
-| **Horizontal plane detection** | Indicates whether the provider implementation supports the detection of horizontal planes, such as the floor. | Yes | Yes | Yes | Yes |
-| **Vertical plane detection** | Indicates whether the provider implementation supports the detection of vertical planes, such as walls. | Yes | iOS 11.3+ | Yes | Yes |
-| **Arbitrary plane detection** | Indicates whether the provider implementation supports the detection of planes that are aligned with neither the horizontal nor vertical axes. | | | Yes | |
-| **Boundary vertices** | Indicates whether the provider implementation supports boundary vertices for its planes. | Yes | Yes | Yes | Yes |
-| **Classification** | Indicates whether the provider implementation can provide a value for [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications). | | iOS 12+ | Yes | |
+| Feature | Description | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
+| :------ | :---------- | :----: | :---: | :---------: | :--------: |:-----------: |
+| **Horizontal plane detection** | Indicates whether the provider implementation supports the detection of horizontal planes, such as the floor. | Yes | Yes | Yes | Yes | Yes |
+| **Vertical plane detection** | Indicates whether the provider implementation supports the detection of vertical planes, such as walls. | Yes | iOS 11.3+ | Yes | Yes | Yes |
+| **Arbitrary plane detection** | Indicates whether the provider implementation supports the detection of planes that are aligned with neither the horizontal nor vertical axes. | | | Yes | Yes | |
+| **Boundary vertices** | Indicates whether the provider implementation supports boundary vertices for its planes. | Yes | Yes | Yes | Yes | Yes |
+| **Classification** | Indicates whether the provider implementation can provide a value for [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications). | | iOS 12+ | Yes | Yes | |
 
 ### Check for optional feature support
 

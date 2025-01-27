@@ -5,7 +5,7 @@
 | [Camera](xref:arfoundation-simulation-camera)                                 |    Yes    |
 | [Plane detection](xref:arfoundation-plane-detection)                          |    Yes    |
 | [Bounding Box detection](xref:arfoundation-bounding-box-detection)            |    Yes    |
-| [Image tracking](xref:arfoundation-image-tracking)                            |    Yes    |
+| [Image tracking](xref:arfoundation-simulation-image-tracking)                 |    Yes    |
 | [Object tracking](xref:arfoundation-object-tracking)                          |           |
 | [Face tracking](xref:arfoundation-face-tracking)                              |           |
 | [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager)          |           |

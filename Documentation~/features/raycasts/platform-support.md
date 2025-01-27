@@ -12,6 +12,7 @@ The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycas
 | Apple visionOS XR Plug-in |                       |                                                |
 | Microsoft HoloLens        |           Yes         | N/A                                            |
 | Unity OpenXR: Meta        |           Yes         | [Ray casts](xref:meta-openxr-raycasts) (Meta OpenXR) |
+| Unity OpenXR: Android XR  |           Yes         | [Ray casts](xref:androidxr-openxr-raycasts) (Android XR) |
 | XR Simulation             |           Yes         | [Ray casts](xref:arfoundation-simulation-raycasts) (XR Simulation) |
 
 ## Check for ray casting support
@@ -39,11 +40,11 @@ The following table lists the optional features of the [XRRaycastSubsystem](xref
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature                    | ARCore | ARKit   | Meta OpenXR | XR Simulation |
-| :------------------------- | :----: | :-----: | :---------: | :-----------: |
-| **Viewport based raycast** |   Yes  |   Yes   |             |               |
-| **World based raycast**    |   Yes  |         |     Yes     |      Yes      |
-| **Tracked raycasts**       |   Yes  | iOS 13+ |             |               |
+| Feature                    | ARCore | ARKit   | Meta OpenXR | Android XR | XR Simulation |
+| :------------------------- | :----: | :-----: | :---------: | :--------: | :-----------: |
+| **Viewport based raycast** |   Yes  |   Yes   |             |            |               |
+| **World based raycast**    |   Yes  |         |     Yes     |     Yes    |      Yes      |
+| **Tracked raycasts**       |   Yes  | iOS 13+ |             |            |               |
 
 > [!NOTE]
 > The Meta OpenXR ray cast implementation performs calculations in Unity world space and does not rely on native platform implementation. Refer to the Meta OpenXR [Ray cast](xref:meta-openxr-raycasts) documentation to understand ray casting on Meta OpenXR devices.
@@ -54,18 +55,18 @@ The following table lists whether certain XR plug-in providers support each opti
 
 [ARRaycastManager](xref:UnityEngine.XR.ARFoundation.ARRaycastManager) supports ray casting against most [TrackableTypes](xref:UnityEngine.XR.ARSubsystems.TrackableType). The following table shows which trackables each platform supports ray casting against:
 
-| TrackableType           | ARCore | ARKit | Meta OpenXR | XR Simulation |
-| :---------------------- | :----: | :---: | :---------: | :-----------: |
-| **BoundingBox**         |        |       |     Yes     |               |
-| **Depth**               |  Yes   |       |             |               |
-| **Face**                |        |       |             |               |
-| **FeaturePoint**        |  Yes   |  Yes  |             |      Yes      |
-| **Image**               |        |       |             |               |
-| **Planes**              |  Yes   |  Yes  |             |      Yes      |
-| **PlaneEstimated**      |  Yes   |  Yes  |             |      Yes      |
-| **PlaneWithinBounds**   |  Yes   |  Yes  |     Yes     |      Yes      |
-| **PlaneWithinInfinity** |        |  Yes  |             |      Yes      |
-| **PlaneWithinPolygon**  |  Yes   |  Yes  |             |      Yes      |
+| TrackableType           | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
+| :---------------------- | :----: | :---: | :---------: | :--------: | :-----------: |
+| **BoundingBox**         |        |       |     Yes     |            |               |
+| **Depth**               |  Yes   |       |             |    Yes     |               |
+| **Face**                |        |       |             |            |               |
+| **FeaturePoint**        |  Yes   |  Yes  |             |            |      Yes      |
+| **Image**               |        |       |             |            |               |
+| **Planes**              |  Yes   |  Yes  |             |    Yes     |      Yes      |
+| **PlaneEstimated**      |  Yes   |  Yes  |             |    Yes     |      Yes      |
+| **PlaneWithinBounds**   |  Yes   |  Yes  |     Yes     |    Yes     |      Yes      |
+| **PlaneWithinInfinity** |        |  Yes  |             |    Yes     |      Yes      |
+| **PlaneWithinPolygon**  |  Yes   |  Yes  |             |    Yes     |      Yes      |
 
 <a id="check-feature-support"></a>
 

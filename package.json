@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.1.0-pre.4",
+  "version": "6.1.0-pre.5",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added camera torch mode support to XR Simulation.\n- Added APIs for batch save, load, and erase of persistent anchors. Refer to [Persistent anchors](xref:arfoundation-anchors-persistent) for more information.\n- Added [XROcclusionSubsystem.TryGetSwapchainTextureDescriptors](xref:UnityEngine.XR.ARSubsystems.TryGetSwapchainTextureDescriptors*), which allows AR Foundation to make optimizations for occlusion providers that store textures in fixed-length swapchains.\n- Added overrides for `object.ToString` to the following types for an improved debugging experience:\n  - [ARExternalTexture](xref:UnityEngine.XR.ARFoundation.ARExternalTexture)\n  - [XRFov](xref:UnityEngine.XR.ARSubsystems.XRFov)\n  - [XRNearFarPlanes](xref:UnityEngine.XR.ARSubsystems.XRNearFarPlanes)\n- Added a constructor to [XRTextureDescriptor](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor) that allows you to create an instance with only the property name ID field set.\n- Added a new struct [XRShaderKeywords](xref:UnityEngine.XR.ARSubsystems.XRShaderKeywords) to replace the `ShaderKeywords` struct. `ShaderKeywords` was introduced to make shader keywords read-only, but its collection enumerators perform boxing operations. `XRShaderKeywords` does not allocate memory on the heap when enumerated.\n  - Added support for the `XRShaderKeywords` struct to the XR Simulation camera and occlusion providers.\n- Added a new value to [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus): `ProviderNotStarted`.\n- Added a new enum [AROcclusionShaderMode](xref:UnityEngine.XR.ARFoundation.AROcclusionShaderMode) and property [ARShaderOcclusion.occlusionShaderMode](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.occlusionShaderMode) to enable or disable hard occlusion.\n- Added the following properties to the AR Shader Occlusion component:\n  - `hardOcclusionShaderKeyword`\n  - `environmentDepthProjectionMatricesPropertyId`\n  - `environmentDepthNearFarPlanesPropertyId`\n- Added two new values to the [XRTextureType](xref:UnityEngine.XR.ARSubsystems.XRTextureType) enum: `ColorRenderTextureRef` and `DepthRenderTextureRef`, and updated the `IsRenderTexture` extension method to include these types.\n\n### Changed\n\n- Changed the [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) to add `[RequireComponent(typeof(Camera))]`. Previously, it was logically required that this component was on the same GameObject as your XR Origin's Camera, but this wasn't as clearly enforced.\n- Changed the timing of `AROcclusionManager.frameReceived` so that this event is now invoked during `Application.onBeforeRender` instead of `MonoBehaviour.Update`. This change is required for compatibility with head-mounted-display (HMD) providers, and may result in improved precision of occlusion frames.\n- Changed the [AR Shader Occlusion component](xref:arfoundation-shader-occlusion) to construct view-projection matrices using poses reported by `AROcclusionFrameEventArgs` instead of getting the XR camera's `WorldToCameraMatrix`.\n- Changed the default implementation of the pre-release API `XROcclusionSubsystem.TryGetFrame` to return `true`. As an additive API in AR Foundation 6.1, this method must succeed for providers that don't override it.\n- Renamed the pre-release type `ARGpuTexture` to `ARExternalTexture`, and added support for the `IEquatable<ARExternalTexture>` interface.\n- Changed the XR Simulation Environments version imported by the XR Environment Overlay from 2.0.1 to 2.1.1\n- Changed the dependency version of XR Core Utilities from 2.4.0 to 2.5.1.\n\n### Deprecated\n\n- Deprecated and replaced the following APIs:\n  - `ShaderKeywords` to `XRShaderKeywords`\n  - `XRCameraSubsystem.GetShaderKeywords` to `XRCameraSubsystem.GetShaderKeywords2`\n  - `XRCameraSubsystem.Provider.GetShaderKeywords` to `XRCameraSubsystem.Provider.GetShaderKeywords2`\n  - `XROcclusionSubsystem.GetShaderKeywords` to `XROcclusionSubsystem.GetShaderKeywords2`\n  - `XROcclusionSubsystem.Provider.GetShaderKeywords` to `XROcclusinSubsystem.Provider.GetShaderKeywords2`\n  - `ARCameraFrameEventArgs.disabledShaderK"
+    "changelog": "### Fixed\n\n- Fixed the `SimulationEnvironmentProbeSubsystem` so that [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes can be enabled or disabled, as is possible on other AR platforms.\n- Fixed the AR Environment Probe Manager component so that it can no longer throw an `ArgumentNullException` when you unload a scene containing one or more environment probes."
   },
   "upmCi": {
-    "footprint": "1093a2f0c98e4e2faf5b9884e38ca808ebca747b"
+    "footprint": "e05089aa7d11b76232fd4d5300cd19be1f3f46c1"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.1/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "90703a3b5a6ee4c05d37f644aeb711fbe4bfd151"
+    "revision": "cf03d2509a43128acf7c349e33bcd3518c04b3c0"
   }
 }

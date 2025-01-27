@@ -12,6 +12,7 @@ Anchors are supported on the ARCore, ARKit, HoloLens, Meta OpenXR, and XR Simula
 | Apple visionOS XR Plug-in | Yes | N/A |
 | HoloLens | Yes | N/A |
 | Unity OpenXR: Meta | Yes | [Anchors](xref:meta-openxr-anchors) (Meta OpenXR) |
+| Unity OpenXR: Android XR | Yes | [Anchors](xref:androidxr-openxr-anchors) (Android XR) |
 | XR Simulation | Yes | [Anchors](xref:arfoundation-simulation-anchors) (XR Simulation) |
 
 ## Check for support at runtime
@@ -47,15 +48,15 @@ The following table lists the optional features of the anchor subsystem. Each op
 
 To understand the optional features that are implemented in each supported XR plug-in provider, refer to the following table:
 
-| Feature | ARCore | ARKit | HoloLens | Meta OpenXR | XR Simulation |
-| :------ | :----: | :---: | :------: | :---------: | :-----------: |
-| **Trackable attachments** | Yes | Yes | | | Yes |
-| **Synchronous add** | Yes | Yes | | | |
-| **Save anchor** | | | | Yes | |
-| **Load anchor** | | | | Yes | |
-| **Erase anchor** | | | | Yes | |
-| **Get saved anchor IDs** | | | | | |
-| **Async cancellation** | | | | | |
+| Feature | ARCore | ARKit | HoloLens | Meta OpenXR | Android XR | XR Simulation |
+| :------ | :----: | :---: | :------: | :---------: | :--------: |:-----------: |
+| **Trackable attachments** | Yes | Yes | | | Yes | Yes |
+| **Synchronous add** | Yes | Yes | | | Yes | |
+| **Save anchor** | | | | Yes | Yes | |
+| **Load anchor** | | | | Yes | Yes | |
+| **Erase anchor** | | | | Yes | Yes | |
+| **Get saved anchor IDs** | | | | | Yes | |
+| **Async cancellation** | | | | | | |
 
 ### Check for optional feature support
 

@@ -108,5 +108,20 @@ namespace UnityEngine.XR.ARFoundation.Tests
             }
             #endregion
         }
+
+        class ImageTrackingCheck
+        {
+            #region CheckIfImageTrackingLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRImageTrackingSubsystem>() != null)
+                {
+                    // XRImageTrackingSubsystem was loaded. Image tracking is supported.
+                }
+            }
+            #endregion
+        }
     }
 }

@@ -3,36 +3,60 @@ uid: arfoundation-whats-new
 ---
 # What's new in version 6.1
 
-## Added
+## New features
 
-- Added `StatusCode.ProviderUninitialized` as an error code to represent an uninitialized state. Methods that return [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) can use this more specific error code instead of `StatusCode.UnknownError` when the provider is uninitialized.
-- Added [SupportedUtils](xref:UnityEngine.XR.ARSubsystems.SupportedUtils) for easier conversion between the types `Supported` and `bool`.
-- Added three new APIs to the `XRSessionSubsystem` and provider class which can be extended by AR session providers to handle Universal Render Pipeline rendering events signaled by the `ARCommandBufferSupportRendererFeature` when it is included in the renderer features list for the `Universal Renderer` asset.
+### Stereo occlusion
+
+- Added support for stereo occlusion, enabling providers for head-mounted displays (HMDs) to implement the XR occlusion subsystem. Refer to [Occlusion](xref:arfoundation-occlusion) for more information.
+
+### Persistent anchor batch operations
+
+- Added APIs for batch save, load, and erase of persistent anchors. Refer to [Persistent anchors](xref:arfoundation-anchors-persistent) for more information.
+
+### Camera torch mode
+
+- Added an API that allows you to turn on the device's camera torch (flash). Refer to [Camera torch mode (flash)](xref:arfoundation-camera-torch-mode) for more information
+
+### Deeper URP integration to support ARCore Vulkan
+
+- Added three new APIs to the `XRSessionSubsystem` and provider class which can be extended by AR session providers to handle Universal Render Pipeline rendering events signaled by the `ARCommandBufferSupportRendererFeature` when it is included in the renderer features list for the `Universal Renderer` asset:
   - [XRSessionSubsystem.requiresCommandBuffer](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.requiresCommandBuffer*)
   - [XRSessionSubsystem.OnCommandBufferSupportEnabled](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.OnCommandBufferSupportEnabled*)
   - [XRSessionSubsystem.OnCommandBufferExecute](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.OnCommandBufferExecute*)
 - Added a new `ARCommandBufferSupportRendererFeature` which calls the newly exposed `XRSessionSubsystem` APIs for integration into **Universal Render Pipeline** command buffer execution.  Refer to [Universal Render Pipeline](xref:arfoundation-universal-render-pipeline) for more information.
-- Added support for simulated bounding box detection to XR Environment via the [SimulatedBoundingBox](xref:UnityEngine.XR.Simulation.SimulatedBoundingBox) component.
-- Added APIs for batch save, load, and erase of persistent anchors. Refer to [Persistent anchors](xref:arfoundation-anchors-persistent) for more information.
-- Added an API that allows you to turn on the device's camera torch (flash). Refer to [Camera torch mode (flash)](xref:arfoundation-camera-torch-mode) for more information
-  - Added camera torch mode support to XR Simulation.
-- Added support for stereo occlusion, enabling HMD providers to implement the XR occlusion subsystem:
-  - Added [XRTextureType](xref:UnityEngine.XR.ARSubsystems.XRTextureType) enum with extension methods to convert from [TextureDimension](xref:UnityEngine.Rendering.TextureDimension).
-  - Added [XRTextureDescriptor.textureType](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor.textureType) property to get a texture descriptor's type.
-  - Added the following structs to represent data used for occlusion: [XRFov](xref:UnityEngine.XR.ARSubsystems.XRFov), [XRNearFarPlanes](xref:UnityEngine.XR.ARSubsystems.XRNearFarPlanes), [XROcclusionFrame](xref:UnityEngine.XR.ARSubsystems.XROcclusionFrame), and [ARGpuTexture](xref:UnityEngine.XR.ARFoundation.ARGpuTexture).
-  - Added the following members to [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem): `depthViewProjectionMatricesPropertyId` and `TryGetFrame(Allocator, out XROcclusionFrame)`.
-  - Added more data to [AROcclusionFrameEventArgs](xref:UnityEngine.XR.ARFoundation.AROcclusionFrameEventArgs).
-  - Added the [ARShaderOcclusion](xref:arfoundation-shader-occlusion) component to write depth textures to global shader memory.
-  - Added [XROcclusionSubsystem.TryGetSwapchainTextureDescriptors](xref:UnityEngine.XR.ARSubsystems.TryGetSwapchainTextureDescriptors*), which allows AR Foundation to make optimizations for occlusion providers that store textures in fixed-length swapchains.
-  - Added a constructor to [XRTextureDescriptor](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor) that allows you to create an instance with only the property name ID field set.
+
+### XR Simulation improvements
+
+- Added support for simulated bounding box detection in XR Simulation via the [SimulatedBoundingBox](xref:UnityEngine.XR.Simulation.SimulatedBoundingBox) component.
 - Added support for EXIF data in [SimulationCameraSubsystem](xref:UnityEngine.XR.Simulation.SimulationCameraSubsystem) via the [SimulatedExifData](xref:UnityEngine.XR.Simulation.SimulatedExifData) component.
+- Added camera torch mode support to XR Simulation.
 
-## Changed
+### Other API additions
 
-- Changed [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) to add additional labels provided by Apple RoomPlan.
-- Changed the Simulation Environment to be visibile in the scene hierarchy.
+- Added the following values to [StatusCode](xref:UnityEngine.XR.ARSubsystems.XRResultStatus.StatusCode): `ProviderUninitialized` and `ProviderNotStarted`. These more specific error codes may be returned instead of `StatusCode.UnknownError` for more specific error information.
+- Added [SupportedUtils](xref:UnityEngine.XR.ARSubsystems.SupportedUtils) for easier conversion between the types `Supported` and `bool`.
+- Added additional values provided by Apple RoomPlan to the [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) flags enum.
+
+## Changes
+
+### XR Simulation environments now visible in the Hierarchy window
+
+- Changed XR Simulation so that simulation environments are now visibile in the **Hierarchy** window, allowing you to inspect the environment while in Play mode.
+
+> [!WARNING]
+> There are many possible runtime modifications to XR Simulation environments that are not supported, such as instantiating or destroying GameObjects. As a best practice, use the Hierarchy window to debug XR Simulation environments, and don't modify environments while in Play mode.
+
+### AR Occlusion Manager GameObject hierarchy
+
 - Changed the [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) to add `[RequireComponent(typeof(Camera))]`. Previously, it was logically required that this component was on the same GameObject as your XR Origin's Camera, but this wasn't as clearly enforced.
-- Changed the timing of `AROcclusionManager.frameReceived` so that this event is now invoked during `Application.onBeforeRender` instead of `MonoBehaviour.Update`. This change is required for compatibility with head-mounted-display (HMD) providers, and may result in improved precision of occlusion frames.
+
+### AR Occlusion Manager frame timing
+
+- Changed the timing of `AROcclusionManager.frameReceived` so that this event is now invoked during `Application.onBeforeRender` instead of `MonoBehaviour.Update`. This change is required for compatibility with head-mounted-display (HMD) providers, and may result in improved precision of occlusion frames on all platforms.
+
+### Size of `XRTextureDescriptor`
+
+- As part of the implementation for stereo occlusion support, we added a new `textureType` field to the [XRTextureDescriptor](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor) struct. If you implement a provider for AR Foundation's camera or occlusion subystems, you should update your native plug-in(s) to match the new struct size.
 
 ## Deprecated
 

@@ -12,6 +12,7 @@ The AR Foundation [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraS
 | Apple visionOS XR Plug-in | | |
 | Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Camera](xref:meta-openxr-camera) (Meta OpenXR) |
+| Unity OpenXR: Android XR | Yes | [Camera](xref:androidxr-openxr-camera) (Android XR) |
 | XR Simulation | Yes | [Camera](xref:arfoundation-simulation-camera) (XR Simulation) |
 
 ## Check for camera support
@@ -57,26 +58,26 @@ The following table lists the optional features of the camera subsystem. Each op
 
 To understand the optional features that are implemented in each supported XR plug-in provider, refer to the following table:
 
-| Feature | ARCore | ARKit | Meta OpenXR | XR Simulation |
-| :------ | :----: | :---: | :---------: | :-----------: |
-| **Brightness** | Yes | | | Yes |
-| **Color temperature** | | Yes | | Yes |
-| **Color correction** | Yes | | | Yes |
-| **Display matrix** | Yes | Yes | | |
-| **Projection matrix** | Yes | Yes | | |
-| **Timestamp** | Yes | Yes | | |
-| **Camera configurations** | Yes | Yes | | Yes |
-| **Camera image** | Yes | Yes | | Yes |
-| **Average intensity in lumens** | | Yes | | Yes |
+| Feature | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
+| :------ | :----: | :---: | :---------: | :--------: | :-----------: |
+| **Brightness** | Yes | | | Yes | Yes |
+| **Color temperature** | | Yes | | Yes | Yes |
+| **Color correction** | Yes | | | Yes | Yes |
+| **Display matrix** | Yes | Yes | | | |
+| **Projection matrix** | Yes | Yes | | | |
+| **Timestamp** | Yes | Yes | | | |
+| **Camera configurations** | Yes | Yes | | | Yes |
+| **Camera image** | Yes | Yes | | | Yes |
+| **Average intensity in lumens** | | Yes | | Yes | Yes |
 | **Focus modes** | Yes | Yes | | |
-| **Face tracking ambient intensity light estimation** | Yes | Yes | | |
+| **Face tracking ambient intensity light estimation** | Yes | Yes | | | |
 | **Face tracking HDR light estimation** | | Yes | | |
-| **World tracking ambient intensity light estimation** | Yes | Yes | | |
-| **World tracking HDR light estimation** | Yes | | | |
-| **Camera grain**  | | iOS 13+ | | |
-| **Image stabilization** | | | | |
-| **EXIF data** | Yes | iOS 16+ | | |
-| **Camera torch mode** | Yes | | | Yes |
+| **World tracking ambient intensity light estimation** | Yes | Yes | | Yes | |
+| **World tracking HDR light estimation** | Yes | | | Yes | |
+| **Camera grain**  | | iOS 13+ | | | |
+| **Image stabilization** | | | | | |
+| **EXIF data** | Yes | iOS 16+ | | | |
+| **Camera torch mode** | Yes | | | | Yes |
 
 <a id="check-feature-support"></a>
 

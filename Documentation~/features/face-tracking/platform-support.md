@@ -12,6 +12,7 @@ The AR Foundation [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsy
 | Apple visionOS XR Plug-in | | |
 | Microsoft HoloLens | | |
 | Unity OpenXR: Meta | | |
+| Unity OpenXR: Android XR | Yes | [Face tracking](xref:androidxr-openxr-faces) (Android XR) |
 | XR Simulation | | |
 
 ## Check for face tracking support
@@ -38,13 +39,13 @@ The following table lists the optional features of the face subsystem. Each opti
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature | ARCore | ARKit |
-| :------ | :----: | :---: |
-| **Face pose** | Yes | Yes |
-| **Face mesh vertices and indices** | Yes | Yes |
-| **Face mesh UVs** | Yes | Yes |
-| **Face mesh normals** | Yes | |
-| **Eye tracking** | | Yes |
+| Feature | ARCore | ARKit | Android XR |
+| :------ | :----: | :---: | :--------: |
+| **Face pose** | Yes | Yes | |
+| **Face mesh vertices and indices** | Yes | Yes | |
+| **Face mesh UVs** | Yes | Yes | |
+| **Face mesh normals** | Yes | | |
+| **Eye tracking** | | Yes | Yes |
 
 <a id="check-feature-support"></a>
 
