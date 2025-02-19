@@ -237,11 +237,7 @@ namespace UnityEngine.XR.Simulation
                 }
 
                 var vertices = plane.vertices;
-#if UNITY_2022_1_OR_NEWER
                 if (vertices.IsCreated)
-#else
-                if (vertices.Length > 0)
-#endif
                 {
                     CreateOrResizeNativeArrayIfNecessary(vertices.Length, allocator, ref boundary);
                     NativeArray<Vector2>.Copy(vertices, boundary);

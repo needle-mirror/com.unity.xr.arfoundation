@@ -28,11 +28,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             m_Manager = GetComponent<TManager>();
             if (m_Manager == null)
             {
-#if UNITY_2023_1_OR_NEWER
                 m_Manager = FindAnyObjectByType<TManager>();
-#else
-                m_Manager = FindObjectOfType<TManager>();
-#endif
                 if (m_Manager == null)
                     throw new InvalidOperationException(
                         $"{GetType().Name} requires an active and enabled {typeof(TManager).Name} in the scene, but none was found.");

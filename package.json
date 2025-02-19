@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.1.0-pre.5",
+  "version": "6.1.0",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed the `SimulationEnvironmentProbeSubsystem` so that [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes can be enabled or disabled, as is possible on other AR platforms.\n- Fixed the AR Environment Probe Manager component so that it can no longer throw an `ArgumentNullException` when you unload a scene containing one or more environment probes."
+    "changelog": "### Added\n\n- Added `ValidationFailure` as an option to [XRResultStatus.StatusCode](xref:UnityEngine.XR.ARSubsystems.XRResultStatus.StatusCode).\n- Added support for soft occlusion. Refer to the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) GitHub repository for example usage in the `MetaOcclusion` scene.\n  - Added a soft occlusion preprocessing shader at `Assets/Shaders/SoftOcclusionPreprocessing.shader`.\n  - Added [ARShaderOcclusion.softOcclusionShaderKeyword](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.softOcclusionShaderKeyword), [ARShaderOcclusion.ndcLinearConversionParametersPropertyId](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.ndcLinearConversionParametersPropertyId), and [AROcclusionShaderMode.SoftOcclusion](xref:UnityEngine.XR.ARFoundation.AROcclusionShaderMode.SoftOcclusion).\n\n### Changed\n\n- Changed the behavior of `XRAnchorSubsystem` so that if you call `GetChanges` while the subsystem is stopped, it will no longer throw an `InvalidOperationException`. It is valid to call `GetChanges` while the subsystem is stopped to retrieve information about anchors that were in the middle of an asynchronous operation at the moment when the subsystem was stopped.\n- Changed the following subsytems so that they validate correct life cycle behavior of trackables when your app is built as a Development Build or run in the Editor: `XREnvironmentProbeSubsystem`, `XRHumanBodySubsystem`, `XRPointCloudSubsystem`, `XRRaycastSubsystem`. All other tracking subsystems already perform validation in this way, so this change makes them all consistent.\n\n### Removed\n\n- Removed the pre-release API `ARShaderOcclusion.environmentDepthNearFarPlanePropertyId` and replaced it with `ARShaderOcclusion.ndcLinearConversionParametersPropertyId`.\n\n### Fixed\n\n- Fixed `XRFaceSubsystem` so that it no longer creates duplicate profiler markers for its `GetChanges` implementation.\n- Fixed the AR Environment Probe Manager component so that it can no longer throw an `InvalidOperationException` when you unload a scene containing one or more environment probes. ([ARFB-521](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-521))\n- Fixed the `ARAnchor` component so that if it fails to add itself as an anchor with the anchor subsystem, the component disables itself instead of deactivating its GameObject."
   },
   "upmCi": {
-    "footprint": "e05089aa7d11b76232fd4d5300cd19be1f3f46c1"
+    "footprint": "2d6f6282b1c247c24c9feced3edd6ac0b68045e4"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.1/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "cf03d2509a43128acf7c349e33bcd3518c04b3c0"
+    "revision": "5db845454a26a1bea749e128402841fde35f0290"
   }
 }

@@ -31,10 +31,9 @@ namespace UnityEditor.XR.ARFoundation
             bool isHumanSegmentationDepthEnabled = ((HumanSegmentationDepthMode)m_HumanSegmentationDepthMode.enumValueIndex).Enabled();
             bool isHumanDepthEnabled = isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled;
 
-            if (!isEnvDepthEnabled && !isHumanDepthEnabled && (occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion))
+            if (!isEnvDepthEnabled && !isHumanDepthEnabled && occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion)
             {
-                EditorGUILayout.HelpBox("Automatic occlusion is disabled.",
-                                        MessageType.Warning);
+                EditorGUILayout.HelpBox("Automatic occlusion is disabled.", MessageType.Warning);
             }
 
             EditorGUILayout.LabelField("Environment Depth", EditorStyles.boldLabel);
@@ -48,22 +47,26 @@ namespace UnityEditor.XR.ARFoundation
             using (new EditorGUI.IndentLevelScope(1))
             {
                 EditorGUILayout.PropertyField(m_HumanSegmentationStencilMode);
-                if (!isHumanSegmentationDepthEnabled && isHumanSegmentationStencilEnabled && (occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion))
+                if (!isHumanSegmentationDepthEnabled && isHumanSegmentationStencilEnabled
+                    && occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion)
                 {
                     using (new EditorGUI.IndentLevelScope(1))
                     {
-                        EditorGUILayout.HelpBox($"Human occlusion also requires {m_HumanSegmentationDepthMode.displayName} to be enabled.",
-                                                MessageType.Warning);
+                        EditorGUILayout.HelpBox(
+                            $"Human occlusion also requires {m_HumanSegmentationDepthMode.displayName} to be enabled.",
+                            MessageType.Warning);
                     }
                 }
 
                 EditorGUILayout.PropertyField(m_HumanSegmentationDepthMode);
-                if (!isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled && (occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion))
+                if (!isHumanSegmentationStencilEnabled && isHumanSegmentationDepthEnabled
+                    && occlusionPreferenceMode != OcclusionPreferenceMode.NoOcclusion)
                 {
                     using (new EditorGUI.IndentLevelScope(1))
                     {
-                        EditorGUILayout.HelpBox($"Human occlusion also requires {m_HumanSegmentationStencilMode.displayName} to be enabled.",
-                                                MessageType.Warning);
+                        EditorGUILayout.HelpBox(
+                            $"Human occlusion also requires {m_HumanSegmentationStencilMode.displayName} to be enabled.",
+                            MessageType.Warning);
                     }
                 }
             }

@@ -218,11 +218,7 @@ namespace UnityEngine.XR.Simulation
             worldVertices.Clear();
 
             var nativeVertices = plane.vertices;
-#if UNITY_2022_1_OR_NEWER
             if (!nativeVertices.IsCreated)
-#else
-            if (nativeVertices.Length <= 0)
-#endif
                 return;
 
             var count = nativeVertices.Length;

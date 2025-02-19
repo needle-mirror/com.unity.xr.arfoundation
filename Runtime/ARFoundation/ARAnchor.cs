@@ -27,7 +27,8 @@ namespace UnityEngine.XR.ARFoundation
             {
                 if (sessionRelativeData.trackableId == TrackableId.invalidId && !manager.TryAddAnchor(this))
                 {
-                    gameObject.SetActive(false);
+                    Debug.LogWarning($"{nameof(ARAnchor)} component on {name} has failed to add itself to the anchor subsystem, and will be disabled. To avoid this possibility, you should use ARAnchorManager.{nameof(ARAnchorManager.TryAddAnchorAsync)} instead of adding the AR Anchor component to GameObjects at runtime.");
+                    enabled = false;
                 }
             }
             else

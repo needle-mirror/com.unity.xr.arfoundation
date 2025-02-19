@@ -14,6 +14,10 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRRaycastSubsystem
         : TrackingSubsystem<XRRaycast, XRRaycastSubsystem, XRRaycastSubsystemDescriptor, XRRaycastSubsystem.Provider>
     {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        ValidationUtility<XRRaycast> m_ValidationUtility = new();
+#endif
+
         /// <summary>
         /// Constructor. Do not invoke directly; use the <c>SubsystemManager</c>
         /// to enumerate the available <see cref="XRRaycastSubsystemDescriptor"/>s
@@ -207,9 +211,5 @@ namespace UnityEngine.XR.ARSubsystems
                 throw new NotSupportedException("Raycasting using a screen point is not supported.");
             }
         }
-
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-        ValidationUtility<XRRaycast> m_ValidationUtility = new ValidationUtility<XRRaycast>();
-#endif
     }
 }

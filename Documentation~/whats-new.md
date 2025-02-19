@@ -33,7 +33,7 @@ uid: arfoundation-whats-new
 
 ### Other API additions
 
-- Added the following values to [StatusCode](xref:UnityEngine.XR.ARSubsystems.XRResultStatus.StatusCode): `ProviderUninitialized` and `ProviderNotStarted`. These more specific error codes may be returned instead of `StatusCode.UnknownError` for more specific error information.
+- Added the following values to [StatusCode](xref:UnityEngine.XR.ARSubsystems.XRResultStatus.StatusCode): `ProviderUninitialized`, `ProviderNotStarted`, and `ValidationFailure`. These error codes may be returned instead of `StatusCode.UnknownError` for more specific error information.
 - Added [SupportedUtils](xref:UnityEngine.XR.ARSubsystems.SupportedUtils) for easier conversion between the types `Supported` and `bool`.
 - Added additional values provided by Apple RoomPlan to the [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) flags enum.
 

@@ -19,14 +19,12 @@ namespace UnityEngine.XR.ARFoundation
         static readonly Vector3 k_CoordSystemScale = new(1, 1, -1);
 
         const string k_HardOcclusionShaderKeyword = "XR_HARD_OCCLUSION";
+        const string k_SoftOcclusionShaderKeyword = "XR_SOFT_OCCLUSION";
 
         const string k_EnvironmentDepthProjectionMatricesPropertyName = "_EnvironmentDepthProjectionMatrices";
-        const string k_EnvironmentDepthNearFarPlanesPropertyName = "_EnvironmentDepthNearFarPlanes";
+        const string k_NdcLinearConversionParametersPropertyName = "_NdcLinearConversionParameters";
 
-        // Using a large threshold value to approximate infinity when comparing the far clip plane in the shader.
-        // The isinf function may not work reliably in Vulkan, potentially due to different handling or representation
-        // of infinite values.
-        const float k_InfinityThreshold = 1e+30f;
+        SoftOcclusionPreprocessor m_SoftOcclusionPreprocessor;
 
         Matrix4x4[] m_EnvironmentDepthReprojectionMatrices = new Matrix4x4[2];
         bool m_OcclusionShaderKeywordsForModeInitialized;
@@ -38,12 +36,17 @@ namespace UnityEngine.XR.ARFoundation
         AROcclusionManager m_OcclusionManager;
 
         [SerializeField]
+        [Tooltip("The shader keywords to enable: hard occlusion, soft occlusion, or neither.")]
         AROcclusionShaderMode m_OcclusionShaderMode = AROcclusionShaderMode.HardOcclusion;
 
+        [SerializeField]
+        [Tooltip("The preprocessing shader, if any, to include in the build for soft occlusion.")]
+        Shader m_SoftOcclusionPreprocessShader;
+
         /// <summary>
-        /// <para>Enables a global shader keyword to enable hard occlusion or default.</para>
-        /// <para>To enable per-object occlusion, use a provided cross-platform occlusion URP shader or modify your
-        /// custom shader to support <see cref="hardOcclusionShaderKeyword"/> keyword.</para>
+        /// Enables a global shader keyword to enable hard or soft occlusion. To implement occlusion in your app, use a
+        /// provided URP shader or modify your custom shader to support <see cref="hardOcclusionShaderKeyword"/> and/or
+        /// <see cref="softOcclusionShaderKeyword"/> keywords.
         /// </summary>
         public AROcclusionShaderMode occlusionShaderMode
         {
@@ -55,6 +58,12 @@ namespace UnityEngine.XR.ARFoundation
 
                 m_OcclusionShaderMode = value;
                 SetOcclusionShaderKeywordsForMode(value);
+
+                if (Application.isPlaying
+                    && value == AROcclusionShaderMode.SoftOcclusion
+                    && m_SoftOcclusionPreprocessor == null
+                    && m_SoftOcclusionPreprocessShader != null)
+                    m_SoftOcclusionPreprocessor = new SoftOcclusionPreprocessor(m_SoftOcclusionPreprocessShader);
             }
         }
 
@@ -64,14 +73,19 @@ namespace UnityEngine.XR.ARFoundation
         public string hardOcclusionShaderKeyword => k_HardOcclusionShaderKeyword;
 
         /// <summary>
+        /// The shader keyword to enable soft occlusions.
+        /// </summary>
+        public string softOcclusionShaderKeyword => k_SoftOcclusionShaderKeyword;
+
+        /// <summary>
         /// Shader property ID for the depth view-projection matrix array.
         /// </summary>
         public int environmentDepthProjectionMatricesPropertyId { get; private set; }
 
         /// <summary>
-        /// Shader property ID for near and far clip planes.
+        /// Shader property ID for Vector2 with parameters for conversion depth between NDC and linear.
         /// </summary>
-        public int environmentDepthNearFarPlanesPropertyId { get; private set; }
+        public int ndcLinearConversionParametersPropertyId { get; private set; }
 
         void Reset()
         {
@@ -86,8 +100,16 @@ namespace UnityEngine.XR.ARFoundation
             environmentDepthProjectionMatricesPropertyId =
                 Shader.PropertyToID(k_EnvironmentDepthProjectionMatricesPropertyName);
 
-            environmentDepthNearFarPlanesPropertyId =
-                Shader.PropertyToID(k_EnvironmentDepthNearFarPlanesPropertyName);
+            ndcLinearConversionParametersPropertyId = Shader.PropertyToID(k_NdcLinearConversionParametersPropertyName);
+
+            if (occlusionShaderMode == AROcclusionShaderMode.SoftOcclusion
+                && m_SoftOcclusionPreprocessShader != null)
+                m_SoftOcclusionPreprocessor = new SoftOcclusionPreprocessor(m_SoftOcclusionPreprocessShader);
+        }
+
+        void OnDestroy()
+        {
+            m_SoftOcclusionPreprocessor?.Dispose();
         }
 
         void OnEnable()
@@ -131,18 +153,19 @@ namespace UnityEngine.XR.ARFoundation
                 m_EnvironmentDepthReprojectionMatrices[i] = GetViewProjectionMatrix(fovs[i], nearFarPlanes, viewMatrix);
             }
 
-            var far = float.IsInfinity(nearFarPlanes.farZ) ? k_InfinityThreshold : nearFarPlanes.farZ;
-            var environmentDepthProjectionParams = new Vector3(nearFarPlanes.nearZ, far, k_InfinityThreshold);
-            Shader.SetGlobalVector(environmentDepthNearFarPlanesPropertyId, environmentDepthProjectionParams);
-            Shader.SetGlobalMatrixArray(
-                environmentDepthProjectionMatricesPropertyId, m_EnvironmentDepthReprojectionMatrices);
+            Shader.SetGlobalMatrixArray(environmentDepthProjectionMatricesPropertyId, m_EnvironmentDepthReprojectionMatrices);
+            var ndcToLinearDepthParams = GetNdcToLinearDepthParameters(nearFarPlanes.nearZ, nearFarPlanes.farZ);
+            Shader.SetGlobalVector(ndcLinearConversionParametersPropertyId, ndcToLinearDepthParams);
 
             if (!m_OcclusionShaderKeywordsForModeInitialized)
             {
                 m_OcclusionShaderKeywordsForModeInitialized = true;
-                if (m_OcclusionShaderMode != AROcclusionShaderMode.None)
-                    SetOcclusionShaderKeywordsForMode(m_OcclusionShaderMode);
+                SetOcclusionShaderKeywordsForMode(m_OcclusionShaderMode);
             }
+
+            if (m_OcclusionShaderMode == AROcclusionShaderMode.SoftOcclusion)
+                // assuming that the first texture in the list is depth texture
+                m_SoftOcclusionPreprocessor.PreprocessDepthTexture(eventArgs.externalTextures[0]);
         }
 
         static Matrix4x4 GetViewProjectionMatrix(XRFov fov, XRNearFarPlanes planes, Matrix4x4 trackingSpaceViewMatrix)
@@ -159,6 +182,25 @@ namespace UnityEngine.XR.ARFoundation
             return projectionMatrix * trackingSpaceViewMatrix;
         }
 
+        static Vector4 GetNdcToLinearDepthParameters(float near, float far)
+        {
+            float invDepthFactor;
+            float depthOffset;
+
+            if (far < near || float.IsInfinity(far))
+            {
+                invDepthFactor = -2.0f * near;
+                depthOffset = -1.0f;
+            }
+            else
+            {
+                invDepthFactor = -2.0f * far * near / (far - near);
+                depthOffset = -(far + near) / (far - near);
+            }
+
+            return new Vector4(invDepthFactor, depthOffset, 0, 0);
+        }
+
         static Matrix4x4 GetProjectionMatrix(float left, float right, float bottom, float top, float near, float far)
         {
             float x = 2.0f * near / (right - left);
@@ -166,23 +208,13 @@ namespace UnityEngine.XR.ARFoundation
             float a = (right + left) / (right - left);
             float b = (top + bottom) / (top - bottom);
             const float e = -1.0f;
-            float c, d;
 
-            if (float.IsInfinity(far))
-            {
-                c = -1.0f;
-                d = -2.0f * near;
-            }
-            else
-            {
-                c = -(far + near) / (far - near);
-                d = -(2.0f * far * near) / (far - near);
-            }
+            var ndcToLinearParams = GetNdcToLinearDepthParameters(near, far);
 
             var projMatrix = new Matrix4x4();
             projMatrix.SetRow(0, new Vector4(x, 0, a, 0));
             projMatrix.SetRow(1, new Vector4(0, y, b, 0));
-            projMatrix.SetRow(2, new Vector4(0, 0, c, d));
+            projMatrix.SetRow(2, new Vector4(0, 0, ndcToLinearParams.y, ndcToLinearParams.x));
             projMatrix.SetRow(3, new Vector4(0, 0, e, 0));
 
             return projMatrix;
@@ -193,11 +225,17 @@ namespace UnityEngine.XR.ARFoundation
             switch (mode)
             {
                 case AROcclusionShaderMode.HardOcclusion:
+                    Shader.DisableKeyword(k_SoftOcclusionShaderKeyword);
                     Shader.EnableKeyword(k_HardOcclusionShaderKeyword);
+                    break;
+                case AROcclusionShaderMode.SoftOcclusion:
+                    Shader.DisableKeyword(k_HardOcclusionShaderKeyword);
+                    Shader.EnableKeyword(k_SoftOcclusionShaderKeyword);
                     break;
                 default:
                 case AROcclusionShaderMode.None:
                     Shader.DisableKeyword(k_HardOcclusionShaderKeyword);
+                    Shader.DisableKeyword(k_SoftOcclusionShaderKeyword);
                     break;
             }
         }

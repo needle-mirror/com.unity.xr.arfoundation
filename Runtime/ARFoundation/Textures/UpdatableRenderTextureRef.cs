@@ -1,7 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using Unity.XR.CoreUtils;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -14,36 +12,45 @@ namespace UnityEngine.XR.ARFoundation
         Texture IUpdatableTexture.texture => m_Texture;
         RenderTexture m_Texture;
 
-        bool m_IsCreated;
+        IntPtr m_RenderTexturePtr;
 
         internal UpdatableRenderTextureRef(XRTextureDescriptor descriptor)
         {
-            AdoptTexture(descriptor);
+            if (!TryUpdateFromDescriptor(descriptor))
+                throw new ArgumentException(nameof(descriptor));
         }
 
-        void AdoptTexture(XRTextureDescriptor newDescriptor)
+        public bool TryUpdateFromDescriptor(XRTextureDescriptor newDescriptor)
         {
-            if (
-                newDescriptor.textureType
-                is not XRTextureType.ColorRenderTextureRef
-                    or XRTextureType.DepthRenderTextureRef
-            )
+            if (newDescriptor.textureType is not (XRTextureType.ColorRenderTextureRef or XRTextureType.DepthRenderTextureRef))
             {
-                Debug.LogError(
-                    $"Failed to adopt texture from descriptor {m_Descriptor}: not a reference TextureType"
-                );
+                Debug.LogError($"UpdatableRenderTextureRef cannot be created with invalid texture type: {m_Descriptor.textureType}");
+                return false;
             }
 
-            var textureHandle = GCHandle.FromIntPtr(newDescriptor.nativeTexture);
+            if (newDescriptor.textureType == XRTextureType.ColorRenderTextureRef
+                && newDescriptor.hasIdenticalTextureMetadata(m_Descriptor)
+                && newDescriptor.nativeTexture == m_RenderTexturePtr)
+                return true;
+
+            if (newDescriptor.textureType == XRTextureType.DepthRenderTextureRef
+                && newDescriptor.hasIdenticalTextureMetadata(m_Descriptor)
+                && newDescriptor.nativeTexture == m_RenderTexturePtr)
+                return true;
+
+            // NOTE: newDescriptor.nativeTexture is not actually a pointer to a native texture in this class.
+            // It's a pointer to a RenderTexture, from which we extract the real native texture pointer via GCHandle.
+            // Thus, for equality comparison with texture descriptors on future frames, we separately save the
+            // RenderTexture pointer so that we don't need to create a GCHandle to check for equality.
+            m_RenderTexturePtr = newDescriptor.nativeTexture;
+            var textureHandle = GCHandle.FromIntPtr(m_RenderTexturePtr);
             m_Texture = (RenderTexture)textureHandle.Target;
             textureHandle.Free();
 
-            // must update the nativeTexture pointer in the descriptor because that is what is
-            // sent to the shader.
-            var nativeTexturePtr =
-                newDescriptor.textureType == XRTextureType.ColorRenderTextureRef
-                    ? m_Texture.GetNativeTexturePtr()
-                    : m_Texture.GetNativeDepthBufferPtr();
+            var nativeTexturePtr = newDescriptor.textureType == XRTextureType.ColorRenderTextureRef
+                ? m_Texture.GetNativeTexturePtr()
+                : m_Texture.GetNativeDepthBufferPtr();
+
             m_Descriptor = new XRTextureDescriptor(
                 nativeTexture: nativeTexturePtr,
                 width: newDescriptor.width,
@@ -55,45 +62,17 @@ namespace UnityEngine.XR.ARFoundation
                 textureType: newDescriptor.textureType
             );
 
-            m_IsCreated = true;
-
-            return;
-        }
-
-        bool IUpdatableTexture.TryUpdateFromDescriptor(XRTextureDescriptor newDescriptor)
-        {
-            if (!m_IsCreated)
-            {
-                return false;
-            }
-
-            if (
-                m_Descriptor.textureType == XRTextureType.ColorRenderTextureRef
-                && m_Descriptor.nativeTexture == m_Texture.GetNativeTexturePtr()
-            )
-            {
-                return true;
-            }
-            if (
-                m_Descriptor.textureType == XRTextureType.DepthRenderTextureRef
-                && m_Descriptor.nativeTexture == m_Texture.GetNativeDepthBufferPtr()
-            )
-            {
-                return true;
-            }
-
-            AdoptTexture(newDescriptor);
             return true;
         }
 
         public void DestroyTexture()
         {
-            m_IsCreated = false;
+            // Do nothing. This class cannot destroy the RenderTexture that it references.
         }
 
         void IDisposable.Dispose()
         {
-            DestroyTexture();
+            // Do nothing.
         }
     }
 }

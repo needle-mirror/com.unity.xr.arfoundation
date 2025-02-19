@@ -10,6 +10,10 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRHumanBodySubsystem
         : TrackingSubsystem<XRHumanBody, XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider>
     {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        ValidationUtility<XRHumanBody> m_ValidationUtility = new();
+#endif
+
         /// <summary>
         /// Whether 2D human body pose estimation is requested.
         /// </summary>
@@ -83,7 +87,13 @@ namespace UnityEngine.XR.ARSubsystems
         /// The trackable human body changes.
         /// </returns>
         public override TrackableChanges<XRHumanBody> GetChanges(Allocator allocator)
-            => provider.GetChanges(XRHumanBody.defaultValue, allocator);
+        {
+            var changes = provider.GetChanges(XRHumanBody.defaultValue, allocator);
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#endif
+            return changes;
+        }
 
         /// <summary>
         /// Query the provider for the skeleton joints for the requested trackable identifier.
@@ -108,8 +118,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support human body
         /// pose 2D.</exception>
         public NativeArray<XRHumanBodyPose2DJoint> GetHumanBodyPose2DJoints(Allocator allocator)
-            => provider.GetHumanBodyPose2DJoints(default(XRHumanBodyPose2DJoint), Screen.width, Screen.height,
-                                                   Screen.orientation, allocator);
+            => provider.GetHumanBodyPose2DJoints(
+                default, Screen.width, Screen.height, Screen.orientation, allocator);
 
         /// <summary>
         /// Register the descriptor for the human body subsystem implementation.

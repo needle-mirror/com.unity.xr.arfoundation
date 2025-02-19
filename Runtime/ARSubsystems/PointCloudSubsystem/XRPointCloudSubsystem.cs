@@ -15,6 +15,9 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRPointCloudSubsystem
         : TrackingSubsystem<XRPointCloud, XRPointCloudSubsystem, XRPointCloudSubsystemDescriptor, XRPointCloudSubsystem.Provider>
     {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        ValidationUtility<XRPointCloud> m_ValidationUtility = new();
+#endif
 
         /// <summary>
         /// Get the changes to point clouds (added, updated, and removed) since the last call to <see cref="GetChanges(Allocator)"/>.
@@ -27,7 +30,6 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XRPointCloud> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XRPointCloud.defaultValue, allocator);
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
 #endif
@@ -44,9 +46,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// A new <see cref="XRPointCloudData"/> with newly allocated <c>NativeArray</c>s using <paramref name="allocator"/>.
         /// The caller owns the memory and is responsible for calling <see cref="XRPointCloudData.Dispose"/> on it.
         /// </returns>
-        public XRPointCloudData GetPointCloudData(
-            TrackableId trackableId,
-            Allocator allocator)
+        public XRPointCloudData GetPointCloudData(TrackableId trackableId, Allocator allocator)
         {
             if (allocator == Allocator.Temp)
                 throw new InvalidOperationException("Allocator.Temp is not supported. Use Allocator.TempJob if you wish to use a temporary allocator.");
@@ -105,10 +105,5 @@ namespace UnityEngine.XR.ARSubsystems
             /// </returns>
             public abstract XRPointCloudData GetPointCloudData(TrackableId trackableId, Allocator allocator);
         }
-
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-        ValidationUtility<XRPointCloud> m_ValidationUtility =
-            new ValidationUtility<XRPointCloud>();
-#endif
     }
 }

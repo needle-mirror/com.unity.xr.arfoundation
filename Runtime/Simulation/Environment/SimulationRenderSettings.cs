@@ -78,12 +78,7 @@ namespace UnityEngine.XR.Simulation
             m_AmbientLight = RenderSettings.ambientLight;
             m_SubtractiveShadowColor = RenderSettings.subtractiveShadowColor;
             m_Skybox = RenderSettings.skybox;
-#if UNITY_2022_1_OR_NEWER
             m_CustomReflection = RenderSettings.customReflectionTexture;
-#else
-            if (RenderSettings.customReflection is Cubemap customReflection)
-                m_CustomReflection = customReflection;
-#endif
             m_ReflectionIntensity = RenderSettings.reflectionIntensity;
             m_ReflectionBounces = RenderSettings.reflectionBounces;
             m_DefaultReflectionMode = RenderSettings.defaultReflectionMode;
@@ -110,11 +105,7 @@ namespace UnityEngine.XR.Simulation
             RenderSettings.skybox = m_Skybox;
             RenderSettings.sun = m_UseSceneSun ? m_SceneSun : m_Sun;
             RenderSettings.ambientProbe = m_UseSceneSun ? m_SceneAmbientProbe : m_AmbientProbe;
-#if UNITY_2022_1_OR_NEWER
             RenderSettings.customReflectionTexture = m_CustomReflection;
-#else
-            RenderSettings.customReflection = m_CustomReflection;
-#endif
             RenderSettings.reflectionIntensity = m_ReflectionIntensity;
             RenderSettings.reflectionBounces = m_ReflectionBounces;
             RenderSettings.defaultReflectionMode = m_DefaultReflectionMode;

@@ -50,8 +50,8 @@ namespace UnityEngine.XR.Simulation
 
         internal bool automaticPlacementEnabled
         {
-            get { return m_AutomaticPlacementEnabled; }
-            set { m_AutomaticPlacementEnabled = value; }
+            get => m_AutomaticPlacementEnabled;
+            set => m_AutomaticPlacementEnabled = value;
         }
 
         public void Dispose()
@@ -173,18 +173,11 @@ namespace UnityEngine.XR.Simulation
             var probeTransform = probe.transform;
             m_ProbeCameraData.transform.SetPositionAndRotation(probeTransform.position, probeTransform.rotation);
 
-#if UNITY_2022_1_OR_NEWER
             var cubemap = new Cubemap(
                 m_ProbeParams.cubemapFaceSize,
                 TextureFormat.RGBAHalf,
                 0,
                 true)
-#else
-            var cubemap = new Cubemap(
-                m_ProbeParams.cubemapFaceSize,
-                TextureFormat.RGBAHalf,
-                false)
-#endif
             {
                 name = $"{probe.name}-Generated-Cubemap",
                 hideFlags = k_GeneratedHideFlags

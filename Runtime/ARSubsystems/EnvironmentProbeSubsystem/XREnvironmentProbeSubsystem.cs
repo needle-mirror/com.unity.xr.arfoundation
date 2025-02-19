@@ -11,6 +11,10 @@ namespace UnityEngine.XR.ARSubsystems
     public class XREnvironmentProbeSubsystem
         : TrackingSubsystem<XREnvironmentProbe, XREnvironmentProbeSubsystem, XREnvironmentProbeSubsystemDescriptor, XREnvironmentProbeSubsystem.Provider>
     {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        ValidationUtility<XREnvironmentProbe> m_ValidationUtility = new();
+#endif
+
         /// <summary>
         /// Constructs an <see cref="XREnvironmentProbeSubsystem"/>.
         /// Do not create this directly.
@@ -75,7 +79,13 @@ namespace UnityEngine.XR.ARSubsystems
         /// since the last call to <see cref="GetChanges(Allocator)"/>. The caller owns the memory allocated with [Allocator](xref:Unity.Collections.Allocator) and is responsible for disposing it.
         /// </returns>
         public override TrackableChanges<XREnvironmentProbe> GetChanges(Allocator allocator)
-            => provider.GetChanges(XREnvironmentProbe.defaultValue, allocator);
+        {
+            var changes = provider.GetChanges(XREnvironmentProbe.defaultValue, allocator);
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#endif
+            return changes;
+        }
 
         /// <summary>
         /// Tries to create an environment probe.

@@ -92,11 +92,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             var manager = flow.GetValue(managerIn) as ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>;
             if (manager == null)
             {
-#if UNITY_2023_1_OR_NEWER
                 manager = Object.FindAnyObjectByType<ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>>();
-#else
-                manager = Object.FindObjectOfType<ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>>();
-#endif
             }
             if (manager == null)
                 throw new InvalidOperationException(

@@ -132,11 +132,7 @@ namespace UnityEngine.XR.Simulation
                 return;
 
             var vertices = plane.vertices;
-#if UNITY_2022_1_OR_NEWER
             if (!vertices.IsCreated)
-#else
-            if (vertices.Length <= 0)
-#endif
                 return;
 
             var subsumedVertices = new NativeArray<Vector2>(vertices.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);

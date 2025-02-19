@@ -15,5 +15,10 @@ namespace UnityEngine.XR.ARFoundation
         /// Enable a global shader keyword for hard occlusion.
         /// </summary>
         HardOcclusion = 1,
+
+        /// <summary>
+        /// Enable a global shader keyword for soft occlusion.
+        /// </summary>
+        SoftOcclusion = 2
     }
 }

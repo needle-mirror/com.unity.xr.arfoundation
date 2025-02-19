@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation
 
         internal Texture texture { get; }
 
-        internal bool TryUpdateFromDescriptor(XRTextureDescriptor descriptor);
+        public bool TryUpdateFromDescriptor(XRTextureDescriptor descriptor);
 
         public void DestroyTexture();
 

@@ -42,10 +42,6 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>Changes since the last call to this method.</returns>
         public override TrackableChanges<XRAnchor> GetChanges(Allocator allocator)
         {
-            if (!running)
-                throw new InvalidOperationException(
-                    $"Can't call {nameof(GetChanges)} without \"Start\"ing the anchor subsystem!");
-
             var changes = provider.GetChanges(XRAnchor.defaultValue, allocator);
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             m_ValidationUtility.ValidateAndDisposeIfThrown(changes);

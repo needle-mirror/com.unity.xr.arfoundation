@@ -8,6 +8,30 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.1.0] - 2025-02-19
+
+### Added
+
+- Added `ValidationFailure` as an option to [XRResultStatus.StatusCode](xref:UnityEngine.XR.ARSubsystems.XRResultStatus.StatusCode).
+- Added support for soft occlusion. Refer to the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) GitHub repository for example usage in the `MetaOcclusion` scene.
+  - Added a soft occlusion preprocessing shader at `Assets/Shaders/SoftOcclusionPreprocessing.shader`.
+  - Added [ARShaderOcclusion.softOcclusionShaderKeyword](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.softOcclusionShaderKeyword), [ARShaderOcclusion.ndcLinearConversionParametersPropertyId](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.ndcLinearConversionParametersPropertyId), and [AROcclusionShaderMode.SoftOcclusion](xref:UnityEngine.XR.ARFoundation.AROcclusionShaderMode.SoftOcclusion).
+
+### Changed
+
+- Changed the behavior of `XRAnchorSubsystem` so that if you call `GetChanges` while the subsystem is stopped, it will no longer throw an `InvalidOperationException`. It is valid to call `GetChanges` while the subsystem is stopped to retrieve information about anchors that were in the middle of an asynchronous operation at the moment when the subsystem was stopped.
+- Changed the following subsytems so that they validate correct life cycle behavior of trackables when your app is built as a Development Build or run in the Editor: `XREnvironmentProbeSubsystem`, `XRHumanBodySubsystem`, `XRPointCloudSubsystem`, `XRRaycastSubsystem`. All other tracking subsystems already perform validation in this way, so this change makes them all consistent.
+
+### Removed
+
+- Removed the pre-release API `ARShaderOcclusion.environmentDepthNearFarPlanePropertyId` and replaced it with `ARShaderOcclusion.ndcLinearConversionParametersPropertyId`.
+
+### Fixed
+
+- Fixed `XRFaceSubsystem` so that it no longer creates duplicate profiler markers for its `GetChanges` implementation.
+- Fixed the AR Environment Probe Manager component so that it can no longer throw an `InvalidOperationException` when you unload a scene containing one or more environment probes. ([ARFB-521](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-521))
+- Fixed the `ARAnchor` component so that if it fails to add itself as an anchor with the anchor subsystem, the component disables itself instead of deactivating its GameObject.
+
 ## [6.1.0-pre.5] - 2025-01-27
 
 ### Fixed

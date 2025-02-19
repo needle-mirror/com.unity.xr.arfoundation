@@ -24,11 +24,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             m_Manager = GetComponent<ARCameraManager>();
             if (m_Manager == null)
             {
-#if UNITY_2023_1_OR_NEWER
                 m_Manager = FindAnyObjectByType<ARCameraManager>();
-#else
-                m_Manager = FindObjectOfType<ARCameraManager>();
-#endif
                 if (m_Manager == null)
                     throw new InvalidOperationException(
                         $"{GetType().Name} requires an active and enabled {nameof(ARCameraManager)} in the scene, but none was found.");

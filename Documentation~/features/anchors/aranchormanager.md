@@ -45,9 +45,9 @@ While enabled, the AR Anchor Manager component allows you to create anchors in f
     When an AR Anchor component is enabled at runtime, it will use the AR Anchor Manager in your scene to attempt to add itself as an anchor. If you choose to create anchors with the AR Anchor component, it is important to understand the limitations of this approach.
 
     > [!IMPORTANT]
-    > When you enable an AR Anchor component at runtime, it makes a request to the AR Anchor Manager to add itself as an anchor. This request can fail, and if it fails, the AR Anchor component deactivates its GameObject and is not tracked.
-    >
-    > You should use `ARAnchorManager.trackablesChanged` to verify that the anchor was successfully added before you parent any content to a newly enabled AR Anchor component.
+    > When you enable an AR Anchor component at runtime, it makes a request to the AR Anchor Manager to add itself as an anchor. This request can fail, and if it fails, the AR Anchor component disables itself and is not tracked.
+
+    Given the limitations of adding an AR Anchor component at runtime, Unity recommends that you add anchors with `TryAddAnchorAsync` instead. If you choose to add an AR Anchor component to a GameObject at runtime, you should use `ARAnchorManager.trackablesChanged` to verify that the anchor was successfully added before you parent any content to a newly enabled AR Anchor component.
 
 ## Parent your content to the anchor
 
