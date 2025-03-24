@@ -7,7 +7,7 @@ A *subsystem* (shorthand for [SubsystemWithProvider](xref:UnityEngine.Subsystems
 
 AR Foundation defines its AR features using subsystems. For example, the [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem) defines an interface for plane detection. You use the same application code to interact with a detected plane on iOS and Android — or any other platform with an implementation of the plane subsystem — but AR Foundation itself does not contain subsystem implementations for these platforms.
 
-Subsystem implementations are called *providers*, and are typically made available in separate packages called *provider plug-ins*. For example, the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) provides subsystem implementations for the Android platform, and the [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html) provides implementations for iOS.
+Subsystem implementations are called *providers*, and are typically made available in separate packages called *provider plug-ins*. For example, the [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.2/manual/index.html) provides subsystem implementations for the Android platform, and the [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.2/manual/index.html) provides implementations for iOS.
 
 With the exception of [Device tracking](xref:arfoundation-device-tracking), the table below lists AR Foundation's AR features and their corresponding subsystems. (Device tracking uses the [Input System](https://docs.unity3d.com/Packages/com.unity.inputsystem@latest) and is not subsytem-based.)
 

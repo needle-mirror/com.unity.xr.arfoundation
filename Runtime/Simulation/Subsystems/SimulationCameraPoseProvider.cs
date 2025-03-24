@@ -4,12 +4,16 @@ using Unity.XR.CoreUtils;
 namespace UnityEngine.XR.Simulation
 {
     /// <summary>
-    /// Takes mouse and keyboard input and uses it to compute a new camera transform
-    /// which is passed to our InputSubsystem in native code.
+    /// This component takes updates from mouse and keyboard input and uses it to compute a new camera pose,
+    /// which it then passes to the XR Input subsystem in native code.
     /// </summary>
-    class SimulationCamera : MonoBehaviour
+    /// <remarks>
+    /// The <see cref="SimulationCameraSubsystem"/> is responsible to create this component at runtime.
+    /// </remarks>
+    [AddComponentMenu("")]
+    public class SimulationCameraPoseProvider : MonoBehaviour
     {
-        static SimulationCamera s_Instance;
+        static SimulationCameraPoseProvider s_Instance;
 
         CameraFPSModeHandler m_FPSModeHandler;
 
@@ -36,11 +40,11 @@ namespace UnityEngine.XR.Simulation
             transform.SetWorldPose(pose);
 
             var localPose = transform.GetLocalPose();
-            SetCameraPose(localPose.position.x, localPose.position.y, localPose.position.z,
+            NativeApi.SetCameraPose(localPose.position.x, localPose.position.y, localPose.position.z,
                 localPose.rotation.x, localPose.rotation.y, localPose.rotation.z, localPose.rotation.w);
         }
 
-        public void SetSimulationEnvironment(SimulationEnvironment simulationEnvironment)
+        internal void SetSimulationEnvironment(SimulationEnvironment simulationEnvironment)
         {
             if (simulationEnvironment != null)
             {
@@ -51,12 +55,12 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
-        internal static SimulationCamera GetOrCreateSimulationCamera()
+        internal static SimulationCameraPoseProvider GetOrCreateSimulationCameraPoseProvider()
         {
             if (!s_Instance)
             {
                 var go = GameObjectUtils.Create("SimulationCamera");
-                s_Instance = go.AddComponent<SimulationCamera>();
+                s_Instance = go.AddComponent<SimulationCameraPoseProvider>();
                 var camera = go.AddComponent<Camera>();
                 camera.enabled = false;
             }
@@ -64,8 +68,11 @@ namespace UnityEngine.XR.Simulation
             return s_Instance;
         }
 
-        [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_SetCameraPose")]
-        public static extern void SetCameraPose(float pos_x, float pos_y, float pos_z,
-        float rot_x, float rot_y, float rot_z, float rot_w);
+        static class NativeApi
+        {
+            [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_SetCameraPose")]
+            public static extern void SetCameraPose(float pos_x, float pos_y, float pos_z,
+            float rot_x, float rot_y, float rot_z, float rot_w);
+        }
     }
 }

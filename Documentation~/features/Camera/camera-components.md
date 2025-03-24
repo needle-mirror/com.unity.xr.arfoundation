@@ -11,8 +11,8 @@ AR Foundation cameras are supported on iOS and Android as indicated by the table
 
 | Provider plug-in         | Camera supported | Provider documentation |
 | :----------------------- | :--------------: | :--------------------- |
-| Google ARCore XR Plug-in |        Yes       | [Camera](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/arcore-camera.html) (ARCore) |
-| Apple ARKit XR Plug-in   |        Yes       | [Camera](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/arkit-camera.html) (ARKit) |
+| Google ARCore XR Plug-in |        Yes       | [Camera](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.2/manual/arcore-camera.html) (ARCore) |
+| Apple ARKit XR Plug-in   |        Yes       | [Camera](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.2/manual/arkit-camera.html) (ARKit) |
 | OpenXR Plug-in           |        No        | |
 
 # AR Camera Manager component

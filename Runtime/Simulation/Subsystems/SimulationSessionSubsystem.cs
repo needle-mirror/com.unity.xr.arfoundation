@@ -24,7 +24,7 @@ namespace UnityEngine.XR.Simulation
 
         class SimulationProvider : Provider
         {
-            SimulationCamera m_SimulationCamera;
+            SimulationCameraPoseProvider m_SimulationCameraPoseProvider;
             SimulationMeshSubsystem m_MeshSubsystem;
 
             Camera m_XROriginCamera;
@@ -39,7 +39,7 @@ namespace UnityEngine.XR.Simulation
             bool Initialize()
             {
                 s_SimulationSceneManager ??= new SimulationSceneManager();
-                m_SimulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
+                m_SimulationCameraPoseProvider = SimulationCameraPoseProvider.GetOrCreateSimulationCameraPoseProvider();
 
                 if (SimulationMeshSubsystem.GetActiveSubsystemInstance() != null)
                 {
@@ -60,7 +60,7 @@ namespace UnityEngine.XR.Simulation
                 m_XROriginCamera = xrOrigin.Camera;
 
                 SimulationEnvironmentScanner.GetOrCreate().Initialize(
-                    m_SimulationCamera,
+                    m_SimulationCameraPoseProvider,
                     s_SimulationSceneManager.environmentScene.GetPhysicsScene(),
                     s_SimulationSceneManager.simulationEnvironment.gameObject);
 
@@ -101,10 +101,10 @@ namespace UnityEngine.XR.Simulation
 
             public override void Destroy()
             {
-                if (m_SimulationCamera != null)
+                if (m_SimulationCameraPoseProvider != null)
                 {
-                    Object.Destroy(m_SimulationCamera.gameObject);
-                    m_SimulationCamera = null;
+                    Object.Destroy(m_SimulationCameraPoseProvider.gameObject);
+                    m_SimulationCameraPoseProvider = null;
                 }
 
                 if (m_MeshSubsystem != null)
@@ -140,7 +140,7 @@ namespace UnityEngine.XR.Simulation
             void SetupSimulation()
             {
                 s_SimulationSceneManager.SetupEnvironment();
-                m_SimulationCamera.SetSimulationEnvironment(s_SimulationSceneManager.simulationEnvironment);
+                m_SimulationCameraPoseProvider.SetSimulationEnvironment(s_SimulationSceneManager.simulationEnvironment);
             }
 
 #if UNITY_EDITOR

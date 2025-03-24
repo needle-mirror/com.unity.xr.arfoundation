@@ -1,8 +1,8 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "5.1.6",
-  "unity": "2021.2",
+  "version": "5.2.0",
+  "unity": "2021.3",
   "description": "A collection of Subsystems as well as MonoBehaviours and C# utilities for working with the Subsystems. \n\nIncludes: \n▪ Definitions of Subsystems \n▪ GameObject menu items for creating an AR setup \n▪ MonoBehaviours that control AR session lifecycle and create GameObjects from detected, real-world trackable features \n▪ Scale handling \n▪ Face tracking\n\nSamples available at https://github.com/Unity-Technologies/arfoundation-samples",
   "keywords": [
     "xr",
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed the `SimulationRaycastSubsystem` to correctly state via `XRRaycastSubsystemDescriptor.supportedTrackableTypes` that casting rays against planes is supported in XR Simulation.\n- Fixed the `SimulationSessionSubsystem` so it doesn't log an error if you call `ARSession.Reset` before the session is initialized.\n- Fixed the XR Simulation point clouds implementation so that it no longer logs an error when the AR Point Cloud Manager component is disabled and then re-enabled. ([ARFB-487](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-487))\n- Fixed the `SimulationEnvironmentProbeSubsystem` so that [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes can be enabled or disabled, as is possible on other AR platforms.\n- Fixed the AR Environment Probe Manager component so that it can no longer throw an `ArgumentNullException` when you unload a scene containing one or more environment probes.\n- Fixed the AR Environment Probe Manager component so that it can no longer throw an `InvalidOperationException` when you unload a scene containing one or more environment probes. ([ARFB-521](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-521))\n- Fixed `XRFaceSubsystem` so that it no longer creates duplicate profiler markers for its `GetChanges` implementation."
+    "changelog": "### Added\n\n- Added enum `ARDebugMenu.DebugMenuRenderMode` and property `ARDebugMenu.debugMenuMode` that allows you to specify the render mode of the menu's canvas.\n- Added XR Simulation's `SimulationCameraPoseProvider` as a public component."
   },
   "upmCi": {
-    "footprint": "8173e0b411cb508e7f621545c9dd9325c5744d2f"
+    "footprint": "0636010cb1eef68800d044afb2401dc2718ad790"
   },
-  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@5.1/manual/index.html",
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@5.2/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "37df803cce57e6d6a12eb76538d244f7c5d84618"
+    "revision": "0764e7f8f718adfebde434e12c9b1cc3b88737b3"
   }
 }

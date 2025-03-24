@@ -47,11 +47,11 @@ An `AR Face` is represented by a mesh that consists of [vertices](xref:UnityEngi
 
 You can add the [ARFaceMeshVisualizer](xref:UnityEngine.XR.ARFoundation.ARFaceMeshVisualizer) to your face prefab to generate a 3D representation of detected human faces.
 
-The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/5.1) GitHub repository contains prefabs that you can use to get started, outlined in the following table.
+The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/5.2) GitHub repository contains prefabs that you can use to get started, outlined in the following table.
 
 | Prefab | Description |
 | :----- | :---------- |
-| [Face Mesh Visualizer](https://github.com/Unity-Technologies/arfoundation-samples/blob/5.1/Assets/Prefabs/FaceMeshPrefab.prefab) | Visualize the generated face mesh for a detected face. |
+| [Face Mesh Visualizer](https://github.com/Unity-Technologies/arfoundation-samples/blob/5.2/Assets/Prefabs/FaceMeshPrefab.prefab) | Visualize the generated face mesh for a detected face. |
 
 #### Custom face visualizers
 

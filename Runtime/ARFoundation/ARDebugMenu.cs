@@ -20,6 +20,27 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(Canvas))]
     public class ARDebugMenu : MonoBehaviour
     {
+        /// <summary>
+        /// The render mode of the debug menu's canvas.
+        /// </summary>
+        public enum DebugMenuRenderMode
+        {
+            /// <summary>
+            /// Automated mode that sets the canvas render mode to screen space on mobile platforms
+            /// and world space on non-mobile platforms.
+            /// </summary>
+            Auto,
+
+            /// <summary>
+            /// Overlay screen space render mode for the canvas.
+            /// </summary>
+            ScreenSpace,
+
+            /// <summary>
+            /// World space render mode for the canvas.
+            /// </summary>
+            WorldSpace,
+        }
 
         [SerializeField]
         [Tooltip("A debug prefab that visualizes the position of the XROrigin.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
@@ -452,6 +473,23 @@ namespace UnityEngine.XR.ARFoundation
             set => m_CameraConfigurationDropdown = value;
         }
 
+        [SerializeField]
+        [Tooltip("The render mode of the debug menu's canvas.")]
+        DebugMenuRenderMode m_DebugMenuRenderMode = DebugMenuRenderMode.Auto;
+
+        /// <summary>
+        /// The render mode of the debug menu's canvas.
+        /// </summary>
+        /// <value>
+        /// The render mode can either be in world space, screen space or in an automated mode that sets mobile platforms
+        /// to screen space and non-mobile platforms to worldspace.
+        /// </value>
+        public DebugMenuRenderMode debugMenuRenderMode
+        {
+            get => m_DebugMenuRenderMode;
+            set => m_DebugMenuRenderMode = value;
+        }
+
         //Managers
         XROrigin m_Origin;
 
@@ -495,6 +533,8 @@ namespace UnityEngine.XR.ARFoundation
         bool m_ConfigMenuSetup;
 
         bool m_CameraMenuSetup;
+
+        bool m_CanvasRenderModeSetup;
 
         Configuration m_CurrentConfiguration;
 
@@ -624,6 +664,12 @@ namespace UnityEngine.XR.ARFoundation
                     m_CurrentCameraConfiguration = (XRCameraConfiguration) cameraConfig;
                 }
             }
+
+            if (!m_CanvasRenderModeSetup)
+            {
+                ConfigureCanvasRenderBehavior();
+                m_CanvasRenderModeSetup = true;
+            }
         }
 
         void InitMenu()
@@ -679,17 +725,31 @@ namespace UnityEngine.XR.ARFoundation
             m_DisplayDebugOptionsMenuButton.onClick.AddListener(delegate { ShowMenu(m_DebugOptionsMenu); });
             m_DisplayCameraConfigurationsMenuButton.onClick.AddListener(delegate { ShowMenu(m_CameraConfigurationMenu); });
             m_CameraConfigurationDropdown.onValueChanged.AddListener(delegate { OnCameraDropdownValueChanged(m_CameraConfigurationDropdown); });
+        }
 
+        void ConfigureCanvasRenderBehavior()
+        {
             Canvas menu = GetComponent<Canvas>();
-#if UNITY_IOS || UNITY_ANDROID
-            menu.renderMode = RenderMode.ScreenSpaceOverlay;
-#else
-            var rectTransform = GetComponent<RectTransform>();
-            menu.renderMode = RenderMode.WorldSpace;
-            menu.worldCamera  = m_CameraAR;
-            m_CameraFollow = true;
-            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, 575);
-#endif
+
+            if (m_DebugMenuRenderMode == DebugMenuRenderMode.ScreenSpace ||
+                (m_DebugMenuRenderMode == DebugMenuRenderMode.Auto && IsScreenSpaceSession()))
+            {
+               menu.renderMode = RenderMode.ScreenSpaceOverlay;
+            }
+            else
+            {
+                var rectTransform = GetComponent<RectTransform>();
+                menu.renderMode = RenderMode.WorldSpace;
+                menu.worldCamera  = m_CameraAR;
+                m_CameraFollow = true;
+                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, 575);
+            }
+        }
+
+        bool IsScreenSpaceSession()
+        {
+            return m_SessionSubsystem == null || m_SessionSubsystem.subsystemDescriptor.id == "ARKit-Session" ||
+                    m_SessionSubsystem.subsystemDescriptor.id == "ARCore-Session" ||  m_SessionSubsystem.subsystemDescriptor.id == "XRSimulation-Session";
         }
 
         void ConfigureMenuPosition()

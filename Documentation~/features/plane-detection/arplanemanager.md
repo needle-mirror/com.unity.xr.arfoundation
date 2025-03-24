@@ -40,8 +40,8 @@ The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-s
 
 | Prefab | Description |
 | :----- | :---------- |
-| [AR Plane Debug Visualizer](https://github.com/Unity-Technologies/arfoundation-samples/blob/5.1/Assets/Prefabs/AR%20Plane%20Debug%20Visualizer.prefab) | Visualize plane meshes with a solid color, and optionally visualize additional information such as the plane's [trackableId](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackableId), [trackingState](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackingState), [classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications), and normal vector. You can configure the visualization options via the Inspector. |
-| [AR Feathered Plane](https://github.com/Unity-Technologies/arfoundation-samples/blob/5.1/Assets/Prefabs/AR%20Feathered%20Plane.prefab) | Visualize plane meshes with a stylized polka dot pattern that fades to become transparent at the edges of the plane's boundary. |
+| [AR Plane Debug Visualizer](https://github.com/Unity-Technologies/arfoundation-samples/blob/5.2/Assets/Prefabs/AR%20Plane%20Debug%20Visualizer.prefab) | Visualize plane meshes with a solid color, and optionally visualize additional information such as the plane's [trackableId](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackableId), [trackingState](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackingState), [classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications), and normal vector. You can configure the visualization options via the Inspector. |
+| [AR Feathered Plane](https://github.com/Unity-Technologies/arfoundation-samples/blob/5.2/Assets/Prefabs/AR%20Feathered%20Plane.prefab) | Visualize plane meshes with a stylized polka dot pattern that fades to become transparent at the edges of the plane's boundary. |
 
 #### Custom plane visualizers
 

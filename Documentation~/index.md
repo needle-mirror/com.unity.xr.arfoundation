@@ -16,8 +16,8 @@ The AR Foundation package contains interfaces for AR features, but doesn't imple
 
 Unity officially supports the following provider plug-ins:
 
-* [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.1/manual/index.html) on Android
-* [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.1/manual/index.html) on iOS
+* [Google ARCore XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arcore@5.2/manual/index.html) on Android
+* [Apple ARKit XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.arkit@5.2/manual/index.html) on iOS
 * [Apple visionOS XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.visionos@0.6/manual/index.html) on visionOS
 * [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.5/manual/index.html) on HoloLens 2
 * [Unity OpenXR: Meta](https://docs.unity3d.com/Packages/com.unity.xr.meta-openxr@1.0/manual/index.html) on Meta Quest

@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     class HelpURLAttribute : UnityEngine.HelpURLAttribute
     {
-        const string k_Version = "5.1";
+        const string k_Version = "5.2";
 
         public HelpURLAttribute(Type type)
             : base($"https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@{k_Version}/api/{type.FullName}.html")

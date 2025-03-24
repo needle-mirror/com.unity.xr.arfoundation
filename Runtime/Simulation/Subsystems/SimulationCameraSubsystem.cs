@@ -129,8 +129,8 @@ namespace UnityEngine.XR.Simulation
                     return;
                 }
 
-                var simulationCamera = SimulationCamera.GetOrCreateSimulationCamera();
-                m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simulationCamera.GetComponent<Camera>(), xrCamera);
+                var simCameraPoseProvider = SimulationCameraPoseProvider.GetOrCreateSimulationCameraPoseProvider();
+                m_CameraTextureProvider = CameraTextureProvider.AddTextureProviderToCamera(simCameraPoseProvider.GetComponent<Camera>(), xrCamera);
                 m_CameraTextureProvider.onTextureReadbackFulfilled += SimulationXRCpuImageApi.OnCameraDataReceived;
                 m_CameraTextureProvider.cameraFrameReceived += CameraFrameReceived;
                 if (m_CameraTextureProvider != null && m_CameraTextureProvider.CameraFrameEventArgs != null)
