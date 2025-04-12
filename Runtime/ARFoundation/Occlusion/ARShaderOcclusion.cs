@@ -1,5 +1,10 @@
 using System;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
+#if UNITY_EDITOR
+using UnityEditor.Callbacks;
+using UnityEditor;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -23,6 +28,9 @@ namespace UnityEngine.XR.ARFoundation
 
         const string k_EnvironmentDepthProjectionMatricesPropertyName = "_EnvironmentDepthProjectionMatrices";
         const string k_NdcLinearConversionParametersPropertyName = "_NdcLinearConversionParameters";
+        const string k_IsOcclusionOnPropertyName = "_IsOcclusionOn";
+
+        static int s_IsOcclusionOnPropertyNameId;
 
         SoftOcclusionPreprocessor m_SoftOcclusionPreprocessor;
 
@@ -42,6 +50,19 @@ namespace UnityEngine.XR.ARFoundation
         [SerializeField]
         [Tooltip("The preprocessing shader, if any, to include in the build for soft occlusion.")]
         Shader m_SoftOcclusionPreprocessShader;
+
+        [SerializeField]
+        [Tooltip("Flags for making an occlusion source mask")]
+        AROcclusionSources m_AROcclusionSources;
+
+        [SerializeField]
+        [Tooltip("A material which is being used on hands, when hands occlusion is enabled")]
+        Material m_HandsOcclusionMaterial;
+
+        /// <summary>
+        /// Event triggered when an occlusion source is set or updated.
+        /// </summary>
+        public event EventHandler<AROcclusionSourceEventArgs> occlusionSourceSet = delegate { };
 
         /// <summary>
         /// Enables a global shader keyword to enable hard or soft occlusion. To implement occlusion in your app, use a
@@ -101,10 +122,16 @@ namespace UnityEngine.XR.ARFoundation
                 Shader.PropertyToID(k_EnvironmentDepthProjectionMatricesPropertyName);
 
             ndcLinearConversionParametersPropertyId = Shader.PropertyToID(k_NdcLinearConversionParametersPropertyName);
+            s_IsOcclusionOnPropertyNameId = Shader.PropertyToID(k_IsOcclusionOnPropertyName);
 
             if (occlusionShaderMode == AROcclusionShaderMode.SoftOcclusion
                 && m_SoftOcclusionPreprocessShader != null)
                 m_SoftOcclusionPreprocessor = new SoftOcclusionPreprocessor(m_SoftOcclusionPreprocessShader);
+        }
+
+        void Start()
+        {
+            occlusionSourceSet.Invoke(this, new AROcclusionSourceEventArgs(m_AROcclusionSources, m_HandsOcclusionMaterial));
         }
 
         void OnDestroy()
@@ -116,12 +143,48 @@ namespace UnityEngine.XR.ARFoundation
         {
             shaderOcclusionComponentEnabled?.Invoke(gameObject);
             m_OcclusionManager.frameReceived += OnOcclusionFrameReceived;
+
+            if ((m_AROcclusionSources & AROcclusionSources.EnvironmentDepth) == AROcclusionSources.EnvironmentDepth)
+            {
+                EnableEnvironmentOcclusion();
+            }
         }
 
         void OnDisable()
         {
             m_OcclusionManager.frameReceived -= OnOcclusionFrameReceived;
             shaderOcclusionComponentDisabled?.Invoke(gameObject);
+            DisableEnvironmentOcclusion();
+        }
+
+#if UNITY_EDITOR
+        [DidReloadScripts]
+        static void OnScriptReloaded()
+        {
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            s_IsOcclusionOnPropertyNameId = Shader.PropertyToID(k_IsOcclusionOnPropertyName);
+        }
+
+        static void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredEditMode || state == PlayModeStateChange.ExitingPlayMode)
+            {
+                DisableEnvironmentOcclusion();
+            }
+            else if (state == PlayModeStateChange.EnteredPlayMode)
+            {
+                EnableEnvironmentOcclusion();
+            }
+        }
+#endif
+        static void EnableEnvironmentOcclusion()
+        {
+            Shader.SetGlobalInteger(s_IsOcclusionOnPropertyNameId, 1);
+        }
+
+        static void DisableEnvironmentOcclusion()
+        {
+            Shader.SetGlobalInteger(s_IsOcclusionOnPropertyNameId, 0);
         }
 
         void OnOcclusionFrameReceived(AROcclusionFrameEventArgs eventArgs)

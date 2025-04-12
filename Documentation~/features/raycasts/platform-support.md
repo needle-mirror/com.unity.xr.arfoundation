@@ -3,7 +3,7 @@ uid: arfoundation-raycasts-platform-support
 ---
 # Ray cast platform support
 
-The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) is supported on the ARCore, ARKit, Microsoft HoloLens, Meta OpenXR, and XR Simulation platforms, as shown in the following table:
+The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) is supported on the ARCore, ARKit, Microsoft HoloLens, OpenXR Meta, and XR Simulation platforms, as shown in the following table:
 
 | Provider plug-in          | Ray casting supported | Provider documentation                         |
 | :------------------------ | :-------------------: | :--------------------------------------------- |
@@ -11,7 +11,7 @@ The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycas
 | Apple ARKit XR Plug-in    |           Yes         | [Ray casts](xref:arkit-raycasts) (ARKit)       |
 | Apple visionOS XR Plug-in |                       |                                                |
 | Microsoft HoloLens        |           Yes         | N/A                                            |
-| Unity OpenXR: Meta        |           Yes         | [Ray casts](xref:meta-openxr-raycasts) (Meta OpenXR) |
+| Unity OpenXR: Meta        |           Yes         | [Ray casts](xref:meta-openxr-raycasts) (OpenXR Meta) |
 | Unity OpenXR: Android XR  |           Yes         | [Ray casts](xref:androidxr-openxr-raycasts) (Android XR) |
 | XR Simulation             |           Yes         | [Ray casts](xref:arfoundation-simulation-raycasts) (XR Simulation) |
 
@@ -40,14 +40,14 @@ The following table lists the optional features of the [XRRaycastSubsystem](xref
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature                    | ARCore | ARKit   | Meta OpenXR | Android XR | XR Simulation |
+| Feature                    | ARCore | ARKit   | OpenXR Meta | Android XR | XR Simulation |
 | :------------------------- | :----: | :-----: | :---------: | :--------: | :-----------: |
 | **Viewport based raycast** |   Yes  |   Yes   |             |            |               |
 | **World based raycast**    |   Yes  |         |     Yes     |     Yes    |      Yes      |
 | **Tracked raycasts**       |   Yes  | iOS 13+ |             |            |               |
 
 > [!NOTE]
-> The Meta OpenXR ray cast implementation performs calculations in Unity world space and does not rely on native platform implementation. Refer to the Meta OpenXR [Ray cast](xref:meta-openxr-raycasts) documentation to understand ray casting on Meta OpenXR devices.
+> The OpenXR Meta ray cast implementation performs calculations in Unity world space and does not rely on native platform implementation. Refer to the OpenXR Meta [Ray cast](xref:meta-openxr-raycasts) documentation to understand ray casting on OpenXR Meta devices.
 
 <a id="supported-trackables"/>
 
@@ -55,7 +55,7 @@ The following table lists whether certain XR plug-in providers support each opti
 
 [ARRaycastManager](xref:UnityEngine.XR.ARFoundation.ARRaycastManager) supports ray casting against most [TrackableTypes](xref:UnityEngine.XR.ARSubsystems.TrackableType). The following table shows which trackables each platform supports ray casting against:
 
-| TrackableType           | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
+| TrackableType           | ARCore | ARKit | OpenXR Meta | Android XR | XR Simulation |
 | :---------------------- | :----: | :---: | :---------: | :--------: | :-----------: |
 | **BoundingBox**         |        |       |     Yes     |            |               |
 | **Depth**               |  Yes   |       |             |    Yes     |               |

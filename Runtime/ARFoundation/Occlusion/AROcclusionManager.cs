@@ -21,10 +21,10 @@ namespace UnityEngine.XR.ARFoundation
         SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
     {
         ISwapchainStrategy m_SwapchainStrategy;
-        ARTextureInfo m_HumanStencilTextureInfo;
-        ARTextureInfo m_HumanDepthTextureInfo;
-        ARTextureInfo m_EnvironmentDepthTextureInfo;
-        ARTextureInfo m_EnvironmentDepthConfidenceTextureInfo;
+        IUpdatableTexture m_HumanStencilUpdatableTexture;
+        IUpdatableTexture m_HumanDepthUpdatableTexture;
+        IUpdatableTexture m_EnvironmentDepthUpdatableTexture;
+        IUpdatableTexture m_EnvironmentDepthConfidenceUpdatableTexture;
 
         // Output collections. These are not used for any internal state.
         readonly List<ARExternalTexture> m_Textures = new();
@@ -181,15 +181,15 @@ namespace UnityEngine.XR.ARFoundation
                     !subsystem.TryGetHumanStencil(out var humanStencilDescriptor))
                     return null;
 
-                if (m_HumanStencilTextureInfo == null)
-                    m_HumanStencilTextureInfo = new ARTextureInfo(humanStencilDescriptor);
-                else if (!m_HumanStencilTextureInfo.TryUpdateTextureInfo(humanStencilDescriptor))
+                if (m_HumanStencilUpdatableTexture == null)
+                    m_HumanStencilUpdatableTexture = UpdatableTextureFactory.Create(humanStencilDescriptor);
+                else if (!m_HumanStencilUpdatableTexture.TryUpdateFromDescriptor(humanStencilDescriptor))
                     return null;
 
-                DebugAssert.That(m_HumanStencilTextureInfo.descriptor.textureType is XRTextureType.Texture2D or XRTextureType.None)?
-                    .WithMessage($"Human stencil texture must be Texture2D, but is {m_HumanStencilTextureInfo.descriptor.textureType}");
+                DebugAssert.That(m_HumanStencilUpdatableTexture.descriptor.textureType is XRTextureType.Texture2D or XRTextureType.None)?
+                    .WithMessage($"Human stencil texture must be Texture2D, but is {m_HumanStencilUpdatableTexture.descriptor.textureType}");
 
-                return m_HumanStencilTextureInfo.texture as Texture2D;
+                return m_HumanStencilUpdatableTexture.texture as Texture2D;
             }
         }
 
@@ -205,15 +205,15 @@ namespace UnityEngine.XR.ARFoundation
                     !subsystem.TryGetHumanDepth(out var humanDepthDescriptor))
                     return null;
 
-                if (m_HumanDepthTextureInfo == null)
-                    m_HumanDepthTextureInfo = new ARTextureInfo(humanDepthDescriptor);
-                else if (!m_HumanDepthTextureInfo.TryUpdateTextureInfo(humanDepthDescriptor))
+                if (m_HumanDepthUpdatableTexture == null)
+                    m_HumanDepthUpdatableTexture = UpdatableTextureFactory.Create(humanDepthDescriptor);
+                else if (!m_HumanDepthUpdatableTexture.TryUpdateFromDescriptor(humanDepthDescriptor))
                     return null;
 
-                DebugAssert.That(m_HumanDepthTextureInfo.descriptor.textureType is XRTextureType.Texture2D or XRTextureType.None)?
-                    .WithMessage($"Human depth texture must be Texture2D, but is {m_HumanDepthTextureInfo.descriptor.textureType}");
+                DebugAssert.That(m_HumanDepthUpdatableTexture.descriptor.textureType is XRTextureType.Texture2D or XRTextureType.None)?
+                    .WithMessage($"Human depth texture must be Texture2D, but is {m_HumanDepthUpdatableTexture.descriptor.textureType}");
 
-                return m_HumanDepthTextureInfo.texture as Texture2D;
+                return m_HumanDepthUpdatableTexture.texture as Texture2D;
             }
         }
 
@@ -349,19 +349,19 @@ namespace UnityEngine.XR.ARFoundation
                 return false;
             }
 
-            if (m_EnvironmentDepthTextureInfo == null)
+            if (m_EnvironmentDepthUpdatableTexture == null)
             {
-                m_EnvironmentDepthTextureInfo = new ARTextureInfo(environmentDepthDescriptor);
+                m_EnvironmentDepthUpdatableTexture = UpdatableTextureFactory.Create(environmentDepthDescriptor);
             }
-            else if (!m_EnvironmentDepthTextureInfo.TryUpdateTextureInfo(environmentDepthDescriptor))
+            else if (!m_EnvironmentDepthUpdatableTexture.TryUpdateFromDescriptor(environmentDepthDescriptor))
             {
                 depthTexture = null;
                 return false;
             }
 
-            depthTexture = m_EnvironmentDepthTextureInfo.texture;
+            depthTexture = m_EnvironmentDepthUpdatableTexture.texture;
 
-            var textureType = m_EnvironmentDepthTextureInfo.descriptor.textureType;
+            var textureType = m_EnvironmentDepthUpdatableTexture.descriptor.textureType;
             DebugAssert.That(textureType is XRTextureType.Texture2D or XRTextureType.None || textureType.IsRenderTexture())?
                 .WithMessage($"Environment depth texture must be Texture2D or RenderTexture, but was {textureType}.");
 
@@ -385,21 +385,19 @@ namespace UnityEngine.XR.ARFoundation
                 return false;
             }
 
-            if (m_EnvironmentDepthConfidenceTextureInfo == null)
+            if (m_EnvironmentDepthConfidenceUpdatableTexture == null)
             {
-                m_EnvironmentDepthConfidenceTextureInfo = new ARTextureInfo(depthConfidenceDescriptor);
+                m_EnvironmentDepthConfidenceUpdatableTexture = UpdatableTextureFactory.Create(depthConfidenceDescriptor);
             }
-            else if (!m_EnvironmentDepthConfidenceTextureInfo.TryUpdateTextureInfo(depthConfidenceDescriptor))
+            else if (!m_EnvironmentDepthConfidenceUpdatableTexture.TryUpdateFromDescriptor(depthConfidenceDescriptor))
             {
                 depthConfidenceTexture = default;
                 return false;
             }
 
-            depthConfidenceTexture = new ARExternalTexture(
-                m_EnvironmentDepthConfidenceTextureInfo.texture,
-                m_EnvironmentDepthConfidenceTextureInfo.descriptor.propertyNameId);
+            depthConfidenceTexture = new ARExternalTexture(m_EnvironmentDepthConfidenceUpdatableTexture);
 
-            var textureType = m_EnvironmentDepthConfidenceTextureInfo.descriptor.textureType;
+            var textureType = m_EnvironmentDepthConfidenceUpdatableTexture.descriptor.textureType;
             DebugAssert.That(textureType is XRTextureType.Texture2D or XRTextureType.None || textureType.IsRenderTexture())?
                 .WithMessage($"Environment depth confidence texture must be Texture2D or RenderTexture, but was {textureType}.");
 
@@ -417,9 +415,9 @@ namespace UnityEngine.XR.ARFoundation
             requestedOcclusionPreferenceMode = m_OcclusionPreferenceMode;
             environmentDepthTemporalSmoothingRequested = m_EnvironmentDepthTemporalSmoothing;
 
-            m_TexturesReadOnly ??= new(m_Textures);
-            m_PosesReadOnly ??= new(m_Poses);
-            m_FovsReadOnly ??= new(m_Fovs);
+            m_TexturesReadOnly ??= new ReadOnlyList<ARExternalTexture>(m_Textures);
+            m_PosesReadOnly ??= new ReadOnlyList<Pose>(m_Poses);
+            m_FovsReadOnly ??= new ReadOnlyList<XRFov>(m_Fovs);
 
             Application.onBeforeRender += OnBeforeRender;
         }
@@ -466,39 +464,39 @@ namespace UnityEngine.XR.ARFoundation
                 return;
 
             var descriptors = subsystem.GetTextureDescriptors(Allocator.Temp);
-            if (m_SwapchainStrategy.TryUpdateTextureInfosForFrame(descriptors, out var textureInfos))
-                InvokeFrameReceived(frame, textureInfos);
+            if (m_SwapchainStrategy.TryUpdateTexturesForFrame(descriptors, out var updatableTextures))
+                InvokeFrameReceived(frame, updatableTextures);
         }
 
         void DestroyTextures()
         {
-            m_HumanStencilTextureInfo?.DestroyTexture();
-            m_HumanDepthTextureInfo?.DestroyTexture();
-            m_EnvironmentDepthTextureInfo?.DestroyTexture();
-            m_EnvironmentDepthConfidenceTextureInfo?.DestroyTexture();
+            m_HumanStencilUpdatableTexture?.DestroyTexture();
+            m_HumanDepthUpdatableTexture?.DestroyTexture();
+            m_EnvironmentDepthUpdatableTexture?.DestroyTexture();
+            m_EnvironmentDepthConfidenceUpdatableTexture?.DestroyTexture();
             m_SwapchainStrategy.Dispose();
         }
 
         /// <remarks>
         /// Method must be correct whether `frame` is a default value or an initialized frame.
         /// </remarks>
-        void InvokeFrameReceived(XROcclusionFrame frame, ReadOnlyListSpan<ARTextureInfo> textureInfos)
+        void InvokeFrameReceived(XROcclusionFrame frame, ReadOnlyListSpan<IUpdatableTexture> updatableTextures)
         {
             if (frameReceived == null)
                 return;
 
             m_Textures.Clear();
-            int numTextureInfos = textureInfos.Count;
-            if (numTextureInfos > m_Textures.Capacity)
-                m_Textures.Capacity = numTextureInfos;
+            int numTextures = updatableTextures.Count;
+            if (numTextures > m_Textures.Capacity)
+                m_Textures.Capacity = numTextures;
 
-            for (var i = 0; i < numTextureInfos; ++i)
+            for (var i = 0; i < numTextures; ++i)
             {
-                var textureType = textureInfos[i].descriptor.textureType;
+                var textureType = updatableTextures[i].descriptor.textureType;
                 DebugAssert.That(textureType is XRTextureType.Texture2D || textureType.IsRenderTexture())?
                     .WithMessage($"Texture needs to be a Texture2D or RenderTexture, but is {textureType}");
 
-                m_Textures.Add(new ARExternalTexture(textureInfos[i].texture, textureInfos[i].descriptor.propertyNameId));
+                m_Textures.Add(new ARExternalTexture(updatableTextures[i]));
             }
 
             m_Poses.Clear();

@@ -7,72 +7,14 @@ Go to **Window** > **XR** > **AR Foundation** > **XR Environment** to open the X
 
 ![The XR Environment view](../images/xr-environment-view-annotated.png)<br/>*The XR Environment view*
 
-<table>
-  <tr>
-   <td><strong>Label</strong></td>
-   <td colspan="2" ><strong>Element</strong></td>
-   <td><strong>Description</strong></td>
-  </tr>
-  <tr>
-   <td><strong>A</strong></td>
-   <td colspan="2" ><strong>XR Environment visibility toggle</strong></td>
-   <td>Toggles XR Environment visibility on and off. When XR Environment visibility is off, the XR Environment view behaves like a normal Scene view.</td>
-  </tr>
-  <tr>
-   <td><strong>B</strong></td>
-   <td colspan="2" ><strong>Environment dropdown:</strong></td>
-   <td>Displays the currently selected simulation environment. Click to reveal the controls listed below for selecting different environments.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td></td>
-   <td><strong>Environment list</strong></td>
-   <td>Lists all environment Prefabs found in the Assets folder. Click on an environment to select it, making it the active environment. Refresh the list by going to <strong>Assets</strong> &gt; <strong>Refresh XR Environment List</strong>.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td></td>
-   <td><strong>Install sample environments</strong></td>
-   <td>Installs the sample environment assets to your project. See <a href="simulation-getting-started.md#install-the-sample-environments">Install the sample environments</a>.</td>
-  </tr>
-  <tr>
-   <td><strong>C</strong></td>
-   <td colspan="2" ><strong>Previous environment</strong></td>
-   <td>Select the previous environment in the Environments list.</td>
-  </tr>
-  <tr>
-   <td><strong>D</strong></td>
-   <td colspan="2" ><strong>Next environment</strong></td>
-   <td>Select the next environment in the Environments list.</td>
-  </tr>
-   <td><strong>E</strong></td>
-   <td colspan="2" ><strong>Create/edit environment dropdown:</strong></td>
-   <td>Click to reveal the controls listed below for creating and editing environments.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td></td>
-   <td><strong>Create environment</strong></td>
-   <td>Create and save a new environment using the default XR Simulation environment as a template.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td></td>
-   <td><strong>Duplicate environment</strong></td>
-   <td>Create and save a copy of the active environment.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td></td>
-   <td><strong>Edit environment</strong></td>
-   <td>Open the active environment for editing in <a href="https://docs.unity3d.com/Manual/EditingInPrefabMode.html">Prefab Mode</a>.</td>
-  </tr>
-  <tr>
-   <td><strong>F</strong></td>
-   <td colspan="2" ><strong>Camera starting pose</strong></td>
-   <td>Visualizes the initial position and rotation of the Camera in the environment when you enter Play Mode. See <a href="simulation-environments.md#simulation-environment-component">Simulation Environment component</a> for more information about setting these values.</td>
-  </tr>
-</table>
+| **Label** | **Element** | **Description** |
+| :-------: | :---------- | :-------------- |
+| **A** | **XR Environment visibility toggle** | Toggles XR Environment visibility on and off. When XR Environment visibility is off, the XR Environment view behaves like a normal Scene view. |
+| **B** | **Environment dropdown** | Click to reveal the following options: <ul><li><strong>Environment list:</strong> Lists all environment Prefabs found in the Assets folder. Click on an environment to select it, making it the active environment. Refresh the list by going to **Assets** > **Refresh XR Environment List**.</li><li><strong>Install sample environments</strong> Installs the sample environment assets to your project. See [Install the sample environments](simulation-getting-started.md#install-the-sample-environments).</li></ul> |
+| **C** | **Previous environment**       | Select the previous environment in the Environments list. |
+| **D** | **Next environment**           | Select the next environment in the Environments list.  |
+| **E** | **Create/edit environment dropdown** | Click to reveal the following options for creating and editing environments: <ul><li><strong>Create environment:</strong> Create and save a new environment using the default XR Simulation environment as a template.</li><li><strong>Duplicate environment</strong> Create and save a copy of the active environment.</li><li><strong>Edit environment</strong> Open the active environment for editing in [Prefab Mode](https://docs.unity3d.com/Manual/EditingInPrefabMode.html).</li></ul> |
+| **F** | **Camera starting pose** | Visualizes the initial position and rotation of the Camera in the environment when you enter Play Mode. See [Simulation Environment component](simulation-environments.md#simulation-environment-component) for more information about setting these values. |
 
 Any Prefab under your Assets folder with a `SimulationEnvironment` component on the root GameObject is considered to be a simulation environment and can appear in the Environment list. This list is cached and can be refreshed by going to **Assets** > **Refresh XR Environment List**. See [Install the sample environments](xref:arfoundation-simulation-getting-started#install-the-sample-environments) to install the sample environments, or [Simulation environments](xref:arfoundation-simulation-environments) to create and modify environments.
 

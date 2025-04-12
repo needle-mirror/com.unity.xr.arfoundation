@@ -3,7 +3,7 @@ uid: arfoundation-camera-platform-support
 ---
 # Camera platform support
 
-The AR Foundation [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem) is supported on the ARCore, ARKit, Meta OpenXR and XR Simulation platforms, as shown in the following table:
+The AR Foundation [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem) is supported on the ARCore, ARKit, OpenXR Meta and XR Simulation platforms, as shown in the following table:
 
 | Provider plug-in | Camera supported | Provider documentation |
 | :--------------- | :-----------------------: | :--------------------- |
@@ -11,7 +11,7 @@ The AR Foundation [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraS
 | Apple ARKit XR Plug-in | Yes | [Camera](xref:arkit-camera) (ARKit) |
 | Apple visionOS XR Plug-in | | |
 | Microsoft HoloLens | | |
-| Unity OpenXR: Meta | Yes | [Camera](xref:meta-openxr-camera) (Meta OpenXR) |
+| Unity OpenXR: Meta | Yes | [Camera](xref:meta-openxr-camera) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Camera](xref:androidxr-openxr-camera) (Android XR) |
 | XR Simulation | Yes | [Camera](xref:arfoundation-simulation-camera) (XR Simulation) |
 
@@ -58,7 +58,7 @@ The following table lists the optional features of the camera subsystem. Each op
 
 To understand the optional features that are implemented in each supported XR plug-in provider, refer to the following table:
 
-| Feature | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
+| Feature | ARCore | ARKit | OpenXR Meta | Android XR | XR Simulation |
 | :------ | :----: | :---: | :---------: | :--------: | :-----------: |
 | **Brightness** | Yes | | | Yes | Yes |
 | **Color temperature** | | Yes | | Yes | Yes |
@@ -77,7 +77,7 @@ To understand the optional features that are implemented in each supported XR pl
 | **Camera grain**  | | iOS 13+ | | | |
 | **Image stabilization** | | | | | |
 | **EXIF data** | Yes | iOS 16+ | | | |
-| **Camera torch mode** | Yes | | | | Yes |
+| **Camera torch mode** | Yes | Yes | | | Yes |
 
 <a id="check-feature-support"></a>
 

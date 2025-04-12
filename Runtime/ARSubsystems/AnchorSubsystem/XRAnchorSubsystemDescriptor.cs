@@ -155,7 +155,13 @@ namespace UnityEngine.XR.ARSubsystems
                     int hash = HashCodeUtil.ReferenceHash(id);
                     hash = 486187739 * hash + HashCodeUtil.ReferenceHash(providerType);
                     hash = 486187739 * hash + HashCodeUtil.ReferenceHash(subsystemTypeOverride);
-                    hash = 486187738 * hash + supportsTrackableAttachments.GetHashCode();
+                    hash = 486187739 * hash + supportsTrackableAttachments.GetHashCode();
+                    hash = 486187739 * hash + supportsSynchronousAdd.GetHashCode();
+                    hash = 486187739 * hash + supportsSaveAnchor.GetHashCode();
+                    hash = 486187739 * hash + supportsLoadAnchor.GetHashCode();
+                    hash = 486187739 * hash + supportsEraseAnchor.GetHashCode();
+                    hash = 486187739 * hash + supportsGetSavedAnchorIds.GetHashCode();
+                    hash = 486187739 * hash + supportsAsyncCancellation.GetHashCode();
                     return hash;
                 }
             }
@@ -181,7 +187,13 @@ namespace UnityEngine.XR.ARSubsystems
                     string.Equals(id, other.id) &&
                     ReferenceEquals(providerType, other.providerType) &&
                     ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride) &&
-                    supportsTrackableAttachments == other.supportsTrackableAttachments;
+                    supportsTrackableAttachments == other.supportsTrackableAttachments &&
+                    supportsSynchronousAdd == other.supportsSynchronousAdd &&
+                    supportsSaveAnchor == other.supportsSaveAnchor &&
+                    supportsLoadAnchor == other.supportsLoadAnchor &&
+                    supportsEraseAnchor == other.supportsEraseAnchor &&
+                    supportsGetSavedAnchorIds == other.supportsGetSavedAnchorIds &&
+                    supportsAsyncCancellation == other.supportsAsyncCancellation;
             }
 
             /// <summary>

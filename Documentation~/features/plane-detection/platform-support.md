@@ -3,7 +3,7 @@ uid: arfoundation-plane-platform-support
 ---
 # Plane detection platform support
 
-Plane detection is supported on the ARCore, ARKit, Meta OpenXR and XR Simulation platforms, as shown in the table below:
+Plane detection is supported on the ARCore, ARKit, OpenXR Meta and XR Simulation platforms, as shown in the table below:
 
 | Provider plug-in | Plane detection supported | Provider documentation |
 | :--------------- | :-----------------------: | :--------------------- |
@@ -11,7 +11,7 @@ Plane detection is supported on the ARCore, ARKit, Meta OpenXR and XR Simulation
 | Apple ARKit XR Plug-in | Yes | [Plane detection](xref:arkit-plane-detection) (ARKit) |
 | Apple visionOS XR Plug-in | Yes | N/A |
 | Microsoft HoloLens | | |
-| Unity OpenXR: Meta | Yes | [Plane detection](xref:meta-openxr-planes) (Meta OpenXR) |
+| Unity OpenXR: Meta | Yes | [Plane detection](xref:meta-openxr-planes) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Plane detection](xref:androidxr-openxr-plane-detection) (Android XR) |
 | XR Simulation | Yes | N/A |
 
@@ -29,7 +29,7 @@ Use the example code below to check whether the device supports plane detection:
 
 Plane detection providers may choose whether to implement any of the optional features of AR Foundation's [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem), as indicated in the table below:
 
-| Feature | Description | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
+| Feature | Description | ARCore | ARKit | OpenXR Meta | Android XR | XR Simulation |
 | :------ | :---------- | :----: | :---: | :---------: | :--------: |:-----------: |
 | **Horizontal plane detection** | Indicates whether the provider implementation supports the detection of horizontal planes, such as the floor. | Yes | Yes | Yes | Yes | Yes |
 | **Vertical plane detection** | Indicates whether the provider implementation supports the detection of vertical planes, such as walls. | Yes | iOS 11.3+ | Yes | Yes | Yes |

@@ -32,3 +32,7 @@ This array is parallel to `positions`. This feature varies by provider. Check th
 Feature points can also have confidence values, represented as `float`s in the 0..1 range. You can access confidence values via [ARPointCloud.confidenceValues](xref:UnityEngine.XR.ARFoundation.ARPointCloud.confidenceValues).
 
 This array is parallel to `positions`. This feature varies by provider. Check the `SubsystemDescriptor` (`ARPointCloud.descriptor`).
+
+## Additional resources
+
+* [Point clouds sample](xref:arfoundation-samples-point-clouds)

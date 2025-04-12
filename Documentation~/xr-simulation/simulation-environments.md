@@ -32,54 +32,25 @@ You can create, duplicate, or edit an XR Simulation environment prefab using the
 > [!TIP]
 > Since XR Simulation environments are prefabs, you can use any of the standard tools in the Unity Editor to create and edit them. The only requirement for a prefab to be considered an XR Simulation environment is for its root GameObject to have a [Simulation Environment component](#simulation-environment-component) attached.
 
-# Components and shaders
+## Components and shaders
 
 AR Foundation contains the following components and shaders you can use to create XR Simulation environments:
 
-<table>
-  <tr>
-   <td colspan="2" ><strong>Component or shader</strong></td>
-   <td><strong>Description</strong></td>
-  </tr>
-  <tr>
-   <td colspan="2" ><a href="#simulation-environment-component">Simulation Environment component</a></td>
-   <td>Add to the root GameObject of a prefab to designate it as an XR Simulation environment. XR Simulation automatically finds environment prefabs and adds them to the Environment list in the <a href="simulation-xr-environment-view.md">XR Environment view</a>.</td>
-  </tr>
-  <tr>
-   <td colspan="2" ><a href="#simulated-tracked-image-component">Simulated Tracked Image component</a></td>
-   <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated tracked image for image tracking purposes.</td>
-  </tr>
-  <tr>
-   <td colspan="2" ><a href="#simulated-bounding-box-component">Simulated Bounding Box component</a></td>
-   <td>Add to a GameObject in an XR Simulation environment to add a simulated bounding box to it, for bounding box discovery purposes.</td>
-  </tr>
-  <tr>
-   <td colspan="2" ><a href="#simulated-environment-probe-component">Simulated Environment Probe component</a></td>
-   <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated environment probe. At runtime this GameObject will appear as an automatically placed environment probe.</td>
-  </tr>
-  <tr>
-   <td colspan="2" ><a href="#simulated-anchor-component">Simulated Anchor component</a></td>
-   <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated anchor. At runtime this GameObject will appear as a pre-existing anchor in the environment.</td>
-  </tr>
-  <tr>
-   <td colspan="2" ><a href="#simulated-light-component">Simulated Light component</a></td>
-   <td>Add to a GameObject in an XR Simulation environment to designate it as a simulated light. At runtime this GameObject will be used for lighting estimation.</td>
-  </tr>
-  <tr>
-   <td colspan="2" ><a href="#x-ray-rendering">X-ray rendering</a></td>
-   <td>Add the X Ray Region component and x-ray shaders to an XR Simulation environment to make it easier to prevent the camera from being obstructed by exterior walls.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td><a href="#x-ray-region-component">X Ray Region component</a></td>
-   <td>Defines the active area for any x-ray shaders in the scene.</td>
-  </tr>
-  <tr>
-   <td></td>
-   <td><a href="#x-ray-shaders">X-ray shaders</a></td>
-   <td>Shaders that clip exterior surfaces, allowing the camera to easily see into interior rooms from outside the walls.</td>
-  </tr>
-</table>
+| **Component** | **Description** |
+| :---------------------- | :-------------- |
+| [Simulation Environment component](#simulation-environment-component) | Add to the root GameObject of a prefab to designate it as an XR Simulation environment. XR Simulation automatically finds environment prefabs and adds them to the Environment list in the [XR Environment view](xref:arfoundation-simulation-xr-environment-view). |
+| [Simulated Tracked Image component](#simulated-tracked-image-component) | Add to a GameObject in an XR Simulation environment to designate it as a simulated tracked image for image tracking purposes. |
+| [Simulated Bounding Box component](#simulated-bounding-box-component) | Add to a GameObject in an XR Simulation environment to add a simulated bounding box to it, for bounding box discovery purposes. |
+| [Simulated Environment probe component](#simulated-environment-probe-component) | Add to a GameObject in an XR Simulation environment to designate it as a simulated environment probe. At runtime this GameObject will appear as an automatically placed environment probe. |
+| [Simulated Anchor component](#simulated-anchor-component) | Add to a GameObject in an XR Simulation environment to designate it as a simulated anchor. At runtime this GameObject will appear as a pre-existing anchor in the environment. |
+| [Simulated Light component](#simulated-light-component) | Add to a GameObject in an XR Simulation environment to designate it as a simulated light. At runtime this GameObject will be used for lighting estimation. |
+
+Add the X Ray Region component and one of the following shaders to an XR Simulation environment to prevent exterior walls from obstructing the camera:
+
+| **Component or shader** | **Description** |
+| :---------------------- | :-------------- |
+| [X Ray Region component](#x-ray-region-component) | Defines the active area for any x-ray shaders in the scene. |
+| [X-ray shaders](#x-ray-shaders) | Shaders that clip exterior surfaces, allowing the camera to easily see into interior rooms from outside the walls. |
 
 <!-- uncomment and add to table above when documentation is added | [Simulated Mesh Classification component](#simulated-mesh-classification-component) || | -->
 

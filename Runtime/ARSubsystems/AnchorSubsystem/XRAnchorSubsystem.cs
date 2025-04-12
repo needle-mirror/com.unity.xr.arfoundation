@@ -160,10 +160,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// uses `Allocation.Temp`.</param>
         /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
         /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
-        /// <returns>The result of the async operation. You are responsible to
-        /// <see langword="await"/> this result.</returns>
-        /// <exception cref="NotSupportedException">Thrown if
-        /// <see cref="XRAnchorSubsystemDescriptor.supportsLoadAnchor"/> is false for this provider.</exception>
+        /// <returns>The result of the async operation containing the newly added anchors if the operation succeeded.
+        /// You are responsible to <see langword="await"/> this result.</returns>
+        /// <exception cref="NotSupportedException">Thrown if <see cref="XRAnchorSubsystemDescriptor.supportsLoadAnchor"/>
+        /// is false for this provider.</exception>
         /// <remarks>
         /// The order in which anchors are loaded may not match the enumeration order of
         /// <paramref name="savedAnchorGuidsToLoad"/>. To check if an anchor loaded successfully, check the
@@ -237,54 +237,19 @@ namespace UnityEngine.XR.ARSubsystems
         public abstract class Provider : SubsystemProvider<XRAnchorSubsystem>
         {
             static readonly Pool.ObjectPool<Dictionary<TrackableId, Awaitable<Result<SerializableGuid>>>> s_SaveAwaitablesMaps =
-                new(
-                    createFunc: () => new Dictionary<TrackableId, Awaitable<Result<SerializableGuid>>>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<Dictionary<TrackableId, Awaitable<Result<SerializableGuid>>>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<Dictionary<SerializableGuid, Awaitable<Result<XRAnchor>>>> s_LoadAwaitablesMaps =
-                new(
-                    createFunc: () => new Dictionary<SerializableGuid, Awaitable<Result<XRAnchor>>>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<Dictionary<SerializableGuid, Awaitable<Result<XRAnchor>>>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<List<XRLoadAnchorResult>> s_AccumulatedXRLoadAnchorResultLists =
-                new(
-                    createFunc: () => new List<XRLoadAnchorResult>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<List<XRLoadAnchorResult>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<Dictionary<SerializableGuid, Awaitable<XRResultStatus>>> s_EraseAwaitablesMaps =
-                new(
-                    createFunc: () => new Dictionary<SerializableGuid, Awaitable<XRResultStatus>>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<Dictionary<SerializableGuid, Awaitable<XRResultStatus>>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<List<XREraseAnchorResult>> s_EraseAnchorResultLists =
-                new(
-                    createFunc: () => new List<XREraseAnchorResult>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<List<XREraseAnchorResult>>(defaultCapacity: 2);
 
             /// <summary>
             /// Reusable completion source to return results of <see cref="TryAddAnchor"/> to <see cref="TryAddAnchorAsync"/>.
@@ -472,8 +437,8 @@ namespace UnityEngine.XR.ARSubsystems
             /// this parameter to ignore it.</param>
             /// <param name="cancellationToken">An optional `CancellationToken` that you can use to cancel the operation
             /// in progress if the loaded provider <see cref="XRAnchorSubsystemDescriptor.supportsAsyncCancellation"/>.</param>
-            /// <returns>The result of the async operation. You are responsible to
-            /// <see langword="await"/> this result.</returns>
+            /// <returns>The result of the async operation containing the newly added anchors if the operation succeeded.
+            /// You are responsible to <see langword="await"/> this result.</returns>
             /// <exception cref="ArgumentException">Thrown if the `NativeArray` of saved anchor GUIDs to load has been disposed.</exception>
             /// <exception cref="NotSupportedException">Thrown if
             /// <see cref="XRAnchorSubsystemDescriptor.supportsLoadAnchor"/> is false for this provider.</exception>

@@ -12,3 +12,7 @@ Refer to the following topics to understand how to use AR Foundation's bounding 
 | [Platform support](xref:arfoundation-bounding-box-platform-support) | Discover which AR platforms support bounding box detection. |
 | [AR Bounding Box Manager component](xref:arfoundation-bounding-box-arboundingboxmanager) | Understand the AR Bounding Box Manager component. |
 | [AR Bounding Box component](xref:arfoundation-bounding-box-arboundingbox) | Understand the AR Bounding Box component. |
+
+## Additional resources
+
+* [Bounding box detection samples](xref:arfoundation-samples-bounding-box-detection)

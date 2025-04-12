@@ -37,6 +37,12 @@ namespace UnityEngine.XR.ARFoundation
             this.propertyId = propertyId;
         }
 
+        internal ARExternalTexture(IUpdatableTexture updatableTexture)
+        {
+            texture = updatableTexture.texture;
+            propertyId = updatableTexture.descriptor.propertyNameId;
+        }
+
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type. Textures are compared
         /// using reference equality.

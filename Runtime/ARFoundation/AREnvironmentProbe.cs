@@ -1,4 +1,3 @@
-using System;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
@@ -50,7 +49,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <value>
         /// The texture info of the custom baked texture from the reflection probe.
         /// </value>
-        ARTextureInfo m_CustomBakedTextureInfo;
+        IUpdatableTexture m_CustomBakedUpdatableTexture;
 
         /// <summary>
         /// Specifies the texture filter mode to be used with the environment texture.
@@ -176,16 +175,16 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (m_ReflectionProbe.customBakedTexture == null)
             {
-                m_CustomBakedTextureInfo = new ARTextureInfo(descriptor);
+                m_CustomBakedUpdatableTexture = UpdatableTextureFactory.Create(descriptor);
             }
             else
             {
                 // always succeeds for Cubemap
-                m_CustomBakedTextureInfo.TryUpdateTextureInfo(descriptor);
+                m_CustomBakedUpdatableTexture.TryUpdateFromDescriptor(descriptor);
             }
 
-            m_CustomBakedTextureInfo.texture.filterMode = m_EnvironmentTextureFilterMode;
-            m_ReflectionProbe.customBakedTexture = m_CustomBakedTextureInfo.texture as Cubemap;
+            m_CustomBakedUpdatableTexture.texture.filterMode = m_EnvironmentTextureFilterMode;
+            m_ReflectionProbe.customBakedTexture = m_CustomBakedUpdatableTexture.texture as Cubemap;
 
             // Update the current environment texture metadata.
             m_CurrentTextureDescriptor = descriptor;

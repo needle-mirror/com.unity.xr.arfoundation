@@ -103,7 +103,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Because the data types are not identical, the conversion may be imprecise and the texture formats may
         /// not match exactly.
         /// </summary>
-        /// <returns>An <see cref="UnityXRRenderTextureDesc"/> matching this object as closely as possible.</returns>
+        /// <returns>A <see cref="UnityXRRenderTextureDesc"/> matching this object as closely as possible.</returns>
         static UnityXRRenderTextureDesc ToUnityXRRenderTextureDesc(XRTextureDescriptor descriptor)
         {
             var renderTextureDescriptor = new UnityXRRenderTextureDesc

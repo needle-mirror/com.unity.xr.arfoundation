@@ -318,7 +318,7 @@ namespace UnityEngine.XR.ARFoundation
                             var mesh = (meshFilter.sharedMesh != null) ? meshFilter.sharedMesh : meshFilter.mesh;
 
                             // Calculate normals if they weren't populated by the provider.
-                            if (mesh.normals.Length == 0)
+                            if (!mesh.HasVertexAttribute(Rendering.VertexAttribute.Normal))
                                 mesh.RecalculateNormals();
                         }
 
@@ -327,7 +327,7 @@ namespace UnityEngine.XR.ARFoundation
                             var mesh = (meshFilter.sharedMesh != null) ? meshFilter.sharedMesh : meshFilter.mesh;
 
                             // Calculate normals if they weren't populated by the provider.
-                            if (mesh.normals.Length == 0)
+                            if (!mesh.HasVertexAttribute(Rendering.VertexAttribute.Normal))
                                 mesh.RecalculateNormals();
                         }
                     }

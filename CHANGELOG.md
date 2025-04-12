@@ -8,6 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.2.0-pre.1] - 2025-04-12
+
+### Added
+
+- Added support for depth preprocessing, when depth data is provided in a linear format.
+- Added occlusion sources flags mask and hands mesh source of occlusion.
+
+### Changed
+
+- Changed the occlusion to be based on the mask of the occlusion sources.
+
+### Fixed
+
+- Fixed the `Cinfo.Equals` method in `XRAnchorSubsystemDescriptor` so that it correctly checks all values of the struct for equality.
+- Fixed the `Cinfo.GetHashCode` method in `XRAnchorSubsystemDescriptor` so that it correctly includes all values of the struct in the hash calculation.
+
 ## [6.1.0] - 2025-02-19
 
 ### Added
@@ -16,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added support for soft occlusion. Refer to the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) GitHub repository for example usage in the `MetaOcclusion` scene.
   - Added a soft occlusion preprocessing shader at `Assets/Shaders/SoftOcclusionPreprocessing.shader`.
   - Added [ARShaderOcclusion.softOcclusionShaderKeyword](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.softOcclusionShaderKeyword), [ARShaderOcclusion.ndcLinearConversionParametersPropertyId](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.ndcLinearConversionParametersPropertyId), and [AROcclusionShaderMode.SoftOcclusion](xref:UnityEngine.XR.ARFoundation.AROcclusionShaderMode.SoftOcclusion).
+- Added [XRAnchorSubsystemDescriptor.sharedAnchorsSupported](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.sharedAnchorsSupported) for checking if shared anchors is supported.
 
 ### Changed
 
@@ -115,6 +132,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Changed the type of `XRResultStatus` from `struct` to `readonly struct`.
 - Changed the Simulation Environment to be visibile in the scene hierarchy.
+- Updated the [Anchors platform support](xref:arfoundation-anchors-platform-support) documentation to reflect that the Google ARCore XR Plug-in now supports persistent anchor APIs.
 
 ### Deprecated
 

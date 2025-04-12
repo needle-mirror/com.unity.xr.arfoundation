@@ -12,6 +12,9 @@ Shader "Occlusion/Soft/DepthPreprocessing"
             #pragma target 4.5
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile _ XR_LINEAR_DEPTH
+
+            #include "Utils.hlsl"
 
             Texture2DArray_half _EnvironmentDepthTexture;
             SamplerState sampler_EnvironmentDepthTexture;
@@ -54,6 +57,14 @@ Shader "Occlusion/Soft/DepthPreprocessing"
                 {
                     float2 uvSample = uv + (offsets[i] + 0.5f) * onePixelOffset;
                     depths[i] = _EnvironmentDepthTexture.Gather(sampler_EnvironmentDepthTexture, float3(uvSample.x, uvSample.y, slice));
+
+                    #ifdef XR_LINEAR_DEPTH
+                        depths[i].x = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].x));
+                        depths[i].y = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].y));
+                        depths[i].z = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].z));
+                        depths[i].w = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].w));
+                    #endif
+
                     depthSum += dot(depths[i], float4(0.25f, 0.25, 0.25, 0.25));
 
                     float localMax = max(max(depths[i].x, depths[i].y), max(depths[i].z, depths[i].w));

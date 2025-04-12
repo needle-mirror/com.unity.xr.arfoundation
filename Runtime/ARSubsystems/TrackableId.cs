@@ -21,13 +21,17 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Regular expression that matches a valid trackable identifier.
         /// </summary>
-        static readonly Regex s_TrackableIdRegex = new Regex(@"^(?<part1>[a-fA-F\d]{16})-(?<part2>[a-fA-F\d]{16})$",
-                                                             RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture);
+        static readonly Regex s_TrackableIdRegex = new(
+            @"^(?<part1>[a-fA-F\d]{16})-(?<part2>[a-fA-F\d]{16})$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture);
 
         /// <summary>
         /// Get the invalid id.
         /// </summary>
-        public static TrackableId invalidId => s_InvalidId;
+        public static TrackableId invalidId => new(0,0);
+
+        ulong m_SubId1;
+        ulong m_SubId2;
 
         /// <summary>
         /// The first half of the id.
@@ -141,11 +145,5 @@ namespace UnityEngine.XR.ARSubsystems
         public static bool operator !=(TrackableId lhs, TrackableId rhs) =>
             (lhs.m_SubId1 != rhs.m_SubId1) ||
             (lhs.m_SubId2 != rhs.m_SubId2);
-
-        static TrackableId s_InvalidId = new TrackableId(0, 0);
-
-        ulong m_SubId1;
-
-        ulong m_SubId2;
     }
 }

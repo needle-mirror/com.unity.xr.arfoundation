@@ -14,3 +14,7 @@ Device cameras and their configuration are an essential function of most AR apps
 | [Display matrix format and derivation](xref:arfoundation-display-matrix-format-and-derivation) | Learn how to transform image texture coordinates onto XR device screens. |
 | [Custom background shaders](xref:arfoundation-custom-background-shaders) | Learn how to use the display matrix to write custom background shaders. |
 | [Camera torch mode (flash)](xref:arfoundation-camera-torch-mode) | Learn how to activate the device's camera torch. |
+
+## Additional resources
+
+* [Camera samples](xref:arfoundation-samples-camera)

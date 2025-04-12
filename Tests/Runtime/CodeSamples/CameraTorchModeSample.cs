@@ -9,9 +9,10 @@ namespace UnityEngine.XR.ARFoundation.Tests
         {
             var loader = LoaderUtility.GetActiveLoader();
             var sessionSubsystem =
-                loader != null ? loader.GetLoadedSubsystem<XRSessionSubsystem>() : null;
-            var configurations =
-                sessionSubsystem.GetConfigurationDescriptors(Unity.Collections.Allocator.Temp);
+                loader?.GetLoadedSubsystem<XRSessionSubsystem>();
+            var configurations = sessionSubsystem.GetConfigurationDescriptors(
+                Unity.Collections.Allocator.Temp);
+
             for (int i = 0; i < configurations.Length; i++)
             {
                 var config = configurations[i];
@@ -27,7 +28,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
         void EnableCameraTorch()
         {
             var loader = LoaderUtility.GetActiveLoader();
-            var cameraSubsystem = loader != null ? loader.GetLoadedSubsystem<XRCameraSubsystem>() : null;
+            var cameraSubsystem = loader?.GetLoadedSubsystem<XRCameraSubsystem>();
             if (cameraSubsystem.DoesCurrentCameraSupportTorch())
             {
                 cameraSubsystem.requestedCameraTorchMode = XRCameraTorchMode.On;

@@ -67,7 +67,7 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Indicates that the operation failed because the provider was not started.
-            /// This may be because you haven't enabled a necessary manager component, or because platform-specific
+            /// This may be because you haven't enabled a necessary manager component, or because platforms-specific
             /// requirements to start the provider were not met.
             /// </summary>
             ProviderNotStarted = -4,

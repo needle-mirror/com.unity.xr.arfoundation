@@ -3,16 +3,17 @@ uid: arfoundation-bounding-box-platform-support
 ---
 # Bounding box detection platform support
 
-Bounding box detection is only supported on the Meta OpenXR platform, as shown in the table below:
+Bounding box detection is supported on ARKit and OpenXR Meta, as shown in the following table:
 
 | Provider plug-in | Bounding box detection supported | Provider documentation |
 | :--------------- | :------------------------------: | :--------------------- |
 | Google ARCore XR Plug-in | | |
-| Apple ARKit XR Plug-in | | |
+| Apple ARKit XR Plug-in | Yes | [Bounding box detection](xref:arkit-bounding-boxes) (ARKit) |
 | Apple visionOS XR Plug-in | | |
 | Microsoft HoloLens | | |
-| Unity OpenXR: Meta | Yes | N/A |
-| XR Simulation | | |
+| Unity OpenXR: Meta | Yes | [Bounding boxes](xref:meta-openxr-bounding-boxes) (OpenXR Meta) |
+| Unity OpenXR: Android XR | | |
+| XR Simulation | Yes | N/A |
 
 ## Check for bounding box detection support
 
@@ -28,7 +29,7 @@ Use the example code below to check whether the device supports bounding box det
 
 Bounding box detection providers may choose whether to implement the optional features of AR Foundation's [XRBoundingBoxSubsystem](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystem), as indicated in the table below:
 
-| Feature | Description | ARCore | ARKit | Meta OpenXR | XR Simulation |
+| Feature | Description | ARCore | ARKit | OpenXR Meta | XR Simulation |
 | :------ | :---------- | :----: | :---: | :---------: | :-----------: |
 | **Classification** | Indicates whether the provider implementation can provide a value for [ARBoundingBox.classifications](xref:UnityEngine.XR.ARFoundation.ARBoundingBox.classifications). | | | | |
 

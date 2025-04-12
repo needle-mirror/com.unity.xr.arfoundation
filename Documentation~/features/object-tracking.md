@@ -20,6 +20,8 @@ The tracked object manager creates a GameObject for each object detected in the 
 |**Reference object**|A reference object is an object that you have previously scanned and stored in a reference object library. The object tracking subsystem detects and tracks instances of the object in the environment.|
 |**Reference object library**|A reference object library is an asset containing a collection of reference objects.|
 
+<a id="create-library"/>
+
 ## Create a reference object library
 
 In a typical object tracking workflow, you create a reference object library in the Editor and then populate the library with reference objects. You must add a provider-specific entry for each provider plug-in your project that supports object tracking.
@@ -77,3 +79,7 @@ manager.enabled = true;
 This Prefab is instantiated whenever an object from the reference object library is detected. The manager ensures the instantiated GameObject includes an `ARTrackedObject` component. You can get the reference object that was used to detect the `ARTrackedObject` with the `ARTrackedObject.referenceObject` property.
 
 [!include[](../snippets/apple-arkit-trademark.md)]
+
+## Additional resources
+
+* [Object tracking samples](xref:arfoundation-samples-object-tracking)
