@@ -84,10 +84,12 @@ namespace UnityEngine.XR.Simulation
 
             m_UpdateCancellationTokenSource?.Cancel();
 
+            // any trackables already not deemed as not tracking, revert to a "limited" tracking
+            // status until the discoverer is resumed.
             for (var i = 0; i < m_ImagesInScene.Count; i++)
             {
                 if (m_TrackingStatesOfImages[i] != TrackingState.None)
-                    SubsystemRemoveImageAtIndex(i);
+                    m_TrackingStatesOfImages[i] = TrackingState.Limited;
             }
 
             m_IsRunning = false;
@@ -220,6 +222,7 @@ namespace UnityEngine.XR.Simulation
                         var image = m_ImagesInScene[i];
                         var prevTrackingState = m_TrackingStatesOfImages[i];
                         var newTrackingState = m_ImageDiscoveryStrategy.ComputeTrackingState(image);
+                        var referenceImageChanged = false;
 
                         if (!m_ReferenceImagesForImages[i].HasValue && hasLibraryChanged)
                         {
@@ -228,12 +231,13 @@ namespace UnityEngine.XR.Simulation
                                     out var foundImage))
                             {
                                 m_ReferenceImagesForImages[i] = foundImage;
+                                referenceImageChanged = true;
                             }
                         }
 
                         if (prevTrackingState is TrackingState.None && newTrackingState is TrackingState.Tracking)
                             SubsystemAddImageAtIndex(i);
-                        else if (prevTrackingState is TrackingState.Tracking || newTrackingState is TrackingState.Tracking)
+                        else if (prevTrackingState is TrackingState.Tracking || newTrackingState is TrackingState.Tracking || referenceImageChanged)
                             SubsystemUpdateImageAtIndex(i, newTrackingState);
                     }
 
@@ -256,13 +260,6 @@ namespace UnityEngine.XR.Simulation
             var image = m_ImagesInScene[imageIndex];
             m_TrackingStatesOfImages[imageIndex] = trackingState;
             imageUpdated?.Invoke(CreateXRImage(image, trackingState, m_ReferenceImagesForImages[imageIndex]));
-        }
-
-        void SubsystemRemoveImageAtIndex(int imageIndex)
-        {
-            var image = m_ImagesInScene[imageIndex];
-            m_TrackingStatesOfImages[imageIndex] = TrackingState.None;
-            imageRemoved?.Invoke(image.trackableId);
         }
 
         static XRTrackedImage CreateXRImage(SimulatedTrackedImage image, TrackingState trackingState, XRReferenceImage? referenceImage)

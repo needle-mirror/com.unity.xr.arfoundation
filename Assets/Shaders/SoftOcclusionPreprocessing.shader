@@ -52,26 +52,30 @@ Shader "Occlusion/Soft/DepthPreprocessing"
                 float maxDepth = 0.0f;
                 float depthSum = 0.0f;
 
+                int sampleIndex = 0;
+
                 // Find the local min and max, and collect all depth samples in the sampling grid
-                for (int i = 0; i < NUM_SAMPLES; ++i)
+                while (sampleIndex < NUM_SAMPLES)
                 {
-                    float2 uvSample = uv + (offsets[i] + 0.5f) * onePixelOffset;
-                    depths[i] = _EnvironmentDepthTexture.Gather(sampler_EnvironmentDepthTexture, float3(uvSample.x, uvSample.y, slice));
+                    float2 uvSample = uv + (offsets[sampleIndex] + 0.5f) * onePixelOffset;
+                    depths[sampleIndex] = _EnvironmentDepthTexture.Gather(sampler_EnvironmentDepthTexture, float3(uvSample.x, uvSample.y, slice));
 
                     #ifdef XR_LINEAR_DEPTH
-                        depths[i].x = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].x));
-                        depths[i].y = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].y));
-                        depths[i].z = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].z));
-                        depths[i].w = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[i].w));
+                        depths[sampleIndex].x = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[sampleIndex].x));
+                        depths[sampleIndex].y = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[sampleIndex].y));
+                        depths[sampleIndex].z = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[sampleIndex].z));
+                        depths[sampleIndex].w = ConvertDepthToNonSymmetricRange(LinearDepthToSymmetricRangeNDC(depths[sampleIndex].w));
                     #endif
 
-                    depthSum += dot(depths[i], float4(0.25f, 0.25, 0.25, 0.25));
+                    depthSum += dot(depths[sampleIndex], float4(0.25f, 0.25, 0.25, 0.25));
 
-                    float localMax = max(max(depths[i].x, depths[i].y), max(depths[i].z, depths[i].w));
-                    float localMin = min(min(depths[i].x, depths[i].y), min(depths[i].z, depths[i].w));
+                    float localMax = max(max(depths[sampleIndex].x, depths[sampleIndex].y), max(depths[sampleIndex].z, depths[sampleIndex].w));
+                    float localMin = min(min(depths[sampleIndex].x, depths[sampleIndex].y), min(depths[sampleIndex].z, depths[sampleIndex].w));
 
                     maxDepth = max(maxDepth, localMax);
                     minDepth = min(minDepth, localMin);
+
+                    sampleIndex++;
                 }
 
                 float maxSumDepth = 0.0f;
@@ -102,16 +106,21 @@ Shader "Occlusion/Soft/DepthPreprocessing"
                     return float4(1.0f - avg, 1.0f - avg, 0.0f, 0.0f);
                 }
 
-                for (int i = 0; i < NUM_SAMPLES; ++i)
+                sampleIndex = 0;
+
+                while (sampleIndex < NUM_SAMPLES)
                 {
-                    float4 maxMask = depths[i] >= float4(depthThrMax, depthThrMax, depthThrMax, depthThrMax);
-                    float4 minMask = depths[i] <= float4(depthThrMin, depthThrMin, depthThrMin, depthThrMin);
-                    minSumDepth += dot(minMask, depths[i]);
+                    float4 maxMask = depths[sampleIndex] >= float4(depthThrMax, depthThrMax, depthThrMax, depthThrMax);
+                    float4 minMask = depths[sampleIndex] <= float4(depthThrMin, depthThrMin, depthThrMin, depthThrMin);
+                    minSumDepth += dot(minMask, depths[sampleIndex]);
                     minSumCount += dot(minMask, float4(1.0f, 1.0f, 1.0f, 1.0f));
-                    maxSumDepth += dot(maxMask, depths[i]);
+                    maxSumDepth += dot(maxMask, depths[sampleIndex]);
                     maxSumCount += dot(maxMask, float4(1.0f, 1.0f, 1.0f, 1.0f));
                     // Value used to interpolate occlusion alphas between min and max values
+
+                    sampleIndex++;
                 }
+
                 float minAvg = minSumDepth / minSumCount;
                 float maxAvg = maxSumDepth / maxSumCount;
 

@@ -8,6 +8,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.2.0-pre.2] - 2025-04-22
+
+### Added
+
+- Added constructors and `defaultValue` properties to `XRSaveAnchorResult`, `XRLoadAnchorResult`, and `XREraseAnchorResult` structs.
+
+### Changed
+
+- Changed default **Occlusion Sources** value on the AR Shader Occlusion component from `None` to `EnvironmentDepth`.
+
 ## [6.2.0-pre.1] - 2025-04-12
 
 ### Added
@@ -23,6 +33,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Fixed the `Cinfo.Equals` method in `XRAnchorSubsystemDescriptor` so that it correctly checks all values of the struct for equality.
 - Fixed the `Cinfo.GetHashCode` method in `XRAnchorSubsystemDescriptor` so that it correctly includes all values of the struct in the hash calculation.
+- Fixed `SoftOcclusionPreprocessing.shader` so that it no longer logs a warning when included in an Android build.
+- Fixed `SimulationImageTrackingSubsystem` behavior to not throw an exception when stopping and restarting the subsystem through the enabling and disabling of the `ARTrackedImageManager` ([ARFB-554](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-554)).
 
 ## [6.1.0] - 2025-02-19
 

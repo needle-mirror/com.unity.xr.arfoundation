@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.XR.ARFoundation.InternalUtils;
 using UnityEngine.XR.ARSubsystems;
 #if UNITY_EDITOR
 using UnityEditor.Callbacks;
@@ -53,7 +52,7 @@ namespace UnityEngine.XR.ARFoundation
 
         [SerializeField]
         [Tooltip("Flags for making an occlusion source mask")]
-        AROcclusionSources m_AROcclusionSources;
+        AROcclusionSources m_AROcclusionSources = AROcclusionSources.EnvironmentDepth;
 
         [SerializeField]
         [Tooltip("A material which is being used on hands, when hands occlusion is enabled")]
