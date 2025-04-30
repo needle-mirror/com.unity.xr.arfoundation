@@ -64,7 +64,6 @@ namespace UnityEngine.XR.Simulation
                 m_Discoverer.imagesInitialized += OnImagesInitialized;
                 m_Discoverer.imageAdded += OnImageAdded;
                 m_Discoverer.imageUpdated += OnImageUpdated;
-                m_Discoverer.imageRemoved += OnImageRemoved;
             }
 
             /// <inheritdoc/>
@@ -187,11 +186,6 @@ namespace UnityEngine.XR.Simulation
             void OnImageUpdated(XRTrackedImage image)
             {
                 m_Updated[image.trackableId] = image;
-            }
-
-            void OnImageRemoved(TrackableId image)
-            {
-                m_Removed[m_NumRemoved++] = image;
             }
         }
 

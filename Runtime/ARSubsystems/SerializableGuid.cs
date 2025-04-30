@@ -1,4 +1,5 @@
 using System;
+using Unity.Collections;
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -53,6 +54,18 @@ namespace UnityEngine.XR.ARSubsystems
         /// Reconstructs the <c>Guid</c> from the serialized data.
         /// </summary>
         public Guid guid => GuidUtil.Compose(m_GuidLow, m_GuidHigh);
+
+        /// <summary>
+        /// Convert the SerializableGuid to a NativeArray of bytes.
+        /// </summary>
+        /// <param name="allocator">The allocation strategy for the returned `NativeArray`.</param>
+        /// <returns>The byte `NativeArray`.</returns>
+        public NativeArray<byte> AsByteNativeArray(Allocator allocator = Allocator.Temp)
+        {
+            var nativeArray = new NativeArray<byte>(16, allocator);
+            guid.TryWriteBytes(nativeArray.AsSpan());
+            return nativeArray;
+        }
 
         /// <summary>
         /// Convert from <see cref="TrackableId"/> to `SerializableGuid` using the <see cref="SerializableGuid(ulong, ulong)"/> constructor.

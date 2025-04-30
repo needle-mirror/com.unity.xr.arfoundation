@@ -57,11 +57,6 @@ namespace UnityEngine.XR.Simulation
         public event Action<XRTrackedImage> imageUpdated;
 
         /// <summary>
-        /// Invoked when a tracked image is removed.
-        /// </summary>
-        public event Action<TrackableId> imageRemoved;
-
-        /// <summary>
         /// Starts actively trying to discover tracked images in the environment.
         /// </summary>
         public void Start()
