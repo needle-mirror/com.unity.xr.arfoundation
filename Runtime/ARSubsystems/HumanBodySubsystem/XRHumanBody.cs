@@ -75,6 +75,16 @@ namespace UnityEngine.XR.ARSubsystems
         IntPtr m_NativePtr;
 
         /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId
+        {
+            get => m_ParentId;
+            private set => m_ParentId = value;
+        }
+        TrackableId m_ParentId;
+
+        /// <summary>
         /// Get the default human body data.
         /// </summary>
         /// <value>
@@ -87,6 +97,7 @@ namespace UnityEngine.XR.ARSubsystems
             trackableId = TrackableId.invalidId,
             pose = Pose.identity,
             estimatedHeightScaleFactor = 1.0f,
+            parentId = TrackableId.invalidId
         };
 
         /// <summary>

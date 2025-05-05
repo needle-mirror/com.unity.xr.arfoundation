@@ -42,6 +42,40 @@ namespace UnityEngine.XR.ARSubsystems
         public BoundingBoxClassifications classifications { get; }
 
         /// <summary>
+        /// The parent ID of the bounding box.
+        /// </summary>
+        public TrackableId parentId{ get; }
+
+        /// <summary>
+        /// Constructs a new instance. `XRBoundingBox` objects are typically created by
+        /// <see cref="XRBoundingBoxSubsystem.GetChanges(Unity.Collections.Allocator)">XRBoundingBoxSubsystem.GetChanges</see>.
+        /// </summary>
+        /// <param name="trackableId">The `TrackableId` associated with the bounding box.</param>
+        /// <param name="pose">The pose describing the position and orientation of the bounding box.</param>
+        /// <param name="size">The dimensions of the bounding box.</param>
+        /// <param name="trackingState">The `TrackingState` describing how well the XR device is tracking the bounding box.</param>
+        /// <param name="classifications">The BoundingBoxClassification assigned to the bounding box by the XR device.</param>
+        /// <param name="nativePtr">The native pointer associated with the bounding box.</param>
+        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
+        public XRBoundingBox(
+           TrackableId trackableId,
+           Pose pose,
+           Vector3 size,
+           TrackingState trackingState,
+           BoundingBoxClassifications classifications,
+           IntPtr nativePtr,
+           TrackableId parentId)
+        {
+            this.trackableId = trackableId;
+            this.pose = pose;
+            this.size = size;
+            this.trackingState = trackingState;
+            this.classifications = classifications;
+            this.nativePtr = nativePtr;
+            this.parentId = parentId;
+        }
+
+        /// <summary>
         /// Constructs a new instance. `XRBoundingBox` objects are typically created by
         /// <see cref="XRBoundingBoxSubsystem.GetChanges(Unity.Collections.Allocator)">XRBoundingBoxSubsystem.GetChanges</see>.
         /// </summary>
@@ -65,6 +99,7 @@ namespace UnityEngine.XR.ARSubsystems
             this.trackingState = trackingState;
             this.classifications = classifications;
             this.nativePtr = nativePtr;
+            this.parentId = TrackableId.invalidId;
         }
 
         /// <summary>
@@ -75,12 +110,13 @@ namespace UnityEngine.XR.ARSubsystems
         {
             SharedStringBuilder.stringBuilder.AppendLine("Bounding Box:");
             SharedStringBuilder.stringBuilder.AppendLine("\ttrackableId: " + trackableId);
+            SharedStringBuilder.stringBuilder.AppendLine("\tparentId: " + parentId);
             SharedStringBuilder.stringBuilder.AppendLine("\tpose: " + pose);
             SharedStringBuilder.stringBuilder.AppendLine("\tsize: " + size);
             SharedStringBuilder.stringBuilder.AppendLine("\tclassifications: " + classifications);
             SharedStringBuilder.stringBuilder.AppendLine("\ttrackingState: " + trackingState);
             SharedStringBuilder.stringBuilder.Append("\tnativePtr: ");
-            SharedStringBuilder.stringBuilder.Append("" + nativePtr.ToInt64(), 0, 16);
+            SharedStringBuilder.stringBuilder.Append("" + nativePtr.ToInt64());
             SharedStringBuilder.stringBuilder.Append("\n");
             string tempString = SharedStringBuilder.stringBuilder.ToString();
             SharedStringBuilder.stringBuilder.Clear();

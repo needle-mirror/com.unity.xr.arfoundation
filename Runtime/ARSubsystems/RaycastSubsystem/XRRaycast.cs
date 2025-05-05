@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARSubsystems
     public struct XRRaycast : ITrackable, IEquatable<XRRaycast>
     {
         static readonly XRRaycast s_Default = new XRRaycast(
-            TrackableId.invalidId, Pose.identity, TrackingState.None, IntPtr.Zero, 0, TrackableId.invalidId);
+            TrackableId.invalidId, Pose.identity, TrackingState.None, IntPtr.Zero, 0, TrackableId.invalidId, TrackableId.invalidId);
 
         /// <summary>
         /// A default-initialized raycast.
@@ -51,6 +51,35 @@ namespace UnityEngine.XR.ARSubsystems
         public TrackableId hitTrackableId => m_HitTrackableId;
 
         /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
+
+        /// <summary>
+        /// Constructs an <see cref="XRRaycast"/>.
+        /// </summary>
+        /// <param name="trackableId">The <see cref="TrackableId"/> of the trackable which was hit.</param>
+        /// <param name="pose">The session-space <c>Pose</c> of the intersection.</param>
+        /// <param name="trackingState">The tracking state of this raycast.</param>
+        /// <param name="nativePtr">A pointer into native memory for this raycast.</param>
+        /// <param name="distance">The session-space distance from the raycast origin to the intersection point.</param>
+        /// <param name="hitTrackableId">The <see cref="TrackableId"/> of the trackable hit by this raycast,
+        /// or <see cref="TrackableId.invalidId"/> if none.</param>
+        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
+        public XRRaycast(
+            TrackableId trackableId, Pose pose, TrackingState trackingState, IntPtr nativePtr,  float distance,
+            TrackableId hitTrackableId, TrackableId parentId)
+        {
+            m_TrackableId = trackableId;
+            m_Pose = pose;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_Distance = distance;
+            m_HitTrackableId = hitTrackableId;
+            m_ParentId = parentId;
+        }
+
+        /// <summary>
         /// Constructs an <see cref="XRRaycast"/>.
         /// </summary>
         /// <param name="trackableId">The <see cref="TrackableId"/> of the trackable which was hit.</param>
@@ -70,6 +99,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_NativePtr = nativePtr;
             m_Distance = distance;
             m_HitTrackableId = hitTrackableId;
+            m_ParentId = defaultValue.parentId;
         }
 
         /// <summary>
@@ -137,5 +167,7 @@ namespace UnityEngine.XR.ARSubsystems
         float m_Distance;
 
         TrackableId m_HitTrackableId;
+
+        TrackableId m_ParentId;
     }
 }

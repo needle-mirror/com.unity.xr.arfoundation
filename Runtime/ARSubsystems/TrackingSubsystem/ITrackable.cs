@@ -47,5 +47,17 @@ namespace UnityEngine.XR.ARSubsystems
         /// this pointer on your target platform(s).
         /// </remarks>
         IntPtr nativePtr { get; }
+
+        /// <summary>
+        /// The `TrackableId` of the parent trackable, if any.
+        /// </summary>
+        /// <value>The `TrackableId` of the parent trackable, or <see cref="TrackableId.invalidId"/> if none.</value>
+        TrackableId parentId
+        {
+            get
+            {
+                return TrackableId.invalidId;
+            }
+        }
     }
 }

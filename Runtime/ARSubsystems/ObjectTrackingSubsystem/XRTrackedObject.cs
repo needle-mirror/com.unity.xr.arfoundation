@@ -53,6 +53,38 @@ namespace UnityEngine.XR.ARSubsystems
         public Guid referenceObjectGuid => m_ReferenceObjectGuid;
 
         /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
+
+        /// <summary>
+        /// Constructs an <see cref="XRTrackedObject"/>.
+        /// </summary>
+        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this tracked object.</param>
+        /// <param name="pose">The <c>Pose</c> of this tracked object.</param>
+        /// <param name="trackingState">The <see cref="TrackingState"/> of the tracked object.</param>
+        /// <param name="nativePtr">A native pointer associated with this tracked object. If not <c>null</c>,
+        /// the object pointed to by this pointer should be valid at least until the next call to
+        /// <see cref="XRObjectTrackingSubsystem.GetChanges(Unity.Collections.Allocator)"/>.</param>
+        /// <param name="referenceObjectGuid">The <c>GUID</c> of the reference object which was used to detect this tracked object.</param>
+        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
+        public XRTrackedObject(
+            TrackableId trackableId,
+            Pose pose,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            Guid referenceObjectGuid,
+            TrackableId parentId)
+        {
+            m_TrackableId = trackableId;
+            m_Pose = pose;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_ReferenceObjectGuid = referenceObjectGuid;
+            m_ParentId = parentId;
+        }
+
+        /// <summary>
         /// Constructs an <see cref="XRTrackedObject"/>.
         /// </summary>
         /// <param name="trackableId">The <see cref="TrackableId"/> associated with this tracked object.</param>
@@ -74,6 +106,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_TrackingState = trackingState;
             m_NativePtr = nativePtr;
             m_ReferenceObjectGuid = referenceObjectGuid;
+            m_ParentId = defaultValue.parentId;
         }
 
         /// <summary>
@@ -123,11 +156,14 @@ namespace UnityEngine.XR.ARSubsystems
 
         Guid m_ReferenceObjectGuid;
 
+        TrackableId m_ParentId;
+
         static readonly XRTrackedObject s_Default = new XRTrackedObject
         {
             m_TrackableId = TrackableId.invalidId,
             m_Pose = Pose.identity,
             m_ReferenceObjectGuid = Guid.Empty,
+            m_ParentId = TrackableId.invalidId
         };
     }
 }

@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.2.0-pre.4] - 2025-05-05
+
+### Added
+
+- Added `parentId` field to all trackable struct types: `XRAnchor`, `XRBoundingBox`, `XREnvironmentProbe`, `XRFace`, `XRHumanBody`, `XRTrackedImage`, `XRTrackedObject`, `XRParticipant`, `BoundedPlane`, `XRPointCloud`, and `XRRaycast`. Providers can use this field to indicate scene hierarchy information.
+- Changed the Transform hierarchy of trackable GameObjects spawned by AR Foundation manager components to reflect the scene hierarchy reported by the provider.
+
 ## [6.2.0-pre.3] - 2025-04-30
 
 No changes
@@ -28,7 +35,7 @@ No changes
 
 - Added support for depth preprocessing, when depth data is provided in a linear format.
 - Added occlusion sources flags mask and hands mesh source of occlusion.
-- Added `SerializableGuid.TryGetByteNativeArray` to convert a `SerializableGuid` to a `NativeArray<byte>`.
+- Added `SerializableGuid.AsByteNativeArray` to convert a `SerializableGuid` to a `NativeArray<byte>`.
 
 ### Changed
 

@@ -32,6 +32,30 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="pose">The <c>Pose</c> associated with the point cloud.</param>
         /// <param name="trackingState">The <see cref="TrackingState"/> associated with the point cloud.</param>
         /// <param name="nativePtr">The native pointer associated with the point cloud.</param>
+        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
+        public XRPointCloud(
+            TrackableId trackableId,
+            Pose pose,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            TrackableId parentId)
+        {
+            m_TrackableId = trackableId;
+            m_Pose = pose;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_ParentId = parentId;
+        }
+
+        /// <summary>
+        /// Constructs a new <see cref="XRPointCloud"/>. This is a container
+        /// for the session-relative data. These are typically created by
+        /// <see cref="XRPointCloudSubsystem.GetChanges(Unity.Collections.Allocator)"/>.
+        /// </summary>
+        /// <param name="trackableId">The <see cref="TrackableId"/> associated with the point cloud.</param>
+        /// <param name="pose">The <c>Pose</c> associated with the point cloud.</param>
+        /// <param name="trackingState">The <see cref="TrackingState"/> associated with the point cloud.</param>
+        /// <param name="nativePtr">The native pointer associated with the point cloud.</param>
         public XRPointCloud(
             TrackableId trackableId,
             Pose pose,
@@ -42,6 +66,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_Pose = pose;
             m_TrackingState = trackingState;
             m_NativePtr = nativePtr;
+            m_ParentId = TrackableId.invalidId;
         }
 
         /// <summary>
@@ -69,6 +94,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// The data this pointer points to is implementation defined.
         /// </remarks>
         public IntPtr nativePtr => m_NativePtr;
+
+        /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -131,5 +161,7 @@ namespace UnityEngine.XR.ARSubsystems
         TrackingState m_TrackingState;
 
         IntPtr m_NativePtr;
+
+        TrackableId m_ParentId;
     }
 }

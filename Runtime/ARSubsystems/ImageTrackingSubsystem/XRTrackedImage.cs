@@ -18,6 +18,34 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="size">The size (dimensions) of the detected image.</param>
         /// <param name="trackingState">The <see cref="TrackingState"/> of the detected image.</param>
         /// <param name="nativePtr">A native pointer associated with the detected image.</param>
+        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
+        public XRTrackedImage(
+            TrackableId trackableId,
+            Guid sourceImageId,
+            Pose pose,
+            Vector2 size,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            TrackableId parentId)
+        {
+            m_Id = trackableId;
+            m_SourceImageId = sourceImageId;
+            m_Pose = pose;
+            m_Size = size;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_ParentId = parentId;
+        }
+
+        /// <summary>
+        /// Constructs an <see cref="XRTrackedImage"/>.
+        /// </summary>
+        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this tracked image.</param>
+        /// <param name="sourceImageId">A <c>GUID</c> associated with the source image.</param>
+        /// <param name="pose">The <c>Pose</c> associated with the detected image.</param>
+        /// <param name="size">The size (dimensions) of the detected image.</param>
+        /// <param name="trackingState">The <see cref="TrackingState"/> of the detected image.</param>
+        /// <param name="nativePtr">A native pointer associated with the detected image.</param>
         public XRTrackedImage(
             TrackableId trackableId,
             Guid sourceImageId,
@@ -32,6 +60,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_Size = size;
             m_TrackingState = trackingState;
             m_NativePtr = nativePtr;
+            m_ParentId = defaultValue.parentId;
         }
 
         /// <summary>
@@ -44,6 +73,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_Id = TrackableId.invalidId,
             m_SourceImageId = Guid.Empty,
             m_Pose = Pose.identity,
+            m_ParentId = TrackableId.invalidId,
         };
 
         /// <summary>
@@ -79,6 +109,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="TrackingSubsystem{TTrackable, TSubsystem, TSubsystemDescriptor, TProvider}.GetChanges(Unity.Collections.Allocator)"/>.
         /// </summary>
         public IntPtr nativePtr => m_NativePtr;
+
+        /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -142,5 +177,6 @@ namespace UnityEngine.XR.ARSubsystems
         Vector2 m_Size;
         TrackingState m_TrackingState;
         IntPtr m_NativePtr;
+        TrackableId m_ParentId;
     }
 }

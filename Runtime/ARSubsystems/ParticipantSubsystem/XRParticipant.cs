@@ -18,6 +18,33 @@ namespace UnityEngine.XR.ARSubsystems
         TrackingState m_TrackingState;
         IntPtr m_NativePtr;
         Guid m_SessionId;
+        TrackableId m_ParentId;
+
+        /// <summary>
+        /// Constructs an <see cref="XRParticipant"/>. <see cref="XRParticipant"/>s are generated
+        /// by <see cref="XRParticipantSubsystem.GetChanges(Unity.Collections.Allocator)"/>.
+        /// </summary>
+        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this participant.</param>
+        /// <param name="pose">The <c>Pose</c> associated with this participant.</param>
+        /// <param name="trackingState">The <see cref="TrackingState"/> associated with this participant.</param>
+        /// <param name="nativePtr">A native pointer associated with this participant.</param>
+        /// <param name="sessionId">The session from which this participant originated.</param>
+        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
+        public XRParticipant(
+            TrackableId trackableId,
+            Pose pose,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            Guid sessionId,
+            TrackableId parentId)
+        {
+            m_TrackableId = trackableId;
+            m_Pose = pose;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_SessionId = sessionId;
+            m_ParentId = parentId;
+        }
 
         /// <summary>
         /// Constructs an <see cref="XRParticipant"/>. <see cref="XRParticipant"/>s are generated
@@ -40,6 +67,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_TrackingState = trackingState;
             m_NativePtr = nativePtr;
             m_SessionId = sessionId;
+            m_ParentId = TrackableId.invalidId;
         }
 
         /// <summary>
@@ -73,6 +101,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// This participant's session identifier.
         /// </summary>
         public Guid sessionId => m_SessionId;
+
+        /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
 
         static readonly XRParticipant k_Default = new XRParticipant
         {

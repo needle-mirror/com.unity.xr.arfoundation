@@ -89,6 +89,7 @@ namespace UnityEngine.XR.ARFoundation
         protected virtual void Awake()
         {
             origin = GetComponent<XROrigin>();
+            TrackableSpawner.instance.SetTrackablesParent(origin.TrackablesParent);
         }
 
         /// <inheritdoc />
@@ -108,6 +109,8 @@ namespace UnityEngine.XR.ARFoundation
 
         void OnTrackablesParentTransformChanged(ARTrackablesParentTransformChangedEventArgs eventArgs)
         {
+            TrackableSpawner.instance.SetTrackablesParent(eventArgs.TrackablesParent);
+
             foreach (var trackable in trackables)
             {
                 var trackableTransform = trackable.transform;
@@ -361,47 +364,10 @@ namespace UnityEngine.XR.ARFoundation
             return gameObjectName + " " + trackableId;
         }
 
-        (GameObject gameObject, bool shouldBeActive) CreateGameObjectDeactivated()
-        {
-            var prefab = GetPrefab();
-            if (prefab == null)
-            {
-                var newGameObject = new GameObject();
-                newGameObject.SetActive(false);
-                newGameObject.transform.parent = origin.TrackablesParent;
-                return (newGameObject, true);
-            }
-
-            var active = prefab.activeSelf;
-            prefab.SetActive(false);
-            var prefabInstance = Instantiate(prefab, origin.TrackablesParent);
-            prefab.SetActive(active);
-            return (prefabInstance, active);
-        }
-
-        (GameObject gameObject, bool shouldBeActive) CreateGameObjectDeactivated(string name)
-        {
-            var tuple = CreateGameObjectDeactivated();
-            tuple.gameObject.name = name;
-            return tuple;
-        }
-
-        (GameObject gameObject, bool shouldBeActive) CreateGameObjectDeactivated(TrackableId trackableId)
-        {
-            using (new ScopedProfiler("CreateGameObject"))
-            {
-                return CreateGameObjectDeactivated(GetTrackableName(trackableId));
-            }
-        }
-
         TTrackable CreateTrackable(TSessionRelativeData sessionRelativeData)
         {
-            var (trackableGameObject, shouldBeActive) = CreateGameObjectDeactivated(sessionRelativeData.trackableId);
+            var (trackableGameObject, shouldBeActive) = TrackableSpawner.instance.CreateTrackable<TTrackable, TSessionRelativeData>(sessionRelativeData, GetPrefab(), GetTrackableName(sessionRelativeData.trackableId));
             var trackable = trackableGameObject.GetComponent<TTrackable>();
-            if (trackable == null)
-            {
-                trackable = trackableGameObject.AddComponent<TTrackable>();
-            }
 
             m_Trackables.Add(sessionRelativeData.trackableId, trackable);
             SetSessionRelativeData(trackable, sessionRelativeData);
@@ -443,6 +409,8 @@ namespace UnityEngine.XR.ARFoundation
             {
                 Destroy(trackable.gameObject);
             }
+
+            TrackableSpawner.instance.AfterTrackableRemoved<TTrackable, TSessionRelativeData>(trackable);
         }
     }
 }

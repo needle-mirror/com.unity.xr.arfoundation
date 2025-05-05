@@ -17,6 +17,7 @@ namespace UnityEngine.XR.ARSubsystems
         Pose m_LeftEyePose;
         Pose m_RightEyePose;
         Vector3 m_FixationPoint;
+        TrackableId m_ParentId;
 
         /// <summary>
         /// Get a <see cref="XRFace"/> with reasonable default values.
@@ -29,6 +30,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_Pose = Pose.identity,
             m_LeftEyePose = Pose.identity,
             m_RightEyePose = Pose.identity,
+            m_ParentId = TrackableId.invalidId
         };
 
         /// <summary>
@@ -71,6 +73,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// The position where the eyes are fixated in relation to the face.
         /// </summary>
         public Vector3 fixationPoint => m_FixationPoint;
+
+        /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
 
         /// <summary>
         /// Tests for equality.

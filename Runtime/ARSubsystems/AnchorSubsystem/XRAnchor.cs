@@ -15,6 +15,7 @@ namespace UnityEngine.XR.ARSubsystems
         TrackingState m_TrackingState;
         IntPtr m_NativePtr;
         Guid m_SessionId;
+        TrackableId m_ParentId;
 
         /// <summary>
         /// Gets a default-initialized <see cref="XRAnchor"/>. This may be
@@ -27,9 +28,35 @@ namespace UnityEngine.XR.ARSubsystems
         {
             m_Id = TrackableId.invalidId,
             m_Pose = Pose.identity,
-            m_SessionId = Guid.Empty
+            m_SessionId = Guid.Empty,
+            m_ParentId = TrackableId.invalidId
         };
 
+        /// <summary>
+        /// Constructs the session-relative data for an anchor.
+        /// This is typically provided by an implementation of the <see cref="XRAnchorSubsystem"/>
+        /// and not invoked directly.
+        /// </summary>
+        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this anchor.</param>
+        /// <param name="pose">The <c>Pose</c>, in session space, of the anchor.</param>
+        /// <param name="trackingState">The <see cref="TrackingState"/> of the anchor.</param>
+        /// <param name="nativePtr">A native pointer associated with the anchor. The data pointed to by
+        /// this pointer is implementation-specific.</param>
+        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
+        public XRAnchor(
+            TrackableId trackableId,
+            Pose pose,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            TrackableId parentId)
+        {
+            m_Id = trackableId;
+            m_Pose = pose;
+            m_TrackingState = trackingState;
+            m_NativePtr = nativePtr;
+            m_SessionId = Guid.Empty;
+            m_ParentId = parentId;
+        }
         /// <summary>
         /// Constructs the session-relative data for an anchor.
         /// This is typically provided by an implementation of the <see cref="XRAnchorSubsystem"/>
@@ -51,6 +78,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_TrackingState = trackingState;
             m_NativePtr = nativePtr;
             m_SessionId = Guid.Empty;
+            m_ParentId = defaultValue.parentId;
         }
 
         /// <summary>
@@ -100,6 +128,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// The id of the session from which this anchor originated.
         /// </summary>
         public Guid sessionId => m_SessionId;
+
+        /// <summary>
+        /// The <see cref="TrackableId"/> of the parent of this tracked object.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
