@@ -12,3 +12,7 @@ Refer to the following topics to learn more about face tracking in AR Foundation
 | [Face tracking platform support](xref:arfoundation-face-tracking-platform-support) | Discover which AR platforms support AR Foundation's face subsystem. |
 | [AR Face Manager component](xref:arfoundation-face-tracking-face-manager) | Understand the AR Face Manager component. |
 | [AR Face component](xref:arfoundation-face-tracking-arface) | Understand the AR Face component. |
+
+## Additional resources
+
+* [Face tracking samples](xref:arfoundation-samples-face-tracking)

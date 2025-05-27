@@ -14,3 +14,7 @@ Refer to the following topics to understand how to use AR Foundation ray casting
 | [Ray cast platform support](xref:arfoundation-raycasts-platform-support)  | Discover which AR platforms support ray casting features, and the trackables supported by each AR platform. |
 | [AR Raycast Manager component](xref:arfoundation-raycasts-raycastmanager) | Understand the AR Raycast Manager component and the types of ray cast methods it provides. |
 | [AR Raycast component](xref:arfoundation-raycasts-arraycast)              | Understand the AR Raycast component.                 |
+
+## Additional resources
+
+* [Simple AR sample](xref:arfoundation-samples-simple-ar)

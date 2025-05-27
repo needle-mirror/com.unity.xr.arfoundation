@@ -1,6 +1,6 @@
 | Feature                                                                       | Supported |
 | :---------------------------------------------------------------------------- | :-------: |
-| [Session](xref:arfoundation-session)                                          |    Yes    |
+| [Session](xref:arfoundation-simulation-session)                               |    Yes    |
 | [Device tracking](xref:arfoundation-device-tracking)                          |    Yes    |
 | [Camera](xref:arfoundation-simulation-camera)                                 |    Yes    |
 | [Plane detection](xref:arfoundation-plane-detection)                          |    Yes    |

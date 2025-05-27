@@ -1,5 +1,9 @@
 using System;
 using UnityEngine.XR.ARSubsystems;
+#if UNITY_EDITOR
+using UnityEditor.Callbacks;
+using UnityEditor;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -23,6 +27,9 @@ namespace UnityEngine.XR.ARFoundation
 
         const string k_EnvironmentDepthProjectionMatricesPropertyName = "_EnvironmentDepthProjectionMatrices";
         const string k_NdcLinearConversionParametersPropertyName = "_NdcLinearConversionParameters";
+        const string k_IsOcclusionOnPropertyName = "_IsOcclusionOn";
+
+        static int s_IsOcclusionOnPropertyNamePropertyId;
 
         SoftOcclusionPreprocessor m_SoftOcclusionPreprocessor;
 
@@ -101,6 +108,7 @@ namespace UnityEngine.XR.ARFoundation
                 Shader.PropertyToID(k_EnvironmentDepthProjectionMatricesPropertyName);
 
             ndcLinearConversionParametersPropertyId = Shader.PropertyToID(k_NdcLinearConversionParametersPropertyName);
+            s_IsOcclusionOnPropertyNamePropertyId = Shader.PropertyToID(k_IsOcclusionOnPropertyName);
 
             if (occlusionShaderMode == AROcclusionShaderMode.SoftOcclusion
                 && m_SoftOcclusionPreprocessShader != null)
@@ -116,13 +124,36 @@ namespace UnityEngine.XR.ARFoundation
         {
             shaderOcclusionComponentEnabled?.Invoke(gameObject);
             m_OcclusionManager.frameReceived += OnOcclusionFrameReceived;
+            Shader.SetGlobalInteger(s_IsOcclusionOnPropertyNamePropertyId, 1);
         }
 
         void OnDisable()
         {
             m_OcclusionManager.frameReceived -= OnOcclusionFrameReceived;
             shaderOcclusionComponentDisabled?.Invoke(gameObject);
+            Shader.SetGlobalInteger(s_IsOcclusionOnPropertyNamePropertyId, 0);
         }
+
+#if UNITY_EDITOR
+        [DidReloadScripts]
+        static void OnScriptReloaded()
+        {
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            s_IsOcclusionOnPropertyNamePropertyId = Shader.PropertyToID(k_IsOcclusionOnPropertyName);
+        }
+
+        static void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredEditMode || state == PlayModeStateChange.ExitingPlayMode)
+            {
+                Shader.SetGlobalInteger(s_IsOcclusionOnPropertyNamePropertyId, 0);
+            }
+            else if (state == PlayModeStateChange.EnteredPlayMode)
+            {
+                Shader.SetGlobalInteger(s_IsOcclusionOnPropertyNamePropertyId, 1);
+            }
+        }
+#endif
 
         void OnOcclusionFrameReceived(AROcclusionFrameEventArgs eventArgs)
         {

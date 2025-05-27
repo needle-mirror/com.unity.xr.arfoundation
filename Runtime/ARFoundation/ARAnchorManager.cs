@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 using Unity.XR.CoreUtils.Collections;
+using UnityEngine.XR.ARFoundation.InternalUtils;
 using SerializableGuid = UnityEngine.XR.ARSubsystems.SerializableGuid;
 
 namespace UnityEngine.XR.ARFoundation
@@ -34,7 +35,14 @@ namespace UnityEngine.XR.ARFoundation
         XRAnchor,
         ARAnchor>
     {
-        UnityEngine.Pool.ObjectPool<AwaitableCompletionSource<Result<ARAnchor>>> m_AnchorCompletionSources = new(
+        /// <summary>
+        /// Invoked once per frame to communicate changes: new anchors, updates to existing
+        /// anchors, and removed anchors.
+        /// </summary>
+        [Obsolete("anchorsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        public event Action<ARAnchorsChangedEventArgs> anchorsChanged;
+
+        Pool.ObjectPool<AwaitableCompletionSource<Result<ARAnchor>>> m_AnchorCompletionSources = new(
             createFunc: () => new AwaitableCompletionSource<Result<ARAnchor>>(),
             actionOnGet: null,
             actionOnRelease: null,
@@ -49,14 +57,12 @@ namespace UnityEngine.XR.ARFoundation
         GameObject m_AnchorPrefab;
 
         static readonly Pool.ObjectPool<Dictionary<TrackableId, ARAnchor>> s_AnchorByTrackableIdMaps =
-            new(
-                createFunc: () => new Dictionary<TrackableId, ARAnchor>(),
-                actionOnGet: null,
-                actionOnRelease: null,
-                actionOnDestroy: null,
-                collectionCheck: false,
-                defaultCapacity: 8,
-                maxSize: 1024);
+            ObjectPoolCreateUtil.Create<Dictionary<TrackableId, ARAnchor>>();
+
+        /// <summary>
+        /// The name to assign to the GameObject instantiated for each <see cref="ARAnchor"/>.
+        /// </summary>
+        protected override string gameObjectName => "Anchor";
 
         /// <summary>
         /// This prefab will be instantiated for each <see cref="ARAnchor"/>. May be <see langword="null"/>.
@@ -70,13 +76,6 @@ namespace UnityEngine.XR.ARFoundation
             get => m_AnchorPrefab;
             set => m_AnchorPrefab = value;
         }
-
-        /// <summary>
-        /// Invoked once per frame to communicate changes: new anchors, updates to existing
-        /// anchors, and removed anchors.
-        /// </summary>
-        [Obsolete("anchorsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
-        public event Action<ARAnchorsChangedEventArgs> anchorsChanged;
 
         internal bool TryAddAnchor(ARAnchor anchor)
         {
@@ -199,11 +198,6 @@ namespace UnityEngine.XR.ARFoundation
         protected override GameObject GetPrefab() => m_AnchorPrefab;
 
         /// <summary>
-        /// The name to assign to the GameObject instantiated for each <see cref="ARAnchor"/>.
-        /// </summary>
-        protected override string gameObjectName => "Anchor";
-
-        /// <summary>
         /// Attempts to persistently save the given anchor so that it can be loaded in a future AR session. Use the
         /// `SerializableGuid` returned by this method as an input to <see cref="TryLoadAnchorAsync"/> or
         /// <see cref="TryEraseAnchorAsync"/>.
@@ -236,7 +230,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <seealso cref="XRAnchorSubsystemDescriptor.supportsSaveAnchor"/>
         /// <exception cref="NotSupportedException"> Thrown if
         /// <see cref="XRAnchorSubsystemDescriptor.supportsSaveAnchor"/> is false for this provider.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="anchorsToSave"/> or <paramref name="outputSaveAnchorResults"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if either <paramref name="anchorsToSave"/> or
+        /// <paramref name="outputSaveAnchorResults"/> is null.</exception>
         public async Awaitable TrySaveAnchorsAsync(
             IEnumerable<ARAnchor> anchorsToSave,
             List<ARSaveOrLoadAnchorResult> outputSaveAnchorResults,
@@ -263,9 +258,7 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             var xrSaveAnchorResults = await subsystem.TrySaveAnchorsAsync(
-                anchorIds,
-                Allocator.Temp,
-                cancellationToken);
+                anchorIds, Allocator.Temp, cancellationToken);
 
             for (var i = 0; i < xrSaveAnchorResults.Length; i += 1)
             {
@@ -441,8 +434,7 @@ namespace UnityEngine.XR.ARFoundation
                 return;
 
             var nativeSavedAnchorGuids = new NativeArray<SerializableGuid>(
-                savedAnchorGuidsToErase.Count(),
-                Allocator.Persistent);
+                savedAnchorGuidsToErase.Count(), Allocator.Persistent);
 
             var index = 0;
             foreach (var savedAnchorGuid in savedAnchorGuidsToErase)
@@ -452,9 +444,7 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             var eraseAnchorResults = await subsystem.TryEraseAnchorsAsync(
-                nativeSavedAnchorGuids,
-                Allocator.Temp,
-                cancellationToken);
+                nativeSavedAnchorGuids, Allocator.Temp, cancellationToken);
 
             outputEraseAnchorResults.Clear();
             foreach (var eraseAnchorResult in eraseAnchorResults)
@@ -489,19 +479,14 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="removed">The list of removed anchors.</param>
         [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(
-            List<ARAnchor> added,
-            List<ARAnchor> updated,
-            List<ARAnchor> removed)
+            List<ARAnchor> added, List<ARAnchor> updated, List<ARAnchor> removed)
         {
-            if (anchorsChanged != null)
+            if (anchorsChanged == null)
+                return;
+
+            using (new ScopedProfiler("OnAnchorsChanged"))
             {
-                using (new ScopedProfiler("OnAnchorsChanged"))
-                {
-                    anchorsChanged?.Invoke(new ARAnchorsChangedEventArgs(
-                        added,
-                        updated,
-                        removed));
-                }
+                anchorsChanged?.Invoke(new ARAnchorsChangedEventArgs(added, updated, removed));
             }
         }
     }

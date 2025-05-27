@@ -28,7 +28,7 @@ namespace UnityEngine.XR.ARFoundation
 
         Camera m_Camera;
         bool m_PreRenderInvertCullingValue;
-        ARTextureInfo m_CameraGrainInfo;
+        IUpdatableTexture m_CameraGrainUpdatableTexture;
 
         /// <summary>
         /// An event which fires each time a new camera frame is received.
@@ -363,7 +363,7 @@ namespace UnityEngine.XR.ARFoundation
             if (!subsystem.TryGetLatestFrame(cameraParams, out XRCameraFrame frame))
                 return;
 
-            if (m_SwapchainStrategy.TryUpdateTextureInfosForFrame(
+            if (m_SwapchainStrategy.TryUpdateTexturesForFrame(
                     subsystem.GetTextureDescriptors(Allocator.Temp), out var textureInfos))
                 InvokeFrameReceivedEvent(frame, textureInfos);
         }
@@ -372,7 +372,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Invoke the camera frame received event packing the frame information into the event argument.
         /// </summary>
         /// <param name="frame">The camera frame raising the event.</param>
-        void InvokeFrameReceivedEvent(XRCameraFrame frame, ReadOnlyListSpan<ARTextureInfo> textureInfos)
+        void InvokeFrameReceivedEvent(XRCameraFrame frame, ReadOnlyListSpan<IUpdatableTexture> updatableTextures)
         {
             if (frameReceived == null)
                 return;
@@ -424,17 +424,17 @@ namespace UnityEngine.XR.ARFoundation
 
             if (frame.TryGetCameraGrain(out var cameraGrain))
             {
-                if (m_CameraGrainInfo == null)
+                if (m_CameraGrainUpdatableTexture == null)
                 {
-                    m_CameraGrainInfo = new ARTextureInfo(cameraGrain);
+                    m_CameraGrainUpdatableTexture = UpdatableTextureFactory.Create(cameraGrain);
                 }
                 else
                 {
                     // always succeeds for Texture2D
-                    m_CameraGrainInfo.TryUpdateTextureInfo(cameraGrain);
+                    m_CameraGrainUpdatableTexture.TryUpdateFromDescriptor(cameraGrain);
                 }
 
-                eventArgs.cameraGrainTexture = m_CameraGrainInfo.texture;
+                eventArgs.cameraGrainTexture = m_CameraGrainUpdatableTexture.texture;
             }
 
             if (frame.TryGetNoiseIntensity(out var noiseIntensity))
@@ -445,13 +445,13 @@ namespace UnityEngine.XR.ARFoundation
 
             s_Textures.Clear();
             s_PropertyIds.Clear();
-            foreach (var textureInfo in textureInfos)
+            foreach (var updatableTexture in updatableTextures)
             {
-                DebugAssert.That(textureInfo.descriptor.textureType == XRTextureType.Texture2D)?.
-                    WithMessage($"Camera Texture needs to be a Texture 2D, but instead is {textureInfo.descriptor.textureType.ToString()}.");
+                DebugAssert.That(updatableTexture.descriptor.textureType == XRTextureType.Texture2D)?.
+                    WithMessage($"Camera Texture needs to be a Texture 2D, but instead is {updatableTexture.descriptor.textureType.ToString()}.");
 
-                s_Textures.Add((Texture2D)textureInfo.texture);
-                s_PropertyIds.Add(textureInfo.descriptor.propertyNameId);
+                s_Textures.Add((Texture2D)updatableTexture.texture);
+                s_PropertyIds.Add(updatableTexture.descriptor.propertyNameId);
             }
 
             eventArgs.textures = s_Textures;

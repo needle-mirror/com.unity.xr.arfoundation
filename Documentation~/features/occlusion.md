@@ -16,3 +16,6 @@ Refer to the following topics to understand how to use AR Foundation occlusion:
 | [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) | Understand the AR Occlusion Manager component. |
 | [AR Shader Occlusion component](xref:arfoundation-shader-occlusion) | Understand the AR Shader Occlusion component. |
 
+## Additional resources
+
+* [Occlusion samples](xref:arfoundation-samples-occlusion)

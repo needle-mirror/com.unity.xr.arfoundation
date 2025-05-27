@@ -12,3 +12,7 @@ Refer to the following topics to understand anchors and how to use them:
 | [AR Anchor Manager component](xref:arfoundation-anchors-aranchormanager) | Understand how to configure and use the AR Anchor Manager component. |
 | [AR Anchor component](xref:arfoundation-anchors-aranchor) | Understand how to configure and use the AR Anchor component. |
 | [Persistent anchors](xref:arfoundation-anchors-persistent) | Understand how to save anchors during an AR session and load them in subsequent sessions. |
+
+## Additional resources
+
+* [Anchors samples](xref:arfoundation-samples-anchors)

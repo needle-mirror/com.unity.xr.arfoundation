@@ -103,7 +103,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Because the data types are not identical, the conversion may be imprecise and the texture formats may
         /// not match exactly.
         /// </summary>
-        /// <returns>An <see cref="UnityXRRenderTextureDesc"/> matching this object as closely as possible.</returns>
+        /// <returns>A <see cref="UnityXRRenderTextureDesc"/> matching this object as closely as possible.</returns>
         static UnityXRRenderTextureDesc ToUnityXRRenderTextureDesc(XRTextureDescriptor descriptor)
         {
             var renderTextureDescriptor = new UnityXRRenderTextureDesc
@@ -175,9 +175,18 @@ namespace UnityEngine.XR.ARFoundation
 
         public void DestroyTexture()
         {
+#if OPENXR_1_15_OR_NEWER
+            if (!UnityXRDisplay.DestroyTexture(m_RenderTextureId))
+            {
+                Debug.LogError("An error occurred while destroying a render texture, possibly causing a memory leak.");
+            }
+#else
             UnityObjectUtils.Destroy(m_Texture);
+#endif
             m_IsCreated = false;
             m_IsCreateRequested = false;
+            m_RenderTextureId = 0;
+            m_Texture = null;
         }
 
         void IDisposable.Dispose()

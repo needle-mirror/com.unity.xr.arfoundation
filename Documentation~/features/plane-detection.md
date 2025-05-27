@@ -12,3 +12,7 @@ Refer to the following topics to understand how to use AR Foundation plane detec
 | [Plane detection platform support](xref:arfoundation-plane-platform-support) | Discover which AR platforms support plane detection. |
 | [AR Plane Manager component](xref:arfoundation-plane-arplanemanager) | Understand the AR Plane Manager component. |
 | [AR Plane component](xref:arfoundation-plane-arplane) | Understand the AR Plane component. |
+
+## Additional resources
+
+* [Plane detection samples](xref:arfoundation-samples-plane-detection)

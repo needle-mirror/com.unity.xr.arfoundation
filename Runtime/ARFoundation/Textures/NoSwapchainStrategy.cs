@@ -11,63 +11,63 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     class NoSwapchainStrategy : ISwapchainStrategy
     {
-        ARTextureInfo[] m_TextureInfos;
+        IUpdatableTexture[] m_UpdatableTextures;
 
-        bool ISwapchainStrategy.TryUpdateTextureInfosForFrame(
-            NativeArray<XRTextureDescriptor> textureDescriptors, out ReadOnlyListSpan<ARTextureInfo> textureInfos)
+        bool ISwapchainStrategy.TryUpdateTexturesForFrame(
+            NativeArray<XRTextureDescriptor> textureDescriptors, out ReadOnlyListSpan<IUpdatableTexture> updatableTextures)
         {
-            if (m_TextureInfos is null || m_TextureInfos.Length != textureDescriptors.Length)
+            if (m_UpdatableTextures is null || m_UpdatableTextures.Length != textureDescriptors.Length)
                 ResizeTextureInfos(textureDescriptors);
 
             bool allRequiredTexturesDoExist = true;
 
-            for (int i = 0; i < m_TextureInfos!.Length; ++i)
+            for (int i = 0; i < m_UpdatableTextures!.Length; ++i)
             {
-                if (!m_TextureInfos[i].TryUpdateTextureInfo(textureDescriptors[i]))
+                if (!m_UpdatableTextures[i].TryUpdateFromDescriptor(textureDescriptors[i]))
                     allRequiredTexturesDoExist = false;
             }
 
-            textureInfos = new ReadOnlyListSpan<ARTextureInfo>(m_TextureInfos);
+            updatableTextures = new ReadOnlyListSpan<IUpdatableTexture>(m_UpdatableTextures);
             return allRequiredTexturesDoExist;
         }
 
         void ResizeTextureInfos(NativeArray<XRTextureDescriptor> descriptors)
         {
-            var newInfos = new ARTextureInfo[descriptors.Length];
+            var newInfos = new IUpdatableTexture[descriptors.Length];
             int numInfosToCopy = 0;
 
-            if (m_TextureInfos != null)
+            if (m_UpdatableTextures != null)
             {
-                numInfosToCopy = Mathf.Min(m_TextureInfos.Length, descriptors.Length);
+                numInfosToCopy = Mathf.Min(m_UpdatableTextures.Length, descriptors.Length);
                 for (var i = 0; i < numInfosToCopy; ++i)
                 {
-                    newInfos[i] = m_TextureInfos[i];
+                    newInfos[i] = m_UpdatableTextures[i];
                 }
 
                 // If we are downsizing, dispose infos that aren't copied to the new array
                 for (var i = newInfos.Length; i < numInfosToCopy; ++i)
                 {
-                    m_TextureInfos[i].Dispose();
+                    m_UpdatableTextures[i].Dispose();
                 }
             }
 
             // If we are upsizing or creating a new array, create new infos
             for (var i = numInfosToCopy; i < newInfos.Length; ++i)
             {
-                newInfos[i] = new ARTextureInfo(descriptors[i]);
+                newInfos[i] = UpdatableTextureFactory.Create(descriptors[i]);
             }
 
-            m_TextureInfos = newInfos;
+            m_UpdatableTextures = newInfos;
         }
 
         public void DestroyTextures()
         {
-            if (m_TextureInfos == null)
+            if (m_UpdatableTextures == null)
                 return;
 
-            foreach (ARTextureInfo textureInfo in m_TextureInfos)
+            foreach (IUpdatableTexture updatableTexture in m_UpdatableTextures)
             {
-                textureInfo.Dispose();
+                updatableTexture.Dispose();
             }
         }
 

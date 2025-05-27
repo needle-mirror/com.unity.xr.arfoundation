@@ -25,7 +25,7 @@ Your app can check at runtime whether a provider plug-in supports image tracking
 
 [!include[](../../snippets/initialization.md)]
 
-<a id="optional-features"/>
+<a id="optional-features"></a>
 
 ## Optional features
 
@@ -38,7 +38,7 @@ The following table lists the optional features of the image tracking subsystem.
 | **Mutable library** | [supportsMutableLibrary](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsMutableLibrary) | Whether the subsystem supports [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary), a reference image library which can modified at runtime, as opposed to the [XRReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary), which is generated at edit time and cannot be modified at runtime. |
 | **Image validation** | [supportsImageValidation](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsImageValidation) | Whether the subsystem supports image validation (validating images before they are added to a [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary)).|
 
-<a id="optional-feature-platform-support"/>
+<a id="optional-feature-platform-support"></a>
 
 ### Optional feature platform support
 
@@ -51,7 +51,7 @@ The following table lists whether certain XR plug-in providers support each opti
 | **Mutable library** | Yes | Yes | Yes | Yes |
 | **Image validation** | Yes | iOS 13+ | Yes | Yes |
 
-<a id="check-feature-support"/>
+<a id="check-feature-support"></a>
 
 ### Check for optional feature support
 

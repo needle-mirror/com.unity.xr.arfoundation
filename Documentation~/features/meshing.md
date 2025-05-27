@@ -62,3 +62,7 @@ Not all platforms support this feature.
 ### Concurrent queue size
 
 To avoid blocking the main thread, the tasks of converting the device mesh into a Unity mesh and creating the physics collision mesh (if the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject contains a [MeshCollider](xref:UnityEngine.MeshCollider) component) are moved into a job queue processed on a background thread. [concurrentQueueSize](xref:UnityEngine.XR.ARFoundation.ARMeshManager.concurrentQueueSize) specifies the number of meshes to be processed concurrently.
+
+## Additional resources
+
+* [Meshing samples](xref:arfoundation-samples-meshing)

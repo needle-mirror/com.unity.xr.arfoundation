@@ -237,54 +237,19 @@ namespace UnityEngine.XR.ARSubsystems
         public abstract class Provider : SubsystemProvider<XRAnchorSubsystem>
         {
             static readonly Pool.ObjectPool<Dictionary<TrackableId, Awaitable<Result<SerializableGuid>>>> s_SaveAwaitablesMaps =
-                new(
-                    createFunc: () => new Dictionary<TrackableId, Awaitable<Result<SerializableGuid>>>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<Dictionary<TrackableId, Awaitable<Result<SerializableGuid>>>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<Dictionary<SerializableGuid, Awaitable<Result<XRAnchor>>>> s_LoadAwaitablesMaps =
-                new(
-                    createFunc: () => new Dictionary<SerializableGuid, Awaitable<Result<XRAnchor>>>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<Dictionary<SerializableGuid, Awaitable<Result<XRAnchor>>>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<List<XRLoadAnchorResult>> s_AccumulatedXRLoadAnchorResultLists =
-                new(
-                    createFunc: () => new List<XRLoadAnchorResult>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<List<XRLoadAnchorResult>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<Dictionary<SerializableGuid, Awaitable<XRResultStatus>>> s_EraseAwaitablesMaps =
-                new(
-                    createFunc: () => new Dictionary<SerializableGuid, Awaitable<XRResultStatus>>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<Dictionary<SerializableGuid, Awaitable<XRResultStatus>>>(defaultCapacity: 2);
 
             static readonly Pool.ObjectPool<List<XREraseAnchorResult>> s_EraseAnchorResultLists =
-                new(
-                    createFunc: () => new List<XREraseAnchorResult>(),
-                    actionOnGet: null,
-                    actionOnRelease: null,
-                    actionOnDestroy: null,
-                    collectionCheck: false,
-                    defaultCapacity: 2,
-                    maxSize: 1024);
+                ObjectPoolCreateUtil.Create<List<XREraseAnchorResult>>(defaultCapacity: 2);
 
             /// <summary>
             /// Reusable completion source to return results of <see cref="TryAddAnchor"/> to <see cref="TryAddAnchorAsync"/>.

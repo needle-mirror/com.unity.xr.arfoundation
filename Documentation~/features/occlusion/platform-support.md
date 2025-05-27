@@ -3,7 +3,7 @@ uid: arfoundation-occlusion-platform-support
 ---
 # Occlusion platform support
 
-Occlusion is supported on the ARCore, ARKit, and XR Simulation platforms, as shown in the table below:
+The AR Foundation [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) is supported on the following platforms:
 
 | Provider plug-in | Occlusion supported | Provider documentation |
 | :--------------- | :---------: | :--------------------- |
@@ -11,7 +11,7 @@ Occlusion is supported on the ARCore, ARKit, and XR Simulation platforms, as sho
 | Apple ARKit XR Plug-in | Yes | [Occlusion](xref:arkit-occlusion) (ARKit) |
 | Apple visionOS XR Plug-in | | |
 | Microsoft HoloLens | | |
-| Unity OpenXR: Meta | | |
+| Unity OpenXR: Meta | Yes | [Occlusion](xref:meta-openxr-occlusion) (Meta OpenXR) |
 | Unity OpenXR: Android XR | Yes | [Occlusion](xref:androidxr-openxr-occlusion) (Android XR) |
 | XR Simulation | Yes | [Occlusion](xref:arfoundation-simulation-occlusion) (XR Simulation) |
 
@@ -27,27 +27,27 @@ Use the example code below to check whether the device supports occlusion:
 
 ## Optional features
 
-The following table describes the optional features of the [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem). The **Descriptor Property** column provides the relevant property of the [XROcclusionSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor). The **Description** column defines the property. Refer to [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) for more information about the types of depth image described.
+The following table lists the optional features of the occlusion subsystem. Each optional feature is defined by a **Descriptor Property** of the [XROcclusionSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported. Refer to [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) for more information about the types of depth image described.
 
 | Feature | Descriptor Property | Description  |
 | :------ | :---------- | :------------ |
-| **Environment Depth Image** | [environmentDepthImageSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthImageSupported) | Whether the subsystem supports environment depth image. |
 | **Environment Depth Confidence Image** | [environmentDepthConfidenceImageSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthConfidenceImageSupported) | Whether the subsystem supports environment depth confidence image. |
+| **Environment Depth Image** | [environmentDepthImageSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthImageSupported) | Whether the subsystem supports environment depth image. |
 | **Environment Depth Temporal Smoothing** | [environmentDepthTemporalSmoothingSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.environmentDepthTemporalSmoothingSupported) | Whether temporal smoothing of the environment image is supported. |
-| **Human Segmentation Stencil Image** | [humanSegmentationStencilImageSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.humanSegmentationStencilImageSupported) | Whether a subsystem supports human segmentation stencil image. |
 | **Human Segmentation Depth Image** | [humanSegmentationDepthImageSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.humanSegmentationDepthImageSupported) | Whether a subsystem supports human segmentation depth image. |
+| **Human Segmentation Stencil Image** | [humanSegmentationStencilImageSupported](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor.humanSegmentationStencilImageSupported) | Whether a subsystem supports human segmentation stencil image. |
 
 ### Optional feature platform support
 
-Occlusion providers may choose whether to implement any of the optional features of AR Foundation's [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem), as indicated in the following table:
+The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature | ARCore | ARKit | Android XR | XR Simulation |
-| :------ | :----: | :---: | :--------: |:-----------: |
-| **Environment Depth Image** | Yes | Yes | Yes | Yes |
-| **Environment Depth Confidence Image** | Yes | Yes | Yes | |
-| **Environment Depth Temporal Smoothing** | Yes | Yes | Yes | |
-| **Human Segmentation Stencil Image** | | Yes | | |
-| **Human Segmentation Depth Image** | | Yes | | |
+| Feature | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
+| :------ | :----: | :---: | :---------: | :------- : | :-----------: |
+| **Environment Depth Confidence Image** | Yes | Yes | | Yes | |
+| **Environment Depth Image** | Yes | Yes | Yes | Yes | Yes |
+| **Environment Depth Temporal Smoothing** | Yes | Yes | | Yes | |
+| **Human Segmentation Depth Image** | | Yes | | | |
+| **Human Segmentation Stencil Image** | | Yes | | | |
 
 <a id="check-feature-support"></a>
 

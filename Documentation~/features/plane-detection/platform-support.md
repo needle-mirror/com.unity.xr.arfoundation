@@ -3,7 +3,7 @@ uid: arfoundation-plane-platform-support
 ---
 # Plane detection platform support
 
-Plane detection is supported on the ARCore, ARKit, Meta OpenXR and XR Simulation platforms, as shown in the table below:
+The AR Foundation [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem) is supported on the following platforms:
 
 | Provider plug-in | Plane detection supported | Provider documentation |
 | :--------------- | :-----------------------: | :--------------------- |
@@ -27,15 +27,34 @@ Use the example code below to check whether the device supports plane detection:
 
 ## Optional features
 
-Plane detection providers may choose whether to implement any of the optional features of AR Foundation's [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem), as indicated in the table below:
+The following table lists the optional features of the plane subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRPlaneSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
-| Feature | Description | ARCore | ARKit | Meta OpenXR | Android XR | XR Simulation |
-| :------ | :---------- | :----: | :---: | :---------: | :--------: |:-----------: |
-| **Horizontal plane detection** | Indicates whether the provider implementation supports the detection of horizontal planes, such as the floor. | Yes | Yes | Yes | Yes | Yes |
-| **Vertical plane detection** | Indicates whether the provider implementation supports the detection of vertical planes, such as walls. | Yes | iOS 11.3+ | Yes | Yes | Yes |
-| **Arbitrary plane detection** | Indicates whether the provider implementation supports the detection of planes that are aligned with neither the horizontal nor vertical axes. | | | Yes | Yes | |
-| **Boundary vertices** | Indicates whether the provider implementation supports boundary vertices for its planes. | Yes | Yes | Yes | Yes | Yes |
-| **Classification** | Indicates whether the provider implementation can provide a value for [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications). | | iOS 12+ | Yes | Yes | |
+> [!TIP]
+> Check the API documentation to understand how each API behaves when the provider doesn't support a feature. For example, some properties throw an exception if you try to set the value when the feature isn't supported.
+
+| Feature | Descriptor Property | Description |
+| :------ | :------------------ | :---------- |
+| **Horizontal plane detection** | [supportsHorizontalPlaneDetection](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsHorizontalPlaneDetection) |Indicates whether the provider implementation supports the detection of horizontal planes, such as the floor. |
+| **Vertical plane detection** | [supportsVerticalPlaneDetection](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsVerticalPlaneDetection) | Indicates whether the provider implementation supports the detection of vertical planes, such as walls. |
+| **Arbitrary plane detection** | [supportsArbitraryPlaneDetection](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsArbitraryPlaneDetection) | Indicates whether the provider implementation supports the detection of planes that are aligned with neither the horizontal nor vertical axes. |
+| **Boundary vertices** | [supportsBoundaryVertices](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsBoundaryVertices) | Indicates whether the provider implementation supports boundary vertices for its planes. |
+| **Classification** | [supportsClassification](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsClassification) | Indicates whether the provider implementation can provide a value for [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications). |
+
+<a id="optional-features-support-table"></a>
+
+### Optional features support
+
+The following table lists whether certain XR plug-in providers support each optional feature:
+
+| Feature | ARCore | ARKit | visionOS | OpenXR Meta | Android XR | XR Simulation |
+| :------ | :----: | :---: | :------: | :---------: | :--------: |:-----------: |
+| **Horizontal plane detection** | Yes | Yes | |Yes | Yes | Yes |
+| **Vertical plane detection** | Yes | iOS 11.3+ | Yes | Yes | Yes | Yes |
+| **Arbitrary plane detection** | | | | Yes | Yes | |
+| **Boundary vertices** | Yes | Yes | Yes | Yes | Yes | Yes |
+| **Classification** | | iOS 12+ | Yes |Yes | Yes | |
+
+<a id="check-feature-support"></a>
 
 ### Check for optional feature support
 

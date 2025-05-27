@@ -8,6 +8,21 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.1.1] - 2025-05-27
+
+### Added
+
+- Added support for soft occlusion when depth data is provided in a linear format.
+
+### Fixed
+
+- Fixed the `Cinfo.GetHashCode` method in `XRAnchorSubsystemDescriptor` so that it correctly includes all values of the struct in the hash calculation.
+- Fixed the `Cinfo.Equals` method in `XRAnchorSubsystemDescriptor` so that it correctly checks all values of the struct for equality.
+- Fixed `SoftOcclusionPreprocessing.shader` so that it no longer logs a warning when included in an Android build.
+- Fixed `SimulationImageTrackingSubsystem` behavior to not throw an exception when stopping and restarting the subsystem through the enabling and disabling of the `ARTrackedImageManager` ([ARFB-554](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-554)).
+- Fixed texture management so that if you disable the AR Occlusion Manager component while your app is running on a Meta Quest device, this no longer causes your app to unexpectedly quit when you later deinitialize the XR Loader. This bug fix requires that you upgrade your OpenXR Plug-in version to 1.15.0-pre.1 or newer.
+- Fixed the XR Simulation native plugins so that they no longer throw `DllNotFoundException` on Windows ARM64 systems.
+
 ## [6.1.0] - 2025-02-19
 
 ### Added

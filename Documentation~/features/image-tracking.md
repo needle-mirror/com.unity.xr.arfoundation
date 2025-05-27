@@ -18,3 +18,7 @@ Refer to the following topics to learn more about image tracking in AR Foundatio
 | [AR Tracked Image component](xref:arfoundation-image-tracking-artrackedimage) | Understand the AR Tracked Image component and how to interpret lifecycle events. |
 | [Add images to a reference image library at runtime](xref:arfoundation-image-tracking-mutable-libraries) | On supported platforms, use this workflow to create a mutable reference image library and add images at runtime. |
 | [Use reference image libraries with AssetBundles](xref:arfoundation-image-tracking-assetbundles) | Understand how to package a reference image library into an AssetBundle. |
+
+## Additional resources
+
+* [Image tracking samples](xref:arfoundation-samples-image-tracking)

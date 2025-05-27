@@ -17,3 +17,7 @@ The [ARHumanBodyManager](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager) co
 | **Pose 3D** | Whether to estimate the 3D pose for any human bodies detected. |
 | **Pose 3D Scale Estimation** | Whether to estimate 3D human body scale. |
 | **Human Body Prefab** | The Prefab to instantiate at the origin for the detected human body. |
+
+## Additional resources
+
+* [Body tracking samples](xref:arfoundation-samples-body-tracking)
