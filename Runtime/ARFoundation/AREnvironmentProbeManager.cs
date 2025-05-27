@@ -176,10 +176,10 @@ namespace UnityEngine.XR.ARFoundation
             var desc = descriptor;
 
             if (probe.placementType == AREnvironmentProbePlacementType.Manual && !desc.supportsRemovalOfManual)
-                throw new InvalidOperationException("Removal of manually placed environment probes is not supported by this subsystem.");
+                return false;
 
             if (probe.placementType == AREnvironmentProbePlacementType.Automatic && !desc.supportsRemovalOfAutomatic)
-                throw new InvalidOperationException("Removal of automatically placed environment probes is not supported by this subsystem.");
+                return false;
 
             if (subsystem.RemoveEnvironmentProbe(probe.trackableId))
             {

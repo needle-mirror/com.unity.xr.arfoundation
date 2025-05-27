@@ -3,7 +3,7 @@ uid: arfoundation-raycasts-platform-support
 ---
 # Ray cast platform support
 
-The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) is supported on the ARCore, ARKit, Microsoft HoloLens, Meta OpenXR, and XR Simulation platforms, as shown in the following table:
+The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) is supported on the following platforms:
 
 | Provider plug-in          | Ray casting supported | Provider documentation                         |
 | :------------------------ | :-------------------: | :--------------------------------------------- |
@@ -24,7 +24,7 @@ Your app can check at runtime whether a provider plug-in supports ray casting on
 
 ## Optional features
 
-The following table lists the optional features of the [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem). Each optional feature is defined by a **Descriptor Property** of the [XRRaycastSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
+The following table lists the optional features of the raycast subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRRaycastSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
 | Feature                    | Descriptor Property | Description |
 | :------------------------- | :------------------ | :---------- |
@@ -33,7 +33,7 @@ The following table lists the optional features of the [XRRaycastSubsystem](xref
 | **Trackable types**        | [supportedTrackableTypes](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportedTrackableTypes) | The types of trackables against which ray casting is supported. |
 | **Tracked raycasts**       | [supportsTrackedRaycasts](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportsTrackedRaycasts) | Whether tracked raycasts are supported. A tracked raycast is repeated over time and the results are updated automatically. |
 
-<a id="optional-features-support-table"/>
+<a id="optional-features-support-table"></a>
 
 ### Optional feature platform support
 

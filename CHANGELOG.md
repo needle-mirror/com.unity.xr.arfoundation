@@ -8,12 +8,26 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.6] - 2025-05-27
+
+### Changed
+
+- Changed the behavior of `XRAnchorSubsystem` so that if you call `GetChanges` while the subsystem is stopped, it will no longer throw an `InvalidOperationException`. It is valid to call `GetChanges` while the subsystem is stopped to retrieve information about anchors that were in the middle of an asynchronous operation at the moment when the subsystem was stopped.
+
+### Fixed
+
+- Fixed `XRFaceSubsystem` so that it no longer creates duplicate profiler markers for its `GetChanges` implementation.
+- Fixed the `ARAnchor` component so that if it fails to add itself as an anchor with the anchor subsystem, the component disables itself instead of deactivating its GameObject.
+- Fixed `SimulationImageTrackingSubsystem` behavior to not throw an exception when stopping and restarting the subsystem through the enabling and disabling of the `ARTrackedImageManager` ([ARFB-554](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-554)).
+- Fixed the XR Simulation native plugins so that they no longer throw `DllNotFoundException` on Windows ARM64 systems.
+
 ## [6.0.5] - 2025-01-24
 
 ### Fixed
 
 - Fixed the `SimulationEnvironmentProbeSubsystem` so that [automatic placement](xref:arfoundation-environment-probes#automatic-placement) of environment probes can be enabled or disabled, as is possible on other AR platforms.
 - Fixed the AR Environment Probe Manager component so that it can no longer throw an `ArgumentNullException` when you unload a scene containing one or more environment probes.
+- Fixed the AR Environment Probe Manager component so that it can no longer throw an `InvalidOperationException` when you unload a scene containing one or more environment probes. ([ARFB-521](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-521))
 
 ## [6.0.4] - 2024-12-05
 

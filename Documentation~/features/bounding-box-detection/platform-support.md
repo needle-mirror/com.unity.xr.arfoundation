@@ -3,7 +3,7 @@ uid: arfoundation-bounding-box-platform-support
 ---
 # Bounding box detection platform support
 
-Bounding box detection is only supported on the Meta OpenXR platform, as shown in the table below:
+The AR Foundation [XRBoundingBoxSubsystem](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystem) is supported on the following platforms:
 
 | Provider plug-in | Bounding box detection supported | Provider documentation |
 | :--------------- | :------------------------------: | :--------------------- |
@@ -25,11 +25,23 @@ Use the example code below to check whether the device supports bounding box det
 
 ## Optional features
 
-Bounding box detection providers may choose whether to implement the optional features of AR Foundation's [XRBoundingBoxSubsystem](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystem), as indicated in the table below:
+The following table lists the optional features of the bounding box subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRBoundingBoxSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
-| Feature | Description | ARCore | ARKit | Meta OpenXR | XR Simulation |
-| :------ | :---------- | :----: | :---: | :---------: | :-----------: |
-| **Classification** | Indicates whether the provider implementation can provide a value for [ARBoundingBox.classifications](xref:UnityEngine.XR.ARFoundation.ARBoundingBox.classifications). | | | | |
+| Feature                    | Descriptor Property | Description |
+| :------------------------- | :------------------ | :---------- |
+| **Classification** | [supportsClassifications](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystemDescriptor.supportsClassifications) | Indicates whether the provider implementation can provide a value for [ARBoundingBox.classifications](xref:UnityEngine.XR.ARFoundation.ARBoundingBox.classifications). |
+
+<a id="optional-features-support-table"></a>
+
+### Optional feature platform support
+
+The following table lists whether certain XR plug-in providers support each optional feature:
+
+| Feature | ARKit | OpenXR Meta | XR Simulation |
+| :------ | :---: | :---------: | :-----------: |
+| **Classification** | Yes | Yes | Yes |
+
+<a id="check-feature-support"></a>
 
 ### Check for optional feature support
 

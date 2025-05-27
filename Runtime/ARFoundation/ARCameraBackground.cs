@@ -20,29 +20,9 @@ namespace UnityEngine.XR.ARFoundation
     ///
     /// </summary>
     /// <remarks>
-    /// To add the <see cref="ARBackgroundRendererFeature"/> to the list of render features for the scriptable
-    /// renderer:
-    /// <list type="bullet">
-    /// <item><description>In Project Settings &gt; Graphics, select the render pipeline asset
-    /// (<c>UniversalRenderPipelineAsset</c>) that is in the Scriptable Render Pipeline Settings
-    /// field.</description></item>
-    /// <item><description>In the render pipeline asset's Inspector window, make sure that the Render Type is set
-    /// to Custom.</description></item>
-    /// <item><description>In render pipeline asset's Inspector window, select the Render Type &gt; Data
-    /// asset which would be of type <c>ForwardRendererData</c>.</description></item>
-    /// <item><description>In forward renderer data's Inspector window, ensure the Render Features list
-    /// contains a <see cref="ARBackgroundRendererFeature"/>.</description></item>
-    /// </list>
+    /// For information about how to set up the Universal Rendering Pipeline, refer to [Universal Rendering Pipeline](xref:arfoundation-universal-render-pipeline).
     ///
-    /// To customize background rendering with the legacy render pipeline, you can override the
-    /// <see cref="legacyCameraEvents"/> property and the
-    /// <see cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/> method to modify the given
-    /// <c>CommandBuffer</c> with rendering commands and to inject the given <c>CommandBuffer</c> into the Camera's
-    /// rendering.
-    ///
-    /// To customize background rendering with a scriptable render pipeline, create a
-    /// <c>ScriptableRendererFeature</c> with the background rendering commands, and insert the
-    /// <c>ScriptableRendererFeature</c> into the list of render features for the scriptable renderer.
+    /// Related information: <a href="xref:arfoundation-camera-components">Camera components</a>
     /// </remarks>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]

@@ -3,7 +3,7 @@ uid: arfoundation-face-tracking-platform-support
 ---
 # Face tracking platform support
 
-The AR Foundation [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) is supported on the ARCore and ARKit platforms, as shown in the following table:
+The AR Foundation [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystem) is supported on the following platforms:
 
 | Provider plug-in | Face tracking supported | Provider documentation |
 | :--------------- | :-----------------------: | :--------------------- |
