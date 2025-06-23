@@ -14,6 +14,6 @@ The following table describes samples that are specific to ARKit on iOS devices:
 | [Thermal state](xref:arfoundation-samples-thermal-state) | Shows how to use iOS device thermal state. |
 | [AR world map](xref:arfoundation-samples-world-map) | Implements the ARKit ARWorldMap feature. |
 | [Geo anchors](xref:arfoundation-samples-geo-anchors) | Demonstrates the ARKit ARGeoAnchors feature. |
-| [AR collaboration data](xref-arfoundation-samples-collaboration-data) | Implements the ARKit collaboration data feature. |
+| [AR collaboration data](xref:arfoundation-samples-collaboration-data) | Implements the ARKit collaboration data feature. |
 
 [!include[](../snippets/apple-arkit-trademark.md)]

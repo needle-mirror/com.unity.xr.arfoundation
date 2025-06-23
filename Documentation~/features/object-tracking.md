@@ -20,7 +20,7 @@ The tracked object manager creates a GameObject for each object detected in the 
 |**Reference object**|A reference object is an object that you have previously scanned and stored in a reference object library. The object tracking subsystem detects and tracks instances of the object in the environment.|
 |**Reference object library**|A reference object library is an asset containing a collection of reference objects.|
 
-<a id="create-library"/>
+<a id="create-library"></a>
 
 ## Create a reference object library
 

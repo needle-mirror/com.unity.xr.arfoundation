@@ -175,9 +175,18 @@ namespace UnityEngine.XR.ARFoundation
 
         public void DestroyTexture()
         {
+#if OPENXR_1_15_OR_NEWER
+            if (!UnityXRDisplay.DestroyTexture(m_RenderTextureId))
+            {
+                Debug.LogError("An error occurred while destroying a render texture, possibly causing a memory leak.");
+            }
+#else
             UnityObjectUtils.Destroy(m_Texture);
+#endif
             m_IsCreated = false;
             m_IsCreateRequested = false;
+            m_RenderTextureId = 0;
+            m_Texture = null;
         }
 
         void IDisposable.Dispose()

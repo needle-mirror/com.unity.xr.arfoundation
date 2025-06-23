@@ -3,7 +3,7 @@ uid: arfoundation-occlusion-platform-support
 ---
 # Occlusion platform support
 
-Occlusion is supported on the ARCore, ARKit, and XR Simulation platforms, as shown in the table below:
+The AR Foundation [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) is supported on the following platforms:
 
 | Provider plug-in | Occlusion supported | Provider documentation |
 | :--------------- | :---------: | :--------------------- |
@@ -27,7 +27,7 @@ Use the example code below to check whether the device supports occlusion:
 
 ## Optional features
 
-The following table describes the optional features of the [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem). The **Descriptor Property** column provides the relevant property of the [XROcclusionSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor). The **Description** column defines the property. Refer to [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) for more information about the types of depth image described.
+The following table lists the optional features of the occlusion subsystem. Each optional feature is defined by a **Descriptor Property** of the [XROcclusionSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported. Refer to [AR Occlusion Manager component](xref:arfoundation-occlusion-manager) for more information about the types of depth image described.
 
 | Feature | Descriptor Property | Description  |
 | :------ | :---------- | :------------ |
@@ -39,7 +39,7 @@ The following table describes the optional features of the [XROcclusionSubsystem
 
 ### Optional feature platform support
 
-Occlusion providers may choose whether to implement any of the optional features of AR Foundation's [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem), as indicated in the following table:
+The following table lists whether certain XR plug-in providers support each optional feature:
 
 | Feature | ARCore | ARKit | OpenXR Meta | Android XR | XR Simulation |
 | :------ | :----: | :---: | :---------: | :------- : | :-----------: |

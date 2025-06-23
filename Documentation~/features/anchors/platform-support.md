@@ -3,7 +3,7 @@ uid: arfoundation-anchors-platform-support
 ---
 # Anchors platform support
 
-Anchors are supported on the ARCore, ARKit, HoloLens, OpenXR Meta, and XR Simulation platforms, as shown in the table below:
+The AR Foundation [XRAnchorSubsystem](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem) is supported on the following platforms:
 
 | Provider plug-in | Anchors supported | Provider documentation |
 | :--------------- | :---------------: | :--------------------- |
@@ -27,10 +27,10 @@ Use the following example code to check if the device supports anchors:
 
 ## Optional features
 
-The following table lists the optional features of the anchor subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRAnchorSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor), which you can check at runtime to determine if a feature is supported. The **Description** column lists the optional API that may or may not be implemented on each platform.
+The following table lists the optional features of the anchor subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRAnchorSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
 > [!TIP]
-> Check the API documentation to understand how each API behaves when the provider doesn't support a feature. For example, some methods may throw an exception if you call them when the feature isn't supported.
+> Check the API documentation to understand how each API behaves when the provider doesn't support a feature. For example, some properties throw an exception if you try to set the value when the feature isn't supported.
 
 | Feature | Descriptor Property | Description |
 | :------ | :------------------ | :---------- |
@@ -42,21 +42,23 @@ The following table lists the optional features of the anchor subsystem. Each op
 | **Get saved anchor IDs** | [supportsGetSavedAnchorIds](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsGetSavedAnchorIds) | Indicates whether the provider implementation supports the ability to get all saved persistent anchor GUIDs via [TryGetSavedAnchorIdsAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryGetSavedAnchorIdsAsync(Unity.Collections.Allocator,CancellationToken)). |
 | **Async cancellation** | [supportsAsyncCancellation](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsAsyncCancellation) | Indicates whether the provider implementation supports cancelling async operations in progress using a [CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-8.0). |
 
-<a id="optional-features-support-table"/>
+<a id="optional-features-support-table"></a>
 
 ### Optional features support table
 
-To understand the optional features that are implemented in each supported XR plug-in provider, refer to the following table:
+The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature                   | ARCore | ARKit  | HoloLens | OpenXR Meta | Android XR | XR Simulation |
-| :------------------------ | :----: | :---:  | :------: | :---------: | :--------: |:------------: |
-| **Trackable attachments** | Yes    | Yes    |          |             | Yes        | Yes           |
-| **Synchronous add**       | Yes    | Yes    |          |             | Yes        |               |
-| **Save anchor**           | Yes    |        |          | Yes         | Yes        |               |
-| **Load anchor**           | Yes    |        |          | Yes         | Yes        |               |
-| **Erase anchor**          |        |        |          | Yes         | Yes        |               |
-| **Get saved anchor IDs**  |        |        |          |             | Yes        |               |
-| **Async cancellation**    | Yes    |        |          |             |            |               |
+| Feature                   | ARCore | ARKit  | visionOS |HoloLens | OpenXR Meta | Android XR | XR Simulation |
+| :------------------------ | :----: | :---:  | :------: |:------: | :---------: | :--------: |:------------: |
+| **Trackable attachments** | Yes    | Yes    |          |         |             | Yes        | Yes           |
+| **Synchronous add**       | Yes    | Yes    |          |         |             | Yes        |               |
+| **Save anchor**           | Yes    |        |          |         | Yes         | Yes        |               |
+| **Load anchor**           | Yes    |        |          |         | Yes         | Yes        |               |
+| **Erase anchor**          |        |        |          |         | Yes         | Yes        |               |
+| **Get saved anchor IDs**  |        |        |          |         |             | Yes        |               |
+| **Async cancellation**    | Yes    |        |          |         |             |            |               |
+
+<a id="check-feature-support"></a>
 
 ### Check for optional feature support
 

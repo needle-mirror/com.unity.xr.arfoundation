@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.2.0-pre.4",
+  "version": "6.2.0",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added `parentId` field to all trackable struct types: `XRAnchor`, `XRBoundingBox`, `XREnvironmentProbe`, `XRFace`, `XRHumanBody`, `XRTrackedImage`, `XRTrackedObject`, `XRParticipant`, `BoundedPlane`, `XRPointCloud`, and `XRRaycast`. Providers can use this field to indicate scene hierarchy information.\n- Changed the Transform hierarchy of trackable GameObjects spawned by AR Foundation manager components to reflect the scene hierarchy reported by the provider."
+    "changelog": "### Fixed\n\n- Fixed texture management so that if you disable the AR Occlusion Manager component while your app is running on a Meta Quest device, this no longer causes your app to unexpectedly quit when you later deinitialize the XR Loader. This bug fix requires that you upgrade your OpenXR Plug-in version to 1.15.0-pre.1 or newer.\n- Fixed the XR Simulation native plugins so that they no longer throw `DllNotFoundException` on Windows ARM64 systems."
   },
   "upmCi": {
-    "footprint": "12adc90cc9b19f27cb08c103ac6b9fd51e7648e0"
+    "footprint": "87211ddf3fb4083d3e316f55cd43f7d90c1badba"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.2/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "6f12fb170f214e0eacd7118d182baae0ed335f19"
+    "revision": "61b43dd04b6ca60655d6e1079b222ccb7e1dde1b"
   }
 }

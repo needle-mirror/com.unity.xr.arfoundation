@@ -8,6 +8,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.2.0] - 2025-06-23
+
+### Fixed
+
+- Fixed texture management so that if you disable the AR Occlusion Manager component while your app is running on a Meta Quest device, this no longer causes your app to unexpectedly quit when you later deinitialize the XR Loader. This bug fix requires that you upgrade your OpenXR Plug-in version to 1.15.0-pre.1 or newer.
+- Fixed the XR Simulation native plugins so that they no longer throw `DllNotFoundException` on Windows ARM64 systems.
+
 ## [6.2.0-pre.4] - 2025-05-05
 
 ### Added

@@ -51,6 +51,8 @@ AR Foundation supports the following features:
 | [Occlusion](xref:arfoundation-occlusion) | Occlude AR content with physical objects and perform human segmentation. |
 | [Participants](xref:arfoundation-participant-tracking) | Track other devices in a shared AR session. |
 
+<a id="platforms"></a>
+
 ## Platform support
 
 AR Foundation provider plug-ins rely on platform implementations of AR features, such as Google's ARCore on Android and Apple's ARKit on iOS. Not all features are available on all platforms.

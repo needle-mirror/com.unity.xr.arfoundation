@@ -38,6 +38,8 @@ The Stats Info tab provides general information about a session, including curre
 
 ![Stats Info tab](images/ar-debug-menu-status-info.png)<br/>*Stats Info tab*
 
+<a id="session-configurations"></a>
+
 ## Session Configurations
 
 The Session Configurations tab displays all the available session [`Configurations`](xref:UnityEngine.XR.ARSubsystems.Configuration) for a specific platform and highlights the currently active configuration.

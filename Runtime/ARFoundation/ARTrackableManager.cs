@@ -266,9 +266,7 @@ namespace UnityEngine.XR.ARFoundation
         /// The trackable components are not destroyed until after this method returns.</param>
         [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected virtual void OnTrackablesChanged(
-            List<TTrackable> added,
-            List<TTrackable> updated,
-            List<TTrackable> removed)
+            List<TTrackable> added, List<TTrackable> updated, List<TTrackable> removed)
         { }
 
         /// <summary>

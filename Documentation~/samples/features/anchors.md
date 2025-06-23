@@ -15,7 +15,7 @@ The anchors sample scene shows how to create anchors as the result of a ray cast
 The `ARAnchorManager` can create two kinds of anchors based on a ray cast hit:
 
 * If the ray hits a feature point, it creates a normal anchor at the hit pose using the [TryAddAnchorAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryAddAnchorAsync(UnityEngine.Pose)) method.
-* If the ray hits a plane, it creates an anchor attached to the plane using the [AttachAnchor](UnityEngine.XR.ARFoundation.ARAnchorManager.AttachAnchor(UnityEngine.XR.ARFoundation.ARPlane,UnityEngine.Pose)) method.
+* If the ray hits a plane, it creates an anchor attached to the plane using the [AttachAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.AttachAnchor(UnityEngine.XR.ARFoundation.ARPlane,UnityEngine.Pose)) method.
 
 ## Anchor visualizer
 

@@ -94,9 +94,9 @@ iOS 13 adds support for face tracking while the world-facing (rear) camera is ac
 
 To enable this mode in AR Foundation, you must:
 
-* Enable an [ARFaceManager](arfoundation-face-tracking-face-manager).
-* Set the [ARSession](arfoundation-session) **Tracking mode** to **Position and Rotation** or **Don't Care**.
-* Set the [ARCameraManager](arfoundation-camera-manager)'s **Facing direction** to **World**. Tap the screen to toggle between the user-facing and world-facing cameras.
+* Enable an [ARFaceManager](xref:arfoundation-face-tracking-face-manager).
+* Set the [ARSession](xref:arfoundation-session) **Tracking mode** to **Position and Rotation** or **Don't Care**.
+* Set the [ARCameraManager](xref:arfoundation-camera-components#ar-camera-manager-component)'s **Facing direction** to **World**. Tap the screen to toggle between the user-facing and world-facing cameras.
 
 The sample code in `DisplayFaceInfo.OnEnable.cs` shows how to detect support for these face tracking features.
 
