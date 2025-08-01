@@ -91,6 +91,20 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Attempts to get the blend shapes associated with the given face.
+        /// </summary>
+        /// <param name="faceId">The <see cref="TrackableId"/> associated with the <see cref="XRFace"/> to query.</param>
+        /// <param name="allocator">The allocator to use for the returned blend shape native array.</param>
+        /// <returns>A result of a new native array, allocated with the requested allocation strategy, describing
+        /// the blend shapes for the face. You own the returned native array and are responsible for calling <c>Dispose</c>
+        /// on it if you have opted for the `Allocator.Persistent` strategy.</returns>
+        public Result<NativeArray<XRFaceBlendShape>> TryGetBlendShapes(
+   TrackableId faceId, Allocator allocator)
+        {
+            return provider.TryGetBlendShapes(faceId, allocator);
+        }
+
+        /// <summary>
         /// Class to be implemented by an implementor of the <see cref="XRFaceSubsystem"/>.
         /// </summary>
         public abstract class Provider : SubsystemProvider<XRFaceSubsystem>
@@ -137,6 +151,22 @@ namespace UnityEngine.XR.ARSubsystems
             /// <paramref name="allocator"/>.
             /// </returns>
             public abstract TrackableChanges<XRFace> GetChanges(XRFace defaultFace, Allocator allocator);
+
+            /// <summary>
+            /// Attempts to get the blend shapes associated with the face with the given ID.
+            /// Blend shapes describe facial features on a scale of 0..1. For example, how closed is the left eye, how open is the mouth, etc.
+            /// See <see cref="XRFaceBlendShape"/> for more details.
+            /// </summary>
+            /// <param name="faceId">The <see cref="TrackableId"/> associated with the <see cref="XRFace"/> to query.</param>
+            /// <param name="allocator">The allocator to use for the returned blend shape <c>NativeArray</c>.</param>
+            /// <returns>A <see cref="Result"/> of a new <c>NativeArray</c> allocated with <paramref name="allocator"/> describing
+            /// the blend shapes for the face with the given ID. The caller owns the
+            /// <c>NativeArray</c> and is responsible for calling <c>Dispose</c> on it.</returns>
+            public virtual Result<NativeArray<XRFaceBlendShape>> TryGetBlendShapes(
+   TrackableId faceId, Allocator allocator)
+            {
+                throw new NotSupportedException("Blend Shapes are not supported.");
+            }
 
             /// <summary>
             /// Should return the maximum number of faces the subsystem is able to track simultaneously.

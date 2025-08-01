@@ -87,7 +87,6 @@ namespace UnityEngine.XR.ARFoundation
             /// non-RenderGraph paths.
             /// </summary>
             /// <param name="commandBuffer">The CommandBuffer object that allows us to enqueue rendering instructions for this render pass.</param>
-            /// <param name="passData">The data that is passed to the function that executes this render pass.</param>
             static void ExecuteRenderPass(CommandBuffer commandBuffer)
             {
                 if (RequiresCommandBufferSupport(out var sessionSubsystem))
@@ -99,9 +98,8 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="context">The render context for executing the render commands.</param>
             /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
-#pragma warning disable CS0672
+            [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-#pragma warning restore CS0672
             {
                 var commandBuffer = CommandBufferPool.Get(k_NonRenderGraphPassName);
                 ExecuteRenderPass(commandBuffer);

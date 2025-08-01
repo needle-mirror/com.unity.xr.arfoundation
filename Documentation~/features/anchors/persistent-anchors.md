@@ -46,7 +46,7 @@ You can save a batch of anchors with [ARAnchorManager.TrySaveAnchorsAsync](xref:
 
 > [!IMPORTANT]
 > Keep track of the persistent anchor GUIDs that are populated in `saveAnchorResults.savedAnchorGuid`. Not all platforms support the ability to get your saved persistent anchor GUIDs if you lose them.
-[The AR Foundation Samples GitHub repository](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scripts/Runtime/SaveAndLoadAnchorIdsToFile.cs) contains example code that you can use to save your persistent anchor GUIDs to Unity's [Application.persistentDataPath](xref:UnityEngine.Application.persistentDataPath), allowing you to quit your app and then load or erase your saved anchors in subsequent sessions. Any files created by your app and saved to `Application.persistentDataPath` will be lost if your app is uninstalled.
+[The AR Foundation Samples GitHub repository](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scripts/Runtime/SaveAndLoadAnchorDataToFile.cs) contains example code that you can use to save your persistent anchor GUIDs to Unity's [Application.persistentDataPath](xref:UnityEngine.Application.persistentDataPath), allowing you to quit your app and then load or erase your saved anchors in subsequent sessions. Any files created by your app and saved to `Application.persistentDataPath` will be lost if your app is uninstalled.
 
 By default, batch save anchors sequentially calls `ARAnchorManager.TrySaveAnchorAsync` on the list of anchors passed in. Platforms can override this behavior with custom implementations for batch save anchors. Refer to your platform's documentation to understand platform specific implementation details.
 

@@ -109,6 +109,21 @@ namespace UnityEngine.XR.ARSubsystems
         WasherDryer = 1u << 17,
 
         /// <summary>
+        /// The bounding box is classified as a keyboard.
+        /// </summary>
+        Keyboard = 1u << 18,
+
+        /// <summary>
+        /// The bounding box is classified as a mouse.
+        /// </summary>
+        Mouse = 1u << 19,
+
+        /// <summary>
+        /// The bounding box is classified as a laptop.
+        /// </summary>
+        Laptop = 1u << 20,
+
+        /// <summary>
         /// The bounding box is classified as other.
         /// </summary>
         Other = 1u << 31

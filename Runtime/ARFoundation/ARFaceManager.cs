@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 using UnityEngine.Serialization;
+using Unity.Collections;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -88,6 +89,21 @@ namespace UnityEngine.XR.ARFoundation
         {
             m_Trackables.TryGetValue(faceId, out ARFace face);
             return face;
+        }
+
+        /// <summary>
+        /// Attempts to get the blend shapes for the given face. This call may fail if the id of the face
+        /// cannot be found by the native provider, or if no blend shape data can be found for the given face.
+        /// </summary>
+        /// <param name="face">The face whose blend shapes will be returned.</param>
+        /// <param name="allocator">The allocator to use for the returned blend shape native array.</param>
+        /// <returns>A result of a new native array, allocated with the requested allocation strategy, describing
+        /// the blend shapes for the face. You own the returned native array and are responsible for calling <c>Dispose</c>
+        /// on it if you have opted for the `Allocator.Persistent` strategy.</returns>
+        public Result<NativeArray<XRFaceBlendShape>> TryGetBlendShapes(
+   ARFace face, Allocator allocator)
+        {
+            return subsystem.TryGetBlendShapes(face.trackableId, allocator);
         }
 
         /// <summary>

@@ -57,7 +57,11 @@ namespace UnityEngine.XR.Simulation
 #if UNITY_EDITOR
         internal static Guid GetTextureGuid(Texture texture)
         {
+#if UNITY_6000_3_OR_NEWER
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(texture.GetEntityId(), out var assetGuidString, out _);
+#else
             AssetDatabase.TryGetGUIDAndLocalFileIdentifier(texture.GetInstanceID(), out string assetGuidString, out var _);
+#endif
             var guid = new Guid(assetGuidString);
             return guid;
         }

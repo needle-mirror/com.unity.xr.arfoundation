@@ -38,7 +38,12 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The subsystem can supply eye tracking data for a face.
         /// </summary>
-        EyeTracking = 1 << 4
+        EyeTracking = 1 << 4,
+
+        /// <summary>
+        /// The subsystem can generate weights that represent the features of a face.
+        /// </summary>
+        BlendShapes = 1 << 5
     }
 
     /// <summary>
@@ -259,6 +264,11 @@ namespace UnityEngine.XR.ARSubsystems
         public bool supportsEyeTracking { get; }
 
         /// <summary>
+        /// Whether the subsystem supports blend shapes and produces weights that represent the features of a detected face.
+        /// </summary>
+        public bool supportsBlendShapes { get; }
+
+        /// <summary>
         /// This struct is an initializer for the creation of a <see cref="XRFaceSubsystemDescriptor"/>.
         /// </summary>
         /// <remarks>
@@ -383,6 +393,25 @@ namespace UnityEngine.XR.ARSubsystems
                 }
             }
 
+            /// <summary>
+            /// Whether the subsystem supports blend shapes for each detected faces.
+            /// </summary>
+            public bool supportsBlendShapes
+            {
+                get => (m_Capabilities & FaceSubsystemCapabilities.BlendShapes) != 0;
+                set
+                {
+                    if (value)
+                    {
+                        m_Capabilities |= FaceSubsystemCapabilities.BlendShapes;
+                    }
+                    else
+                    {
+                        m_Capabilities &= FaceSubsystemCapabilities.BlendShapes;
+                    }
+                }
+            }
+
             FaceSubsystemCapabilities m_Capabilities;
 
             /// <summary>
@@ -480,6 +509,7 @@ namespace UnityEngine.XR.ARSubsystems
             supportsFaceMeshUVs = descriptorParams.supportsFaceMeshUVs;
             supportsFaceMeshNormals = descriptorParams.supportsFaceMeshNormals;
             supportsEyeTracking = descriptorParams.supportsEyeTracking;
+            supportsBlendShapes = descriptorParams.supportsBlendShapes;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_GuidHigh = guidParts.high;
         }
 
-        static readonly SerializableGuid k_Empty = new SerializableGuid(0, 0);
+        static readonly SerializableGuid k_Empty = new(0, 0);
 
         /// <summary>
         /// Used to represent <c>System.Guid.Empty</c> (that is, a GUID whose values are all zeros).
@@ -127,11 +127,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="other">The other <see cref="SerializableGuid"/> to compare against.</param>
         /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="SerializableGuid"/>, otherwise false.</returns>
         public bool Equals(SerializableGuid other)
-        {
-            return
-                (m_GuidLow == other.m_GuidLow) &&
-                (m_GuidHigh == other.m_GuidHigh);
-        }
+            => m_GuidLow == other.m_GuidLow && m_GuidHigh == other.m_GuidHigh;
 
         /// <summary>
         /// Tests for equality. Same as <see cref="Equals(SerializableGuid)"/>.

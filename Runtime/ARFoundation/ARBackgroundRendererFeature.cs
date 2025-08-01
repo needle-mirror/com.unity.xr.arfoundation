@@ -187,9 +187,8 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="context">The render context for executing the render commands.</param>
             /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
-#pragma warning disable CS0672
+            [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-#pragma warning restore CS0672
             {
                 // Populate struct to send to ExecuteRenderPass
                 m_RenderPassData.worldToCameraMatrix = renderingData.cameraData.camera.worldToCameraMatrix;
@@ -313,13 +312,10 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="commandBuffer">The command buffer for configuration.</param>
             /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
-#pragma warning disable CS0672
+            [Obsolete("Configure is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
-#pragma warning restore CS0672
             {
-#pragma warning disable CS0618
                 ConfigureClear(ClearFlag.Depth, Color.clear);
-#pragma warning restore CS0618
             }
 
             protected override XRCameraBackgroundRenderingMode renderingMode
@@ -344,13 +340,10 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="commandBuffer">The command buffer for configuration.</param>
             /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
-#pragma warning disable CS0672
+            [Obsolete("Configure is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
-#pragma warning restore CS0672
             {
-#pragma warning disable CS0618
                 ConfigureClear(ClearFlag.None, Color.clear);
-#pragma warning restore CS0618
             }
 
             protected override XRCameraBackgroundRenderingMode renderingMode

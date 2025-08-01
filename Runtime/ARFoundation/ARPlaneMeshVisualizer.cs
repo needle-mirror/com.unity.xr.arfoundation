@@ -183,7 +183,6 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     m_InitialLineWidthMultiplier = null;
                 }
-
                 transform.hasChanged = false;
             }
 

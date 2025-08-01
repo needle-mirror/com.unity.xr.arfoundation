@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// Ids are generally unique to a particular session, but multiple sessions might produce
     /// identical ids for different trackables.
     /// </para><para>
-    /// A trackable id is a 128 bit number, stored as two <c>ulong</c>s. This makes it large enough to hold a <c>Guid</c>.
+    /// A trackable id is a 128-bit number, stored as two <c>ulong</c>s. This makes it large enough to hold a <c>Guid</c>.
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]

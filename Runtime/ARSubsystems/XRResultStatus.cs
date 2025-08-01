@@ -67,7 +67,7 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Indicates that the operation failed because the provider was not started.
-            /// This may be because you haven't enabled a necessary manager component, or because platforms-specific
+            /// This may be because you haven't enabled a necessary manager component, or because platform-specific
             /// requirements to start the provider were not met.
             /// </summary>
             ProviderNotStarted = -4,
@@ -105,7 +105,7 @@ namespace UnityEngine.XR.ARSubsystems
         public XRResultStatus(StatusCode statusCode)
         {
             m_StatusCode = statusCode;
-            m_NativeStatusCode = default;
+            m_NativeStatusCode = 0;
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace UnityEngine.XR.ARSubsystems
         public XRResultStatus(bool wasSuccessful)
         {
             m_StatusCode = wasSuccessful ? StatusCode.UnqualifiedSuccess : StatusCode.UnknownError;
-            m_NativeStatusCode = default;
+            m_NativeStatusCode = 0;
         }
 
         /// <summary>

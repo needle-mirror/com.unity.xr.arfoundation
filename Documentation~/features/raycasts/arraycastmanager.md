@@ -27,6 +27,12 @@ There are two types of ray casts you can perform in your mixed reality project, 
 | [Single ray casts](xref:arfoundation-raycasts-single)   | Ray casts that occur once.                                         |
 | [Tracked ray casts](xref:arfoundation-raycasts-tracked) | Ray casts that continue to update for the entire AR session, or until cancelled. |
 
+## Fallback ray casts
+
+If the provider plug-in for a specific platform doesn't implement the `XRRaycastSubsystem`, or the provider implementation doesn't [support](xref:arfoundation-raycasts-platform-support#supported-trackables) casting rays against planes, bounding boxes, or feature points, the AR Raycast Manager component can fall back to a physics-based ray cast for these trackable types.
+
+To enable fallback physics-based ray casts, add an AR Plane Manager, AR Bounding Box Manager, or AR Point Cloud Manager component to your scene in addition to the AR Raycast Manager component.
+
 ## Sample scene with ray casts
 
 The [Simple AR scene](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scenes/SimpleAR/SimpleAR.unity) in the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) GitHub repository provides an example scene using ray casting functionality against planes. You can use the configurations in this sample scene to get started with ray casting in your project.

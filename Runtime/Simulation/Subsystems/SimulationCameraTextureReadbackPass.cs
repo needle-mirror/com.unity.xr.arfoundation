@@ -1,4 +1,5 @@
 #if URP_7_OR_NEWER
+using System;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 #if URP_17_OR_NEWER
@@ -52,7 +53,7 @@ namespace UnityEngine.XR.Simulation
         /// <param name="cmd">The <see cref="CommandBuffer"/> object to enqueue rendering commands.</param>
         /// <param name="renderingData">Current rendering state information.</param>
         /// <seealso cref="ScriptableRenderPass.ConfigureInput"/>
-#pragma warning disable CS0672
+        [Obsolete("OnCameraSetup is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ConfigureInput(ScriptableRenderPassInput.Color | ScriptableRenderPassInput.Depth);
@@ -66,8 +67,8 @@ namespace UnityEngine.XR.Simulation
         /// the <see cref="CommandBuffer"/> object for this render pass.</param>
         /// <param name="renderingData">Current rendering state information. Unused for this render pass.</param>
         /// <seealso cref="CameraTextureProvider.TryConfigureReadbackCommandBuffer"/>
+        [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-#pragma warning restore CS0672
         {
             using var commandBuffer = CommandBufferPool.Get("SimulationCameraTextureReadbackPass (Render Graph Disabled)");
             if (m_Provider.TryConfigureReadbackCommandBuffer(commandBuffer))

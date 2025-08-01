@@ -8,6 +8,30 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.3.0-pre.1] - 2025-08-01
+
+### Added
+
+- Added new values to the [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) enum: `Keyboard`, `Mouse`, and `Laptop`.
+- Added constructors and `defaultValue` properties to `XRSaveAnchorResult`, `XRLoadAnchorResult`, and `XREraseAnchorResult` structs.
+- Added [ARFaceManager.TryGetBlendShapes](xref:UnityEngine.XR.ARFoundation.ARFaceManager.TryGetBlendShapes), which provides information about the facial expression of a tracked face.
+  - Added the struct `XRFaceBlendShape`, which provides information about the degree of articulation of a specific facial feature.
+
+### Changed
+
+- Changed [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) to always support physics-based ray casts as a fallback implementation, even if the provider doesn't implement the `XRRaycastSubsystem`. For more information, refer to [Fallback ray casts](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts)
+
+### Deprecated
+
+- Deprecated everything associated with URP Compatibility Mode, as URP Compatibility Mode is now hidden by default in Unity 6.3. Refer to [Render Graph Updates in Unity 6.3](https://discussions.unity.com/t/render-graph-updates-in-unity-6-3/1668122) (Unity Discussions) for more information. The following methods are deprecated:
+* `ARBackgroundRendererFeature.Execute`
+* `ARBackgroundRendererFeature.Configure`
+* `ARCommandBufferSupportRendererFeature.Execute`
+
+### Fixed
+
+- Fixed a typo in `Feature.ToStringList`.
+
 ## [6.2.0] - 2025-06-23
 
 ### Fixed

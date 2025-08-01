@@ -28,13 +28,12 @@ namespace UnityEngine.XR.ARFoundation
         [Tooltip("If not null, instantiates this prefab for each raycast.")]
         GameObject m_RaycastPrefab;
 
-        static Comparison<ARRaycastHit> s_RaycastHitComparer = RaycastHitComparer;
+        static Comparison<ARRaycastHit> s_RaycastHitComparer = CompareRaycastHit;
         static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new();
 
-        Func<Vector2, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastViewportDelegate;
-        Func<Ray, TrackableType, Allocator, NativeArray<XRRaycastHit>> m_RaycastRayDelegate;
-
-        List<IRaycaster> m_Raycasters = new();
+        HashSet<IRaycaster> m_Raycasters = new();
+        ARPlaneManager m_CachedPlaneManager;
+        ARBoundingBoxManager m_CachedBoundingBoxManager;
 
         /// <summary>
         /// The name of the `GameObject` for each instantiated <see cref="ARRaycast"/>.
@@ -66,15 +65,13 @@ namespace UnityEngine.XR.ARFoundation
             TrackableType trackableTypes = TrackableType.AllTypes)
         #endregion
         {
-            if (subsystem == null)
-                return false;
-
             if (hitResults == null)
                 throw new ArgumentNullException("hitResults");
 
-            var nativeHits = m_RaycastViewportDelegate(screenPoint, trackableTypes, Allocator.Temp);
+            var allHits = RaycastViewPortImpl(screenPoint, trackableTypes, Allocator.Temp);
             var originTransform = origin.Camera != null ? origin.Camera.transform : origin.TrackablesParent;
-            return TransformAndDisposeNativeHitResults(nativeHits, hitResults, originTransform.position);
+
+            return TransformAndDisposeNativeHitResults(allHits, hitResults, originTransform.position);
         }
 
         /// <summary>
@@ -93,15 +90,13 @@ namespace UnityEngine.XR.ARFoundation
             TrackableType trackableTypes = TrackableType.AllTypes)
         #endregion
         {
-            if (subsystem == null)
-                return false;
-
             if (hitResults == null)
                 throw new ArgumentNullException(nameof(hitResults));
 
             var sessionSpaceRay = origin.TrackablesParent.InverseTransformRay(ray);
-            var nativeHits = m_RaycastRayDelegate(sessionSpaceRay, trackableTypes, Allocator.Temp);
-            return TransformAndDisposeNativeHitResults(nativeHits, hitResults, ray.origin);
+            var allHits = RaycastWorldSpace(sessionSpaceRay, trackableTypes, Allocator.Temp);
+
+            return TransformAndDisposeNativeHitResults(allHits,hitResults,ray.origin);
         }
 
         /// <summary>
@@ -164,8 +159,13 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="raycaster">A raycaster implementing the IRaycast interface.</param>
         internal void RegisterRaycaster(IRaycaster raycaster)
         {
-            if (!m_Raycasters.Contains(raycaster))
-                m_Raycasters.Add(raycaster);
+            var raycasterType = raycaster.GetType();
+            if (raycasterType == typeof(ARPlaneManager))
+                m_CachedPlaneManager = raycaster as ARPlaneManager;
+            else if (raycasterType == typeof(ARBoundingBoxManager))
+                m_CachedBoundingBoxManager = raycaster as ARBoundingBoxManager;
+
+            m_Raycasters.Add(raycaster);
         }
 
         /// <summary>
@@ -181,30 +181,63 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Invoked just after the subsystem has been `Start`ed. Used to set raycast delegates internally.
         /// </summary>
-        protected override void OnAfterStart()
+        protected override void OnAfterStart() {}
+
+        NativeArray<XRRaycastHit> RaycastWorldSpace(Ray ray, TrackableType typeMask, Allocator allocator)
         {
-            var desc = subsystem.subsystemDescriptor;
-            if (desc.supportsViewportBasedRaycast)
-            {
-                m_RaycastViewportDelegate = RaycastViewport;
-            }
-            else
-            {
-                m_RaycastViewportDelegate = RaycastViewportAsRay;
-            }
+            TrackableType fallbackTypeMask = typeMask;
+            bool doNativeRaycast =
+                subsystem != null
+                && subsystem.subsystemDescriptor.supportsWorldBasedRaycast
+                && (typeMask & subsystem.subsystemDescriptor.supportedTrackableTypes) != TrackableType.None;
+            if (doNativeRaycast)
+                fallbackTypeMask = typeMask & ~subsystem.subsystemDescriptor.supportedTrackableTypes;
 
-            if (desc.supportsWorldBasedRaycast)
-            {
-                m_RaycastRayDelegate = RaycastRay;
-            }
-            else
-            {
-                m_RaycastRayDelegate = RaycastFallback;
-            }
+            bool doFallbackRaycast = fallbackTypeMask != TrackableType.None;
 
-            var raycasters = GetComponents(typeof(IRaycaster));
-            foreach (var raycaster in raycasters)
-                RegisterRaycaster((IRaycaster)raycaster);
+            if (doNativeRaycast && doFallbackRaycast)
+            {
+                var nativeHits = RaycastRay(ray, typeMask, Allocator.Temp);
+                var fallbackHits = RaycastRayFallback(ray, fallbackTypeMask, Allocator.Temp);
+                return CombineNativeArraysAndDispose(nativeHits, fallbackHits, allocator);
+            }
+            else if (doNativeRaycast)
+                return RaycastRay(ray, typeMask, allocator);
+            else if (doFallbackRaycast)
+                return RaycastRayFallback(ray, fallbackTypeMask, allocator);
+            else
+                return new NativeArray<XRRaycastHit>(0, allocator);
+        }
+
+        NativeArray<XRRaycastHit> RaycastViewPortImpl(Vector2 screenPoint, TrackableType typeMask, Allocator allocator)
+        {
+            TrackableType fallbackTypeMask = typeMask;
+            bool doNativeRaycast =
+                subsystem != null
+                && subsystem.subsystemDescriptor.supportsViewportBasedRaycast
+                && (typeMask & subsystem.subsystemDescriptor.supportedTrackableTypes) != TrackableType.None;
+            if (doNativeRaycast)
+                fallbackTypeMask = typeMask & ~subsystem.subsystemDescriptor.supportedTrackableTypes;
+
+            bool doFallbackRaycast = fallbackTypeMask != TrackableType.None;
+
+            if (doNativeRaycast && doFallbackRaycast)
+            {
+                var nativeHits = RaycastViewport(screenPoint, typeMask, Allocator.Temp);
+                var fallbackHits = RaycastWorldSpace(ScreenPointToSessionSpaceRay(screenPoint), fallbackTypeMask, Allocator.Temp);
+                return CombineNativeArraysAndDispose(nativeHits, fallbackHits, allocator);
+            }
+            else if (doNativeRaycast)
+                return RaycastViewport(screenPoint, typeMask, allocator);
+            else if (doFallbackRaycast)
+                return RaycastWorldSpace(ScreenPointToSessionSpaceRay(screenPoint), fallbackTypeMask, allocator);
+            else
+                return new NativeArray<XRRaycastHit>(0, allocator);
+        }
+
+        static int CompareRaycastHit(ARRaycastHit lhs, ARRaycastHit rhs)
+        {
+            return lhs.CompareTo(rhs);
         }
 
         Ray ScreenPointToSessionSpaceRay(Vector2 screenPoint)
@@ -213,25 +246,11 @@ namespace UnityEngine.XR.ARFoundation
             return origin.TrackablesParent.InverseTransformRay(worldSpaceRay);
         }
 
-        NativeArray<XRRaycastHit> RaycastViewportAsRay(
-            Vector2 screenPoint,
-            TrackableType trackableTypeMask,
-            Allocator allocator)
-        {
-            if (origin.Camera == null)
-                return new NativeArray<XRRaycastHit>(0, allocator);
-
-            return m_RaycastRayDelegate(ScreenPointToSessionSpaceRay(screenPoint), trackableTypeMask, allocator);
-        }
-
-        NativeArray<XRRaycastHit> RaycastViewport(
-            Vector2 screenPoint,
-            TrackableType trackableTypeMask,
-            Allocator allocator)
+        NativeArray<XRRaycastHit> RaycastViewport(Vector2 screenPoint, TrackableType typeMask, Allocator allocator)
         {
             screenPoint.x = Mathf.Clamp01(screenPoint.x / Screen.width);
             screenPoint.y = Mathf.Clamp01(screenPoint.y / Screen.height);
-            return subsystem.Raycast(screenPoint, trackableTypeMask, allocator);
+            return subsystem.Raycast(screenPoint, typeMask, allocator);
         }
 
         NativeArray<XRRaycastHit> RaycastRay(
@@ -242,21 +261,13 @@ namespace UnityEngine.XR.ARFoundation
             return subsystem.Raycast(ray, trackableTypeMask, allocator);
         }
 
-        static int RaycastHitComparer(ARRaycastHit lhs, ARRaycastHit rhs)
-        {
-            return lhs.CompareTo(rhs);
-        }
-
-        NativeArray<XRRaycastHit> RaycastFallback(
-            Ray ray,
-            TrackableType trackableTypeMask,
-            Allocator allocator)
+        NativeArray<XRRaycastHit> RaycastRayFallback(Ray ray, TrackableType typeMask, Allocator allocator)
         {
             s_NativeRaycastHits.Clear();
             int count = 0;
             foreach (var raycaster in m_Raycasters)
             {
-                var hits = raycaster.Raycast(ray, trackableTypeMask, Allocator.Temp);
+                var hits = raycaster.Raycast(ray, typeMask, Allocator.Temp);
                 if (hits.IsCreated)
                 {
                     s_NativeRaycastHits.Add(hits);
@@ -292,10 +303,11 @@ namespace UnityEngine.XR.ARFoundation
             if (!nativeHits.IsCreated)
                 return false;
 
-            var planeManager = GetComponent<ARPlaneManager>();
-
             using (nativeHits)
             {
+                bool cachedPlaneManagerFound = m_CachedPlaneManager != null;
+                bool cachedBoxManagerFound = m_CachedBoundingBoxManager != null;
+
                 // Results are in "trackables space", so transform results back into world space
                 foreach (var nativeHit in nativeHits)
                 {
@@ -305,12 +317,16 @@ namespace UnityEngine.XR.ARFoundation
                     ARTrackable trackable = null;
 
                     // Planes
-                    if ((nativeHit.hitType & TrackableType.Planes) != 0)
+                    if ((nativeHit.hitType & TrackableType.Planes) != 0 && cachedPlaneManagerFound)
                     {
-                        if (planeManager)
-                        {
-                            trackable = planeManager.GetPlane(nativeHit.trackableId);
-                        }
+                        trackable = m_CachedPlaneManager.GetPlane(nativeHit.trackableId);
+                    }
+                    // Bounding Boxes
+                    if ((nativeHit.hitType & TrackableType.BoundingBox) != 0 && cachedBoxManagerFound)
+                    {
+                        ARBoundingBox boundingBox;
+                        if (m_CachedBoundingBoxManager.TryGetBoundingBox(nativeHit.trackableId, out boundingBox))
+                            trackable = boundingBox;
                     }
 
                     managedHits.Add(new ARRaycastHit(nativeHit, distanceInWorldSpace, origin.TrackablesParent, trackable));
@@ -321,6 +337,20 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
+        NativeArray<T> CombineNativeArraysAndDispose<T>(
+            NativeArray<T> first,
+            NativeArray<T> second,
+            Allocator allocator) where T : struct
+        {
+            NativeArray<T> combinedArray = new NativeArray<T>(first.Length + second.Length, allocator);
+            NativeArray<T>.Copy(first, 0, combinedArray, 0, first.Length);
+            if (second.Length > 0)
+                NativeArray<T>.Copy(second, 0, combinedArray, first.Length, second.Length);
+            first.Dispose();
+            second.Dispose();
+            return combinedArray;
+        }
+
         /// <summary>
         /// Invoked just after a <see cref="ARRaycast"/> has been updated.
         /// </summary>
@@ -329,8 +359,7 @@ namespace UnityEngine.XR.ARFoundation
         /// data is is session-relative space.</param>
         protected override void OnAfterSetSessionRelativeData(ARRaycast raycast, XRRaycast sessionRelativeData)
         {
-            var planeManager = GetComponent<ARPlaneManager>();
-            raycast.plane = planeManager ? planeManager.GetPlane(sessionRelativeData.hitTrackableId) : null;
+            raycast.plane = m_CachedPlaneManager != null ? m_CachedPlaneManager.GetPlane(sessionRelativeData.hitTrackableId) : null;
         }
     }
 }
