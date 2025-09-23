@@ -3,7 +3,8 @@
     "rootNamespace": "UnityEngine.XR.ARSubsystems",
     "references": [
         "Unity.InputSystem",
-        "Unity.XR.CoreUtils"
+        "Unity.XR.CoreUtils",
+        "Unity.XR.OpenXR"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -17,6 +18,11 @@
             "name": "com.unity.inputsystem",
             "expression": "",
             "define": "UNITY_INPUT_SYSTEM"
+        },
+        {
+            "name": "com.unity.xr.openxr",
+            "expression": "1.16.0-pre.1",
+            "define": "OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER"
         }
     ],
     "noEngineReferences": false

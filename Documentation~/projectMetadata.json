@@ -1,7 +1,7 @@
 {
     "xref": [
-        "com.unity.xr.arkit@6.0",
-        "com.unity.xr.arcore@6.0",
+        "com.unity.xr.arkit@6.3",
+        "com.unity.xr.arcore@6.3",
         "com.unity.xr.meta-openxr",
         "com.unity.xr.androidxr-openxr",
         "com.unity.visualscripting"

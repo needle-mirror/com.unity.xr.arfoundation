@@ -1,3 +1,5 @@
+using static UnityEngine.XR.ARSubsystems.XRResultStatus;
+
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
@@ -33,6 +35,16 @@ namespace UnityEngine.XR.ARSubsystems
         public Result(XRResultStatus status, T value)
         {
             m_Status = status;
+            m_Value = value;
+        }
+
+        /// <summary>
+        /// Construct a result containing an unqualified success status code and the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public Result(T value)
+        {
+            m_Status = new XRResultStatus(StatusCode.UnqualifiedSuccess);
             m_Value = value;
         }
     }

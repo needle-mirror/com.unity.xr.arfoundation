@@ -36,7 +36,6 @@ namespace UnityEngine.XR.Simulation
 #if UNITY_EDITOR
                 SimulationSubsystemAnalytics.SubsystemStarted(k_SubsystemId);
 #endif
-
                 m_AnchorImpl.Start();
                 SimulationSessionSubsystem.s_SimulationSessionReset += OnSimulationSessionReset;
             }
@@ -105,12 +104,11 @@ namespace UnityEngine.XR.Simulation
             public override bool TryAttachAnchor(TrackableId attachedToId, Pose pose, out XRAnchor anchor)
             {
                 anchor = XRAnchor.defaultValue;
-                return m_AnchorImpl != null &&
-                       m_AnchorImpl.TryAttachAnchor(attachedToId, pose, out anchor);
+                return m_AnchorImpl != null && m_AnchorImpl.TryAttachAnchor(attachedToId, pose, out anchor);
             }
 
-            public override bool TryRemoveAnchor(TrackableId anchorId) =>
-                m_AnchorImpl != null && m_AnchorImpl.TryRemoveAnchor(anchorId);
+            public override bool TryRemoveAnchor(TrackableId anchorId)
+                => m_AnchorImpl != null && m_AnchorImpl.TryRemoveAnchor(anchorId);
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]

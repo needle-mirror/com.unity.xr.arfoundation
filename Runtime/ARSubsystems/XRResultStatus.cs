@@ -1,5 +1,8 @@
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 using System;
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+using UnityEngine.XR.OpenXR.NativeTypes;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -77,6 +80,19 @@ namespace UnityEngine.XR.ARSubsystems
             /// and no additional information is available.
             /// </summary>
             ValidationFailure = -5,
+
+            /// <summary>
+            /// Indicates that Unity has determined that the operation is not supported on the device.
+            /// </summary>
+            /// <remarks>
+            /// This error code allows Unity to design APIs where some source other than the OpenXR runtime
+            /// defines whether an operation is supported.
+            ///
+            /// If a runtime returns `XrResult.FeatureUnsupported` or `XrResult.FunctionUnsupported` as the
+            /// `nativeStatusCode` for an API call, the expected `StatusCode` value is `PlatformError`,
+            /// as the runtime is the source of the error.
+            /// </remarks>
+            Unsupported = -6,
         }
 
         /// <summary>
@@ -170,7 +186,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Construct an instance from a boolean value.
         /// </summary>
         /// <param name="wasSuccessful">
-        /// If <see langword="true"/>, assigns a <see cref="statusCode"/> of <see cref="StatusCode.UnqualifiedSuccess"/>.
+        /// If `true`, assigns a <see cref="statusCode"/> of <see cref="StatusCode.UnqualifiedSuccess"/>.
         /// Otherwise, assigns <see cref="StatusCode.UnknownError"/>
         /// </param>
         public XRResultStatus(bool wasSuccessful)
@@ -180,10 +196,10 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Indicates whether the operation was an unqualified success. In other words, returns <see langword="true"/>
+        /// Indicates whether the operation was an unqualified success. In other words, returns `true`
         /// if the operation succeeded and no additional status information is available.
         /// </summary>
-        /// <returns><see langword="true"/> if the operation was an unqualified success. Otherwise, <see langword="false"/>.</returns>
+        /// <returns>`true` if the operation was an unqualified success. Otherwise, `false`.</returns>
         public bool IsUnqualifiedSuccess() => m_StatusCode == StatusCode.UnqualifiedSuccess;
 
         /// <summary>
@@ -193,7 +209,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <remarks>
         /// Equivalent to both `!IsError()` and implicitly converting this instance to <see cref="bool"/>.
         /// </remarks>
-        /// <returns><see langword="true"/> if the operation was successful. Otherwise, <see langword="false"/>.</returns>
+        /// <returns>`true` if the operation was successful. Otherwise, `false`.</returns>
         public bool IsSuccess() => m_StatusCode >= 0;
 
         /// <summary>
@@ -202,14 +218,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// <remarks>
         /// Equivalent to `!IsSuccess()`.
         /// </remarks>
-        /// <returns><see langword="true"/> if the operation failed with error. Otherwise, <see langword="false"/>.</returns>
+        /// <returns>`true` if the operation failed with error. Otherwise, `false`.</returns>
         public bool IsError() => m_StatusCode < 0;
 
         /// <summary>
         /// Convert from <see cref="bool"/> to `XRResultStatus` using the <see cref="XRResultStatus(bool)"/> constructor.
         /// </summary>
         /// <param name="wasSuccessful">Whether the operation was successful.</param>
-        /// <returns>The status.</returns>
+        /// <returns>The instance.</returns>
         public static implicit operator XRResultStatus(bool wasSuccessful)
         {
             return new XRResultStatus(wasSuccessful);
@@ -218,19 +234,48 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Convert from `XRResultStatus` to <see cref="bool"/> using <see cref="XRResultStatus.IsSuccess"/>.
         /// </summary>
-        /// <param name="status">The status.</param>
-        /// <returns><see langword="true"/> if the operation was successful. Otherwise, <see langword="false"/>.</returns>
+        /// <param name="status">The instance.</param>
+        /// <returns>`true` if the operation was successful. Otherwise, `false`.</returns>
         public static implicit operator bool(XRResultStatus status)
         {
             return status.IsSuccess();
         }
+
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+        /// <summary>
+        /// Convert from `OpenXRResultStatus` to `XRResultStatus`.
+        /// </summary>
+        /// <param name="oxrResultStatus">Whether the operation was successful.</param>
+        /// <returns>The instance.</returns>
+        public static implicit operator XRResultStatus(OpenXRResultStatus oxrResultStatus)
+        {
+            return new XRResultStatus((StatusCode)oxrResultStatus.statusCode, (int)oxrResultStatus.nativeStatusCode);
+        }
+
+        /// <summary>
+        /// Convert from `XRResultStatus` to `OpenXRResultStatus`.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <returns>`true` if the operation was successful. Otherwise, `false`.</returns>
+        /// <remarks>
+        /// > [!IMPORTANT]
+        /// > This operator assumes that the underlying type of <see cref="nativeStatusCode"/> is
+        /// > <see cref="XrResult"/>. Only use this operator if you know that the input <paramref name="status"/>
+        /// > is the result of an operation that executed on an OpenXR runtime.
+        /// </remarks>
+        public static explicit operator OpenXRResultStatus(XRResultStatus status)
+        {
+            return new OpenXRResultStatus(
+                (OpenXRResultStatus.StatusCode)status.statusCode, (XrResult)status.nativeStatusCode);
+        }
+#endif
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type. Equality is compared using
         /// both <see cref="statusCode"/> and <see cref="nativeStatusCode"/>.
         /// </summary>
         /// <param name="other">The other object.</param>
-        /// <returns><see langword="true"/> if the objects are equal. Otherwise, <see langword="false"/>.</returns>
+        /// <returns>`true` if the objects are equal. Otherwise, `false`.</returns>
         public bool Equals(XRResultStatus other)
         {
             return m_StatusCode == other.statusCode && m_NativeStatusCode == other.nativeStatusCode;

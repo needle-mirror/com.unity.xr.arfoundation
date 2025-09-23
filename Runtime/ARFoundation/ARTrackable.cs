@@ -9,6 +9,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <remarks>
     /// A "trackable" is something that is tracked in the physical environment. These include:
     /// - <see cref="ARAnchor"/>
+    /// - <see cref="ARBoundingBox"/>
     /// - <see cref="AREnvironmentProbe"/>
     /// - <see cref="ARFace"/>
     /// - <see cref="ARHumanBody"/>
@@ -32,6 +33,21 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <inheritdoc/>
         public abstract IntPtr nativePtr { get; }
+
+        /// <inheritdoc/>
+        public virtual TrackableId parentId => TrackableId.invalidId;
+
+        /// <summary>
+        /// Notifies AR Foundation's internal systems that this trackable has been destroyed.
+        /// </summary>
+        /// <remarks>
+        /// If you override Unity's `OnDestroy` method in your `ARTrackable`-derived type, call
+        /// `base.OnDestroy` to ensure that AR Foundation is notified when your trackable type is destroyed.
+        /// </remarks>
+        protected void OnDestroy()
+        {
+            TrackableSpawner.instance.OnTrackableDestroyed(trackableId);
+        }
     }
 
     /// <summary>
@@ -73,6 +89,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <inheritdoc/>
         public override IntPtr nativePtr => sessionRelativeData.nativePtr;
 
+        /// <inheritdoc/>
+        public override TrackableId parentId => sessionRelativeData.parentId;
+
         /// <summary>
         /// Pending means the trackable was added manually (usually via an <c>AddTrackable</c>-style method
         /// on its manager) but has not yet been reported as added.
@@ -92,6 +111,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected internal virtual void OnAfterSetSessionRelativeData() { }
 
-        internal void SetSessionRelativeData(TSessionRelativeData data) => sessionRelativeData = data;
+        internal void SetSessionRelativeData(TSessionRelativeData data)
+            => sessionRelativeData = data;
     }
 }

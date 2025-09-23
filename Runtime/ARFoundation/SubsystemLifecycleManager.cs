@@ -73,8 +73,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected virtual void OnDisable()
         {
-            if (subsystem != null)
-                subsystem.Stop();
+            subsystem?.Stop();
         }
 
         /// <summary>

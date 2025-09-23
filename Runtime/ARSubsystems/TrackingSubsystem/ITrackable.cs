@@ -52,12 +52,6 @@ namespace UnityEngine.XR.ARSubsystems
         /// The `TrackableId` of the parent trackable, if any.
         /// </summary>
         /// <value>The `TrackableId` of the parent trackable, or <see cref="TrackableId.invalidId"/> if none.</value>
-        TrackableId parentId
-        {
-            get
-            {
-                return TrackableId.invalidId;
-            }
-        }
+        TrackableId parentId => TrackableId.invalidId;
     }
 }

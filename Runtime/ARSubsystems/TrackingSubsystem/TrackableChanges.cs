@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
@@ -117,6 +118,58 @@ namespace UnityEngine.XR.ARSubsystems
             {
                 UnsafeUtility.MemCpy(m_Removed.GetUnsafePtr(), removedPtr, removedCount * sizeof(TrackableId));
             }
+            isCreated = true;
+        }
+
+        /// <summary>
+        /// Create an instance from any enumerable collection.
+        /// </summary>
+        /// <param name="added">The added trackables.</param>
+        /// <param name="addedCount">The count of elements in <paramref name="added"/>.</param>
+        /// <param name="updated">The updated trackables.</param>
+        /// <param name="updatedCount">The count of elements in <paramref name="updated"/>.</param>
+        /// <param name="removed">The ID values of the removed trackables.</param>
+        /// <param name="removedCount">The count of elements in <paramref name="removed"/>.</param>
+        /// <param name="allocator">The allocator to use for native collections in this struct.</param>
+        public TrackableChanges(
+            IEnumerable<T> added, int addedCount,
+            IEnumerable<T> updated, int updatedCount,
+            IEnumerable<TrackableId> removed, int removedCount,
+            Allocator allocator)
+        {
+            var i = 0;
+            m_Added = new NativeArray<T>(addedCount, allocator);
+            if (added != null)
+            {
+                foreach (var trackable in added)
+                {
+                    m_Added[i] = trackable;
+                    ++i;
+                }
+            }
+
+            i = 0;
+            m_Updated = new NativeArray<T>(updatedCount, allocator);
+            if (updated != null)
+            {
+                foreach (var trackable in updated)
+                {
+                    m_Updated[i] = trackable;
+                    ++i;
+                }
+            }
+
+            i = 0;
+            m_Removed = new NativeArray<TrackableId>(removedCount, allocator);
+            if (removed != null)
+            {
+                foreach (var trackableId in removed)
+                {
+                    m_Removed[i] = trackableId;
+                    ++i;
+                }
+            }
+
             isCreated = true;
         }
 

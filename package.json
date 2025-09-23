@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.3.0-pre.1",
+  "version": "6.3.0-pre.2",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added new values to the [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) enum: `Keyboard`, `Mouse`, and `Laptop`.\n- Added constructors and `defaultValue` properties to `XRSaveAnchorResult`, `XRLoadAnchorResult`, and `XREraseAnchorResult` structs.\n- Added [ARFaceManager.TryGetBlendShapes](xref:UnityEngine.XR.ARFoundation.ARFaceManager.TryGetBlendShapes), which provides information about the facial expression of a tracked face.\n  - Added the struct `XRFaceBlendShape`, which provides information about the degree of articulation of a specific facial feature.\n\n### Changed\n\n- Changed [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) to always support physics-based ray casts as a fallback implementation, even if the provider doesn't implement the `XRRaycastSubsystem`. For more information, refer to [Fallback ray casts](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts)\n\n### Deprecated\n\n- Deprecated everything associated with URP Compatibility Mode, as URP Compatibility Mode is now hidden by default in Unity 6.3. Refer to [Render Graph Updates in Unity 6.3](https://discussions.unity.com/t/render-graph-updates-in-unity-6-3/1668122) (Unity Discussions) for more information. The following methods are deprecated:\n* `ARBackgroundRendererFeature.Execute`\n* `ARBackgroundRendererFeature.Configure`\n* `ARCommandBufferSupportRendererFeature.Execute`\n\n### Fixed\n\n- Fixed a typo in `Feature.ToStringList`."
+    "changelog": "### Added\n\n- Added a constructor to `Result<T>` that enables more convenient construction of successful results.\n- Added a `parentId` property to `ARTrackable` with a public getter.\n- Added conversion operators between `XRResultStatus` and the new `OpenXRResultStatus` type introduced in OpenXR Plug-in 1.16.0-pre.1.\n- Added a new enum member `XRResultStatus.StatusCode.Unsupported`.\n- Added a constructor to `XRAnchor` that allows you to initialize all the struct fields.\n- Added [XRAnchorBuilder](xref:UnityEngine.XR.ARSubsystems.XRAnchorBuilder), which provides a fluent API for constructing `XRAnchor` instances.\n- Added a constructor to `TrackableChanges<T>` that allows you construct an instance given `IEnumerable<T>` input collections.\n\n### Changed\n\n- Changed how trackable GameObjects are spawned to support parent-child hierarchies of any depth, allowing trackable GameObjects to have other trackable GameObjects as their parent.\n\n### Fixed\n\n- Fixed an internal utility that could incorrectly cache references to destroyed subsystems, which in turn could cause bugs if you deinitialized and re-initialized the `SimulationLoader`.\n- Fixed child trackable GameObjects so that their position is not adjusted when their parent is changed.\n- Fixed `XRAnchor.Equals` so that it considers the anchor's `parentId` when comparing for equality."
   },
   "upmCi": {
-    "footprint": "3fb260448c02653c2fbc24a3dfed84c7c0081017"
+    "footprint": "6cc95ef346d405cf8bce3f9147fc1b81557926ce"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.3/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "3f88df7744167c0cd7236fcae03eb0bfd6977ad1"
+    "revision": "c4577fc0c312500537fb96dd8038fe82e26e1525"
   }
 }

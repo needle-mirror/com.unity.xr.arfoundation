@@ -76,6 +76,10 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void OnDestroy() => Dispose();
+        new void OnDestroy()
+        {
+            base.OnDestroy();
+            Dispose();
+        }
     }
 }

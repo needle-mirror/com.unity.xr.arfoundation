@@ -375,7 +375,7 @@ namespace UnityEngine.XR.Simulation
 
         readonly struct PoseAnchorData : IAnchorData
         {
-            public readonly XRAnchor anchor;
+            readonly XRAnchor anchor;
 
             PoseAnchorData(in XRAnchor anchor) => this.anchor = anchor;
 

@@ -74,8 +74,9 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        void OnDestroy()
+        new void OnDestroy()
         {
+            base.OnDestroy();
             m_FaceMesh.Dispose();
         }
 

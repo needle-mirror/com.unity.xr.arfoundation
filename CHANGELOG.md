@@ -8,6 +8,28 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.3.0-pre.2] - 2025-09-23
+
+### Added
+
+- Added a constructor to `Result<T>` that enables more convenient construction of successful results.
+- Added a `parentId` property to `ARTrackable` with a public getter.
+- Added conversion operators between `XRResultStatus` and the new `OpenXRResultStatus` type introduced in OpenXR Plug-in 1.16.0-pre.1.
+- Added a new enum member `XRResultStatus.StatusCode.Unsupported`.
+- Added a constructor to `XRAnchor` that allows you to initialize all the struct fields.
+- Added [XRAnchorBuilder](xref:UnityEngine.XR.ARSubsystems.XRAnchorBuilder), which provides a fluent API for constructing `XRAnchor` instances.
+- Added a constructor to `TrackableChanges<T>` that allows you construct an instance given `IEnumerable<T>` input collections.
+
+### Changed
+
+- Changed how trackable GameObjects are spawned to support parent-child hierarchies of any depth, allowing trackable GameObjects to have other trackable GameObjects as their parent.
+
+### Fixed
+
+- Fixed an internal utility that could incorrectly cache references to destroyed subsystems, which in turn could cause bugs if you deinitialized and re-initialized the `SimulationLoader`.
+- Fixed child trackable GameObjects so that their position is not adjusted when their parent is changed.
+- Fixed `XRAnchor.Equals` so that it considers the anchor's `parentId` when comparing for equality.
+
 ## [6.3.0-pre.1] - 2025-08-01
 
 ### Added
@@ -19,14 +41,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Changed [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) to always support physics-based ray casts as a fallback implementation, even if the provider doesn't implement the `XRRaycastSubsystem`. For more information, refer to [Fallback ray casts](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts)
+- Changed [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) to always support physics-based ray casts as a fallback implementation, even if the provider doesn't implement the `XRRaycastSubsystem`. For more information, refer to [Fallback ray casts](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts).
 
 ### Deprecated
 
 - Deprecated everything associated with URP Compatibility Mode, as URP Compatibility Mode is now hidden by default in Unity 6.3. Refer to [Render Graph Updates in Unity 6.3](https://discussions.unity.com/t/render-graph-updates-in-unity-6-3/1668122) (Unity Discussions) for more information. The following methods are deprecated:
-* `ARBackgroundRendererFeature.Execute`
-* `ARBackgroundRendererFeature.Configure`
-* `ARCommandBufferSupportRendererFeature.Execute`
+  * `ARBackgroundRendererFeature.Execute`
+  * `ARBackgroundRendererFeature.Configure`
+  * `ARCommandBufferSupportRendererFeature.Execute`
 
 ### Fixed
 

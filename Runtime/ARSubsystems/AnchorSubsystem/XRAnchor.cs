@@ -18,9 +18,39 @@ namespace UnityEngine.XR.ARSubsystems
         TrackableId m_ParentId;
 
         /// <summary>
-        /// Gets a default-initialized <see cref="XRAnchor"/>. This may be
-        /// different from the zero-initialized version (for example, the <see cref="pose"/>
-        /// is <c>Pose.identity</c> instead of zero-initialized).
+        /// Get this anchor's trackable ID.
+        /// </summary>
+        public TrackableId trackableId => m_Id;
+
+        /// <summary>
+        /// Get this anchor's pose in session space.
+        /// </summary>
+        public Pose pose => m_Pose;
+
+        /// <summary>
+        /// Get this anchor's tracking state.
+        /// </summary>
+        public TrackingState trackingState => m_TrackingState;
+
+        /// <summary>
+        /// Get this anchor's native pointer.
+        /// The data pointed to by this pointer is implementation-specific.
+        /// </summary>
+        public IntPtr nativePtr => m_NativePtr;
+
+        /// <summary>
+        /// Get the ID of the session from which this anchor originated.
+        /// </summary>
+        public Guid sessionId => m_SessionId;
+
+        /// <summary>
+        /// Get the trackable ID of this anchor's parent trackable.
+        /// </summary>
+        public TrackableId parentId => m_ParentId;
+
+        /// <summary>
+        /// Get a default-initialized <see cref="XRAnchor"/>, which is distinct from C# <see langword="default"/>
+        /// as `Pose.identity` is not equal to `0`.
         /// </summary>
         public static XRAnchor defaultValue => s_Default;
 
@@ -33,40 +63,12 @@ namespace UnityEngine.XR.ARSubsystems
         };
 
         /// <summary>
-        /// Constructs the session-relative data for an anchor.
-        /// This is typically provided by an implementation of the <see cref="XRAnchorSubsystem"/>
-        /// and not invoked directly.
+        /// Construct an instance.
         /// </summary>
-        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this anchor.</param>
-        /// <param name="pose">The <c>Pose</c>, in session space, of the anchor.</param>
-        /// <param name="trackingState">The <see cref="TrackingState"/> of the anchor.</param>
-        /// <param name="nativePtr">A native pointer associated with the anchor. The data pointed to by
-        /// this pointer is implementation-specific.</param>
-        /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
-        public XRAnchor(
-            TrackableId trackableId,
-            Pose pose,
-            TrackingState trackingState,
-            IntPtr nativePtr,
-            TrackableId parentId)
-        {
-            m_Id = trackableId;
-            m_Pose = pose;
-            m_TrackingState = trackingState;
-            m_NativePtr = nativePtr;
-            m_SessionId = Guid.Empty;
-            m_ParentId = parentId;
-        }
-        /// <summary>
-        /// Constructs the session-relative data for an anchor.
-        /// This is typically provided by an implementation of the <see cref="XRAnchorSubsystem"/>
-        /// and not invoked directly.
-        /// </summary>
-        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this anchor.</param>
-        /// <param name="pose">The <c>Pose</c>, in session space, of the anchor.</param>
-        /// <param name="trackingState">The <see cref="TrackingState"/> of the anchor.</param>
-        /// <param name="nativePtr">A native pointer associated with the anchor. The data pointed to by
-        /// this pointer is implementation-specific.</param>
+        /// <param name="trackableId">The trackable ID.</param>
+        /// <param name="pose">The pose in session space.</param>
+        /// <param name="trackingState">The tracking state.</param>
+        /// <param name="nativePtr">The native pointer.</param>
         public XRAnchor(
             TrackableId trackableId,
             Pose pose,
@@ -78,61 +80,67 @@ namespace UnityEngine.XR.ARSubsystems
             m_TrackingState = trackingState;
             m_NativePtr = nativePtr;
             m_SessionId = Guid.Empty;
-            m_ParentId = defaultValue.parentId;
+            m_ParentId = TrackableId.invalidId;
         }
 
         /// <summary>
-        /// Constructs the session-relative data for anchor.
-        /// This is typically provided by an implementation of the <see cref="XRAnchorSubsystem"/>
-        /// and not invoked directly.
+        /// Construct an instance.
         /// </summary>
-        /// <param name="trackableId">The <see cref="TrackableId"/> associated with this anchor.</param>
-        /// <param name="pose">The <c>Pose</c>, in session space, of the anchor.</param>
-        /// <param name="trackingState">The <see cref="TrackingState"/> of the anchor.</param>
-        /// <param name="nativePtr">A native pointer associated with the anchor. The data pointed to by
-        /// this pointer is implementation-specific.</param>
-        /// <param name="sessionId">The session from which this anchor originated.</param>
+        /// <param name="trackableId">The trackable ID.</param>
+        /// <param name="pose">The pose in session space.</param>
+        /// <param name="trackingState">The tracking state.</param>
+        /// <param name="nativePtr">The native pointer.</param>
+        /// <param name="parentId">The trackable ID of the parent trackable.</param>
+        public XRAnchor(
+            TrackableId trackableId,
+            Pose pose,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            TrackableId parentId)
+            : this(trackableId, pose, trackingState, nativePtr)
+        {
+            m_ParentId = parentId;
+        }
+
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
+        /// <param name="trackableId">The trackable ID.</param>
+        /// <param name="pose">The pose in session space.</param>
+        /// <param name="trackingState">The tracking state.</param>
+        /// <param name="nativePtr">The native pointer.</param>
+        /// <param name="sessionId">The ID of the session from which this anchor originated.</param>
         public XRAnchor(
             TrackableId trackableId,
             Pose pose,
             TrackingState trackingState,
             IntPtr nativePtr,
             Guid sessionId)
-        : this(trackableId, pose, trackingState, nativePtr)
+            : this(trackableId, pose, trackingState, nativePtr)
         {
             m_SessionId = sessionId;
         }
 
         /// <summary>
-        /// Get the <see cref="TrackableId"/> associated with this anchor.
+        /// Construct an instance.
         /// </summary>
-        public TrackableId trackableId => m_Id;
-
-        /// <summary>
-        /// Get the <c>Pose</c>, in session space, for this anchor.
-        /// </summary>
-        public Pose pose => m_Pose;
-
-        /// <summary>
-        /// Get the <see cref="TrackingState"/> of this anchor.
-        /// </summary>
-        public TrackingState trackingState => m_TrackingState;
-
-        /// <summary>
-        /// A native pointer associated with the anchor.
-        /// The data pointed to by this pointer is implementation-specific.
-        /// </summary>
-        public IntPtr nativePtr => m_NativePtr;
-
-        /// <summary>
-        /// The id of the session from which this anchor originated.
-        /// </summary>
-        public Guid sessionId => m_SessionId;
-
-        /// <summary>
-        /// The <see cref="TrackableId"/> of the parent of this tracked object.
-        /// </summary>
-        public TrackableId parentId => m_ParentId;
+        /// <param name="trackableId">The trackable ID.</param>
+        /// <param name="pose">The pose in session space.</param>
+        /// <param name="trackingState">The tracking state.</param>
+        /// <param name="nativePtr">The native pointer.</param>
+        /// <param name="sessionId">The ID of the session from which this anchor originated.</param>
+        /// <param name="parentId">The trackable ID of the parent trackable.</param>
+        public XRAnchor(
+            TrackableId trackableId,
+            Pose pose,
+            TrackingState trackingState,
+            IntPtr nativePtr,
+            Guid sessionId,
+            TrackableId parentId)
+            : this(trackableId, pose, trackingState, nativePtr, parentId)
+        {
+            m_SessionId = sessionId;
+        }
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -155,39 +163,41 @@ namespace UnityEngine.XR.ARSubsystems
         /// Tests for equality.
         /// </summary>
         /// <param name="other">The other <see cref="XRAnchor"/> to compare against.</param>
-        /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="XRAnchor"/>, otherwise false.</returns>
+        /// <returns>`true` if every field in <paramref name="other"/> is equal to this <see cref="XRAnchor"/>.
+        /// Otherwise, `false`.</returns>
         public bool Equals(XRAnchor other)
         {
             return
-                m_Id.Equals(other.m_Id) &&
-                m_Pose.Equals(other.m_Pose) &&
-                m_TrackingState == other.m_TrackingState &&
-                m_NativePtr == other.m_NativePtr &&
-                m_SessionId.Equals(other.m_SessionId);
+                m_Id.Equals(other.m_Id)
+                && m_Pose.Equals(other.m_Pose)
+                && m_TrackingState == other.m_TrackingState
+                && m_NativePtr == other.m_NativePtr
+                && m_SessionId.Equals(other.m_SessionId)
+                && m_ParentId.Equals(other.m_ParentId);
         }
 
         /// <summary>
         /// Tests for equality.
         /// </summary>
         /// <param name="obj">The `object` to compare against.</param>
-        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="XRAnchor"/> and
-        /// <see cref="Equals(XRAnchor)"/> also returns `true`; otherwise `false`.</returns>
-        public override bool Equals(object obj) => obj is XRAnchor && Equals((XRAnchor)obj);
+        /// <returns>`true` if <paramref name="obj"/> is of type <see cref="XRAnchor"/> and
+        /// <see cref="Equals(XRAnchor)"/> also returns `true`. Otherwise, `false`.</returns>
+        public override bool Equals(object obj) => obj is XRAnchor anchor && Equals(anchor);
 
         /// <summary>
-        /// Tests for equality. Same as <see cref="Equals(XRAnchor)"/>.
+        /// Tests for equality. Equivalent to <see cref="Equals(XRAnchor)"/>.
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        /// <returns>`true` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>. Otherwise, `false`.</returns>
         public static bool operator==(XRAnchor lhs, XRAnchor rhs) => lhs.Equals(rhs);
 
         /// <summary>
-        /// Tests for inequality. Same as `!`<see cref="Equals(XRAnchor)"/>.
+        /// Tests for inequality. Equivalent to `!`<see cref="Equals(XRAnchor)"/>.
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
+        /// <returns>`true` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>. Otherwise, `false`.</returns>
         public static bool operator!=(XRAnchor lhs, XRAnchor rhs) => !lhs.Equals(rhs);
     }
 }

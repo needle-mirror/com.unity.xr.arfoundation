@@ -100,8 +100,9 @@ namespace UnityEngine.XR.ARFoundation
         }
 #endif
 
-        void OnDestroy()
+        new void OnDestroy()
         {
+            base.OnDestroy();
             DisposeNativeContainers();
 #if UNITY_EDITOR
             AssemblyReloadEvents.beforeAssemblyReload -= DisposeNativeContainers;

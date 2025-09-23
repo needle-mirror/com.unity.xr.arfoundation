@@ -142,12 +142,9 @@ namespace UnityEngine.XR.ARFoundation
                 throw new ArgumentNullException(nameof(plane));
 
             var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
-            if (subsystem.TryAttachAnchor(plane.trackableId, sessionRelativePose, out var sessionRelativeData))
-            {
-                return CreateTrackableImmediate(sessionRelativeData);
-            }
-
-            return null;
+            return subsystem.TryAttachAnchor(plane.trackableId, sessionRelativePose, out var sessionRelativeData)
+                ? CreateTrackableImmediate(sessionRelativeData)
+                : null;
         }
 
         /// <summary>

@@ -11,7 +11,8 @@ namespace UnityEngine.XR.ARSubsystems
     [StructLayout(LayoutKind.Sequential)]
     public struct BoundedPlane : ITrackable, IEquatable<BoundedPlane>
     {
-        static readonly BoundedPlane s_Default = new BoundedPlane(
+        static readonly BoundedPlane s_Default =
+            new(
                 TrackableId.invalidId,
                 TrackableId.invalidId,
                 Pose.identity,
@@ -22,6 +23,17 @@ namespace UnityEngine.XR.ARSubsystems
                 IntPtr.Zero,
                 PlaneClassifications.None,
                 TrackableId.invalidId);
+
+        TrackableId m_TrackableId;
+        TrackableId m_SubsumedById;
+        Vector2 m_Center;
+        Pose m_Pose;
+        Vector2 m_Size;
+        PlaneAlignment m_Alignment;
+        TrackingState m_TrackingState;
+        IntPtr m_NativePtr;
+        PlaneClassifications m_Classifications;
+        TrackableId m_ParentId;
 
         /// <summary>
         /// Gets a default-initialized instance. This can be
@@ -341,25 +353,5 @@ namespace UnityEngine.XR.ARSubsystems
                 (m_TrackingState == other.m_TrackingState) &&
                 (m_NativePtr == other.m_NativePtr);
         }
-
-        TrackableId m_TrackableId;
-
-        TrackableId m_SubsumedById;
-
-        Vector2 m_Center;
-
-        Pose m_Pose;
-
-        Vector2 m_Size;
-
-        PlaneAlignment m_Alignment;
-
-        TrackingState m_TrackingState;
-
-        IntPtr m_NativePtr;
-
-        PlaneClassifications m_Classifications;
-
-        TrackableId m_ParentId;
     }
 }

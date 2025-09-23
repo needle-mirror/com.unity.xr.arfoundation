@@ -9,37 +9,37 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     public class SimulationLoader : XRLoaderHelper
     {
-        static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new();
-        static List<XRCameraSubsystemDescriptor> s_CameraSubsystemDescriptors = new();
-        static List<XRInputSubsystemDescriptor> s_InputSubsystemDescriptors = new();
-        static List<XRPlaneSubsystemDescriptor> s_PlaneSubsystemDescriptors = new();
-        static List<XRPointCloudSubsystemDescriptor> s_PointCloudSubsystemDescriptors = new();
-        static List<XRImageTrackingSubsystemDescriptor> s_ImageTrackingSubsystemDescriptors = new();
-        static List<XRRaycastSubsystemDescriptor> s_RaycastSubsystemDescriptors = new();
-        static List<XRMeshSubsystemDescriptor> s_MeshSubsystemDescriptors  = new();
-        static List<XREnvironmentProbeSubsystemDescriptor> s_ProbeSubsystemDescriptors = new();
-        static List<XRAnchorSubsystemDescriptor> s_AnchorSubsystemDescriptors = new();
-        static List<XROcclusionSubsystemDescriptor> s_OcclusionSubsystemDescriptors = new();
-        static List<XRBoundingBoxSubsystemDescriptor> s_BoundingBoxSubsystemDescriptors = new();
+        static List<XRSessionSubsystemDescriptor> s_SessionDescriptors = new();
+        static List<XRCameraSubsystemDescriptor> s_CameraDescriptors = new();
+        static List<XRInputSubsystemDescriptor> s_InputDescriptors = new();
+        static List<XRPlaneSubsystemDescriptor> s_PlaneDescriptors = new();
+        static List<XRPointCloudSubsystemDescriptor> s_PointCloudDescriptors = new();
+        static List<XRImageTrackingSubsystemDescriptor> s_ImageTrackingDescriptors = new();
+        static List<XRRaycastSubsystemDescriptor> s_RaycastDescriptors = new();
+        static List<XRMeshSubsystemDescriptor> s_MeshDescriptors  = new();
+        static List<XREnvironmentProbeSubsystemDescriptor> s_ProbeDescriptors = new();
+        static List<XRAnchorSubsystemDescriptor> s_AnchorDescriptors = new();
+        static List<XROcclusionSubsystemDescriptor> s_OcclusionDescriptors = new();
+        static List<XRBoundingBoxSubsystemDescriptor> s_BoundingBoxDescriptors = new();
 
         /// <summary>
         /// Initializes the loader.
         /// </summary>
-        /// <returns>`True` if the session subsystem was successfully created, otherwise `false`.</returns>
+        /// <returns>`true` if the session subsystem was successfully created. Otherwise, `false`.</returns>
         public override bool Initialize()
         {
-            CreateSubsystem<XRSessionSubsystemDescriptor, XRSessionSubsystem>(s_SessionSubsystemDescriptors, SimulationSessionSubsystem.k_SubsystemId);
-            CreateSubsystem<XRCameraSubsystemDescriptor, XRCameraSubsystem>(s_CameraSubsystemDescriptors, SimulationCameraSubsystem.k_SubsystemId);
-            CreateSubsystem<XRInputSubsystemDescriptor, XRInputSubsystem>(s_InputSubsystemDescriptors, "XRSimulation-Input");
-            CreateSubsystem<XRPlaneSubsystemDescriptor, XRPlaneSubsystem>(s_PlaneSubsystemDescriptors, SimulationPlaneSubsystem.k_SubsystemId);
-            CreateSubsystem<XRPointCloudSubsystemDescriptor, XRPointCloudSubsystem>(s_PointCloudSubsystemDescriptors, SimulationPointCloudSubsystem.k_SubsystemId);
-            CreateSubsystem<XRImageTrackingSubsystemDescriptor, XRImageTrackingSubsystem>(s_ImageTrackingSubsystemDescriptors, SimulationImageTrackingSubsystem.k_SubsystemId);
-            CreateSubsystem<XRRaycastSubsystemDescriptor, XRRaycastSubsystem>(s_RaycastSubsystemDescriptors, SimulationRaycastSubsystem.k_SubsystemId);
-            CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, SimulationMeshSubsystem.k_SubsystemId);
-            CreateSubsystem<XREnvironmentProbeSubsystemDescriptor, XREnvironmentProbeSubsystem>(s_ProbeSubsystemDescriptors, SimulationEnvironmentProbeSubsystem.k_SubsystemId);
-            CreateSubsystem<XRAnchorSubsystemDescriptor, XRAnchorSubsystem>(s_AnchorSubsystemDescriptors, SimulationAnchorSubsystem.k_SubsystemId);
-            CreateSubsystem<XROcclusionSubsystemDescriptor, XROcclusionSubsystem>(s_OcclusionSubsystemDescriptors, SimulationOcclusionSubsystem.k_SubsystemId);
-            CreateSubsystem<XRBoundingBoxSubsystemDescriptor, XRBoundingBoxSubsystem>(s_BoundingBoxSubsystemDescriptors, SimulationBoundingBoxSubsystem.k_SubsystemId);
+            CreateSubsystem<XRSessionSubsystemDescriptor, XRSessionSubsystem>(s_SessionDescriptors, SimulationSessionSubsystem.k_SubsystemId);
+            CreateSubsystem<XRCameraSubsystemDescriptor, XRCameraSubsystem>(s_CameraDescriptors, SimulationCameraSubsystem.k_SubsystemId);
+            CreateSubsystem<XRInputSubsystemDescriptor, XRInputSubsystem>(s_InputDescriptors, "XRSimulation-Input");
+            CreateSubsystem<XRPlaneSubsystemDescriptor, XRPlaneSubsystem>(s_PlaneDescriptors, SimulationPlaneSubsystem.k_SubsystemId);
+            CreateSubsystem<XRPointCloudSubsystemDescriptor, XRPointCloudSubsystem>(s_PointCloudDescriptors, SimulationPointCloudSubsystem.k_SubsystemId);
+            CreateSubsystem<XRImageTrackingSubsystemDescriptor, XRImageTrackingSubsystem>(s_ImageTrackingDescriptors, SimulationImageTrackingSubsystem.k_SubsystemId);
+            CreateSubsystem<XRRaycastSubsystemDescriptor, XRRaycastSubsystem>(s_RaycastDescriptors, SimulationRaycastSubsystem.k_SubsystemId);
+            CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshDescriptors, SimulationMeshSubsystem.k_SubsystemId);
+            CreateSubsystem<XREnvironmentProbeSubsystemDescriptor, XREnvironmentProbeSubsystem>(s_ProbeDescriptors, SimulationEnvironmentProbeSubsystem.k_SubsystemId);
+            CreateSubsystem<XRAnchorSubsystemDescriptor, XRAnchorSubsystem>(s_AnchorDescriptors, SimulationAnchorSubsystem.k_SubsystemId);
+            CreateSubsystem<XROcclusionSubsystemDescriptor, XROcclusionSubsystem>(s_OcclusionDescriptors, SimulationOcclusionSubsystem.k_SubsystemId);
+            CreateSubsystem<XRBoundingBoxSubsystemDescriptor, XRBoundingBoxSubsystem>(s_BoundingBoxDescriptors, SimulationBoundingBoxSubsystem.k_SubsystemId);
 
             var sessionSubsystem = GetLoadedSubsystem<XRSessionSubsystem>();
             if (sessionSubsystem == null)
