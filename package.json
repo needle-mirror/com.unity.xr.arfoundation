@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.3.0-pre.2",
+  "version": "6.3.0",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added a constructor to `Result<T>` that enables more convenient construction of successful results.\n- Added a `parentId` property to `ARTrackable` with a public getter.\n- Added conversion operators between `XRResultStatus` and the new `OpenXRResultStatus` type introduced in OpenXR Plug-in 1.16.0-pre.1.\n- Added a new enum member `XRResultStatus.StatusCode.Unsupported`.\n- Added a constructor to `XRAnchor` that allows you to initialize all the struct fields.\n- Added [XRAnchorBuilder](xref:UnityEngine.XR.ARSubsystems.XRAnchorBuilder), which provides a fluent API for constructing `XRAnchor` instances.\n- Added a constructor to `TrackableChanges<T>` that allows you construct an instance given `IEnumerable<T>` input collections.\n\n### Changed\n\n- Changed how trackable GameObjects are spawned to support parent-child hierarchies of any depth, allowing trackable GameObjects to have other trackable GameObjects as their parent.\n\n### Fixed\n\n- Fixed an internal utility that could incorrectly cache references to destroyed subsystems, which in turn could cause bugs if you deinitialized and re-initialized the `SimulationLoader`.\n- Fixed child trackable GameObjects so that their position is not adjusted when their parent is changed.\n- Fixed `XRAnchor.Equals` so that it considers the anchor's `parentId` when comparing for equality."
+    "changelog": "### Added\n\n- Added a static property `XRResultStatus.unqualifiedSuccess`.\n\n### Fixed\n\n- Fixed the XR Environment view so that it no longer sets the title of the Scene view to null if you launch the Editor with the XR Environment overlay open. ([ARFB-592](https://issuetracker.unity3d.com/issues/installing-ar-foundation-package-corrupts-scene-view-tab-text))\n- Fixed the XR Environment overlay so that it no longer causes \"Unable to load the Icon\" errors in the Console when AR Foundation is first installed to a project. ([ARFB-593](https://issuetracker.unity3d.com/issues/unable-to-load-the-icon-errors-are-thrown-in-the-console-after-installing-ar-foundation-package))"
   },
   "upmCi": {
-    "footprint": "6cc95ef346d405cf8bce3f9147fc1b81557926ce"
+    "footprint": "2388a47bb3289811d442c73e42257c125d09f3db"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.3/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "c4577fc0c312500537fb96dd8038fe82e26e1525"
+    "revision": "ff2067cc204bbcc8e33cc7f4ab420a5a5f5ad0cd"
   }
 }

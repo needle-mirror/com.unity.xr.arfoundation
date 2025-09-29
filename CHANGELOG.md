@@ -8,6 +8,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.3.0] - 2025-09-29
+
+### Added
+
+- Added a static property `XRResultStatus.unqualifiedSuccess`.
+
+### Fixed
+
+- Fixed the XR Environment view so that it no longer sets the title of the Scene view to null if you launch the Editor with the XR Environment overlay open. ([ARFB-592](https://issuetracker.unity3d.com/issues/installing-ar-foundation-package-corrupts-scene-view-tab-text))
+- Fixed the XR Environment overlay so that it no longer causes "Unable to load the Icon" errors in the Console when AR Foundation is first installed to a project. ([ARFB-593](https://issuetracker.unity3d.com/issues/unable-to-load-the-icon-errors-are-thrown-in-the-console-after-installing-ar-foundation-package))
+
 ## [6.3.0-pre.2] - 2025-09-23
 
 ### Added

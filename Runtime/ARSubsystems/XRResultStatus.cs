@@ -96,6 +96,11 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Get a default-initialized successful instance, convenient for testing.
+        /// </summary>
+        public static XRResultStatus unqualifiedSuccess => new(0, 0);
+
+        /// <summary>
         /// The cross-platform status code.
         /// </summary>
         /// <value>The status code.</value>

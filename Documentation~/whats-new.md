@@ -22,6 +22,7 @@ This release includes the following significant changes:
 - Added a constructor to `XRAnchor` that allows you to initialize all the struct fields.
 - Added [XRAnchorBuilder](xref:UnityEngine.XR.ARSubsystems.XRAnchorBuilder), which provides a fluent API for constructing `XRAnchor` instances.
 - Added a constructor to `TrackableChanges<T>` that allows you construct an instance given `IEnumerable<T>` input collections.
+- Added a static property `XRResultStatus.unqualifiedSuccess`.
 
 ## Changes
 
