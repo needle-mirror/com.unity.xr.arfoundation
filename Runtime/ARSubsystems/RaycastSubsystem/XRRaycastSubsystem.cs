@@ -88,6 +88,24 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Casts <paramref name="ray"/> against trackables specified with <paramref name="trackableTypeMask"/>
+        /// that are within <paramref name="maxDistance"/> from the ray origin.
+        /// </summary>
+        /// <param name="ray">A ray in session space.</param>
+        /// <param name="trackableTypeMask">The types of trackables to test for ray intersections.</param>
+        /// <param name="allocator">The <c>Allocator</c> used to allocate the returned <c>NativeArray</c>.</param>
+        /// <param name="maxDistance">The maximum distance from the ray origin a hit can be detected.</param>
+        /// <returns>A <c>NativeArray</c> of all the resulting ray intersections.</returns>
+        public virtual NativeArray<XRRaycastHit> Raycast(
+            Ray ray,
+            TrackableType trackableTypeMask,
+            Allocator allocator,
+            float maxDistance)
+        {
+            return provider.Raycast(XRRaycastHit.defaultValue, ray, trackableTypeMask, allocator, maxDistance);
+        }
+
+        /// <summary>
         /// Casts a ray originating from <paramref name="screenPoint"/> against trackables specified with <paramref name="trackableTypeMask"/>.
         /// </summary>
         /// <param name="screenPoint">A point on the screen in normalized screen coordinates (0, 0) - (1, 1).</param>
@@ -176,7 +194,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Performs a raycast from an arbitrary ray against the types
             /// specified by <paramref name="trackableTypeMask"/>. Results
-            /// should be sorted by distance from the ray origin.
+            /// are sorted by distance from the ray origin.
             /// </summary>
             /// <param name="defaultRaycastHit">The default raycast hit that should be used as a template when populating the returned <c>NativeArray</c>.</param>
             /// <param name="ray">A ray in session space from which to raycast.</param>
@@ -193,9 +211,41 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
+            /// Performs a raycast from an arbitrary ray against the types
+            /// specified by <paramref name="trackableTypeMask"/>. Results
+            /// are sorted by distance from the ray origin.
+            /// </summary>
+            /// <param name="defaultRaycastHit">The default raycast hit that should be used as a template when populating the returned <c>NativeArray</c>.</param>
+            /// <param name="ray">A ray in session space from which to raycast.</param>
+            /// <param name="trackableTypeMask">The types to raycast against.</param>
+            /// <param name="allocator">The allocator with which to allocate the returned <c>NativeArray</c>.</param>
+            /// <param name="maxDistance">The maximum distance from the ray origin a hit can be detected.</param>
+            /// <returns>A <c>NativeArray</c> of all the resulting ray intersections.</returns>
+            public virtual NativeArray<XRRaycastHit> Raycast(
+                XRRaycastHit defaultRaycastHit,
+                Ray ray,
+                TrackableType trackableTypeMask,
+                Allocator allocator,
+                float maxDistance)
+            {
+                var hits = Raycast(defaultRaycastHit,ray, trackableTypeMask, Allocator.Temp);
+                int cutOffIndex;
+                // Find the index of a hit that is farther than maxDistance
+                for (cutOffIndex = 0; cutOffIndex < hits.Length; cutOffIndex++)
+                {
+                    var hit = hits[cutOffIndex];
+                    if (Vector3.Distance(ray.origin, hit.pose.position) > maxDistance)
+                        break;
+                }
+                var newHits = new NativeArray<XRRaycastHit>(cutOffIndex, allocator);
+                NativeArray<XRRaycastHit>.Copy(hits, newHits, cutOffIndex);
+                return newHits;
+            }
+
+            /// <summary>
             /// Performs a raycast from the camera against the types
             /// specified by <paramref name="trackableTypeMask"/>. Results
-            /// should be sorted by distance from the ray origin.
+            /// are sorted by distance from the ray origin.
             /// </summary>
             /// <param name="defaultRaycastHit">The default raycast hit that should be used as a template when populating the returned <c>NativeArray</c>.</param>
             /// <param name="screenPoint">A point on the screen in normalized (0..1) coordinates.</param>

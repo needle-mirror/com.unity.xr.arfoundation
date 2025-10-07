@@ -17,14 +17,7 @@ To understand each of the meshing sample scenes, refer to the following sections
 
 ## Requirements
 
-The meshing sample scenes use features of some devices to construct meshes from scanned data of real world surfaces. These meshing scenes will not work on all devices.
-
-### ARKit requirements
-
-On ARKit, this functionality requires iOS 13.4 or newer, and iPadOS 13.4 or newer. Meshing is supported on devices with a LiDAR scanner.
-
-> [!NOTE]
-> To check whether a device has a LiDAR scanner, refer to Apple's [Tech Specs](https://support.apple.com/en_US/specs).
+The meshing sample scenes use features of some devices to construct meshes from scanned data of real world surfaces. These meshing scenes will not work on all devices. Refer to the [meshing](xref:arfoundation-meshing-platform-support) documentation for your target platform to understand any platform-specific requirements.
 
 <a id="normal"></a>
 
@@ -32,15 +25,17 @@ On ARKit, this functionality requires iOS 13.4 or newer, and iPadOS 13.4 or newe
 
 The `Normal Meshes` scene renders an overlay on top of the real world scanned geometry illustrating the normal of the surface.
 
+![NormalMeshes](../../images/arfoundation-arkit-normal-meshing.gif)
+
 <a id="classification"></a>
 
-## Classification meshes scene (ARKit)
+## Classification meshes scene
 
 The `Classification Meshes` scene demonstrates mesh classification functionality.
 
 With mesh classification enabled, each triangle in the mesh surface is identified as one of several surface types. This sample scene creates submeshes for each classification type and renders each mesh type with a different color.
 
-This scene is available on ARKit only on iOS 13.4 or newer, and iPadOS 13.4 or newer. Meshing is supported on devices with a LiDAR scanner.
+![ClassificationMeshes](../../images/arfoundation-arkit-classified-meshing.gif)
 
 <a id="occlusion"></a>
 
@@ -49,5 +44,7 @@ This scene is available on ARKit only on iOS 13.4 or newer, and iPadOS 13.4 or n
 The `Occlusion Meshes` scene demonstrates how to use meshes of real world geometry to occlude virtual content.
 
 At first, this scene might appear to be doing nothing. However, it's rendering a depth texture on top of the scene based on the real world geometry. This allows for the real world to occlude virtual content. The scene has a script on it that fires a red ball into the scene when you tap. To observe occlusion working, fire the red balls into a space and move the iPad camera behind a real world object. You will see that the virtual red balls are occluded by the real world object.
+
+![OcclusionMeshes](../../images/arfoundation-arkit-occlusion-meshing.gif)
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

@@ -53,11 +53,16 @@ namespace UnityEngine.XR.Simulation
         /// <param name="cmd">The <see cref="CommandBuffer"/> object to enqueue rendering commands.</param>
         /// <param name="renderingData">Current rendering state information.</param>
         /// <seealso cref="ScriptableRenderPass.ConfigureInput"/>
+#if !UNITY_6000_4_OR_NEWER
         [Obsolete("OnCameraSetup is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ConfigureInput(ScriptableRenderPassInput.Color | ScriptableRenderPassInput.Depth);
         }
+#else
+        [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
+        public void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData) { }
+#endif
 
         /// <summary>
         /// Queries the <see cref="CameraTextureProvider"/> object to perform Simulation camera texture async readback
@@ -67,6 +72,7 @@ namespace UnityEngine.XR.Simulation
         /// the <see cref="CommandBuffer"/> object for this render pass.</param>
         /// <param name="renderingData">Current rendering state information. Unused for this render pass.</param>
         /// <seealso cref="CameraTextureProvider.TryConfigureReadbackCommandBuffer"/>
+#if !UNITY_6000_4_OR_NEWER
         [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
@@ -76,6 +82,10 @@ namespace UnityEngine.XR.Simulation
                 context.ExecuteCommandBuffer(commandBuffer);
             }
         }
+#else
+        [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
+        public void Execute(ScriptableRenderContext context, ref RenderingData renderingData) { }
+#endif
 
 #if URP_17_OR_NEWER
         /// <summary>

@@ -40,6 +40,7 @@ AR Foundation supports the following features:
 | [Plane detection](xref:arfoundation-plane-detection) | Detect and track flat surfaces. |
 | [Bounding Box detection](xref:arfoundation-bounding-box-detection) | Detect and track bounding boxes of 3D objects. |
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
+| [Markers](xref:arfoundation-markers) | Track AR markers and read their encoded data. |
 | [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |
 | [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager) | Detect and track a human body. |
@@ -75,7 +76,7 @@ The following table lists the available features in each Unity-supported provide
 | [Point clouds](xref:arfoundation-point-clouds)                     |   Yes   | Yes |          |          |            |            |       Yes     |
 | [Ray casts](xref:arfoundation-raycasts)                            |   Yes   | Yes |          |     Yes  |      Yes   |     Yes    |       Yes     |
 | [Anchors](xref:arfoundation-anchors)                               |   Yes   | Yes |   Yes    |     Yes  |      Yes   |     Yes    |       Yes     |
-| [Meshing](xref:arfoundation-meshing)                               |         | Yes |   Yes    |     Yes  |      Yes   |            |       Yes     |
+| [Meshing](xref:arfoundation-meshing)                               |         | Yes |   Yes    |     Yes  |      Yes   |     Yes    |       Yes     |
 | [Environment probes](xref:arfoundation-environment-probes)         |   Yes   | Yes |   Yes    |          |            |            |       Yes     |
 | [Occlusion](xref:arfoundation-occlusion)                           |    Yes  | Yes |          |          |      Yes   |     Yes    |       Yes     |
 | [Participants](xref:arfoundation-participants)                     |         | Yes |          |          |            |            |               |

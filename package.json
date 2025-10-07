@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.3.0",
+  "version": "6.4.0-pre.1",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added a static property `XRResultStatus.unqualifiedSuccess`.\n\n### Fixed\n\n- Fixed the XR Environment view so that it no longer sets the title of the Scene view to null if you launch the Editor with the XR Environment overlay open. ([ARFB-592](https://issuetracker.unity3d.com/issues/installing-ar-foundation-package-corrupts-scene-view-tab-text))\n- Fixed the XR Environment overlay so that it no longer causes \"Unable to load the Icon\" errors in the Console when AR Foundation is first installed to a project. ([ARFB-593](https://issuetracker.unity3d.com/issues/unable-to-load-the-icon-errors-are-thrown-in-the-console-after-installing-ar-foundation-package))"
+    "changelog": "### Added\n\n- Added a new virtual [Raycast](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem.Provider.Raycast(UnityEngine.XR.ARSubsystems.XRRaycastHit,UnityEngine.Ray,UnityEngine.XR.ARSubsystems.TrackableType,Unity.Collections.Allocator,System.Single)) function to XRRaycastSubsystem that takes a float maxDistance argument, that will only return ray cast hits within that distance.\n- Added the [XRMarkerSubsystem](xref:UnityEngine.XR.ARSubsystems.XRMarkerSubsystem) APIs that providers can implement to support tracking QR codes and other marker types. Manual documentation to follow in a subsequent pre-release version of this package.\n- Added [ARMarkerManager](xref:UnityEngine.XR.ARFoundation.ARMarkerManager) that uses the `XRMarkerSubsystem` to bring marker data into Unity via [ARMarkerManager](xref:UnityEngine.XR.ARFoundation.ARMarkerManager) and [ARMarker](xref:UnityEngine.XR.ARFoundation.ARMarker). Refer to [marker documentation](xref:arfoundation-markers-armarker) to learn more.\n- Added [TryGetSubmeshClassifications](xref:UnityEngine.XR.ARFoundation.ARMeshManager.TryGetSubmeshClassifications) to access mesh component semantic classifications on supported platforms, using the new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) with submesh classification pipeline.\n\n### Deprecated\n\n- [ARMeshManager.meshesChanged](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshesChanged) is deprecated; use [meshInfosChanged](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshInfosChanged) instead, which contains the same information plus additional information (e.g. TrackableId)\n\n- In Unity 6000.4 and newer Editor versions, all methods that depend on URP Compatibility Mode have been changed from `Obsolete(false)` to `Obsolete(true)`. URP Compatibility Mode is removed in Unity 6000.4, so these APIs are no longer supported in Unity 6000.4 or newer. The following methods are affected:\n  - `ARBackgroundRendererFeature.Execute`\n  - `ARBackgroundRendererFeature.Configure`\n  - `ARCommandBufferSupportRendererFeature.Execute`"
   },
   "upmCi": {
-    "footprint": "2388a47bb3289811d442c73e42257c125d09f3db"
+    "footprint": "98e0b8593ffe94bd785fbbbc2a6964d9682209ae"
   },
-  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.3/manual/index.html",
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.4/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "ff2067cc204bbcc8e33cc7f4ab420a5a5f5ad0cd"
+    "revision": "102fdedc102caf50f3bd5f0a7e11322d5b775031"
   }
 }

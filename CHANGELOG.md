@@ -8,6 +8,24 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.4.0-pre.1] - 2025-10-07
+
+### Added
+
+- Added a new virtual [Raycast](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem.Provider.Raycast(UnityEngine.XR.ARSubsystems.XRRaycastHit,UnityEngine.Ray,UnityEngine.XR.ARSubsystems.TrackableType,Unity.Collections.Allocator,System.Single)) function to XRRaycastSubsystem that takes a float maxDistance argument, that will only return ray cast hits within that distance.
+- Added the [XRMarkerSubsystem](xref:UnityEngine.XR.ARSubsystems.XRMarkerSubsystem) APIs that providers can implement to support tracking QR codes and other marker types. Manual documentation to follow in a subsequent pre-release version of this package.
+- Added [ARMarkerManager](xref:UnityEngine.XR.ARFoundation.ARMarkerManager) that uses the `XRMarkerSubsystem` to bring marker data into Unity via [ARMarkerManager](xref:UnityEngine.XR.ARFoundation.ARMarkerManager) and [ARMarker](xref:UnityEngine.XR.ARFoundation.ARMarker). Refer to [marker documentation](xref:arfoundation-markers-armarker) to learn more.
+- Added [TryGetSubmeshClassifications](xref:UnityEngine.XR.ARFoundation.ARMeshManager.TryGetSubmeshClassifications) to access mesh component semantic classifications on supported platforms, using the new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) with submesh classification pipeline.
+
+### Deprecated
+
+- [ARMeshManager.meshesChanged](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshesChanged) is deprecated; use [meshInfosChanged](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshInfosChanged) instead, which contains the same information plus additional information (e.g. TrackableId)
+
+- In Unity 6000.4 and newer Editor versions, all methods that depend on URP Compatibility Mode have been changed from `Obsolete(false)` to `Obsolete(true)`. URP Compatibility Mode is removed in Unity 6000.4, so these APIs are no longer supported in Unity 6000.4 or newer. The following methods are affected:
+  - `ARBackgroundRendererFeature.Execute`
+  - `ARBackgroundRendererFeature.Configure`
+  - `ARCommandBufferSupportRendererFeature.Execute`
+
 ## [6.3.0] - 2025-09-29
 
 ### Added

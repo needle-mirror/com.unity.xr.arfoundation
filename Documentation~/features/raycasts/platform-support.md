@@ -57,18 +57,21 @@ The following table lists whether certain XR plug-in providers support each opti
 
 | TrackableType           | ARCore | ARKit | OpenXR Meta | Android XR | XR Simulation |
 | :---------------------- | :----: | :---: | :---------: | :--------: | :-----------: |
-| **BoundingBox**         |        |       |     Yes     |            |               |
-| **Depth**               |  Yes   |       |             |    Yes     |               |
+| **BoundingBox**         |        |       |  Fallback   |            |               |
+| **Depth**               |  Yes   |       |     Yes     |    Yes     |               |
 | **Face**                |        |       |             |            |               |
 | **FeaturePoint**        |  Yes   |  Yes  |             |            |      Yes      |
 | **Image**               |        |       |             |            |               |
 | **Planes**              |  Yes   |  Yes  |             |    Yes     |      Yes      |
 | **PlaneEstimated**      |  Yes   |  Yes  |             |    Yes     |      Yes      |
-| **PlaneWithinBounds**   |  Yes   |  Yes  |     Yes     |    Yes     |      Yes      |
+| **PlaneWithinBounds**   |  Yes   |  Yes  |  Fallback   |    Yes     |      Yes      |
 | **PlaneWithinInfinity** |        |  Yes  |             |    Yes     |      Yes      |
-| **PlaneWithinPolygon**  |  Yes   |  Yes  |             |    Yes     |      Yes      |
+| **PlaneWithinPolygon**  |  Yes   |  Yes  |  Fallback   |    Yes     |      Yes      |
 
 <a id="check-feature-support"></a>
+
+> [!NOTE]
+> Fallback means the provider relies on AR Foundation's [Fallback ray casts](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts) implementation.
 
 ### Check for optional feature support
 

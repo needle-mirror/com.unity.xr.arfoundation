@@ -58,6 +58,7 @@ This table summarizes the trackable managers and their trackable types.
 | [ARPlaneManager](xref:arfoundation-plane-detection#ar-plane-manager-component) | [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | Detect and track surfaces. |
 | [ARBoundingBoxManager](xref:arfoundation-bounding-box-detection#ar-bounding-box-manager-component) | [ARBoundingBox](xref:UnityEngine.XR.ARFoundation.ARBoundingBox) | Detect and track bounding boxes of 3D objects. |
 | [ARTrackedImageManager](xref:arfoundation-image-tracking#ar-tracked-image-manager-component) | [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | Detect and track 2D images. |
+| [ARMarkerManager](xref:arfoundation-markers-armarkermanager) | [ARMarker](xref:UnityEngine.XR.ARFoundation.ARMarker) | Track AR markers and read their encoded data. |
 | [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) | [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | Detect and track 3D objects. |
 | [ARFaceManager](xref:arfoundation-face-tracking#ar-face-manager-component) | [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | Detect and track human faces. |
 | [ARHumanBodyManager](xref:arfoundation-body-tracking#ar-human-body-manager-component) | [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | Detect and track a human body. |

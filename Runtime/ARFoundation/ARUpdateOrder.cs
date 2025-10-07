@@ -35,6 +35,18 @@ namespace UnityEngine.XR.ARFoundation
         public const int k_BoundingBox = k_BoundingBoxManager + 1;
 
         /// <summary>
+        /// The <see cref="ARMarkerManager"/>'s update order. Should come after
+        /// the <see cref="ARSession"/>.
+        /// </summary>
+        public const int k_MarkerManager = k_Session + 1;
+
+        /// <summary>
+        /// The <see cref="ARMarker"/>'s update order. Should come after the
+        /// <see cref="ARMarkerManager"/>.
+        /// </summary>
+        public const int k_Marker = k_MarkerManager + 1;
+
+        /// <summary>
         /// The <see cref="ARPointCloudManager"/>'s update order. Should come
         /// after the <see cref="ARSession"/>.
         /// </summary>

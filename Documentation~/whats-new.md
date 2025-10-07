@@ -1,46 +1,31 @@
 ---
 uid: arfoundation-whats-new
 ---
-# What's new in version 6.3
+# What's new in version 6.4
 
 This release includes the following significant changes:
 
 ## New features
 
-### Face tracking blend shapes API
+### AR markers
 
-- Added [ARFaceManager.TryGetBlendShapes](xref:UnityEngine.XR.ARFoundation.ARFaceManager.TryGetBlendShapes), which providers can implement to provide information about the facial expression of a tracked face.
+- We added new types that can be used by provider plug-ins to implement support for tracking and decoding markers such as QR codes in mixed reality apps. Currently Unity doesn't support any provider plug-ins that implement this feature, but we expect to release more support for these APIs in the future. Refer to [Markers](xref:arfoundation-markers) for more information about how to build an app that uses these APIs.
+
+### Mesh classification API
+
+- Added [ARMeshManager.TryGetSubmeshClassifications](xref:UnityEngine.XR.ARFoundation.ARMeshManager.TryGetSubmeshClassifications), which allows you to retrieve semantic classifications for mesh components on supported platforms, using the new [XRMeshSubsystem](xref:UnityEngine.XR.XRMeshSubsystem) with submesh classification pipeline.
 
 ## Other API additions
 
-- Added new values to the [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) enum: `Keyboard`, `Mouse`, and `Laptop`.
-- Added constructors and `defaultValue` properties to `XRSaveAnchorResult`, `XRLoadAnchorResult`, and `XREraseAnchorResult` structs.
-- Added a constructor to `Result<T>` that enables more convenient construction of successful results.
-- Added a `parentId` property to `ARTrackable` with a public getter.
-- Added conversion operators between `XRResultStatus` and the new `OpenXRResultStatus` type introduced in OpenXR Plug-in 1.16.0-pre.1.
-- Added a new enum member `XRResultStatus.StatusCode.Unsupported`.
-- Added a constructor to `XRAnchor` that allows you to initialize all the struct fields.
-- Added [XRAnchorBuilder](xref:UnityEngine.XR.ARSubsystems.XRAnchorBuilder), which provides a fluent API for constructing `XRAnchor` instances.
-- Added a constructor to `TrackableChanges<T>` that allows you construct an instance given `IEnumerable<T>` input collections.
-- Added a static property `XRResultStatus.unqualifiedSuccess`.
-
-## Changes
-
-### Ray casts are easier to support
-
-- Changed [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) to always support physics-based ray casts as a fallback implementation, even if the provider doesn't implement the `XRRaycastSubsystem`. For more information, refer to [Fallback ray casts](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts).
-
-### Trackable GameObject hierarchies
-
-- Changed how trackable GameObjects are spawned to support parent-child hierarchies of any depth, allowing trackable GameObjects to have other trackable GameObjects as their parent.
+- Added a new virtual [Raycast](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem.Provider.Raycast(UnityEngine.XR.ARSubsystems.XRRaycastHit,UnityEngine.Ray,UnityEngine.XR.ARSubsystems.TrackableType,Unity.Collections.Allocator,System.Single)) function to XRRaycastSubsystem that takes a float maxDistance argument, that will only return ray cast hits within that distance.
 
 ## Deprecations
 
-### URP compatibility mode
+## URP compatibility mode is removed in Unity 6.4
 
-- Deprecated everything associated with URP Compatibility Mode, as URP Compatibility Mode is now hidden by default in Unity 6.3. Refer to [Render Graph Updates in Unity 6.3](https://discussions.unity.com/t/render-graph-updates-in-unity-6-3/1668122) (Unity Discussions) for more information. The following methods are deprecated:
-* `ARBackgroundRendererFeature.Execute`
-* `ARBackgroundRendererFeature.Configure`
-* `ARCommandBufferSupportRendererFeature.Execute`
+- In Unity 6000.4 and newer Editor versions, all methods that depend on URP Compatibility Mode have been changed from `Obsolete(false)` to `Obsolete(true)`. URP Compatibility Mode is removed in Unity 6000.4, so these APIs are no longer supported in Unity 6000.4 or newer. The following methods are affected:
+  - `ARBackgroundRendererFeature.Execute`
+  - `ARBackgroundRendererFeature.Configure`
+  - `ARCommandBufferSupportRendererFeature.Execute`
 
 For a full list of changes in this version including backwards-compatible bugfixes, refer to the package [changelog](xref:arfoundation-changelog).

@@ -98,6 +98,7 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="context">The render context for executing the render commands.</param>
             /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
+#if !UNITY_6000_4_OR_NEWER
             [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
@@ -106,6 +107,10 @@ namespace UnityEngine.XR.ARFoundation
                 context.ExecuteCommandBuffer(commandBuffer);
                 CommandBufferPool.Release(commandBuffer);
             }
+#else
+            [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
+            public void Execute(ScriptableRenderContext context, ref RenderingData renderingData) { }
+#endif
         }
 
         EventInjectionRenderPass m_EventInjectionPass;

@@ -17,4 +17,3 @@ Refer to the following topics to understand anchors and how to use them:
 ## Additional resources
 
 * [Anchors samples](xref:arfoundation-samples-anchors)
-

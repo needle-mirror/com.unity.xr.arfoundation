@@ -7,7 +7,10 @@
         "Unity.XR.Management",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Unity.XR.CoreUtils"
+        "Unity.XR.CoreUtils",
+        "Unity.XR.ARFoundation.InternalUtils",
+        "Unity.XR.ARFoundation.Editor",
+        "Unity.XR.Management.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

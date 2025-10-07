@@ -104,6 +104,11 @@ namespace UnityEngine.XR.ARSubsystems
         BoundingBox = 1 << 8,
 
         /// <summary>
+        /// Refers to an AR marker such as a QR code or ArUco marker.
+        /// </summary>
+        Marker = 1 << 9,
+
+        /// <summary>
         /// Deprecated in favor of <see cref="TrackableType.AllTypes"/>. Refers to all trackable types except
         /// <see cref="TrackableType.Depth"/>.
         /// </summary>

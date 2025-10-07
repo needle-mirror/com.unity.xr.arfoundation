@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
+using UnityEngine.Events;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 using Unity.XR.CoreUtils;
+using Unity.XR.CoreUtils.Collections;
 using LegacyMeshId = UnityEngine.XR.MeshId;
 
 namespace UnityEngine.XR.ARFoundation
@@ -26,9 +29,12 @@ namespace UnityEngine.XR.ARFoundation
     [HelpURL("features/meshing")]
     public class ARMeshManager : MonoBehaviour
     {
-        List<MeshFilter> m_Added;
-        List<MeshFilter> m_Updated;
-        List<MeshFilter> m_Removed;
+        List<MeshUpdateInfo> m_Added;
+        List<MeshUpdateInfo> m_Updated;
+        List<MeshUpdateInfo> m_Removed;
+        ReadOnlyList<MeshUpdateInfo> m_AddedReadOnly;
+        ReadOnlyList<MeshUpdateInfo> m_UpdatedReadOnly;
+        ReadOnlyList<MeshUpdateInfo> m_RemovedReadOnly;
 
         MeshQueue m_Pending;
 
@@ -40,7 +46,7 @@ namespace UnityEngine.XR.ARFoundation
 
         Action<MeshGenerationResult> m_OnMeshGeneratedDelegate;
 
-        XRMeshSubsystem m_Subsystem;
+        internal IXRMeshSubsystem m_Subsystem;
 
         static TrackableIdComparer s_TrackableIdComparer = new();
 
@@ -143,6 +149,38 @@ namespace UnityEngine.XR.ARFoundation
             set => m_Colors = value;
         }
 
+#if UNITY_6000_4_OR_NEWER
+        [SerializeField]
+        [Tooltip(
+            "If enabled, classifications are made available for mesh sub-components.\n\n"
+                + "This feature might not be implemented on all platforms. See the platform-specific package documentation for your platform."
+        )]
+        bool m_Classification;
+#endif
+
+        /// <summary>
+        /// Gets or sets the current enabled state of submesh classification. Note that some
+        /// providers may require a restart if this value is changed in order to reflect the new setting.
+        /// </summary>
+#if UNITY_6000_4_OR_NEWER
+        public bool submeshClassificationEnabled
+        {
+            get
+            {
+                m_Classification = m_Subsystem?.submeshClassificationEnabled ?? m_Classification;
+                return m_Classification;
+            }
+            set
+            {
+                m_Classification = value;
+                if (m_Subsystem != null)
+                {
+                    m_Subsystem.submeshClassificationEnabled = m_Classification;
+                }
+            }
+        }
+#endif
+
         [SerializeField]
         [Tooltip("The number of meshes to process concurrently. Higher values require more CPU time.")]
         int m_ConcurrentQueueSize = 4;
@@ -160,13 +198,20 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Invoked whenever meshes have changed (been added, updated, or removed).
         /// </summary>
+        [Obsolete("meshesChanged is deprecated in AR Foundation 6.4. Use meshInfosChanged instead")]
         public event Action<ARMeshesChangedEventArgs> meshesChanged;
+
+        /// <summary>
+        /// Invoked whenever meshes have changed (been added, updated, or removed).
+        /// </summary>
+        public UnityEvent<ARMeshInfosChangedEventArgs> meshInfosChanged = new UnityEvent<ARMeshInfosChangedEventArgs>();
 
         /// <summary>
         /// The [XRMeshSubsystem](https://docs.unity3d.com/ScriptReference/XR.XRMeshSubsystem.html)
         /// used by this component to generate meshes.
         /// </summary>
-        public XRMeshSubsystem subsystem => m_Subsystem;
+        public XRMeshSubsystem subsystem =>
+            m_Subsystem is XRMeshSubsystemWrapper ? ((XRMeshSubsystemWrapper)m_Subsystem).subsystem : null;
 
         /// <summary>
         /// Returns a collection of [MeshFilter](https://docs.unity3d.com/ScriptReference/MeshFilter.html)s
@@ -188,6 +233,42 @@ namespace UnityEngine.XR.ARFoundation
             }
             m_Meshes.Clear();
         }
+
+#if UNITY_6000_4_OR_NEWER
+        /// <summary>
+        /// Gets classification information for vertices or vertex sets for meshes obtained through
+        /// [meshInfosChanged]. This must be enabled through [submeshClassificationEnabled].
+        /// </summary>
+        /// <param name="id">The TrackableId of the mesh to obtain classifications for</param>
+        /// <param name="allocator">The
+        /// [Allocator](https://docs.unity3d.com/ScriptReference/Unity.Collections.Allocator.html)
+        /// type the [vertexIndexVectors] and [classifications]
+        /// [NativeArray](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.html)s
+        /// should be created with.</param>
+        /// <param name="indexVectorLength">The number of vertex indices packed in
+        /// [vertexIndexVectors] that should be considered as one classified element, e.g. 1 for a
+        /// single vertex, or 3 for a triangle face.</param>
+        /// <param name="vertexIndexVectors">The packed vertex indices that are classified,
+        /// coallated with the applicable [classifications]</param>
+        /// <param name="classifications">The classifications for the mesh components describing the
+        /// vertex indices</param>
+        public bool TryGetSubmeshClassifications(
+            TrackableId id,
+            Allocator allocator,
+            out uint indexVectorLength,
+            out NativeArray<uint> vertexIndexVectors,
+            out NativeArray<uint> classifications
+        )
+        {
+            return m_Subsystem.TryGetSubmeshClassifications(
+                GetLegacyMeshId(id),
+                allocator,
+                out indexVectorLength,
+                out vertexIndexVectors,
+                out classifications
+            );
+        }
+#endif
 
         // This is similar to GetComponentInParent but also considers inactive GameObjects, while GetComponentInParent
         // ignores GameObjects that are not activeInHierarchy.
@@ -255,6 +336,9 @@ namespace UnityEngine.XR.ARFoundation
                 m_Subsystem.meshDensity = m_Density;
                 SetBoundingVolume();
                 m_Subsystem.Start();
+#if UNITY_6000_4_OR_NEWER
+                submeshClassificationEnabled = m_Classification;
+#endif
             }
             else
             {
@@ -262,7 +346,7 @@ namespace UnityEngine.XR.ARFoundation
             }
         }
 
-        static XRMeshSubsystem GetActiveSubsystemInstance()
+        static IXRMeshSubsystem GetActiveSubsystemInstance()
         {
             XRMeshSubsystem activeSubsystem = null;
 
@@ -282,7 +366,7 @@ namespace UnityEngine.XR.ARFoundation
                     $"No active {typeof(XRMeshSubsystem).FullName} is available. Please ensure that a valid loader configuration exists in the XR project settings and that meshing is supported.");
             }
 
-            return activeSubsystem;
+            return activeSubsystem != null ? new XRMeshSubsystemWrapper(activeSubsystem) : null;
         }
 
         void OnDrawGizmosSelected()
@@ -313,18 +397,20 @@ namespace UnityEngine.XR.ARFoundation
                     // If normals were requested, compute the normals before invoking meshesChanged
                     if (m_Normals)
                     {
-                        foreach (var meshFilter in m_Added)
+                        foreach (var meshUpdateInfo in m_Added)
                         {
-                            var mesh = (meshFilter.sharedMesh != null) ? meshFilter.sharedMesh : meshFilter.mesh;
+                            var meshFilter = meshUpdateInfo.meshFilter;
+                            var mesh = meshFilter.sharedMesh ?? meshFilter.mesh;
 
                             // Calculate normals if they weren't populated by the provider.
                             if (!mesh.HasVertexAttribute(Rendering.VertexAttribute.Normal))
                                 mesh.RecalculateNormals();
                         }
 
-                        foreach (var meshFilter in m_Updated)
+                        foreach (var meshUpdateInfo in m_Updated)
                         {
-                            var mesh = (meshFilter.sharedMesh != null) ? meshFilter.sharedMesh : meshFilter.mesh;
+                            var meshFilter = meshUpdateInfo.meshFilter;
+                            var mesh = meshFilter.sharedMesh ?? meshFilter.mesh;
 
                             // Calculate normals if they weren't populated by the provider.
                             if (!mesh.HasVertexAttribute(Rendering.VertexAttribute.Normal))
@@ -332,7 +418,15 @@ namespace UnityEngine.XR.ARFoundation
                         }
                     }
 
-                    meshesChanged?.Invoke(new ARMeshesChangedEventArgs(m_Added, m_Updated, m_Removed));
+                    meshInfosChanged?.Invoke(new ARMeshInfosChangedEventArgs(m_AddedReadOnly, m_UpdatedReadOnly, m_RemovedReadOnly));
+
+                    if (meshesChanged != null)
+                    {
+                        var added = m_Added.Select(x => x.meshFilter).ToList();
+                        var updated = m_Updated.Select(x => x.meshFilter).ToList();
+                        var removed = m_Removed.Select(x => x.meshFilter).ToList();
+                        meshesChanged?.Invoke(new ARMeshesChangedEventArgs(added, updated, removed));
+                    }
                 }
             }
             finally
@@ -341,8 +435,9 @@ namespace UnityEngine.XR.ARFoundation
                 m_Added.Clear();
                 m_Updated.Clear();
 
-                foreach (var meshFilter in m_Removed)
+                foreach (var meshUpdateInfo in m_Removed)
                 {
+                    var meshFilter = meshUpdateInfo.meshFilter;
                     if (meshFilter != null)
                         Destroy(meshFilter.gameObject);
                 }
@@ -363,8 +458,9 @@ namespace UnityEngine.XR.ARFoundation
             if (m_Colors)
                 vertexAttributes |= MeshVertexAttributes.Colors;
 
-            while (m_Generating.Count < m_ConcurrentQueueSize &&
-                   m_Pending.TryDequeue(m_Generating, out MeshInfo meshInfo))
+            while (
+                m_Generating.Count < m_ConcurrentQueueSize && m_Pending.TryDequeue(m_Generating, out MeshInfo meshInfo)
+            )
             {
                 var meshId = meshInfo.MeshId;
                 var meshFilter = GetOrCreateMeshFilter(GetTrackableId(meshId));
@@ -391,10 +487,12 @@ namespace UnityEngine.XR.ARFoundation
             if (result.Status != MeshGenerationStatus.Success)
                 return;
 
-            var meshTransform = GetOrUpdateMeshTransform(new MeshTransform(
-                result.MeshId, result.Timestamp, result.Position, result.Rotation, result.Scale));
+            var meshTransform = GetOrUpdateMeshTransform(
+                new MeshTransform(result.MeshId, result.Timestamp, result.Position, result.Rotation, result.Scale)
+            );
 
-            if (!m_Meshes.TryGetValue(GetTrackableId(result.MeshId), out MeshFilter meshFilter) || meshFilter == null)
+            var trackableId = GetTrackableId(result.MeshId);
+            if (!m_Meshes.TryGetValue(trackableId, out MeshFilter meshFilter) || meshFilter == null)
                 return;
 
             SetMeshTransform(meshFilter.transform, meshTransform);
@@ -404,10 +502,10 @@ namespace UnityEngine.XR.ARFoundation
             switch (meshInfo.ChangeState)
             {
                 case MeshChangeState.Added:
-                    m_Added.Add(meshFilter);
+                    m_Added.Add(new MeshUpdateInfo(trackableId, meshFilter));
                     break;
                 case MeshChangeState.Updated:
-                    m_Updated.Add(meshFilter);
+                    m_Updated.Add(new MeshUpdateInfo(trackableId, meshFilter));
                     break;
 
                 // Removed/unchanged meshes don't get generated.
@@ -458,7 +556,7 @@ namespace UnityEngine.XR.ARFoundation
                             {
                                 if (meshFilter != null)
                                 {
-                                    m_Removed.Add(meshFilter);
+                                    m_Removed.Add(new MeshUpdateInfo(trackableId, meshFilter));
                                 }
                             }
 
@@ -518,9 +616,12 @@ namespace UnityEngine.XR.ARFoundation
 
         void Awake()
         {
-            m_Added = new List<MeshFilter>();
-            m_Updated = new List<MeshFilter>();
-            m_Removed = new List<MeshFilter>();
+            m_Added = new List<MeshUpdateInfo>();
+            m_Updated = new List<MeshUpdateInfo>();
+            m_Removed = new List<MeshUpdateInfo>();
+            m_AddedReadOnly = new ReadOnlyList<MeshUpdateInfo>(m_Added);
+            m_UpdatedReadOnly = new ReadOnlyList<MeshUpdateInfo>(m_Updated);
+            m_RemovedReadOnly = new ReadOnlyList<MeshUpdateInfo>(m_Removed);
             m_Pending = new MeshQueue();
             m_Generating = new Dictionary<LegacyMeshId, MeshInfo>();
             m_Meshes = new SortedList<TrackableId, MeshFilter>(s_TrackableIdComparer);

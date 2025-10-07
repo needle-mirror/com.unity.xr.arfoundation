@@ -13,6 +13,7 @@ AR Foundation supports the following features:
 | [Plane detection](xref:arfoundation-plane-detection) | Detect and track flat surfaces. |
 | [Bounding Box detection](xref:arfoundation-bounding-box-detection) | Detect and track bounding boxes of 3D objects. |
 | [Image tracking](xref:arfoundation-image-tracking) | Detect and track 2D images. |
+| [Markers](xref:arfoundation-markers) | Track AR markers and read their encoded data. |
 | [Object tracking](xref:arfoundation-object-tracking) | Detect and track 3D objects. |
 | [Face tracking](xref:arfoundation-face-tracking) | Detect and track human faces. |
 | [Body tracking](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager) | Detect and track a human body. |
