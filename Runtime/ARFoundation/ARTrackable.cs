@@ -46,7 +46,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </remarks>
         protected void OnDestroy()
         {
-            TrackableSpawner.instance.OnTrackableDestroyed(trackableId);
+            TrackableSpawner.instance.OnTrackableDestroyed(new TrackableKey(trackableId, GetType()));
         }
     }
 

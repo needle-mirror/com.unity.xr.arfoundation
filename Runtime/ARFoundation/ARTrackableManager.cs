@@ -4,6 +4,7 @@ using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 using Unity.XR.CoreUtils.Collections;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityEngine.SubsystemsImplementation;
 
@@ -119,7 +120,10 @@ namespace UnityEngine.XR.ARFoundation
 
                     foreach (var added in changes.added)
                     {
-                        var trackable = TrackableSpawner.instance.GetTrackableById(added.trackableId) as TTrackable;
+                        var key = new TrackableKey(added.trackableId, typeof(TTrackable));
+                        var success = TrackableSpawner.instance.TryGetTrackableByKey(key, out var arTrackable);
+                        Assert.IsTrue(success);
+                        var trackable = (TTrackable)arTrackable;
                         m_Trackables[trackable!.trackableId] = trackable;
                         s_Added.Add(trackable);
                     }

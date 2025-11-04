@@ -102,7 +102,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Build the output `XRAnchor` using all this builder's input parameter values.
+        /// Build an output `XRAnchor` using all this builder's parameter values.
         /// </summary>
         /// <returns>The built `XRAnchor`.</returns>
         public XRAnchor Build()

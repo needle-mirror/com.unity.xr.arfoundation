@@ -200,13 +200,31 @@ namespace UnityEngine.XR.ARSubsystems
         public NativeArray<ConfigurationDescriptor> GetConfigurationDescriptors(Allocator allocator) => provider.GetConfigurationDescriptors(allocator);
 
         /// <summary>
-        /// Should be invoked when the application is paused.
+        /// Forwards Unity’s [MonoBehaviour.OnApplicationPause(true)](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html)
+        /// callback to the `XRSessionSubsystem` to notify the XR provider that the application has paused.
+        /// Invoked automatically by the <see cref="UnityEngine.XR.ARFoundation.ARSession"/> component.
         /// </summary>
-        public void OnApplicationPause() =>  provider.OnApplicationPause();
+        /// <remarks>
+        /// The `ARSession` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(true)`
+        /// to the `XRSessionSubsystem`. If you are using the `ARSession` component to manage the `XRSessionSubsystem`,
+        /// you don’t need to call this method yourself.
+        /// If you aren't using the `ARSession` component to manage the `XRSessionSubsystem`, you must call this method and
+        /// <see cref="OnApplicationResume"/>  to forward the corresponding `MonoBehaviour.OnApplicationPause` callback to the `XRSessionSubsystem`.
+        /// </remarks>
+        public void OnApplicationPause() => provider.OnApplicationPause();
 
         /// <summary>
-        /// Should be invoked when the application is resumed.
+        /// Forwards Unity’s [MonoBehaviour.OnApplicationPause(false)](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html)
+        /// callback to the `XRSessionSubsystem` to notify the XR provider that the application has resumed.
+        /// Invoked automatically by the <see cref="UnityEngine.XR.ARFoundation.ARSession"/> component.
         /// </summary>
+        /// <remarks>
+        /// The `ARSession` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(false)`
+        /// to the `XRSessionSubsystem`. If you are using the `ARSession` component to manage the `XRSessionSubsystem`,
+        /// you don’t need to call this method yourself.
+        /// If you aren't using the `ARSession` component to manage the `XRSessionSubsystem`, you must call this method and
+        /// <see cref="OnApplicationPause"/> to forward the corresponding `MonoBehaviour.OnApplicationPause` callback to the `XRSessionSubsystem`.
+        /// </remarks>
         public void OnApplicationResume() => provider.OnApplicationResume();
 
         /// <summary>

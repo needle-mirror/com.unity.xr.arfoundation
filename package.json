@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Added\n\n- Added a static property `XRResultStatus.unqualifiedSuccess`.\n\n### Fixed\n\n- Fixed the XR Environment view so that it no longer sets the title of the Scene view to null if you launch the Editor with the XR Environment overlay open. ([ARFB-592](https://issuetracker.unity3d.com/issues/installing-ar-foundation-package-corrupts-scene-view-tab-text))\n- Fixed the XR Environment overlay so that it no longer causes \"Unable to load the Icon\" errors in the Console when AR Foundation is first installed to a project. ([ARFB-593](https://issuetracker.unity3d.com/issues/unable-to-load-the-icon-errors-are-thrown-in-the-console-after-installing-ar-foundation-package))"
+    "changelog": "### Fixed\n\n- Fixed an issue where disabling the AROcclusionManager could cause some objects to become incorrectly occluded for ARCore and ARKit apps.\n- Fixed `LoaderUtility` so that it correctly initializes or deinitializes the OpenXR Loader when you call `Initialize` or `Deinitialize`, respectfully.\n- Fixed internal code so that if trackables of different types share the same `TrackableId`, their GameObjects are spawned correctly with no exceptions logged to the console. ([ARFB-665](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-665)).\n- Fixed the following methods of [XRBoundingBox](xref:UnityEngine.XR.ARSubsystems.XRBoundingBox):\n  - `ToString` now lists the struct members in the order they appear in the stuct\n  - `Equals` now correctly considers a bounding box's `parentId` when comparing for equality\n  - `GetHashCode` now correctly considers a bounding box's `parentId` when generating a hash code."
   },
   "upmCi": {
-    "footprint": "2388a47bb3289811d442c73e42257c125d09f3db"
+    "footprint": "850e8d0180710ecc14a3ea313166235764873782"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.3/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "ff2067cc204bbcc8e33cc7f4ab420a5a5f5ad0cd"
+    "revision": "16dfde08a7aee3f294065951f578776c2524f9f4"
   }
 }

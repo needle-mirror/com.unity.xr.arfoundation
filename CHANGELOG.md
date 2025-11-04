@@ -8,6 +8,18 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.3.1] - 2025-11-04
+
+### Fixed
+
+- Fixed an issue where disabling the AROcclusionManager could cause some objects to become incorrectly occluded for ARCore and ARKit apps.
+- Fixed `LoaderUtility` so that it correctly initializes or deinitializes the OpenXR Loader when you call `Initialize` or `Deinitialize`, respectfully.
+- Fixed internal code so that if trackables of different types share the same `TrackableId`, their GameObjects are spawned correctly with no exceptions logged to the console. ([ARFB-665](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-665)).
+- Fixed the following methods of [XRBoundingBox](xref:UnityEngine.XR.ARSubsystems.XRBoundingBox):
+  - `ToString` now lists the struct members in the order they appear in the stuct
+  - `Equals` now correctly considers a bounding box's `parentId` when comparing for equality
+  - `GetHashCode` now correctly considers a bounding box's `parentId` when generating a hash code.
+
 ## [6.3.0] - 2025-09-29
 
 ### Added
