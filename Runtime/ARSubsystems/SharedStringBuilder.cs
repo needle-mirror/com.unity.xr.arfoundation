@@ -8,7 +8,6 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     internal static class SharedStringBuilder
     {
-        static StringBuilder s_StringBuilder = new();
-        internal static StringBuilder stringBuilder => s_StringBuilder;
+        internal static StringBuilder instance { get; } = new();
     }
 }

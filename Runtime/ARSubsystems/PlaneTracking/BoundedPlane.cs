@@ -260,21 +260,21 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>A string that describes the plane's properties.</returns>
         public override string ToString()
         {
-            SharedStringBuilder.stringBuilder.AppendLine("Plane:");
-            SharedStringBuilder.stringBuilder.AppendLine("\ttrackableId: " + trackableId);
-            SharedStringBuilder.stringBuilder.AppendLine("\tparentId: " + parentId);
-            SharedStringBuilder.stringBuilder.AppendLine("\tsubsumedById: " + subsumedById);
-            SharedStringBuilder.stringBuilder.AppendLine("\tpose: " + pose);
-            SharedStringBuilder.stringBuilder.AppendLine("\tcenter: " + center);
-            SharedStringBuilder.stringBuilder.AppendLine("\tsize: " + size);
-            SharedStringBuilder.stringBuilder.AppendLine("\talignment: " + alignment);
-            SharedStringBuilder.stringBuilder.AppendLine("\tclassifications: " + classifications);
-            SharedStringBuilder.stringBuilder.AppendLine("\ttrackingState: " + trackingState);
-            SharedStringBuilder.stringBuilder.Append("\tnativePtr: ");
-            SharedStringBuilder.stringBuilder.Append("" + nativePtr.ToInt64());
-            SharedStringBuilder.stringBuilder.Append("\n");
-            string tempString = SharedStringBuilder.stringBuilder.ToString();
-            SharedStringBuilder.stringBuilder.Clear();
+            SharedStringBuilder.instance.AppendLine("Plane:");
+            SharedStringBuilder.instance.AppendLine("\ttrackableId: " + trackableId);
+            SharedStringBuilder.instance.AppendLine("\tparentId: " + parentId);
+            SharedStringBuilder.instance.AppendLine("\tsubsumedById: " + subsumedById);
+            SharedStringBuilder.instance.AppendLine("\tpose: " + pose);
+            SharedStringBuilder.instance.AppendLine("\tcenter: " + center);
+            SharedStringBuilder.instance.AppendLine("\tsize: " + size);
+            SharedStringBuilder.instance.AppendLine("\talignment: " + alignment);
+            SharedStringBuilder.instance.AppendLine("\tclassifications: " + classifications);
+            SharedStringBuilder.instance.AppendLine("\ttrackingState: " + trackingState);
+            SharedStringBuilder.instance.Append("\tnativePtr: ");
+            SharedStringBuilder.instance.Append("" + nativePtr.ToInt64());
+            SharedStringBuilder.instance.Append("\n");
+            string tempString = SharedStringBuilder.instance.ToString();
+            SharedStringBuilder.instance.Clear();
             return tempString;
         }
 

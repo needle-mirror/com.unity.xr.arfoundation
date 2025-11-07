@@ -8,6 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.2.1] - 2025-11-07
+
+### Fixed
+
+- Fixed a typo in `Feature.ToStringList`.
+- Fixed the XR Environment view so that it no longer sets the title of the Scene view to null if you launch the Editor with the XR Environment overlay open. ([ARFB-592](https://issuetracker.unity3d.com/issues/installing-ar-foundation-package-corrupts-scene-view-tab-text))
+- Fixed the XR Environment overlay so that it no longer causes "Unable to load the Icon" errors in the Console when AR Foundation is first installed to a project. ([ARFB-593](https://issuetracker.unity3d.com/issues/unable-to-load-the-icon-errors-are-thrown-in-the-console-after-installing-ar-foundation-package))
+- Fixed an internal utility that could incorrectly cache references to destroyed subsystems, which in turn could cause bugs if you deinitialized and re-initialized the `SimulationLoader`.
+- Fixed `XRAnchor.Equals` so that it considers the anchor's `parentId` when comparing for equality.
+- Fixed an issue where disabling the AROcclusionManager could cause some objects to become incorrectly occluded for ARCore and ARKit apps.
+- Fixed `LoaderUtility` so that it correctly initializes or deinitializes the OpenXR Loader when you call `Initialize` or `Deinitialize`, respectfully.
+- Fixed the following methods of [XRBoundingBox](xref:UnityEngine.XR.ARSubsystems.XRBoundingBox):
+  - `ToString` now lists the struct members in the order they appear in the stuct
+  - `Equals` now correctly considers a bounding box's `parentId` when comparing for equality
+  - `GetHashCode` now correctly considers a bounding box's `parentId` when generating a hash code.
+
 ## [6.2.0] - 2025-06-23
 
 ### Fixed

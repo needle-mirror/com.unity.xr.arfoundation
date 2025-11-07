@@ -28,7 +28,6 @@ namespace UnityEditor.XR.Simulation
         public const string viewEnvironmentIconPath = k_IconsPath + "ViewEnvironment.png";
         public const string viewEnvironmentDisableIconPath = k_IconsPath + "NoViewEnvironment.png";
 
-
         public static Func<string[], string[]> collectElementIds;
 
         public static bool CanEnableContent(EditorWindow window)
@@ -164,6 +163,11 @@ namespace UnityEditor.XR.Simulation
         {
             style.whiteSpace = WhiteSpace.NoWrap;
             tooltip = k_Tooltip;
+            EditorApplication.delayCall += LoadIcons;
+        }
+
+        void LoadIcons()
+        {
             var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.xrEnvironmentIconPath);
             icon = iconContent.image as Texture2D;
         }
@@ -348,6 +352,11 @@ namespace UnityEditor.XR.Simulation
         public PreviousEnvironmentButton()
         {
             tooltip = k_Tooltip;
+            EditorApplication.delayCall += LoadIcons;
+        }
+
+        void LoadIcons()
+        {
             var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.arrowCaretLeftIconPath);
             icon = iconContent.image as Texture2D;
         }
@@ -368,6 +377,11 @@ namespace UnityEditor.XR.Simulation
         public NextEnvironmentButton()
         {
             tooltip = k_Tooltip;
+            EditorApplication.delayCall += LoadIcons;
+        }
+
+        void LoadIcons()
+        {
             var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.arrowCaretRightIconPath);
             icon = iconContent.image as Texture2D;
         }
@@ -392,6 +406,11 @@ namespace UnityEditor.XR.Simulation
         public AddEditEnvironmentDropdown()
         {
             tooltip = k_Tooltip;
+            EditorApplication.delayCall += LoadIcons;
+        }
+
+        void LoadIcons()
+        {
             var iconContent = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.addEditIconPath);
             icon = iconContent.image as Texture2D;
         }
@@ -488,7 +507,7 @@ namespace UnityEditor.XR.Simulation
 
         public override bool value
         {
-            get { return m_Value; }
+            get => m_Value;
             set
             {
                 if (m_Value == value)
@@ -508,16 +527,20 @@ namespace UnityEditor.XR.Simulation
         EnvironmentVisibilityToggle()
         {
             tooltip = k_Tooltip;
-            onIcon = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.viewEnvironmentIconPath).image as Texture2D;
-            offIcon = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.viewEnvironmentDisableIconPath).image as Texture2D;
-
             RegisterCallback<ClickEvent>(OnClick);
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             XREnvironmentViewManager.environmentViewEnabled += onEnvironmentViewEnabled;
             XREnvironmentViewManager.environmentViewDisabled += onEnvironmentViewDisabled;
             UpdateEnabled();
+            EditorApplication.delayCall += LoadIcons;
             EditorApplication.delayCall += SyncToggleState;
+        }
+
+        void LoadIcons()
+        {
+            onIcon = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.viewEnvironmentIconPath).image as Texture2D;
+            offIcon = EditorGUIUtility.TrIconContent(XREnvironmentToolbarOverlay.viewEnvironmentDisableIconPath).image as Texture2D;
         }
 
         void onEnvironmentViewEnabled(SceneView sceneView)

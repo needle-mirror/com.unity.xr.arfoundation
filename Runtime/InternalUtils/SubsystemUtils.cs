@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine.SubsystemsImplementation;
 using UnityEngine.XR.Management;
 
@@ -10,9 +9,6 @@ namespace UnityEngine.XR.ARFoundation.InternalUtils
     /// </summary>
     static class SubsystemUtils
     {
-        static Dictionary<Type, SubsystemWithProvider> s_SubsystemsByType = new();
-        static Dictionary<Type, IntegratedSubsystem> s_IntegratedSubsystemsByType = new();
-
         /// <summary>
         /// Returns <see langword="true"/> if there is a loaded <see cref="SubsystemWithProvider"/> of
         /// type <typeparamref name="TSubsystem"/>, and outputs it.
@@ -26,22 +22,8 @@ namespace UnityEngine.XR.ARFoundation.InternalUtils
             where TSubsystemBase : SubsystemWithProvider, new()
             where TSubsystem : TSubsystemBase
         {
-            if (s_SubsystemsByType.TryGetValue(typeof(TSubsystem), out var subsystemWithProvider))
-            {
-                if (subsystemWithProvider != null)
-                {
-                    subsystem = subsystemWithProvider as TSubsystem;
-                    return true;
-                }
-
-                s_SubsystemsByType.Remove(typeof(TSubsystem));
-            }
-
             TryGetLoadedSubsystem<TSubsystemBase>(out var baseSubsystem);
             subsystem = baseSubsystem as TSubsystem;
-            if (subsystem != null)
-                s_SubsystemsByType.Add(typeof(TSubsystem), subsystem);
-
             return subsystem != null;
         }
 
@@ -66,7 +48,6 @@ namespace UnityEngine.XR.ARFoundation.InternalUtils
 
             var loader = XRGeneralSettings.Instance.Manager.activeLoader;
             subsystem = loader != null ? loader.GetLoadedSubsystem<TSubsystemBase>() : null;
-
             return subsystem != null;
         }
 
@@ -81,17 +62,6 @@ namespace UnityEngine.XR.ARFoundation.InternalUtils
         internal static bool TryGetLoadedIntegratedSubsystem<TIntegratedSubsystem>(out TIntegratedSubsystem subsystem)
             where TIntegratedSubsystem : IntegratedSubsystem, new()
         {
-            if (s_IntegratedSubsystemsByType.TryGetValue(typeof(TIntegratedSubsystem), out var baseSubsystem))
-            {
-                if (baseSubsystem != null)
-                {
-                    subsystem = baseSubsystem as TIntegratedSubsystem;
-                    return true;
-                }
-
-                s_IntegratedSubsystemsByType.Remove(typeof(TIntegratedSubsystem));
-            }
-
             if (XRGeneralSettings.Instance == null || XRGeneralSettings.Instance.Manager == null)
             {
                 subsystem = null;
@@ -100,9 +70,6 @@ namespace UnityEngine.XR.ARFoundation.InternalUtils
 
             var loader = XRGeneralSettings.Instance.Manager.activeLoader;
             subsystem = loader != null ? loader.GetLoadedSubsystem<TIntegratedSubsystem>() : null;
-            if (subsystem != null)
-                s_IntegratedSubsystemsByType.Add(typeof(TIntegratedSubsystem), subsystem);
-
             return subsystem != null;
         }
     }

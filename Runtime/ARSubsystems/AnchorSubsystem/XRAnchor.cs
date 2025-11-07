@@ -163,7 +163,8 @@ namespace UnityEngine.XR.ARSubsystems
                 m_Pose.Equals(other.m_Pose) &&
                 m_TrackingState == other.m_TrackingState &&
                 m_NativePtr == other.m_NativePtr &&
-                m_SessionId.Equals(other.m_SessionId);
+                m_SessionId.Equals(other.m_SessionId) &&
+                m_ParentId.Equals(other.m_ParentId);
         }
 
         /// <summary>
