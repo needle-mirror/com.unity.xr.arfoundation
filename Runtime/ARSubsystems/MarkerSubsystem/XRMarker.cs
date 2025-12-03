@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARSubsystems
         public TrackableId trackableId { get; }
 
         /// <summary>
-        /// The pose of the marker in the session space.
+        /// The pose of the marker in the Unity world space.
         /// </summary>
         /// <remarks>
         /// The `Pose` is oriented so that its local positive Y-axis (up) points directly away from the front face of
@@ -50,7 +50,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// If <see cref="markerType"/> is <see cref="XRMarkerType.ArUco"/> or <see cref="XRMarkerType.AprilTag"/>,
         /// this property gets the integer ID encoded by the marker. Otherwise, `0`.
         /// </summary>
-        public int markerId { get; }
+        public uint markerId { get; }
 
         /// <summary>
         /// The marker's data buffer.
@@ -63,7 +63,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRSpatialBufferType.String"/> or <see cref="XRSpatialBufferType.Uint8"/> and assigns a valid
         /// <see cref="XRSpatialBuffer.bufferId"/>. If the `bufferType` is one of these values, you can then use
         /// <see cref="XRMarkerSubsystem.TryGetStringData"/> or
-        /// <see cref="XRMarkerSubsystem.TryGetBytesData(UnityEngine.XR.ARSubsystems.XRSpatialBuffer)"/> to retrieve the data.
+        /// <see cref="XRMarkerSubsystem.TryGetBytesData(TrackableId, XRSpatialBuffer)"/> to retrieve the data.
         /// </remarks>
         public XRSpatialBuffer dataBuffer { get; }
 
@@ -92,7 +92,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Constructs a new <see cref="XRMarker"/>.
         /// </summary>
         /// <param name="trackableId">The unique identifier for the marker.</param>
-        /// <param name="pose">The marker's pose in session space.</param>
+        /// <param name="pose">The marker's pose in Unity world space.</param>
         /// <param name="trackingState">Tracking status.</param>
         /// <param name="nativePtr">Provider-specific native pointer, or <see cref="IntPtr.Zero"/>.</param>
         /// <param name="size">The detected marker size.</param>
@@ -107,7 +107,7 @@ namespace UnityEngine.XR.ARSubsystems
             IntPtr nativePtr,
             Vector2 size,
             XRMarkerType markerType,
-            int markerId,
+            uint markerId,
             XRSpatialBuffer dataBuffer,
             TrackableId parentId)
         {

@@ -17,6 +17,8 @@ You must create tracked ray casts from a screen point:
 
 [!code-cs[ARRaycastManager_AddRaycast_screenPoint](../../../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_AddRaycast_screenPoint)]
 
+<a id="lifecycle-events"></a>
+
 ## Ray cast lifecycle events
 
 While enabled, the AR Raycast Manager component gets changes reported by the [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) every frame. If any ray casts were added, updated, or removed, AR Raycast Manager invokes its [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event with the relevant information.

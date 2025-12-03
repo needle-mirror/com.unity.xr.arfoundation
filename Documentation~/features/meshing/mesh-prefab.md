@@ -13,6 +13,8 @@ Once you have added the [AR Mesh Manager](xref:arfoundation-meshing-manager) to 
 
 You must set the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab) to a prefab that is instantiated for each scanned mesh. The [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab) must contain at least a [MeshFilter](xref:UnityEngine.MeshFilter) component.
 
+<a id="additional-components"></a>
+
 ## Additional meshing components
 
 If you want to render the scanned meshes, you need to add a [MeshRenderer](xref:UnityEngine.MeshRenderer) component, and a [Material](xref:UnityEngine.Material) component to the [meshPrefab](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshPrefab)'s GameObject.

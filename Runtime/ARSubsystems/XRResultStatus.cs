@@ -11,6 +11,9 @@ namespace UnityEngine.XR.ARSubsystems
     /// platform-specific <see cref="nativeStatusCode"/>.
     /// </summary>
     public readonly struct XRResultStatus : IEquatable<XRResultStatus>, IComparable<XRResultStatus>
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+        , IEquatable<XrResult>
+#endif
     {
         /// <summary>
         /// Indicates whether the operation succeeded or failed as well as whether additional status information is
@@ -273,6 +276,31 @@ namespace UnityEngine.XR.ARSubsystems
             return new OpenXRResultStatus(
                 (OpenXRResultStatus.StatusCode)status.statusCode, (XrResult)status.nativeStatusCode);
         }
+
+        /// <summary>
+        /// Compares for equality with an `XrResult`.
+        /// An `XRResultStatus` is equal to an `XrResult` if its <see cref="nativeStatusCode"/> is equal to the
+        /// `XrResult`, and its <see cref="statusCode"/> value correctly matches the `XrResult` value.
+        ///
+        /// For example, an `XrResult` error value must have a matching `statusCode` of
+        /// <see cref="StatusCode.PlatformError"/>. Likewise, a qualified success must have a
+        /// <see cref="StatusCode.PlatformQualifiedSuccess"/> status code, and an unqualified success must have
+        /// <see cref="StatusCode.UnqualifiedSuccess"/> to be considered equal to the `XrResult`.
+        /// </summary>
+        /// <param name="other">The `XrResult` value.</param>
+        /// <returns>`true` if this instance is equal to the `XrResult` value. Otherwise, `false`.</returns>
+        public bool Equals(XrResult other)
+        {
+            if ((int)other != nativeStatusCode)
+                return false;
+
+            return other switch
+            {
+                > 0 => statusCode == StatusCode.PlatformQualifiedSuccess,
+                0 => statusCode == StatusCode.UnqualifiedSuccess,
+                < 0 => statusCode == StatusCode.PlatformError
+            };
+        }
 #endif
 
         /// <summary>
@@ -320,6 +348,17 @@ namespace UnityEngine.XR.ARSubsystems
         {
             var nativeComparison = nativeStatusCode.CompareTo(other.nativeStatusCode);
             return nativeComparison == 0 ? statusCode.CompareTo(other.statusCode) : nativeComparison;
+        }
+
+        /// <summary>
+        /// Creates a string suitable for debugging purposes.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString()
+        {
+            return statusCode is StatusCode.PlatformQualifiedSuccess or StatusCode.PlatformError
+                ? $"({statusCode}, {nativeStatusCode})"
+                : $"({statusCode})";
         }
     }
 }

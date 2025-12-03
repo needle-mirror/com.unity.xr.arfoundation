@@ -11,7 +11,7 @@ Triggers when AR Faces have changed. AR Faces can be added, updated, and/or remo
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Target** | [GameObject](xref:UnityEngine.GameObject) | Target GameObject should have an enabled [ARFaceManager](xref:arfoundation-face-tracking#ar-face-manager-component) component. If you do not connect this port, this node searches for an enabled AR Face Manager component in the scene instead, and throws an exception if none is found. |
+| **Target** | [GameObject](xref:UnityEngine.GameObject) | Target GameObject should have an enabled [ARFaceManager](xref:arfoundation-face-tracking-face-manager) component. If you do not connect this port, this node searches for an enabled AR Face Manager component in the scene instead, and throws an exception if none is found. |
 
 [!include[](snippets/get-variable-tip.md)]
 

@@ -31,7 +31,7 @@ The save operation takes an anchor as input, saves that anchor to persistent sto
 > [!NOTE]
 > Some AR platforms may save anchors to the device's local disk, while others may save them to a cloud storage location associated with your app. Refer to the provider plug-in documentation for your target platforms to understand the implementation details of how anchors are saved.
 
-To save an anchor, use [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorAsync(UnityEngine.XR.ARFoundation.ARAnchor,CancellationToken)) as shown in the following code example:
+To save an anchor, use [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.Provider.TrySaveAnchorAsync*) as shown in the following code example:
 
 [!code-cs[TrySaveAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TrySaveAnchorAsync)]
 
@@ -40,7 +40,7 @@ To save an anchor, use [ARAnchorManager.TrySaveAnchorAsync](xref:UnityEngine.XR.
 
 ## Batch save anchors
 
-You can save a batch of anchors with [ARAnchorManager.TrySaveAnchorsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TrySaveAnchorsAsync(IEnumerable{UnityEngine.XR.ARFoundation.ARAnchor},List{UnityEngine.XR.ARFoundation.ARSaveOrLoadAnchorResult},CancellationToken)) as shown in the following code example:
+You can save a batch of anchors with [ARAnchorManager.TrySaveAnchorsAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.Provider.TrySaveAnchorsAsync*) as shown in the following code example:
 
 [!code-cs[TrySaveAnchorsAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TrySaveAnchorsAsync)]
 
@@ -54,13 +54,13 @@ By default, batch save anchors sequentially calls `ARAnchorManager.TrySaveAnchor
 
 The load operation takes a persistent anchor GUID returned by [Save anchor](#save-anchor) as input, retrieves the associated anchor from persistent storage, and returns a newly created anchor. On the AR Anchor Manager component's next Update step, that anchor will be reported as added.
 
-To load an anchor, use [ARAnchorManager.TryLoadAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryLoadAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,CancellationToken)) as shown in the following code example:
+To load an anchor, use [ARAnchorManager.TryLoadAnchorAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryLoadAnchorAsync*) as shown in the following code example:
 
 [!code-cs[TryLoadAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryLoadAnchorAsync)]
 
 ## Batch load anchors
 
-You can load a batch of anchors with [ARAnchorManager.TryLoadAnchorsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryLoadAnchorsAsync(IEnumerable{UnityEngine.XR.ARSubsystems.SerializableGuid},List{UnityEngine.XR.ARFoundation.ARSaveOrLoadAnchorResult},Action{Unity.XR.CoreUtils.Collections.ReadOnlyListSpan{UnityEngine.XR.ARFoundation.ARSaveOrLoadAnchorResult}},CancellationToken)) as shown in the following code example:
+You can load a batch of anchors with [ARAnchorManager.TryLoadAnchorsAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryLoadAnchorsAsync*) as shown in the following code example:
 
 [!code-cs[TryLoadAnchorsAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryLoadAnchorsAsync)]
 
@@ -85,13 +85,13 @@ The erase operation takes a persistent anchor GUID returned by [Save anchor](#sa
 > [!NOTE]
 > The save and erase operations only modify the persistent storage associated with an anchor, not the tracking state of the anchor. For instance, if you create an anchor, save it, then immediately erase it, the persistent storage associated with the anchor will be erased, but the anchor itself will not be removed from the scene.
 
-To erase an anchor, use [ARAnchorManager.TryEraseAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorAsync(UnityEngine.XR.ARSubsystems.SerializableGuid,CancellationToken)) as shown in the following code example:
+To erase an anchor, use [ARAnchorManager.TryEraseAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorAsync*) as shown in the following code example:
 
 [!code-cs[TryEraseAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryEraseAnchorAsync)]
 
 ## Batch erase anchors
 
-You can erase a batch of anchors with [ARAnchorManager.TryEraseAnchorsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorsAsync(IEnumerable{UnityEngine.XR.ARSubsystems.SerializableGuid},List{UnityEngine.XR.ARSubsystems.XREraseAnchorResult},CancellationToken)) as shown in the following code example:
+You can erase a batch of anchors with [ARAnchorManager.TryEraseAnchorsAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryEraseAnchorsAsync*) as shown in the following code example:
 
 [!code-cs[TryEraseAnchorsAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryEraseAnchorsAsync)]
 

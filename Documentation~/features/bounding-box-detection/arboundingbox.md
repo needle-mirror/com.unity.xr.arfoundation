@@ -13,7 +13,7 @@ The [ARBoundingBox](xref:UnityEngine.XR.ARFoundation.ARBoundingBox) component is
 
 ## Bounding box life cycle
 
-As trackables, AR bounding boxes have a life cycle that consists of three phases: added, updated, and removed. Your app can [Respond to detected 3D bounding boxes](xref:arfoundation-bounding-box-arboundingboxmanager#respond-to-detected-boundingboxes) during your AR session by subscribing to the AR Bounding Box Manager component's `trackablesChanged` event.
+As trackables, AR bounding boxes have a life cycle that consists of three phases: added, updated, and removed. Your app can [Respond to detected 3D bounding boxes](xref:arfoundation-bounding-box-arboundingboxmanager#respond) during your AR session by subscribing to the AR Bounding Box Manager component's `trackablesChanged` event.
 
 ### Added
 

@@ -441,6 +441,10 @@ namespace UnityEngine.XR.ARFoundation
             Application.onBeforeRender -= OnBeforeRender;
             base.OnDisable();
             DestroyTextures();
+
+            // We are firing a frameReceived event when occlusion manager is disabled
+            // because ARCameraBackground needs it to set the shader keywords.
+            InvokeFrameReceivedDefault();
         }
 
         /// <summary>
@@ -475,6 +479,31 @@ namespace UnityEngine.XR.ARFoundation
             m_EnvironmentDepthUpdatableTexture?.DestroyTexture();
             m_EnvironmentDepthConfidenceUpdatableTexture?.DestroyTexture();
             m_SwapchainStrategy.Dispose();
+        }
+
+        /// <summary>
+        /// Just invoke the frame received event without the other steps
+        /// </summary>
+        void InvokeFrameReceivedDefault()
+        {
+            if (frameReceived == null)
+                return;
+
+            XROcclusionFrame frame = default;
+            frame.TryGetTimestamp(out var timestampNs);
+            frame.TryGetNearFarPlanes(out var planes);
+            var args = new AROcclusionFrameEventArgs
+            {
+                shaderKeywords = subsystem.GetShaderKeywords2(),
+                externalTextures = m_TexturesReadOnly,
+                properties = frame.properties,
+                timestamp = timestampNs,
+                nearFarPlanes = planes,
+                poses = m_PosesReadOnly,
+                fovs = m_FovsReadOnly,
+            };
+
+            frameReceived.Invoke(args);
         }
 
         /// <remarks>

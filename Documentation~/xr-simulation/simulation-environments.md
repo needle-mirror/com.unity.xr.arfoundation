@@ -75,17 +75,17 @@ Add a Simulation Environment component to the root GameObject of a prefab to des
 
 ## Simulated Tracked Image component
 
-Add a Simulated Tracked Image component to a GameObject in your XR Simulation environment to designate it as a simulated tracked image. Simulated tracked images simulate AR Foundation's [image tracking](xref:arfoundation-image-tracking) feature, and you can [respond to detected images](xref:arfoundation-image-tracking#respond-to-detected-images) in XR Simulation environments the same way that you would on device.
+Add a Simulated Tracked Image component to a GameObject in your XR Simulation environment to designate it as a simulated tracked image. Simulated tracked images simulate AR Foundation's [image tracking](xref:arfoundation-image-tracking) feature, and you can [respond to detected images](xref:arfoundation-image-tracking-manager#respond-to-detected-images) in XR Simulation environments the same way that you would on device.
 
 ![Simulated Tracked Image component](../images/simulated-tracked-image.png)<br/>*Simulated Tracked Image component*
 
-XR Simulation can detect and track all simulated tracked images in an environment, even if you have not included their textures in your [reference image library](xref:arfoundation-image-tracking#reference-image-library). To optionally bind a simulated tracked image to your reference image library, set the **Image** field of its Simulated Tracked Image component to reference a texture asset that is also used in the reference image library.
+XR Simulation can detect and track all simulated tracked images in an environment, even if you have not included their textures in your [reference image library](xref:arfoundation-image-tracking-reference-images). To optionally bind a simulated tracked image to your reference image library, set the **Image** field of its Simulated Tracked Image component to reference a texture asset that is also used in the reference image library.
 
 When XR Simulation detects images that are not part of the reference image library, the corresponding [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) trackables will not contain a fully initialized [referenceImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage.referenceImage). Instead, the `guid` property of the [referenceImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage.referenceImage) is set to zero, and its `texture` is set to `null`.
 
 | Property | Description |
 | :------- | :---------- |
-| **Image** | A reference to the [Texture2D](xref:UnityEngine.Texture2D) asset of the image. Optionally, this can also match a texture asset in your [reference image library](xref:arfoundation-image-tracking#reference-image-library). |
+| **Image** | A reference to the [Texture2D](xref:UnityEngine.Texture2D) asset of the image. Optionally, this can also match a texture asset in your [reference image library](xref:arfoundation-image-tracking-reference-images). |
 | **Image Physical Size Meters** | The size in meters of the image in the environment. This influences the distance at which an image can be detected by the simulated device. Set this value to the expected size of the image in the real world. |
 
 ### Simulated Tracked Image setup

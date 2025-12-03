@@ -11,7 +11,7 @@ Triggers when AR Tracked Images have changed. AR Tracked Images can be added, up
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Target** | [GameObject](xref:UnityEngine.GameObject) | Target GameObject should have an enabled [ARTrackedImageManager](xref:arfoundation-image-tracking#ar-tracked-image-manager-component) component. If you do not connect this port, this node searches for an enabled AR Tracked Image Manager component in the scene instead, and throws an exception if none is found. |
+| **Target** | [GameObject](xref:UnityEngine.GameObject) | Target GameObject should have an enabled [ARTrackedImageManager](xref:arfoundation-image-tracking-manager) component. If you do not connect this port, this node searches for an enabled AR Tracked Image Manager component in the scene instead, and throws an exception if none is found. |
 
 [!include[](snippets/get-variable-tip.md)]
 

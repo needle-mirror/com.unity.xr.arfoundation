@@ -19,7 +19,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// >
     /// > This is not something consumers of the <see cref="UnityEngine.XR.ARSubsystems"/> namespace should implement.
     /// </remarks>
-    /// <seealso cref="XRImageTrackingSubsystem.CreateRuntimeLibrary(XRReferenceImageLibrary)"/>
+    /// <seealso href="xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.CreateRuntimeLibrary*">XRImageTrackingSubsystem.CreateRuntimeLibrary</seealso>
     public abstract class MutableRuntimeReferenceImageLibrary : RuntimeReferenceImageLibrary
     {
         /// <summary>

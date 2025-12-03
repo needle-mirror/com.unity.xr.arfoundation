@@ -3,7 +3,7 @@ uid: arfoundation-vs-node-on-session-state-changed
 ---
 # On Session State Changed
 
-Triggers when the AR [session state](xref:arfoundation-session#session-state) changes.
+Triggers when the AR [session state](xref:arfoundation-session-arsession#session-state) changes.
 
 ![On Session State Changed](../../images/visual-scripting/vs-on-session-state-changed.png)<br/>*On Session State Changed node, shown with Session State Switch*
 

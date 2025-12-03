@@ -6,19 +6,21 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Represents the intersection of a raycast with a trackable.
     /// </summary>
-    /// <seealso cref="XRRaycastSubsystem.Raycast(Ray, TrackableType, Unity.Collections.Allocator)"/>
-    /// <seealso cref="XRRaycastSubsystem.Raycast(Vector2, TrackableType, Unity.Collections.Allocator)"/>
     [StructLayout(LayoutKind.Sequential)]
     public struct XRRaycastHit : IEquatable<XRRaycastHit>
     {
-        static readonly XRRaycastHit s_Default = new XRRaycastHit(
-            TrackableId.invalidId, Pose.identity, 0, TrackableType.None);
+        static readonly XRRaycastHit s_Default = new(TrackableId.invalidId, Pose.identity, 0, TrackableType.None);
 
         /// <summary>
         /// A default-initialized raycast hit.
         /// This can be different from a zero-initialized raycast hit.
         /// </summary>
         public static XRRaycastHit defaultValue => s_Default;
+
+        TrackableId m_TrackableId;
+        Pose m_Pose;
+        float m_Distance;
+        TrackableType m_HitType;
 
         /// <summary>
         /// The <see cref="TrackableId"/> of the trackable which was hit. This can be <see cref="TrackableId.invalidId"/>
@@ -129,13 +131,5 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
         public static bool operator !=(XRRaycastHit lhs, XRRaycastHit rhs) => !lhs.Equals(rhs);
-
-        TrackableId m_TrackableId;
-
-        Pose m_Pose;
-
-        float m_Distance;
-
-        TrackableType m_HitType;
     }
 }

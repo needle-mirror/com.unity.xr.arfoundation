@@ -7,14 +7,14 @@ Single ray casts occur once. Use single ray casts for discrete, one time user in
 
  There are two `Raycast` methods on the [ARRaycastManager](xref:UnityEngine.XR.ARFoundation.ARRaycastManager) that perform single ray casts. Refer to [Optional feature platform support](xref:arfoundation-raycasts-platform-support#optional-features-support-table) to check whether your target platform supports each type of ray casting method.
 
-| Method                                              | Description                                                             |
-|:--------------------------------------------------- | :---------------------------------------------------------------------  |
+| Method | Description |
+|:------ | :---------- |
 | [Viewport based ray cast](#viewport-based-ray-cast) | Casts a ray from a two-dimensional pixel position on the screen (a screen point). |
-| [World based ray cast](#world-based-ray-cast)       | Casts an arbitrary ray (a position and direction).                      |
+| [World based ray cast](#world-based-ray-cast) | Casts an arbitrary ray (a position and direction). |
 
 ## Viewport based ray cast
 
-The viewport based [Raycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Vector2,List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType)) method casts a ray from a two-dimensional pixel position on the screen:
+The viewport based [Raycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Vector2,System.Collections.Generic.List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType)) method casts a ray from a two-dimensional pixel position on the screen:
 
 [!code-cs[ARRaycastManager_Raycast_screenPoint](../../../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_Raycast_screenPoint)]
 
@@ -24,7 +24,7 @@ You can, for example, pass a touch position directly:
 
 ## World based ray cast
 
-The world based [Raycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Ray,List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType)) method takes an arbitrary [Ray](xref:UnityEngine.Ray) (a position and direction):
+The world based [Raycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Ray,System.Collections.Generic.List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType)) method takes an arbitrary [Ray](xref:UnityEngine.Ray) (a position and direction):
 
 [!code-cs[ARRaycastManager_Raycast_ray](../../../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_Raycast_ray)]
 

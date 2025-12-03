@@ -47,13 +47,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// Alternatively, if you expect string data (for example, you are scanning QR codes with URLs), you can
         /// call this method directly and check the <see cref="Result{T}.status"/> to see if it was successful.
         /// </remarks>
+        /// <param name="trackableId">The trackableId of the marker to retrieve the encoded data from.</param>
         /// <param name="dataBuffer">The spatial buffer of the marker required to retrieve the encoded data.</param>
         /// <returns>
         /// A `Result` which contains the decoded string if successful.
         /// </returns>
-        public Result<string> TryGetStringData(XRSpatialBuffer dataBuffer)
+        public Result<string> TryGetStringData(TrackableId trackableId, XRSpatialBuffer dataBuffer)
         {
-            return provider.TryGetStringData(dataBuffer);
+            return provider.TryGetStringData(trackableId, dataBuffer);
         }
 
         /// <summary>
@@ -63,13 +64,15 @@ namespace UnityEngine.XR.ARSubsystems
         /// This method is useful for performance sensitive applications as it avoids managed memory allocations.
         /// The caller is responsible for disposing the returned <see cref="NativeArray{Byte}"/> for persistent allocators.
         /// </remarks>
+        /// <param name="trackableId">The trackableId of the marker to retrieve the encoded data from.</param>
         /// <param name="dataBuffer">The spatial buffer of the marker required to retrieve the encoded data.</param>
         /// <param name="allocator">The allocator to use for the returned <see cref="NativeArray{Byte}"/>.</param>
         /// <returns>A `Result` containing the raw bytes in a <see cref="NativeArray{Byte}"/> if the operation is
         /// successful.</returns>
-        public Result<NativeArray<byte>> TryGetBytesData(XRSpatialBuffer dataBuffer, Allocator allocator)
+        public Result<NativeArray<byte>> TryGetBytesData(
+            TrackableId trackableId, XRSpatialBuffer dataBuffer, Allocator allocator)
         {
-            return provider.TryGetBytesData(dataBuffer, allocator);
+            return provider.TryGetBytesData(trackableId, dataBuffer, allocator);
         }
 
         /// <summary>
@@ -82,15 +85,16 @@ namespace UnityEngine.XR.ARSubsystems
         ///
         /// This method allocates a new managed `byte[]` on each successful call. For performance critical applications
         /// that need to avoid garbage collection, consider using
-        /// (<see cref="TryGetBytesData(XRSpatialBuffer, Allocator)"/>).
+        /// (<see cref="TryGetBytesData(TrackableId, XRSpatialBuffer, Allocator)"/>).
         /// </remarks>
+        /// <param name="trackableId">The trackableId of the marker to retrieve the encoded data from.</param>
         /// <param name="dataBuffer">The spatial buffer of the marker required to retrieve the encoded data.</param>
         /// <returns>
         /// A `Result` which contains the raw byte array if successful.
         /// </returns>
-        public Result<byte[]> TryGetBytesData(XRSpatialBuffer dataBuffer)
+        public Result<byte[]> TryGetBytesData(TrackableId trackableId, XRSpatialBuffer dataBuffer)
         {
-            return provider.TryGetBytesData(dataBuffer);
+            return provider.TryGetBytesData(trackableId, dataBuffer);
         }
 
         /// <summary>
@@ -117,11 +121,12 @@ namespace UnityEngine.XR.ARSubsystems
             /// Alternatively, if you expect string data (for example, you are scanning QR codes with URLs), you can
             /// call this method directly and check the <see cref="Result{T}.status"/> to see if it was successful.
             /// </remarks>
+            /// <param name="trackableId">The trackableId of the marker to retrieve the encoded data from.</param>
             /// <param name="dataBuffer">The spatial buffer of the marker required to retrieve the encoded data.</param>
             /// <returns>
             /// A `Result` which contains the decoded string if successful.
             /// </returns>
-            public abstract Result<string> TryGetStringData(XRSpatialBuffer dataBuffer);
+            public abstract Result<string> TryGetStringData(TrackableId trackableId, XRSpatialBuffer dataBuffer);
 
             /// <summary>
             /// Attempts to get the encoded data of a specific marker, decoded as a <see cref="NativeArray{Byte}"/>.
@@ -130,11 +135,13 @@ namespace UnityEngine.XR.ARSubsystems
             /// This method is useful for performance sensitive applications as it avoids managed memory allocations.
             /// The caller is responsible for disposing the returned <see cref="NativeArray{Byte}"/> for persistent allocators.
             /// </remarks>
+            /// <param name="trackableId">The trackableId of the marker to retrieve the encoded data from.</param>
             /// <param name="dataBuffer">The spatial buffer of the marker required to retrieve the encoded data.</param>
             /// <param name="allocator">The allocator to use for the returned <see cref="NativeArray{Byte}"/>.</param>
             /// <returns>A `Result` containing the raw bytes in a <see cref="NativeArray{Byte}"/> if the operation is
             /// successful.</returns>
-            public abstract Result<NativeArray<byte>> TryGetBytesData(XRSpatialBuffer dataBuffer, Allocator allocator);
+            public abstract Result<NativeArray<byte>> TryGetBytesData(
+                TrackableId trackableId, XRSpatialBuffer dataBuffer, Allocator allocator);
 
             /// <summary>
             /// Attempts to get the encoded data of a specific marker, decoded as a byte array.
@@ -146,13 +153,14 @@ namespace UnityEngine.XR.ARSubsystems
             ///
             /// This method allocates a new managed `byte[]` on each successful call. For performance critical applications
             /// that need to avoid garbage collection, consider using
-            /// (<see cref="TryGetBytesData(XRSpatialBuffer, Allocator)"/>) directly.
+            /// (<see cref="TryGetBytesData(TrackableId, XRSpatialBuffer, Allocator)"/>) directly.
             /// </remarks>
+            /// <param name="trackableId">The trackableId of the marker to retrieve the encoded data from.</param>
             /// <param name="dataBuffer">The spatial buffer of the marker required to retrieve the encoded data.</param>
             /// <returns>
             /// A `Result` which contains the raw byte array if successful.
             /// </returns>
-            public abstract Result<byte[]> TryGetBytesData(XRSpatialBuffer dataBuffer);
+            public abstract Result<byte[]> TryGetBytesData(TrackableId trackableId, XRSpatialBuffer dataBuffer);
         }
     }
 }

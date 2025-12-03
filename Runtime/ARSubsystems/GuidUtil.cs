@@ -10,8 +10,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Reconstructs a [Guid](xref:System.Guid) from two <c>ulong</c>s representing the low and high bytes.
         /// </summary>
-        /// <param name="low">The low 8 bytes of the guid</param>
-        /// <param name="high">The high 8 bytes of the guid.</param>
+        /// <param name="low">The first 8 bytes of the guid</param>
+        /// <param name="high">The second 8 bytes of the guid.</param>
         /// <returns>The Guid composed of <paramref name="low"/> and <paramref name="high"/>.</returns>
         public static Guid Compose(ulong low, ulong high)
         {

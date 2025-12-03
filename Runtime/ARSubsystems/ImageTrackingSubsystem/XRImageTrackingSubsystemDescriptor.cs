@@ -148,7 +148,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// which is generated at edit time and cannot be modified at runtime.
         /// </summary>
         /// <seealso cref="MutableRuntimeReferenceImageLibrary"/>
-        /// <seealso cref="XRImageTrackingSubsystem.CreateRuntimeLibrary(XRReferenceImageLibrary)"/>
+        /// <seealso href="xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.CreateRuntimeLibrary*">XRImageTrackingSubsystem.CreateRuntimeLibrary</seealso>
         public bool supportsMutableLibrary { get; }
 
         /// <summary>

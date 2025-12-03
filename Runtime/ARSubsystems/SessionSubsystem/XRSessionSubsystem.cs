@@ -186,7 +186,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Get the list of supported configuration descriptors. The session can have multiple, discrete modes of operation.
-        /// A configuration represents the capabilities of a mode of operation, which can be a subset of the session's overal
+        /// A configuration represents the capabilities of a mode of operation, which can be a subset of the session's overall
         /// capabilities. That is, the session might support many features, but not all at the same time. This is used by
         /// <see cref="XRSessionSubsystem.DetermineConfiguration(Feature)"/> to determine the best configuration given a set
         /// of requested features.
@@ -200,13 +200,33 @@ namespace UnityEngine.XR.ARSubsystems
         public NativeArray<ConfigurationDescriptor> GetConfigurationDescriptors(Allocator allocator) => provider.GetConfigurationDescriptors(allocator);
 
         /// <summary>
-        /// Should be invoked when the application is paused.
+        /// Forwards Unity’s [MonoBehaviour.OnApplicationPause(true)](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html)
+        /// callback to the `XRSessionSubsystem` to notify the XR provider that the application has paused.
+        /// Invoked automatically by the [ARSession](xref:UnityEngine.XR.ARFoundation.ARSession) component.
         /// </summary>
-        public void OnApplicationPause() =>  provider.OnApplicationPause();
+        /// <remarks>
+        /// The `ARSession` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(true)`
+        /// to the `XRSessionSubsystem`. If you are using the `ARSession` component to manage the `XRSessionSubsystem`,
+        /// you don’t need to call this method yourself.
+        ///
+        /// If you aren't using the `ARSession` component to manage the `XRSessionSubsystem`, you must call this method and
+        /// <see cref="OnApplicationResume"/>  to forward the corresponding `MonoBehaviour.OnApplicationPause` callback to the `XRSessionSubsystem`.
+        /// </remarks>
+        public void OnApplicationPause() => provider.OnApplicationPause();
 
         /// <summary>
-        /// Should be invoked when the application is resumed.
+        /// Forwards Unity’s [MonoBehaviour.OnApplicationPause(false)](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html)
+        /// callback to the `XRSessionSubsystem` to notify the XR provider that the application has resumed.
+        /// Invoked automatically by the [ARSession](xref:UnityEngine.XR.ARFoundation.ARSession) component.
         /// </summary>
+        /// <remarks>
+        /// The `ARSession` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(false)`
+        /// to the `XRSessionSubsystem`. If you are using the `ARSession` component to manage the `XRSessionSubsystem`,
+        /// you don’t need to call this method yourself.
+        ///
+        /// If you aren't using the `ARSession` component to manage the `XRSessionSubsystem`, you must call this method and
+        /// <see cref="OnApplicationPause"/> to forward the corresponding `MonoBehaviour.OnApplicationPause` callback to the `XRSessionSubsystem`.
+        /// </remarks>
         public void OnApplicationResume() => provider.OnApplicationResume();
 
         /// <summary>

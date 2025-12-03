@@ -15,14 +15,14 @@ These nodes appear in the fuzzy finder in the **AR Foundation** category:
 
 | Node | Input manager type | Output trackable type |
 | :--- | :----------------- | :-------------------- |
-| [Get Planes](xref:arfoundation-vs-node-get-planes) | [ARPlaneManager](xref:arfoundation-plane-detection#ar-plane-manager-component) | [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) |
-| [Get Tracked Images](xref:arfoundation-vs-node-get-tracked-images) | [ARTrackedImageManager](xref:arfoundation-image-tracking#ar-tracked-image-manager-component) | [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) |
+| [Get Planes](xref:arfoundation-vs-node-get-planes) | [ARPlaneManager](xref:arfoundation-plane-arplanemanager) | [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) |
+| [Get Tracked Images](xref:arfoundation-vs-node-get-tracked-images) | [ARTrackedImageManager](xref:arfoundation-image-tracking-manager) | [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) |
 | [Get Tracked Objects](xref:arfoundation-vs-node-get-tracked-objects) | [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) | [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) |
-| [Get Faces](xref:arfoundation-vs-node-get-faces) | [ARFaceManager](xref:arfoundation-face-tracking#ar-face-manager-component) | [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) |
+| [Get Faces](xref:arfoundation-vs-node-get-faces) | [ARFaceManager](xref:arfoundation-face-tracking-face-manager) | [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) |
 | [Get Human Bodies](xref:arfoundation-vs-node-get-human-bodies) | [ARHumanBodyManager](xref:arfoundation-body-tracking#ar-human-body-manager-component) | [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) |
 | [Get Point Clouds](xref:arfoundation-vs-node-get-point-clouds) | [ARPointCloudManager](xref:arfoundation-point-clouds#ar-point-cloud-manager-component) | [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) |
-| [Get Raycasts](xref:arfoundation-vs-node-get-raycasts) | [ARRaycastManager](xref:arfoundation-raycasts#ar-raycast-manager-component) | [ARRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycast) |
-| [Get Anchors](xref:arfoundation-vs-node-get-anchors) | [ARAnchorManager](xref:arfoundation-anchors#ar-anchor-manager-component) | [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) |
+| [Get Raycasts](xref:arfoundation-vs-node-get-raycasts) | [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) | [ARRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycast) |
+| [Get Anchors](xref:arfoundation-vs-node-get-anchors) | [ARAnchorManager](xref:arfoundation-anchors-aranchormanager) | [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) |
 | [Get Environment Probes](xref:arfoundation-vs-node-get-environment-probes) | [AREnvironmentProbeManager](xref:arfoundation-environment-probes#ar-environment-probe-manager-component) | [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) |
 | [Get Participants](xref:arfoundation-vs-node-get-participants) | [ARParticipantManager](xref:arfoundation-participant-tracking#ar-participant-manager-component) | [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) |
 
@@ -34,13 +34,13 @@ These nodes appear in the fuzzy finder in the **Events** > **AR Foundation** cat
 
 | Node | Input manager type | Trackables-changed event |
 | :--- | :----------------- | :----------------------- |
-| [On Planes Changed](xref:arfoundation-vs-node-on-planes-changed) | [ARPlaneManager](xref:arfoundation-plane-detection#ar-plane-manager-component) | [planesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.planesChanged) |
-| [On Tracked Images Changed](xref:arfoundation-vs-node-on-tracked-images-changed) | [ARTrackedImageManager](xref:arfoundation-image-tracking#ar-tracked-image-manager-component) | [trackedImagesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagesChanged) |
+| [On Planes Changed](xref:arfoundation-vs-node-on-planes-changed) | [ARPlaneManager](xref:arfoundation-plane-arplanemanager) | [planesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.planesChanged) |
+| [On Tracked Images Changed](xref:arfoundation-vs-node-on-tracked-images-changed) | [ARTrackedImageManager](xref:arfoundation-image-tracking-manager) | [trackedImagesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagesChanged) |
 | [On Tracked Objects Changed](xref:arfoundation-vs-node-on-tracked-objects-changed) | [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) | [trackedObjectsChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.trackedObjectsChanged) |
-| [On Faces Changed](xref:arfoundation-vs-node-on-faces-changed) | [ARFaceManager](xref:arfoundation-face-tracking#ar-face-manager-component) | [facesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.facesChanged) |
+| [On Faces Changed](xref:arfoundation-vs-node-on-faces-changed) | [ARFaceManager](xref:arfoundation-face-tracking-face-manager) | [facesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.facesChanged) |
 | [On Human Bodies Changed](xref:arfoundation-vs-node-on-human-bodies-changed) | [ARHumanBodyManager](xref:arfoundation-body-tracking#ar-human-body-manager-component) | [humanBodiesChanged](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager.humanBodiesChanged) |
 | [On Point Clouds Changed](xref:arfoundation-vs-node-on-point-clouds-changed) | [ARPointCloudManager](xref:arfoundation-point-clouds#ar-point-cloud-manager-component) | [pointCloudChanged](xref:UnityEngine.XR.ARFoundation.ARPointCloudManager.pointCloudsChanged) |
-| [On Anchors Changed](xref:arfoundation-vs-node-on-anchors-changed) | [ARAnchorManager](xref:arfoundation-anchors#ar-anchor-manager-component) | [anchorsChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorsChanged) |
+| [On Anchors Changed](xref:arfoundation-vs-node-on-anchors-changed) | [ARAnchorManager](xref:arfoundation-anchors-aranchormanager) | [anchorsChanged](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.anchorsChanged) |
 | [On Environment Probes Changed](xref:arfoundation-vs-node-on-environment-probes-changed) | [AREnvironmentProbeManager](xref:arfoundation-environment-probes#ar-environment-probe-manager-component) | [environmentProbesChanged](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbeManager.environmentProbesChanged) |
 | [On Participants Changed](xref:arfoundation-vs-node-on-participants-changed) | [ARParticipantManager](xref:arfoundation-participant-tracking#ar-participant-manager-component) | [participantsChanged](xref:UnityEngine.XR.ARFoundation.ARParticipantManager.participantsChanged) |
 
@@ -53,5 +53,5 @@ These nodes appear in the fuzzy finder in the **Events** > **AR Foundation** cat
 
 | Node | Description |
 | :--- | :---------- |
-| [On Session State Changed](xref:arfoundation-vs-node-on-session-state-changed) | Triggers whenever the AR [session state](xref:arfoundation-session#session-state) changes. |
+| [On Session State Changed](xref:arfoundation-vs-node-on-session-state-changed) | Triggers whenever the AR [session state](xref:arfoundation-session-arsession#session-state) changes. |
 | [On Camera Frame Received](xref:arfoundation-vs-node-on-camera-frame-received) | Triggers every frame when Unity receives a new image from the device camera. |

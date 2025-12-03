@@ -66,11 +66,11 @@ namespace UnityEngine.XR.ARSubsystems
     public static class XRTextureTypeExtensions
     {
         /// <summary>
-        /// Indicates whether the texture type is represented in Unity as a [RenderTexture](UnityEngine.RenderTexture).
+        /// Indicates whether the texture type is represented in Unity as a [RenderTexture](xref:UnityEngine.RenderTexture).
         /// </summary>
         /// <param name="textureType">The texture type.</param>
-        /// <returns><see langword="true"/>> if the texture type is represented in Unity as a render texture.
-        /// Otherwise, <see langword="false"/>.</returns>
+        /// <returns>`true` if the texture type is represented in Unity as a render texture.
+        /// Otherwise, `false`.</returns>
         public static bool IsRenderTexture(this XRTextureType textureType)
         {
             return textureType

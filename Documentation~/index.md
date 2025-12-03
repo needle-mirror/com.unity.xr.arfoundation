@@ -10,6 +10,8 @@ AR Foundation enables you to create multiplatform augmented reality (AR) apps wi
 > [!TIP]
 > AR Foundation is an important tool for building an AR app with Unity, but your app may require other tools as well. For more information about Unity's AR tools and support, refer to the [Augmented reality](https://unity.com/solutions/xr/ar) homepage.
 
+<a id="required-packages"></a>
+
 ## Required packages
 
 The AR Foundation package contains interfaces for AR features, but doesn't implement any features itself. To use AR Foundation on a target platform, you also need a separate provider plug-in package for that platform.
@@ -79,7 +81,7 @@ The following table lists the available features in each Unity-supported provide
 | [Meshing](xref:arfoundation-meshing)                               |         | Yes |   Yes    |     Yes  |      Yes   |     Yes    |       Yes     |
 | [Environment probes](xref:arfoundation-environment-probes)         |   Yes   | Yes |   Yes    |          |            |            |       Yes     |
 | [Occlusion](xref:arfoundation-occlusion)                           |    Yes  | Yes |          |          |      Yes   |     Yes    |       Yes     |
-| [Participants](xref:arfoundation-participants)                     |         | Yes |          |          |            |            |               |
+| [Participants](xref:arfoundation-participant-tracking)             |         | Yes |          |          |            |            |               |
 
 [!include[](snippets/arf-docs-tip.md)]
 

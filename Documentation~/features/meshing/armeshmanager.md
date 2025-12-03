@@ -34,7 +34,7 @@ The AR Mesh Manager enables you to configure the following options:
 | [Texture Coordinates](xref:UnityEngine.XR.ARFoundation.ARMeshManager.textureCoordinates)  | If enabled, a texture coordinate is requested for each vertex. |
 | [Colors](xref:UnityEngine.XR.ARFoundation.ARMeshManager.colors) |  If enabled, a color value is requested for each vertex. |
 | [Concurrent Queue Size](xref:UnityEngine.XR.ARFoundation.ARMeshManager.concurrentQueueSize) | Specifies the number of meshes to process concurrently. |
-| [Classification](xref:UnityEngine.XR.ARFoundation.ARMeshManager.submeshClassificationEnabled) | If enabled, classifications are made available for mesh subcomponents. Refer to [Mesh classification](xref:arfoundation-meshing-classification) for more information about the mesh classification feature. |
+| [Classification](xref:UnityEngine.XR.ARFoundation.ARMeshManager.submeshClassificationEnabled) (requires Unity 6.4 or newer) | If enabled, classifications are made available for mesh subcomponents. Refer to [Mesh classification](xref:arfoundation-meshing-classification) for more information about the mesh classification feature. |
 | [Mesh Infos Changed (ARMeshInfosChangedEventArgs)](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshInfosChanged) | Invoked when meshes have changed (been added, updated, or removed). |
 
 > [!NOTE]

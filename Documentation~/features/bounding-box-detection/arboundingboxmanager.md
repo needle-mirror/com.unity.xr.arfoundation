@@ -18,6 +18,8 @@ Add an AR Bounding Box Manager component to your XR Origin GameObject to enable 
 
 Whenever your app doesn't need bounding box detection functionality, disable the AR Bounding Box Manager component to improve app performance. If the user's device does not [support](xref:arfoundation-bounding-box-platform-support) bounding box detection, the AR Bounding Box Manager component will disable itself during `OnEnable`.
 
+<a id="respond"></a>
+
 ## Respond to detected bounding boxes
 
 While enabled, the AR Bounding Box Manager component will get changes reported by the [XRBoundingBoxSubsystem](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystem) every frame. If any bounding boxes were added, updated, or removed, the [trackablesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.trackablesChanged) event is invoked with the relevant information.

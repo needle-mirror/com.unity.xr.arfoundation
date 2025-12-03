@@ -22,7 +22,7 @@ The AR Foundation XRMarkerSubsystem is supported on the following platforms:
 
 Not all devices and platforms support every type of marker. Before building features that rely on a specific marker type, you should check whether the current device supports it. To check whether the current device supports a specific marker type, query the [XRMarkerSubsystemDescriptor.supportedMarkerTypes](xref:UnityEngine.XR.ARSubsystems.XRMarkerSubsystemDescriptor.supportedMarkerTypes) property.
 
-`XRMarkerSubsystemDescriptor.supportedMarkerTypes` returns a [Result](xref:UnityEngine.XR.ARSubsystems.Result`1) which indicates whether the platform supports marker tracking. If the platform supports marker tracking, `XRMarkerSubsystemDescriptor.supportedMarkerTypes` returns a [ReadOnlyListSpan](xref:xref:Unity.XR.CoreUtils.Collections.ReadOnlyListSpan`1) of the supported [XRMarkerTypes](xref:UnityEngine.XR.ARSubsystems.XRMarkerType).
+`XRMarkerSubsystemDescriptor.supportedMarkerTypes` returns a [Result](xref:UnityEngine.XR.ARSubsystems.Result`1) which indicates whether the platform supports marker tracking. If the platform supports marker tracking, `XRMarkerSubsystemDescriptor.supportedMarkerTypes` returns a [ReadOnlyListSpan](xref:Unity.XR.CoreUtils.Collections.ReadOnlyListSpan`1) of the supported [XRMarkerTypes](xref:UnityEngine.XR.ARSubsystems.XRMarkerType).
 
 The following code example shows how to check which marker types a platform supports:
 

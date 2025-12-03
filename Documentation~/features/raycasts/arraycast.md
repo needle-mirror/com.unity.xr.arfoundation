@@ -13,7 +13,7 @@ The [ARRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycast) component is a type 
 
 ## Raycast lifecycle
 
-As trackables, AR ray casts have a lifecycle that consists of three phases: added, updated, and removed. Your app can respond to [Raycast lifecycle events](xref:arfoundation-raycasts-tracked#raycast-life-cycle-events) during an AR session if you subscribe to the AR Raycast Manager component's `trackablesChanged` event.
+As trackables, AR ray casts have a lifecycle that consists of three phases: added, updated, and removed. Your app can respond to [Raycast lifecycle events](xref:arfoundation-raycasts-tracked#lifecycle-events) during an AR session if you subscribe to the AR Raycast Manager component's `trackablesChanged` event.
 
 ### Added
 

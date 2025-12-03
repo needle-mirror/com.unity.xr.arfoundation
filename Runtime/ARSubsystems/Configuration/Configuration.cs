@@ -5,12 +5,11 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Represents a session configuration. It consists of a configuration <see cref="descriptor"/>, which
     /// contains information about the capabilities of the configuration, and the specific <see cref="features"/>
-    /// which should be enabled by this configuration. Use <see cref="XRSessionSubsystem.DetermineConfiguration(Feature)"/>
-    /// to get a <see cref="Configuration"/> given a set of features.
+    /// which should be enabled by this configuration.
     /// </summary>
     /// <seealso cref="ConfigurationChooser"/>
     /// <seealso cref="XRSessionSubsystem.configurationChooser"/>
-    /// <seealso cref="XRSessionSubsystem.DetermineConfiguration(Feature)"/>
+    /// <seealso href="xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.DetermineConfiguration*">XRSessionSubsystem.DetermineConfiguration</seealso>
     public struct Configuration : IEquatable<Configuration>
     {
         /// <summary>

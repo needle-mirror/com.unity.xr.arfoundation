@@ -130,7 +130,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
             if (manager.subsystem is XRMarkerSubsystem markerSubsystem)
             {
                 var result = markerSubsystem.TryGetBytesData(
-                    marker.dataBuffer, Allocator.Temp);
+                    marker.trackableId, marker.dataBuffer, Allocator.Temp);
 
                 if (result.status.IsError())
                 {

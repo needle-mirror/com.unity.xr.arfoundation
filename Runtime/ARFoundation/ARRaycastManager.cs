@@ -31,10 +31,6 @@ namespace UnityEngine.XR.ARFoundation
         static Comparison<ARRaycastHit> s_RaycastHitComparer = CompareRaycastHit;
         static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new();
 
-        HashSet<IRaycaster> m_Raycasters = new();
-        ARPlaneManager m_CachedPlaneManager;
-        ARBoundingBoxManager m_CachedBoundingBoxManager;
-
         /// <summary>
         /// The name of the `GameObject` for each instantiated <see cref="ARRaycast"/>.
         /// </summary>
@@ -152,33 +148,6 @@ namespace UnityEngine.XR.ARFoundation
         protected override GameObject GetPrefab() => m_RaycastPrefab;
 
         /// <summary>
-        /// Allows AR managers to register themselves as a raycaster.
-        /// Raycasters can be used as a fallback method if the AR platform does
-        /// not support raycasting using arbitrary <c>Ray</c>s.
-        /// </summary>
-        /// <param name="raycaster">A raycaster implementing the IRaycast interface.</param>
-        internal void RegisterRaycaster(IRaycaster raycaster)
-        {
-            var raycasterType = raycaster.GetType();
-            if (raycasterType == typeof(ARPlaneManager))
-                m_CachedPlaneManager = raycaster as ARPlaneManager;
-            else if (raycasterType == typeof(ARBoundingBoxManager))
-                m_CachedBoundingBoxManager = raycaster as ARBoundingBoxManager;
-
-            m_Raycasters.Add(raycaster);
-        }
-
-        /// <summary>
-        /// Unregisters a raycaster previously registered with <see cref="RegisterRaycaster(IRaycaster)"/>.
-        /// </summary>
-        /// <param name="raycaster">A raycaster to use as a fallback, if needed.</param>
-        internal void UnregisterRaycaster(IRaycaster raycaster)
-        {
-            if (m_Raycasters != null)
-                m_Raycasters.Remove(raycaster);
-        }
-
-        /// <summary>
         /// Invoked just after the subsystem has been `Start`ed. Used to set raycast delegates internally.
         /// </summary>
         protected override void OnAfterStart() {}
@@ -265,7 +234,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             s_NativeRaycastHits.Clear();
             int count = 0;
-            foreach (var raycaster in m_Raycasters)
+            foreach (var raycaster in FallbackRaycastRegistry.Raycasters)
             {
                 var hits = raycaster.Raycast(ray, typeMask, Allocator.Temp);
                 if (hits.IsCreated)
@@ -305,8 +274,8 @@ namespace UnityEngine.XR.ARFoundation
 
             using (nativeHits)
             {
-                bool cachedPlaneManagerFound = m_CachedPlaneManager != null;
-                bool cachedBoxManagerFound = m_CachedBoundingBoxManager != null;
+                bool cachedPlaneManagerFound = FallbackRaycastRegistry.CachedPlaneManager != null;
+                bool cachedBoxManagerFound = FallbackRaycastRegistry.CachedBoundingBoxManager != null;
 
                 // Results are in "trackables space", so transform results back into world space
                 foreach (var nativeHit in nativeHits)
@@ -319,13 +288,13 @@ namespace UnityEngine.XR.ARFoundation
                     // Planes
                     if ((nativeHit.hitType & TrackableType.Planes) != 0 && cachedPlaneManagerFound)
                     {
-                        trackable = m_CachedPlaneManager.GetPlane(nativeHit.trackableId);
+                        trackable = FallbackRaycastRegistry.CachedPlaneManager.GetPlane(nativeHit.trackableId);
                     }
                     // Bounding Boxes
                     if ((nativeHit.hitType & TrackableType.BoundingBox) != 0 && cachedBoxManagerFound)
                     {
                         ARBoundingBox boundingBox;
-                        if (m_CachedBoundingBoxManager.TryGetBoundingBox(nativeHit.trackableId, out boundingBox))
+                        if (FallbackRaycastRegistry.CachedBoundingBoxManager.TryGetBoundingBox(nativeHit.trackableId, out boundingBox))
                             trackable = boundingBox;
                     }
 
@@ -359,7 +328,7 @@ namespace UnityEngine.XR.ARFoundation
         /// data is is session-relative space.</param>
         protected override void OnAfterSetSessionRelativeData(ARRaycast raycast, XRRaycast sessionRelativeData)
         {
-            raycast.plane = m_CachedPlaneManager != null ? m_CachedPlaneManager.GetPlane(sessionRelativeData.hitTrackableId) : null;
+            raycast.plane = FallbackRaycastRegistry.CachedPlaneManager != null ? FallbackRaycastRegistry.CachedPlaneManager.GetPlane(sessionRelativeData.hitTrackableId) : null;
         }
     }
 }

@@ -89,8 +89,6 @@ namespace UnityEngine.XR.ARFoundation
         /// A new <c>NativeArray</c> of raycast results allocated with <paramref name="allocator"/>.
         /// The caller owns the memory and is responsible for calling <c>Dispose</c> on the <c>NativeArray</c>.
         /// </returns>
-        /// <seealso cref="ARRaycastManager.Raycast(Ray, List{ARRaycastHit}, TrackableType)"/>
-        /// <seealso cref="ARRaycastManager.Raycast(Vector2, List{ARRaycastHit}, TrackableType)"/>
         public NativeArray<XRRaycastHit> Raycast(
             Ray ray,
             TrackableType trackableTypeMask,
@@ -228,7 +226,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="plane">The <see cref="ARPlane"/> being updated.</param>
         /// <param name="sessionRelativeData">The new data associated with the plane. All spatial
-        /// data is is session-relative space.</param>
+        /// data is session-relative space.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARPlane plane,
             BoundedPlane sessionRelativeData)
@@ -270,9 +268,7 @@ namespace UnityEngine.XR.ARFoundation
 
             if (subsystem != null)
             {
-                var raycastManager = GetComponent<ARRaycastManager>();
-                if (raycastManager != null)
-                    raycastManager.RegisterRaycaster(this);
+                FallbackRaycastRegistry.RegisterRaycaster(this);
             }
         }
 
@@ -283,9 +279,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             base.OnDisable();
 
-            var raycastManager = GetComponent<ARRaycastManager>();
-            if (raycastManager != null)
-                raycastManager.UnregisterRaycaster(this);
+            FallbackRaycastRegistry.UnregisterRaycaster(this);
         }
 
 #if UNITY_EDITOR

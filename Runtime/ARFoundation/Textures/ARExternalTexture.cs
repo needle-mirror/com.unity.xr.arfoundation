@@ -78,7 +78,7 @@ namespace UnityEngine.XR.ARFoundation
         public static bool operator ==(ARExternalTexture lhs, ARExternalTexture rhs) => Equals(lhs, rhs);
 
         /// <summary>
-        /// Tests for inequality. Equivalent to `!`<see cref="Equals(AROcclusionFrameEventArgs)"/>.
+        /// Tests for inequality. Equivalent to `!`<see cref="Equals(ARExternalTexture)"/>.
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>

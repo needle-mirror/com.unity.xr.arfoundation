@@ -89,13 +89,21 @@ namespace UnityEngine.XR.Simulation
 
         TrackableId GenerateTrackableID()
         {
-            var unsignedInstanceId = (ulong)Math.Abs(Convert.ToInt64(gameObject.GetInstanceID()));
+#if UNITY_6000_4_OR_NEWER
+            var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetEntityId());
+#else
+            var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetInstanceID());
+#endif
             return new TrackableId(unsignedInstanceId, 0);
         }
 
         Guid GenerateSourceImageId()
         {
-            var unsignedInstanceId = (ulong)Math.Abs(Convert.ToInt64(texture.GetInstanceID()));
+#if UNITY_6000_4_OR_NEWER
+            var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetEntityId());
+#else
+            var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetInstanceID());
+#endif
             return GuidUtil.Compose(unsignedInstanceId, 0);
         }
 

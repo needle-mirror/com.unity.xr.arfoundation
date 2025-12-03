@@ -5,12 +5,11 @@ namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
     /// Represents the state of an asynchronous "add image job" scheduled by
-    /// <see cref="MutableRuntimeReferenceImageLibrary.ScheduleAddImageWithValidationJob"/>.
+    /// [MutableRuntimeReferenceImageLibrary.ScheduleAddImageWithValidationJob](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary.ScheduleAddImageWithValidationJob*).
     /// </summary>
     public readonly struct AddReferenceImageJobState : IEquatable<AddReferenceImageJobState>
     {
         readonly IntPtr m_Handle;
-
         readonly MutableRuntimeReferenceImageLibrary m_Library;
 
         internal AddReferenceImageJobState(IntPtr nativePtr, JobHandle jobHandle, MutableRuntimeReferenceImageLibrary library)

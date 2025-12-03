@@ -63,11 +63,11 @@ The following table lists whether certain XR plug-in providers support each opti
 | **Brightness** | Yes | | | Yes | Yes |
 | **Color temperature** | | Yes | | Yes | Yes |
 | **Color correction** | Yes | | | Yes | Yes |
-| **Display matrix** | Yes | Yes | | | |
-| **Projection matrix** | Yes | Yes | | | |
+| **Display matrix** | Yes | Yes | Yes | | |
+| **Projection matrix** | Yes | Yes | Yes | | |
 | **Timestamp** | Yes | Yes | | | |
 | **Camera configurations** | Yes | Yes | | | Yes |
-| **Camera image** | Yes | Yes | | | Yes |
+| **Camera image** | Yes | Yes | Yes | | Yes |
 | **Average intensity in lumens** | | Yes | | Yes | Yes |
 | **Focus modes** | Yes | Yes | | |
 | **Face tracking ambient intensity light estimation** | Yes | Yes | | | |

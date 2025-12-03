@@ -8,7 +8,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     /// <seealso cref="XRBoundingBoxSubsystem"/>
     [StructLayout(LayoutKind.Sequential)]
-    public struct XRBoundingBox : ITrackable, IEquatable<XRBoundingBox>
+    public readonly struct XRBoundingBox : ITrackable, IEquatable<XRBoundingBox>
     {
         /// <summary>
         /// The <see cref="TrackableId"/> associated with this bounding box.
@@ -99,7 +99,18 @@ namespace UnityEngine.XR.ARSubsystems
             this.trackingState = trackingState;
             this.classifications = classifications;
             this.nativePtr = nativePtr;
-            this.parentId = TrackableId.invalidId;
+            parentId = TrackableId.invalidId;
+        }
+
+        /// <summary>
+        /// Generates a hash suitable for use with containers such as
+        /// <see cref="System.Collections.Generic.HashSet{T}">HashSet</see>
+        /// and <see cref="System.Collections.Generic.Dictionary{T1, T2}">Dictionary</see>.
+        /// </summary>
+        /// <returns>The hash code.</returns>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(trackableId, pose, size, (int)trackingState, nativePtr, (int)classifications, parentId);
         }
 
         /// <summary>
@@ -108,77 +119,62 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>A string that describes the bounding box's properties.</returns>
         public override string ToString()
         {
-            SharedStringBuilder.stringBuilder.AppendLine("Bounding Box:");
-            SharedStringBuilder.stringBuilder.AppendLine("\ttrackableId: " + trackableId);
-            SharedStringBuilder.stringBuilder.AppendLine("\tparentId: " + parentId);
-            SharedStringBuilder.stringBuilder.AppendLine("\tpose: " + pose);
-            SharedStringBuilder.stringBuilder.AppendLine("\tsize: " + size);
-            SharedStringBuilder.stringBuilder.AppendLine("\tclassifications: " + classifications);
-            SharedStringBuilder.stringBuilder.AppendLine("\ttrackingState: " + trackingState);
-            SharedStringBuilder.stringBuilder.Append("\tnativePtr: ");
-            SharedStringBuilder.stringBuilder.Append("" + nativePtr.ToInt64());
-            SharedStringBuilder.stringBuilder.Append("\n");
-            string tempString = SharedStringBuilder.stringBuilder.ToString();
-            SharedStringBuilder.stringBuilder.Clear();
-            return tempString;
+            var sb = SharedStringBuilder.instance;
+            sb.AppendLine("Bounding Box:");
+            sb.AppendLine("\ttrackableId: " + trackableId);
+            sb.AppendLine("\tpose: " + pose);
+            sb.AppendLine("\tsize: " + size);
+            sb.AppendLine("\ttrackingState: " + trackingState);
+            sb.AppendLine($"\tnativePtr: {nativePtr.ToInt64()}");
+            sb.AppendLine("\tclassifications: " + classifications);
+            sb.AppendLine("\tparentId: " + parentId);
+            var result = SharedStringBuilder.instance.ToString();
+            SharedStringBuilder.instance.Clear();
+            return result;
         }
 
         /// <summary>
         /// Tests for equality.
         /// </summary>
         /// <param name="obj">The `object` to compare against.</param>
-        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="XRBoundingBox"/> and
-        /// <see cref="Equals(XRBoundingBox)"/> also returns `true`; otherwise `false`.</returns>
+        /// <returns>`true` if <paramref name="obj"/> is of type <see cref="XRBoundingBox"/> and
+        /// <see cref="Equals(XRBoundingBox)"/> also returns `true`. Otherwise, `false`.</returns>
         public override bool Equals(object obj) => (obj is XRBoundingBox other) && Equals(other);
-
-        /// <summary>
-        /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
-        /// </summary>
-        /// <returns>A hash code generated from this object's fields.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = trackableId.GetHashCode();
-                hashCode = (hashCode * 486187739) + pose.GetHashCode();
-                hashCode = (hashCode * 486187739) + size.GetHashCode();
-                hashCode = (hashCode * 486187739) + ((int)classifications).GetHashCode();
-                hashCode = (hashCode * 486187739) + ((int)trackingState).GetHashCode();
-                hashCode = (hashCode * 486187739) + nativePtr.GetHashCode();
-                return hashCode;
-            }
-        }
 
         /// <summary>
         /// Tests for equality. Equivalent to <see cref="Equals(XRBoundingBox)"/>.
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns><see langword="true"/> if <paramref name="lhs"/> is equal to <paramref name="rhs"/>. Otherwise, <see langword="false"/>.</returns>
+        /// <returns>`true` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>.
+        /// Otherwise, `false`.</returns>
         public static bool operator ==(XRBoundingBox lhs, XRBoundingBox rhs) => lhs.Equals(rhs);
 
         /// <summary>
-        /// Tests for inequality. Same as `!`<see cref="Equals(XRBoundingBox)"/>.
+        /// Tests for inequality. Equivalent to `!`<see cref="Equals(XRBoundingBox)"/>.
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
-        /// <returns><see langword="true"/> if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise <see langword="false"/>.</returns>
+        /// <returns>`true` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>.
+        /// Otherwise, `false`.</returns>
         public static bool operator !=(XRBoundingBox lhs, XRBoundingBox rhs) => !lhs.Equals(rhs);
 
         /// <summary>
         /// Tests for equality.
         /// </summary>
         /// <param name="other">The other <see cref="XRBoundingBox"/> to compare against.</param>
-        /// <returns><see langword="true"/> if every field in <paramref name="other"/> is equal to this <see cref="XRBoundingBox"/>, otherwise <see langword="false"/>.</returns>
+        /// <returns>`true` if every field in <paramref name="other"/> is equal to this <see cref="XRBoundingBox"/>.
+        /// Otherwise, `false`.</returns>
         public bool Equals(XRBoundingBox other)
         {
             return
-                trackableId.Equals(other.trackableId) &&
-                pose.Equals(other.pose) &&
-                size.Equals(other.size) &&
-                (trackingState == other.trackingState) &&
-                (nativePtr == other.nativePtr) &&
-                (classifications == other.classifications);
+                trackableId.Equals(other.trackableId)
+                && pose.Equals(other.pose)
+                && size.Equals(other.size)
+                && trackingState == other.trackingState
+                && nativePtr == other.nativePtr
+                && classifications == other.classifications
+                && parentId == other.parentId;
         }
     }
 }

@@ -14,17 +14,28 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     /// <remarks>
     /// Image libraries are immutable at runtime. To create and manipulate an image library via Editor scripts, use the
-    /// extension methods in [XRReferenceImageLibraryExtensions](UnityEditor.XR.ARSubsystems.XRReferenceImageLibraryExtensions).
+    /// extension methods in [XRReferenceImageLibraryExtensions](xref:UnityEditor.XR.ARSubsystems.XRReferenceImageLibraryExtensions).
     /// If you need to mutate the library at runtime, see <see cref="MutableRuntimeReferenceImageLibrary"/>.
     /// </remarks>
     [CreateAssetMenu(fileName="ReferenceImageLibrary", menuName="XR/Reference Image Library", order=1001)]
     [HelpURL("features/image-tracking")]
-    public class XRReferenceImageLibrary
-        : ScriptableObject
-        , IReferenceImageLibrary
-        , ISerializationCallbackReceiver
-        , IEnumerable<XRReferenceImage>
+    public class XRReferenceImageLibrary : ScriptableObject,
+        IReferenceImageLibrary, ISerializationCallbackReceiver, IEnumerable<XRReferenceImage>
     {
+#pragma warning disable CS0649
+        [SerializeField]
+        ulong m_GuidLow;
+
+        [SerializeField]
+        ulong m_GuidHigh;
+#pragma warning restore CS0649
+
+        [SerializeField]
+        SerializableDictionary<string, byte[]> m_DataStore = new();
+
+        [SerializeField]
+        internal List<XRReferenceImage> m_Images = new();
+
         /// <summary>
         /// The number of images in the library.
         /// </summary>
@@ -40,7 +51,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// entries for itself.
         ///
         /// Providers can use this to store a serialized version of the image library specific to that provider.
-        /// Set data with <see cref="UnityEditor.XR.ARSubsystems.XRReferenceImageLibraryExtensions.SetDataForKey"/>.
+        /// Set data with [XRReferenceLibraryExtensions.SetDataForKey](xref:UnityEditor.XR.ARSubsystems.XRReferenceImageLibraryExtensions.SetDataForKey*).
         /// </remarks>
         public IReadOnlyDictionary<string, byte[]> dataStore => m_DataStore.dictionary;
 
@@ -86,7 +97,7 @@ namespace UnityEngine.XR.ARSubsystems
                     throw new IndexOutOfRangeException("The reference image library is empty; cannot index into it.");
 
                 if (index < 0 || index >= count)
-                    throw new IndexOutOfRangeException(string.Format("{0} is out of range. 'index' must be between 0 and {1}", index, count - 1));
+                    throw new IndexOutOfRangeException($"{index} is out of range. 'index' must be between 0 and {count - 1}");
 
                 return m_Images[index];
             }
@@ -171,19 +182,5 @@ namespace UnityEngine.XR.ARSubsystems
             }
         }
 #endif
-
-#pragma warning disable CS0649
-        [SerializeField]
-        ulong m_GuidLow;
-
-        [SerializeField]
-        ulong m_GuidHigh;
-#pragma warning restore CS0649
-
-        [SerializeField]
-        SerializableDictionary<string, byte[]> m_DataStore = new SerializableDictionary<string, byte[]>();
-
-        [SerializeField]
-        internal List<XRReferenceImage> m_Images = new List<XRReferenceImage>();
     }
 }

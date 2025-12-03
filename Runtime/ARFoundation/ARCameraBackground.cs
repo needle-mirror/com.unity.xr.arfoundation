@@ -319,8 +319,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The list of [CameraEvent](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.html)s
         /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html).
-        /// By default, it will select either <see cref="s_DefaultBeforeOpaqueCameraEvents"/> or <see cref="s_DefaultAfterOpaqueCameraEvents"/>
-        /// depending on the value of <see cref="currentRenderingMode"/>.
         ///
         /// In the case where Before Opaques rendering has been selected it will return:
         ///

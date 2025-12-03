@@ -111,13 +111,35 @@ namespace UnityEngine.XR.ARSubsystems
             T defaultT, int stride,
             Allocator allocator)
         {
-            m_Added = NativeCopyUtility.PtrToNativeArrayWithDefault<T>(defaultT, addedPtr, stride, addedCount, allocator);
-            m_Updated = NativeCopyUtility.PtrToNativeArrayWithDefault<T>(defaultT, updatedPtr, stride, updatedCount, allocator);
+            m_Added = NativeCopyUtility.PtrToNativeArrayWithDefault(defaultT, addedPtr, stride, addedCount, allocator);
+            m_Updated = NativeCopyUtility.PtrToNativeArrayWithDefault(defaultT, updatedPtr, stride, updatedCount, allocator);
             m_Removed = new NativeArray<TrackableId>(removedCount, allocator);
             if (removedCount > 0)
             {
                 UnsafeUtility.MemCpy(m_Removed.GetUnsafePtr(), removedPtr, removedCount * sizeof(TrackableId));
             }
+            isCreated = true;
+        }
+
+        /// <summary>
+        /// Create an instance using arrays that you have already created.
+        /// </summary>
+        /// <param name="added">The added trackables.</param>
+        /// <param name="updated">The updated trackables.</param>
+        /// <param name="removed">The ID values of the removed trackables.</param>
+        /// <remarks>
+        /// > [!IMPORTANT]
+        /// > This struct assumes ownership of the arrays, and any code that receives this struct
+        /// > might `Dispose` them.
+        /// </remarks>
+        public TrackableChanges(
+            NativeArray<T> added,
+            NativeArray<T> updated,
+            NativeArray<TrackableId> removed)
+        {
+            m_Added = added;
+            m_Updated = updated;
+            m_Removed = removed;
             isCreated = true;
         }
 
@@ -214,17 +236,6 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             isCreated = false;
-        }
-
-        TrackableChanges(
-            NativeArray<T> added,
-            NativeArray<T> updated,
-            NativeArray<TrackableId> removed)
-        {
-            m_Added = added;
-            m_Updated = updated;
-            m_Removed = removed;
-            isCreated = true;
         }
     }
 }

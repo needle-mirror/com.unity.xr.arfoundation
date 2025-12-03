@@ -12,7 +12,7 @@ To learn about the scenes that demonstrate AR Foundation features, refer to the 
 | [Simple AR](xref:arfoundation-samples-simple-ar) | Demonstrates basic plane detection and ray casting. |
 | [Camera](xref:arfoundation-samples-camera) | Scenes that demonstrate camera features.    |
 | [Plane detection](xref:arfoundation-samples-plane-detection) | Scenes that demonstrate plane detection. |
-| [Bounding box detection](xref:arfoundation-samples-bounding-box) | Demonstrates bounding box detection. |
+| [Bounding box detection](xref:arfoundation-samples-bounding-box-detection) | Demonstrates bounding box detection. |
 | [Image tracking](xref:arfoundation-samples-image-tracking) | Scenes that demonstrate image tracking. |
 | [Object tracking](xref:arfoundation-samples-object-tracking) | Demonstrates object tracking. |
 | [Face tracking](xref:arfoundation-samples-face-tracking) | Scenes that demonstrate face tracking. |

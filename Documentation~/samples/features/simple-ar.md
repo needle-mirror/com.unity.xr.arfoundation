@@ -11,7 +11,7 @@ The `Simple AR` sample is a good starting sample for beginners to AR Foundation 
 
 This scene provides on-screen buttons to you pause, resume, reset, and reload the [AR Session](xref:arfoundation-session).
 
-When a plane is detected, you can tap on the detected plane to place a cube on it. This uses the [ARRaycastManager](xref:arfoundation-raycast-manager) to perform a ray cast against the plane. If the plane is in `TrackingState.Limited`, it will highlight red. On [ARCore](xref:arcore-manual), this means that ray casting will not be available until the plane is in `TrackingState.Tracking` again.
+When a plane is detected, you can tap on the detected plane to place a cube on it. This uses the [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) to perform a ray cast against the plane. If the plane is in `TrackingState.Limited`, it will highlight red. On [ARCore](xref:arcore-manual), this means that ray casting will not be available until the plane is in `TrackingState.Tracking` again.
 
 The following table describes the available actions in this scene:
 

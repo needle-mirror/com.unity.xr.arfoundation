@@ -5,9 +5,10 @@ uid: arfoundation-simulation-project-settings
 
 Understand the project settings and XR Simulation settings you can configure.
 
-The following sections outline the [Project settings](#project-settings) and [XR Simulation settings](#simulation-settings) you can configure in your XR Simulation project.
+The following sections outline the [Project settings](#project-settings) and [Preferences](#simulation-preferences) you can configure in your XR Simulation project.
 
 <a id="project-settings"></a>
+
 ## Project settings reference
 
 Go to **Edit** > **Project Settings** > **XR Plug-in Management** > **XR Simulation** to tune the performance of XR Simulation according to your project's needs. XR Simulation project settings are saved under your Assets folder at `XR/Resources/XRSimulationRuntimeSettings.asset`.
@@ -78,6 +79,7 @@ Performance tuning options for discovery of automatically placed anchors:
 | **Min Time Until Update** | Minimum time in seconds between anchor discovery updates. |
 
 <a id="simulation-preferences"></a>
+
 ## XR Simulation Preferences reference
 
 Go to menu **Edit** > **Preferences** > **XR Simulation** (Windows) or **Unity** > **Preferences** > **XR Simulation** (Mac) to set your preferences for XR Simulation. Preferences are saved under your Assets folder at `XR/UserSimulationSettings/Resources/XRSimulationPreferences.asset`.

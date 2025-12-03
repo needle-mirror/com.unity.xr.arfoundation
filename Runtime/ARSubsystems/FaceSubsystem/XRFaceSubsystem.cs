@@ -159,7 +159,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="faceId">The <see cref="TrackableId"/> associated with the <see cref="XRFace"/> to query.</param>
             /// <param name="allocator">The allocator to use for the returned blend shape <c>NativeArray</c>.</param>
-            /// <returns>A <see cref="Result"/> of a new <c>NativeArray</c> allocated with <paramref name="allocator"/> describing
+            /// <returns>A result of a new <c>NativeArray</c> allocated with <paramref name="allocator"/> describing
             /// the blend shapes for the face with the given ID. The caller owns the
             /// <c>NativeArray</c> and is responsible for calling <c>Dispose</c> on it.</returns>
             public virtual Result<NativeArray<XRFaceBlendShape>> TryGetBlendShapes(

@@ -8,6 +8,48 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.4.0] - 2025-12-03
+
+### Added
+
+- Added `XRMarkerSubsystemDescriptor.Cinfo` properties for `id`, `providerType`, and `subsystemTypeOverride` that are needed during subsystem registration.
+- Added [XRBoundingBoxBuilder](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxBuilder), [BoundedPlaneBuilder](xref:UnityEngine.XR.ARSubsystems.BoundedPlaneBuilder), and [XRMarkerBuilder](xref:UnityEngine.XR.ARSubsystems.XRMarkerBuilder) which provide fluent APIs for constructing `XRBoundingBox`, `BoundedPlane`, and `XRMarker` instances, respectively.
+- Added `XRMarkerBuilder.WithPose` overload that takes an OpenXR `XrPosef` representing the session space pose and converts it to a Unity world space pose to build the marker with.
+- Added `InnerWallFace` semantic label to [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications).
+- Added support for the `IEquatable<XRResultStatus>` and `IEquatable<Result<T>>` interfaces to [Result\<T\>](xref:UnityEngine.XR.ARSubsystems.Result`1).
+- Added a `ToString` override to [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus).
+- Added a `ToString` override to [Result\<T\>](xref:UnityEngine.XR.ARSubsystems.Result`1).
+- Added an implicit conversion operator from [SerializableGuid](xref:UnityEngine.XR.ARSubsystems.SerializableGuid) to [XrUuid](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.16/api/UnityEngine.XR.OpenXR.NativeTypes.XrUuid.html) if your project contains OpenXR Plug-in 1.16.0 or newer.
+
+### Changed
+
+- Changed pre-release property types `ARMarker.markerId` and `XRMarker.markerId` from `int` to `uint`.
+- Changed the type of [XRBoundingBox](xref:UnityEngine.XR.ARSubsystems.XRBoundingBox) from `struct` to `readonly struct`.
+- Changed the pre-release methods `XRMarkerSubsystem.TryGetStringData` and `XRMarkerSubsystem.TryGetBytesData` to now take the marker's `TrackableId` as a new argument when querying for a marker's encoded data.
+
+### Deprecated
+
+- Deprecated and replaced the following properties of [XRAnchorSubsystemDescriptor.Cinfo](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.Cinfo) to allow providers to determine at runtime whether AR Foundation persistent anchor APIs are supported::
+  - `supportsSaveAnchor` to `supportsSaveAnchorDelegate`
+  - `supportsLoadAnchor` to `supportsLoadAnchorDelegate`
+  - `supportsEraseAnchor` to `supportsEraseAnchorDelegate`
+  - `supportsGetSavedAnchorIds` to `supportsGetSavedAnchorIdsDelegate`
+
+### Fixed
+
+- Fixed an issue with the XR Simulation provider where creating new sessions through loading new scenes would throw exceptions and fail to start those new sessions.
+- Fixed an issue where disabling the AROcclusionManager could cause some objects to become incorrectly occluded for ARCore and ARKit apps.
+- Fixed [ARRaycastManager](xref:UnityEngine.XR.ARFoundation.ARRaycastManager) so that fallback raycasts can still be invoked if the AR Raycast Manager component is created at runtime.
+- Fixed internal code so that if trackables of different types share the same `TrackableId`, their GameObjects are spawned correctly with no exceptions logged to the console. ([ARFB-665](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-665)).
+- Fixed `LoaderUtility` so that it correctly initializes or deinitializes the OpenXR Loader when you call `Initialize` or `Deinitialize`, respectfully.
+- Fixed the following methods of [XRBoundingBox](xref:UnityEngine.XR.ARSubsystems.XRBoundingBox):
+  - `ToString` now lists the struct members in the order they appear in the stuct
+  - `Equals` now correctly considers a bounding box's `parentId` when comparing for equality
+  - `GetHashCode` now correctly considers a bounding box's `parentId` when generating a hash code.
+- Fixed pre-release `XRMarker` API documentation to indicate that its pose is in Unity world space and not in OpenXR session space.
+- Fixed `ARTrackableManager` so that it calls `OnAfterSetSessionRelativeData` for added trackables.
+- Fixed `SimulatedTrackedImage` and `SimulatedBoundingBox` so that they no longer use APIs which are deprecated in Unity 6.4 or newer.
+
 ## [6.4.0-pre.1] - 2025-10-07
 
 ### Added
@@ -65,7 +107,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added new values to the [BoundingBoxClassifications](xref:UnityEngine.XR.ARSubsystems.BoundingBoxClassifications) enum: `Keyboard`, `Mouse`, and `Laptop`.
 - Added constructors and `defaultValue` properties to `XRSaveAnchorResult`, `XRLoadAnchorResult`, and `XREraseAnchorResult` structs.
-- Added [ARFaceManager.TryGetBlendShapes](xref:UnityEngine.XR.ARFoundation.ARFaceManager.TryGetBlendShapes), which provides information about the facial expression of a tracked face.
+- Added [ARFaceManager.TryGetBlendShapes](xref:UnityEngine.XR.ARFoundation.ARFaceManager.TryGetBlendShapes*), which provides information about the facial expression of a tracked face.
   - Added the struct `XRFaceBlendShape`, which provides information about the degree of articulation of a specific facial feature.
 
 ### Changed
@@ -138,7 +180,6 @@ No changes
 - Added support for soft occlusion. Refer to the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) GitHub repository for example usage in the `MetaOcclusion` scene.
   - Added a soft occlusion preprocessing shader at `Assets/Shaders/SoftOcclusionPreprocessing.shader`.
   - Added [ARShaderOcclusion.softOcclusionShaderKeyword](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.softOcclusionShaderKeyword), [ARShaderOcclusion.ndcLinearConversionParametersPropertyId](xref:UnityEngine.XR.ARFoundation.ARShaderOcclusion.ndcLinearConversionParametersPropertyId), and [AROcclusionShaderMode.SoftOcclusion](xref:UnityEngine.XR.ARFoundation.AROcclusionShaderMode.SoftOcclusion).
-- Added [XRAnchorSubsystemDescriptor.sharedAnchorsSupported](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.sharedAnchorsSupported) for checking if shared anchors is supported.
 
 ### Changed
 
@@ -168,7 +209,7 @@ No changes
 
 - Added camera torch mode support to XR Simulation.
 - Added APIs for batch save, load, and erase of persistent anchors. Refer to [Persistent anchors](xref:arfoundation-anchors-persistent) for more information.
-- Added [XROcclusionSubsystem.TryGetSwapchainTextureDescriptors](xref:UnityEngine.XR.ARSubsystems.TryGetSwapchainTextureDescriptors*), which allows AR Foundation to make optimizations for occlusion providers that store textures in fixed-length swapchains.
+- Added [XROcclusionSubsystem.TryGetSwapchainTextureDescriptors](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem.TryGetSwapchainTextureDescriptors*), which allows AR Foundation to make optimizations for occlusion providers that store textures in fixed-length swapchains.
 - Added overrides for `object.ToString` to the following types for an improved debugging experience:
   - [ARExternalTexture](xref:UnityEngine.XR.ARFoundation.ARExternalTexture)
   - [XRFov](xref:UnityEngine.XR.ARSubsystems.XRFov)
@@ -229,7 +270,7 @@ No changes
 - Added support for stereo occlusion, enabling HMD providers to implement the XR occlusion subsystem:
   - Added [XRTextureType](xref:UnityEngine.XR.ARSubsystems.XRTextureType) enum with extension methods to convert from [TextureDimension](xref:UnityEngine.Rendering.TextureDimension).
   - Added [XRTextureDescriptor.textureType](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor.textureType) property to get a texture descriptor's type.
-  - Added the following structs to represent data used for occlusion: [XRFov](xref:UnityEngine.XR.ARSubsystems.XRFov), [XRNearFarPlanes](xref:UnityEngine.XR.ARSubsystems.XRNearFarPlanes), [XROcclusionFrame](xref:UnityEngine.XR.ARSubsystems.XROcclusionFrame), and [ARGpuTexture](xref:UnityEngine.XR.ARFoundation.ARGpuTexture).
+  - Added the following structs to represent data used for occlusion: [XRFov](xref:UnityEngine.XR.ARSubsystems.XRFov), [XRNearFarPlanes](xref:UnityEngine.XR.ARSubsystems.XRNearFarPlanes), [XROcclusionFrame](xref:UnityEngine.XR.ARSubsystems.XROcclusionFrame), and `ARGpuTexture`.
   - Added the following members to [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem): `depthViewProjectionMatricesPropertyId` and `TryGetFrame(Allocator, out XROcclusionFrame)`.
   - Added more data to [AROcclusionFrameEventArgs](xref:UnityEngine.XR.ARFoundation.AROcclusionFrameEventArgs).
   - Added the [ARShaderOcclusion](xref:arfoundation-shader-occlusion) component to write depth textures to global shader memory.
@@ -403,7 +444,7 @@ No changes
 
 ### Changed
 
-- Changed the [Use reference image libraries with AssetBundles](xref:arfoundation-image-tracking#use-reference-image-libraries-with-assetbundles) section of the Image tracking documentation to mention that `ARBuildProcessor.PreprocessBuild` must be called before building AssetBundles.
+- Changed the [Use reference image libraries with AssetBundles](xref:arfoundation-image-tracking-assetbundles) section of the Image tracking documentation to mention that `ARBuildProcessor.PreprocessBuild` must be called before building AssetBundles.
 - Changed the location of the **Refresh XR Environment List** menu item from **Assets** to **Assets** > **AR Foundation**.
 - Changed the materials "Debug Face" and "Debug Plane" to be compatible with URP by changing them to the 'Simulation/StandardLit' shader instead of the unity standard shader.
 - Changed the XR Simulation Environments version imported by the XR Environment Overlay from 1.0.0 to 2.0.1.
@@ -538,8 +579,8 @@ No changes
 ### Added
 
 - Added [XRObjectTrackingSubsystemDescriptor.Register(XRObjectTrackingSubsystemDescriptor.Cinfo)](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystemDescriptor.Register(UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystemDescriptor.Cinfo)) to replace the deprecated register methods present in `XRObjectTrackingSubsystem`
-- Added [XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo)](UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor.Register(UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor.Cinfo)) to replace the deprecated register methods present in `XRParticipantSubsystem`
-- Added support for asynchronous anchor creation. Refer to [What's New](xref:arfoundation-whats-new#asynchronous-tryaddanchor-api) for more information.
+- Added [XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo)](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor.Register*) to replace the deprecated register methods present in `XRParticipantSubsystem`
+- Added support for asynchronous anchor creation. Refer to [Create an anchor](xref:arfoundation-anchors-aranchormanager#create-an-anchor) for more information.
 - Added support for Image Stabilization, which helps stabilize shaky video from the camera.
 - Added support for Occlusion to XR Simulation.
 - Added support for planes to have multiple semantic labels via the [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications) flags enum, [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications), and [BoundedPlane.classifications](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.classifications).
@@ -564,7 +605,7 @@ No changes
 - Deprecated the following APIs:
   - [PlaneClassification](xref:UnityEngine.XR.ARSubsystems.PlaneClassification)
   - [ARPlane.classification](xref:UnityEngine.XR.ARFoundation.ARPlane.classification)
-  - [BoundedPlane constructor](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.#ctor(UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.XR.ARSubsystems.TrackableId,UnityEngine.Pose,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.XR.ARSubsystems.PlaneAlignment,UnityEngine.XR.ARSubsystems.TrackingState,IntPtr,UnityEngine.XR.ARSubsystems.PlaneClassification))
+  - `BoundedPlane` constructor
   - [BoundedPlane.classification](xref:UnityEngine.XR.ARSubsystems.BoundedPlane.classification)
 - Deprecated the structs `XRObjectTrackingSubsystemDescriptor.Capabilities` and `XRParticipantSubsystemDescriptor.Capabilities`.
 - Deprecated the `XRObjectTrackingSubsystemDescriptor.Register` and `XRParticipantSubsystemDescriptor.Register` methods that use the now-deprecated `Capabilities` struct.

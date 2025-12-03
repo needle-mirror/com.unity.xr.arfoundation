@@ -84,7 +84,7 @@ namespace UnityEngine.XR.ARFoundation
                 return new Result<string>(resultStatus, string.Empty);
             }
 
-            return subsystem.TryGetStringData(marker.dataBuffer);
+            return subsystem.TryGetStringData(marker.trackableId, marker.dataBuffer);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace UnityEngine.XR.ARFoundation
                 return new Result<byte[]>(resultStatus, null);
             }
 
-            var result = subsystem.TryGetBytesData(marker.dataBuffer, Allocator.Temp);
+            var result = subsystem.TryGetBytesData(marker.trackableId, marker.dataBuffer, Allocator.Temp);
             var bytesData = result.value;
             result = new Result<NativeArray<byte>>(result.status, bytesData);
 
@@ -137,7 +137,7 @@ namespace UnityEngine.XR.ARFoundation
                 return new Result<NativeArray<byte>>(resultStatus, default);
             }
 
-            return subsystem.TryGetBytesData(marker.dataBuffer, allocator);
+            return subsystem.TryGetBytesData(marker.trackableId, marker.dataBuffer, allocator);
         }
 
         /// <summary>

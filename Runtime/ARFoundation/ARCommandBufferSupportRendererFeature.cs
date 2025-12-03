@@ -37,7 +37,9 @@ namespace UnityEngine.XR.ARFoundation
                 renderPassEvent = RenderPassEvent.BeforeRendering;
             }
 
+#if !UNITY_6000_4_OR_NEWER
             static readonly string k_NonRenderGraphPassName = "XRSessionSubsystem Command Buffer Event Injection Pass (Render Graph Disabled)";
+#endif
 
 #if URP_17_OR_NEWER
             /// <summary>

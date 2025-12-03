@@ -55,16 +55,16 @@ This table summarizes the trackable managers and their trackable types.
 
 | Trackable Manager | Trackable | Purpose |
 | ----------------- | --------- | ------- |
-| [ARPlaneManager](xref:arfoundation-plane-detection#ar-plane-manager-component) | [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | Detect and track surfaces. |
-| [ARBoundingBoxManager](xref:arfoundation-bounding-box-detection#ar-bounding-box-manager-component) | [ARBoundingBox](xref:UnityEngine.XR.ARFoundation.ARBoundingBox) | Detect and track bounding boxes of 3D objects. |
-| [ARTrackedImageManager](xref:arfoundation-image-tracking#ar-tracked-image-manager-component) | [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | Detect and track 2D images. |
+| [ARPlaneManager](xref:arfoundation-plane-arplanemanager) | [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) | Detect and track surfaces. |
+| [ARBoundingBoxManager](xref:arfoundation-bounding-box-arboundingboxmanager) | [ARBoundingBox](xref:UnityEngine.XR.ARFoundation.ARBoundingBox) | Detect and track bounding boxes of 3D objects. |
+| [ARTrackedImageManager](xref:arfoundation-image-tracking-manager) | [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) | Detect and track 2D images. |
 | [ARMarkerManager](xref:arfoundation-markers-armarkermanager) | [ARMarker](xref:UnityEngine.XR.ARFoundation.ARMarker) | Track AR markers and read their encoded data. |
 | [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) | [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) | Detect and track 3D objects. |
-| [ARFaceManager](xref:arfoundation-face-tracking#ar-face-manager-component) | [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | Detect and track human faces. |
+| [ARFaceManager](xref:arfoundation-face-tracking-face-manager) | [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) | Detect and track human faces. |
 | [ARHumanBodyManager](xref:arfoundation-body-tracking#ar-human-body-manager-component) | [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) | Detect and track a human body. |
 | [ARPointCloudManager](xref:arfoundation-point-clouds#ar-point-cloud-manager-component) | [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) | Detect and track feature points. |
-| [ARRaycastManager](xref:arfoundation-raycasts#ar-raycast-manager-component) | [ARRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycast) | Repeats a raycast every frame. |
-| [ARAnchorManager](xref:arfoundation-anchors#ar-anchor-manager-component) | [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | Track an arbitrary point in space. |
+| [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) | [ARRaycast](xref:UnityEngine.XR.ARFoundation.ARRaycast) | Repeats a raycast every frame. |
+| [ARAnchorManager](xref:arfoundation-anchors-aranchormanager) | [ARAnchor](xref:UnityEngine.XR.ARFoundation.ARAnchor) | Track an arbitrary point in space. |
 | [AREnvironmentProbeManager](xref:arfoundation-environment-probes#ar-environment-probe-manager-component) | [AREnvironmentProbe](xref:UnityEngine.XR.ARFoundation.AREnvironmentProbe) | Generate cubemaps of the environment. |
 | [ARParticipantManager](xref:arfoundation-participant-tracking#ar-participant-manager-component) | [ARParticipant](xref:UnityEngine.XR.ARFoundation.ARParticipant) | Track other devices in a shared AR session. |
 
@@ -114,7 +114,7 @@ The exact amount of time a trackable spends in the pending state depends on the 
 
 With the exception of anchors, you should never `Destroy` a trackable component or its GameObject. Trackables are representations of data surfaced by a trackable subsystem and destroying their scene representation has no affect on the subsystem implementation. If a trackable supports manual removal, its manager generally provides a method to remove it. For example, you can remove a persistent raycast by calling `ARRaycastManager.RemoveRaycast(ARRaycast)`.
 
-Anchors are an exception to this rule; you can safely remove an anchor by destroying its GameObject. For more information about adding and removing anchors, see [Anchors](xref:arfoundation-anchors#adding-and-removing-anchors).
+Anchors are an exception to this rule; you can safely remove an anchor by destroying its GameObject. For more information about removing anchors, refer to [Remove an anchor](xref:arfoundation-anchors-aranchormanager#remove-an-anchor).
 
 Many trackables, such as planes, images, objects, and point clouds, do not support any form of manual removal. These trackables can only be removed by their manager, which will automatically remove them when it receives a removal notification from the underlying subsystem. When a manager removes a trackable this way, it will `Destroy` the trackable's GameObject unless `destroyOnRemoval` is `false`.
 

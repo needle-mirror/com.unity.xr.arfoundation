@@ -73,9 +73,14 @@ namespace UnityEngine.XR.ARSubsystems
         Table = 1u << 8,
 
         /// <summary>
-        /// The plane is classified as an invisible wall face .
+        /// The plane is classified as an invisible wall face.
         /// </summary>
         InvisibleWallFace = 1u << 9,
+
+        /// <summary>
+        /// The plane is classified as an inner wall face.
+        /// </summary>
+        InnerWallFace = 1u << 10,
 
         /// <summary>
         /// The plane is classified as other.

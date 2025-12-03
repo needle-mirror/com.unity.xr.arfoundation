@@ -96,9 +96,7 @@ namespace UnityEngine.XR.ARFoundation
 
             if (subsystem != null)
             {
-                var raycastManager = GetComponent<ARRaycastManager>();
-                if (raycastManager != null)
-                    raycastManager.RegisterRaycaster(this);
+                FallbackRaycastRegistry.RegisterRaycaster(this);
             }
         }
 
@@ -109,9 +107,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             base.OnDisable();
 
-            var raycastManager = GetComponent<ARRaycastManager>();
-            if (raycastManager != null)
-                raycastManager.UnregisterRaycaster(this);
+            FallbackRaycastRegistry.UnregisterRaycaster(this);
         }
     }
 }

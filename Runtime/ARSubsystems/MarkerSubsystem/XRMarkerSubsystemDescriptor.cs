@@ -27,13 +27,25 @@ namespace UnityEngine.XR.ARSubsystems
         /// </remarks>
         public Result<ReadOnlyListSpan<XRMarkerType>> supportedMarkerTypes
         {
-            get => m_SupportedMarkerTypesDelegate();
+            get
+            {
+                if (m_SupportedMarkerTypesDelegate == null)
+                {
+                    var unsupportedStatus = new XRResultStatus(XRResultStatus.StatusCode.UnknownError);
+                    return new Result<ReadOnlyListSpan<XRMarkerType>>(unsupportedStatus, new());
+                }
+
+                return m_SupportedMarkerTypesDelegate.Invoke();
+            }
         }
 
         Func<Result<ReadOnlyListSpan<XRMarkerType>>> m_SupportedMarkerTypesDelegate;
 
         XRMarkerSubsystemDescriptor(Cinfo markerSubsystemCinfo)
         {
+            id = markerSubsystemCinfo.id;
+            providerType = markerSubsystemCinfo.providerType;
+            subsystemTypeOverride = markerSubsystemCinfo.subsystemTypeOverride;
             m_SupportedMarkerTypesDelegate = markerSubsystemCinfo.supportedMarkerTypesDelegate;
         }
 
@@ -43,8 +55,25 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="cinfo">Construction info for the descriptor.</param>
         public static void Register(Cinfo cinfo)
         {
-            if (cinfo.supportedMarkerTypesDelegate == null)
-                throw new ArgumentException($"{nameof(cinfo.supportedMarkerTypesDelegate)} is null.");
+            if (string.IsNullOrEmpty(cinfo.id))
+            {
+                throw new ArgumentException("Cannot create marker subsystem descriptor because id is invalid",
+                    nameof(cinfo));
+            }
+
+            if (cinfo.providerType == null
+                || !cinfo.providerType.IsSubclassOf(typeof(XRMarkerSubsystem.Provider)))
+            {
+                throw new ArgumentException("Cannot create marker subsystem descriptor because providerType is invalid",
+                    nameof(cinfo));
+            }
+
+            if (cinfo.subsystemTypeOverride == null || (cinfo.subsystemTypeOverride != typeof(XRMarkerSubsystem)
+                && !cinfo.subsystemTypeOverride.IsSubclassOf(typeof(XRMarkerSubsystem))))
+            {
+                throw new ArgumentException("Cannot create marker subsystem descriptor because subsystemTypeOverride is invalid",
+                    nameof(cinfo));
+            }
 
             SubsystemDescriptorStore.RegisterDescriptor(new XRMarkerSubsystemDescriptor(cinfo));
         }
@@ -54,6 +83,25 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         public struct Cinfo : IEquatable<Cinfo>
         {
+            /// <summary>
+            /// The unique identifier of the provider implementation. No specific format is required.
+            /// </summary>
+            public string id { get; set; }
+
+            /// <summary>
+            /// The provider implementation type to use for instantiation.
+            /// </summary>
+            /// <value>The provider implementation type.</value>
+            public Type providerType { get; set; }
+
+            /// <summary>
+            /// The <see cref="XRMarkerSubsystem"/>-derived type to use for instantiation. The instantiated instance of
+            /// this type will forward cast calls to its provider.
+            /// </summary>
+            /// <value>The subsystem implementation type.
+            /// If <see langword="null"/>, <see cref="XRMarkerSubsystem"/> will be instantiated.</value>
+            public Type subsystemTypeOverride { get; set; }
+
             /// <summary>
             /// Specifies the supported marker types for marker detection.
             /// </summary>
@@ -67,7 +115,11 @@ namespace UnityEngine.XR.ARSubsystems
             /// Otherwise, `false`.</returns>
             public bool Equals(Cinfo other)
             {
-                return supportedMarkerTypesDelegate == other.supportedMarkerTypesDelegate;
+                return
+                    id == other.id &&
+                    providerType == other.providerType &&
+                    subsystemTypeOverride == other.subsystemTypeOverride &&
+                    supportedMarkerTypesDelegate == other.supportedMarkerTypesDelegate;
             }
 
             /// <summary>
@@ -88,7 +140,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <returns>A hash code generated from this object's fields.</returns>
             public override int GetHashCode()
             {
-                return HashCode.Combine(supportedMarkerTypesDelegate);
+                return HashCode.Combine(id, providerType, subsystemTypeOverride, supportedMarkerTypesDelegate);
             }
 
             /// <summary>

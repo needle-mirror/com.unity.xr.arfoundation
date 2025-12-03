@@ -1,12 +1,13 @@
 using System;
 using Unity.Collections;
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+using UnityEngine.XR.OpenXR.NativeTypes;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// A <c>Guid</c> that can be serialized by Unity. The 128-bit <c>Guid</c>
-    /// is stored as two 64-bit <c>ulong</c>s. Refer to the creation utility at
-    /// <see cref="UnityEditor.XR.ARSubsystems.SerializableGuidUtil"/> for more information.
+    /// A <c>Guid</c> that can be serialized by Unity. The 128-bit <c>Guid</c> is stored as two 64-bit <c>ulong</c>s.
     /// </summary>
     [Serializable]
     public struct SerializableGuid : IEquatable<SerializableGuid>
@@ -24,8 +25,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Constructs a <see cref="SerializableGuid"/> from two 64-bit <c>ulong</c>s.
         /// </summary>
-        /// <param name="guidLow">The low 8 bytes of the <c>Guid</c>.</param>
-        /// <param name="guidHigh">The high 8 bytes of the <c>Guid</c>.</param>
+        /// <param name="guidLow">The first 8 bytes of the <c>Guid</c>.</param>
+        /// <param name="guidHigh">The second 8 bytes of the <c>Guid</c>.</param>
         public SerializableGuid(ulong guidLow, ulong guidHigh)
         {
             m_GuidLow = guidLow;
@@ -76,6 +77,18 @@ namespace UnityEngine.XR.ARSubsystems
         {
             return new SerializableGuid(trackableId.subId1, trackableId.subId2);
         }
+
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+        /// <summary>
+        /// Convert this instance to an `XrUuid` for use in OpenXR API calls.
+        /// </summary>
+        /// <param name="guid">This instance.</param>
+        /// <returns>The equivalent `XrUuid`.</returns>
+        public static implicit operator XrUuid(SerializableGuid guid)
+        {
+            return new XrUuid(guid.guidLow, guid.guidHigh);
+        }
+#endif
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.

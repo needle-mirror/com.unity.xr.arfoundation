@@ -13,7 +13,7 @@ You can create anchors at any time during an AR session, then use them by parent
 
 In Unity XR apps, the [XR Origin component](xref:arfoundation-device-tracking-xr-origin-component) defines a translation function between coordinates in Unity world space and coordinates in your AR platform's session space. Without the ability to translate AR data from one coordinate system to another, there would be no way to make mixed reality content appear at specific positions in the physical environment.
 
-In an ideal AR [Session state](xref:arfoundation-session#session-state) of `SessionTracking`, the translation function between session space and Unity world space is stable. However, AR platforms can lose tracking during the middle of a session due to factors such as rapid device movement, poor lighting conditions, or an environment with too few distinguishing features.
+In an ideal AR [Session state](xref:arfoundation-session-arsession#session-state) of `SessionTracking`, the translation function between session space and Unity world space is stable. However, AR platforms can lose tracking during the middle of a session due to factors such as rapid device movement, poor lighting conditions, or an environment with too few distinguishing features.
 
 When tracking is lost, the session state may transition to `SessionInitializing`. Then when tracking is reestablished, the AR platform may choose to define a new translation function between coordinate systems. At that moment, if any GameObjects in your scene aren't parented to a [trackable](xref:arfoundation-managers#trackables-and-trackable-managers), they will suddenly move to a random location, because the mapping between Unity world space and session space has changed.
 

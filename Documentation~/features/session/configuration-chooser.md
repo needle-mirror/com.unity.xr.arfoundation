@@ -5,7 +5,7 @@ uid: arfoundation-session-configuration-chooser
 
 Understand how to use the Configuration Chooser to configure your AR session.
 
-The [Configuration Chooser](xref:xref:UnityEngine.XR.ARSubsystems.ConfigurationChooser) is an overridable class which you can use to configure your [AR Session](xref:arfoundation-session-arsession). You can use the Configuration Chooser to enable better performance for your application.
+The [Configuration Chooser](xref:UnityEngine.XR.ARSubsystems.ConfigurationChooser) is an overridable class which you can use to configure your [AR Session](xref:arfoundation-session-arsession). You can use the Configuration Chooser to enable better performance for your application.
 
 ## Introduction to configurations
 

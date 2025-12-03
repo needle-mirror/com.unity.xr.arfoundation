@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Jobs;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
@@ -25,6 +24,8 @@ namespace UnityEngine.XR.ARFoundation
         XRTrackedImage,
         ARTrackedImage>
     {
+        Dictionary<Guid, XRReferenceImage> m_ReferenceImages = new();
+
         [SerializeField]
         [FormerlySerializedAs("m_ReferenceLibrary")]
         [Tooltip("The library of images which will be detected and/or tracked in the physical environment.")]
@@ -46,33 +47,33 @@ namespace UnityEngine.XR.ARFoundation
             get
             {
                 if (subsystem != null)
-                {
                     return subsystem.imageLibrary;
-                }
-                else
-                {
-                    return m_SerializedLibrary;
-                }
-            }
 
+                return m_SerializedLibrary;
+            }
             set
             {
-                if (value == null && subsystem != null && subsystem.running)
-                    throw new InvalidOperationException("Cannot set a null reference library while image tracking is enabled.");
-
-                if (value is XRReferenceImageLibrary serializedLibrary)
+                switch (value)
                 {
-                    m_SerializedLibrary = serializedLibrary;
-                    if (subsystem != null)
-                        subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(serializedLibrary);
-                }
-                else if (value is RuntimeReferenceImageLibrary runtimeLibrary)
-                {
-                    m_SerializedLibrary = null;
-                    EnsureSubsystemInstanceSet();
+                    case null when subsystem != null && subsystem.running:
+                        throw new InvalidOperationException(
+                            "Can't set a null reference library while image tracking is enabled.");
+                    case XRReferenceImageLibrary serializedLibrary:
+                    {
+                        m_SerializedLibrary = serializedLibrary;
+                        if (subsystem != null)
+                            subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(serializedLibrary);
+                        break;
+                    }
+                    case RuntimeReferenceImageLibrary runtimeLibrary:
+                    {
+                        m_SerializedLibrary = null;
+                        EnsureSubsystemInstanceSet();
 
-                    if (subsystem != null)
-                        subsystem.imageLibrary = runtimeLibrary;
+                        if (subsystem != null)
+                            subsystem.imageLibrary = runtimeLibrary;
+                        break;
+                    }
                 }
 
                 if (subsystem != null)
@@ -244,18 +245,16 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="removed">A list of images removed this frame.</param>
         [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(
-            List<ARTrackedImage> added,
-            List<ARTrackedImage> updated,
-            List<ARTrackedImage> removed)
+            List<ARTrackedImage> added, List<ARTrackedImage> updated, List<ARTrackedImage> removed)
         {
             if (trackedImagesChanged != null)
             {
                 using (new ScopedProfiler("OnTrackedImagesChanged"))
-                trackedImagesChanged?.Invoke(
-                    new ARTrackedImagesChangedEventArgs(
-                        added,
-                        updated,
-                        removed));
+                    trackedImagesChanged?.Invoke(
+                        new ARTrackedImagesChangedEventArgs(
+                            added,
+                            updated,
+                            removed));
             }
         }
 
@@ -271,7 +270,5 @@ namespace UnityEngine.XR.ARFoundation
                 m_ReferenceImages[referenceImage.guid] = referenceImage;
             }
         }
-
-        Dictionary<Guid, XRReferenceImage> m_ReferenceImages = new Dictionary<Guid, XRReferenceImage>();
     }
 }

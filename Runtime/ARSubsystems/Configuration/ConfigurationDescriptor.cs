@@ -14,8 +14,8 @@ namespace UnityEngine.XR.ARSubsystems
     /// That is, the session may support many features, but not all at the same time.
     /// </remarks>
     /// <seealso cref="ConfigurationChooser"/>
-    /// <seealso cref="XRSessionSubsystem.DetermineConfiguration(Feature)"/>
-    /// <seealso cref="XRSessionSubsystem.GetConfigurationDescriptors(Unity.Collections.Allocator)"/>
+    /// <seealso href="xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.DetermineConfiguration*">XRSessionSubsystem.DetermineConfiguration</seealso>
+    /// <seealso href="xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.GetConfigurationDescriptors*">XRSessionSubsystem.GetConfigurationDescriptors</seealso>
     [StructLayout(LayoutKind.Sequential)]
     public struct ConfigurationDescriptor : IEquatable<ConfigurationDescriptor>
     {

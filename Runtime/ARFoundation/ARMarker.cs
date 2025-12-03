@@ -43,7 +43,7 @@ namespace UnityEngine.XR.ARFoundation
         /// For the `ArUco` or `AprilTag` marker types, gets the numerical ID encoded in the tag.
         /// For other types, this value isn't relevant.
         /// </remarks>
-        public int markerId => sessionRelativeData.markerId;
+        public uint markerId => sessionRelativeData.markerId;
 
         /// <summary>
         /// Provides metadata that describes the embedded data available for this marker, such as its type.

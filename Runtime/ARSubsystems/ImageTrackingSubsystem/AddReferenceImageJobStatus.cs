@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// Represents the status of an <see cref="AddReferenceImageJobState"/>.
     /// </summary>
     /// <seealso cref="AddReferenceImageJobState.status"/>
-    /// <seealso cref="MutableRuntimeReferenceImageLibrary.ScheduleAddImageWithValidationJob"/>
+    /// <seealso href="xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary.ScheduleAddImageWithValidationJob*">MutableRuntimeReferenceImageLibrary.ScheduleAddImageWithValidationJob</seealso>
     public enum AddReferenceImageJobStatus
     {
         /// <summary>
