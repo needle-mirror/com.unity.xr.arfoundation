@@ -134,6 +134,12 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode.Add(supportsTrackableAttachments);
                 hashCode.Add(supportsSynchronousAdd);
                 hashCode.Add(supportsAsyncCancellation);
+#pragma warning disable CS0618 // Type or member is obsolete
+                hashCode.Add(supportsSaveAnchor);
+                hashCode.Add(supportsLoadAnchor);
+                hashCode.Add(supportsEraseAnchor);
+                hashCode.Add(supportsGetSavedAnchorIds);
+#pragma warning restore CS0618 // Type or member is obsolete
                 hashCode.Add(supportsSaveAnchorDelegate);
                 hashCode.Add(supportsLoadAnchorDelegate);
                 hashCode.Add(supportsEraseAnchorDelegate);
@@ -155,6 +161,12 @@ namespace UnityEngine.XR.ARSubsystems
                     && ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride)
                     && supportsTrackableAttachments == other.supportsTrackableAttachments
                     && supportsSynchronousAdd == other.supportsSynchronousAdd
+#pragma warning disable CS0618 // Type or member is obsolete
+                    && supportsSaveAnchor == other.supportsSaveAnchor
+                    && supportsLoadAnchor == other.supportsLoadAnchor
+                    && supportsEraseAnchor == other.supportsEraseAnchor
+                    && supportsGetSavedAnchorIds == other.supportsGetSavedAnchorIds
+#pragma warning restore CS0618 // Type or member is obsolete
                     && supportsSaveAnchorDelegate == other.supportsSaveAnchorDelegate
                     && supportsLoadAnchorDelegate == other.supportsLoadAnchorDelegate
                     && supportsEraseAnchorDelegate == other.supportsEraseAnchorDelegate
@@ -283,7 +295,6 @@ namespace UnityEngine.XR.ARSubsystems
             supportsTrackableAttachments = cinfo.supportsTrackableAttachments;
             supportsSynchronousAdd = cinfo.supportsSynchronousAdd;
             supportsAsyncCancellation = cinfo.supportsAsyncCancellation;
-
             m_SupportsSaveAnchorDelegate = cinfo.supportsSaveAnchorDelegate;
             m_SupportsLoadAnchorDelegate = cinfo.supportsLoadAnchorDelegate;
             m_SupportsEraseAnchorDelegate = cinfo.supportsEraseAnchorDelegate;

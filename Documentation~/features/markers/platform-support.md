@@ -9,14 +9,16 @@ The AR Foundation XRMarkerSubsystem is supported on the following platforms:
 
 | Provider plug-in | Markers supported | Provider documentation |
 | :--------------- | :---------------: | :--------------------- |
-| Unity OpenXR: Spatial Entities | Yes | N/A |
 | Google ARCore XR Plug-in | | |
 | Apple ARKit XR Plug-in | | |
 | Apple visionOS XR Plug-in | | |
 | HoloLens | | |
-| Unity OpenXR: Meta | Yes (via Spatial Entities) | N/A |
+| Unity OpenXR: Meta | | |
 | Unity OpenXR: Android XR | | |
 | XR Simulation | | |
+
+> [!NOTE]
+> Currently Unity doesn't support any provider plug-ins that implement this feature, but we expect to release more support for these APIs in the future.
 
 ## Check for support at runtime
 
