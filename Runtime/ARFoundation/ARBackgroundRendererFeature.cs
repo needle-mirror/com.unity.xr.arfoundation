@@ -187,6 +187,7 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="context">The render context for executing the render commands.</param>
             /// <param name="renderingData">Additional rendering data about the current state of rendering.</param>
+#if !UNITY_6000_4_OR_NEWER
             [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
@@ -202,6 +203,10 @@ namespace UnityEngine.XR.ARFoundation
                 context.ExecuteCommandBuffer(cmd);
                 CommandBufferPool.Release(cmd);
             }
+#else
+            [Obsolete("URP compatibility mode is no longer supported as of Unity 6.4. You must upgrade to Render Graph.", true)]
+            public void Execute(ScriptableRenderContext context, ref RenderingData renderingData) { }
+#endif
 
             /// <summary>
             /// Execute the commands to render the camera background. This function is used for both RenderGraph and
@@ -312,11 +317,16 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="commandBuffer">The command buffer for configuration.</param>
             /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
+#if !UNITY_6000_4_OR_NEWER
             [Obsolete("Configure is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
             {
                 ConfigureClear(ClearFlag.Depth, Color.clear);
             }
+#else
+            [Obsolete("URP compatibility mode is no longer supported as of Unity 6.4. You must upgrade to Render Graph.", true)]
+            public void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor) { }
+#endif
 
             protected override XRCameraBackgroundRenderingMode renderingMode
                 => XRCameraBackgroundRenderingMode.BeforeOpaques;
@@ -340,11 +350,16 @@ namespace UnityEngine.XR.ARFoundation
             /// </summary>
             /// <param name="commandBuffer">The command buffer for configuration.</param>
             /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
+#if !UNITY_6000_4_OR_NEWER
             [Obsolete("Configure is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
             {
                 ConfigureClear(ClearFlag.None, Color.clear);
             }
+#else
+            [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
+            public void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor) { }
+#endif
 
             protected override XRCameraBackgroundRenderingMode renderingMode
                 => XRCameraBackgroundRenderingMode.AfterOpaques;

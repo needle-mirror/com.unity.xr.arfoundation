@@ -126,6 +126,7 @@ namespace UnityEngine.XR.ARFoundation
                         var trackable = (TTrackable)arTrackable;
                         m_Trackables[trackable!.trackableId] = trackable;
                         s_Added.Add(trackable);
+                        OnAfterSetSessionRelativeData(trackable, added);
                     }
                 }
 

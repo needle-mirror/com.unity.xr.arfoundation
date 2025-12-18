@@ -96,6 +96,9 @@ namespace UnityEngine.XR.Simulation
             if (s_Instance == null)
             {
                 var go = GameObjectUtils.Create("SimulationCamera");
+                // The SimulationCamera object is expected to persistent beyond scene load boundaries by
+                // many classes and so needs to be in the DoNotDestroy scene
+                DontDestroyOnLoad(go);
                 // s_Instance gets assigned in the Awake() event handler.  This way whether the component
                 // is added through some other means, or added as a result of this method call, then the
                 // s_Instance static member will get set.
@@ -105,6 +108,29 @@ namespace UnityEngine.XR.Simulation
             }
 
             return s_Instance;
+        }
+
+        internal void Start()
+        {
+            // since the camera pose provider is persistent across scene loads, we need
+            // to be sure to enable it when the session is started
+            gameObject.SetActive(true);
+        }
+
+        internal void Stop()
+        {
+            // since the camera pose provider is persistent across scene loads, we need
+            // to be sure to disable it when the session is stopped
+            gameObject.SetActive(false);
+        }
+
+        internal static void DestroySimulationCameraPoseProvider()
+        {
+            if (s_Instance != null)
+            {
+                Destroy(s_Instance.gameObject);
+                s_Instance = null;
+            }
         }
 
         [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_SetCameraPose")]

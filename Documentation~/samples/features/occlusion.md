@@ -16,20 +16,24 @@ The `Simple Occlusion` scene demonstrates occlusion of virtual content by real w
 
 The `Depth Images` scene demonstrates raw texture depth images from different methods.
 
-### Depth images requirements
-
-The following table describes which platforms support each type of depth image:
-
-| **Depth image**                      | **Supported devices** |
-| :----------------------------------- | :---------------- |
-| **Environment depth**                | Some Android devices. Apple devices with LiDAR sensor. |
-| **Human segmentation stencil image** | Apple devices with an A12 bionic chip (or later) running iOS 13 or newer. |
-| **Human segmentation depth image**   | Apple devices with an A12 bionic chip (or later) running iOS 13 or newer. |
-
-Refer to ARKit Occlusion [Requirements](xref:arkit-occlusion#requirements) and ARCore Occlusion [Requirements](xref:arcore-occlusion#requirements) for more information about hardware and software requirements.
-
 ## HMD occlusion scene
 
 The `HMDOcclusion` scene demonstrates how to use AR Foundation occlusion with shaders, as described in [AR Shader Occlusion component](xref:arfoundation-shader-occlusion). You can use this sample on a head-mounted display with an [OpenXR runtime](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.14/manual/index.html#runtimes).
+
+## Hands occlusion scene
+
+The `HandsOcclusion` scene demonstrates how to use occlusion with hand meshes as the occlusion source. Refer to [AR Shader Occlusion component](xref:arfoundation-shader-occlusion) for more information.
+
+## Meta occlusion scene
+
+The `MetaOcclusion` scene implements [soft occlusion](xref:arfoundation-occlusion-introduction#types) on Meta Quest devices. Access this sample from `Assets/Scenes/Meta`. Refer to the OpenXR Meta [Occlusion](xref:meta-openxr-occlusion) documentation to learn more about occlusion on Meta Quest.
+
+<a id="shaders"></a>
+
+## Shader samples
+
+Unity provides sample shaders that you can use with the [AR Shader Occlusion component](xref:arfoundation-shader-occlusion) for soft occlusion in your app.
+
+You can access the shader samples for soft occlusion from `Assets/Shaders/Occlusion`.
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

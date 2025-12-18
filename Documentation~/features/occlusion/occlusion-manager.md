@@ -3,22 +3,21 @@ uid: arfoundation-occlusion-manager
 ---
 # AR Occlusion Manager component
 
-The [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager) component allows mixed reality content in your app to appear hidden or partially obscured behind objects in the physical environment. Without occlusion, geometry in your scene will always render on top of physical objects in the AR background, regardless of their difference in depth.
+Understand the AR Occlusion manager component.
 
-More specifically, the AR Occlusion Manager acquires per-frame images from the AR platform containing depth or stencil data that shaders can use to implement the occlusion effect. Incorporating depth images into the rendering process allows shaders to sample both the depth of your Unity scene and the depth of the physical environment, and render the pixels that are closer to the camera.
+The [AROcclusionManager](xref:UnityEngine.XR.ARFoundation.AROcclusionManager) enables occlusion in your project.
 
-![AR Occlusion Manager component](../../images/ar-occlusion-manager.png)<br/>*AR Occlusion Manager component.*
+The AR Occlusion Manager acquires per-frame images from the AR platform containing depth or stencil data that shaders can use to implement the occlusion effect. Incorporating depth images into the rendering process allows shaders to sample both the depth of your Unity scene and the depth of the physical environment, and render the pixels that are closer to the camera.
 
-## Add required components to your scene
+## Enable occlusion
 
-To enable occlusion, add the `AROcclusionManager` to your [Camera](xref:arfoundation-camera) as outlined in [Managers](xref:arfoundation-managers).
+To enable occlusion, add the `AROcclusionManager` to your [Camera](xref:arfoundation-camera) as outlined in [Occlusion workflow](xref:arfoundation-occlusion-workflow).
 
-For ARKit, ARCore, or XR Simulation, you must also add the [AR Camera Background component](xref:arfoundation-camera-components#ar-camera-background-component) to your camera. On [OpenXR platforms](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.13/manual/index.html#runtimes) such as Meta Quest, you must add the [AR Shader Occlusion](xref:arfoundation-shader-occlusion) component to your camera. If both `ARShaderOcclusion` and `ARCameraBackground` are attached to your camera, occlusion functionality is controlled by `ARShaderOcclusion`.
+<a id="reference"></a>
 
-> [!WARNING]
-> AR Shader Occlusion is not yet compatible with ARCore or ARKit. If you are building an app that targets both HMDs and mobile devices, consider either creating separate scenes or adding the AR Shader Occlusion component at runtime on HMD platforms.
+## Component reference
 
-## AR Occlusion Manager properties
+![AR Occlusion Manager component](../../images/occlusion/ar-occlusion-manager.png)<br/>*AR Occlusion Manager component.*
 
 The following table describes the properties of the AR Occlusion Manager component:
 
@@ -43,5 +42,10 @@ The types of depth images supported are:
 | **Environment Depth** | Distance from the device to any part of the environment in the camera field of view. |
 | **Human Depth** | Distance from the device to any part of a human recognized within the camera field of view. |
 | **Human Stencil** | Value designating, for each pixel, whether that pixel contains a recognized human. |
+
+## Additional resources
+
+* [Configure occlusion in your project](xref:arfoundation-occlusion-workflow)
+* [AR Shader Occlusion component](xref:arfoundation-shader-occlusion)
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

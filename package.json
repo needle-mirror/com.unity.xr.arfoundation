@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.3.1",
+  "version": "6.3.2",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed an issue where disabling the AROcclusionManager could cause some objects to become incorrectly occluded for ARCore and ARKit apps.\n- Fixed `LoaderUtility` so that it correctly initializes or deinitializes the OpenXR Loader when you call `Initialize` or `Deinitialize`, respectfully.\n- Fixed internal code so that if trackables of different types share the same `TrackableId`, their GameObjects are spawned correctly with no exceptions logged to the console. ([ARFB-665](https://issuetracker.unity3d.com/product/unity/issues/guid/ARFB-665)).\n- Fixed the following methods of [XRBoundingBox](xref:UnityEngine.XR.ARSubsystems.XRBoundingBox):\n  - `ToString` now lists the struct members in the order they appear in the stuct\n  - `Equals` now correctly considers a bounding box's `parentId` when comparing for equality\n  - `GetHashCode` now correctly considers a bounding box's `parentId` when generating a hash code."
+    "changelog": "### Fixed\n\n- Fixed an issue with the XR Simulation provider where creating new sessions through loading new scenes would throw exceptions and fail to start those new sessions.\n- Fixed `ARTrackableManager` so that it calls `OnAfterSetSessionRelativeData` for added trackables.\n\n### Deprecated\n\n- In Unity 6000.4 and newer Editor versions, all methods that depend on URP Compatibility Mode have been changed from `Obsolete(false)` to `Obsolete(true)`. URP Compatibility Mode is removed in Unity 6000.4, so these APIs are no longer supported in Unity 6000.4 or newer. The following methods are affected:\n  - `ARBackgroundRendererFeature.Execute`\n  - `ARBackgroundRendererFeature.Configure`\n  - `ARCommandBufferSupportRendererFeature.Execute`"
   },
   "upmCi": {
-    "footprint": "850e8d0180710ecc14a3ea313166235764873782"
+    "footprint": "dfae2c74c7c2fc9546c284c88e843b7545f2db88"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.3/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "16dfde08a7aee3f294065951f578776c2524f9f4"
+    "revision": "b4b1e22c1cbb73cd1bcf048bf2b02302268de404"
   }
 }

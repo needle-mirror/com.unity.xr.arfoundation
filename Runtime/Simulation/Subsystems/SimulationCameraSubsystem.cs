@@ -33,6 +33,8 @@ namespace UnityEngine.XR.Simulation
 
         class SimulationProvider : Provider
         {
+            const string k_TorchLightGameObjectName = "SimulationLight";
+
             CameraTextureFrameEventArgs m_CameraTextureFrameEventArgs;
             CameraTextureProvider m_CameraTextureProvider;
             Camera m_Camera;
@@ -142,11 +144,8 @@ namespace UnityEngine.XR.Simulation
                     m_CameraTextureFrameEventArgs = (CameraTextureFrameEventArgs)m_CameraTextureProvider.CameraFrameEventArgs;
 
                 m_Camera = m_CameraTextureProvider.GetComponent<Camera>();
-                var lightObject = new GameObject("SimulationLight");
-                lightObject.transform.parent = m_Camera.transform;
-                lightObject.layer = m_Camera.gameObject.layer;
-                m_CameraTorch = lightObject.AddComponent<Light>();
-                SetupCameraTorch(m_CameraTorch);
+
+                EnsureCameraHasTorchLight();
 
                 m_XRCameraConfiguration = new XRCameraConfiguration(IntPtr.Zero, new Vector2Int(m_Camera.pixelWidth, m_Camera.pixelHeight));
                 m_XRCameraIntrinsics = new XRCameraIntrinsics();
@@ -162,6 +161,10 @@ namespace UnityEngine.XR.Simulation
                 {
                     m_CameraTextureProvider.cameraFrameReceived -= CameraFrameReceived;
                     m_CameraTextureProvider.onTextureReadbackFulfilled -= SimulationXRCpuImageApi.OnCameraDataReceived;
+                    // Destroy the camera texture provider here since it is not resilient to destructive scene loads.
+                    // It will be re-added when this subsystem is started again through the Start() method
+                    Object.Destroy(m_CameraTextureProvider);
+                    m_CameraTextureProvider = null;
                 }
 
                 BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentSetupFinished;
@@ -169,10 +172,19 @@ namespace UnityEngine.XR.Simulation
 
             public override void Destroy()
             {
-                if (m_CameraTextureProvider != null)
+                // NOTE: the camera texture provider's game object does not need to be destroyed here because its
+                // lifecycle (as a do not destroy object) is not governed here
+            }
+
+            void EnsureCameraHasTorchLight()
+            {
+                if (m_Camera.transform.Find(k_TorchLightGameObjectName) == null)
                 {
-                    Object.Destroy(m_CameraTextureProvider.gameObject);
-                    m_CameraTextureProvider = null;
+                    var lightObject = new GameObject(k_TorchLightGameObjectName);
+                    lightObject.transform.parent = m_Camera.transform;
+                    lightObject.layer = m_Camera.gameObject.layer;
+                    m_CameraTorch = lightObject.AddComponent<Light>();
+                    SetupCameraTorch(m_CameraTorch);
                 }
             }
 

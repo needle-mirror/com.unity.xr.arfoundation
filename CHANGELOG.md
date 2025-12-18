@@ -8,6 +8,20 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.3.2] - 2025-12-18
+
+### Fixed
+
+- Fixed an issue with the XR Simulation provider where creating new sessions through loading new scenes would throw exceptions and fail to start those new sessions.
+- Fixed `ARTrackableManager` so that it calls `OnAfterSetSessionRelativeData` for added trackables.
+
+### Deprecated
+
+- In Unity 6000.4 and newer Editor versions, all methods that depend on URP Compatibility Mode have been changed from `Obsolete(false)` to `Obsolete(true)`. URP Compatibility Mode is removed in Unity 6000.4, so these APIs are no longer supported in Unity 6000.4 or newer. The following methods are affected:
+  - `ARBackgroundRendererFeature.Execute`
+  - `ARBackgroundRendererFeature.Configure`
+  - `ARCommandBufferSupportRendererFeature.Execute`
+
 ## [6.3.1] - 2025-11-04
 
 ### Fixed

@@ -3,6 +3,8 @@ uid: arfoundation-occlusion-platform-support
 ---
 # Occlusion platform support
 
+Discover which AR platforms support occlusion features.
+
 The AR Foundation [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) is supported on the following platforms:
 
 | Provider plug-in | Occlusion supported | Provider documentation |
@@ -19,11 +21,21 @@ The AR Foundation [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROccl
 
 Your app can check at runtime whether a provider plug-in supports occlusion on the user's device.
 
-Use the example code below to check whether the device supports occlusion:
+Use the following example code to check whether the device supports occlusion:
 
 [!code-cs[CheckIfOcclusionLoaded](../../../Tests/Runtime/CodeSamples/LoaderUtilitySamples.cs#CheckIfOcclusionLoaded)]
 
 [!include[](../../snippets/initialization.md)]
+
+## Occlusion component support
+
+The following table describes which platforms support each occlusion component:
+
+| **Component** | **Supported platforms** |
+| :------------ | :---------------------- |
+| [AR Occlusion Manager](xref:arfoundation-occlusion-manager) | All platforms that support occlusion. |
+| [AR Shader Occlusion](xref:arfoundation-shader-occlusion) | Android XR and Meta OpenXR. |
+| [AR Camera Background](xref:arfoundation-camera-components) | ARCore, ARKit, and XR Simulation. |
 
 ## Optional features
 
@@ -49,6 +61,9 @@ The following table lists whether certain XR plug-in providers support each opti
 | **Human Segmentation Depth Image** | | Yes | | | |
 | **Human Segmentation Stencil Image** | | Yes | | | |
 
+> [!NOTE]
+> Depth images have additional hardware and software requirements on ARCore and ARKit. Refer to ARKit Occlusion [Requirements](xref:arkit-occlusion#requirements) and ARCore Occlusion [Requirements](xref:arcore-occlusion#requirements) for more information.
+
 <a id="check-feature-support"></a>
 
 ### Check for optional feature support
@@ -58,5 +73,9 @@ Your app can check at runtime whether an occlusion provider supports any optiona
 Refer to the following example code to learn how to check for optional feature support:
 
 [!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/AROcclusionManagerSamples.cs#DescriptorChecks)]
+
+## Additional resources
+
+* [Configure occlusion in your project](xref:arfoundation-occlusion-workflow)
 
 [!include[](../../snippets/apple-arkit-trademark.md)]
