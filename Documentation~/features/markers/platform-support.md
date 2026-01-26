@@ -20,6 +20,8 @@ The AR Foundation XRMarkerSubsystem is supported on the following platforms:
 > [!NOTE]
 > Currently Unity doesn't support any provider plug-ins that implement this feature, but we expect to release more support for these APIs in the future.
 
+<a id="check-for-support-at-runtime"></a>
+
 ## Check for support at runtime
 
 Not all devices and platforms support every type of marker. Before building features that rely on a specific marker type, you should check whether the current device supports it. To check whether the current device supports a specific marker type, query the [XRMarkerSubsystemDescriptor.supportedMarkerTypes](xref:UnityEngine.XR.ARSubsystems.XRMarkerSubsystemDescriptor.supportedMarkerTypes) property.

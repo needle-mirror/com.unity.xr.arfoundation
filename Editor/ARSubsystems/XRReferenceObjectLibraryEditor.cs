@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
+#if UNITY_6000_5_OR_NEWER
+using UnityEngine.Assemblies;
+#endif
 
 namespace UnityEditor.XR.ARSubsystems
 {
@@ -17,7 +20,7 @@ namespace UnityEditor.XR.ARSubsystems
 
                 s_RemoveButtonContent = new GUIContent(
                     string.Empty,
-                    EditorGUIUtility.FindTexture("d_winbtn_win_close"),
+                    EditorGUIUtility.IconContent("d_clear")?.image as Texture2D,
                     "Remove this image from the library.");
             }
 
@@ -65,7 +68,11 @@ namespace UnityEditor.XR.ARSubsystems
             void OnAfterAssemblyReload()
             {
                 m_Types.Clear();
+#if UNITY_6000_5_OR_NEWER
+                foreach (var assembly in CurrentAssemblies.GetLoadedAssemblies())
+#else
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+#endif
                 {
                     foreach(var type in assembly.GetTypes())
                     {

@@ -88,14 +88,33 @@ namespace UnityEngine.XR.ARSubsystems
             /// Indicates that Unity has determined that the operation is not supported on the device.
             /// </summary>
             /// <remarks>
-            /// This error code allows Unity to design APIs where some source other than the OpenXR runtime
+            /// This status code allows Unity to design APIs where some source other than an a platform error code
             /// defines whether an operation is supported.
             ///
-            /// If a runtime returns `XrResult.FeatureUnsupported` or `XrResult.FunctionUnsupported` as the
-            /// `nativeStatusCode` for an API call, the expected `StatusCode` value is `PlatformError`,
-            /// as the runtime is the source of the error.
+            /// This status code should not be used as a replacement for platform error codes such as OpenXR's
+            /// `XrResult.FeatureUnsupported` or `XrResult.FunctionUnsupported`. If an OpenXR runtime returns one of
+            /// these `XrResult` values, the corresponding `XRResultStatus.StatusCode` value should be `PlatformError`,
+            /// indicating that the OpenXR runtime, not Unity, produced the error code.
             /// </remarks>
             Unsupported = -6,
+
+            /// <summary>
+            /// Indicates that the operation failed to return a value because a required lookup step failed.
+            /// </summary>
+            /// <remarks>
+            /// Some OpenXR APIs perform a lookup step as part of their logic, but don't represent failed lookups
+            /// as `XrResult` error codes. In these cases, an OpenXR runtime will return `XrResult.Success`, but AR
+            /// Foundation did not receive the data it needs to return a successful result and must therefore
+            /// represent this as an error.
+            /// </remarks>
+            NotFound = -7,
+
+            /// <summary>
+            /// Indicates that the operation failed to return a value because it required a native resource to be in a
+            /// `Tracking` state, but the operation terminated before tracking could be established.
+            /// </summary>
+            /// <seealso cref="TrackingState"/>
+            NotTracking = -8,
         }
 
         /// <summary>
@@ -230,6 +249,15 @@ namespace UnityEngine.XR.ARSubsystems
         public bool IsError() => m_StatusCode < 0;
 
         /// <summary>
+        /// Indicates whether this instance contains a valid <see cref="nativeStatusCode"/>. If this method returns
+        /// `false`, you must only read the <see cref="statusCode"/> value and ignore the native status code property.
+        /// </summary>
+        /// <returns>`true` if the operation returned a native status code that you can use.
+        /// Otherwise, `false`.</returns>
+        public bool HasNativeStatusCode() =>
+            m_StatusCode is StatusCode.PlatformError or StatusCode.PlatformQualifiedSuccess;
+
+        /// <summary>
         /// Convert from <see cref="bool"/> to `XRResultStatus` using the <see cref="XRResultStatus(bool)"/> constructor.
         /// </summary>
         /// <param name="wasSuccessful">Whether the operation was successful.</param>
@@ -253,8 +281,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Convert from `OpenXRResultStatus` to `XRResultStatus`.
         /// </summary>
-        /// <param name="oxrResultStatus">Whether the operation was successful.</param>
-        /// <returns>The instance.</returns>
+        /// <param name="oxrResultStatus">The `OpenXRResultStatus` instance.</param>
+        /// <returns>The output instance.</returns>
         public static implicit operator XRResultStatus(OpenXRResultStatus oxrResultStatus)
         {
             return new XRResultStatus((StatusCode)oxrResultStatus.statusCode, (int)oxrResultStatus.nativeStatusCode);

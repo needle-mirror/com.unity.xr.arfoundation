@@ -2,6 +2,9 @@ using System;
 using System.Linq;
 using UnityEditor.Build;
 using UnityEditor.XR.Management;
+#if UNITY_6000_5_OR_NEWER
+using UnityEngine.Assemblies;
+#endif
 
 namespace UnityEditor.XR.ARSubsystems
 {
@@ -47,8 +50,12 @@ namespace UnityEditor.XR.ARSubsystems
             XRReferenceImageLibraryBuildProcessor.ClearDataStore();
 
             // Find and create all IPreprocessBuild objects
-            var interfaces = AppDomain.CurrentDomain
-                .GetAssemblies()
+#if UNITY_6000_5_OR_NEWER
+            var assemblies = CurrentAssemblies.GetLoadedAssemblies();
+#else
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+#endif
+            var interfaces = assemblies
                 .SelectMany(x => x.GetTypes())
                 .Where(type => Array.Exists(type.GetInterfaces(), i => i == typeof(IPreprocessBuild)))
                 .Select(type => Activator.CreateInstance(type) as IPreprocessBuild)

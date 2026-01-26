@@ -78,7 +78,9 @@ namespace UnityEngine.XR.Simulation
 
         TrackableId GenerateTrackableID()
         {
-#if UNITY_6000_4_OR_NEWER
+#if UNITY_6000_5_OR_NEWER
+            var unsignedInstanceId = gameObject.GetEntityId().GetRawData();
+#elif UNITY_6000_4_OR_NEWER
             var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetEntityId());
 #else
             var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetInstanceID());

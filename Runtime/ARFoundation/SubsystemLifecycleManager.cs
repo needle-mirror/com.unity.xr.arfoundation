@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.SubsystemsImplementation;
 using UnityEngine.XR.ARFoundation.InternalUtils;
 
@@ -14,6 +15,11 @@ namespace UnityEngine.XR.ARFoundation
         where TSubsystemDescriptor : SubsystemDescriptorWithProvider<TSubsystem, TProvider>
         where TProvider : SubsystemProvider<TSubsystem>
     {
+        const float k_SubsystemLocatorTimeoutSeconds = 5;
+
+        static readonly string k_NoSubsystemInstance =
+            $"No active {typeof(TSubsystem).FullName} is available. This feature is either not supported on the current platform, or you may need to enable a provider in <b>Project Settings</b> > <b>XR Plug-in Management</b>.";
+
         /// <summary>
         /// Get the <c>TSubsystem</c> whose lifetime this component manages.
         /// </summary>
@@ -34,7 +40,7 @@ namespace UnityEngine.XR.ARFoundation
             var success = SubsystemUtils.TryGetLoadedSubsystem(out TSubsystem activeSubsystem);
 
             if (!success)
-                Debug.LogWarning($"No active {typeof(TSubsystem).FullName} is available. This feature is either not supported on the current platform, or you may need to enable a provider in <b>Project Settings</b> > <b>XR Plug-in Management</b>.");
+                Debug.LogWarning(k_NoSubsystemInstance);
 
             return activeSubsystem;
         }
@@ -47,25 +53,55 @@ namespace UnityEngine.XR.ARFoundation
             subsystem = GetActiveSubsystemInstance();
         }
 
+        bool TryStartSubsystem()
+        {
+            var success = SubsystemUtils.TryGetLoadedSubsystem(out TSubsystem activeSubsystem);
+            if (!success || activeSubsystem == null)
+                return false;
+
+            subsystem = activeSubsystem;
+            OnBeforeStart();
+
+            // The derived class may disable the
+            // component if it has invalid state
+            if (enabled)
+            {
+                subsystem.Start();
+                OnAfterStart();
+            }
+
+            return true;
+        }
+
+        async void FindAndStartSubsystemAsync()
+        {
+            try
+            {
+                float pollStartTime = Time.time;
+                while (Time.time - pollStartTime < k_SubsystemLocatorTimeoutSeconds)
+                {
+                    if (TryStartSubsystem())
+                        return;
+
+                    await Awaitable.NextFrameAsync();
+                    if (this == null || gameObject == null || !isActiveAndEnabled)
+                        return;
+                }
+
+                Debug.LogWarning(k_NoSubsystemInstance);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+
         /// <summary>
-        /// Creates the <c>TSubsystem</c>.
+        /// Starts the <c>TSubsystem</c>.
         /// </summary>
         protected virtual void OnEnable()
         {
-            EnsureSubsystemInstanceSet();
-
-            if (subsystem != null)
-            {
-                OnBeforeStart();
-
-                // The derived class may disable the
-                // component if it has invalid state
-                if (enabled)
-                {
-                    subsystem.Start();
-                    OnAfterStart();
-                }
-            }
+            FindAndStartSubsystemAsync();
         }
 
         /// <summary>
@@ -77,7 +113,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Destroys the <c>TSubsystem</c>.
+        /// Called when this instance is destroyed.
         /// </summary>
         protected virtual void OnDestroy()
         {

@@ -29,7 +29,7 @@ The physical size (width and height) of the marker in meters. The width correspo
 
 The type of the marker, such as `QRCode` or `ArUco`. Refer to [Marker types](xref:arfoundation-markers-introduction#marker-types) for more information on the different supported marker types and how they compare to each other.
 
-<a id="marker-id"/>
+<a id="marker-id"></a>
 
 ### Marker ID
 

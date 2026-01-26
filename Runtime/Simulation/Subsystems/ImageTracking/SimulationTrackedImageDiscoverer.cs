@@ -217,7 +217,6 @@ namespace UnityEngine.XR.Simulation
                         var image = m_ImagesInScene[i];
                         var prevTrackingState = m_TrackingStatesOfImages[i];
                         var newTrackingState = m_ImageDiscoveryStrategy.ComputeTrackingState(image);
-                        var referenceImageChanged = false;
 
                         if (!m_ReferenceImagesForImages[i].HasValue && hasLibraryChanged)
                         {
@@ -226,13 +225,12 @@ namespace UnityEngine.XR.Simulation
                                     out var foundImage))
                             {
                                 m_ReferenceImagesForImages[i] = foundImage;
-                                referenceImageChanged = true;
                             }
                         }
 
                         if (prevTrackingState is TrackingState.None && newTrackingState is TrackingState.Tracking)
                             SubsystemAddImageAtIndex(i);
-                        else if (prevTrackingState is TrackingState.Tracking || newTrackingState is TrackingState.Tracking || referenceImageChanged)
+                        else if (prevTrackingState is TrackingState.Tracking || newTrackingState is TrackingState.Tracking)
                             SubsystemUpdateImageAtIndex(i, newTrackingState);
                     }
 

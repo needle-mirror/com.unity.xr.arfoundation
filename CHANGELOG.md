@@ -8,11 +8,31 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [6.4.1] - 2025-12-09
+## [6.5.0-pre.1] - 2026-01-26
+
+### Added
+
+- Added `BoundedPlaneBuilder.WithPose` overload that takes an OpenXR `XrPosef` if your app uses OpenXR Plug-in 1.16.0 or newer.
+- Added `XRAnchorBuilder.FromAnchor`, which enables you to initialize all fields of an `XRAnchorBuilder` from a given anchor.
+- Added `XRResultStatus.StatusCode.NotFound` and `XRResultStatus.StatusCode.NotTracking` as a new possible error codes for AR Foundation operations.
+- Added an implicit operator to convert from `XrUuid` to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.
+- Added an `IEquatable<XrUuid>` implementation to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.
+- Added `XRResultStatus.HasNativeStatusCode` as a convenience method to determine whether a native status code is present.
+
+### Deprecated
+
+- Deprecated and replaced the following properties of [XRPlaneSubsystemDescriptor.Cinfo](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.Cinfo) to allow providers to determine at runtime whether AR Foundation plane APIs are supported:
+  - `supportsBoundaryVertices` to `supportsBoundaryVerticesDelegate`
+  - `supportsClassification` to `supportsClassificationDelegate`
 
 ### Fixed
 
+- Fixed `InvalidOperationException`s which occurred in XR Simulation sessions when images were added to the reference image library during the active session.
+- Fixed the editor for `XRReferenceObjectLibrary` so that the remove button renders correctly in all Unity versions. ([ARFB-673](https://issuetracker.unity3d.com/issues/remove-reference-object-button-is-unclear-for-xr-reference-object-library-in-inspector-window))
+- Fixed usages of the implicit operator to convert a GameObject's Entity ID to `int`, as this operator is deprecated in Unity 6.5.
 - Fixed `XRAnchorSubsystemDescriptor.Cinfo` so that it still considers deprecated field values when computing equality or its hash code.
+- Fixed `ARAnchorManager` so that if its subsystem fails to create an anchor, it doesn't try to create an `ARAnchor` object with invalid data.
+- Fixed `ARDebugMenu` so that it matches the state of the slider buttons and visualizers for plane and anchors when enabled.
 
 ## [6.4.0] - 2025-12-03
 
@@ -21,6 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `XRMarkerSubsystemDescriptor.Cinfo` properties for `id`, `providerType`, and `subsystemTypeOverride` that are needed during subsystem registration.
 - Added [XRBoundingBoxBuilder](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxBuilder), [BoundedPlaneBuilder](xref:UnityEngine.XR.ARSubsystems.BoundedPlaneBuilder), and [XRMarkerBuilder](xref:UnityEngine.XR.ARSubsystems.XRMarkerBuilder) which provide fluent APIs for constructing `XRBoundingBox`, `BoundedPlane`, and `XRMarker` instances, respectively.
 - Added `XRMarkerBuilder.WithPose` overload that takes an OpenXR `XrPosef` representing the session space pose and converts it to a Unity world space pose to build the marker with.
+- Added `XRMarkerBuilder.FromMarker` to create a copy of an existing `XRMarker`.
 - Added `InnerWallFace` semantic label to [PlaneClassifications](xref:UnityEngine.XR.ARSubsystems.PlaneClassifications).
 - Added support for the `IEquatable<XRResultStatus>` and `IEquatable<Result<T>>` interfaces to [Result\<T\>](xref:UnityEngine.XR.ARSubsystems.Result`1).
 - Added a `ToString` override to [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus).
@@ -32,6 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed pre-release property types `ARMarker.markerId` and `XRMarker.markerId` from `int` to `uint`.
 - Changed the type of [XRBoundingBox](xref:UnityEngine.XR.ARSubsystems.XRBoundingBox) from `struct` to `readonly struct`.
 - Changed the pre-release methods `XRMarkerSubsystem.TryGetStringData` and `XRMarkerSubsystem.TryGetBytesData` to now take the marker's `TrackableId` as a new argument when querying for a marker's encoded data.
+- Changed `SubsystemLifecycleManager.OnEnable` to poll for a number of seconds until a subsytem is created before it disables itself, allowing subsystems to be created asynchronously and still connect with their managers.
 
 ### Deprecated
 

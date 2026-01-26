@@ -418,7 +418,7 @@ namespace UnityEngine.XR.Simulation
                 supportsHorizontalPlaneDetection = true,
                 supportsVerticalPlaneDetection = true,
                 supportsArbitraryPlaneDetection = false,
-                supportsBoundaryVertices = true
+                supportsBoundaryVerticesDelegate = () => true
             };
 
             XRPlaneSubsystemDescriptor.Register(cinfo);

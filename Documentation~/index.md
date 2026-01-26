@@ -87,6 +87,6 @@ The following table lists the available features in each Unity-supported provide
 
 ## Samples
 
-AR Foundation provides pre-configured sample scenes that demonstrate how to use each feature, in the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples) GitHub repository. To understand how to use these samples, and learn more about each scene, refer to [AR Foundation samples](xref:arfoundation-samples).
+To learn about the samples AR Foundation provides to help you learn about and implement AR Foundation features, refer to [Samples](xref:arfoundation-samples).
 
 [!include[](snippets/apple-arkit-trademark.md)]

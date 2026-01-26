@@ -102,6 +102,22 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Initialize all fields using data from the given anchor.
+        /// </summary>
+        /// <param name="anchor">The anchor.</param>
+        /// <returns>This instance.</returns>
+        public XRAnchorBuilder FromAnchor(XRAnchor anchor)
+        {
+            m_TrackableId = anchor.trackableId;
+            m_Pose = anchor.pose;
+            m_TrackingState = anchor.trackingState;
+            m_NativePtr = anchor.nativePtr;
+            m_SessionId = anchor.sessionId;
+            m_ParentId = anchor.parentId;
+            return this;
+        }
+
+        /// <summary>
         /// Build an output `XRAnchor` using all this builder's parameter values.
         /// </summary>
         /// <returns>The built `XRAnchor`.</returns>

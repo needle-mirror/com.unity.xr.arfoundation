@@ -26,7 +26,7 @@ The following code example shows how to subscribe to this event to respond to de
 
 Once you have a reference to an `ARMarker` from the added or updated lists, you can query its properties (such as `markerId` or `size`) or retrieve its encoded data if the marker type supports it.
 
-<a id="get-marker-encoded-data"/>
+<a id="get-marker-encoded-data"></a>
 
 ## Get the marker's encoded data
 
@@ -59,3 +59,7 @@ If the `bufferType` is `Uint8`, the `NativeArray<byte>` you retrieved contains t
 If the `bufferType` is `String`, the `NativeArray<byte>` contains the UTF-8 encoded string data. While you could convert this to a C# string, doing so would cause a new allocation and defeat the purpose of the efficient retrieval.
 
 The key to performance is to avoid creating the managed string object altogether by processing the raw UTF-8 bytes.
+
+## Additional resources
+
+* [Markers samples](xref:arfoundation-markers-samples)

@@ -14,6 +14,7 @@ To learn about the scenes that demonstrate AR Foundation features, refer to the 
 | [Plane detection](xref:arfoundation-samples-plane-detection) | Scenes that demonstrate plane detection. |
 | [Bounding box detection](xref:arfoundation-samples-bounding-box-detection) | Demonstrates bounding box detection. |
 | [Image tracking](xref:arfoundation-samples-image-tracking) | Scenes that demonstrate image tracking. |
+| [Markers](xref:arfoundation-samples-markers) | Demonstrates AR marker detection, such as QR codes. |
 | [Object tracking](xref:arfoundation-samples-object-tracking) | Demonstrates object tracking. |
 | [Face tracking](xref:arfoundation-samples-face-tracking) | Scenes that demonstrate face tracking. |
 | [Body tracking](xref:arfoundation-samples-body-tracking) | Scenes that demonstrate body tracking. |

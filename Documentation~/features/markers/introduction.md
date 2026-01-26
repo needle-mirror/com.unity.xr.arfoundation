@@ -23,7 +23,7 @@ AR markers provide an explicit, machine-readable visual target that addresses th
 - **Accurate positioning**: markers allow the device to compute the exact real-world pose, correcting for drift and enabling precise spatial alignment of digital content.
 - **Identity and metadata**: markers can encode information, such as a unique identifier or URL, allowing applications to associate content or logic with a specific physical object or location.
 
-<a id="marker-types"/>
+<a id="marker-types"></a>
 
 ## Marker types
 

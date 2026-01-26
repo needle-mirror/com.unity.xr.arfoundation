@@ -11,3 +11,7 @@ Refer to the following topics to understand markers and how to use them:
 | [Markers platform support](xref:arfoundation-markers-platform-support) | Discover which AR platforms support AR Foundation's marker subsystem. |
 | [AR Marker Manager component](xref:arfoundation-markers-armarkermanager) | Understand how to configure and use the AR Marker Manager component. |
 | [AR Marker component](xref:arfoundation-markers-armarker) | Understand how to configure and use the AR Marker component. |
+
+## Additional resources
+
+* [Markers samples](xref:arfoundation-samples-markers)

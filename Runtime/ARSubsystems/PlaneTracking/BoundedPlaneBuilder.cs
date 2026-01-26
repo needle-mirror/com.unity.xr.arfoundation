@@ -1,5 +1,8 @@
 using System;
-using UnityEngine;
+
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+using UnityEngine.XR.OpenXR.NativeTypes;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -87,6 +90,28 @@ namespace UnityEngine.XR.ARSubsystems
             m_Pose = pose;
             return this;
         }
+
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+        /// <summary>
+        /// Set the pose for built `BoundedPlane` instances.
+        /// </summary>
+        /// <param name="pose">The session space pose.</param>
+        /// <remarks>
+        /// The session space pose passed in will be transformed to Unity world space by flipping the Z component for
+        /// the position and flipping the X and Y components of the rotation <see cref="Quaternion"/> and rotating it
+        /// -90 degrees around the X-axis.
+        /// </remarks>
+        /// <returns>This instance</returns>
+        public BoundedPlaneBuilder WithPose(XrPosef pose)
+        {
+            var position = pose.Position.AsVector3();
+            var rotation = pose.Orientation.AsQuaternion();
+            // Reorient so the Y-axis points out of the face of the bounded plane
+            rotation *= Quaternion.Euler(-90f, 0f, 0f);
+            m_Pose = new Pose(position, rotation);
+            return this;
+        }
+#endif
 
         /// <summary>
         /// Set the size for built `BoundedPlane` instances.

@@ -326,26 +326,21 @@ namespace UnityEngine.XR.ARFoundation
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             WarnIfMultipleARSessions();
 #endif
-            EnsureSubsystemInstanceSet();
+            base.OnEnable();
 
             // Cache these values and restore them in OnDisable
             m_VSyncCount = QualitySettings.vSyncCount;
             m_TargetFrameRate = Application.targetFrameRate;
             m_WasFrameRateSet = false;
+        }
 
+        /// <inheritdoc/>
+        protected override void OnBeforeStart()
+        {
             if (subsystem != null)
             {
                 StartCoroutine(Initialize());
             }
-#if DEVELOPMENT_BUILD
-            else
-            {
-                Debug.LogWarning("No ARSession available for the current platform. " +
-                    "Please ensure you have installed the relevant XR Plug-in package " +
-                    "for this platform via XR Plug-in Management (Project Settings > XR Plug-in Management)."
-                );
-            }
-#endif
         }
 
         IEnumerator Initialize()

@@ -9,6 +9,11 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     public class XRPlaneSubsystemDescriptor : SubsystemDescriptorWithProvider<XRPlaneSubsystem, XRPlaneSubsystem.Provider>
     {
+        bool m_SupportsBoundaryVerticesObsolete;
+        bool m_SupportsClassificationObsolete;
+        Func<bool> m_SupportsBoundaryVerticesDelegate;
+        Func<bool> m_SupportsClassificationDelegate;
+
         /// <summary>
         /// Indicates whether the provider implementation supports the detection of horizontal planes,
         /// such as the floor.
@@ -49,7 +54,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports boundary vertices for its planes.
         /// Otherwise, <see langword="false"/>.</value>
-        public bool supportsBoundaryVertices { get; }
+        public bool supportsBoundaryVertices
+            => m_SupportsBoundaryVerticesDelegate?.Invoke() ?? m_SupportsBoundaryVerticesObsolete;
 
         /// <summary>
         /// Indicates whether the provider implementation can provide a value for
@@ -59,7 +65,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports plane classifications.
         /// Otherwise, <see langword="false"/>.</value>
-        public bool supportsClassification { get; }
+        public bool supportsClassification
+            => m_SupportsClassificationDelegate?.Invoke() ?? m_SupportsClassificationObsolete;
 
         /// <summary>
         /// Contains the parameters necessary to construct a new <see cref="XRPlaneSubsystemDescriptor"/> instance.
@@ -125,6 +132,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports boundary vertices for its planes.
             /// Otherwise, <see langword="false"/>.</value>
+            [Obsolete("supportsBoundaryVertices is deprecated in AR Foundation 6.5.0-pre.1. Use supportsBoundaryVerticesDelegate instead.")]
             public bool supportsBoundaryVertices { get; set; }
 
             /// <summary>
@@ -135,7 +143,49 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports plane classification.
             /// Otherwise, <see langword="false"/>.</value>
+            [Obsolete("supportsClassification is deprecated in AR Foundation 6.5.0-pre.1. Use supportsClassificationDelegate instead.")]
             public bool supportsClassification { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation supports boundary vertices for its planes.
+            /// If <see langword="false"/>, <see cref="XRPlaneSubsystem.GetBoundary">XRPlaneSubsystem.GetBoundary</see>
+            /// must throw a <see cref="NotSupportedException"/>.
+            /// </summary>
+            /// <value><see langword="true"/> if the implementation supports boundary vertices for its planes.
+            /// Otherwise, <see langword="false"/>.</value>
+            public Func<bool> supportsBoundaryVerticesDelegate { get; set; }
+
+            /// <summary>
+            /// Indicates whether the provider implementation can provide a value for
+            /// <see cref="BoundedPlane.classifications">BoundedPlane.classifications</see>. If <see langword="false"/>, all
+            /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have a
+            /// <c>classifications</c> value of <see cref="PlaneClassifications.None"/>.
+            /// </summary>
+            /// <value><see langword="true"/> if the implementation supports plane classification.
+            /// Otherwise, <see langword="false"/>.</value>
+            public Func<bool> supportsClassificationDelegate { get; set; }
+
+            /// <summary>
+            /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
+            /// </summary>
+            /// <returns>A hash code generated from this object's fields.</returns>
+            public override int GetHashCode()
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(id);
+                hashCode.Add(providerType);
+                hashCode.Add(subsystemTypeOverride);
+                hashCode.Add(supportsHorizontalPlaneDetection);
+                hashCode.Add(supportsVerticalPlaneDetection);
+                hashCode.Add(supportsArbitraryPlaneDetection);
+#pragma warning disable CS0618 // Type or member is obsolete
+                hashCode.Add(supportsBoundaryVertices);
+                hashCode.Add(supportsClassification);
+#pragma warning restore CS0618 // Type or member is obsolete
+                hashCode.Add(supportsBoundaryVerticesDelegate);
+                hashCode.Add(supportsClassificationDelegate);
+                return hashCode.ToHashCode();
+            }
 
             /// <summary>
             /// Tests for equality.
@@ -152,8 +202,12 @@ namespace UnityEngine.XR.ARSubsystems
                     supportsHorizontalPlaneDetection == other.supportsHorizontalPlaneDetection &&
                     supportsVerticalPlaneDetection == other.supportsVerticalPlaneDetection &&
                     supportsArbitraryPlaneDetection == other.supportsArbitraryPlaneDetection &&
-                    supportsClassification == other.supportsClassification &&
-                    supportsBoundaryVertices == other.supportsBoundaryVertices;
+                    supportsClassificationDelegate == other.supportsClassificationDelegate &&
+                    supportsBoundaryVerticesDelegate == other.supportsBoundaryVerticesDelegate &&
+#pragma warning disable CS0618 // Type or member is obsolete
+                    supportsBoundaryVertices == other.supportsBoundaryVertices &&
+                    supportsClassification == other.supportsClassification;
+#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             /// <summary>
@@ -169,26 +223,6 @@ namespace UnityEngine.XR.ARSubsystems
                     return false;
 
                 return Equals((Cinfo)obj);
-            }
-
-            /// <summary>
-            /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
-            /// </summary>
-            /// <returns>A hash code generated from this object's fields.</returns>
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    int hashCode = HashCodeUtil.ReferenceHash(id);
-                    hashCode = (hashCode * 486187739) + HashCodeUtil.ReferenceHash(providerType);
-                    hashCode = (hashCode * 486187739) + HashCodeUtil.ReferenceHash(subsystemTypeOverride);
-                    hashCode = (hashCode * 486187739) + supportsHorizontalPlaneDetection.GetHashCode();
-                    hashCode = (hashCode * 486187739) + supportsVerticalPlaneDetection.GetHashCode();
-                    hashCode = (hashCode * 486187739) + supportsArbitraryPlaneDetection.GetHashCode();
-                    hashCode = (hashCode * 486187739) + supportsBoundaryVertices.GetHashCode();
-                    hashCode = (hashCode * 486187739) + supportsClassification.GetHashCode();
-                    return hashCode;
-                }
             }
 
             /// <summary>
@@ -237,8 +271,12 @@ namespace UnityEngine.XR.ARSubsystems
             supportsHorizontalPlaneDetection = cinfo.supportsHorizontalPlaneDetection;
             supportsVerticalPlaneDetection = cinfo.supportsVerticalPlaneDetection;
             supportsArbitraryPlaneDetection = cinfo.supportsArbitraryPlaneDetection;
-            supportsBoundaryVertices = cinfo.supportsBoundaryVertices;
-            supportsClassification = cinfo.supportsClassification;
+#pragma warning disable CS0618 // Type or member is obsolete
+            m_SupportsBoundaryVerticesObsolete = cinfo.supportsBoundaryVertices;
+            m_SupportsClassificationObsolete = cinfo.supportsClassification;
+#pragma warning restore CS0618 // Type or member is obsolete
+            m_SupportsBoundaryVerticesDelegate = cinfo.supportsBoundaryVerticesDelegate;
+            m_SupportsClassificationDelegate = cinfo.supportsClassificationDelegate;
         }
     }
 }

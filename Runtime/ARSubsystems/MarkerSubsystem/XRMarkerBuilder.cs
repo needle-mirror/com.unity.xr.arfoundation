@@ -30,6 +30,25 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
+        /// Copies values from another marker to this instance.
+        /// </summary>
+        /// <param name="marker">The marker values to copy to this instance.</param>
+        /// <returns>This instance.</returns>
+        public XRMarkerBuilder FromMarker(XRMarker marker)
+        {
+            m_TrackableId = marker.trackableId;
+            m_Pose = marker.pose;
+            m_TrackingState = marker.trackingState;
+            m_NativePtr =  marker.nativePtr;
+            m_Size =  marker.size;
+            m_MarkerType = marker.markerType;
+            m_MarkerId =  marker.markerId;
+            m_DataBuffer = marker.dataBuffer;
+            m_ParentId  = marker.parentId;
+            return this;
+        }
+
+        /// <summary>
         /// Reset the instance to default values.
         /// </summary>
         public void Reset()

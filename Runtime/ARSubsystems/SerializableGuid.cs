@@ -11,6 +11,9 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     [Serializable]
     public struct SerializableGuid : IEquatable<SerializableGuid>
+#if OPENXR_PLUGIN_1_16_0_PRE1_OR_NEWER
+        , IEquatable<XrUuid>
+#endif
     {
         [SerializeField]
         ulong m_GuidLow;
@@ -88,20 +91,43 @@ namespace UnityEngine.XR.ARSubsystems
         {
             return new XrUuid(guid.guidLow, guid.guidHigh);
         }
+
+        /// <summary>
+        /// Convert a an `XrUuid` to a `SerializableGuid`.
+        /// </summary>
+        /// <param name="uuid">The UUID.</param>
+        /// <returns>The equivalent `SerializableGuid`.</returns>
+        public static implicit operator SerializableGuid(XrUuid uuid)
+        {
+            return new SerializableGuid(uuid.dataPart1, uuid.dataPart2);
+        }
+
+        /// <summary>
+        /// Compares for equality with an `XrUuid` instance.
+        /// </summary>
+        /// <param name="other">The `XrUuid`.</param>
+        /// <returns>`true` if the bits are the same between both instances. Otherwise, `false`.</returns>
+        public bool Equals(XrUuid other)
+        {
+            return ((SerializableGuid)other).Equals(this);
+        }
 #endif
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
         /// </summary>
         /// <returns>A hash code generated from this object's fields.</returns>
-        public override int GetHashCode() => HashCodeUtil.Combine(m_GuidLow.GetHashCode(), m_GuidHigh.GetHashCode());
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(m_GuidLow, m_GuidHigh);
+        }
 
         /// <summary>
         /// Tests for equality.
         /// </summary>
         /// <param name="obj">The `object` to compare against.</param>
-        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="SerializableGuid"/> and
-        /// <see cref="Equals(SerializableGuid)"/> also returns `true`; otherwise `false`.</returns>
+        /// <returns>`true` if <paramref name="obj"/> is of type <see cref="SerializableGuid"/> and
+        /// <see cref="Equals(SerializableGuid)"/> also returns `true`. Otherwise, `false`.</returns>
         public override bool Equals(object obj) => (obj is SerializableGuid) && Equals((SerializableGuid)obj);
 
         /// <summary>
