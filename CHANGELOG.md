@@ -8,12 +8,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [6.3.2] - 2025-12-18
+## [6.3.3] - 2026-01-26
 
 ### Fixed
 
-- Fixed an issue with the XR Simulation provider where creating new sessions through loading new scenes would throw exceptions and fail to start those new sessions.
-- Fixed `ARTrackableManager` so that it calls `OnAfterSetSessionRelativeData` for added trackables.
+- Fixed `InvalidOperationException`s which occurred in XR Simulation sessions when images were added to the reference image library during the active session.
+- Fixed the editor for `XRReferenceObjectLibrary` so that the remove button renders correctly in all Unity versions. ([ARFB-673](https://issuetracker.unity3d.com/issues/remove-reference-object-button-is-unclear-for-xr-reference-object-library-in-inspector-window))
+- Fixed `ARAnchorManager` so that if its subsystem fails to create an anchor, it doesn't try to create an `ARAnchor` object with invalid data.
+
+## [6.3.2] - 2025-12-18
 
 ### Deprecated
 
@@ -21,6 +24,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `ARBackgroundRendererFeature.Execute`
   - `ARBackgroundRendererFeature.Configure`
   - `ARCommandBufferSupportRendererFeature.Execute`
+
+### Fixed
+
+- Fixed an issue with the XR Simulation provider where creating new sessions through loading new scenes would throw exceptions and fail to start those new sessions.
+- Fixed `ARTrackableManager` so that it calls `OnAfterSetSessionRelativeData` for added trackables.
 
 ## [6.3.1] - 2025-11-04
 

@@ -112,10 +112,14 @@ namespace UnityEngine.XR.ARFoundation
         {
             var completionSource = m_AnchorCompletionSources.Get();
             var sessionRelativePose = origin.TrackablesParent.InverseTransformPose(pose);
-            var subsystemResult = await subsystem.TryAddAnchorAsync(sessionRelativePose);
+            var result = await subsystem.TryAddAnchorAsync(sessionRelativePose);
 
-            completionSource.SetResult(new Result<ARAnchor>(
-                subsystemResult.status, CreateTrackableImmediate(subsystemResult.value)));
+            completionSource.SetResult(
+                new Result<ARAnchor>(
+                    result.status,
+                    result.status.IsSuccess()
+                        ? CreateTrackableImmediate(result.value)
+                        : null));
 
             var resultAwaitable = completionSource.Awaitable;
 
