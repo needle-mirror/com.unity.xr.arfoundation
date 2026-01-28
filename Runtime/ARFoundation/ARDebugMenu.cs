@@ -814,7 +814,7 @@ namespace UnityEngine.XR.ARFoundation
                     m_PlaneVisualizers = new GameObject("PlaneVisualizers");
                 }
 
-                m_PlaneVisualizers.SetActive(false);
+                m_PlaneVisualizers.SetActive(m_ShowPlanesButton.value == m_ShowPlanesButton.maxValue);
                 m_ShowPlanesButton.interactable = true;
                 m_ShowPlanesButton.onValueChanged.AddListener(delegate {TogglePlanesVisibility();});
                 planeManager.planesChanged += OnPlaneChanged;
@@ -828,7 +828,7 @@ namespace UnityEngine.XR.ARFoundation
                     m_AnchorVisualizers = new GameObject("AnchorVisualizers");
                 }
 
-                m_AnchorVisualizers.SetActive(false);
+                m_AnchorVisualizers.SetActive(m_ShowAnchorsButton.value == m_ShowAnchorsButton.maxValue);
                 m_ShowAnchorsButton.interactable = true;
                 m_ShowAnchorsButton.onValueChanged.AddListener(delegate {ToggleAnchorsVisibility();});
                 anchorManager.anchorsChanged += OnAnchorChanged;
