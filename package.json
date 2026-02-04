@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.5.0-pre.1",
+  "version": "6.5.0-pre.2",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -37,15 +37,15 @@
     }
   ],
   "_upm": {
-    "changelog": "### Added\n\n- Added `BoundedPlaneBuilder.WithPose` overload that takes an OpenXR `XrPosef` if your app uses OpenXR Plug-in 1.16.0 or newer.\n- Added `XRAnchorBuilder.FromAnchor`, which enables you to initialize all fields of an `XRAnchorBuilder` from a given anchor.\n- Added `XRResultStatus.StatusCode.NotFound` and `XRResultStatus.StatusCode.NotTracking` as a new possible error codes for AR Foundation operations.\n- Added an implicit operator to convert from `XrUuid` to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.\n- Added an `IEquatable<XrUuid>` implementation to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.\n- Added `XRResultStatus.HasNativeStatusCode` as a convenience method to determine whether a native status code is present.\n\n### Deprecated\n\n- Deprecated and replaced the following properties of [XRPlaneSubsystemDescriptor.Cinfo](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.Cinfo) to allow providers to determine at runtime whether AR Foundation plane APIs are supported:\n  - `supportsBoundaryVertices` to `supportsBoundaryVerticesDelegate`\n  - `supportsClassification` to `supportsClassificationDelegate`\n\n### Fixed\n\n- Fixed `InvalidOperationException`s which occurred in XR Simulation sessions when images were added to the reference image library during the active session.\n- Fixed the editor for `XRReferenceObjectLibrary` so that the remove button renders correctly in all Unity versions. ([ARFB-673](https://issuetracker.unity3d.com/issues/remove-reference-object-button-is-unclear-for-xr-reference-object-library-in-inspector-window))\n- Fixed usages of the implicit operator to convert a GameObject's Entity ID to `int`, as this operator is deprecated in Unity 6.5.\n- Fixed `XRAnchorSubsystemDescriptor.Cinfo` so that it still considers deprecated field values when computing equality or its hash code.\n- Fixed `ARAnchorManager` so that if its subsystem fails to create an anchor, it doesn't try to create an `ARAnchor` object with invalid data.\n- Fixed `ARDebugMenu` so that it matches the state of the slider buttons and visualizers for plane and anchors when enabled."
+    "changelog": "### Changed\n\n- macOS binaries are now code signed."
   },
   "upmCi": {
-    "footprint": "c12b258324b9fbfbd9f35b6cd8d3926fe5786726"
+    "footprint": "f69d8995bbe8b4a59de773da1a0d122ec8b87541"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.5/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "39ee88e7dbf5706bad2c776ef02ba29311744ae1"
+    "revision": "c6b13da085940ffc45c274f62c3860ef50fc28b3"
   }
 }
