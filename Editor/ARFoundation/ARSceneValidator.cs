@@ -48,11 +48,14 @@ namespace UnityEditor.XR.ARFoundation
                 Debug.LogWarningFormat(sb.ToString());
             }
 
-            var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildPipeline.GetBuildTargetGroup(target));
-            if(generalSettings != null && generalSettings.Manager != null && generalSettings.Manager.activeLoaders != null)
+            var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(
+                BuildPipeline.GetBuildTargetGroup(target));
+            if (generalSettings != null
+                && generalSettings.Manager != null
+                && generalSettings.Manager.activeLoaders != null)
             {
                  int loaderCount = generalSettings.Manager.activeLoaders.Count;
-                 if(loaderCount <= 0 && s_SessionCount > 0)
+                 if (loaderCount <= 0 && s_SessionCount > 0)
                  {
                      Debug.LogWarning(
                      "There are scenes that contain an ARSession, but no XR plug-in providers have been selected for the current platform. " +
@@ -73,7 +76,11 @@ namespace UnityEditor.XR.ARFoundation
                 s_ScenesWithARTypes.Add(SceneManager.GetActiveScene().name);
             }
 
+#if UNITY_6000_5_OR_NEWER
+            s_SessionCount += Object.FindObjectsByType<ARSession>().Length;
+#else
             s_SessionCount += Object.FindObjectsByType<ARSession>(FindObjectsSortMode.None).Length;
+#endif
         }
 
         static bool sceneContainsARTypes
@@ -82,7 +89,11 @@ namespace UnityEditor.XR.ARFoundation
             {
                 foreach (var type in k_ARTypes)
                 {
+#if UNITY_6000_5_OR_NEWER
+                    foreach (var component in Object.FindObjectsByType(type))
+#else
                     foreach (var component in Object.FindObjectsByType(type, FindObjectsSortMode.None))
+#endif
                     {
                         var monobehaviour = component as MonoBehaviour;
                         if (monobehaviour != null && monobehaviour.enabled)

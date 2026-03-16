@@ -174,7 +174,11 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         static void WarnIfMultipleARSessions()
         {
+#if UNITY_6000_4_OR_NEWER
+            var sessions = FindObjectsByType<ARSession>();
+#else
             var sessions = FindObjectsByType<ARSession>(FindObjectsSortMode.None);
+#endif
             if (sessions.Length > 1)
             {
                 // Compile a list of session names

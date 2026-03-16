@@ -37,8 +37,6 @@ namespace UnityEngine.XR.ARFoundation
                 renderPassEvent = RenderPassEvent.BeforeRendering;
             }
 
-            static readonly string k_NonRenderGraphPassName = "XRSessionSubsystem Command Buffer Event Injection Pass (Render Graph Disabled)";
-
 #if URP_17_OR_NEWER
             /// <summary>
             /// No data is passed during this pass.
@@ -107,6 +105,9 @@ namespace UnityEngine.XR.ARFoundation
                 context.ExecuteCommandBuffer(commandBuffer);
                 CommandBufferPool.Release(commandBuffer);
             }
+
+            static readonly string k_NonRenderGraphPassName = "XRSessionSubsystem Command Buffer Event Injection Pass (Render Graph Disabled)";
+
 #else
             [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
             public void Execute(ScriptableRenderContext context, ref RenderingData renderingData) { }

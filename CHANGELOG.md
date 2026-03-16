@@ -8,6 +8,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.3.4] - 2026-03-16
+
+### Fixed
+
+- Fixed `ARDebugMenu` so that it matches the state of the slider buttons and visualizers for plane and anchors when enabled.
+- Fixed usages of APIs that are deprecated in Unity 6.5 alpha 7 and 6.4 beta 9 using conditional compilation. (Nothing changes if this package is used in previous minor versions of the Editor.)
+- Fixed a possible `MissingReferenceException` in an internal script when opening a scene in the Editor if another scene was previously unloaded within the same frame.
+- Fixed `AROcclusionManager` so that it no longer throws a `NullReferenceException` after disabling itself if your target device doesn't support occlusion.
+- Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.
+
 ## [6.3.3] - 2026-01-26
 
 ### Fixed
