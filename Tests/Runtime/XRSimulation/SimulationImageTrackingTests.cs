@@ -108,11 +108,11 @@ namespace UnityEngine.XR.Simulation.Tests
             Assert.IsTrue(imageLibrary is SimulationRuntimeImageLibrary);
 
             // get the camera so that we can get it to face the track image
-            var xrOrigin = Object.FindFirstObjectByType<XROrigin>();
+            var xrOrigin = Object.FindAnyObjectByType<XROrigin>();
             Assert.IsNotNull(xrOrigin);
             var xrCamera = xrOrigin.Camera;
             Assert.IsNotNull(xrCamera);
-            var simulationPoseControls = Object.FindFirstObjectByType<SimulationCameraPoseProvider>();
+            var simulationPoseControls = Object.FindAnyObjectByType<SimulationCameraPoseProvider>();
             Assert.IsNotNull(simulationPoseControls);
 
             // note: the XROrigin creation utility does not guarantee an identity for

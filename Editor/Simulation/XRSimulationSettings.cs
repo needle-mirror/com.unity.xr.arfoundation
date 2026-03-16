@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.XR.Management;
 
 namespace UnityEditor.XR.Simulation
 {
@@ -8,7 +7,7 @@ namespace UnityEditor.XR.Simulation
     /// Build settings for XR Simulation.
     /// </summary>
     [Serializable]
-    [XRConfigurationData("XR Simulation", k_SettingsKey)]
+    [Obsolete("XRSimulationSettings has been deprecated in AR Foundation 6.5. Use XRSimulationRuntimeSettingsInstead")]
     public class XRSimulationSettings : ScriptableObject
     {
         /// <summary>

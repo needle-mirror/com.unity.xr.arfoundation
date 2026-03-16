@@ -215,6 +215,7 @@ namespace UnityEngine.XR.Simulation.Tests
             // Image tracking subsystem needs a image library to run
             var subsystem = m_Loader.GetLoadedSubsystem<XRImageTrackingSubsystem>();
             var imageLibrary = ScriptableObject.CreateInstance<XRReferenceImageLibrary>();
+            imageLibrary.name = $"{nameof(SimulationSubsystemsTestFixture)} ImageTrackingSubsystem";
             subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(imageLibrary);
 
             CheckSubsystemFunctional<XRImageTrackingSubsystem, SimulationImageTrackingSubsystem>();

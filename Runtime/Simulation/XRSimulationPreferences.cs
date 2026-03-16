@@ -97,7 +97,7 @@ namespace UnityEngine.XR.Simulation
         }
 
         // Sets up input actions in existing scriptable object asset if it has not already been upgraded
-        void SetupInputActions()
+        static void SetupInputActions()
         {
             if (BaseInstance == null)
                 return;

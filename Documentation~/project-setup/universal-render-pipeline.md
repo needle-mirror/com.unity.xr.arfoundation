@@ -8,6 +8,9 @@ AR Foundation supports the Universal Render Pipeline (URP) versions 7.0.0 or lat
 > [!NOTE]
 >  You can use either URP or the Built-in Render Pipeline with AR Foundation, but you should decide which render pipeline to use in your project before you start development.
 
+> [!IMPORTANT]
+> In Unity 6.5 and newer, the Built-In Render Pipeline is deprecated and will be made obsolete in a future release. For more information, refer to [Migrating from the Built-In Render Pipeline to URP](https://docs.unity3d.com/6000.5/Documentation/Manual/urp/upgrading-from-birp.html) and [Render pipeline feature comparison](https://docs.unity3d.com/6000.5/Documentation/Manual/render-pipelines-feature-comparison.html).
+
 # Configure URP for AR Foundation
 
 ## Create a Universal Render Pipeline Asset

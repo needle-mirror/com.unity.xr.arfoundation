@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_OcclusionManager)]
     [RequireComponent(typeof(Camera))]
     [AddComponentMenu("XR/AR Foundation/AR Occlusion Manager")]
-    [HelpURL("features/occlusion")]
+    [HelpUrl("features/occlusion")]
     public sealed class AROcclusionManager :
         SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
     {
@@ -478,7 +478,8 @@ namespace UnityEngine.XR.ARFoundation
             m_HumanDepthUpdatableTexture?.DestroyTexture();
             m_EnvironmentDepthUpdatableTexture?.DestroyTexture();
             m_EnvironmentDepthConfidenceUpdatableTexture?.DestroyTexture();
-            m_SwapchainStrategy.Dispose();
+            m_SwapchainStrategy?.Dispose();
+            m_SwapchainStrategy = null;
         }
 
         /// <summary>

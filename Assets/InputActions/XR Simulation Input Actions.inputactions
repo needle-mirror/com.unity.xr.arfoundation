@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "XR Simulation Input Actions",
     "maps": [
         {
@@ -9,7 +10,7 @@
                     "name": "Unlock",
                     "type": "Button",
                     "id": "c866b416-d7fd-460a-b674-1590f988b2e2",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

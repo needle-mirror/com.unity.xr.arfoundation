@@ -20,25 +20,25 @@ namespace UnityEditor.XR.ARFoundation
             /// A string containing the <see cref="GUID"/> of the build.
             /// </summary>
             [SerializeField]
-            private string buildGuid;
+            string buildGuid;
 
             /// <summary>
             /// A string containing the <see cref="GUID"/> of the scene.
             /// </summary>
             [SerializeField]
-            private string sceneGuid;
+            string sceneGuid;
 
             /// <summary>
             /// The current target build platform.
             /// </summary>
             [SerializeField]
-            private string targetPlatform;
+            string targetPlatform;
 
             /// <summary>
             /// List of AR Managers in the scene specified by <see cref="sceneGuid"/>.
             /// </summary>
             [SerializeField]
-            private ARManagerInfo[] arManagersInfo;
+            ARManagerInfo[] arManagersInfo;
 
             internal EventPayload(
                 Context eventName,

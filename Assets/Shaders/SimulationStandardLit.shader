@@ -77,8 +77,47 @@ Shader "Simulation/Standard Lit"
         UsePass "Universal Render Pipeline/Lit/ForwardLit"
         UsePass "Universal Render Pipeline/Lit/ShadowCaster"
         UsePass "Universal Render Pipeline/Lit/DepthOnly"
+
         // This pass it not used during regular rendering, only for lightmap baking.
-        UsePass "Universal Render Pipeline/Lit/Meta"
+        // Copied from UniversalRenderPipeline/Lit/Meta
+        Pass
+        {
+            Name "Meta"
+            Tags
+            {
+                "LightMode" = "Meta"
+            }
+
+            // -------------------------------------
+            // Render State Commands
+            Cull Off
+
+            HLSLPROGRAM
+            #pragma target 2.0
+
+            // -------------------------------------
+            // Shader Stages
+            #pragma vertex UniversalVertexMeta
+            #pragma fragment UniversalFragmentMetaLit
+
+            // -------------------------------------
+            // Material Keywords
+            #pragma shader_feature_local_fragment _SPECULAR_SETUP
+            #pragma shader_feature_local_fragment _EMISSION
+            #pragma shader_feature_local_fragment _METALLICSPECGLOSSMAP
+            #pragma shader_feature_local_fragment _ALPHATEST_ON
+            #pragma shader_feature_local_fragment _ _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local _ _DETAIL_MULX2 _DETAIL_SCALED
+            #pragma shader_feature_local_fragment _SPECGLOSSMAP
+            #pragma shader_feature EDITOR_VISUALIZATION
+
+            // -------------------------------------
+            // Includes
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitMetaPass.hlsl"
+
+            ENDHLSL
+        }
     }
 
     Fallback "Simulation/Legacy/Standard"

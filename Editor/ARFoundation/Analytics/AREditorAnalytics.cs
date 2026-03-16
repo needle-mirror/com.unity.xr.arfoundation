@@ -1,5 +1,3 @@
-using UnityEditor.XR.ARAnalytics;
-
 namespace UnityEditor.XR.ARFoundation
 {
     static class AREditorAnalytics

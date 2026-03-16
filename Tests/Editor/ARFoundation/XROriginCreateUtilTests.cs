@@ -51,7 +51,11 @@ namespace UnityEditor.XR.ARFoundation.Tests
 
         static void DestroyAllGameObjects()
         {
+#if UNITY_6000_5_OR_NEWER
+            foreach (var g in Object.FindObjectsByType<GameObject>())
+#else
             foreach (var g in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+#endif
             {
                 // Don't destroy GameObjects that are children within a Prefab instance
                 if (g == null || (PrefabUtility.IsPartOfAnyPrefab(g) && !PrefabUtility.IsAnyPrefabInstanceRoot(g)))

@@ -4,6 +4,7 @@
         "com.unity.xr.arcore@6.4",
         "com.unity.xr.meta-openxr@2.4",
         "com.unity.xr.androidxr-openxr",
+        "com.unity.xr.polyspatial.visionos",
         "com.unity.visualscripting"
     ]
 }

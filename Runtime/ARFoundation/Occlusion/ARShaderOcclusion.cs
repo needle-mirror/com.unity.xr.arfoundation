@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AROcclusionManager))]
     [AddComponentMenu("XR/AR Foundation/AR Shader Occlusion")]
-    [HelpURL("features/occlusion")]
+    [HelpUrl("features/occlusion")]
     public class ARShaderOcclusion : MonoBehaviour
     {
         // Depth data is expected to be provided in a right-handed coordinate system.

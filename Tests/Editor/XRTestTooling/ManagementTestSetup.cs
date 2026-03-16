@@ -29,9 +29,11 @@ namespace UnityEditor.XR.TestTooling
         protected virtual void SetupTest()
         {
             m_TestManager = ScriptableObject.CreateInstance<XRManagerSettings>();
+            m_TestManager.name = $"{GetType().FullName} XR Manager Settings";
 
-            m_XrGeneralSettings = ScriptableObject.CreateInstance<XRGeneralSettings>() as XRGeneralSettings;
+            m_XrGeneralSettings = ScriptableObject.CreateInstance<XRGeneralSettings>();
             m_XrGeneralSettings.Manager = m_TestManager;
+            m_XrGeneralSettings.name = $"{GetType().FullName} XR General Settings";
 
             m_TestPathToSettings = GetAssetPathForComponents(s_TempSettingsPath);
             m_TestPathToSettings = Path.Combine(m_TestPathToSettings, "Test_XRGeneralSettings.asset");
@@ -49,6 +51,7 @@ namespace UnityEditor.XR.TestTooling
             m_TestPathToGeneralSettings = Path.Combine(m_TestPathToGeneralSettings, "Test_XRGeneralSettingsPerBuildTarget.asset");
 
             m_BuildTargetSettings = ScriptableObject.CreateInstance<XRGeneralSettingsPerBuildTarget>();
+            m_BuildTargetSettings.name = $"{GetType().FullName} XR General Settings Per Build Target";
             m_BuildTargetSettings.SetSettingsForBuildTarget(BuildTargetGroup.Standalone, m_XrGeneralSettings);
             if (!string.IsNullOrEmpty(m_TestPathToSettings))
             {

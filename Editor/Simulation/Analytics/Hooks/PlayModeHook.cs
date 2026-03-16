@@ -14,6 +14,7 @@ namespace UnityEditor.XR.Simulation
         {
             s_StartTime = DateTime.UtcNow;
             SimulationSubsystemAnalytics.ClearStartedSubsystems();
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
 

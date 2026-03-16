@@ -153,11 +153,10 @@ namespace UnityEngine.XR.Simulation
         {
             bool m_Active;
 
-            readonly Control k_Control;
             readonly string k_ActionMissingMessage;
             readonly string k_MismatchValueTypeMessage;
 
-            internal readonly InputActionReference k_InputActionReference;
+            readonly InputActionReference k_InputActionReference;
             protected internal T value { get; protected set; }
 
             internal event EventHandler<T> actionCanceled;
@@ -170,13 +169,12 @@ namespace UnityEngine.XR.Simulation
             protected InputActionReferenceWrapper(InputActionReference inputActionReference, Control control)
             {
                 k_InputActionReference = inputActionReference;
-                k_Control = control;
 
-                k_ActionMissingMessage = $"Cannot find InputAction({k_Control})";
-                k_MismatchValueTypeMessage = $"InputAction({k_Control}) does not match expected value type: {typeof(T).Name}";
+                k_ActionMissingMessage = $"Cannot find InputAction({control})";
+                k_MismatchValueTypeMessage = $"InputAction({control}) does not match expected value type: {typeof(T).Name}";
 
                 if (k_InputActionReference == null)
-                    Debug.LogWarning($"Missing InputActionReference({k_Control}). Navigation controls will not be fully functional.");
+                    Debug.LogWarning($"Missing InputActionReference({control}). Navigation controls will not be fully functional.");
             }
 
             /// <summary>

@@ -17,6 +17,7 @@ namespace UnityEditor.XR.ARAnalytics
         /// <summary>
         /// Maintains common data properties sent with AR analytics events.
         /// </summary>
+        [Serializable]
         internal abstract class Payload : IAnalytic.IData
         {
             /// <summary>

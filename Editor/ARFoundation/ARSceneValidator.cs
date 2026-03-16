@@ -73,7 +73,11 @@ namespace UnityEditor.XR.ARFoundation
                 s_ScenesWithARTypes.Add(SceneManager.GetActiveScene().name);
             }
 
+#if UNITY_6000_5_OR_NEWER
+            s_SessionCount += Object.FindObjectsByType<ARSession>().Length;
+#else
             s_SessionCount += Object.FindObjectsByType<ARSession>(FindObjectsSortMode.None).Length;
+#endif
         }
 
         static bool sceneContainsARTypes
@@ -82,7 +86,11 @@ namespace UnityEditor.XR.ARFoundation
             {
                 foreach (var type in k_ARTypes)
                 {
+#if UNITY_6000_5_OR_NEWER
+                    foreach (var component in Object.FindObjectsByType(type))
+#else
                     foreach (var component in Object.FindObjectsByType(type, FindObjectsSortMode.None))
+#endif
                     {
                         var monobehaviour = component as MonoBehaviour;
                         if (monobehaviour != null && monobehaviour.enabled)

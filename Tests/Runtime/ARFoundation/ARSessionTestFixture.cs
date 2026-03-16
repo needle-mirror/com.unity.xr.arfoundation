@@ -32,6 +32,8 @@ namespace UnityEngine.XR.ARFoundation.Tests
 
         static string GetSubsystemName(SupportsInstall supportsInstall) => $"SessionThatSupportsInstall{supportsInstall.ToString()}";
 
+        static XRGeneralSettings s_OldInstance;
+
         static XRSessionSubsystemDescriptor.Cinfo GetDescriptorCinfo(SupportsInstall supportsInstall)
         {
             var canBeInstalled = supportsInstall == SupportsInstall.Yes;
@@ -81,12 +83,18 @@ namespace UnityEngine.XR.ARFoundation.Tests
             MockLoader.supportsInstall = supportsInstall;
             MockProvider.availability = availability;
             var xrManager = ScriptableObject.CreateInstance<XRManagerSettings>();
+            xrManager.name = $"{nameof(ARSessionTestFixture)} XR Manager Settings";
 #pragma warning disable CS0618
-            xrManager.loaders.Add(ScriptableObject.CreateInstance<MockLoader>());
+            var mockLoader = ScriptableObject.CreateInstance<MockLoader>();
+            mockLoader.name = $"{nameof(ARSessionTestFixture)} Mock Loader";
+            xrManager.loaders.Add(mockLoader);
 #pragma warning restore CS0618
             xrManager.InitializeLoaderSync();
 #if UNITY_EDITOR
-            XRGeneralSettings.Instance = ScriptableObject.CreateInstance<XRGeneralSettings>();
+            s_OldInstance = XRGeneralSettings.Instance;
+            var xrGeneralSettings = ScriptableObject.CreateInstance<XRGeneralSettings>();
+            XRGeneralSettings.Instance = xrGeneralSettings;
+            xrGeneralSettings.name = $"{nameof(ARSessionTestFixture)} XR General Settings";
             XRGeneralSettings.Instance.Manager = xrManager;
 #else
             throw new InvalidOperationException("This test is only valid on the Editor platform.");
@@ -103,7 +111,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
             ScriptableObject.Destroy(xrManager);
             ScriptableObject.Destroy(XRGeneralSettings.Instance);
 #if UNITY_EDITOR
-            XRGeneralSettings.Instance = null;
+            XRGeneralSettings.Instance = s_OldInstance;
 #else
             throw new InvalidOperationException("This test is only valid on the Editor platform.");
 #endif

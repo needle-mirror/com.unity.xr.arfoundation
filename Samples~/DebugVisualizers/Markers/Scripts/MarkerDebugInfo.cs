@@ -181,7 +181,7 @@ namespace UnityEngine.XR.ARFoundation.PackageSamples.DebugVisualizers
             if (m_MarkerIdValueRT.gameObject.activeSelf)
                 labelContainerHeight += m_MarkerIdValueRT.rect.height;
 
-            if (m_MarkerIdValueRT.gameObject.activeSelf)
+            if (m_EncodedDataValueRT.gameObject.activeSelf)
                 labelContainerHeight += m_EncodedDataValueRT.rect.height;
 
             if (m_DataValueRT.gameObject.activeSelf)

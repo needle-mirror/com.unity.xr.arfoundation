@@ -1,6 +1,3 @@
-using UnityEditor.XR.ARAnalytics;
-using UnityEngine.Analytics;
-
 namespace UnityEditor.XR.Simulation
 {
     static class AREditorAnalytics

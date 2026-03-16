@@ -47,7 +47,7 @@ The following table lists whether certain XR plug-in providers support each opti
 | **Face mesh UVs** | Yes | Yes | |
 | **Face mesh normals** | Yes | | |
 | **Eye tracking** | | Yes | Yes |
-| **Blend Shapes** | | Yes | |
+| **Blend Shapes** | | Yes | Yes |
 
 <a id="check-feature-support"></a>
 

@@ -8,6 +8,27 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.5.0-pre.3] - 2026-03-16
+
+### Added
+
+- Added `BoundedPlaneBuilder.FromBoundedPlane`, which enables you to initialize all fields of a `BoundedPlaneBuilder` from a given plane.
+
+### Changed
+
+- Changed [ARPlaneManager](xref:arfoundation-plane-arplanemanager) to always register itself as a [fallback raycaster](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts) even if its subsystem isn't available on the frame that the component is enabled. This change allows raycasts to succeed if a subsystem is created later.
+
+### Deprecated
+
+- Deprecated `SimulationBuildProcessor`. This class had no effect.
+
+### Fixed
+
+- Fixed a possible `MissingReferenceException` in an internal script when opening a scene if another scene was previously unloaded within the same frame.
+- Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.
+- Fixed `AROcclusionManager` so that it no longer throws a `NullReferenceException` after disabling itself if your target device doesn't support occlusion.
+- Fixed `ARPlaneMeshGenerator` so that degenerate vertex boundary geometry will not cause the application to stop responding.
+
 ## [6.5.0-pre.2] - 2026-02-04
 
 ### Changed

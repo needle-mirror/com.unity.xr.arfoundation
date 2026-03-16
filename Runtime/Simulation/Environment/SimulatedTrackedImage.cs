@@ -90,7 +90,7 @@ namespace UnityEngine.XR.Simulation
         TrackableId GenerateTrackableID()
         {
 #if UNITY_6000_5_OR_NEWER
-            var unsignedInstanceId = gameObject.GetEntityId().GetRawData();
+            var unsignedInstanceId = EntityId.ToULong(gameObject.GetEntityId());
 #elif UNITY_6000_4_OR_NEWER
             var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetEntityId());
 #else
@@ -102,7 +102,7 @@ namespace UnityEngine.XR.Simulation
         Guid GenerateSourceImageId()
         {
 #if UNITY_6000_5_OR_NEWER
-            var unsignedInstanceId = gameObject.GetEntityId().GetRawData();
+            var unsignedInstanceId = EntityId.ToULong(gameObject.GetEntityId());
 #elif UNITY_6000_4_OR_NEWER
             var unsignedInstanceId = (ulong)Convert.ToInt64(gameObject.GetEntityId());
 #else

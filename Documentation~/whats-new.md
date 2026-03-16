@@ -8,8 +8,9 @@ This release includes the following significant changes:
 ## API additions
 
 - Added `BoundedPlaneBuilder.WithPose` overload that takes an OpenXR `XrPosef` if your app uses OpenXR Plug-in 1.16.0 or newer.
+- Added `BoundedPlaneBuilder.FromBoundedPlane`, which enables you to initialize all fields of a `BoundedPlaneBuilder` from a given plane.
 - Added `XRAnchorBuilder.FromAnchor`, which enables you to initialize all fields of an `XRAnchorBuilder` from a given anchor.
-- Added `XRResultStatus.StatusCode.NotFound` and `XRResultStatus.StatusCode.NotTracking` as a new possible error codes for AR Foundation operations.
+- Added `XRResultStatus.StatusCode.NotFound` and `XRResultStatus.StatusCode.NotTracking` as new possible error codes for AR Foundation operations.
 - Added an implicit operator to convert from `XrUuid` to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.
 - Added an `IEquatable<XrUuid>` implementation to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.
 - Added `XRResultStatus.HasNativeStatusCode` as a convenience method to determine whether a native status code is present.
@@ -24,6 +25,7 @@ This release includes the following significant changes:
 
 ### Other deprecations
 
+- Deprecated `SimulationBuildProcessor`. This class had no effect.
 - Deprecated and replaced the following properties of [XRPlaneSubsystemDescriptor.Cinfo](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.Cinfo) to allow providers to determine at runtime whether AR Foundation plane APIs are supported:
   - `supportsBoundaryVertices` to `supportsBoundaryVerticesDelegate`
   - `supportsClassification` to `supportsClassificationDelegate`

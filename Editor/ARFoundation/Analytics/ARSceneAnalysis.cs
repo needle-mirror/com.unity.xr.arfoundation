@@ -10,20 +10,23 @@ namespace UnityEditor.XR.ARFoundation
     {
         static readonly Type[] k_ArManagerTypes =
         {
-            typeof(ARPlaneManager),
+            typeof(ARSession),
+            typeof(ARInputManager),
             typeof(ARCameraManager),
-            typeof(ARAnchorManager),
-            typeof(AREnvironmentProbeManager),
+            typeof(ARPlaneManager),
+            typeof(ARBoundingBoxManager),
+            typeof(ARTrackedImageManager),
+            typeof(ARMarkerManager),
+            typeof(ARTrackedObjectManager),
             typeof(ARFaceManager),
             typeof(ARHumanBodyManager),
-            typeof(ARInputManager),
-            typeof(ARMeshManager),
-            typeof(AROcclusionManager),
-            typeof(ARParticipantManager),
             typeof(ARPointCloudManager),
             typeof(ARRaycastManager),
-            typeof(ARTrackedImageManager),
-            typeof(ARTrackedObjectManager)
+            typeof(ARAnchorManager),
+            typeof(ARMeshManager),
+            typeof(AREnvironmentProbeManager),
+            typeof(AROcclusionManager),
+            typeof(ARParticipantManager),
         };
 
         // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use
@@ -69,6 +72,10 @@ namespace UnityEditor.XR.ARFoundation
             {
                 foreach (var go in k_RootObjects)
                 {
+                    // Destroyed GameObjects can appear in the roots list when they were destroyed on the same frame.
+                    // Skip them to avoid MissingReferenceException.
+                    if (go == null)
+                        continue;
                     foreach (var component in go.GetComponentsInChildren(type, true))
                     {
                         if (component is MonoBehaviour monoBehaviour)

@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.5.0-pre.2",
+  "version": "6.5.0-pre.3",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -37,15 +37,15 @@
     }
   ],
   "_upm": {
-    "changelog": "### Changed\n\n- macOS binaries are now code signed."
+    "changelog": "### Added\n\n- Added `BoundedPlaneBuilder.FromBoundedPlane`, which enables you to initialize all fields of a `BoundedPlaneBuilder` from a given plane.\n\n### Changed\n\n- Changed [ARPlaneManager](xref:arfoundation-plane-arplanemanager) to always register itself as a [fallback raycaster](xref:arfoundation-raycasts-raycastmanager#fallback-ray-casts) even if its subsystem isn't available on the frame that the component is enabled. This change allows raycasts to succeed if a subsystem is created later.\n\n### Deprecated\n\n- Deprecated `SimulationBuildProcessor`. This class had no effect.\n\n### Fixed\n\n- Fixed a possible `MissingReferenceException` in an internal script when opening a scene if another scene was previously unloaded within the same frame.\n- Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.\n- Fixed `AROcclusionManager` so that it no longer throws a `NullReferenceException` after disabling itself if your target device doesn't support occlusion.\n- Fixed `ARPlaneMeshGenerator` so that degenerate vertex boundary geometry will not cause the application to stop responding."
   },
   "upmCi": {
-    "footprint": "f69d8995bbe8b4a59de773da1a0d122ec8b87541"
+    "footprint": "70abd2af64a2b4a35ff0f24120c8fd93fd483e5b"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.5/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "c6b13da085940ffc45c274f62c3860ef50fc28b3"
+    "revision": "01fe66e3dce790624acb0884a9b0df335863855b"
   }
 }

@@ -1,5 +1,6 @@
 using System;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR.Management;
 
 namespace UnityEngine.XR.Simulation
 {
@@ -8,8 +9,11 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     [Serializable]
     [ScriptableSettingsPath(SimulationConstants.runtimeSettingsPath)]
+    [XRConfigurationData("XR Simulation", k_SettingsKey)]
     class XRSimulationRuntimeSettings : ScriptableSettings<XRSimulationRuntimeSettings>
     {
+        internal const string k_SettingsKey = "com.unity.xr.arfoundation.simulation_settings";
+
         [SerializeField, Tooltip("Layer used for the simulation environment")]
         int m_EnvironmentLayer = 30;
 

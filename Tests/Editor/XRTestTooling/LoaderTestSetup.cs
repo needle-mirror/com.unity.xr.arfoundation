@@ -34,6 +34,7 @@ namespace UnityEditor.XR.TestTooling
 
             // Setup Loader
             m_Loader = ScriptableObject.CreateInstance<TXRLoader>();
+            m_Loader.name = $"{GetType().Name} {typeof(TXRLoader).Name}";
             m_Path ??= GetAssetPathForComponents(s_TempSettingsPath);
             AssetDatabase.CreateAsset(m_Loader, Path.Combine(m_Path, $"Test_{typeof(TXRLoader).Name}.asset"));
 
@@ -120,6 +121,7 @@ namespace UnityEditor.XR.TestTooling
 
             // Setup Settings
             m_Settings = ScriptableObject.CreateInstance<TSettings>();
+            m_Settings.name = $"{GetType().Name} {typeof(TSettings).Name}";
             AssetDatabase.CreateAsset(m_Settings, Path.Combine(m_Path, $"Test_{typeof(TSettings).Name}.asset"));
             EditorBuildSettings.AddConfigObject(settingsKey, m_Settings, true);
 

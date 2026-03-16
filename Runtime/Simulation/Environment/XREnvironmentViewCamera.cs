@@ -16,7 +16,11 @@ namespace UnityEngine.XR.Simulation
         [HideInInspector]
         Camera m_Camera;
 
+#if UNITY_6000_5_OR_NEWER
+        internal Camera camera => m_Camera;
+#else
         internal new Camera camera => m_Camera;
+#endif
 
         void OnEnable()
         {
