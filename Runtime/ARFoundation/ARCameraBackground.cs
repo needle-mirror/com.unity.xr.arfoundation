@@ -109,11 +109,11 @@ namespace UnityEngine.XR.ARFoundation
         /// The camera to which the projection matrix is set on each frame event.
         /// </summary>
         /// <value>The camera to which the projection matrix is set on each frame event.</value>
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
         protected new Camera camera => m_Camera;
-#else // UNITY_EDITOR
+#else
         protected Camera camera => m_Camera;
-#endif // UNITY_EDITOR
+#endif // UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
         Camera m_Camera;
 
         /// <summary>

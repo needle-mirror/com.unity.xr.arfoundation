@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.4.1",
+  "version": "6.4.2",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed `XRAnchorSubsystemDescriptor.Cinfo` so that it still considers deprecated field values when computing equality or its hash code."
+    "changelog": "### Fixed\n\n- Fixed `InvalidOperationException`s which occurred in XR Simulation sessions when images were added to the reference image library during the active session.\n- Fixed the editor for `XRReferenceObjectLibrary` so that the remove button renders correctly in all Unity versions. ([ARFB-673](https://issuetracker.unity3d.com/issues/remove-reference-object-button-is-unclear-for-xr-reference-object-library-in-inspector-window))\n- Fixed `ARAnchorManager` so that if its subsystem fails to create an anchor, it doesn't try to create an `ARAnchor` object with invalid data.\n- Fixed `ARDebugMenu` so that it matches the state of the slider buttons and visualizers for plane and anchors when enabled.\n- Fixed a possible `MissingReferenceException` in an internal script when opening a scene in the Editor if another scene was previously unloaded within the same frame.\n- Fixed `AROcclusionManager` so that it no longer throws a `NullReferenceException` after disabling itself if your target device doesn't support occlusion.\n- Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.\n- Fixed usages of types that are deprecated in Unity 6.5 or newer when this package is imported into Unity 6.5."
   },
   "upmCi": {
-    "footprint": "87d8c748754a5df831433026a53f0561afa62a1e"
+    "footprint": "dff734717dffb17117629a679782e14ba23836ee"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.4/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "6498d718637514e9d6e1f780d2bd6fd0e7e06d3b"
+    "revision": "6c0f52d5ffb5caa6aaa148a5411e8cf9f5a8f09f"
   }
 }

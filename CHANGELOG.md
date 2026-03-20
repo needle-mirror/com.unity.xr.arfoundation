@@ -8,6 +8,19 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.4.2] - 2026-03-20
+
+### Fixed
+
+- Fixed `InvalidOperationException`s which occurred in XR Simulation sessions when images were added to the reference image library during the active session.
+- Fixed the editor for `XRReferenceObjectLibrary` so that the remove button renders correctly in all Unity versions. ([ARFB-673](https://issuetracker.unity3d.com/issues/remove-reference-object-button-is-unclear-for-xr-reference-object-library-in-inspector-window))
+- Fixed `ARAnchorManager` so that if its subsystem fails to create an anchor, it doesn't try to create an `ARAnchor` object with invalid data.
+- Fixed `ARDebugMenu` so that it matches the state of the slider buttons and visualizers for plane and anchors when enabled.
+- Fixed a possible `MissingReferenceException` in an internal script when opening a scene in the Editor if another scene was previously unloaded within the same frame.
+- Fixed `AROcclusionManager` so that it no longer throws a `NullReferenceException` after disabling itself if your target device doesn't support occlusion.
+- Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.
+- Fixed usages of types that are deprecated in Unity 6.5 or newer when this package is imported into Unity 6.5.
+
 ## [6.4.1] - 2025-12-09
 
 ### Fixed

@@ -478,7 +478,8 @@ namespace UnityEngine.XR.ARFoundation
             m_HumanDepthUpdatableTexture?.DestroyTexture();
             m_EnvironmentDepthUpdatableTexture?.DestroyTexture();
             m_EnvironmentDepthConfidenceUpdatableTexture?.DestroyTexture();
-            m_SwapchainStrategy.Dispose();
+            m_SwapchainStrategy?.Dispose();
+            m_SwapchainStrategy = null;
         }
 
         /// <summary>
