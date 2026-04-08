@@ -10,7 +10,7 @@ The [ARTrackedObjectManager](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectMan
 The tracked object manager creates a GameObject for each object detected in the environment. Before a real-world object can be detected, you must scan it to create a reference object. You can then add the reference object to the tracked object manager's reference object library.
 
 > [!NOTE]
-> * Currently, the [Apple ARKit XR Plug-in](xref:arkit-object-tracking) is the only Unity-supported provider plug-in that implements object tracking.
+> * Currently, the [Apple ARKit XR Plug-in](xref:arkit-object-tracking) and [Apple visionOS XR Plug-in](xref:psl-vos-unbounded-samples#object-tracking) are the only Unity-supported provider plug-ins that implement object tracking.
 > * The [Scanning and Detecting 3D Objects](https://developer.apple.com/documentation/arkit/scanning_and_detecting_3d_objects) page on Apple's developer website allows you to download an app that you can use on an iOS device to produce such a scan. Note that this is a third-party application, and Unity is not involved in its development.
 
 ## Terminology

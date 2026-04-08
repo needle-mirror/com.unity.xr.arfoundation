@@ -151,6 +151,10 @@ namespace UnityEngine.XR.Simulation
                 {
                     m_CameraTextureProvider.cameraFrameReceived -= CameraFrameReceived;
                     m_CameraTextureProvider.onTextureReadbackFulfilled -= SimulationXRCpuImageApi.OnCameraDataReceived;
+                    // Destroy the camera texture provider here since it is not resilient to destructive scene loads.
+                    // It will be re-added when this subsystem is started again through the Start() method
+                    Object.Destroy(m_CameraTextureProvider);
+                    m_CameraTextureProvider = null;
                 }
 
                 BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentSetupFinished;
@@ -158,11 +162,8 @@ namespace UnityEngine.XR.Simulation
 
             public override void Destroy()
             {
-                if (m_CameraTextureProvider != null)
-                {
-                    Object.Destroy(m_CameraTextureProvider.gameObject);
-                    m_CameraTextureProvider = null;
-                }
+                // NOTE: the camera texture provider's game object does not need to be destroyed here because its
+                // lifecycle (as a do not destroy object) is not governed here
             }
 
             void OnEnvironmentSetupFinished()

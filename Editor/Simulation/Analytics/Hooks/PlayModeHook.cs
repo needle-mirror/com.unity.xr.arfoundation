@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using UnityEngine.XR.Management;
+using UnityEngine;
 using UnityEngine.XR.Simulation;
 
 namespace UnityEditor.XR.Simulation
@@ -31,7 +31,7 @@ namespace UnityEditor.XR.Simulation
             if (string.IsNullOrEmpty(environmentGuid))
                 return;
 
-            if (SimulationSubsystemAnalytics.StartedSubsystems.Count() == 0)
+            if (!SimulationSubsystemAnalytics.StartedSubsystems.Any())
                 return;
 
             var subsystemIds = SimulationSubsystemAnalytics.StartedSubsystems.ToArray();

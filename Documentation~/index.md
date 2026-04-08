@@ -130,7 +130,7 @@ The table below lists the available features in each Unity-supported provider pl
     <td><a href="features/object-tracking.md">Object tracking</a></td>
     <td style="text-align: center"></td>    <!-- Android -->
     <td style="text-align: center">Yes</td> <!-- iOS -->
-    <td style="text-align: center"></td>    <!-- visionOS -->
+    <td style="text-align: center">Yes</td> <!-- visionOS -->
     <td style="text-align: center"></td>    <!-- HoloLens -->
     <td style="text-align: center"></td>    <!-- Meta Quest -->
     <td style="text-align: center"></td>    <!-- Unity Editor -->

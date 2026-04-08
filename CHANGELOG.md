@@ -8,6 +8,22 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.7] - 2026-04-08
+
+### Fixed
+
+- Fixed the editor for `XRReferenceObjectLibrary` so that the remove button renders correctly in all Unity versions. ([ARFB-673](https://issuetracker.unity3d.com/issues/remove-reference-object-button-is-unclear-for-xr-reference-object-library-in-inspector-window))
+- Fixed an issue with the XR Simulation provider where creating new sessions through loading new scenes would throw exceptions and fail to start those new sessions.
+- Fixed the XR Environment view so that it no longer sets the title of the Scene view to null if you launch the Editor with the XR Environment overlay open. ([ARFB-592](https://issuetracker.unity3d.com/issues/installing-ar-foundation-package-corrupts-scene-view-tab-text))
+- Fixed a typo in `Feature.ToStringList`.
+- Fixed the XR Environment overlay so that it no longer causes "Unable to load the Icon" errors in the Console when AR Foundation is first installed to a project. ([ARFB-593](https://issuetracker.unity3d.com/issues/unable-to-load-the-icon-errors-are-thrown-in-the-console-after-installing-ar-foundation-package))
+- Fixed `LoaderUtility` so that it correctly initializes or deinitializes the OpenXR Loader when you call `Initialize` or `Deinitialize`, respectfully.
+- Fixed `ARDebugMenu` so that it matches the state of the slider buttons and visualizers for plane and anchors when enabled.
+- Fixed a possible `MissingReferenceException` in an internal script when opening a scene if another scene was previously unloaded within the same frame.
+- Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.
+- Fixed `ARRaycastManager` so that raycast hits are calculated correctly if you previously moved the XR Origin. ([UUM-138221](https://issuetracker.unity3d.com/issues/using-movecameratoworldlocation-will-make-offset-planes-from-the-ar-plane-manager))
+- Fixed `ARRaycastManager` so that it now raycasts against bounding boxes.
+
 ## [6.0.6] - 2025-05-27
 
 ### Changed

@@ -289,13 +289,15 @@ namespace UnityEngine.XR.ARFoundation
                 return false;
 
             var planeManager = GetComponent<ARPlaneManager>();
+            var boundingBoxManager = GetComponent<ARBoundingBoxManager>();
 
             using (nativeHits)
             {
                 // Results are in "trackables space", so transform results back into world space
                 foreach (var nativeHit in nativeHits)
                 {
-                    float distanceInWorldSpace = (nativeHit.pose.position - rayOrigin).magnitude;
+                    var worldHitPosition = origin.TrackablesParent.TransformPoint(nativeHit.pose.position);
+                    float distanceInWorldSpace = (worldHitPosition - rayOrigin).magnitude;
 
                     // Attempt to look up the trackable
                     ARTrackable trackable = null;
@@ -307,6 +309,12 @@ namespace UnityEngine.XR.ARFoundation
                         {
                             trackable = planeManager.GetPlane(nativeHit.trackableId);
                         }
+                    }
+                    // Bounding Boxes
+                    if ((nativeHit.hitType & TrackableType.BoundingBox) != 0 && boundingBoxManager != null)
+                    {
+                        if (boundingBoxManager.TryGetBoundingBox(nativeHit.trackableId, out var boundingBox))
+                            trackable = boundingBox;
                     }
 
                     managedHits.Add(new ARRaycastHit(nativeHit, distanceInWorldSpace, origin.TrackablesParent, trackable));

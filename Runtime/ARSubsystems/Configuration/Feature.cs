@@ -317,7 +317,7 @@ namespace UnityEngine.XR.ARSubsystems
                         names.Add("Rotation Only");
                         break;
                     case Feature.PositionAndRotation:
-                        names.Add("Rotation and Orientation");
+                        names.Add("Position and Rotation");
                         break;
                     case Feature.FaceTracking:
                         names.Add("Face Tracking");

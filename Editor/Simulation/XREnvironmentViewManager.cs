@@ -216,6 +216,7 @@ namespace UnityEditor.XR.Simulation
             if (sceneView == null || sceneView.camera == null)
                 return;
 
+            CacheTitleContent(sceneView);
             sceneView.titleContent = m_SceneViewTitleContent;
 
             if (PrefabStageUtility.GetCurrentPrefabStage() != null)
@@ -233,7 +234,8 @@ namespace UnityEditor.XR.Simulation
                 return;
 
             // Cache the render settings in case they are being modified by the user.
-            if (XREnvironmentViewUtilities.renderingOverrideEnabled && !XREnvironmentViewUtilities.lightingOverrideActive)
+            if (XREnvironmentViewUtilities.renderingOverrideEnabled
+                && !XREnvironmentViewUtilities.lightingOverrideActive)
                 XREnvironmentViewUtilities.simulationRenderSettings.UseSceneRenderSettings();
         }
 
@@ -242,7 +244,8 @@ namespace UnityEditor.XR.Simulation
             if (!m_Initialized)
                 return;
 
-            if (!m_EnvironmentViews.Contains(sceneView) || activeSceneManager == null
+            if (!m_EnvironmentViews.Contains(sceneView)
+                || activeSceneManager == null
                 || PrefabStageUtility.GetCurrentPrefabStage() != null)
             {
                 DoSceneViewXRay();
@@ -267,7 +270,8 @@ namespace UnityEditor.XR.Simulation
             if (simEnv != null)
             {
                 Handles.color = Color.cyan;
-                SimulationEnvironment.DrawWireCamera(Handles.DrawLine, simEnv.cameraStartingPose, sceneView.size * 0.06f);
+                SimulationEnvironment.DrawWireCamera(
+                    Handles.DrawLine, simEnv.cameraStartingPose, sceneView.size * 0.06f);
             }
 
             XREnvironmentViewUtilities.RestoreBaseLighting();
@@ -283,7 +287,8 @@ namespace UnityEditor.XR.Simulation
             if (useEditorSceneManager && m_EnvironmentViews.Count > 0 && m_EditorSimulationSceneManager != null)
             {
                 m_EditorSimulationSceneManager.SetupEnvironment();
-                m_CurrentSceneMask = EditorSceneManager.GetSceneCullingMask(m_EditorSimulationSceneManager.environmentScene);
+                m_CurrentSceneMask = EditorSceneManager.GetSceneCullingMask(
+                    m_EditorSimulationSceneManager.environmentScene);
 
                 if (PrefabStageUtility.GetCurrentPrefabStage() != null)
                     return;

@@ -78,7 +78,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Performs a raycast against all currently tracked planes.
         /// </summary>
-        /// <param name="ray">The ray, in Unity world space, to cast.</param>
+        /// <param name="ray">The ray, in session space, to cast.</param>
         /// <param name="trackableTypeMask">A mask of raycast types to perform.</param>
         /// <param name="allocator">The <c>Allocator</c> to use when creating the returned <c>NativeArray</c>.</param>
         /// <returns>
@@ -97,6 +97,9 @@ namespace UnityEngine.XR.ARFoundation
                 return new NativeArray<XRRaycastHit>(0, allocator);
 
             var trackableCollection = trackables;
+            var trackablesParent = origin.TrackablesParent;
+            var worldSpaceRay = trackablesParent.TransformRay(ray);
+            var trackablesParentRotationInverse = Quaternion.Inverse(trackablesParent.rotation);
 
             // Allocate a buffer that is at least large enough to contain a hit against every plane
             var hitBuffer = new NativeArray<XRRaycastHit>(trackableCollection.count, Allocator.Temp);
@@ -108,21 +111,21 @@ namespace UnityEngine.XR.ARFoundation
                     TrackableType trackableTypes = TrackableType.None;
 
                     var t = plane.transform;
-                    var normal = t.localRotation * Vector3.up;
-                    var infinitePlane = new Plane(normal, t.localPosition);
-                    if (!infinitePlane.Raycast(ray, out var distance))
+                    var planePosition = t.position;
+                    var planeRotation = t.rotation;
+
+                    var normal = planeRotation * Vector3.up;
+                    var infinitePlane = new Plane(normal, planePosition);
+                    if (!infinitePlane.Raycast(worldSpaceRay, out var distance))
                         continue;
 
-                    // Pose in session space
-                    var pose = new Pose(
-                        ray.origin + ray.direction * distance,
-                        plane.transform.localRotation);
+                    var worldHitPosition = worldSpaceRay.origin + worldSpaceRay.direction * distance;
 
                     if ((trackableTypeMask & TrackableType.PlaneWithinInfinity) != TrackableType.None)
                         trackableTypes |= TrackableType.PlaneWithinInfinity;
 
                     // To test the rest, we need the intersection point in plane space
-                    var hitPositionPlaneSpace3d = Quaternion.Inverse(plane.transform.localRotation) * (pose.position - plane.transform.localPosition);
+                    var hitPositionPlaneSpace3d = Quaternion.Inverse(planeRotation) * (worldHitPosition - planePosition);
                     var hitPositionPlaneSpace = new Vector2(hitPositionPlaneSpace3d.x, hitPositionPlaneSpace3d.z);
 
                     const TrackableType estimatedOrWithinBounds = TrackableType.PlaneWithinBounds | TrackableType.PlaneEstimated;
@@ -144,9 +147,11 @@ namespace UnityEngine.XR.ARFoundation
 
                     if (trackableTypes != TrackableType.None)
                     {
+                        var sessionHitPosition = trackablesParent.InverseTransformPoint(worldHitPosition);
+                        var sessionRotation = trackablesParentRotationInverse * planeRotation;
                         hitBuffer[count++] = new XRRaycastHit(
                             plane.trackableId,
-                            pose,
+                            new Pose(sessionHitPosition, sessionRotation),
                             distance,
                             trackableTypes);
                     }
