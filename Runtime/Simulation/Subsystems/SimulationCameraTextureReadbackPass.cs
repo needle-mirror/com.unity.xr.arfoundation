@@ -114,7 +114,7 @@ namespace UnityEngine.XR.Simulation
         /// the full command buffer API.
         /// </remarks>
         /// <param name="renderGraph">The RenderGraph object that we add the unsafe render pass to.</param>
-        /// <param name="frameData">A <c>ContextContainer</c> object that is unused for this RenderGraph pass.</param>
+        /// <param name="frameData">A <c>ContextContainer</c> object that provides access to URP resource data.</param>
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
             using (var builder = renderGraph.AddUnsafePass<PassData>(
@@ -123,6 +123,11 @@ namespace UnityEngine.XR.Simulation
                 profilingSampler))
             {
                 passData.cameraTextureProvider = m_Provider;
+
+                // Declare _CameraDepthTexture as a resource dependency so RenderGraph keeps it alive until this pass executes.
+                var resourceData = frameData.Get<UniversalResourceData>();
+                if (resourceData.cameraDepthTexture.IsValid())
+                    builder.UseTexture(resourceData.cameraDepthTexture, AccessFlags.Read);
 
                 builder.AllowPassCulling(false);
                 builder.SetRenderFunc<PassData>(ExecuteRenderGraphReadbackPass);

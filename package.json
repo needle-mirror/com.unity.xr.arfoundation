@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.4.2",
+  "version": "6.4.3",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -30,15 +30,15 @@
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed `InvalidOperationException`s which occurred in XR Simulation sessions when images were added to the reference image library during the active session.\n- Fixed the editor for `XRReferenceObjectLibrary` so that the remove button renders correctly in all Unity versions. ([ARFB-673](https://issuetracker.unity3d.com/issues/remove-reference-object-button-is-unclear-for-xr-reference-object-library-in-inspector-window))\n- Fixed `ARAnchorManager` so that if its subsystem fails to create an anchor, it doesn't try to create an `ARAnchor` object with invalid data.\n- Fixed `ARDebugMenu` so that it matches the state of the slider buttons and visualizers for plane and anchors when enabled.\n- Fixed a possible `MissingReferenceException` in an internal script when opening a scene in the Editor if another scene was previously unloaded within the same frame.\n- Fixed `AROcclusionManager` so that it no longer throws a `NullReferenceException` after disabling itself if your target device doesn't support occlusion.\n- Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.\n- Fixed usages of types that are deprecated in Unity 6.5 or newer when this package is imported into Unity 6.5."
+    "changelog": "### Fixed\n\n- Fixed `ARRaycastManager` so that raycast hits are calculated correctly if you previously moved the XR Origin. ([UUM-138221](https://issuetracker.unity3d.com/issues/using-movecameratoworldlocation-will-make-offset-planes-from-the-ar-plane-manager))\n- Fixed `ARTrackableManager` so that it only destroys trackables upon removal if `ARTrackable.destroyOnRemoval` is true.\n- Fixed `ARTrackableManager` so that `ARAnchor.pending` is set to false when the anchor is added. ([UUM-136565](https://issuetracker.unity3d.com/issues/aranchor-dot-pending-never-resolves-when-adding-an-anchor-via-tryaddanchorasync-in-editor-play-mode-with-xr-simulation))\n- Fixed a bug where a duplicate `ARAnchor` GameObject is no longer created for anchors that were added by the user creating the component at runtime.\n- Fixed `SimulatedTrackedImage` so that modifying a duplicated component's image reference doesn't visually change the original component's image. ([UUM-135143](https://issuetracker.unity3d.com/issues/ar-foundation-simulated-tracked-image-component-image-property-does-not-get-updated-in-prefab-mode-after-duplication))\n- Fixed XR Simulation internal logic so that the Editor no longer unexpectedly quits when unloading and reloading an AR scene without deinitializing the XR Loader. ([UUM-137252](https://issuetracker.unity3d.com/issues/crash-on-asyncgpureadbackbuffer-validatetexture-when-re-entering-the-ar-scene)).\n- Fixed the custom Editor for XR Simulation shaders so that changes to color values are applied correctly in Unity 6.3 or newer.\n- Fixed RenderGraph releasing depth texture from `SimulationCameraTextureReadbackPass` before the pass is finished, resolving occlusion issues and z-fighting in XR Simulation Environments.\n- Fixed usages of APIs in Unity 6.4 that have been deprecated in that Editor version.\n- Fixed missing RenderGraph depth texture read access in `ARBackgroundRendererFeature`."
   },
   "upmCi": {
-    "footprint": "dff734717dffb17117629a679782e14ba23836ee"
+    "footprint": "d102fb64ba341e77afc6a1ef30b9f000da892e88"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.4/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "6c0f52d5ffb5caa6aaa148a5411e8cf9f5a8f09f"
+    "revision": "848be546f8c8c1a4db3029bda718b849f9165cf4"
   }
 }

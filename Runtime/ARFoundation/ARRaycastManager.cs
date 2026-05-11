@@ -276,11 +276,13 @@ namespace UnityEngine.XR.ARFoundation
             {
                 bool cachedPlaneManagerFound = FallbackRaycastRegistry.CachedPlaneManager != null;
                 bool cachedBoxManagerFound = FallbackRaycastRegistry.CachedBoundingBoxManager != null;
+                bool cachedMarkerManagerFound = FallbackRaycastRegistry.CachedMarkerManager != null;
 
                 // Results are in "trackables space", so transform results back into world space
                 foreach (var nativeHit in nativeHits)
                 {
-                    float distanceInWorldSpace = (nativeHit.pose.position - rayOrigin).magnitude;
+                    var worldHitPosition = origin.TrackablesParent.TransformPoint(nativeHit.pose.position);
+                    float distanceInWorldSpace = (worldHitPosition - rayOrigin).magnitude;
 
                     // Attempt to look up the trackable
                     ARTrackable trackable = null;
@@ -293,9 +295,13 @@ namespace UnityEngine.XR.ARFoundation
                     // Bounding Boxes
                     if ((nativeHit.hitType & TrackableType.BoundingBox) != 0 && cachedBoxManagerFound)
                     {
-                        ARBoundingBox boundingBox;
-                        if (FallbackRaycastRegistry.CachedBoundingBoxManager.TryGetBoundingBox(nativeHit.trackableId, out boundingBox))
+                        if (FallbackRaycastRegistry.CachedBoundingBoxManager.TryGetBoundingBox(nativeHit.trackableId, out var boundingBox))
                             trackable = boundingBox;
+                    }
+                    // Markers
+                    if ((nativeHit.hitType & TrackableType.Marker) != 0 && cachedMarkerManagerFound)
+                    {
+                        trackable = FallbackRaycastRegistry.CachedMarkerManager.GetMarker(nativeHit.trackableId);
                     }
 
                     managedHits.Add(new ARRaycastHit(nativeHit, distanceInWorldSpace, origin.TrackablesParent, trackable));
