@@ -138,6 +138,12 @@ namespace UnityEngine.XR.ARFoundation
             bool m_InvertCulling;
 
             /// <summary>
+            /// Whether occlusion is enabled for the current frame. Set during <see cref="SetupInternal"/>
+            /// and used by <see cref="RecordRenderGraph"/> to declare the depth texture dependency.
+            /// </summary>
+            bool m_OcclusionEnabled;
+
+            /// <summary>
             /// The default platform geometry and transform for the camera background.
             /// </summary>
             XRCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams
@@ -174,7 +180,9 @@ namespace UnityEngine.XR.ARFoundation
             /// <see cref="Material"/> and any additional rendering information required by the render pass.</param>
             protected virtual void SetupInternal(ARCameraBackground cameraBackground)
             {
-                if (cameraBackground.occlusionManager != null && cameraBackground.occlusionManager.enabled)
+                var occlusionManager = cameraBackground.occlusionManager;
+                m_OcclusionEnabled = occlusionManager != null && occlusionManager.enabled;
+                if (m_OcclusionEnabled)
                 {
                     // If an occlusion texture is being provided, rendering will need
                     // to compare it against the depth texture created by the camera.
@@ -266,6 +274,12 @@ namespace UnityEngine.XR.ARFoundation
                     m_RenderPassData.invertCulling = m_InvertCulling;
                     m_RenderPassData.cameraBackgroundRenderingParams = m_CameraBackgroundRenderingParams;
                     m_RenderPassData.backgroundMaterial = m_BackgroundMaterial;
+
+                    // When occlusion is enabled, the background material samples _CameraDepthTexture.
+                    // Declare the read so RenderGraph tracks the dependency and won't reorder or
+                    // cull the pass that produces the depth texture.
+                    if (m_OcclusionEnabled && resourceData.cameraDepthTexture.IsValid())
+                        builder.UseTexture(resourceData.cameraDepthTexture, AccessFlags.Read);
 
                     // Shader keyword changes are considered global state modifications
                     builder.AllowGlobalStateModification(true);

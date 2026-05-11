@@ -22,7 +22,7 @@ namespace UnityEngine.XR.Simulation
         /// <summary>
         /// Performs a raycast against all 3D bounding boxes passed in during construction.
         /// </summary>
-        /// <param name="ray">The ray, in Unity world space, to cast.</param>
+        /// <param name="ray">The ray, in session space, to cast.</param>
         /// <param name="trackableTypeMask">A mask of raycast types to perform.</param>
         /// <param name="allocator">The <c>Allocator</c> to use when creating the returned <c>NativeArray</c>.</param>
         /// <returns>

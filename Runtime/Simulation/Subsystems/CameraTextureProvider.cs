@@ -175,10 +175,22 @@ namespace UnityEngine.XR.Simulation
 
         void OnDestroy()
         {
+            m_Initialized = false;
             BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentSetupFinished;
 
             if (m_SimulationCamera != null)
+            {
+                if (m_ReadbackCommandBuffer != null)
+                    m_SimulationCamera.RemoveCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
+
                 m_SimulationCamera.targetTexture = null;
+            }
+
+            if (m_ReadbackCommandBuffer != null)
+            {
+                m_ReadbackCommandBuffer.Dispose();
+                m_ReadbackCommandBuffer = null;
+            }
 
             if (m_SimulationCameraRenderTexture != null)
                 m_SimulationCameraRenderTexture.Release();

@@ -42,6 +42,12 @@ namespace UnityEngine.XR.Simulation
         [ReadOnly, ShowInDebugInspectorOnly]
         SerializableGuid m_SerializableImageAssetGuid;
 
+        // Not serialized, so always resets to false on load and after duplication. This lets
+        // us detect in OnValidate when CreateQuadMesh() hasn't run yet for this instance,
+        // which happens when OnEnable is not called by [ExecuteInEditMode] in Prefab Mode.
+        [NonSerialized]
+        bool m_QuadInitialized;
+
         Material s_QuadBaseMaterial;
 
         /// <summary>
@@ -132,11 +138,25 @@ namespace UnityEngine.XR.Simulation
                     m_ImagePhysicalSizeMeters.y < k_MinSideLengthMeters ? k_MinSideLengthMeters : m_ImagePhysicalSizeMeters.y);
             }
 
-            UpdateQuadMesh();
-
 #if UNITY_EDITOR
-            SetSerializedGuid();
+            // The quad mesh cannot be persisted in a prefab asset. Calling CreateQuadMesh here
+            // would assign a new Mesh to a [SerializeField], marking the prefab dirty and
+            // triggering a save attempt that fails for immutable package paths. OnEnable
+            // regenerates the mesh when the component becomes active.
+            var shouldUpdateMesh = !UnityEditor.PrefabUtility.IsPartOfPrefabAsset(this);
+            if (shouldUpdateMesh)
+                SetSerializedGuid();
+#else
+            var shouldUpdateMesh = true;
 #endif
+
+            if (shouldUpdateMesh)
+            {
+                if (m_QuadMesh == null || !m_QuadInitialized)
+                    CreateQuadMesh();
+                else
+                    UpdateQuadMesh();
+            }
         }
 
         /// <remarks>
@@ -206,6 +226,7 @@ namespace UnityEngine.XR.Simulation
             };
 
             m_QuadMeshRenderer.sharedMaterial = m_QuadMaterial;
+            m_QuadInitialized = true;
         }
 
         void UpdateQuadMesh()

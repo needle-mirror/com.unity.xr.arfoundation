@@ -311,7 +311,8 @@ namespace UnityEngine.XR.ARFoundation
                 // Results are in "trackables space", so transform results back into world space
                 foreach (var nativeHit in nativeHits)
                 {
-                    float distanceInWorldSpace = (nativeHit.pose.position - rayOrigin).magnitude;
+                    var worldHitPosition = origin.TrackablesParent.TransformPoint(nativeHit.pose.position);
+                    float distanceInWorldSpace = (worldHitPosition - rayOrigin).magnitude;
 
                     // Attempt to look up the trackable
                     ARTrackable trackable = null;
