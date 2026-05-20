@@ -26,6 +26,9 @@ The following code sets up a [command buffer](https://docs.unity3d.com/ScriptRef
 
 [!code-cs[GPU_Blit](../../../Tests/Runtime/CodeSamples/CpuImageSamples.cs#GPU_Blit)]
 
+> [!NOTE]
+> If your project targets the OpenXR Meta provider, you can access GPU images directly with the `MetaOpenXRCameraSubsystem` acquisition APIs. Refer to [Acquire and release GPU images](xref:meta-openxr-camera#acquire-and-release-gpu-images) (OpenXR Meta) for more information about GPU image access on Meta Quest.
+
 # Access images via CPU
 
 To access the device camera image on the CPU, first call [ARCameraManager.TryAcquireLatestCpuImage](xref:UnityEngine.XR.ARFoundation.ARCameraManager.TryAcquireLatestCpuImage(UnityEngine.XR.ARSubsystems.XRCpuImage@)) to obtain an `XRCpuImage`.
@@ -139,3 +142,6 @@ image.Dispose();
 ```
 
 `XRCpuImage.Plane` provides direct access to a native memory buffer via `NativeArray<byte>`. This represents a view into the native memory — you don't need to dispose the `NativeArray`. You should consider this memory read-only, and its data is valid until the `XRCpuImage` is disposed.
+
+> [!NOTE]
+> If your project targets the OpenXR Meta provider, you can access CPU images directly with the `MetaOpenXRCameraSubsystem` acquisition APIs. Refer to [Access images via CPU](xref:meta-openxr-camera#access-images-via-cpu) (OpenXR Meta) for more information about CPU image access on Meta Quest.

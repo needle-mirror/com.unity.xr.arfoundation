@@ -196,6 +196,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <value>
         /// The timestamp, in seconds, associated with this camera image
         /// </value>
+        /// <remarks>
+        /// The exact format and starting reference of this timestamp (such as the time elapsed after the last device reboot) depend on the device and platform. Use this value to compare the relative timing of images captured on the same device. Don't use it to establish an absolute frame of reference or absolute real-world time (for example, time elapsed from the Unix epoch).
+        /// </remarks>
         public double timestamp { get; private set; }
 
         /// <summary>

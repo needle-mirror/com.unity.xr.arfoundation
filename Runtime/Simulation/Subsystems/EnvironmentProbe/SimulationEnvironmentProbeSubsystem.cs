@@ -19,7 +19,7 @@ namespace UnityEngine.XR.Simulation
             float m_LastUpdateTime;
 
             public override bool automaticPlacementRequested {
-                get { return m_ProbeDiscoverer?.automaticPlacementEnabled ?? false; }
+                get => m_ProbeDiscoverer?.automaticPlacementEnabled ?? false;
                 set {
                     if (m_ProbeDiscoverer != null)
                         m_ProbeDiscoverer.automaticPlacementEnabled = value;

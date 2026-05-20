@@ -59,7 +59,8 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// When both
-        /// - `DEVELOPMENT_BUILD` is defined (for example, in a development build) AND
+        /// - the build is configured to enable diagnostic checks (for example, a development build, or any build
+        ///   with the Checked Managed Code Variant on Unity 6.6+) AND
         /// - <paramref name="condition"/> is `false`
         /// a new <see cref="Message"/> object is returned. This allows you to write code like
         /// <code>
@@ -74,10 +75,13 @@ namespace UnityEngine.XR.ARFoundation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Message? WhenFalse(bool condition)
         {
-#if DEVELOPMENT_BUILD
-            if (!condition)
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (Debug.isDebugBuild)
+#endif
             {
-                return new Message();
+                if (!condition)
+                    return new Message();
             }
 #endif
             return null;

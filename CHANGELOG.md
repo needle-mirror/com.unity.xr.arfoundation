@@ -8,6 +8,48 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.6.0-pre.1] - 2026-05-20
+
+### Added
+
+- Added a new [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3) base class that enables providers to incorporate permissions and asynchronous resource creation into their `Start` implementation.
+- Added a `ToString` override for `ARMarker`.
+- Added support for Apple visionOS to the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**).
+- Added [XRCameraSubsystem.requiresPremultipliedBackgroundColor](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.requiresPremultipliedBackgroundColor) to support runtimes that require premultiplying the background color with the background color alpha.
+- Added `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate`, which allows a raycast provider to determine at runtime which trackable types it supports.
+
+### Changed
+
+- Changed `SubsystemLifecycleManager.Start` logic to be compatible with the new `XRSubsystem` base class.
+- Reverted a previous change to `SubsystemLifecycleManager.OnEnable`, which allowed the manager component to poll for subsystems that weren't synchronously available. With the addition of `XRSubsystem`, all providers are now expected to create subsystems synchronously during `XRLoader.Initialize`.
+- Changed the minimum dependency version of XR Core Utils from 2.6.0-pre.2 to 2.6.0.
+- Changed diagnostic gates that previously used the deprecated `DEVELOPMENT_BUILD` script define to use `UNITY_ENABLE_CHECKS` on Unity 6.6 or newer (where the new Managed Code Variant Player Setting controls diagnostic compilation), with a runtime `Debug.isDebugBuild` fallback on older Unity versions. There is no public API change; on Unity 6.6+ the trackable-change validators and AR Foundation diagnostic warnings now compile in for Player builds with the Debug or Checked Managed Code Variant.
+
+### Deprecated
+
+- Deprecated `XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary<T>` and `XRPlaneSubsystem.Provider.CreateOrResizeNativeArrayIfNecessary<T>`. Use [NativeArrayUtils](xref:Unity.XR.CoreUtils.NativeArrayUtils) instead.
+- Deprecated `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypes`. Use `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate` instead.
+
+### Removed
+
+- Removed unnecessary color attachment in "Copy Simulation Camera" pass.
+
+### Fixed
+
+- Fixed `ARCameraManager` so that the camera's background color is pre-multiplied by its alpha before clearing the framebuffer on platforms that require premultiplied alpha compositing. This prevents non-black background colors from tinting the passthrough image when alpha is zero.
+- Fixed `ARTrackableManager` so that it only destroys trackables upon removal if `ARTrackable.destroyOnRemoval` is true.
+- Fixed `ARTrackableManager` so that `ARAnchor.pending` is set to false when the anchor is added. ([UUM-136565](https://issuetracker.unity3d.com/issues/aranchor-dot-pending-never-resolves-when-adding-an-anchor-via-tryaddanchorasync-in-editor-play-mode-with-xr-simulation))
+- Fixed a bug where a duplicate `ARAnchor` GameObject is no longer created for anchors that were added by the user creating the component at runtime.
+- Fixed `SimulatedTrackedImage` so that modifying a duplicated component's image reference doesn't visually change the original component's image. ([UUM-135143](https://issuetracker.unity3d.com/issues/ar-foundation-simulated-tracked-image-component-image-property-does-not-get-updated-in-prefab-mode-after-duplication))
+- Fixed XR Simulation internal logic so that the Editor no longer unexpectedly quits when unloading and reloading an AR scene without deinitializing the XR Loader. ([UUM-137252](https://issuetracker.unity3d.com/issues/crash-on-asyncgpureadbackbuffer-validatetexture-when-re-entering-the-ar-scene)).
+- Fixed the custom Editor for XR Simulation shaders so that changes to color values are applied correctly in Unity 6.3 or newer.
+- Fixed RenderGraph releasing depth texture from `SimulationCameraTextureReadbackPass` before the pass is finished, resolving occlusion issues and z-fighting in XR Simulation Environments.
+- Fixed usages of APIs in Unity 6.4 that have been deprecated in that Editor version.
+- Fixed missing RenderGraph depth texture read access in `ARBackgroundRendererFeature`.
+- Fixed inconsistent Render Pass names, including mismatch between Frame Debugger and Render Graph Viewer.
+- Fixed `ARSession` so that camera torch mode is available on supported iOS devices the first time that this component is started.
+- Fixed the `SimulationURPLit` shader so that it no longer reports a missing shader keyword when analyzed via Project Auditor.
+
 ## [6.5.0] - 2026-03-26
 
 No changes
@@ -32,6 +74,7 @@ No changes
 - Fixed build processing logic so that your app no longer logs `The referenced script on this Behaviour (Game Object '<null>') is missing!` when it launches.
 - Fixed `AROcclusionManager` so that it no longer throws a `NullReferenceException` after disabling itself if your target device doesn't support occlusion.
 - Fixed `ARPlaneMeshGenerator` so that degenerate vertex boundary geometry will not cause the application to stop responding.
+- Fixed `ARRaycastManager` so that raycast hits are calculated correctly if you previously moved the XR Origin. ([UUM-138221](https://issuetracker.unity3d.com/issues/using-movecameratoworldlocation-will-make-offset-planes-from-the-ar-plane-manager))
 
 ## [6.5.0-pre.2] - 2026-02-04
 

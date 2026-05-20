@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -14,7 +15,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         public static XREnvironmentProbe defaultValue => s_Default;
 
-        static readonly XREnvironmentProbe s_Default = new XREnvironmentProbe
+        static readonly XREnvironmentProbe s_Default = new()
         {
             trackableId = TrackableId.invalidId,
             pose = Pose.identity
@@ -244,10 +245,23 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>A string representation of this <see cref="XREnvironmentProbe"/>.</returns>
         public string ToString(string floatingPointformat)
         {
-            return string.Format("{0} scale:{1} pose:{2} size:{3} environmentTextureData:{4} trackingState:{5} nativePtr:{6}",
-                                 m_TrackableId.ToString(), m_Scale.ToString(floatingPointformat),
-                                 m_Pose.ToString(floatingPointformat), m_Size.ToString(floatingPointformat),
-                                 m_TextureDescriptor.ToString(), m_TrackingState.ToString(), m_NativePtr.ToString());
+            var sb = SharedStringBuilder.instance;
+            sb.Append(m_TrackableId.ToString());
+            sb.Append(" scale:");
+            sb.Append(m_Scale.ToString(floatingPointformat));
+            sb.Append(" pose:");
+            sb.Append(m_Pose.ToString(floatingPointformat));
+            sb.Append(" size:");
+            sb.Append(m_Size.ToString(floatingPointformat));
+            sb.Append(" environmentTextureData:");
+            sb.Append(m_TextureDescriptor.ToString());
+            sb.Append(" trackingState:");
+            sb.Append(m_TrackingState.ToString());
+            sb.Append(" nativePtr:");
+            sb.Append(m_NativePtr.ToString());
+            var result = sb.ToString();
+            sb.Clear();
+            return result;
         }
     }
 }

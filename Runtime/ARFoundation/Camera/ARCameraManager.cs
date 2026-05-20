@@ -4,6 +4,10 @@ using Unity.Collections;
 using Unity.XR.CoreUtils.Collections;
 using UnityEngine.XR.ARSubsystems;
 
+#if URP_7_OR_NEWER
+using UnityEngine.Rendering;
+#endif
+
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -29,6 +33,8 @@ namespace UnityEngine.XR.ARFoundation
         Camera m_Camera;
         bool m_PreRenderInvertCullingValue;
         IUpdatableTexture m_CameraGrainUpdatableTexture;
+        Color m_OriginalBackgroundColor;
+        bool m_DidPremultiplyBackgroundColor;
 
         /// <summary>
         /// An event which fires each time a new camera frame is received.
@@ -324,6 +330,19 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <inheritdoc/>
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+#if URP_7_OR_NEWER
+            RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+            RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+#else
+            Camera.onPreRender += OnCameraPreRender;
+            Camera.onPostRender += OnCameraPostRender;
+#endif
+        }
+
+        /// <inheritdoc/>
         protected override void OnBeforeStart()
         {
             subsystem.requestedCameraBackgroundRenderingMode = m_RenderMode.ToXRSupportedCameraBackgroundRenderingMode();
@@ -336,6 +355,19 @@ namespace UnityEngine.XR.ARFoundation
         /// <inheritdoc/>
         protected override void OnDisable()
         {
+#if URP_7_OR_NEWER
+            RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+            RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+#else
+            Camera.onPreRender -= OnCameraPreRender;
+            Camera.onPostRender -= OnCameraPostRender;
+#endif
+            if (m_DidPremultiplyBackgroundColor && m_Camera != null)
+            {
+                m_Camera.backgroundColor = m_OriginalBackgroundColor;
+                m_DidPremultiplyBackgroundColor = false;
+            }
+
             base.OnDisable();
             m_SwapchainStrategy.DestroyTextures();
         }
@@ -460,5 +492,49 @@ namespace UnityEngine.XR.ARFoundation
 
             frameReceived(eventArgs);
         }
+
+        /// <summary>
+        /// Multiplies the cameras backgorund color with its alpha.
+        /// </summary>
+        /// <param name="camera">The camera to premultiply the background color with the alpha. Must not be null.</param>
+        void PremultiplyBackgroundColor(Camera camera)
+        {
+            if (camera != m_Camera
+                || subsystem == null
+                || !subsystem.requiresPremultipliedBackgroundColor)
+                return;
+
+            // Only save the original color if we haven't already. If the restore callback was
+            // skipped on the previous frame, the camera still holds the premultiplied value and
+            // we must not overwrite our saved original with it.
+            if (!m_DidPremultiplyBackgroundColor)
+                m_OriginalBackgroundColor = m_Camera.backgroundColor;
+
+            var color = m_OriginalBackgroundColor;
+            m_Camera.backgroundColor =
+                new Color(color.r * color.a, color.g * color.a, color.b * color.a, color.a);
+            m_DidPremultiplyBackgroundColor = true;
+        }
+
+        void RestoreBackgroundColor(Camera camera)
+        {
+            if (camera != m_Camera || !m_DidPremultiplyBackgroundColor)
+                return;
+
+            m_Camera.backgroundColor = m_OriginalBackgroundColor;
+            m_DidPremultiplyBackgroundColor = false;
+        }
+
+#if URP_7_OR_NEWER
+        void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
+            => PremultiplyBackgroundColor(camera);
+
+        void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
+            => RestoreBackgroundColor(camera);
+#else
+        void OnCameraPreRender(Camera camera) => PremultiplyBackgroundColor(camera);
+
+        void OnCameraPostRender(Camera camera) => RestoreBackgroundColor(camera);
+#endif
     }
 }

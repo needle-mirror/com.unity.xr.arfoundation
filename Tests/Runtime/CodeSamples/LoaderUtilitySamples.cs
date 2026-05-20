@@ -123,5 +123,20 @@ namespace UnityEngine.XR.ARFoundation.Tests
             }
             #endregion
         }
+
+        class ObjectTrackingCheck
+        {
+            #region CheckIfObjectTrackingLoaded
+            void Start()
+            {
+                if (LoaderUtility
+                        .GetActiveLoader()?
+                        .GetLoadedSubsystem<XRObjectTrackingSubsystem>() != null)
+                {
+                    // XRObjectTrackingSubsystem was loaded. Object tracking is supported.
+                }
+            }
+            #endregion
+        }
     }
 }

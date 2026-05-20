@@ -10,9 +10,12 @@ namespace UnityEngine.XR.ARFoundation
 
         internal static ARBoundingBoxManager CachedBoundingBoxManager => m_CachedBoundingBoxManager;
 
+        internal static ARMarkerManager CachedMarkerManager => m_CachedMarkerManager;
+
         static HashSet<IRaycaster> m_Raycasters = new();
         static ARPlaneManager m_CachedPlaneManager;
         static ARBoundingBoxManager m_CachedBoundingBoxManager;
+        static ARMarkerManager m_CachedMarkerManager;
 
         /// <summary>
         /// Allows AR managers to register themselves as a raycaster.
@@ -27,6 +30,8 @@ namespace UnityEngine.XR.ARFoundation
                 m_CachedPlaneManager = raycaster as ARPlaneManager;
             else if (raycasterType == typeof(ARBoundingBoxManager))
                 m_CachedBoundingBoxManager = raycaster as ARBoundingBoxManager;
+            else if (raycasterType == typeof(ARMarkerManager))
+                m_CachedMarkerManager = raycaster as ARMarkerManager;
 
             m_Raycasters.Add(raycaster);
         }
@@ -47,6 +52,7 @@ namespace UnityEngine.XR.ARFoundation
             m_Raycasters?.Clear();
             m_CachedBoundingBoxManager = null;
             m_CachedPlaneManager = null;
+            m_CachedMarkerManager = null;
         }
     }
 }

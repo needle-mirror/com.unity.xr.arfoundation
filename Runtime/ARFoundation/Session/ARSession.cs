@@ -174,7 +174,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         static void WarnIfMultipleARSessions()
         {
-#if UNITY_6000_5_OR_NEWER
+#if UNITY_6000_4_OR_NEWER
             var sessions = FindObjectsByType<ARSession>();
 #else
             var sessions = FindObjectsByType<ARSession>(FindObjectsSortMode.None);
@@ -327,15 +327,19 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected override void OnEnable()
         {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            WarnIfMultipleARSessions();
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (Debug.isDebugBuild)
 #endif
-            base.OnEnable();
+                WarnIfMultipleARSessions();
+#endif
 
             // Cache these values and restore them in OnDisable
             m_VSyncCount = QualitySettings.vSyncCount;
             m_TargetFrameRate = Application.targetFrameRate;
             m_WasFrameRateSet = false;
+
+            base.OnEnable();
         }
 
         /// <inheritdoc/>
@@ -343,6 +347,10 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (subsystem != null)
             {
+                // These values must be set before the subsystem is started by SubsystemLifecycleManager.
+                SetMatchFrameRateRequested(m_MatchFrameRate);
+                subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
+
                 StartCoroutine(Initialize());
             }
         }
@@ -372,8 +380,6 @@ namespace UnityEngine.XR.ARFoundation
 
         void StartSubsystem()
         {
-            SetMatchFrameRateRequested(m_MatchFrameRate);
-            subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
             subsystem.Start();
         }
 

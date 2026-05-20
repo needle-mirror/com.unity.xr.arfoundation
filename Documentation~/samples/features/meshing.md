@@ -13,7 +13,6 @@ To understand each of the meshing sample scenes, refer to the following sections
 | :----------------------------------- | :----------- |
 | [Normal meshes](#normal) | Renders an overlay on top of the real world scanned geometry illustrating the normal of the surface. |
 | [Classification meshes](#classification) (ARKit) | Demonstrates mesh classification functionality. |
-| [Occlusion meshes](#occlusion) | Demonstrates how to use meshes of real world geometry to occlude virtual content. |
 
 ## Requirements
 
@@ -36,15 +35,5 @@ The `Classification Meshes` scene demonstrates mesh classification functionality
 With mesh classification enabled, each triangle in the mesh surface is identified as one of several surface types. This sample scene creates submeshes for each classification type and renders each mesh type with a different color.
 
 ![ClassificationMeshes](../../images/arfoundation-arkit-classified-meshing.gif)
-
-<a id="occlusion"></a>
-
-## Occlusion meshes scene
-
-The `Occlusion Meshes` scene demonstrates how to use meshes of real world geometry to occlude virtual content.
-
-At first, this scene might appear to be doing nothing. However, it's rendering a depth texture on top of the scene based on the real world geometry. This allows for the real world to occlude virtual content. The scene has a script on it that fires a red ball into the scene when you tap. To observe occlusion working, fire the red balls into a space and move the iPad camera behind a real world object. You will see that the virtual red balls are occluded by the real world object.
-
-![OcclusionMeshes](../../images/arfoundation-arkit-occlusion-meshing.gif)
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

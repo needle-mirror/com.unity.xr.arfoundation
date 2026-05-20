@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// Defines an interface for interacting with occlusion functionality.
     /// </summary>
     public class XROcclusionSubsystem
-        : SubsystemWithProvider<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
+        : XRSubsystem<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
     {
         /// <summary>
         /// Specifies the human segmentation stencil mode.

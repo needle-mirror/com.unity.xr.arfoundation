@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>

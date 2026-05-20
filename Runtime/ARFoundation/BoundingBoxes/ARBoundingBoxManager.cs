@@ -1,4 +1,3 @@
-using System;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
@@ -49,7 +48,7 @@ namespace UnityEngine.XR.ARFoundation
         protected override void Awake()
         {
             base.Awake();
-            m_BoundingBoxRaycaster = new(trackables);
+            m_BoundingBoxRaycaster = new(trackables, origin);
         }
 
         /// <summary>
@@ -66,7 +65,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Performs a raycast against all currently tracked 3D bounding boxes.
         /// </summary>
-        /// <param name="ray">The ray, in Unity world space, to cast.</param>
+        /// <param name="ray">The ray, in session space, to cast.</param>
         /// <param name="trackableTypeMask">A mask of raycast types to perform.</param>
         /// <param name="allocator">The <c>Allocator</c> to use when creating the returned <c>NativeArray</c>.</param>
         /// <returns>
@@ -93,11 +92,7 @@ namespace UnityEngine.XR.ARFoundation
         protected override void OnEnable()
         {
             base.OnEnable();
-
-            if (subsystem != null)
-            {
-                FallbackRaycastRegistry.RegisterRaycaster(this);
-            }
+            FallbackRaycastRegistry.RegisterRaycaster(this);
         }
 
         /// <summary>

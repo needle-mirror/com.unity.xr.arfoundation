@@ -48,8 +48,12 @@ namespace UnityEditor.XR.ARSubsystems
 
         static Texture2D s_FolderIcon;
 
-        static readonly string[] k_SupportedBuildTargets = { nameof(BuildTarget.Android), nameof(BuildTarget.iOS) };
-        static readonly int[] k_SupportedBuildTargetValues = { (int)BuildTarget.Android, (int)BuildTarget.iOS };
+        // Note: visionOS (lowercase 'v') is the official product name
+        static readonly string[] k_SupportedBuildTargets =
+            { nameof(BuildTarget.Android), nameof(BuildTarget.iOS), "visionOS" };
+
+        static readonly int[] k_SupportedBuildTargetValues =
+            { (int)BuildTarget.Android, (int)BuildTarget.iOS, (int)BuildTarget.VisionOS };
 
         static readonly string k_ProjectRepository = Directory.GetParent(Application.dataPath)!.ToString();
 
@@ -75,7 +79,19 @@ namespace UnityEditor.XR.ARSubsystems
 
         void OnEnable()
         {
-            m_BuildForTarget = EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? BuildTarget.iOS : BuildTarget.Android;
+            switch (EditorUserBuildSettings.activeBuildTarget)
+            {
+                case BuildTarget.iOS:
+                    m_BuildForTarget = BuildTarget.iOS;
+                    break;
+                case BuildTarget.VisionOS:
+                    m_BuildForTarget = BuildTarget.VisionOS;
+                    break;
+                default:
+                case BuildTarget.Android:
+                    m_BuildForTarget = BuildTarget.Android;
+                    break;
+            }
             m_OutputDirectory = EditorPrefs.GetString(k_EditorPrefsAssetBundleOutputDirectoryKey);
 
             if (!staticsAreInitialized)

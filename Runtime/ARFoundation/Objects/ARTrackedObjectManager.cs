@@ -92,8 +92,11 @@ namespace UnityEngine.XR.ARFoundation
             else
             {
                 enabled = false;
-#if DEVELOPMENT_BUILD
-                Debug.LogWarning($"{nameof(ARTrackedObjectManager)} '{name}' was enabled but no reference object library is specified. To enable, set a valid reference object library and then re-enable this component.");
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+                if (Debug.isDebugBuild)
+#endif
+                    Debug.LogWarning($"{nameof(ARTrackedObjectManager)} '{name}' was enabled but no reference object library is specified. To enable, set a valid reference object library and then re-enable this component.");
 #endif
             }
         }

@@ -13,6 +13,7 @@ To understand each of the camera sample scenes, refer to the following sections:
 | Sample scene                                     | Description                                         |
 | :----------------------------------------------- | :-------------------------------------------------- |
 | [CPU images](#cpu-images) | Demonstrates how to acquire and manipulate CPU images. |
+| [GPU images](#gpu-images) | Demonstrates how to acquire and manipulate GPU images. |
 | [Basic light estimation](#basic-light) | Performs AR Foundation basic light estimation. |
 | [HDR light estimation](#hdr-light) | Reads HDR light information on supported platforms. |
 | [Background rendering order](#background-rendering-order) | Provides an example of changing the camera's background rendering order. |
@@ -42,6 +43,16 @@ Where available, the human depth and human stencil textures are also available o
 ### Human depth and stencil texture requirements
 
 Human depth and human stencil textures are currently available on ARKit using devices with iOS 13 or newer.
+
+<a id="gpu-images"></a>
+
+## GPU images scene
+
+The `GPU Images` scene shows how to acquire and manipulate camera images obtained from Meta Quest headsets on the GPU. GPU images provide zero-copy access to camera data, making them ideal for real-time rendering, shader processing, and GPU-based computer vision operations.
+
+### Requirements
+
+To use the GPU images scene, you must set your graphics API to Vulkan as outlined in [Vulkan Graphics API](xref:meta-openxr-graphics-settings) (OpenXR Meta).
 
 <a id="basic-light"></a>
 

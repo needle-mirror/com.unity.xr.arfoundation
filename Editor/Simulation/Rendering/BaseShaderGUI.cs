@@ -350,7 +350,9 @@ namespace UnityEditor.XR.Simulation.Rendering
             // UniversalRP does not support RealtimeEmissive. We set it to bake emissive and handle the emissive is black right.
             if (emissive)
             {
+#pragma warning disable 618 // Obsolete warning
                 material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.BakedEmissive;
+#pragma warning restore 618 // Obsolete warning
                 if (brightness <= 0f)
                     material.globalIlluminationFlags |= MaterialGlobalIlluminationFlags.EmissiveIsBlack;
             }

@@ -42,17 +42,11 @@ namespace UnityEngine.XR.ARFoundation
         [Obsolete("anchorsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
         public event Action<ARAnchorsChangedEventArgs> anchorsChanged;
 
-        Pool.ObjectPool<AwaitableCompletionSource<Result<ARAnchor>>> m_AnchorCompletionSources = new(
-            createFunc: () => new AwaitableCompletionSource<Result<ARAnchor>>(),
-            actionOnGet: null,
-            actionOnRelease: null,
-            actionOnDestroy: null,
-            collectionCheck: false,
-            defaultCapacity: 8,
-            maxSize: 1024);
+        Pool.ObjectPool<AwaitableCompletionSource<Result<ARAnchor>>> m_AnchorCompletionSources =
+            ObjectPoolCreateUtil.Create<AwaitableCompletionSource<Result<ARAnchor>>>();
 
         [SerializeField]
-        [Tooltip("If not null, this prefab is instantiated for each detected 3D bounding box.")]
+        [Tooltip("If not null, this prefab is instantiated for each tracked anchor.")]
         [FormerlySerializedAs("m_ReferencePointPrefab")]
         GameObject m_AnchorPrefab;
 

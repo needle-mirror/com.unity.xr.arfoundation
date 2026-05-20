@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -239,7 +240,7 @@ namespace UnityEngine.XR.Simulation
                 var vertices = plane.vertices;
                 if (vertices.IsCreated)
                 {
-                    CreateOrResizeNativeArrayIfNecessary(vertices.Length, allocator, ref boundary);
+                    NativeArrayUtils.EnsureExactSize(ref boundary, vertices.Length, allocator);
                     NativeArray<Vector2>.Copy(vertices, boundary);
                 }
                 else if (boundary.IsCreated)

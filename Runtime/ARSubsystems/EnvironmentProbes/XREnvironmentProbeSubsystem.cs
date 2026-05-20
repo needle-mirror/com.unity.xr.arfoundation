@@ -11,8 +11,12 @@ namespace UnityEngine.XR.ARSubsystems
     public class XREnvironmentProbeSubsystem
         : TrackingSubsystem<XREnvironmentProbe, XREnvironmentProbeSubsystem, XREnvironmentProbeSubsystemDescriptor, XREnvironmentProbeSubsystem.Provider>
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
         ValidationUtility<XREnvironmentProbe> m_ValidationUtility = new();
+#else
+        ValidationUtility<XREnvironmentProbe> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XREnvironmentProbe>() : null;
+#endif
 #endif
 
         /// <summary>
@@ -81,8 +85,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XREnvironmentProbe> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XREnvironmentProbe.defaultValue, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }

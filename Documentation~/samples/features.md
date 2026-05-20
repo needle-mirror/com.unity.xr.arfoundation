@@ -9,9 +9,9 @@ To learn about the scenes that demonstrate AR Foundation features, refer to the 
 
 | Sample scene                                     | Description                                         |
 | :----------------------------------------------- | :-------------------------------------------------- |
-| [Simple AR](xref:arfoundation-samples-simple-ar) | Demonstrates basic plane detection and ray casting. |
+| [Raycasts](xref:arfoundation-samples-raycasts) | Demonstrates basic plane detection and ray casting. |
 | [Camera](xref:arfoundation-samples-camera) | Scenes that demonstrate camera features.    |
-| [Plane detection](xref:arfoundation-samples-plane-detection) | Scenes that demonstrate plane detection. |
+| [Plane detection](xref:arfoundation-samples-plane-detection) | Scene that demonstrates plane detection. |
 | [Bounding box detection](xref:arfoundation-samples-bounding-box-detection) | Demonstrates bounding box detection. |
 | [Image tracking](xref:arfoundation-samples-image-tracking) | Scenes that demonstrate image tracking. |
 | [Markers](xref:arfoundation-samples-markers) | Demonstrates AR marker detection, such as QR codes. |

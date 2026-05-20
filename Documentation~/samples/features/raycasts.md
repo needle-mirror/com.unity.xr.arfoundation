@@ -1,15 +1,15 @@
 ---
-uid: arfoundation-samples-simple-ar
+uid: arfoundation-samples-raycasts
 ---
-# Simple AR sample
+# Raycasts sample
 
-The `Simple AR` sample is a good starting sample for beginners to AR Foundation development. This scene enables AR Foundation [Point cloud visualization](xref:arfoundation-point-clouds) and [Plane detection](xref:arfoundation-plane-detection). You can open this sample in Unity from the `Assets/Scenes/SimpleAR` folder.
+The `Raycasts` sample demonstrates AR Foundation [Raycasts](xref:arfoundation-raycasts). This scene enables AR Foundation [Point cloud visualization](xref:arfoundation-point-clouds) and [Plane detection](xref:arfoundation-plane-detection) to provide surfaces for ray casting. You can open this sample in Unity from the `Assets/Scenes/Raycasts` folder.
 
 [!include[](../../snippets/samples-tip.md)]
 
-## Simple AR scene
+## Raycasts scene
 
-This scene provides on-screen buttons to you pause, resume, reset, and reload the [AR Session](xref:arfoundation-session).
+This scene provides on-screen buttons to let you pause, resume, reset, and reload the [AR Session](xref:arfoundation-session).
 
 When a plane is detected, you can tap on the detected plane to place a cube on it. This uses the [ARRaycastManager](xref:arfoundation-raycasts-raycastmanager) to perform a ray cast against the plane. If the plane is in `TrackingState.Limited`, it will highlight red. On [ARCore](xref:arcore-manual), this means that ray casting will not be available until the plane is in `TrackingState.Tracking` again.
 

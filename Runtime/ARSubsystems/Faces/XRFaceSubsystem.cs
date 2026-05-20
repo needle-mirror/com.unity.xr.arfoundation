@@ -15,8 +15,12 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRFaceSubsystem
         : TrackingSubsystem<XRFace, XRFaceSubsystem, XRFaceSubsystemDescriptor, XRFaceSubsystem.Provider>
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
         ValidationUtility<XRFace> m_ValidationUtility = new();
+#else
+        ValidationUtility<XRFace> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRFace>() : null;
+#endif
 #endif
 
         /// <summary>
@@ -63,8 +67,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XRFace> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XRFace.defaultValue, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }

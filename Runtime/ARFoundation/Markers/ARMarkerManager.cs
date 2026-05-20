@@ -161,28 +161,33 @@ namespace UnityEngine.XR.ARFoundation
 
             var hitBuffer = new NativeArray<XRRaycastHit>(trackables.count, Allocator.Temp);
 
+            var trackablesParent = origin.TrackablesParent;
+            var worldSpaceRay = trackablesParent.TransformRay(ray);
+            var trackablesParentRotationInverse = Quaternion.Inverse(trackablesParent.rotation);
+
             var count = 0;
             foreach (var marker in trackables)
             {
                 var markerTransform = marker.transform;
-                var normal = markerTransform.localRotation * Vector3.up;
-                var infinitePlane = new Plane(normal, markerTransform.localPosition);
-                if (!infinitePlane.Raycast(ray, out var distance))
+                var markerPosition = markerTransform.position;
+                var markerRotation = markerTransform.rotation;
+                var normal = markerRotation * Vector3.up;
+                var infinitePlane = new Plane(normal, markerPosition);
+                if (!infinitePlane.Raycast(worldSpaceRay, out var distance))
                     continue;
 
-                var pose = new Pose(
-                    ray.origin + ray.direction * distance,
-                    marker.transform.localRotation);
-
-                var inverseLocalRotation = Quaternion.Inverse(marker.transform.localRotation);
-                var localHitPosition = inverseLocalRotation * (pose.position - marker.transform.localPosition);
+                var worldHitPosition = worldSpaceRay.origin + worldSpaceRay.direction * distance;
+                var inverseMarkerRotation = Quaternion.Inverse(markerRotation);
+                var localHitPosition = inverseMarkerRotation * (worldHitPosition - markerPosition);
 
                 if (Mathf.Abs(localHitPosition.x) <= marker.size.x * 0.5f &&
                     Mathf.Abs(localHitPosition.z) <= marker.size.y * 0.5f)
                 {
+                    var sessionHitPosition = trackablesParent.InverseTransformPoint(worldHitPosition);
+                    var sessionRotation = trackablesParentRotationInverse * markerRotation;
                     hitBuffer[count] = new XRRaycastHit(
                         marker.trackableId,
-                        pose,
+                        new Pose(sessionHitPosition, sessionRotation),
                         distance,
                         TrackableType.Marker);
 
@@ -193,6 +198,24 @@ namespace UnityEngine.XR.ARFoundation
             var hitResults = new NativeArray<XRRaycastHit>(count, allocator);
             NativeArray<XRRaycastHit>.Copy(hitBuffer, hitResults, count);
             return hitResults;
+        }
+
+        /// <summary>
+        /// Invoked when Unity enables this `MonoBehaviour`. Used to register with the <see cref="ARRaycastManager"/>.
+        /// </summary>
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            FallbackRaycastRegistry.RegisterRaycaster(this);
+        }
+
+        /// <summary>
+        /// Invoked when this component is disabled. Used to unregister with the <see cref="ARRaycastManager"/>.
+        /// </summary>
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            FallbackRaycastRegistry.UnregisterRaycaster(this);
         }
     }
 }

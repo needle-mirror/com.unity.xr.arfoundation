@@ -15,8 +15,12 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRPlaneSubsystem
         : TrackingSubsystem<BoundedPlane, XRPlaneSubsystem, XRPlaneSubsystemDescriptor, XRPlaneSubsystem.Provider>
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
         ValidationUtility<BoundedPlane> m_ValidationUtility = new();
+#else
+        ValidationUtility<BoundedPlane> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<BoundedPlane>() : null;
+#endif
 #endif
 
         /// <summary>
@@ -61,8 +65,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<BoundedPlane> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(BoundedPlane.defaultValue, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }
@@ -102,10 +111,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="allocator">If allocation is necessary, this allocator will be used to create the new <c>NativeArray</c>.</param>
         /// <param name="array">The array to create or resize.</param>
         /// <typeparam name="T">The type of elements held by the <paramref name="array"/>.</typeparam>
+        [Obsolete("CreateOrResizeNativeArrayIfNecessary is deprecated in AR Foundation 6.6. Use XR Core Utils NativeArrayUtils instead.")]
         protected static void CreateOrResizeNativeArrayIfNecessary<T>(
-            int length,
-            Allocator allocator,
-            ref NativeArray<T> array) where T : struct
+            int length, Allocator allocator, ref NativeArray<T> array) where T : struct
         {
             if (array.IsCreated)
             {
@@ -136,10 +144,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="allocator">If allocation is necessary, this allocator will be used to create the new <c>NativeArray</c>.</param>
             /// <param name="array">The array to create or resize.</param>
             /// <typeparam name="T">The type of elements held by the <paramref name="array"/>.</typeparam>
+            [Obsolete("CreateOrResizeNativeArrayIfNecessary is deprecated in AR Foundation 6.6. Use XR Core Utils NativeArrayUtils instead.")]
             protected static void CreateOrResizeNativeArrayIfNecessary<T>(
-                int length,
-                Allocator allocator,
-                ref NativeArray<T> array) where T : struct
+                int length, Allocator allocator, ref NativeArray<T> array) where T : struct
             {
                 if (array.IsCreated)
                 {
@@ -168,9 +175,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// See <see cref="CreateOrResizeNativeArrayIfNecessary{T}"/> for a helper method implementation.
             /// </remarks>
             public virtual void GetBoundary(
-                TrackableId trackableId,
-                Allocator allocator,
-                ref NativeArray<Vector2> boundary)
+                TrackableId trackableId, Allocator allocator, ref NativeArray<Vector2> boundary)
             {
                 throw new NotSupportedException("Boundary vertices are not supported.");
             }

@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+using UnityEngine.Assertions;
 using UnityEngine.XR.ARSubsystems;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -102,7 +103,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Get the infinite plane associated with this <see cref="ARPlane"/>.
         /// </summary>
-        public Plane infinitePlane => new Plane(normal, transform.position);
+        public Plane infinitePlane => new(normal, transform.position);
 
         /// <summary>
         /// The plane's boundary points, in plane space, that is, relative to this <see cref="ARPlane"/>'s
@@ -113,7 +114,7 @@ namespace UnityEngine.XR.ARFoundation
             get
             {
                 if (!m_Boundary.IsCreated)
-                    return default(NativeArray<Vector2>);
+                    return default;
 
                 var boundary = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<Vector2>(
                     m_Boundary.GetUnsafePtr(),
@@ -132,7 +133,7 @@ namespace UnityEngine.XR.ARFoundation
 
         internal void UpdateBoundary(XRPlaneSubsystem subsystem)
         {
-            // subsystem cannot be null here
+            Assert.IsNotNull(subsystem);
             if (subsystem.subsystemDescriptor.supportsBoundaryVertices)
             {
                 subsystem.GetBoundary(trackableId, Allocator.Persistent, ref m_Boundary);
@@ -219,21 +220,11 @@ namespace UnityEngine.XR.ARFoundation
 
         void CopyBoundaryAndSetChangedFlag()
         {
-            // Copy new boundary
-            if (m_OldBoundary.IsCreated)
-            {
-                // If the lengths are different, then we need
-                // to reallocate, but otherwise, we can reuse
-                if (m_OldBoundary.Length != m_Boundary.Length)
-                {
-                    m_OldBoundary.Dispose();
-                    m_OldBoundary = new NativeArray<Vector2>(m_Boundary.Length, Allocator.Persistent);
-                }
-            }
-            else
-            {
+            if (m_OldBoundary.IsCreated && m_OldBoundary.Length != m_Boundary.Length)
+                m_OldBoundary.Dispose();
+
+            if (!m_OldBoundary.IsCreated)
                 m_OldBoundary = new NativeArray<Vector2>(m_Boundary.Length, Allocator.Persistent);
-            }
 
             m_OldBoundary.CopyFrom(m_Boundary);
             m_HasBoundaryChanged = true;

@@ -184,10 +184,15 @@ namespace UnityEngine.XR.ARFoundation
             }
 
             enabled = (subsystem.imageLibrary != null);
-#if DEVELOPMENT_BUILD
-            if (subsystem.imageLibrary == null)
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (Debug.isDebugBuild)
+#endif
             {
-                Debug.LogWarning($"{nameof(ARTrackedImageManager)} '{name}' was enabled but no reference image library is specified. To enable, set a valid reference image library and then re-enable this component.");
+                if (subsystem.imageLibrary == null)
+                {
+                    Debug.LogWarning($"{nameof(ARTrackedImageManager)} '{name}' was enabled but no reference image library is specified. To enable, set a valid reference image library and then re-enable this component.");
+                }
             }
 #endif
         }
@@ -229,10 +234,13 @@ namespace UnityEngine.XR.ARFoundation
             {
                 image.referenceImage = referenceImage;
             }
-#if DEVELOPMENT_BUILD
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
             else
             {
-                Debug.LogError($"Could not find reference image with guid {sessionRelativeData.sourceImageId}");
+#if !UNITY_6000_6_OR_NEWER
+                if (Debug.isDebugBuild)
+#endif
+                    Debug.LogError($"Could not find reference image with guid {sessionRelativeData.sourceImageId}");
             }
 #endif
         }

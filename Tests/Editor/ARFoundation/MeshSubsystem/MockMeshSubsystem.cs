@@ -10,7 +10,6 @@ using UnityEngine.TestTools;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
-using UnityEditor.XR.ARFoundation;
 using LegacyMeshId = UnityEngine.XR.MeshId;
 
 namespace UnityEngine.XR.ARSubsystems.Tests

@@ -5,6 +5,8 @@
         "Unity.XR.ARFoundation",
         "Unity.Coding.Editor",
         "Unity.XR.CoreUtils",
+        "Unity.XR.ARSubsystems",
+        "Unity.XR.Management",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Unity.XR.ARFoundation.Editor",
@@ -14,7 +16,7 @@
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll"

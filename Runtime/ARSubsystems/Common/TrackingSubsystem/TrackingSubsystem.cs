@@ -6,12 +6,12 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Base class for subsystems that detect and track things in the physical environment.
     /// </summary>
-    /// <typeparam name="TTrackable">The trackable's data, often a blittable type to inter-operate with native code.</typeparam>
+    /// <typeparam name="TTrackable">The trackable's data, often a blittable type to interoperate with native code.</typeparam>
     /// <typeparam name="TSubsystem">Concrete subsystem deriving from TrackingSubsystem.</typeparam>
     /// <typeparam name="TSubsystemDescriptor">The subsystem descriptor for the underlying subsystem.</typeparam>
     /// <typeparam name="TProvider">Provider type for the TrackingSubsystem-derived subsystem.</typeparam>
     public abstract class TrackingSubsystem<TTrackable, TSubsystem, TSubsystemDescriptor, TProvider>
-        : SubsystemWithProvider<TSubsystem, TSubsystemDescriptor, TProvider>
+        : XRSubsystem<TSubsystem, TSubsystemDescriptor, TProvider>
         where TTrackable : struct, ITrackable
         where TSubsystem : SubsystemWithProvider, new()
         where TSubsystemDescriptor : SubsystemDescriptorWithProvider

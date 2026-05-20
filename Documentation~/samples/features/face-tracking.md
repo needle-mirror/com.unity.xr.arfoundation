@@ -16,7 +16,7 @@ To understand each of the face tracking sample scenes, refer to the following se
 | [Face mesh](#face-mesh)               | Instantiates and updates a mesh representing the detected face. |
 | [Face regions](#face-region) (ARCore) | Demonstrates ARCore face regions. |
 | [Blend shapes](#blend-shape) (ARKit)  | Implements ARKit blend shapes. |
-| [Eye lasers, eye poses, and fixation point](#eye-lasers) (ARKit) | Demonstrate eye and fixation point tracking on ARKit. |
+| [Eye poses and fixation point](#eye-poses) (ARKit) | Demonstrates eye and fixation point tracking on ARKit. |
 | [Rear camera](#rear-camera) (ARKit)   | Use face tracking while the world-facing (rear) camera is active. |
 
 ## ARKit requirements
@@ -72,13 +72,13 @@ In the blend shapes sample, blend shapes are used to puppet a cartoon face which
 
 This sample is available on ARKit only and uses the front-facing (selfie) camera.
 
-<a id="eye-lasers"></a>
+<a id="eye-poses"></a>
 
-## Eye lasers, eye poses, and fixation point scenes (ARKit)
+## Eye poses and fixation point scenes (ARKit)
 
-The `Eye Lasers`, `Eye Poses`, and `Fixation Point` scenes demonstrate eye and fixation point tracking.
+The `Eye Poses` and `Fixation Point` scenes demonstrate eye and fixation point tracking.
 
-Eye tracking produces a pose (position and rotation) for each eye in the detected face. The fixation point is the point the face is looking at (fixated upon). The eye lasers sample uses the eye pose to draw laser beams emitted from the detected face.
+Eye tracking produces a pose (position and rotation) for each eye in the detected face. The fixation point is the point the face is looking at (fixated upon).
 
 ### Requirements
 

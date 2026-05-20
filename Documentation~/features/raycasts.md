@@ -17,4 +17,4 @@ Refer to the following topics to understand how to use AR Foundation ray casting
 
 ## Additional resources
 
-* [Simple AR sample](xref:arfoundation-samples-simple-ar)
+* [Raycasts sample](xref:arfoundation-samples-raycasts)

@@ -52,6 +52,9 @@ Shader "Simulation/URP/Lit"
         // ObsoleteProperties
         [HideInInspector] _GlossMapScale("Smoothness", Float) = 0.0
         [HideInInspector] _GlossyReflections("EnvironmentReflections", Float) = 0.0
+
+        // Backwards compatibility with BiRP, required for UnityEditor.XR.Simulation.Rendering.MaterialInspector
+        [HideInInspector] _Mode("__mode", Float) = 0.0
     }
 
     SubShader

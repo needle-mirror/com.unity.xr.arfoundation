@@ -41,7 +41,8 @@ namespace UnityEditor.XR.TestTooling
             // Add loader
             UpdateLoaders(true);
 
-            AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssetIfDirty(m_Loader);
+            AssetDatabase.SaveAssetIfDirty(m_XrGeneralSettings.Manager);
         }
 
         protected override void TearDownTest()
@@ -125,7 +126,7 @@ namespace UnityEditor.XR.TestTooling
             AssetDatabase.CreateAsset(m_Settings, Path.Combine(m_Path, $"Test_{typeof(TSettings).Name}.asset"));
             EditorBuildSettings.AddConfigObject(settingsKey, m_Settings, true);
 
-            AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssetIfDirty(m_Settings);
         }
     }
 }

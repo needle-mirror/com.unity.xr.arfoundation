@@ -11,7 +11,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// session on and off to enter and exit XR modes of operation.
     /// </summary>
     public class XRSessionSubsystem
-        : SubsystemWithProvider<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
+        : XRSubsystem<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {
         static readonly ConfigurationChooser s_DefaultConfigurationChooser = new DefaultConfigurationChooser();
 
@@ -101,16 +101,21 @@ namespace UnityEngine.XR.ARSubsystems
                 {
                     if (descriptors.Length > 0)
                     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
                         if (m_FirstUpdate)
                         {
-                            var sb = new System.Text.StringBuilder();
-                            foreach (var descriptor in descriptors)
-                            {
-                                sb.Append($"Configuration Descriptor {HexString(descriptor.identifier)} (rank {descriptor.rank}): {descriptor.capabilities.ToStringList()}\n");
-                            }
-                            Debug.Log(sb.ToString());
                             m_FirstUpdate = false;
+#if !UNITY_6000_6_OR_NEWER
+                            if (Debug.isDebugBuild)
+#endif
+                            {
+                                var sb = new System.Text.StringBuilder();
+                                foreach (var descriptor in descriptors)
+                                {
+                                    sb.Append($"Configuration Descriptor {HexString(descriptor.identifier)} (rank {descriptor.rank}): {descriptor.capabilities.ToStringList()}\n");
+                                }
+                                Debug.Log(sb.ToString());
+                            }
                         }
 #endif
                         return m_ConfigurationChooser.ChooseConfiguration(descriptors, features);
@@ -130,8 +135,11 @@ namespace UnityEngine.XR.ARSubsystems
             currentConfiguration = DetermineConfiguration(features);
             if (currentConfiguration.HasValue)
             {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-                DebugPrintConfigurationChange(currentConfiguration.Value, features);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+                if (Debug.isDebugBuild)
+#endif
+                    DebugPrintConfigurationChange(currentConfiguration.Value, features);
 #endif
                 provider.Update(updateParams, currentConfiguration.Value);
             }
@@ -148,7 +156,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <seealso cref="Feature"/>
         public Configuration? currentConfiguration { get; private set; }
 
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
         unsafe string HexString(IntPtr ptr) => sizeof(IntPtr) == 4 ? $"0x{ptr.ToInt32():x}" : $"0x{ptr.ToInt64():x}";
 
         void DebugPrintConfigurationChange(Configuration configuration, Feature desiredFeatures)

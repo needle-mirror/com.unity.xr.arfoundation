@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Unity.Collections;
 using UnityEngine.XR.ARSubsystems;
 
@@ -132,6 +133,22 @@ namespace UnityEngine.XR.ARFoundation
 
             throw new InvalidOperationException("An active ARMarkerManager is required to get a marker's encoded data, but the " +
                 "ARMarkerManager.instance was not found. Ensure an ARMarkerManager is active and enabled in your scene.");
+        }
+
+        /// <summary>
+        /// Returns a string suitable for debugging purposes.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString()
+        {
+            var sb = new StringBuilder(256);
+            sb.AppendLine("{");
+            sb.Append("  markerType: ").Append(markerType).AppendLine();
+            sb.Append("  size: ").Append(size).AppendLine();
+            sb.Append("  markerId: ").Append(markerId).AppendLine();
+            sb.Append("  dataBuffer: ").Append(dataBuffer).AppendLine();
+            sb.Append("}");
+            return sb.ToString();
         }
     }
 }

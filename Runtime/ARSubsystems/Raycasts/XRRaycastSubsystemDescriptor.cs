@@ -48,6 +48,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// The types of trackables against which raycasting is supported.
             /// </summary>
+            [Obsolete("supportedTrackableTypes is deprecated in AR Foundation 6.6. Use supportedTrackableTypesDelegate instead.")]
             public TrackableType supportedTrackableTypes { get; set; }
 
             /// <summary>
@@ -55,6 +56,16 @@ namespace UnityEngine.XR.ARSubsystems
             /// over time and the results are updated automatically.
             /// </summary>
             public bool supportsTrackedRaycasts { get; set; }
+
+            /// <summary>
+            /// A function that users can call at runtime to determine which types of trackables are supported hit types
+            /// for ray casts.
+            /// </summary>
+            /// <remarks>
+            /// On OpenXR runtimes, availability of a trackable type for ray casts may depend on whether certain OpenXR
+            /// extensions or features are enabled.
+            /// </remarks>
+            public Func<TrackableType> supportedTrackableTypesDelegate { get; set; }
 
             /// <summary>
             /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -66,7 +77,9 @@ namespace UnityEngine.XR.ARSubsystems
                 HashCodeUtil.ReferenceHash(subsystemTypeOverride),
                 supportsViewportBasedRaycast.GetHashCode(),
                 supportsWorldBasedRaycast.GetHashCode(),
+#pragma warning disable CS0618
                 ((int)supportedTrackableTypes).GetHashCode(),
+#pragma warning restore CS0618
                 supportsTrackedRaycasts.GetHashCode());
 
             /// <summary>
@@ -95,12 +108,15 @@ namespace UnityEngine.XR.ARSubsystems
             public bool Equals(Cinfo other)
             {
                 return
-                    String.Equals(id, other.id) &&
-                    ReferenceEquals(providerType, other.providerType) &&
-                    ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride) &&
-                    supportsViewportBasedRaycast == other.supportsViewportBasedRaycast &&
-                    supportsWorldBasedRaycast == other.supportsWorldBasedRaycast &&
-                    supportedTrackableTypes == other.supportedTrackableTypes;
+                    string.Equals(id, other.id)
+                    && ReferenceEquals(providerType, other.providerType)
+                    && ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride)
+                    && supportsViewportBasedRaycast == other.supportsViewportBasedRaycast
+                    && supportsWorldBasedRaycast == other.supportsWorldBasedRaycast
+#pragma warning disable CS0618
+                    && supportedTrackableTypes == other.supportedTrackableTypes
+#pragma warning restore CS0618
+                    && supportedTrackableTypesDelegate == other.supportedTrackableTypesDelegate;
             }
 
             /// <summary>
@@ -120,6 +136,9 @@ namespace UnityEngine.XR.ARSubsystems
             public static bool operator !=(Cinfo lhs, Cinfo rhs) { return !lhs.Equals(rhs); }
         }
 
+        Func<TrackableType> m_SupportedTrackableTypesDelegate;
+        TrackableType m_SupportedTrackableTypesObsolete;
+
         /// <summary>
         /// Whether the provider supports casting a ray from a screen point.
         /// </summary>
@@ -133,7 +152,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The types of trackables against which raycasting is supported.
         /// </summary>
-        public TrackableType supportedTrackableTypes { get; private set; }
+        public TrackableType supportedTrackableTypes
+            => m_SupportedTrackableTypesDelegate?.Invoke() ?? m_SupportedTrackableTypesObsolete;
 
         /// <summary>
         /// Whether "tracked" raycasts are supported. A tracked raycast is repeated
@@ -167,8 +187,11 @@ namespace UnityEngine.XR.ARSubsystems
             subsystemTypeOverride = cinfo.subsystemTypeOverride;
             supportsViewportBasedRaycast = cinfo.supportsViewportBasedRaycast;
             supportsWorldBasedRaycast = cinfo.supportsWorldBasedRaycast;
-            supportedTrackableTypes = cinfo.supportedTrackableTypes;
+#pragma warning disable CS0618
+            m_SupportedTrackableTypesObsolete = cinfo.supportedTrackableTypes;
+#pragma warning restore CS0618
             supportsTrackedRaycasts = cinfo.supportsTrackedRaycasts;
+            m_SupportedTrackableTypesDelegate = cinfo.supportedTrackableTypesDelegate;
         }
     }
 }

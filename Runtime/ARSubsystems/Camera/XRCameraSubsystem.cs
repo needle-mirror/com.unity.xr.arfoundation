@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// The <c>XRCameraSubsystem</c> links a Unity <c>Camera</c> to a device camera for video overlay (pass-thru
     /// rendering). It also allows developers to query for environmental light estimation if available.
     /// </remarks>
-    public class XRCameraSubsystem : SubsystemWithProvider<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>
+    public class XRCameraSubsystem : XRSubsystem<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>
     {
         /// <summary>
         /// Interface for providing camera functionality for the implementation.
@@ -33,15 +33,31 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Get whether camera permission has been granted.
             /// </summary>
-            /// <value><see langword="true"/> if camera permission has been granted. Otherwise, <see langword="false"/>.</value>
+            /// <value>`true` if camera permission has been granted. Otherwise, `false`.</value>
             public virtual bool permissionGranted => false;
 
             /// <summary>
             /// Get whether culling should be inverted during rendering. Some front-facing camera modes might
             /// require this.
             /// </summary>
-            /// <value><see langword="true"/> if culling should be inverted during rendering. Otherwise, <see langword="false"/>.</value>
+            /// <value>`true` if culling should be inverted during rendering. Otherwise, `false`.</value>
             public virtual bool invertCulling => false;
+
+            /// <summary>
+            /// Whether this provider requires the camera's background color RGB values to be multiplied
+            /// by the alpha value before rendering.
+            /// </summary>
+            /// <remarks>
+            /// On some platforms, a non-black background color with zero alpha can cause visible color
+            /// tinting over passthrough. Providers for those platforms should override this property to
+            /// return `true` so that <see cref="ARFoundation.ARCameraManager"/> can
+            /// adjust the background color before rendering each frame.
+            /// </remarks>
+            /// <value>
+            /// `true` if the background color should be pre-multiplied.
+            /// Defaults to `false`.
+            /// </value>
+            public virtual bool requiresPremultipliedBackgroundColor => false;
 
             /// <summary>
             /// Get the actual camera facing direction.
@@ -484,6 +500,18 @@ namespace UnityEngine.XR.ARSubsystems
         /// camera modes might require this.
         /// </summary>
         public bool invertCulling => provider.invertCulling;
+
+        /// <summary>
+        /// Whether the camera's background color RGB values should be multiplied by the alpha value
+        /// before rendering. Some platforms require this to prevent non-black background colors from
+        /// tinting passthrough when alpha is zero.
+        /// </summary>
+        /// <value>
+        /// `true` if the provider requires a pre-multiplied background color.
+        /// Otherwise, `false`.
+        /// </value>
+        public bool requiresPremultipliedBackgroundColor =>
+            provider.requiresPremultipliedBackgroundColor;
 
         /// <summary>
         /// The current camera configuration.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Unity.Collections;
 using UnityEngine.SubsystemsImplementation;
+using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -18,8 +19,12 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRAnchorSubsystem
         : TrackingSubsystem<XRAnchor, XRAnchorSubsystem, XRAnchorSubsystemDescriptor, XRAnchorSubsystem.Provider>
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
         ValidationUtility<XRAnchor> m_ValidationUtility = new();
+#else
+        ValidationUtility<XRAnchor> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRAnchor>() : null;
+#endif
 #endif
 
         /// <summary>
@@ -43,8 +48,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XRAnchor> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XRAnchor.defaultValue, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }
@@ -252,11 +262,6 @@ namespace UnityEngine.XR.ARSubsystems
                 ObjectPoolCreateUtil.Create<List<XREraseAnchorResult>>(defaultCapacity: 2);
 
             /// <summary>
-            /// Reusable completion source to return results of <see cref="TryAddAnchor"/> to <see cref="TryAddAnchorAsync"/>.
-            /// </summary>
-            static AwaitableCompletionSource<Result<XRAnchor>> s_SynchronousAnchorCompletionSource = new();
-
-            /// <summary>
             /// Gets a <see cref="TrackableChanges{T}"/> struct containing any changes to anchors since the last
             /// time you called this method. You are responsible to <see cref="TrackableChanges{T}.Dispose"/> the returned
             /// <c>TrackableChanges</c> instance.
@@ -297,7 +302,7 @@ namespace UnityEngine.XR.ARSubsystems
                 {
                     var wasSuccessful = TryAddAnchor(pose, out var anchor);
                     return AwaitableUtils<Result<XRAnchor>>.FromResult(
-                        s_SynchronousAnchorCompletionSource, new Result<XRAnchor>(wasSuccessful, anchor));
+                        new Result<XRAnchor>(wasSuccessful, anchor));
                 }
             }
 

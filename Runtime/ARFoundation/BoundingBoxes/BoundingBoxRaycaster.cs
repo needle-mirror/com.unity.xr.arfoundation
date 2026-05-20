@@ -1,4 +1,5 @@
 using Unity.Collections;
+using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -10,21 +11,34 @@ namespace UnityEngine.XR.ARFoundation
     {
         const int k_MaxNumberOfHitFaces = 2;
 
+        static readonly Quaternion k_ForwardFaceRotationOffset = Quaternion.Euler(-90, 180, 0);
+        static readonly Quaternion k_BackFaceRotationOffset = Quaternion.Euler(-90, 0, 0);
+        static readonly Quaternion k_RightFaceRotationOffset = Quaternion.Euler(-90, 0, -90);
+        static readonly Quaternion k_LeftFaceRotationOffset = Quaternion.Euler(-90, 0, 90);
+        static readonly Quaternion k_TopFaceRotationOffset = Quaternion.identity;
+        static readonly Quaternion k_BottomFaceRotationOffset = Quaternion.Euler(0, 0, 180);
+
         TrackableCollection<ARBoundingBox> m_BoundingBoxTrackables;
+        XROrigin m_Origin;
+        Transform m_TrackablesParent;
 
         /// <summary>
-        /// Constructs a new instance, initializing the collection of <see cref="XRBoundingBox"> trackables to test raycasts against.
+        /// Constructs a new instance, initializing the collection of <see cref="XRBoundingBox"/> trackables to test
+        /// raycasts against.
         /// </summary>
         /// <param name="boundingBoxTrackables">The collection of bounding boxes to test raycasts again.</param>
-        public BoundingBoxRaycaster(TrackableCollection<ARBoundingBox> boundingBoxTrackables)
+        /// <param name="origin">The <see cref="XROrigin"/>, used to access the trackables parent transform when
+        /// converting between session space and world space.</param>
+        public BoundingBoxRaycaster(TrackableCollection<ARBoundingBox> boundingBoxTrackables, XROrigin origin)
         {
             m_BoundingBoxTrackables = boundingBoxTrackables;
+            m_Origin = origin;
         }
 
         /// <summary>
         /// Performs a raycast against all 3D bounding boxes passed in during construction.
         /// </summary>
-        /// <param name="ray">The ray, in Unity world space, to cast.</param>
+        /// <param name="ray">The ray, in session space, to cast.</param>
         /// <param name="trackableTypeMask">A mask of raycast types to perform.</param>
         /// <param name="allocator">The <c>Allocator</c> to use when creating the returned <c>NativeArray</c>.</param>
         /// <returns>
@@ -37,9 +51,14 @@ namespace UnityEngine.XR.ARFoundation
             TrackableType trackableTypeMask,
             Allocator allocator)
         {
+            m_TrackablesParent = m_Origin.TrackablesParent;
+
             // if the bounding box flag is not set for the mask to search for, return early
             if ((trackableTypeMask & TrackableType.BoundingBox) != TrackableType.BoundingBox)
                 return new NativeArray<XRRaycastHit>(0, allocator);
+
+            // ray is in session space; convert to world space to match the world-space bounding box geometry.
+            var worldSpaceRay = m_TrackablesParent.TransformRay(ray);
 
             var hitBuffer = new NativeArray<XRRaycastHit>(m_BoundingBoxTrackables.count, Allocator.Temp);
             var boundingBoxHitCount = 0;
@@ -51,11 +70,12 @@ namespace UnityEngine.XR.ARFoundation
                 // forward face
                 var wasForwardFaceHit = TryRaycastZAxisFace(
                     boundingBox,
-                    ray,
+                    worldSpaceRay,
                     1,
                     hitBuffer,
                     boundingBoxHitCount,
-                    ref closestHitDistance);
+                    ref closestHitDistance,
+                    k_ForwardFaceRotationOffset);
 
                 numFacesHit += wasForwardFaceHit ? 1 : 0;
 
@@ -64,11 +84,12 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     var wasBackFaceHit = TryRaycastZAxisFace(
                         boundingBox,
-                        ray,
+                        worldSpaceRay,
                         -1,
                         hitBuffer,
                         boundingBoxHitCount,
-                        ref closestHitDistance);
+                        ref closestHitDistance,
+                        k_BackFaceRotationOffset);
 
                     numFacesHit += wasBackFaceHit ? 1 : 0;
                 }
@@ -78,11 +99,12 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     var wasRightFaceHit = TryRaycastXAxisFace(
                         boundingBox,
-                        ray,
+                        worldSpaceRay,
                         1,
                         hitBuffer,
                         boundingBoxHitCount,
-                        ref closestHitDistance);
+                        ref closestHitDistance,
+                        k_RightFaceRotationOffset);
 
                     numFacesHit += wasRightFaceHit ? 1 : 0;
                 }
@@ -92,11 +114,12 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     var wasLeftFaceHit = TryRaycastXAxisFace(
                         boundingBox,
-                        ray,
+                        worldSpaceRay,
                         -1,
                         hitBuffer,
                         boundingBoxHitCount,
-                        ref closestHitDistance);
+                        ref closestHitDistance,
+                        k_LeftFaceRotationOffset);
 
                     numFacesHit += wasLeftFaceHit ? 1 : 0;
                 }
@@ -106,11 +129,12 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     var wasTopFaceHit = TryRaycastYAxisFace(
                         boundingBox,
-                        ray,
+                        worldSpaceRay,
                         1,
                         hitBuffer,
                         boundingBoxHitCount,
-                        ref closestHitDistance);
+                        ref closestHitDistance,
+                        k_TopFaceRotationOffset);
 
                     numFacesHit += wasTopFaceHit ? 1 : 0;
                 }
@@ -120,11 +144,12 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     var wasBottomFaceHit = TryRaycastYAxisFace(
                         boundingBox,
-                        ray,
+                        worldSpaceRay,
                         -1,
                         hitBuffer,
                         boundingBoxHitCount,
-                        ref closestHitDistance);
+                        ref closestHitDistance,
+                        k_BottomFaceRotationOffset);
 
                     numFacesHit += wasBottomFaceHit ? 1 : 0;
                 }
@@ -145,13 +170,14 @@ namespace UnityEngine.XR.ARFoundation
             int sign,
             NativeArray<XRRaycastHit> hitBuffer,
             int hitBufferIndex,
-            ref float closestHitDistance)
+            ref float closestHitDistance,
+            Quaternion rotationOffset)
         {
             var boundingBoxTransform = boundingBox.transform;
 
             var faceNormal = sign * boundingBoxTransform.forward;
             var faceOffset = faceNormal * (boundingBox.size.z * 0.5f);
-            var facePosition = boundingBox.pose.position + faceOffset;
+            var facePosition = boundingBoxTransform.position + faceOffset;
             var infiniteFacePlane = new Plane(faceNormal, facePosition);
 
             // return early if the ray does not intersect the infinite plane
@@ -159,13 +185,17 @@ namespace UnityEngine.XR.ARFoundation
             if (!infiniteFacePlane.Raycast(ray, out var distance))
                 return false;
 
+            var worldHitPosition = ray.origin + ray.direction * distance;
+            var localHitPosition = boundingBoxTransform.InverseTransformPoint(worldHitPosition);
+
+            var sessionHitPosition = m_TrackablesParent.InverseTransformPoint(worldHitPosition);
+            var sessionRotation = Quaternion.Inverse(m_TrackablesParent.rotation) * boundingBoxTransform.rotation;
+
             // rotate the hit pose so the up vector aligns with the normal of the plane
             // and the forward vector faces up
             var hitPose = new Pose(
-                ray.origin + ray.direction * distance,
-                boundingBox.transform.localRotation * Quaternion.Euler(-90, (1 + sign) * 90, 0));
-
-            var localHitPosition = boundingBox.transform.InverseTransformPoint(hitPose.position);
+                sessionHitPosition,
+                sessionRotation * rotationOffset);
 
             if (Mathf.Abs(localHitPosition.x) <= boundingBox.size.x * 0.5f &&
                 Mathf.Abs(localHitPosition.y) <= boundingBox.size.y * 0.5f)
@@ -196,13 +226,14 @@ namespace UnityEngine.XR.ARFoundation
             int sign,
             NativeArray<XRRaycastHit> hitBuffer,
             int hitBufferIndex,
-            ref float closestHitDistance)
+            ref float closestHitDistance,
+            Quaternion rotationOffset)
         {
             var boundingBoxTransform = boundingBox.transform;
 
             var faceNormal = sign * boundingBoxTransform.right;
             var faceOffset = faceNormal * (boundingBox.size.x * 0.5f);
-            var facePosition = boundingBox.pose.position + faceOffset;
+            var facePosition = boundingBoxTransform.position + faceOffset;
             var infiniteFacePlane = new Plane(faceNormal, facePosition);
 
             // return early if the ray does not intersect the infinite plane
@@ -210,13 +241,17 @@ namespace UnityEngine.XR.ARFoundation
             if (!infiniteFacePlane.Raycast(ray, out var distance))
                 return false;
 
+            var worldHitPosition = ray.origin + ray.direction * distance;
+            var localHitPosition = boundingBoxTransform.InverseTransformPoint(worldHitPosition);
+
+            var sessionHitPosition = m_TrackablesParent.InverseTransformPoint(worldHitPosition);
+            var sessionRotation = Quaternion.Inverse(m_TrackablesParent.rotation) * boundingBoxTransform.rotation;
+
             // rotate the hit pose so the up vector aligns with the normal of the plane
             // and the forward vector faces up
             var hitPose = new Pose(
-                ray.origin + ray.direction * distance,
-                boundingBox.transform.localRotation * Quaternion.Euler(-90, 0, -sign * 90));
-
-            var localHitPosition = boundingBox.transform.InverseTransformPoint(hitPose.position);
+                sessionHitPosition,
+                sessionRotation * rotationOffset);
 
             if (Mathf.Abs(localHitPosition.z) <= boundingBox.size.z * 0.5f &&
                 Mathf.Abs(localHitPosition.y) <= boundingBox.size.y * 0.5f)
@@ -247,13 +282,14 @@ namespace UnityEngine.XR.ARFoundation
             int sign,
             NativeArray<XRRaycastHit> hitBuffer,
             int hitBufferIndex,
-            ref float closestHitDistance)
+            ref float closestHitDistance,
+            Quaternion rotationOffset)
         {
             var boundingBoxTransform = boundingBox.transform;
 
             var faceNormal = sign * boundingBoxTransform.up;
             var faceOffset = faceNormal * (boundingBox.size.y * 0.5f);
-            var facePosition = boundingBox.pose.position + faceOffset;
+            var facePosition = boundingBoxTransform.position + faceOffset;
             var infiniteFacePlane = new Plane(faceNormal, facePosition);
 
             // return early if the ray does not intersect the infinite plane
@@ -261,14 +297,18 @@ namespace UnityEngine.XR.ARFoundation
             if (!infiniteFacePlane.Raycast(ray, out var distance))
                 return false;
 
+            var worldHitPosition = ray.origin + ray.direction * distance;
+            var localHitPosition = boundingBoxTransform.InverseTransformPoint(worldHitPosition);
+
+            var sessionHitPosition = m_TrackablesParent.InverseTransformPoint(worldHitPosition);
+            var sessionRotation = Quaternion.Inverse(m_TrackablesParent.rotation) * boundingBoxTransform.rotation;
+
             // rotate the hit pose so the up vector aligns with the normal of the plane
             // and the forward vector matches the bounding box forward for the top face or
             // mirrors it for the bottom face.
             var hitPose = new Pose(
-                ray.origin + ray.direction * distance,
-                boundingBox.transform.localRotation * Quaternion.Euler(0, 0, (1 - sign) * 90));
-
-            var localHitPosition = boundingBox.transform.InverseTransformPoint(hitPose.position);
+                sessionHitPosition,
+                sessionRotation * rotationOffset);
 
             if (Mathf.Abs(localHitPosition.x) <= boundingBox.size.x * 0.5f &&
                 Mathf.Abs(localHitPosition.z) <= boundingBox.size.z * 0.5f)

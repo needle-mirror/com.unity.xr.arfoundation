@@ -14,8 +14,12 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRBoundingBoxSubsystem :
         TrackingSubsystem<XRBoundingBox, XRBoundingBoxSubsystem, XRBoundingBoxSubsystemDescriptor, XRBoundingBoxSubsystem.Provider>
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
         ValidationUtility<XRBoundingBox> m_ValidationUtility = new();
+#else
+        ValidationUtility<XRBoundingBox> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRBoundingBox>() : null;
+#endif
 #endif
 
         /// <summary>
@@ -44,8 +48,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XRBoundingBox> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(default, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }

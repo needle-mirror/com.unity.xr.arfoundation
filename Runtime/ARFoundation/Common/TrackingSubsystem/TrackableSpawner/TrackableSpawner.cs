@@ -168,6 +168,18 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Registers an existing trackable (e.g. from CreateTrackableFromExisting) so that when the subsystem
+        /// reports it in "added", the spawner returns this instance instead of creating a duplicate.
+        /// </summary>
+        /// <param name="trackable">The trackable.</param>
+        internal void RegisterExistingTrackable(ARTrackable trackable)
+        {
+            var entry = RegisterCreatedTrackable(trackable);
+            PopulateParent(entry);
+            ResolveOrphans(entry);
+        }
+
+        /// <summary>
         /// Creates an entry for a trackable. Does not populate information about parents or children.
         /// </summary>
         TrackableEntry RegisterCreatedTrackable(ARTrackable trackable)
@@ -364,6 +376,12 @@ namespace UnityEngine.XR.ARFoundation
             {
                 foreach (var entry in entryList)
                 {
+                    // If the GameObject was destroyed, m_EntriesByTrackableId isn't cleaned up until OnDestroy,
+                    // which happens at end-of-frame. This null check is needed because this code will run once after
+                    // the GameObject is destroyed but before OnDestroy cleans it up.
+                    if (entry.trackable == null)
+                        continue;
+
                     if (entry.trackable.parentId == TrackableId.invalidId)
                         entry.trackable.transform.SetParent(eventArgs.TrackablesParent);
 

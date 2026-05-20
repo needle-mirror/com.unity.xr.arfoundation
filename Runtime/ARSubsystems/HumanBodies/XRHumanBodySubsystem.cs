@@ -10,8 +10,12 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRHumanBodySubsystem
         : TrackingSubsystem<XRHumanBody, XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider>
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
         ValidationUtility<XRHumanBody> m_ValidationUtility = new();
+#else
+        ValidationUtility<XRHumanBody> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRHumanBody>() : null;
+#endif
 #endif
 
         /// <summary>
@@ -89,8 +93,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XRHumanBody> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XRHumanBody.defaultValue, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }

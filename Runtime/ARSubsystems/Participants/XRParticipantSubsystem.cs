@@ -26,8 +26,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XRParticipant> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XRParticipant.defaultParticipant, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }
@@ -56,8 +61,12 @@ namespace UnityEngine.XR.ARSubsystems
                 Allocator allocator);
         }
 
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-        ValidationUtility<XRParticipant> m_ValidationUtility = new ValidationUtility<XRParticipant>();
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
+        ValidationUtility<XRParticipant> m_ValidationUtility = new();
+#else
+        ValidationUtility<XRParticipant> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRParticipant>() : null;
+#endif
 #endif
     }
 }

@@ -110,8 +110,13 @@ namespace UnityEngine.XR.ARSubsystems
         public sealed override TrackableChanges<XRTrackedObject> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XRTrackedObject.defaultValue, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }
@@ -167,9 +172,12 @@ namespace UnityEngine.XR.ARSubsystems
 
         XRReferenceObjectLibrary m_Library;
 
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-        ValidationUtility<XRTrackedObject> m_ValidationUtility =
-            new ValidationUtility<XRTrackedObject>();
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
+        ValidationUtility<XRTrackedObject> m_ValidationUtility = new();
+#else
+        ValidationUtility<XRTrackedObject> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRTrackedObject>() : null;
+#endif
 #endif
     }
 }

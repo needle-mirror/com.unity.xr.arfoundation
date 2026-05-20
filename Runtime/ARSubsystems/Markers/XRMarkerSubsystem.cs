@@ -13,8 +13,12 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRMarkerSubsystem :
         TrackingSubsystem<XRMarker, XRMarkerSubsystem, XRMarkerSubsystemDescriptor, XRMarkerSubsystem.Provider>
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if UNITY_6000_6_OR_NEWER
         ValidationUtility<XRMarker> m_ValidationUtility = new();
+#else
+        ValidationUtility<XRMarker> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRMarker>() : null;
+#endif
 #endif
 
         /// <summary>
@@ -30,8 +34,13 @@ namespace UnityEngine.XR.ARSubsystems
         public override TrackableChanges<XRMarker> GetChanges(Allocator allocator)
         {
             var changes = provider.GetChanges(XRMarker.defaultValue, allocator);
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (m_ValidationUtility != null)
+#endif
+            {
+                m_ValidationUtility.ValidateAndDisposeIfThrown(changes);
+            }
 #endif
             return changes;
         }

@@ -9,7 +9,7 @@ The `Object Tracking` sample demonstrates AR Foundation [Object tracking](xref:a
 
 ## Requirements
 
-Object tracking is supported by ARKit only. This sample requires iOS 12 or newer.
+Object tracking is only supported on ARKit for iOS (iOS 12 or newer) and ARKit for visionOS.
 
 To use this sample, you must have a physical object the device can recognize as described in [Reference objects](#reference-objects).
 
@@ -25,7 +25,7 @@ The sample's reference object library is built using two reference objects. The 
 
 ### Create your own reference objects
 
-You can scan your own objects and add them to the `XRReferenceObjectLibrary`. Refer to [Create a reference object library](xref:arfoundation-object-tracking#create-library) to understand how to create your own reference library.
+You can scan your own objects and add them to the `XRReferenceObjectLibrary`. Refer to [Configure a reference object library](xref:arfoundation-object-tracking-reference-objects) to understand how to create your own reference library.
 
 ## Object tracking scene
 

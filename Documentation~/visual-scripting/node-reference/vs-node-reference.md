@@ -17,7 +17,7 @@ These nodes appear in the fuzzy finder in the **AR Foundation** category:
 | :--- | :----------------- | :-------------------- |
 | [Get Planes](xref:arfoundation-vs-node-get-planes) | [ARPlaneManager](xref:arfoundation-plane-arplanemanager) | [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) |
 | [Get Tracked Images](xref:arfoundation-vs-node-get-tracked-images) | [ARTrackedImageManager](xref:arfoundation-image-tracking-manager) | [ARTrackedImage](xref:UnityEngine.XR.ARFoundation.ARTrackedImage) |
-| [Get Tracked Objects](xref:arfoundation-vs-node-get-tracked-objects) | [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) | [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) |
+| [Get Tracked Objects](xref:arfoundation-vs-node-get-tracked-objects) | [ARTrackedObjectManager](xref:arfoundation-object-tracking-manager) | [ARTrackedObject](xref:UnityEngine.XR.ARFoundation.ARTrackedObject) |
 | [Get Faces](xref:arfoundation-vs-node-get-faces) | [ARFaceManager](xref:arfoundation-face-tracking-face-manager) | [ARFace](xref:UnityEngine.XR.ARFoundation.ARFace) |
 | [Get Human Bodies](xref:arfoundation-vs-node-get-human-bodies) | [ARHumanBodyManager](xref:arfoundation-body-tracking#ar-human-body-manager-component) | [ARHumanBody](xref:UnityEngine.XR.ARFoundation.ARHumanBody) |
 | [Get Point Clouds](xref:arfoundation-vs-node-get-point-clouds) | [ARPointCloudManager](xref:arfoundation-point-clouds#ar-point-cloud-manager-component) | [ARPointCloud](xref:UnityEngine.XR.ARFoundation.ARPointCloud) |
@@ -36,7 +36,7 @@ These nodes appear in the fuzzy finder in the **Events** > **AR Foundation** cat
 | :--- | :----------------- | :----------------------- |
 | [On Planes Changed](xref:arfoundation-vs-node-on-planes-changed) | [ARPlaneManager](xref:arfoundation-plane-arplanemanager) | [planesChanged](xref:UnityEngine.XR.ARFoundation.ARPlaneManager.planesChanged) |
 | [On Tracked Images Changed](xref:arfoundation-vs-node-on-tracked-images-changed) | [ARTrackedImageManager](xref:arfoundation-image-tracking-manager) | [trackedImagesChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.trackedImagesChanged) |
-| [On Tracked Objects Changed](xref:arfoundation-vs-node-on-tracked-objects-changed) | [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) | [trackedObjectsChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.trackedObjectsChanged) |
+| [On Tracked Objects Changed](xref:arfoundation-vs-node-on-tracked-objects-changed) | [ARTrackedObjectManager](xref:arfoundation-object-tracking-manager) | [trackedObjectsChanged](xref:UnityEngine.XR.ARFoundation.ARTrackedObjectManager.trackedObjectsChanged) |
 | [On Faces Changed](xref:arfoundation-vs-node-on-faces-changed) | [ARFaceManager](xref:arfoundation-face-tracking-face-manager) | [facesChanged](xref:UnityEngine.XR.ARFoundation.ARFaceManager.facesChanged) |
 | [On Human Bodies Changed](xref:arfoundation-vs-node-on-human-bodies-changed) | [ARHumanBodyManager](xref:arfoundation-body-tracking#ar-human-body-manager-component) | [humanBodiesChanged](xref:UnityEngine.XR.ARFoundation.ARHumanBodyManager.humanBodiesChanged) |
 | [On Point Clouds Changed](xref:arfoundation-vs-node-on-point-clouds-changed) | [ARPointCloudManager](xref:arfoundation-point-clouds#ar-point-cloud-manager-component) | [pointCloudChanged](xref:UnityEngine.XR.ARFoundation.ARPointCloudManager.pointCloudsChanged) |

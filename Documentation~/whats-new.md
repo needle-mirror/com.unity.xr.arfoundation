@@ -1,33 +1,28 @@
 ---
 uid: arfoundation-whats-new
 ---
-# What's new in version 6.5
+# What's new in version 6.6
 
 This release includes the following significant changes:
 
-## API additions
+## XRSubsystem
 
-- Added `BoundedPlaneBuilder.WithPose` overload that takes an OpenXR `XrPosef` if your app uses OpenXR Plug-in 1.16.0 or newer.
-- Added `BoundedPlaneBuilder.FromBoundedPlane`, which enables you to initialize all fields of a `BoundedPlaneBuilder` from a given plane.
-- Added `XRAnchorBuilder.FromAnchor`, which enables you to initialize all fields of an `XRAnchorBuilder` from a given anchor.
-- Added `XRResultStatus.StatusCode.NotFound` and `XRResultStatus.StatusCode.NotTracking` as new possible error codes for AR Foundation operations.
-- Added an implicit operator to convert from `XrUuid` to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.
-- Added an `IEquatable<XrUuid>` implementation to `SerializableGuid` if your project uses OpenXR Plug-in 1.16.0 or newer.
-- Added `XRResultStatus.HasNativeStatusCode` as a convenience method to determine whether a native status code is present.
+- Added a new [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3) base class that enables providers to incorporate permissions and asynchronous resource creation into their `Start` logic. If you are the owner of a subsystem or provider type, Unity recommends that you inherit the new base class instead of `SubsystemWithProvider`.
+- Changed `SubsystemLifecycleManager.Start` logic to be compatible with the new `XRSubsystem` base class. This is a backwards-compatible change, so Manager components still support `SubsystemWithProvider` as the subsystem base class as well.
+- Reverted a previous change to `SubsystemLifecycleManager.OnEnable`, which allowed the manager component to poll for subsystems that weren't synchronously available. With the addition of `XRSubsystem`, all providers are now expected to create subsystems synchronously during `XRLoader.Initialize`.
 
-## Behavior changes
+## Other API additions
 
-### Allowing asynchronous subsytem creation
+- Added a `ToString` override for `ARMarker`.
+- Added `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate`, which allows a raycast provider to determine at runtime which trackable types it supports.
 
-- Changed `SubsystemLifecycleManager.OnEnable` to poll for a number of seconds until a subsytem is created before it disables itself, allowing subsystems to be created asynchronously and still connect with their managers.
+## UI changes
+
+- Added support for Apple visionOS to the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**).
 
 ## Deprecations
 
-### Other deprecations
-
-- Deprecated `SimulationBuildProcessor`. This class had no effect.
-- Deprecated and replaced the following properties of [XRPlaneSubsystemDescriptor.Cinfo](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.Cinfo) to allow providers to determine at runtime whether AR Foundation plane APIs are supported:
-  - `supportsBoundaryVertices` to `supportsBoundaryVerticesDelegate`
-  - `supportsClassification` to `supportsClassificationDelegate`
+- Deprecated `XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary<T>` and `XRPlaneSubsystem.Provider.CreateOrResizeNativeArrayIfNecessary<T>`. Use [NativeArrayUtils](xref:Unity.XR.CoreUtils.NativeArrayUtils) instead.
+- Deprecated `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypes`. Use `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate` instead.
 
 For a full list of changes in this version including backwards-compatible bugfixes, refer to the package [changelog](xref:arfoundation-changelog).
