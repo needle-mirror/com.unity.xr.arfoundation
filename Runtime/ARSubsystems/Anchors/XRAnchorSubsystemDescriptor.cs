@@ -40,6 +40,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// If <see langword="false"/>, <see cref="XRAnchorSubsystem.TryAttachAnchor">XRAnchorSubsystem.TryAttachAnchor</see>
             /// must always return <see langword="false"/>.
             /// </summary>
+            [Obsolete("supportsTrackableAttachments is deprecated in AR Foundation 6.6. Use `supportsTrackableAttachmentsDelegate` instead.")]
             public bool supportsTrackableAttachments { get; set; }
 
             /// <summary>
@@ -112,6 +113,13 @@ namespace UnityEngine.XR.ARSubsystems
             public Func<bool> supportsGetSavedAnchorIdsDelegate { get; set; }
 
             /// <summary>
+            /// Indicates whether the provider implementation supports attachments (that is, the ability to attach an anchor to a trackable).
+            /// If <see langword="false"/>, <see cref="XRAnchorSubsystem.TryAttachAnchor">XRAnchorSubsystem.TryAttachAnchor</see>
+            /// must always return <see langword="false"/>.
+            /// </summary>
+            public Func<bool> supportsTrackableAttachmentsDelegate { get; set; }
+
+            /// <summary>
             /// Tests for equality.
             /// </summary>
             /// <param name="obj">The `object` to compare against.</param>
@@ -131,7 +139,6 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode.Add(id);
                 hashCode.Add(providerType);
                 hashCode.Add(subsystemTypeOverride);
-                hashCode.Add(supportsTrackableAttachments);
                 hashCode.Add(supportsSynchronousAdd);
                 hashCode.Add(supportsAsyncCancellation);
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -139,11 +146,13 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode.Add(supportsLoadAnchor);
                 hashCode.Add(supportsEraseAnchor);
                 hashCode.Add(supportsGetSavedAnchorIds);
+                hashCode.Add(supportsTrackableAttachments);
 #pragma warning restore CS0618 // Type or member is obsolete
                 hashCode.Add(supportsSaveAnchorDelegate);
                 hashCode.Add(supportsLoadAnchorDelegate);
                 hashCode.Add(supportsEraseAnchorDelegate);
                 hashCode.Add(supportsGetSavedAnchorIdsDelegate);
+                hashCode.Add(supportsTrackableAttachmentsDelegate);
                 return hashCode.ToHashCode();
             }
 
@@ -159,18 +168,19 @@ namespace UnityEngine.XR.ARSubsystems
                     string.Equals(id, other.id)
                     && ReferenceEquals(providerType, other.providerType)
                     && ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride)
-                    && supportsTrackableAttachments == other.supportsTrackableAttachments
                     && supportsSynchronousAdd == other.supportsSynchronousAdd
 #pragma warning disable CS0618 // Type or member is obsolete
                     && supportsSaveAnchor == other.supportsSaveAnchor
                     && supportsLoadAnchor == other.supportsLoadAnchor
                     && supportsEraseAnchor == other.supportsEraseAnchor
                     && supportsGetSavedAnchorIds == other.supportsGetSavedAnchorIds
+                    && supportsTrackableAttachments == other.supportsTrackableAttachments
 #pragma warning restore CS0618 // Type or member is obsolete
                     && supportsSaveAnchorDelegate == other.supportsSaveAnchorDelegate
                     && supportsLoadAnchorDelegate == other.supportsLoadAnchorDelegate
                     && supportsEraseAnchorDelegate == other.supportsEraseAnchorDelegate
                     && supportsGetSavedAnchorIdsDelegate == other.supportsGetSavedAnchorIdsDelegate
+                    && supportsTrackableAttachmentsDelegate == other.supportsTrackableAttachmentsDelegate
                     && supportsAsyncCancellation == other.supportsAsyncCancellation;
             }
 
@@ -197,17 +207,20 @@ namespace UnityEngine.XR.ARSubsystems
         bool m_SupportsLoadAnchorObsolete;
         bool m_SupportsEraseAnchorObsolete;
         bool m_SupportsGetSavedAnchorIdsObsolete;
+        bool m_SupportsTrackableAttachmentsObsolete;
         Func<bool> m_SupportsSaveAnchorDelegate;
         Func<bool> m_SupportsLoadAnchorDelegate;
         Func<bool> m_SupportsEraseAnchorDelegate;
         Func<bool> m_SupportsGetSavedAnchorIdsDelegate;
+        Func<bool> m_SupportsTrackableAttachmentsDelegate;
 
         /// <summary>
         /// Indicates whether the provider implementation supports the ability to attach an anchor to a trackable via
         /// <see cref="XRAnchorSubsystem.TryAttachAnchor">XRAnchorSubsystem.TryAttachAnchor</see>.
         /// If `false`, `TryAttachAnchor` must always return `false`.
         /// </summary>
-        public bool supportsTrackableAttachments { get; }
+        public bool supportsTrackableAttachments
+            => m_SupportsTrackableAttachmentsDelegate?.Invoke() ?? m_SupportsTrackableAttachmentsObsolete;
 
         /// <summary>
         /// Indicates whether the provider implementation supports the ability to synchronously add anchors via
@@ -292,14 +305,15 @@ namespace UnityEngine.XR.ARSubsystems
             id = cinfo.id;
             providerType = cinfo.providerType;
             subsystemTypeOverride = cinfo.subsystemTypeOverride;
-            supportsTrackableAttachments = cinfo.supportsTrackableAttachments;
             supportsSynchronousAdd = cinfo.supportsSynchronousAdd;
             supportsAsyncCancellation = cinfo.supportsAsyncCancellation;
             m_SupportsSaveAnchorDelegate = cinfo.supportsSaveAnchorDelegate;
             m_SupportsLoadAnchorDelegate = cinfo.supportsLoadAnchorDelegate;
             m_SupportsEraseAnchorDelegate = cinfo.supportsEraseAnchorDelegate;
             m_SupportsGetSavedAnchorIdsDelegate = cinfo.supportsGetSavedAnchorIdsDelegate;
+            m_SupportsTrackableAttachmentsDelegate = cinfo.supportsTrackableAttachmentsDelegate;
 #pragma warning disable CS0618 // Type or member is obsolete
+            m_SupportsTrackableAttachmentsObsolete = cinfo.supportsTrackableAttachments;
             m_SupportsSaveAnchorObsolete = cinfo.supportsSaveAnchor;
             m_SupportsLoadAnchorObsolete = cinfo.supportsLoadAnchor;
             m_SupportsEraseAnchorObsolete = cinfo.supportsEraseAnchor;

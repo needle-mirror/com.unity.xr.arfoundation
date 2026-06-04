@@ -119,12 +119,12 @@ namespace UnityEngine.XR.Simulation
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),
                 subsystemTypeOverride = typeof(SimulationAnchorSubsystem),
-                supportsTrackableAttachments = true,
                 supportsSynchronousAdd = true,
                 supportsSaveAnchorDelegate = () => false,
                 supportsLoadAnchorDelegate = () => false,
                 supportsEraseAnchorDelegate = () => false,
                 supportsGetSavedAnchorIdsDelegate = () => false,
+                supportsTrackableAttachmentsDelegate = () => true,
                 supportsAsyncCancellation = false,
             });
         }

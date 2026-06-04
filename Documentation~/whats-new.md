@@ -15,14 +15,17 @@ This release includes the following significant changes:
 
 - Added a `ToString` override for `ARMarker`.
 - Added `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate`, which allows a raycast provider to determine at runtime which trackable types it supports.
+- Added `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachmentsDelegate`, a `Func<bool>` delegate that allows providers to evaluate trackable attachment support dynamically at runtime.
 
 ## UI changes
 
 - Added support for Apple visionOS to the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**).
+- Added `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachmentsDelegate`, a `Func<bool>` delegate that allows providers to evaluate trackable attachment support dynamically at runtime.
 
 ## Deprecations
 
 - Deprecated `XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary<T>` and `XRPlaneSubsystem.Provider.CreateOrResizeNativeArrayIfNecessary<T>`. Use [NativeArrayUtils](xref:Unity.XR.CoreUtils.NativeArrayUtils) instead.
 - Deprecated `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypes`. Use `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate` instead.
+- Deprecated `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachments`. Use supportsTrackableAttachmentsDelegate instead.
 
 For a full list of changes in this version including backwards-compatible bugfixes, refer to the package [changelog](xref:arfoundation-changelog).

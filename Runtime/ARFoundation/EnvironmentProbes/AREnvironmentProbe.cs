@@ -27,6 +27,10 @@ namespace UnityEngine.XR.ARFoundation
 #if UNITY_EDITOR
         const HideFlags k_ProbeHideFlags = HideFlags.DontSave | HideFlags.HideInInspector | HideFlags.NotEditable;
 #endif
+
+        // Clamp for "global" probes (ARKit/ARCore signal global lighting via +Inf extent).
+        // Forwarding +Inf to ReflectionProbe.size Asserts with "invalid aabb result".
+        const float k_GlobalProbeSizeMeters = 1000f;
         /// <summary>
         /// The reflection probe component attached to the GameObject.
         /// </summary>
@@ -107,6 +111,9 @@ namespace UnityEngine.XR.ARFoundation
 
             // Set the reflection probe mode to use a custom baked texture.
             m_ReflectionProbe.mode = ReflectionProbeMode.Custom;
+
+            // Keep the probe disabled until OnAfterSetSessionRelativeData supplies a valid cubemap.
+            m_ReflectionProbe.enabled = false;
         }
 
         Transform GetTrackablesParent()
@@ -155,10 +162,14 @@ namespace UnityEngine.XR.ARFoundation
                 UpdateEnvironmentTexture(sessionRelativeData.textureDescriptor);
             }
 
-            // Update the reflection probe box.
+            // Update the reflection probe box. See k_GlobalProbeSizeMeters for the +Inf clamp.
             m_ReflectionProbe.center = Vector3.zero;
-            m_ReflectionProbe.size = sessionRelativeData.size;
-            m_ReflectionProbe.boxProjection = !float.IsInfinity(m_ReflectionProbe.size.x);
+            var probeSize = sessionRelativeData.size;
+            var isGlobalProbe = float.IsInfinity(probeSize.x) || float.IsInfinity(probeSize.y) || float.IsInfinity(probeSize.z);
+            if (isGlobalProbe)
+                probeSize = new Vector3(k_GlobalProbeSizeMeters, k_GlobalProbeSizeMeters, k_GlobalProbeSizeMeters);
+            m_ReflectionProbe.size = probeSize;
+            m_ReflectionProbe.boxProjection = !isGlobalProbe;
 
             // Manual placement is set by the manager. Unknown means it must have been added automatically.
             if (placementType == AREnvironmentProbePlacementType.Unknown)
