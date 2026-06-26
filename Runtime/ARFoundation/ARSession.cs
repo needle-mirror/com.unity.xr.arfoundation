@@ -336,6 +336,10 @@ namespace UnityEngine.XR.ARFoundation
 
             if (subsystem != null)
             {
+                // These values must be set before the subsystem is started by SubsystemLifecycleManager.
+                SetMatchFrameRateRequested(m_MatchFrameRate);
+                subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
+
                 StartCoroutine(Initialize());
             }
 #if DEVELOPMENT_BUILD
@@ -379,8 +383,6 @@ namespace UnityEngine.XR.ARFoundation
 
         void StartSubsystem()
         {
-            SetMatchFrameRateRequested(m_MatchFrameRate);
-            subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
             subsystem.Start();
         }
 

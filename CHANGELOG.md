@@ -8,6 +8,19 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.8] - 2026-06-26
+
+### Removed
+
+- Removed unnecessary color attachment in "Copy Simulation Camera" pass.
+
+### Fixed
+
+- Fixed `SimulatedTrackedImage` so that modifying a duplicated component's image reference doesn't visually change the original component's image. ([UUM-135143](https://issuetracker.unity3d.com/issues/ar-foundation-simulated-tracked-image-component-image-property-does-not-get-updated-in-prefab-mode-after-duplication))
+- Fixed inconsistent Render Pass names, including mismatch between Frame Debugger and Render Graph Viewer.
+- Fixed `ARSession` to always set the requested tracking mode before a subsystem is started.
+- Fixed `AREnvironmentProbe` so that the underlying `ReflectionProbe` stays disabled until a valid environment cubemap is delivered. ([UUM-135468](https://issuetracker.unity3d.com/issues/ar-environment-probe-reflections-are-rendered-black-when-built-to-device))
+
 ## [6.0.7] - 2026-04-08
 
 ### Fixed

@@ -108,10 +108,7 @@ namespace UnityEngine.XR.ARFoundation
                 internal Material backgroundMaterial;
             }
 
-#if URP_17_OR_NEWER
-            // Name of our RenderGraph render pass.
-            const string k_RenderGraphPassName = "AR Background Render Pass (Render Graph Enabled)";
-#endif  // URP_17_OR_NEWER
+            protected const string k_PassName = "Draw AR Background";
 
             /// <summary>
             /// The data that is passed to the render pass execute functions.
@@ -190,7 +187,7 @@ namespace UnityEngine.XR.ARFoundation
                 m_RenderPassData.cameraBackgroundRenderingParams = m_CameraBackgroundRenderingParams;
                 m_RenderPassData.backgroundMaterial = m_BackgroundMaterial;
 
-                var cmd = CommandBufferPool.Get("AR Background Render Pass (Render Graph Disabled)");
+                var cmd = CommandBufferPool.Get(k_PassName);
                 ExecuteRenderPass(CommandBufferHelpers.GetRasterCommandBuffer(cmd), m_RenderPassData);
                 context.ExecuteCommandBuffer(cmd);
                 CommandBufferPool.Release(cmd);
@@ -241,7 +238,7 @@ namespace UnityEngine.XR.ARFoundation
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
             {
                 using (var builder = renderGraph.AddRasterRenderPass<PassData>(
-                    k_RenderGraphPassName,
+                    k_PassName,
                     out m_RenderPassData,
                     profilingSampler))
                 {
@@ -298,6 +295,7 @@ namespace UnityEngine.XR.ARFoundation
             public ARCameraBeforeOpaquesRenderPass()
             {
                 renderPassEvent = RenderPassEvent.BeforeRenderingOpaques;
+                profilingSampler = new ProfilingSampler(k_PassName);
             }
 
             /// <summary>
@@ -329,6 +327,7 @@ namespace UnityEngine.XR.ARFoundation
             public ARCameraAfterOpaquesRenderPass()
             {
                 renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+                profilingSampler = new ProfilingSampler(k_PassName);
             }
 
             /// <summary>

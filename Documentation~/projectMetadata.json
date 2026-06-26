@@ -3,7 +3,7 @@
         "com.unity.xr.arkit@6.0",
         "com.unity.xr.arcore@6.0",
         "com.unity.xr.meta-openxr@2.0",
-        "com.unity.xr.polyspatial.visionos",
+        "com.unity.polyspatial.visionos",
         "com.unity.visualscripting"
     ]
 }
