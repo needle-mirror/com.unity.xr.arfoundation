@@ -12,7 +12,6 @@ The AR Foundation [XROcclusionSubsystem](xref:UnityEngine.XR.ARSubsystems.XROccl
 | Google ARCore XR Plug-in | Yes | [Occlusion](xref:arcore-occlusion) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Occlusion](xref:arkit-occlusion) (ARKit) |
 | Apple visionOS XR Plug-in | | |
-| Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Occlusion](xref:meta-openxr-occlusion) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Occlusion](xref:androidxr-openxr-occlusion) (Android XR) |
 | XR Simulation | Yes | [Occlusion](xref:arfoundation-simulation-occlusion) (XR Simulation) |

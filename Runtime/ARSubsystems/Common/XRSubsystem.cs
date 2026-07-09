@@ -46,12 +46,16 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Attempts to start the subsystem with the given options.
         /// </summary>
-        /// <param name="token">An optional cancellation token, which you can use to cancel the operation in progress.</param>
+        /// <param name="token">A cancellation token, which you can use to cancel the operation in progress.</param>
         /// <param name="options">The start options.</param>
         /// <returns>A status representing whether the subsystem was successfully started, and
         /// any applicable error codes from the runtime.</returns>
+        /// <remarks>
+        /// You should pass a valid cancellation token as input, and cancel this operation if you no longer require
+        /// the subsystem to be running, for example if the scene that required this capability is unloaded.
+        /// </remarks>
         public virtual Awaitable<XRResultStatus> TryStartAsync(
-            CancellationToken token = default, XRSubsystemStartOptions options = XRSubsystemStartOptions.None)
+            CancellationToken token, XRSubsystemStartOptions options = XRSubsystemStartOptions.None)
         {
             Start();
             return AwaitableUtils<XRResultStatus>.FromResult(XRResultStatus.unqualifiedSuccess);

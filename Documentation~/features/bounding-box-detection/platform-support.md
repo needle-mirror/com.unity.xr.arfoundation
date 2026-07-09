@@ -10,7 +10,6 @@ The AR Foundation [XRBoundingBoxSubsystem](xref:UnityEngine.XR.ARSubsystems.XRBo
 | Google ARCore XR Plug-in | | |
 | Apple ARKit XR Plug-in | Yes | [Bounding box detection](xref:arkit-bounding-boxes) (ARKit) |
 | Apple visionOS XR Plug-in | | |
-| Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Bounding boxes](xref:meta-openxr-bounding-boxes) (OpenXR Meta) |
 | Unity OpenXR: Android XR | | |
 | XR Simulation | Yes | N/A |

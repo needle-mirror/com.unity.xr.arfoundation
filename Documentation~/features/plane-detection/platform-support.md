@@ -10,7 +10,6 @@ The AR Foundation [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSub
 | Google ARCore XR Plug-in | Yes | [Plane detection](xref:arcore-plane-detection) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Plane detection](xref:arkit-plane-detection) (ARKit) |
 | Apple visionOS XR Plug-in | Yes | N/A |
-| Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Plane detection](xref:meta-openxr-planes) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Plane detection](xref:androidxr-openxr-plane-detection) (Android XR) |
 | XR Simulation | Yes | N/A |

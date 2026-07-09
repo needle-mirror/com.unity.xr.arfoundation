@@ -10,7 +10,6 @@ The AR Foundation [XRAnchorSubsystem](xref:UnityEngine.XR.ARSubsystems.XRAnchorS
 | Google ARCore XR Plug-in | Yes | [Anchors](xref:arcore-anchors) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Anchors](xref:arkit-anchors) (ARKit) |
 | Apple visionOS XR Plug-in | Yes | N/A |
-| HoloLens | Yes | N/A |
 | Unity OpenXR: Meta | Yes | [Anchors](xref:meta-openxr-anchors) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Anchors](xref:androidxr-openxr-anchors) (Android XR) |
 | XR Simulation | Yes | [Anchors](xref:arfoundation-simulation-anchors) (XR Simulation) |
@@ -48,15 +47,15 @@ The following table lists the optional features of the anchor subsystem. Each op
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature                   | ARCore | ARKit  | visionOS |HoloLens | OpenXR Meta | Android XR | XR Simulation |
-| :------------------------ | :----: | :---:  | :------: |:------: | :---------: | :--------: |:------------: |
-| **Trackable attachments** | Yes    | Yes    |          |         |             | Yes        | Yes           |
-| **Synchronous add**       | Yes    | Yes    |          |         |             | Yes        |               |
-| **Save anchor**           | Yes    |        |          |         | Yes         | Yes        |               |
-| **Load anchor**           | Yes    |        |          |         | Yes         | Yes        |               |
-| **Erase anchor**          |        |        |          |         | Yes         | Yes        |               |
-| **Get saved anchor IDs**  |        |        |          |         |             | Yes        |               |
-| **Async cancellation**    | Yes    |        |          |         |             |            |               |
+| Feature                   | ARCore | ARKit  | visionOS | OpenXR Meta | Android XR | XR Simulation |
+| :------------------------ | :----: | :---:  | :------: | :---------: | :--------: |:------------: |
+| **Trackable attachments** | Yes    | Yes    |          |             | Yes        | Yes           |
+| **Synchronous add**       | Yes    | Yes    |          |             | Yes        |               |
+| **Save anchor**           | Yes    |        |          | Yes         | Yes        |               |
+| **Load anchor**           | Yes    |        |          | Yes         | Yes        |               |
+| **Erase anchor**          |        |        |          | Yes         | Yes        |               |
+| **Get saved anchor IDs**  |        |        |          |             | Yes        |               |
+| **Async cancellation**    | Yes    |        |          |             |            |               |
 
 <a id="check-feature-support"></a>
 

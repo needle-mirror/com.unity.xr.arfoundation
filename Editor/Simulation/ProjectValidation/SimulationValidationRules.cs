@@ -60,9 +60,9 @@ namespace UnityEditor.XR.Simulation
             if (generalSettings == null)
                 return false;
 
-            var managerSettings = generalSettings.AssignedSettings;
+            var manager = generalSettings.Manager;
 
-            return managerSettings != null && managerSettings.activeLoaders.Any(loader => loader is SimulationLoader);
+            return manager != null && manager.activeLoaders.Any(loader => loader is SimulationLoader);
         }
     }
 }

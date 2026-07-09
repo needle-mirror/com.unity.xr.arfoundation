@@ -8,7 +8,21 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.6.0] - 2026-07-09
+
+### Changed
+
+- Changed the pre-release API `XRSubsystem.TryStartAsync` to make the `CancellationToken` input parameter required instead of optional.
+
 ## [6.6.0-pre.2] - 2026-06-04
+
+### Added
+
+- Added `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachmentsDelegate`, a `Func<bool>` delegate that allows providers to evaluate trackable attachment support dynamically at runtime.
+
+### Deprecated
+
+- Deprecated `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachments`. Use `supportsTrackableAttachmentsDelegate` instead.
 
 ### Fixed
 
@@ -23,7 +37,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added support for Apple visionOS to the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**).
 - Added [XRCameraSubsystem.requiresPremultipliedBackgroundColor](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem.requiresPremultipliedBackgroundColor) to support runtimes that require premultiplying the background color with the background color alpha.
 - Added `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate`, which allows a raycast provider to determine at runtime which trackable types it supports.
-- Added `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachmentsDelegate`, a `Func<bool>` delegate that allows providers to evaluate trackable attachment support dynamically at runtime.
 
 ### Changed
 
@@ -36,7 +49,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Deprecated `XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary<T>` and `XRPlaneSubsystem.Provider.CreateOrResizeNativeArrayIfNecessary<T>`. Use [NativeArrayUtils](xref:Unity.XR.CoreUtils.NativeArrayUtils) instead.
 - Deprecated `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypes`. Use `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate` instead.
-- Deprecated `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachments`. Use supportsTrackableAttachmentsDelegate instead.
 
 ### Removed
 

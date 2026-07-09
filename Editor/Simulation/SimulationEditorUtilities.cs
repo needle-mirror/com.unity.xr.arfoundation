@@ -33,9 +33,9 @@ namespace UnityEditor.XR.Simulation
             var generalSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Standalone);
 
             var simActive = false;
-            if (generalSettings != null && generalSettings.AssignedSettings != null)
+            if (generalSettings != null && generalSettings.Manager != null)
             {
-                var activeLoaders = generalSettings.AssignedSettings.activeLoaders;
+                var activeLoaders = generalSettings.Manager.activeLoaders;
                 simActive = activeLoaders != null && activeLoaders.Any(loader =>
                 {
                     if (loader == null)

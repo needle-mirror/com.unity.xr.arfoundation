@@ -12,7 +12,6 @@ Meshing is supported on the following platforms:
 | Google ARCore XR Plug-in | | |
 | Apple ARKit XR Plug-in | Yes | [Meshing](xref:arkit-meshing) (ARKit) |
 | Apple visionOS XR Plug-in | Yes | N/A |
-| Microsoft HoloLens | Yes | N/A |
 | Unity OpenXR: Meta | Yes | [Meshing](xref:meta-openxr-meshing) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Meshing](xref:androidxr-openxr-meshing) (Android XR) |
 | XR Simulation | Yes | N/A |

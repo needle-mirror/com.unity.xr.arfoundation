@@ -139,11 +139,11 @@ namespace UnityEngine.XR.Simulation.Tests
             // give the image tracking system time to execute and update image tracking
             for (var elapsed = 0.0F; elapsed < k_AsyncOperationTimeout; elapsed += Time.deltaTime)
             {
-                UpdateTracking(sessionSubsystem);
-                changes = imageTrackingSubsystem.GetChanges(Allocator.Temp);
                 if (changes.added.Length == 1)
                     break;
                 yield return null;
+                UpdateTracking(sessionSubsystem);
+                changes = imageTrackingSubsystem.GetChanges(Allocator.Temp);
             }
 
             // make sure that our tracked image has a reference image with a fallback

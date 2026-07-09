@@ -45,8 +45,8 @@ If the build is successful, Unity will install the application on your target de
 In future builds, you can build and run to device directly from **File** > **Build and Run** if you haven't changed your target device.
 
 > [!NOTE]
-> Check the documentation for your target platform to understand whether there are any specific project settings that you must configure for your chosen platform.
+> Check the documentation for your target platform to understand whether there are any specific project settings that you must configure for your chosen platform. Some sample scenes also require you to enable specific features before they work as expected. Where this is the case, the [feature sample](xref:arfoundation-samples-features) documentation describes the required features.
 
 ### Build on Meta Quest devices
 
-This repository is configured with the Google ARCore XR Plug-in enabled by default on the Android platform. To build for Meta Quest, disable the Google ARCore provider in the Android tab of **Project Settings** > **XR Plug-in Management**, then follow the Meta Quest [Project setup](xref:meta-openxr-project-settings) instructions.
+This repository enables the Google ARCore XR Plug-in by default on the Android platform. To build for Meta Quest, disable the Google ARCore provider in the Android tab of **Project Settings** > **XR Plug-in Management**, then follow the Meta Quest [Project setup](xref:meta-openxr-project-settings) instructions.

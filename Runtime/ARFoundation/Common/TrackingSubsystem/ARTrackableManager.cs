@@ -172,9 +172,9 @@ namespace UnityEngine.XR.ARFoundation
                 bool addedOrUpdated = s_Added.Count > 0 || s_Updated.Count > 0;
                 if (addedOrUpdated || s_Removed.Count > 0)
                 {
-#pragma  warning disable CS0618 // disables warning from deprecation
+#pragma warning disable CS0618 // disables warning from deprecation
                     OnTrackablesChanged(s_Added, s_Updated, s_Removed);
-#pragma  warning restore CS0618
+#pragma warning restore CS0618
                 }
 
                 if (addedOrUpdated || s_RemovedTrackables.Count > 0)

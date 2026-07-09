@@ -12,7 +12,6 @@ AR Foundation requires that all provider implementations on all platforms suppor
 | Google ARCore XR Plug-in | Yes | [Session](xref:arcore-session) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Session](xref:arkit-session) (ARKit) |
 | Apple visionOS XR Plug-in | Yes |  N/A |
-| Microsoft HoloLens | Yes | N/A |
 | Unity OpenXR: Meta | Yes | [Session](xref:meta-openxr-session) (Meta OpenXR) |
 | Unity OpenXR: Android XR | Yes | [Session](xref:androidxr-openxr-session) (Android XR) |
 | XR Simulation | Yes | [Session](xref:arfoundation-simulation-session) (XR Simulation) |
@@ -32,7 +31,7 @@ The following table lists the optional features of the session subsystem. Each o
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature              | ARCore | ARKit | VisionOS | Meta OpenXR | Android XR | XR Simulation|
+| Feature              | ARCore | ARKit | visionOS | Meta OpenXR | Android XR | XR Simulation|
 | :------------------- | :----: | :---: | :------: | :--------:  | :--------: | :----------: |
 | **Install**          |  Yes   |       |          |             |            |              |
 | **Match frame rate** |  Yes   |  Yes  |          |             |            |              |

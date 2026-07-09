@@ -12,7 +12,6 @@ The AR Foundation [XRObjectTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.X
 | Google ARCore XR Plug-in | | |
 | Apple ARKit XR Plug-in | Yes | [Object tracking](xref:arkit-object-tracking) (ARKit) |
 | Apple visionOS XR Plug-in | Yes | [Object tracking](xref:psl-vos-unbounded-samples#object-tracking) (Apple visionOS XR Plug-in) |
-| Microsoft HoloLens | | |
 | Unity OpenXR: Meta | | |
 | Unity OpenXR: Android XR | | |
 | XR Simulation | | |

@@ -10,7 +10,6 @@ The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycas
 | Google ARCore XR Plug-in  |           Yes         | [Ray casts](xref:arcore-raycasts) (ARCore)     |
 | Apple ARKit XR Plug-in    |           Yes         | [Ray casts](xref:arkit-raycasts) (ARKit)       |
 | Apple visionOS XR Plug-in |                       |                                                |
-| Microsoft HoloLens        |           Yes         | N/A                                            |
 | Unity OpenXR: Meta        |           Yes         | [Ray casts](xref:meta-openxr-raycasts) (OpenXR Meta) |
 | Unity OpenXR: Android XR  |           Yes         | [Ray casts](xref:androidxr-openxr-raycasts) (Android XR) |
 | XR Simulation             |           Yes         | [Ray casts](xref:arfoundation-simulation-raycasts) (XR Simulation) |

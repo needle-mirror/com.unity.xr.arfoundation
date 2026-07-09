@@ -10,7 +10,6 @@ The AR Foundation [XRFaceSubsystem](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsy
 | Google ARCore XR Plug-in | Yes | [Face tracking](xref:arcore-face-tracking) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Face tracking](xref:arkit-face-tracking) (ARKit) |
 | Apple visionOS XR Plug-in | | |
-| Microsoft HoloLens | | |
 | Unity OpenXR: Meta | | |
 | Unity OpenXR: Android XR | Yes | [Face tracking](xref:androidxr-openxr-faces) (Android XR) |
 | XR Simulation | | |

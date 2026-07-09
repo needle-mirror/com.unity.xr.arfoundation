@@ -16,13 +16,15 @@ The `Simple Occlusion` scene demonstrates occlusion of virtual content by real w
 
 The `Depth Images` scene demonstrates raw texture depth images from different methods.
 
-## HMD occlusion scene
+## Head-mounted display occlusion scene
 
-The `HMDOcclusion` scene demonstrates how to use AR Foundation occlusion with shaders, as described in [AR Shader Occlusion component](xref:arfoundation-shader-occlusion). You can use this sample on a head-mounted display with an [OpenXR runtime](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.14/manual/index.html#runtimes).
+The `HMDOcclusion` scene demonstrates how to use AR Foundation occlusion with shaders, as described in [AR Shader Occlusion component](xref:arfoundation-shader-occlusion). You can use this sample on a head-mounted display (HMD) with an [OpenXR runtime](https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.14/manual/index.html#runtimes).
 
 ## Hands occlusion scene
 
 The `HandsOcclusion` scene demonstrates how to use occlusion with hand meshes as the occlusion source. Refer to [AR Shader Occlusion component](xref:arfoundation-shader-occlusion) for more information.
+
+This scene requires the **Hand Tracking Subsystem** and **Meta Quest: Hand Mesh Data** OpenXR features. Enable these features and disable the deprecated **Android Hand Mesh** feature in your **OpenXR** settings.
 
 ## Meta occlusion scene
 

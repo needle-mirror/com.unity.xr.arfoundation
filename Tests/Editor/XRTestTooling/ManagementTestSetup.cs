@@ -58,14 +58,24 @@ namespace UnityEditor.XR.TestTooling
                 AssetDatabase.CreateAsset(m_BuildTargetSettings, m_TestPathToGeneralSettings);
                 AssetDatabase.SaveAssets();
 
-                EditorBuildSettings.TryGetConfigObject(XRGeneralSettings.k_SettingsKey, out m_CurrentSettings);
-                EditorBuildSettings.AddConfigObject(XRGeneralSettings.k_SettingsKey, m_BuildTargetSettings, true);
+#if UNITY_6000_7_OR_NEWER
+                var settingsKey = XRGeneralSettings.settingsKey;
+#else
+                var settingsKey = XRGeneralSettings.k_SettingsKey;
+#endif
+                EditorBuildSettings.TryGetConfigObject(settingsKey, out m_CurrentSettings);
+                EditorBuildSettings.AddConfigObject(settingsKey, m_BuildTargetSettings, true);
             }
         }
 
         protected virtual void TearDownTest()
         {
-            EditorBuildSettings.RemoveConfigObject(XRGeneralSettings.k_SettingsKey);
+#if UNITY_6000_7_OR_NEWER
+                var settingsKey = XRGeneralSettings.settingsKey;
+#else
+            var settingsKey = XRGeneralSettings.k_SettingsKey;
+#endif
+            EditorBuildSettings.RemoveConfigObject(settingsKey);
 
             if (!string.IsNullOrEmpty(m_TestPathToGeneralSettings))
                 AssetDatabase.DeleteAsset(m_TestPathToGeneralSettings);
@@ -84,9 +94,9 @@ namespace UnityEditor.XR.TestTooling
             m_BuildTargetSettings = null;
 
             if (m_CurrentSettings != null)
-                EditorBuildSettings.AddConfigObject(XRGeneralSettings.k_SettingsKey, m_CurrentSettings, true);
+                EditorBuildSettings.AddConfigObject(settingsKey, m_CurrentSettings, true);
             else
-                EditorBuildSettings.RemoveConfigObject(XRGeneralSettings.k_SettingsKey);
+                EditorBuildSettings.RemoveConfigObject(settingsKey);
 
             AssetDatabase.DeleteAsset(Path.Combine("Assets","Temp"));
         }

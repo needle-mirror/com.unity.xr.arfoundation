@@ -10,7 +10,6 @@ The AR Foundation [XRCameraSubsystem](xref:UnityEngine.XR.ARSubsystems.XRCameraS
 | Google ARCore XR Plug-in | Yes | [Camera](xref:arcore-camera) (ARCore) |
 | Apple ARKit XR Plug-in | Yes | [Camera](xref:arkit-camera) (ARKit) |
 | Apple visionOS XR Plug-in | | |
-| Microsoft HoloLens | | |
 | Unity OpenXR: Meta | Yes | [Camera](xref:meta-openxr-camera) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Camera](xref:androidxr-openxr-camera) (Android XR) |
 | XR Simulation | Yes | [Camera](xref:arfoundation-simulation-camera) (XR Simulation) |

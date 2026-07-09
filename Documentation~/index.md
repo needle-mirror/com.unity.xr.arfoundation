@@ -23,7 +23,6 @@ Unity officially supports the following provider plug-ins:
 | **Android**      | [Google ARCore XR Plug-in](xref:arcore-manual) |
 | **iOS**          | [Apple ARKit XR Plug-in](xref:arkit-manual) |
 | **visionOS**     | [Apple visionOS XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.visionos@latest) |
-| **Hololens 2**   | [OpenXR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.openxr@latest)|
 | **Meta Quest**   | [Unity OpenXR: Meta](xref:meta-openxr-manual) |
 | **Android XR**   | [Unity OpenXR: Android XR](xref:androidxr-openxr-manual) |
 
@@ -64,24 +63,24 @@ Some AR Foundation features are available in [XR Simulation](xref:arfoundation-s
 
 The following table lists the available features in each Unity-supported provider plug-in:
 
-| **Feature**                                                        | Android | iOS | visionOS | HoloLens | Meta Quest | Android XR | XR Simulation |
-| :----------------------------------------------------------------- |:-------:|:---:|:--------:|:--------:|:----------:|:----------:|:-------------:|
-| [Session](xref:arfoundation-session)                               |   Yes   | Yes |   Yes    |    Yes   |     Yes    |     Yes    |      Yes      |
-| [Device tracking](xref:arfoundation-device-tracking)               |   Yes   | Yes |   Yes    |    Yes   |     Yes    |     Yes    |      Yes      |
-| [Camera](xref:arfoundation-camera)                                 |   Yes   | Yes |          |          |     Yes    |     Yes    |      Yes      |
-| [Plane detection](xref:arfoundation-plane-detection)               |   Yes   | Yes |   Yes    |    Yes   |     Yes    |     Yes    |      Yes      |
-| [Bounding Box detection](xref:arfoundation-bounding-box-detection) |         | Yes |          |          |     Yes    |            |      Yes      |
-| [Image tracking](xref:arfoundation-image-tracking)                 |   Yes   | Yes |   Yes    |          |            |            |      Yes      |
-| [Object tracking](xref:arfoundation-object-tracking)               |         | Yes |   Yes    |          |            |            |               |
-| [Face tracking](xref:arfoundation-face-tracking)                   |   Yes   | Yes |          |          |            |     Yes    |               |
-| [Body tracking](xref:arfoundation-body-tracking)                   |         | Yes |          |          |            |            |               |
-| [Point clouds](xref:arfoundation-point-clouds)                     |   Yes   | Yes |          |          |            |            |      Yes      |
-| [Ray casts](xref:arfoundation-raycasts)                            |   Yes   | Yes |          |    Yes   |     Yes    |     Yes    |      Yes      |
-| [Anchors](xref:arfoundation-anchors)                               |   Yes   | Yes |   Yes    |    Yes   |     Yes    |     Yes    |      Yes      |
-| [Meshing](xref:arfoundation-meshing)                               |         | Yes |   Yes    |    Yes   |     Yes    |     Yes    |      Yes      |
-| [Environment probes](xref:arfoundation-environment-probes)         |   Yes   | Yes |   Yes    |          |            |            |      Yes      |
-| [Occlusion](xref:arfoundation-occlusion)                           |   Yes   | Yes |          |          |     Yes    |     Yes    |      Yes      |
-| [Participants](xref:arfoundation-participant-tracking)             |         | Yes |          |          |            |            |               |
+| **Feature**                                                        | Android | iOS | visionOS | Meta Quest | Android XR | XR Simulation |
+| :----------------------------------------------------------------- |:-------:|:---:|:--------:|:----------:|:----------:|:-------------:|
+| [Session](xref:arfoundation-session)                               |   Yes   | Yes |   Yes    |     Yes    |     Yes    |      Yes      |
+| [Device tracking](xref:arfoundation-device-tracking)               |   Yes   | Yes |   Yes    |     Yes    |     Yes    |      Yes      |
+| [Camera](xref:arfoundation-camera)                                 |   Yes   | Yes |          |     Yes    |     Yes    |      Yes      |
+| [Plane detection](xref:arfoundation-plane-detection)               |   Yes   | Yes |   Yes    |     Yes    |     Yes    |      Yes      |
+| [Bounding Box detection](xref:arfoundation-bounding-box-detection) |         | Yes |          |     Yes    |            |      Yes      |
+| [Image tracking](xref:arfoundation-image-tracking)                 |   Yes   | Yes |   Yes    |            |            |      Yes      |
+| [Object tracking](xref:arfoundation-object-tracking)               |         | Yes |   Yes    |            |            |               |
+| [Face tracking](xref:arfoundation-face-tracking)                   |   Yes   | Yes |          |            |     Yes    |               |
+| [Body tracking](xref:arfoundation-body-tracking)                   |         | Yes |          |            |            |               |
+| [Point clouds](xref:arfoundation-point-clouds)                     |   Yes   | Yes |          |            |            |      Yes      |
+| [Ray casts](xref:arfoundation-raycasts)                            |   Yes   | Yes |          |     Yes    |     Yes    |      Yes      |
+| [Anchors](xref:arfoundation-anchors)                               |   Yes   | Yes |   Yes    |     Yes    |     Yes    |      Yes      |
+| [Meshing](xref:arfoundation-meshing)                               |         | Yes |   Yes    |     Yes    |     Yes    |      Yes      |
+| [Environment probes](xref:arfoundation-environment-probes)         |   Yes   | Yes |   Yes    |            |            |      Yes      |
+| [Occlusion](xref:arfoundation-occlusion)                           |   Yes   | Yes |          |     Yes    |     Yes    |      Yes      |
+| [Participants](xref:arfoundation-participant-tracking)             |         | Yes |          |            |            |               |
 
 [!include[](snippets/arf-docs-tip.md)]
 

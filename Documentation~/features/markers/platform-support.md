@@ -12,7 +12,6 @@ The AR Foundation XRMarkerSubsystem is supported on the following platforms:
 | Google ARCore XR Plug-in | | |
 | Apple ARKit XR Plug-in | | |
 | Apple visionOS XR Plug-in | | |
-| HoloLens | | |
 | Unity OpenXR: Meta | | |
 | Unity OpenXR: Android XR | | |
 | XR Simulation | | |
