@@ -30,8 +30,9 @@ Unity officially supports the following provider plug-ins with this version of A
 | **Android**      | [Google ARCore XR Plug-in](xref:arcore-manual) | 6.6 |
 | **iOS**          | [Apple ARKit XR Plug-in](xref:arkit-manual) | 6.6 |
 | **visionOS**     | [Apple visionOS XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.visionos@latest) | 3.1 |
-| **Meta Quest**   | [Unity OpenXR: Meta](xref:meta-openxr-manual) | 2.6|
+| **Meta Quest**   | [Unity OpenXR: Meta](xref:meta-openxr-manual) | 2.6 |
 | **Android XR**   | [Unity OpenXR: Android XR](xref:androidxr-openxr-manual) | 1.3 |
+| **Meta Quest** or **Android XR** | [Unity OpenXR: Spatial Entities](xref:spatialentities-openxr-manual) | 6.6 |
 
 To use AR Foundation on a device, you must install at least one provider plug-in, either from the Package Manager or by going to **Project Settings** > **XR Plug-in Management** as shown below.
 
@@ -49,7 +50,8 @@ Some provider plug-ins require that you set specific project settings for AR to 
 | [Google ARCore XR Plug-in](xref:arcore-manual) | [Project configuration](xref:arcore-project-config) (ARCore) |
 | [Apple ARKit XR Plug-in](xref:arkit-manual) | [Project configuration](xref:arkit-project-config) (ARKit) |
 | [Unity OpenXR: Meta](xref:meta-openxr-manual)| [Get started](xref:meta-openxr-get-started) (OpenXR Meta) |
-| [Unity OpenXR: Android XR](xref:androidxr-openxr-manual) | [Get started](xref:androidxr-openxr-get-started) (OpenXR AndroidXR) |
+| [Unity OpenXR: Android XR](xref:androidxr-openxr-manual) | [Get started](xref:androidxr-openxr-get-started) (Android XR) |
+| [Unity OpenXR: Spatial Entities](xref:spatialentities-openxr-manual) | [Get started](xref:spatialentities-openxr-get-started) (Spatial Entities) |
 
 ## Third-party plug-ins
 

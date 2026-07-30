@@ -12,6 +12,7 @@ The AR Foundation [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSub
 | Apple visionOS XR Plug-in | Yes | N/A |
 | Unity OpenXR: Meta | Yes | [Plane detection](xref:meta-openxr-planes) (OpenXR Meta) |
 | Unity OpenXR: Android XR | Yes | [Plane detection](xref:androidxr-openxr-plane-detection) (Android XR) |
+| Unity OpenXR: Spatial Entities | Yes | [Planes](xref:spatialentities-openxr-planes) (Spatial Entities) |
 | XR Simulation | Yes | N/A |
 
 ## Check for plane detection support
@@ -45,13 +46,13 @@ The following table lists the optional features of the plane subsystem. Each opt
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature | ARCore | ARKit | visionOS | OpenXR Meta | Android XR | XR Simulation |
-| :------ | :----: | :---: | :------: | :---------: | :--------: |:-----------: |
-| **Horizontal plane detection** | Yes | Yes | |Yes | Yes | Yes |
-| **Vertical plane detection** | Yes | iOS 11.3+ | Yes | Yes | Yes | Yes |
-| **Arbitrary plane detection** | | | | Yes | Yes | |
-| **Boundary vertices** | Yes | Yes | Yes | Yes | Yes | Yes |
-| **Classification** | | iOS 12+ | Yes |Yes | Yes | |
+| Feature                        | ARCore | ARKit     | visionOS | OpenXR Meta | Android XR | Spatial Entities | XR Simulation |
+| :----------------------------- | :----: | :-------: | :------: | :---------: | :--------: | :--------------: | :-----------: |
+| **Horizontal plane detection** | Yes    | Yes       | Yes      | Yes         | Yes        | Yes              | Yes           |
+| **Vertical plane detection**   | Yes    | iOS 11.3+ | Yes      | Yes         | Yes        | Yes              | Yes           |
+| **Arbitrary plane detection**  |        |           | Yes      | Yes         | Yes        | Yes              |               |
+| **Boundary vertices**          | Yes    | Yes       | Yes      | Yes         | Yes        | Yes              | Yes           |
+| **Classification**             |        | iOS 12+   | Yes      | Yes         | Yes        | Yes              |               |
 
 <a id="check-feature-support"></a>
 

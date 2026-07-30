@@ -243,7 +243,11 @@ namespace UnityEditor.XR.Simulation
                 return null;
 
             var standAloneSettingsSerializedObject = new SerializedObject(standaloneSettings);
+#if XRM_4_7_0_OR_NEWER
+            var managerInstanceProp = standAloneSettingsSerializedObject.FindProperty("m_Manager");
+#else
             var managerInstanceProp = standAloneSettingsSerializedObject.FindProperty("m_LoaderManagerInstance");
+#endif
             var managerInstanceSerializedObject = new SerializedObject(managerInstanceProp.objectReferenceValue);
             return managerInstanceSerializedObject.FindProperty("m_Loaders.Array");
         }

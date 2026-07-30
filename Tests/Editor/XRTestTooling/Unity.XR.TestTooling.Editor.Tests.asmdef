@@ -20,6 +20,12 @@
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.management",
+            "expression": "4.7.0",
+            "define": "XRM_4_7_0_OR_NEWER"
+        }
+    ],
     "noEngineReferences": false
 }

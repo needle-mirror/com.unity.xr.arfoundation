@@ -58,7 +58,7 @@ namespace UnityEditor.XR.TestTooling
                 AssetDatabase.CreateAsset(m_BuildTargetSettings, m_TestPathToGeneralSettings);
                 AssetDatabase.SaveAssets();
 
-#if UNITY_6000_7_OR_NEWER
+#if XRM_4_7_0_OR_NEWER
                 var settingsKey = XRGeneralSettings.settingsKey;
 #else
                 var settingsKey = XRGeneralSettings.k_SettingsKey;
@@ -70,8 +70,8 @@ namespace UnityEditor.XR.TestTooling
 
         protected virtual void TearDownTest()
         {
-#if UNITY_6000_7_OR_NEWER
-                var settingsKey = XRGeneralSettings.settingsKey;
+#if XRM_4_7_0_OR_NEWER
+            var settingsKey = XRGeneralSettings.settingsKey;
 #else
             var settingsKey = XRGeneralSettings.k_SettingsKey;
 #endif

@@ -26,6 +26,11 @@
             "name": "com.unity.render-pipelines.universal",
             "expression": "7.0.0",
             "define": "INCLUDE_RENDER_PIPELINES_UNIVERSAL"
+        },
+        {
+            "name": "com.unity.xr.management",
+            "expression": "4.7.0",
+            "define": "XRM_4_7_0_OR_NEWER"
         }
     ],
     "noEngineReferences": false

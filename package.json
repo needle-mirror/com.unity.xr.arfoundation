@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.6.0",
+  "version": "6.6.1",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -37,15 +37,15 @@
     }
   ],
   "_upm": {
-    "changelog": "### Changed\n\n- Changed the pre-release API `XRSubsystem.TryStartAsync` to make the `CancellationToken` input parameter required instead of optional."
+    "changelog": "### Fixed\n\n- Fixed a `NullReferenceException` that occurred if you opened the Editor with both AR Foundation 6.6.0 or newer and XR Plug-in Management 4.7.0 or newer installed."
   },
   "upmCi": {
-    "footprint": "53375989e51f2df86e19725ca3de5546201ee677"
+    "footprint": "9ea5cb63002e2696111c4554d29ad462581106e5"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.6/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "31511096c604d966e820289af047fbe0487aa788"
+    "revision": "b5dcd80538059583eda90eb9213bbbd433a6f7f9"
   }
 }
