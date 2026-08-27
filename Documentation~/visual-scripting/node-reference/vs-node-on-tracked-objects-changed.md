@@ -11,7 +11,7 @@ Triggers when AR Tracked Objects have changed. AR Tracked Objects can be added, 
 
 | Port | Data type | Description |
 | :--- | :-------- | :---------- |
-| **Target** | [GameObject](xref:UnityEngine.GameObject) | Target GameObject should have an enabled [ARTrackedObjectManager](xref:arfoundation-object-tracking#ar-tracked-object-manager-component) component. If you do not connect this port, this node searches for an enabled AR Tracked Object Manager component in the scene instead, and throws an exception if none is found. |
+| **Target** | [GameObject](xref:UnityEngine.GameObject) | Target GameObject should have an enabled [ARTrackedObjectManager](xref:arfoundation-object-tracking-manager) component. If you do not connect this port, this node searches for an enabled AR Tracked Object Manager component in the scene instead, and throws an exception if none is found. |
 
 [!include[](snippets/get-variable-tip.md)]
 

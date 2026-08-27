@@ -174,7 +174,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         static void WarnIfMultipleARSessions()
         {
-#if UNITY_6000_5_OR_NEWER
+#if UNITY_6000_4_OR_NEWER
             var sessions = FindObjectsByType<ARSession>();
 #else
             var sessions = FindObjectsByType<ARSession>(FindObjectsSortMode.None);
@@ -343,6 +343,10 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (subsystem != null)
             {
+                // These values must be set before the subsystem is started by SubsystemLifecycleManager.
+                SetMatchFrameRateRequested(m_MatchFrameRate);
+                subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
+
                 StartCoroutine(Initialize());
             }
         }
@@ -372,8 +376,6 @@ namespace UnityEngine.XR.ARFoundation
 
         void StartSubsystem()
         {
-            SetMatchFrameRateRequested(m_MatchFrameRate);
-            subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
             subsystem.Start();
         }
 

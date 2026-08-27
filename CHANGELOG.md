@@ -8,6 +8,28 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.5.1] - 2026-08-27
+
+### Removed
+
+- Removed unnecessary color attachment in "Copy Simulation Camera" pass.
+
+### Fixed
+
+- Fixed `ARTrackableManager` so that it only destroys trackables upon removal if `ARTrackable.destroyOnRemoval` is true.
+- Fixed `ARTrackableManager` so that `ARAnchor.pending` is set to false when the anchor is added. ([UUM-136565](https://issuetracker.unity3d.com/issues/aranchor-dot-pending-never-resolves-when-adding-an-anchor-via-tryaddanchorasync-in-editor-play-mode-with-xr-simulation))
+- Fixed a bug where a duplicate `ARAnchor` GameObject is no longer created for anchors that were added by the user creating the component at runtime.
+- Fixed `SimulatedTrackedImage` so that modifying a duplicated component's image reference doesn't visually change the original component's image. ([UUM-135143](https://issuetracker.unity3d.com/issues/ar-foundation-simulated-tracked-image-component-image-property-does-not-get-updated-in-prefab-mode-after-duplication))
+- Fixed XR Simulation internal logic so that the Editor no longer unexpectedly quits when unloading and reloading an AR scene without deinitializing the XR Loader. ([UUM-137252](https://issuetracker.unity3d.com/issues/crash-on-asyncgpureadbackbuffer-validatetexture-when-re-entering-the-ar-scene)).
+- Fixed the custom Editor for XR Simulation shaders so that changes to color values are applied correctly in Unity 6.3 or newer.
+- Fixed RenderGraph releasing depth texture from `SimulationCameraTextureReadbackPass` before the pass is finished, resolving occlusion issues and z-fighting in XR Simulation Environments.
+- Fixed usages of APIs in Unity 6.4 that have been deprecated in that Editor version.
+- Fixed missing RenderGraph depth texture read access in `ARBackgroundRendererFeature`.
+- Fixed inconsistent Render Pass names, including mismatch between Frame Debugger and Render Graph Viewer.
+- Fixed `ARSession` so that camera torch mode is available on supported iOS devices the first time that this component is started.
+- Fixed `AREnvironmentProbe` so that the underlying `ReflectionProbe` stays disabled until a valid environment cubemap is delivered. ([UUM-135468](https://issuetracker.unity3d.com/issues/ar-environment-probe-reflections-are-rendered-black-when-built-to-device))
+- Fixed the `GizmoSolidColor` shader so that it compiles with DXC, as required by DirectX 12.
+
 ## [6.5.0] - 2026-03-26
 
 No changes

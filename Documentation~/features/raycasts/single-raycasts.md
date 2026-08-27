@@ -16,7 +16,7 @@ Single ray casts occur once. Use single ray casts for discrete, one time user in
 
 The viewport based [Raycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Vector2,System.Collections.Generic.List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType)) method casts a ray from a two-dimensional pixel position on the screen:
 
-[!code-cs[ARRaycastManager_Raycast_screenPoint](../../../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_Raycast_screenPoint)]
+[Raycast(Vector2, List<ARRaycastHit>, TrackableType)](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Vector2,System.Collections.Generic.List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType))
 
 You can, for example, pass a touch position directly:
 
@@ -26,7 +26,7 @@ You can, for example, pass a touch position directly:
 
 The world based [Raycast](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Ray,System.Collections.Generic.List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType)) method takes an arbitrary [Ray](xref:UnityEngine.Ray) (a position and direction):
 
-[!code-cs[ARRaycastManager_Raycast_ray](../../../Runtime/ARFoundation/ARRaycastManager.cs#ARRaycastManager_Raycast_ray)]
+[Raycast(Ray, List<ARRaycastHit>, TrackableType)](xref:UnityEngine.XR.ARFoundation.ARRaycastManager.Raycast(UnityEngine.Ray,System.Collections.Generic.List{UnityEngine.XR.ARFoundation.ARRaycastHit},UnityEngine.XR.ARSubsystems.TrackableType))
 
 ## Parameters
 

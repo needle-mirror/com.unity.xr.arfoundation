@@ -15,6 +15,8 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         CameraTextureProvider m_Provider;
 
+        const string k_PassName = "Copy Simulation Camera";
+
 #if URP_17_OR_NEWER
         /// <summary>
         /// Data provided for the <see cref="ExecuteRenderGraphReadbackPass"/> function.
@@ -23,11 +25,6 @@ namespace UnityEngine.XR.Simulation
         {
             internal CameraTextureProvider cameraTextureProvider;
         }
-
-        /// <summary>
-        /// Name of our RenderGraph render pass.
-        /// </summary>
-        static readonly string k_RenderGraphPassName = "SimulationCameraTextureReadbackPass (Render Graph Enabled)";
 #endif  // URP_17_OR_NEWER
 
         /// <summary>
@@ -41,14 +38,15 @@ namespace UnityEngine.XR.Simulation
             m_Provider = cameraTextureProvider;
             // Specify that the async readback pass will occur after all effects are rendered.
             renderPassEvent = RenderPassEvent.AfterRendering;
-            // Configure the camera's texture input types for both the RenderGraph and non-RenderGraph async readback
-            // passes.
-            ConfigureInput(ScriptableRenderPassInput.Color | ScriptableRenderPassInput.Depth);
+            profilingSampler = new ProfilingSampler(k_PassName);
+            // Configure the camera's depth texture input for both the RenderGraph and non-RenderGraph async readback
+            // passes. Color is not needed because the pass reads from its own m_SimulationCameraRenderTexture.
+            ConfigureInput(ScriptableRenderPassInput.Depth);
         }
 
         /// <summary>
-        /// Called by the renderer before rendering a camera. Configures the camera's texture input types, color and
-        /// depth, for the non-RenderGraph async readback pass.
+        /// Called by the renderer before rendering a camera. Configures the camera's depth texture input type
+        /// for the non-RenderGraph async readback pass.
         /// </summary>
         /// <param name="cmd">The <see cref="CommandBuffer"/> object to enqueue rendering commands.</param>
         /// <param name="renderingData">Current rendering state information.</param>
@@ -57,7 +55,7 @@ namespace UnityEngine.XR.Simulation
         [Obsolete("OnCameraSetup is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            ConfigureInput(ScriptableRenderPassInput.Color | ScriptableRenderPassInput.Depth);
+            ConfigureInput(ScriptableRenderPassInput.Depth);
         }
 #else
         [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
@@ -76,11 +74,12 @@ namespace UnityEngine.XR.Simulation
         [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            using var commandBuffer = CommandBufferPool.Get("SimulationCameraTextureReadbackPass (Render Graph Disabled)");
+            var commandBuffer = CommandBufferPool.Get(k_PassName);
             if (m_Provider.TryConfigureReadbackCommandBuffer(commandBuffer))
             {
                 context.ExecuteCommandBuffer(commandBuffer);
             }
+            CommandBufferPool.Release(commandBuffer);
         }
 #else
         [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
@@ -114,15 +113,20 @@ namespace UnityEngine.XR.Simulation
         /// the full command buffer API.
         /// </remarks>
         /// <param name="renderGraph">The RenderGraph object that we add the unsafe render pass to.</param>
-        /// <param name="frameData">A <c>ContextContainer</c> object that is unused for this RenderGraph pass.</param>
+        /// <param name="frameData">A <c>ContextContainer</c> object that provides access to URP resource data.</param>
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
             using (var builder = renderGraph.AddUnsafePass<PassData>(
-                k_RenderGraphPassName,
+                k_PassName,
                 out PassData passData,
                 profilingSampler))
             {
                 passData.cameraTextureProvider = m_Provider;
+
+                // Declare _CameraDepthTexture as a resource dependency so RenderGraph keeps it alive until this pass executes.
+                var resourceData = frameData.Get<UniversalResourceData>();
+                if (resourceData.cameraDepthTexture.IsValid())
+                    builder.UseTexture(resourceData.cameraDepthTexture, AccessFlags.Read);
 
                 builder.AllowPassCulling(false);
                 builder.SetRenderFunc<PassData>(ExecuteRenderGraphReadbackPass);

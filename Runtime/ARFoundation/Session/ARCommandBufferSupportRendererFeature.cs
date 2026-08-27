@@ -30,27 +30,21 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         class EventInjectionRenderPass : ScriptableRenderPass
         {
+            const string k_PassName = "Execute XR Session Commands";
+
             public EventInjectionRenderPass()
             {
                 // Configure the event to be invoked before rendering started.
                 // This ensures that necessary resources are ready when required during rendering.
                 renderPassEvent = RenderPassEvent.BeforeRendering;
+                profilingSampler = new ProfilingSampler(k_PassName);
             }
-
-#if !UNITY_6000_4_OR_NEWER
-            static readonly string k_NonRenderGraphPassName = "XRSessionSubsystem Command Buffer Event Injection Pass (Render Graph Disabled)";
-#endif
 
 #if URP_17_OR_NEWER
             /// <summary>
             /// No data is passed during this pass.
             /// </summary>
             private class PassData { }
-
-            /// <summary>
-            /// Name of our RenderGraph render pass.
-            /// </summary>
-            static readonly string k_RenderGraphPassName = "XRSessionSubsystem Command Buffer Event Injection Pass (Render Graph Enabled)";
 
             /// <summary>
             /// Execute the commands to inject the plugin event callback with RenderGraph enabled.
@@ -73,7 +67,7 @@ namespace UnityEngine.XR.ARFoundation
             {
                 if (RequiresCommandBufferSupport(out var sessionSubsystem))
                 {
-                    using (var builder = renderGraph.AddUnsafePass<PassData>(k_RenderGraphPassName, out PassData passData))
+                    using (var builder = renderGraph.AddUnsafePass<PassData>(k_PassName, out PassData passData))
                     {
                         builder.AllowPassCulling(false);
                         builder.SetRenderFunc<PassData>(ExecutePass);
@@ -104,7 +98,7 @@ namespace UnityEngine.XR.ARFoundation
             [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
-                var commandBuffer = CommandBufferPool.Get(k_NonRenderGraphPassName);
+                var commandBuffer = CommandBufferPool.Get(k_PassName);
                 ExecuteRenderPass(commandBuffer);
                 context.ExecuteCommandBuffer(commandBuffer);
                 CommandBufferPool.Release(commandBuffer);

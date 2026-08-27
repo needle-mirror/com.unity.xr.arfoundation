@@ -125,6 +125,8 @@ namespace UnityEngine.XR.ARFoundation
                         Assert.IsTrue(success);
                         var trackable = (TTrackable)arTrackable;
                         m_Trackables[trackable!.trackableId] = trackable;
+                        m_PendingAdds.Remove(trackable.trackableId);
+                        trackable.pending = false;
                         s_Added.Add(trackable);
                         OnAfterSetSessionRelativeData(trackable, added);
                     }
@@ -242,6 +244,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             var trackableId = sessionRelativeData.trackableId;
             m_Trackables.Add(trackableId, existingTrackable);
+            TrackableSpawner.instance.RegisterExistingTrackable(existingTrackable);
             TrackableSpawner.instance.SetSessionRelativeDataAndPose(existingTrackable, sessionRelativeData);
             OnCreateTrackable(existingTrackable);
             OnAfterSetSessionRelativeData(existingTrackable, sessionRelativeData);
@@ -277,7 +280,10 @@ namespace UnityEngine.XR.ARFoundation
             if (m_PendingAdds.Remove(trackableId, out var trackable))
             {
                 m_Trackables.Remove(trackableId);
-                Destroy(trackable.gameObject);
+
+                if (trackable.destroyOnRemoval)
+                    Destroy(trackable.gameObject);
+
                 return true;
             }
 

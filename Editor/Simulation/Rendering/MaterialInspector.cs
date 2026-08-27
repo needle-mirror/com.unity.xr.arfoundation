@@ -50,7 +50,7 @@ namespace UnityEditor.XR.Simulation.Rendering
             if (material == null)
                 throw new ArgumentNullException("material");
 
-            if (m_FirstTimeApply)
+            if (material.GetFloat("_Mode") >= 0)
                 SyncWithLegacyValues(material);
 
             SetMaterialKeywords(material, LitGUI.SetMaterialKeywords);
@@ -214,14 +214,15 @@ namespace UnityEditor.XR.Simulation.Rendering
                             break;
                     }
                 }
-
-                // This is distructive but there is not one to one conversions for all modes
-                material.SetFloat("_Mode", -1);
             }
             else
             {
                 SetXRayBlendMode(material);
             }
+
+            // Mark legacy migration as complete so this sync does not run again.
+            // This is destructive but there are not one-to-one conversions for all modes.
+            material.SetFloat("_Mode", -1);
         }
 
         void SetLegacyAndDefaultShaderValues(Material material)
