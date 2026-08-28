@@ -73,7 +73,7 @@ Shader "Unity/Handles/GizmoSolidColor"
                 Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
             }
 
-            half4 frag (v2f i) : COLOR
+            half4 frag (v2f i) : SV_Target
             {
                 float fresnel;
                 Unity_FresnelEffect_float(i.WorldSpaceNormal, i.WorldSpaceViewDirection, _Power, fresnel);
