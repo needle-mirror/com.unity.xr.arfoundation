@@ -47,13 +47,14 @@ namespace UnityEngine.XR.ARFoundation
     /// Scale
     ///
     /// If you want to scale the content rendered by the <c>ARSessionOrigin</c> you should apply
-    /// the scale to the <c>ARSessionOrigin</c>'s transform. This is preferrable to scaling
+    /// the scale to the <c>ARSessionOrigin</c>'s transform. This is preferable to scaling
     /// the content directly, which can have undesirable side effects. Physics and NavMeshes,
     /// for example, do not perform well when scaled very small.
     /// </remarks>
     [DisallowMultipleComponent]
     [Obsolete("ARSessionOrigin has been deprecated. Use XROrigin instead.")]
     [HelpUrl(typeof(ARSessionOrigin))]
+    [Icon(Constants.arvrIconPath)]
     public class ARSessionOrigin : XROrigin
     {
         /// <summary>

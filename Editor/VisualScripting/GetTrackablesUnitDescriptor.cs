@@ -45,7 +45,7 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
         /// The manager input port description.
         /// </summary>
         protected virtual string managerInPortDescription =>
-            $"An active an enabled {typeof(TManager).DisplayName()}.\n" +
+            $"An active and enabled {typeof(TManager).DisplayName()}.\n" +
             $"If you do not connect this port, this node searches for an enabled {typeof(TManager).DisplayName()} component" +
             " in the scene instead, and throws an exception if none is found.";
 

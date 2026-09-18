@@ -22,7 +22,7 @@ The following table lists the optional features of the session subsystem. Each o
 
 | Feature              | Descriptor Property | Description |
 | :------------------- | :------------------ | :----------------- |
-| **Install**          | [supportsInstall](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall) | Whether the session supports the update or installation of session software. |
+| **Install** (Deprecated) | [supportsInstall](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall) | Whether the session supports the update or installation of session software. |
 | **Match frame rate** | [supportsMatchFrameRate](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsMatchFrameRate) | Whether the session supports matching the AR frame rate to the Unity frame rate. |
 
 <a id="optional-feature-support"></a>
@@ -33,7 +33,7 @@ The following table lists whether certain XR plug-in providers support each opti
 
 | Feature              | ARCore | ARKit | visionOS | Meta OpenXR | Android XR | XR Simulation|
 | :------------------- | :----: | :---: | :------: | :--------:  | :--------: | :----------: |
-| **Install**          |  Yes   |       |          |             |            |              |
+| **Install** (Deprecated) |  Yes   |       |          |             |            |              |
 | **Match frame rate** |  Yes   |  Yes  |          |             |            |              |
 
 <a id="check-feature-support"></a>
@@ -48,25 +48,20 @@ Refer to the following example code to learn how to check for optional feature s
 
 ## AR support on mobile devices
 
-Not all mobile devices support AR by default. If you're targeting mobile platforms (ARCore and ARKit), you can check whether the user's device supports AR. On supported devices, you can request install of additional software if needed. You can learn more about AR support on mobile devices, by referring to the [ARCore](xref:arcore-manual) and [ARKit](xref:arkit-manual) documentation.
+Some mobile devices require additional software to run AR. You can request the device to install or update necessary XR software. You can learn more about AR support on mobile devices, by referring to the [ARCore](xref:arcore-manual) and [ARKit](xref:arkit-manual) documentation.
 
-Refer to the following sections to check for AR support on your target device, and install XR software if required.
+Refer to the following section to install XR software on your target device if required.
 
-### Check for AR support on mobile devices
-
-If you're targeting mobile devices, your application needs to be able to detect support for AR Foundation to provide an alternative experience when AR isn't supported. This is relevant to projects that support ARCore, or ARKit for devices older than the iPhone 6s. iPhone models including and newer than the 6s support AR by default.
-
-To check whether AR is available on the target device might require checking a remote server for software availability. To check for AR support, call [CheckAvailability](xref:UnityEngine.XR.ARFoundation.ARSession.CheckAvailability), as shown in the following code example:
-
-[!code-cs[CheckForARSupport](../../../Tests/Runtime/CodeSamples/ARSessionSamples.cs#CheckForARSupport)]
-
-> [!TIP]
-> To learn more about the available session states, refer to [Session state](xref:arfoundation-session-arsession#session-state).
+<a id="install"></a>
 
 ### Install XR software on mobile devices
 
-If your target platform [supports install](#optional-feature-support), you can request the device to install or update necessary XR software.
+To attempt to install XR software, pass [InstallSoftwareIfNeeded](xref:UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded) to `TryStartAsync`.
 
-To attempt to install XR software, call [XRSessionSubsystem.InstallAsync](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystem.InstallAsync). When you call `XRSessionSubsystem.InstallAsync`, you can use the promised [SessionInstallationSession](xref:UnityEngine.XR.ARSubsystems.SessionInstallationStatus) to understand the result of the installation request.
+When AR isn't supported on the device, `TryStartAsync` returns an [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) with a `StatusCode.Unsupported` status code, which you can check to provide an alternative experience.
+
+The following example installs required software if needed, starts the session, and handles an unsupported device:
+
+[!code-cs[InstallAndStartSession](../../../Tests/Runtime/CodeSamples/ARSessionSamples.cs#InstallAndStartSession)]
 
 [!include[](../../snippets/apple-arkit-trademark.md)]

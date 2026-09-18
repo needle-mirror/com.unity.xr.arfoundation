@@ -48,7 +48,7 @@ The following table lists whether certain XR plug-in providers support each opti
 
 Your app can check at runtime whether a bounding box detection provider supports any optional features on the user's device. The [XRBoundingBoxSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRBoundingBoxSubsystemDescriptor) contains boolean properties for each optional feature that tell you whether they are supported.
 
-Refer to example code below to learn how to check for optional feature support:
+Refer to the example code below to learn how to check for optional feature support:
 
 [!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARBoundingBoxManagerSamples.cs#DescriptorChecks)]
 

@@ -21,6 +21,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_Plane)]
     [DisallowMultipleComponent]
     [HelpUrl("features/plane-detection/arplane")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARPlane : ARTrackable<BoundedPlane, ARPlane>
     {
         [SerializeField]

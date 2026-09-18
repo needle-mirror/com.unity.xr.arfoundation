@@ -122,7 +122,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Specifies the volume size around the environment probe's position. This is used for
-        /// for parallax correction when projecting the environment texture.
+        /// parallax correction when projecting the environment texture.
         /// </summary>
         /// <value>
         /// The bounding volume size of the environment probe.

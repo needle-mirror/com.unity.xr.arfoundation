@@ -12,6 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_TrackedImage)]
     [HelpUrl(typeof(ARTrackedImage))]
+    [Icon(Constants.arvrIconPath)]
     public class ARTrackedImage : ARTrackable<XRTrackedImage, ARTrackedImage>
     {
         /// <summary>

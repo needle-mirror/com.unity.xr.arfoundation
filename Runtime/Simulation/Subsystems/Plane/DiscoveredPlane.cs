@@ -1,12 +1,18 @@
 using System;
 using System.Text;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
 {
     struct DiscoveredPlane : IEquatable<DiscoveredPlane>, IDisposable
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly DiscoveredPlane s_Default = new(
                 TrackableId.invalidId,
                 TrackableId.invalidId,

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARSubsystems;
@@ -20,8 +23,20 @@ namespace UnityEngine.XR.Simulation
 
         // cached and reused to prevent GC
         static readonly Plane[] s_CameraPlanes = new Plane[k_FrustumPlaneCount];
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<SimulatedEnvironmentProbe> s_NeedsGeneratedCubemaps = new(k_InitialListCacheCapacity);
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<SimulatedEnvironmentProbe> s_HasGeneratedCubemaps = new(k_InitialListCacheCapacity);
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<SimulatedEnvironmentProbe> s_CollectedProbes = new(k_InitialListCacheCapacity);
 
         readonly List<XREnvironmentProbe> m_Added = new();

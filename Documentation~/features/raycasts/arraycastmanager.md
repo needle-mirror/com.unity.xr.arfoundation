@@ -35,4 +35,4 @@ To enable fallback physics-based ray casts, add an AR Plane Manager, AR Bounding
 
 ## Sample scene with ray casts
 
-The [Simple AR scene](https://github.com/Unity-Technologies/arfoundation-samples/blob/main/Assets/Scenes/SimpleAR/SimpleAR.unity) in the [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) GitHub repository provides an example scene using ray casting functionality against planes. You can use the configurations in this sample scene to get started with ray casting in your project.
+The [Raycasts sample](xref:arfoundation-samples-raycasts) scene in the [AR Foundation samples](xref:arfoundation-samples) provides an example scene using ray casting functionality against planes. You can use the configurations in this sample scene to get started with ray casting in your project.

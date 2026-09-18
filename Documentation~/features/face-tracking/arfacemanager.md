@@ -33,7 +33,7 @@ You can subscribe to `trackablesChanged` in one of two ways:
 
     [!code-cs[FacesChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#FacesChanged)]
 
-    b. Select your XR Origin GameObject, then click the **Add (+)** button on the AR Face Manger component's **trackablesChanged** property.
+    b. Select your XR Origin GameObject, then click the **Add (+)** button on the AR Face Manager component's **trackablesChanged** property.
 
     c. Using the Object picker (⊙), select either a GameObject that contains an instance of your component or an instance of your ScriptableObject, whichever is applicable.
 

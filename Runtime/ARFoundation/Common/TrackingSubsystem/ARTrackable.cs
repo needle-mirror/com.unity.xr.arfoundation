@@ -20,6 +20,7 @@ namespace UnityEngine.XR.ARFoundation
     /// - <see cref="ARTrackedImage"/>
     /// - <see cref="ARTrackedObject"/>
     /// </remarks>
+    [Icon(Constants.arvrIconPath)]
     public abstract class ARTrackable : MonoBehaviour, ITrackable
     {
         /// <inheritdoc/>

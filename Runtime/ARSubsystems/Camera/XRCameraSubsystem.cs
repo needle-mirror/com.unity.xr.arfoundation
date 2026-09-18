@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// Provides access to a device's camera.
     /// </summary>
     /// <remarks>
-    /// The <c>XRCameraSubsystem</c> links a Unity <c>Camera</c> to a device camera for video overlay (pass-thru
+    /// The <c>XRCameraSubsystem</c> links a Unity <c>Camera</c> to a device camera for video overlay (passthrough
     /// rendering). It also allows developers to query for environmental light estimation if available.
     /// </remarks>
     public class XRCameraSubsystem : XRSubsystem<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>
@@ -266,7 +266,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="defaultDescriptor">A default value used to fill the returned array before copying in real
             /// values. This ensures future additions to this <see langword="struct"/> are backwards compatible.</param>
-            /// <param name="allocator">The allocation strategy to use for the returned data..</param>
+            /// <param name="allocator">The allocation strategy to use for the returned data.</param>
             /// <returns>The current texture descriptors.</returns>
             public virtual NativeArray<XRTextureDescriptor> GetTextureDescriptors(
                 XRTextureDescriptor defaultDescriptor,
@@ -290,7 +290,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Get the enabled and disabled shader keywords for the Material.
             /// </summary>
-            /// <returns>Returns an <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
+            /// <returns>Returns a <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
             [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
             public virtual ShaderKeywords GetShaderKeywords() => default;
 
@@ -305,7 +305,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="cameraImageCinfo">The metadata required to construct a <see cref="XRCpuImage"/>.</param>
             /// <returns><see langword="true"/> if the camera image is acquired. Otherwise, <see langword="false"/>.</returns>
-            /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.</exception>
+            /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera images.</exception>
             public virtual bool TryAcquireLatestCpuImage(out XRCpuImage.Cinfo cameraImageCinfo)
             {
                 throw new NotSupportedException("getting camera image is not supported by this implementation");
@@ -624,7 +624,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Get the enabled and disabled shader keywords for the material.
         /// </summary>
-        /// <returns>Returns an <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
+        /// <returns>Returns a <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
         [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
         public ShaderKeywords GetShaderKeywords() => provider.GetShaderKeywords();
 
@@ -640,7 +640,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="cpuImage">A valid <see cref="XRCpuImage"/> if this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the image was acquired. Otherwise, <see langword="false"/>.</returns>
-        /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera image.</exception>
+        /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera images.</exception>
         /// <remarks>The returned <see cref="XRCpuImage"/> must be disposed to avoid resource leaks.</remarks>
         public bool TryAcquireLatestCpuImage(out XRCpuImage cpuImage)
         {

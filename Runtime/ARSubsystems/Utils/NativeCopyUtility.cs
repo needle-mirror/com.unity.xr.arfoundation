@@ -28,7 +28,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="length">The number of elements to copy.</param>
         /// <param name="allocator">The allocator to use when creating the <c>NativeArray</c>.</param>
         /// <returns>
-        /// A new <c>NativeArray</c> populating with <paramref name="defaultT"/> and <paramref name="source"/>.
+        /// A new <c>NativeArray</c> populated with <paramref name="defaultT"/> and <paramref name="source"/>.
         /// The caller owns the memory.
         /// </returns>
         public static unsafe NativeArray<T> PtrToNativeArrayWithDefault<T>(

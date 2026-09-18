@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEngine.SceneManagement;
 
@@ -19,8 +22,19 @@ namespace UnityEngine.XR.Simulation
         [SerializeField]
         SimulationEnvironment m_SimulationEnvironment;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static bool s_Initialized;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static event Action s_EnvironmentSetupFinished;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static string s_ActiveSceneName;
 
         internal static string activeSceneName => s_ActiveSceneName;
@@ -43,6 +57,9 @@ namespace UnityEngine.XR.Simulation
             remove => s_EnvironmentSetupFinished -= value;
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static event Action environmentTeardownStarted;
 
         public Scene environmentScene
@@ -55,6 +72,9 @@ namespace UnityEngine.XR.Simulation
 
         // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use
         // Reference type collections must also be cleared after use
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<Light> k_SimulationLights = new();
 
         protected static string GenerateUniqueSceneName() => $"{k_EnvironmentSceneName} {Guid.NewGuid().ToString()}";

@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The ID of the blend shape, as defined by the platform.
         /// Refer to [Face tracking platform support](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.2/manual/features/face-tracking/platform-support.html)
-        /// to learn if your target platform supports blend shapes, and if so, refer the provider plug-in manual
+        /// to learn if your target platform supports blend shapes, and if so, refer to the provider plug-in manual
         /// for that platform to understand the meaning of each ID value.
         /// </summary>
         public int blendShapeId => m_BlendShapeId;

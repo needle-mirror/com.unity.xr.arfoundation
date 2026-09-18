@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARPointCloud> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="ARPointCloud"/>s udpated since the last event.
+        /// The list of <see cref="ARPointCloud"/>s updated since the last event.
         /// </summary>
         public List<ARPointCloud> updated { get; private set; }
 

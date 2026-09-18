@@ -38,7 +38,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Resize the <c>NativeArray</c>s held by this struct. This method will deallocate
         /// the <c>NativeArray</c>s if they are not needed or if they are not the correct size.
         /// If they are already the correct size, this method does not mutate those <c>NativeArray</c>s.
-        /// This facilitate memory reuse when the number of vertices or triangles in the face does
+        /// This facilitates memory reuse when the number of vertices or triangles in the face does
         /// not change frequently.
         /// </summary>
         /// <param name="vertexCount">The number of vertices in the mesh.</param>
@@ -86,7 +86,7 @@ namespace UnityEngine.XR.ARSubsystems
         NativeArray<Vector2> m_UVs;
 
         /// <summary>
-        /// Disposes of the all four native arrays:
+        /// Disposes of all four native arrays:
         /// <see cref="vertices"/>, <see cref="normals"/>, <see cref="uvs"/>, and <see cref="indices"/>.
         /// Checking for creation before calling Dispose.
         /// </summary>

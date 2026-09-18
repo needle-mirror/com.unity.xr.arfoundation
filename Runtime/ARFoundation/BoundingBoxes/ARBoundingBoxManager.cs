@@ -13,6 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [RequireComponent(typeof(XROrigin))]
     [HelpUrl(typeof(ARBoundingBoxManager))]
+    [Icon(Constants.arvrIconPath)]
     public class ARBoundingBoxManager : ARTrackableManager<
         XRBoundingBoxSubsystem,
         XRBoundingBoxSubsystemDescriptor,

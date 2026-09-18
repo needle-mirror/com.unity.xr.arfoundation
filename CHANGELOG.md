@@ -8,17 +8,47 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [6.6.2] - 2026-08-28
+## [6.7.0-pre.1] - 2026-09-18
 
-### Fixed
+### Added
 
-- Fixed the `GizmoSolidColor` shader so that it compiles with DXC, as required by DirectX 12.
+- Added the following APIs to implement OpenXR support for image tracking:
+  - [XRImageTrackingSubsystem.TryCreateRuntimeLibraryAsync](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.TryCreateRuntimeLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)), an asynchronous method for creating runtime reference image libraries. This supports providers whose runtime library creation completes asynchronously.
+  - [ARTrackedImageManager.TrySetReferenceLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)) and [TrySetReferenceLibrary](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibrary(UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary)), which create or assign a reference image library on the manager.
+  - [XRImageTrackingSubsystemDescriptor.supportsRuntimeLibrary](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsRuntimeLibrary) (and the corresponding `Cinfo.supportsRuntimeLibraryDelegate`), which a provider sets to report whether it supports image libraries that can be instantiated at runtime.
+- Added the following APIs for authoring reference images and reference image libraries:
+  - [XRReferenceImageBuilder](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageBuilder) for constructing [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage) instances in code, which enables you to assemble reference image libraries at runtime.
+  - The [MovingImageType](xref:UnityEngine.XR.ARSubsystems.MovingImageType) enum and corresponding `movingImageType` support on [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage), [XRReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary), and [XRReferenceImageBuilder](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageBuilder), so you can mark a reference image as static or dynamic.
+- Added `XRSubsystemStartOptions.InstallSoftwareIfNeeded`, a start option that requests a subsystem check whether required software is installed on the device and attempts to install it, if needed, before starting.
+- Added `TrackableTypeExtensions`, a new static class with an `IsPlane` extension method that tests whether a `TrackableType` value includes any plane sub-type, and an `allPlaneTypes` property that returns the combined mask of all plane sub-types.
+- Added `XRResultStatus.StatusCode.LimitReached` as a new error code that AR Foundation methods can return.
+- Added `XRPlaneSubsystemDescriptor.supportsPlaneSubsumption`, to allow a platform to indicate whether it will perform plane subsumption.
 
-## [6.6.1] - 2026-07-30
+### Deprecated
+
+- Deprecated and replaced the following APIs, as necessary to implement OpenXR support for image tracking:
+  - `XRImageTrackingSubsystem.CreateRuntimeLibrary` with [TryCreateRuntimeLibraryAsync](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.TryCreateRuntimeLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken))
+  - `ARTrackedImageManager.referenceLibrary` setter with [TrySetReferenceLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)) or [TrySetReferenceLibrary](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibrary(UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary))
+  - `ARTrackedImageManager.CreateRuntimeLibrary` with [TryCreateRuntimeLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TryCreateRuntimeLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken))
+- Deprecated the following APIs. Pass [XRSubsystemStartOptions.InstallSoftwareIfNeeded](xref:UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded) to [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead:
+  - `ARSession.CheckAvailability` and `ARSession.Install`
+  - `ARSessionState.CheckingAvailability`, `ARSessionState.NeedsInstall`, and `ARSessionState.Installing`
+  - `XRSessionSubsystem.GetAvailabilityAsync`, `XRSessionSubsystem.InstallAsync`, and corresponding `XRSessionSubsystem.Provider` methods
+  - `XRSessionSubsystemDescriptor.supportsInstall` and `Cinfo.supportsInstall`
+- Deprecated the following APIs. Use [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) instead:
+  - `SessionAvailability` enum and `SessionAvailabilityExtensions` class
+  - `SessionInstallationStatus` enum
+- Deprecated `TrackableType.Planes` and replaced with `TrackableTypeExtensions.IsPlane` and `TrackableTypeExtensions.allPlaneTypes`.
 
 ### Fixed
 
 - Fixed a `NullReferenceException` that occurred if you opened the Editor with both AR Foundation 6.6.0 or newer and XR Plug-in Management 4.7.0 or newer installed.
+- Fixed the `GizmoSolidColor` shader so that it compiles with DXC, as required by DirectX 12.
+- Fixed `ARCameraBackground` so that its static initialization no longer throws on CoreCLR.
+- Fixed AR Foundation types that unintentionally rendered Gizmos to the Scene view to no longer render Gizmos.
+- Fixed issues related to the `AutoStaticsCleanupAttribute`, as required by Unity versions 6000.7.0b1 and newer.
+- Fixed `ARDebugMenu` so that it gracefully stops setup when no `ARSession` or `XROrigin` is found in the scene. ([UUM-144301](https://issuetracker.unity.com/issues/6627/ar-debug-menu-throws-failed-to-find-arsession-and-nullreferenceexception-errors-when-entering-play-mode))
+- Fixed [ARPlaneMeshVisualizer](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer) documentation to describe the correct visibility condition for the mesh and line renderers of a subsumed plane.
 
 ## [6.6.0] - 2026-07-09
 

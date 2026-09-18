@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
@@ -44,6 +45,7 @@ namespace UnityEngine.XR.Simulation.Tests
             Assert.IsFalse(xrSubsystem.running);
         }
 
+#pragma warning disable CS0618
         static bool CheckARAvailabilitySync<TSubsystem>(TSubsystem subsystem)
             where TSubsystem : XRSessionSubsystem
         {
@@ -56,6 +58,7 @@ namespace UnityEngine.XR.Simulation.Tests
             var availability = availabilityPromise.result;
             return availability.IsSupported() && availability.IsInstalled();
         }
+#pragma warning restore CS0618
 
         [Test]
         [Order(1)]
@@ -210,13 +213,13 @@ namespace UnityEngine.XR.Simulation.Tests
         [Test]
         [Order(4)]
         [Category("SimulationSubsystemsFunctional")]
-        public void ImageTrackingSubsystemFunctionalWithLibrary()
+        public async Task ImageTrackingSubsystemFunctionalWithLibrary()
         {
             // Image tracking subsystem needs a image library to run
             var subsystem = m_Loader.GetLoadedSubsystem<XRImageTrackingSubsystem>();
             var imageLibrary = ScriptableObject.CreateInstance<XRReferenceImageLibrary>();
             imageLibrary.name = $"{nameof(SimulationSubsystemsTestFixture)} ImageTrackingSubsystem";
-            subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(imageLibrary);
+            subsystem.imageLibrary = (await subsystem.TryCreateRuntimeLibraryAsync(imageLibrary)).value;
 
             CheckSubsystemFunctional<XRImageTrackingSubsystem, SimulationImageTrackingSubsystem>();
         }

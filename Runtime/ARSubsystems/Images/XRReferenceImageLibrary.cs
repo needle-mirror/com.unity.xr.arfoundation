@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils.Collections;
 #if UNITY_EDITOR
 using System.Linq;
 using UnityEditor;
@@ -15,9 +16,10 @@ namespace UnityEngine.XR.ARSubsystems
     /// <remarks>
     /// Image libraries are immutable at runtime. To create and manipulate an image library via Editor scripts, use the
     /// extension methods in [XRReferenceImageLibraryExtensions](xref:UnityEditor.XR.ARSubsystems.XRReferenceImageLibraryExtensions).
-    /// If you need to mutate the library at runtime, see <see cref="MutableRuntimeReferenceImageLibrary"/>.
+    /// To work with image libraries at runtime, create a <see cref="RuntimeReferenceImageLibrary"/>. If you need to
+    /// mutate the library at runtime, see <see cref="MutableRuntimeReferenceImageLibrary"/>.
     /// </remarks>
-    [CreateAssetMenu(fileName="ReferenceImageLibrary", menuName="XR/Reference Image Library", order=1001)]
+    [CreateAssetMenu(fileName = "ReferenceImageLibrary", menuName = "XR/Reference Image Library", order = 1001)]
     [HelpUrl("features/image-tracking")]
     public class XRReferenceImageLibrary : ScriptableObject,
         IReferenceImageLibrary, ISerializationCallbackReceiver, IEnumerable<XRReferenceImage>
@@ -35,6 +37,10 @@ namespace UnityEngine.XR.ARSubsystems
 
         [SerializeField]
         internal List<XRReferenceImage> m_Images = new();
+
+        [SerializeField]
+        [Tooltip("Indicates if images contained in this library move in the real world. This property is overridden by the moving image setting on individual images within the library if that setting is anything other than MovingImageType.Unspecified.")]
+        MovingImageType m_MovingImageType;
 
         /// <summary>
         /// The number of images in the library.
@@ -56,10 +62,20 @@ namespace UnityEngine.XR.ARSubsystems
         public IReadOnlyDictionary<string, byte[]> dataStore => m_DataStore.dictionary;
 
         /// <summary>
+        /// Indicates whether the images in this library are expected to move in the real world.
+        /// </summary>
+        /// <remarks>
+        /// This value is overridden by the moving image setting of an individual image in the library if that image's
+        /// setting is anything other than <see cref="ARSubsystems.MovingImageType.Unspecified"/>. Defaults to
+        /// <see cref="ARSubsystems.MovingImageType.Unspecified"/>.
+        /// </remarks>
+        public MovingImageType movingImageType => m_MovingImageType;
+
+        /// <summary>
         /// Gets an enumerator which can be used to iterate over the reference images in this library.
         /// </summary>
         /// <example>
-        /// <para>This examples iterates over the reference images contained in the library.</para>
+        /// <para>This example iterates over the reference images contained in the library.</para>
         /// <code>
         /// XRReferenceImageLibrary imageLibrary = ...
         /// foreach (var referenceImage in imageLibrary)
@@ -101,6 +117,48 @@ namespace UnityEngine.XR.ARSubsystems
 
                 return m_Images[index];
             }
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="XRReferenceImageLibrary"/> instance with the provided data.
+        /// </summary>
+        /// <param name="images">The reference images to include in the library.</param>
+        /// <param name="movingImageType">The moving image type for the library, which serves as the default for any contained <see cref="XRReferenceImage"/> with a moving image type of <see cref="MovingImageType.Unspecified"/>.</param>
+        /// <returns>A new <see cref="XRReferenceImageLibrary"/> instance.</returns>
+        public static XRReferenceImageLibrary Create(
+            ReadOnlyStructSpan<XRReferenceImage> images,
+            MovingImageType movingImageType = MovingImageType.Unspecified)
+        {
+            var library = CreateInstance<XRReferenceImageLibrary>();
+            library.m_Images.AddRange(images);
+            library.m_MovingImageType = movingImageType;
+
+#if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
+#if !UNITY_6000_6_OR_NEWER
+            if (Debug.isDebugBuild)
+#endif
+            {
+                var seenGuids = new HashSet<Guid>();
+                for (var i = 0; i < library.m_Images.Count; i++)
+                {
+                    var image = library.m_Images[i];
+                    if (image.guid == Guid.Empty)
+                    {
+                        Debug.LogWarning(
+                            $"XRReferenceImageLibrary.Create: reference image '{image.name}' has an empty GUID. Assign a " +
+                            "unique GUID (for example via XRReferenceImageBuilder.WithGuid) or image lookup will collide.");
+                    }
+                    else if (!seenGuids.Add(image.guid))
+                    {
+                        Debug.LogWarning(
+                            $"XRReferenceImageLibrary.Create: duplicate reference image GUID {image.guid} ('{image.name}'). " +
+                            "Reference image GUIDs must be unique or image lookup will collide.");
+                    }
+                }
+            }
+#endif
+
+            return library;
         }
 
         /// <summary>

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -13,7 +16,11 @@ using ImageType = UnityEngine.XR.Simulation.SimulationXRCpuImageApi.ImageType;
 
 namespace UnityEngine.XR.Simulation
 {
+#if UNITY_6000_5_OR_NEWER
+    partial class CameraTextureProvider : MonoBehaviour
+#else
     class CameraTextureProvider : MonoBehaviour
+#endif
     {
         internal readonly struct TextureReadbackEventArgs
         {
@@ -38,11 +45,21 @@ namespace UnityEngine.XR.Simulation
             }
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         internal static event Action<Camera> preRenderCamera;
+
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         internal static event Action<Camera> postRenderCamera;
         internal event Action<CameraTextureFrameEventArgs> cameraFrameReceived;
         internal event Action<TextureReadbackEventArgs> onTextureReadbackFulfilled;
 
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         static Material s_DepthCopyShader;
 
         Camera m_XrCamera;

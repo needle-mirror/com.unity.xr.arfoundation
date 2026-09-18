@@ -1,5 +1,8 @@
 using System;
 using System.Linq;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEditor.XR.Management;
 using UnityEngine;
 using UnityEngine.XR.Management;
@@ -9,8 +12,14 @@ namespace UnityEditor.XR.Simulation
 {
     class SimulationEditorUtilities
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static event Action simulationSubsystemLoaderAddedOrRemoved;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static bool s_SimulationSubsystemEnabled;
 
         internal static bool simulationSubsystemEnabled => CheckIsSimulationSubsystemEnabled();

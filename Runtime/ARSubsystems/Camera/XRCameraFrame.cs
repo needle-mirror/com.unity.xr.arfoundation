@@ -379,11 +379,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="displayMatrix">The 4x4 display matrix for the frame.</param>
         /// <param name="trackingState">The camera's <see cref="TrackingState"/> when the frame was captured.</param>
         /// <param name="nativePtr">The native pointer associated with the frame.</param>
-        /// <param name="properties">The set of flags that indicates which properties are included in the frame..</param>
+        /// <param name="properties">The set of flags that indicates which properties are included in the frame.</param>
         /// <param name="averageIntensityInLumens">The estimated intensity of the real-world environment, in lumens.</param>
         /// <param name="exposureDuration">The camera exposure duration of the frame, in seconds with sub-millisecond precision.</param>
         /// <param name="exposureOffset">The camera exposure offset of the frame for lighting scaling.</param>
-        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of strongest real-world directional light source.</param>
+        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of the strongest real-world directional light source.</param>
         /// <param name="mainLightColor">The estimated color of the strongest real-world directional light source.</param>
         /// <param name="mainLightDirection">The estimated direction of the strongest real-world directional light source.</param>
         /// <param name="ambientSphericalHarmonics">The ambient spherical harmonic coefficients that represent the real-world lighting.</param>
@@ -445,7 +445,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="averageIntensityInLumens">The estimated intensity of the real-world environment, in lumens.</param>
         /// <param name="exposureDuration">The camera exposure duration of the frame, in seconds with sub-millisecond precision.</param>
         /// <param name="exposureOffset">The camera exposure offset of the frame for lighting scaling.</param>
-        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of strongest real-world directional light source.</param>
+        /// <param name="mainLightIntensityInLumens">The estimated intensity in lumens of the strongest real-world directional light source.</param>
         /// <param name="mainLightColor">The estimated color of the strongest real-world directional light source.</param>
         /// <param name="mainLightDirection">The estimated direction of the strongest real-world directional light source.</param>
         /// <param name="ambientSphericalHarmonics">The ambient spherical harmonic coefficients that represent the real-world lighting.</param>

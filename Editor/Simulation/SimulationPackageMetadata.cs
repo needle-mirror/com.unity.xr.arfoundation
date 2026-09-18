@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEditor.XR.Management.Metadata;
 using UnityEngine;
 using UnityEngine.XR.Simulation;
@@ -22,18 +25,21 @@ namespace UnityEditor.XR.Simulation
             public List<IXRLoaderMetadata> loaderMetadata { get; set; }
         }
 
-        static IXRPackageMetadata s_Metadata = new SimulationPackageMetadata()
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
+        static IXRPackageMetadata s_Metadata = new SimulationPackageMetadata
         {
             packageName = "AR Foundation",
             packageId = "com.unity.xr.arfoundation",
             settingsType = typeof(XRSimulationRuntimeSettings).FullName,
-            loaderMetadata = new List<IXRLoaderMetadata>()
+            loaderMetadata = new List<IXRLoaderMetadata>
             {
-                new SimulationLoaderMetadata()
+                new SimulationLoaderMetadata
                 {
                     loaderName = "XR Simulation",
                     loaderType = typeof(SimulationLoader).FullName,
-                    supportedBuildTargets = new List<BuildTargetGroup>()
+                    supportedBuildTargets = new List<BuildTargetGroup>
                     {
                         BuildTargetGroup.Standalone,
                     }

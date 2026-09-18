@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.Simulation
@@ -79,13 +82,41 @@ namespace UnityEngine.XR.Simulation
 
         // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use
         // Reference type collections must also be cleared after use
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Queue<Vector2Int> k_VoxelsQueue = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Queue<Vector2Int> k_VoxelsToRevisit = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<Vector3> k_VoxelCornersInPlane = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<Vector3> k_PotentialPlaneVertices = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<Vector3> k_PotentialPlanePoints = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly HashSet<Vector2Int> k_PotentialPlaneVoxels = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly HashSet<LayerPlaneData> k_RemovedPlanesSet = new();
+
         static readonly Vector3[] k_PlaneBoundingBox = new Vector3[4];
 
         /// <summary>

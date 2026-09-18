@@ -1,13 +1,26 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
 namespace UnityEngine.XR.ARFoundation.Tests
 {
+#if UNITY_6000_5_OR_NEWER
+    partial class ARSessionTestFixture
+#else
     class ARSessionTestFixture
+#endif
     {
+        // This fixture intentionally exercises the deprecated availability/install flow
+        // (CheckAvailability, GetAvailabilityAsync, SessionAvailability, supportsInstall, and the
+        // NeedsInstall/Installing states) to keep regression coverage until those APIs are removed.
+        // CS0618: use of obsolete members. CS0672: overriding an obsolete member (MockProvider).
+#pragma warning disable CS0618, CS0672
+
         enum SupportsInstall
         {
             No,
@@ -16,6 +29,9 @@ namespace UnityEngine.XR.ARFoundation.Tests
 
         class MockProvider : XRSessionSubsystem.Provider
         {
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             public static SessionAvailability availability;
 
             public override Promise<SessionAvailability> GetAvailabilityAsync()
@@ -32,6 +48,9 @@ namespace UnityEngine.XR.ARFoundation.Tests
 
         static string GetSubsystemName(SupportsInstall supportsInstall) => $"SessionThatSupportsInstall{supportsInstall.ToString()}";
 
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         static XRGeneralSettings s_OldInstance;
 
         static XRSessionSubsystemDescriptor.Cinfo GetDescriptorCinfo(SupportsInstall supportsInstall)
@@ -59,8 +78,14 @@ namespace UnityEngine.XR.ARFoundation.Tests
 
         class MockLoader : XRLoaderHelper
         {
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             public static SupportsInstall supportsInstall;
 
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new();
 
             XRSessionSubsystem sessionSubsystem => GetLoadedSubsystem<XRSessionSubsystem>();
@@ -84,11 +109,9 @@ namespace UnityEngine.XR.ARFoundation.Tests
             MockProvider.availability = availability;
             var xrManager = ScriptableObject.CreateInstance<XRManagerSettings>();
             xrManager.name = $"{nameof(ARSessionTestFixture)} XR Manager Settings";
-#pragma warning disable CS0618
             var mockLoader = ScriptableObject.CreateInstance<MockLoader>();
             mockLoader.name = $"{nameof(ARSessionTestFixture)} Mock Loader";
             xrManager.loaders.Add(mockLoader);
-#pragma warning restore CS0618
             xrManager.InitializeLoaderSync();
 #if UNITY_EDITOR
             s_OldInstance = XRGeneralSettings.Instance;
@@ -105,9 +128,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
         {
             var xrManager = XRGeneralSettings.Instance.Manager;
             xrManager.DeinitializeLoader();
-#pragma warning disable CS0618
             xrManager.loaders.Clear();
-#pragma warning restore CS0618
             ScriptableObject.Destroy(xrManager);
             ScriptableObject.Destroy(XRGeneralSettings.Instance);
 #if UNITY_EDITOR

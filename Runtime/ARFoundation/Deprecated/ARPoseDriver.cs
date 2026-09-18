@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -12,6 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     [Obsolete("ARPoseDriver is now deprecated, please use the InputSystem TrackedPoseDriver component instead.")]
     [HelpUrl(typeof(ARPoseDriver))]
+    [Icon(Constants.arvrIconPath)]
     public class ARPoseDriver : MonoBehaviour
     {
         internal struct NullablePose
@@ -59,6 +63,9 @@ namespace UnityEngine.XR.ARFoundation
                 transform.localRotation = updatedPose.rotation.Value;
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static internal InputDevice? s_InputTrackingDevice = null;
 
         void OnInputDeviceConnected(InputDevice device) => CheckConnectedDevice(device);

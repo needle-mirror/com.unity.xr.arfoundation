@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using Unity.XR.CoreUtils.Collections;
 using UnityEngine.XR.ARSubsystems;
@@ -22,12 +25,26 @@ namespace UnityEngine.XR.Simulation
         class SimulationProvider : Provider
         {
             const string k_SimulationOcclusionEnabledMaterialKeyword = "SIMULATION_OCCLUSION_ENABLED";
+
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             static readonly List<string> k_EnvironmentDepthKeywords = new() { k_SimulationOcclusionEnabledMaterialKeyword };
+
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             static readonly ReadOnlyList<string> k_EnvironmentDepthKeywordsReadOnly = new(k_EnvironmentDepthKeywords);
 
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             static readonly XRShaderKeywords k_EnvironmentDepthEnabledKeywords =
                 new(k_EnvironmentDepthKeywordsReadOnly, null);
 
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             static readonly XRShaderKeywords k_EnvironmentDepthDisabledKeywords =
                 new(null, k_EnvironmentDepthKeywordsReadOnly);
 

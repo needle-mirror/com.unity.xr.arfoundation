@@ -109,7 +109,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="trackableId">The human body trackable identifier for which to query.</param>
         /// <param name="allocator">The memory allocator to use for the returned arrays.</param>
-        /// <param name="skeleton">The array of skeleton joints to update and returns.</param>
+        /// <param name="skeleton">The array of skeleton joints to update and return.</param>
         public void GetSkeleton(TrackableId trackableId, Allocator allocator, ref NativeArray<XRHumanBodyJoint> skeleton)
             => provider.GetSkeleton(trackableId, allocator, ref skeleton);
 

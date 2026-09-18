@@ -16,6 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Menu that is added to a scene to surface tracking data and visualize trackables in order to aid in debugging.
     /// </summary>
+    [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7. For a replacement session configuration debug visualizer, go to Package Manager > AR Foundation > Samples > Debug Visualizers.")]
     [RequireComponent(typeof(Canvas))]
     [HelpUrl("debug-ar-scenes")]
     public class ARDebugMenu : MonoBehaviour
@@ -251,14 +252,14 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         [SerializeField]
-        [Tooltip("A menu that displays an informative warning messages.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
+        [Tooltip("A menu that displays informative warning messages.\n For an already configured menu, right-click on the Scene Inspector > XR > ARDebugMenu.")]
         GameObject m_DebugOptionsToastMenu;
 
         /// <summary>
         /// The menu that displays informative warning messages.
         /// </summary>
         /// <value>
-        /// A menu that displays an informative warning messages.
+        /// A menu that displays informative warning messages.
         /// </value>
         public GameObject debugOptionsToastMenu
         {
@@ -806,6 +807,9 @@ namespace UnityEngine.XR.ARFoundation
                 m_ShowOriginButton.onValueChanged.AddListener(delegate {ToggleOriginVisibility();});
             }
 
+            if (!enabled || m_Origin == null)
+                return;
+
             var planeManager = m_Origin.GetComponent<ARPlaneManager>();
             if(m_ShowPlanesButton && m_LineRendererPrefab && planeManager)
             {
@@ -896,6 +900,9 @@ namespace UnityEngine.XR.ARFoundation
 
         void ToggleOriginVisibility()
         {
+            if (m_Origin == null)
+                return;
+
             if(m_OriginAxis == null)
             {
                 m_OriginAxis = Instantiate(m_OriginAxisPrefab, m_Origin.transform);

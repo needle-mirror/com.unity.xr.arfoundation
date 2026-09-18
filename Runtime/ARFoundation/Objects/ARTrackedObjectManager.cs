@@ -17,6 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [AddComponentMenu("XR/AR Foundation/AR Tracked Object Manager")]
     [HelpUrl("features/object-tracking")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARTrackedObjectManager : ARTrackableManager<
         XRObjectTrackingSubsystem,
         XRObjectTrackingSubsystemDescriptor,

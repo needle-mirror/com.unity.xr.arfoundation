@@ -41,7 +41,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Indicates whether the provider implementation can provide a value for
         /// <see cref="XRCameraFrame.averageColorTemperature">XRCameraFrame.averageColorTemperature</see>.
         /// </summary>
-        /// <value><see langword="true"/> if the implementation can provide average camera temperature.
+        /// <value><see langword="true"/> if the implementation can provide average color temperature.
         /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageColorTemperature { get; set; }
 
@@ -115,7 +115,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Indicates whether the provider implementation supports the ability to set the camera's focus mode.
-        /// If <see langword="false"/>,the <c>set</c> accessor for
+        /// If <see langword="false"/>, the <c>set</c> accessor for
         /// <see cref="XRCameraSubsystem.autoFocusRequested">XRCameraSubsystem.autoFocusRequested</see> will have no effect.
         /// </summary>
         /// <value><see langword="true"/> if the implementation supports focus modes. Otherwise, <see langword="false"/>.</value>
@@ -285,7 +285,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRCameraFrame.averageColorTemperature">XRCameraFrame.averageColorTemperature</see>.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if the implementation can provide average camera temperature.
+        /// <see langword="true"/> if the implementation can provide average color temperature.
         /// Otherwise, <see langword="false"/>.</value>
         public bool supportsAverageColorTemperature { get; private set; }
 
@@ -464,7 +464,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// Indicates whether the provider implementation can provide a value for
             /// <see cref="XRCameraFrame.averageColorTemperature">XRCameraFrame.averageColorTemperature</see>.
             /// </summary>
-            /// <value><see langword="true"/> if the implementation can provide average camera temperature.
+            /// <value><see langword="true"/> if the implementation can provide average color temperature.
             /// Otherwise, <see langword="false"/>.</value>
             public bool supportsAverageColorTemperature { get; set; }
 
@@ -538,7 +538,7 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Indicates whether the provider implementation supports the ability to set the camera's focus mode.
-            /// If <see langword="false"/>,the <c>set</c> accessor for
+            /// If <see langword="false"/>, the <c>set</c> accessor for
             /// <see cref="XRCameraSubsystem.autoFocusRequested">XRCameraSubsystem.autoFocusRequested</see> will have no effect.
             /// </summary>
             /// <value><see langword="true"/> if the implementation supports focus modes. Otherwise, <see langword="false"/>.</value>
@@ -696,7 +696,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Registers a camera subsystem implementation based on the given subsystem parametersㄝ and validates that the
+        /// Registers a camera subsystem implementation based on the given subsystem parameters, and validates that the
         /// <see cref="Cinfo.id"/> and <see cref="Cinfo.providerType"/>
         /// properties are properly specified.
         /// </summary>

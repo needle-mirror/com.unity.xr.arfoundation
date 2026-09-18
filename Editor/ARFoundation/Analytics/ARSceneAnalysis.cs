@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
@@ -8,6 +11,9 @@ namespace UnityEditor.XR.ARFoundation
 {
     class ARSceneAnalysis
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Type[] k_ArManagerTypes =
         {
             typeof(ARSession),
@@ -30,7 +36,14 @@ namespace UnityEditor.XR.ARFoundation
         };
 
         // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<GameObject> k_RootObjects = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<MonoBehaviour> k_ArManagers = new();
 
         public static ARUsageAnalyticsEvent.ARManagerInfo[] GetARManagersInfo(Scene scene)

@@ -21,6 +21,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [AddComponentMenu("XR/AR Foundation/AR Point Cloud Manager")]
     [HelpUrl("features/point-clouds")]
+    [Icon(Constants.arvrIconPath)]
     public class ARPointCloudManager : ARTrackableManager<
         XRPointCloudSubsystem,
         XRPointCloudSubsystemDescriptor,

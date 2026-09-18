@@ -14,6 +14,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_Anchor)]
     [DisallowMultipleComponent]
     [HelpUrl(typeof(ARAnchor))]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARAnchor : ARTrackable<XRAnchor, ARAnchor>
     {
         /// <summary>

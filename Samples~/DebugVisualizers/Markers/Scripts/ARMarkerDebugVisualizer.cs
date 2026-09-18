@@ -95,7 +95,7 @@ namespace UnityEngine.XR.ARFoundation.PackageSamples.DebugVisualizers
             m_LineRenderer.endWidth = 0.0025f;
             m_LineRenderer.loop = true;
 
-            // We can set these immediately because we know they are won't change
+            // We can set these immediately because we know they won't change
             m_TrackableId = m_ARMarker.trackableId;
             m_MarkerId = m_ARMarker.markerId;
             m_MarkerType = m_ARMarker.markerType;

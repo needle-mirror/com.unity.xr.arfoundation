@@ -18,7 +18,7 @@ To understand each of the camera sample scenes, refer to the following sections:
 | [HDR light estimation](#hdr-light) | Reads HDR light information on supported platforms. |
 | [Background rendering order](#background-rendering-order) | Provides an example of changing the camera's background rendering order. |
 | [Camera grain](#camera-grain) (ARKit) | Implements the camera grain effect on ARKit. |
-| [EXIF data](#exif-data) | Demonstrates how to access camera frame's EXIF metadata. |
+| [EXIF data](#exif-data) | Demonstrates how to access the camera frame's EXIF metadata. |
 | [Image stabilization](#image-stabilization) (ARCore) | Implements image stabilization on supported ARCore devices. |
 | [Camera torch mode](#torch-mode) | Demonstrates how to activate the device's torch. |
 
@@ -98,7 +98,7 @@ This sample is available on ARKit only, and requires a device running iOS 13 or 
 
 ## EXIF data scene
 
-The `EXIF Data` scene demonstrates how to access camera frame's EXIF metadata.
+The `EXIF Data` scene demonstrates how to access the camera frame's EXIF metadata.
 
 You can find values for all the supported EXIF tags on screen. Refer to `ExifDataLogger.cs` for more details.
 

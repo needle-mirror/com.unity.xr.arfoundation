@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<AREnvironmentProbe> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="AREnvironmentProbe"/>s udpated since the last event.
+        /// The list of <see cref="AREnvironmentProbe"/>s updated since the last event.
         /// </summary>
         public List<AREnvironmentProbe> updated { get; private set; }
 

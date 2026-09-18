@@ -45,7 +45,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// This struct is an initializer for the creation of a <see cref="XRDepthSubsystemDescriptor"/>.
         /// </summary>
         /// <remarks>
-        /// Depth data provider should create  a descriptor during <c>InitializeOnLoad</c> using
+        /// A depth data provider should create a descriptor during <c>InitializeOnLoad</c> using
         /// the parameters here to specify which of the XRDepthSubsystem features it supports.
         /// </remarks>
         public struct Cinfo : IEquatable<Cinfo>

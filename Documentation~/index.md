@@ -5,7 +5,7 @@ uid: arfoundation-manual
 
 AR Foundation enables you to create multiplatform augmented reality (AR) apps with Unity. In an AR Foundation project, you choose which AR features to enable by adding the corresponding manager components to your scene. When you build and run your app on an AR device, AR Foundation enables these features using the platform's native AR SDK, so you can create once and deploy to the world's leading AR platforms.
 
-![A screenshot from a mobile device shows an interior office environment. Yellow polygons indicate that planes have been detected on the floor, seats, and other surfaces. The user has placed a magenta cube on one of the planes via raycasting.](images/sample-simple-ar.png)<br/>*The [Simple AR sample](https://github.com/Unity-Technologies/arfoundation-samples#simple-ar) scene shows you how to get started with plane detection and raycasting*
+![A screenshot from a mobile device shows an interior office environment. Yellow polygons indicate that planes have been detected on the floor, seats, and other surfaces. The user has placed a magenta cube on one of the planes via raycasting.](images/sample-simple-ar.png)<br/>*The [Raycasts sample](xref:arfoundation-samples-raycasts) scene shows you how to get started with plane detection and raycasting*
 
 > [!TIP]
 > AR Foundation is an important tool for building an AR app with Unity, but your app may require other tools as well. For more information about Unity's AR tools and support, refer to the [Augmented reality](https://unity.com/solutions/xr/ar) homepage.
@@ -76,7 +76,7 @@ The following table lists the available features in each Unity-supported provide
 | [Face tracking](xref:arfoundation-face-tracking)                   |   Yes   | Yes |          |            |     Yes    |                  |               |
 | [Body tracking](xref:arfoundation-body-tracking)                   |         | Yes |          |            |            |                  |               |
 | [Point clouds](xref:arfoundation-point-clouds)                     |   Yes   | Yes |          |            |            |                  |      Yes      |
-| [Ray casts](xref:arfoundation-raycasts)                            |   Yes   | Yes |          |     Yes    |     Yes    |                  |      Yes      |
+| [Ray casts](xref:arfoundation-raycasts)                            |   Yes   | Yes |          |     Yes    |     Yes    |      Yes         |      Yes      |
 | [Anchors](xref:arfoundation-anchors)                               |   Yes   | Yes |   Yes    |     Yes    |     Yes    |      Yes         |      Yes      |
 | [Meshing](xref:arfoundation-meshing)                               |         | Yes |   Yes    |     Yes    |     Yes    |                  |      Yes      |
 | [Environment probes](xref:arfoundation-environment-probes)         |   Yes   | Yes |   Yes    |            |            |                  |      Yes      |

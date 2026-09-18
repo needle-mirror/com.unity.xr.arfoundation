@@ -23,7 +23,7 @@ The center position and rotation of the marker in world space. The `Pose` is ori
 
 ### Size
 
-The physical size (width and height) of the marker in meters. The width corresponds to the markers local X-axis. The height corresponds to the markers local Z-axis.
+The physical size (width and height) of the marker in meters. The width corresponds to the marker's local X-axis. The height corresponds to the marker's local Z-axis.
 
 ### Marker type
 

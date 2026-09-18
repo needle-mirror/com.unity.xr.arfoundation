@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 
@@ -19,6 +22,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [AddComponentMenu("XR/AR Foundation/AR Raycast Manager")]
     [HelpUrl("features/raycasts")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARRaycastManager : ARTrackableManager<
         XRRaycastSubsystem, XRRaycastSubsystemDescriptor,
         XRRaycastSubsystem.Provider,
@@ -28,7 +32,14 @@ namespace UnityEngine.XR.ARFoundation
         [Tooltip("If not null, instantiates this prefab for each raycast.")]
         GameObject m_RaycastPrefab;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Comparison<ARRaycastHit> s_RaycastHitComparer = CompareRaycastHit;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<NativeArray<XRRaycastHit>> s_NativeRaycastHits = new();
 
         /// <summary>
@@ -288,7 +299,7 @@ namespace UnityEngine.XR.ARFoundation
                     ARTrackable trackable = null;
 
                     // Planes
-                    if ((nativeHit.hitType & TrackableType.Planes) != 0 && cachedPlaneManagerFound)
+                    if (nativeHit.hitType.IsPlane() && cachedPlaneManagerFound)
                     {
                         trackable = FallbackRaycastRegistry.CachedPlaneManager.GetPlane(nativeHit.trackableId);
                     }
@@ -331,7 +342,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="raycast">The <see cref="ARRaycast"/> being updated.</param>
         /// <param name="sessionRelativeData">The new data associated with the raycast. All spatial
-        /// data is is session-relative space.</param>
+        /// data is in session-relative space.</param>
         protected override void OnAfterSetSessionRelativeData(ARRaycast raycast, XRRaycast sessionRelativeData)
         {
             raycast.plane = FallbackRaycastRegistry.CachedPlaneManager != null ? FallbackRaycastRegistry.CachedPlaneManager.GetPlane(sessionRelativeData.hitTrackableId) : null;

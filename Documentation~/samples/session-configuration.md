@@ -3,7 +3,7 @@ uid: arfoundation-samples-session-configuration
 ---
 # Session configuration samples
 
-The AR Foundation Samples repository provides sample scenes to how to configure your [AR Session](xref:arfoundation-session). You can open these samples in Unity from the `Assets/Scenes` folder.
+The AR Foundation Samples repository provides sample scenes to demonstrate how to configure your [AR Session](xref:arfoundation-session). You can open these samples in Unity from the `Assets/Scenes` folder.
 
 ## Check support scene
 

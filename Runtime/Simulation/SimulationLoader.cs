@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
@@ -9,17 +12,64 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     public class SimulationLoader : XRLoaderHelper
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRSessionSubsystemDescriptor> s_SessionDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRCameraSubsystemDescriptor> s_CameraDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRInputSubsystemDescriptor> s_InputDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRPlaneSubsystemDescriptor> s_PlaneDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRPointCloudSubsystemDescriptor> s_PointCloudDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRImageTrackingSubsystemDescriptor> s_ImageTrackingDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRRaycastSubsystemDescriptor> s_RaycastDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRMeshSubsystemDescriptor> s_MeshDescriptors  = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XREnvironmentProbeSubsystemDescriptor> s_ProbeDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRAnchorSubsystemDescriptor> s_AnchorDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XROcclusionSubsystemDescriptor> s_OcclusionDescriptors = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRBoundingBoxSubsystemDescriptor> s_BoundingBoxDescriptors = new();
 
         /// <summary>

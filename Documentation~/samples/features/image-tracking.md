@@ -32,4 +32,10 @@ The `Image Tracking With Multiple Prefabs` scene demonstrates how to track multi
 
 You can also change prefabs at runtime. This sample includes a button that switches between the original and alternative prefab for the first image in the reference image library. Refer to `DynamicPrefab.cs` for example code.
 
+## Multiple image tracking libraries scene
+
+The `Multiple Image Tracking Libraries` scene demonstrates how to replace the active reference image library while the session is running.
+
+`SwapImageLibrary.cs` includes a button that cycles through a list of reference image libraries, calling [TrySetReferenceLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)) on each. Images from the previous library stop tracking, and AR Foundation detects images from the new library in their place.
+
 [!include[](../../snippets/apple-arkit-trademark.md)]

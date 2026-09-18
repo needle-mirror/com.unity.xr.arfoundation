@@ -40,7 +40,7 @@ Check the [ARMarker.dataBuffer.bufferType](xref:UnityEngine.XR.ARSubsystems.XRSp
 
 ## Performance considerations
 
-Retrieving marker's encoded data can have performance implications due to memory allocations. For performance critical applications, it is important to understand how to minimize this overhead. `TryGetStringData` and `TryGetBytesData` allocate new managed memory (`string` and `byte[]` respectively) on every successful call. In performance critical applications, especially those that retrieve markers' encoded data frequently, this can lead to garbage collection pressure and impact performance.
+Retrieving a marker's encoded data can have performance implications due to memory allocations. For performance critical applications, it is important to understand how to minimize this overhead. `TryGetStringData` and `TryGetBytesData` allocate new managed memory (`string` and `byte[]` respectively) on every successful call. In performance critical applications, especially those that retrieve markers' encoded data frequently, this can lead to garbage collection pressure and impact performance.
 
 For the best performance, you should retrieve the encoded data as a `NativeArray<byte>` by calling the subsystem level API directly. This approach works for all data types and avoids the managed heap allocation.
 

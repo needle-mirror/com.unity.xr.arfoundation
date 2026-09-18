@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;
 using static UnityEngine.XR.Simulation.SimulationUtils;
@@ -16,6 +19,7 @@ namespace UnityEngine.XR.Simulation
     {
         int m_TrackingUpdateIntervalMilliseconds = 100;
         int m_PreviousLibraryCount;
+        SimulationRuntimeImageLibrary m_PreviousLibrary;
         SimulationRuntimeImageLibrary m_SimulationRuntimeImageLibrary;
         TrackedImageDiscoveryStrategy m_ImageDiscoveryStrategy;
         bool m_Initialized;
@@ -32,6 +36,9 @@ namespace UnityEngine.XR.Simulation
         /// by the discoverer.  If no params are set, then the default behavior of this discoverer
         /// is to use the XRSimulationRuntimeSettings.
         /// </summary>
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static ITrackedImageDiscoveryParams trackedImageDiscoveryParams { get; set; }
 
         public SimulationRuntimeImageLibrary simulationRuntimeImageLibrary
@@ -167,6 +174,7 @@ namespace UnityEngine.XR.Simulation
                 m_TrackingUpdateIntervalMilliseconds = trackingUpdateIntervalMilliseconds;
 
             m_PreviousLibraryCount = m_SimulationRuntimeImageLibrary?.count ?? 0;
+            m_PreviousLibrary = m_SimulationRuntimeImageLibrary;
 
             foreach (var rootObject in simScene.GetRootGameObjects())
             {
@@ -210,7 +218,10 @@ namespace UnityEngine.XR.Simulation
                 {
                     var hasLibrary = m_SimulationRuntimeImageLibrary != null;
                     var currentLibraryCount = hasLibrary ? m_SimulationRuntimeImageLibrary.count : 0;
-                    var hasLibraryChanged = hasLibrary && currentLibraryCount > m_PreviousLibraryCount;
+
+                    var hasLibraryChanged =
+                        m_SimulationRuntimeImageLibrary != m_PreviousLibrary
+                        || currentLibraryCount != m_PreviousLibraryCount;
 
                     for (var i = 0; i < m_ImagesInScene.Count; i++)
                     {
@@ -218,13 +229,18 @@ namespace UnityEngine.XR.Simulation
                         var prevTrackingState = m_TrackingStatesOfImages[i];
                         var newTrackingState = m_ImageDiscoveryStrategy.ComputeTrackingState(image);
 
-                        if (!m_ReferenceImagesForImages[i].HasValue && hasLibraryChanged)
+                        if (hasLibraryChanged)
                         {
-                            if (m_SimulationRuntimeImageLibrary.TryGetReferenceImageWithGuid(
+                            if (hasLibrary
+                                && m_SimulationRuntimeImageLibrary.TryGetReferenceImageWithGuid(
                                     image.imageAssetGuid,
                                     out var foundImage))
                             {
                                 m_ReferenceImagesForImages[i] = foundImage;
+                            }
+                            else
+                            {
+                                m_ReferenceImagesForImages[i] = null;
                             }
                         }
 
@@ -235,6 +251,7 @@ namespace UnityEngine.XR.Simulation
                     }
 
                     m_PreviousLibraryCount = currentLibraryCount;
+                    m_PreviousLibrary = m_SimulationRuntimeImageLibrary;
                 }
 
                 await RunWithoutCancellationExceptions(Task.Delay(m_TrackingUpdateIntervalMilliseconds, cancellationToken));

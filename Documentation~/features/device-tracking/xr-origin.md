@@ -24,7 +24,7 @@ When your application runs on device, the position and rotation of the XR Origin
 The [XROrigin](xref:xr-core-utils-xr-origin-reference) component uses the Camera Offset GameObject to apply the **Camera Y Offset** value when its **Tracking Origin Mode** is set to **Device**. You can apply additional camera offsets by inserting another GameObject between XR Origin and Camera Offset.
 
 > [!NOTE]
-> You should set the [XROrigin.CameraYOffset](xref:Unity.XR.CoreUtils.XROrigin.CameraYOffset) value to `0` to avoid adding a height offet to your camera and trackables unless your app has a specific reason to do so.
+> You should set the [XROrigin.CameraYOffset](xref:Unity.XR.CoreUtils.XROrigin.CameraYOffset) value to `0` to avoid adding a height offset to your camera and trackables unless your app has a specific reason to do so.
 
 At runtime, the [XROrigin](xref:xr-core-utils-xr-origin-reference) component creates another child GameObject named "Trackables". When any [managers](xref:arfoundation-managers) detect and add new trackables to a scene, they will instantiate them as children of the Trackables GameObject. As child GameObjects, instantiated trackables and their positions, rotations, and scales are defined relative to the XR Origin.
 
@@ -34,6 +34,6 @@ At runtime, the [XROrigin](xref:xr-core-utils-xr-origin-reference) component cre
 
 ## Device targets
 
-[XROrigin](xref:xr-core-utils-xr-origin-reference) is a shared class between AR Foundation and the [XR Interaction Toolkit](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.1/manual/index.html) package. XR Interaction Toolkit is an optional additional package that can used to build AR experiences with Unity.
+[XROrigin](xref:xr-core-utils-xr-origin-reference) is a shared class between AR Foundation and the [XR Interaction Toolkit](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.1/manual/index.html) package. XR Interaction Toolkit is an optional additional package that can be used to build AR experiences with Unity.
 
 The default [XROrigin](xref:xr-core-utils-xr-origin-reference) in AR Foundation is pre-configured for mobile AR experiences; however, if you wish to target AR HMD's with handheld controller inputs, you can [install XR Interaction Toolkit](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.1/manual/installation.html) for additional [XROrigin](xref:xr-core-utils-xr-origin-reference) configurations. For more information on [XROrigin](xref:xr-core-utils-xr-origin-reference) configurations, see the full [XR Origin component documentation](https://docs.unity3d.com/Packages/com.unity.xr.core-utils@2.1/manual/xr-origin.html).

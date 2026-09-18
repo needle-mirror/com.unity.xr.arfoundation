@@ -1,8 +1,19 @@
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
+
 namespace UnityEditor.XR.Simulation
 {
     static class AREditorAnalytics
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static readonly SimulationUIAnalyticsEvent simulationUIAnalyticsEvent = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static readonly SimulationSessionAnalyticsEvent simulationSessionAnalyticsEvent = new();
 
         [InitializeOnLoadMethod]

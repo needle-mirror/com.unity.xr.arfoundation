@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Unity.Collections;
 using UnityEngine.Assertions;
 using UnityEngine.SubsystemsImplementation;
@@ -11,6 +12,8 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRImageTrackingSubsystem
         : TrackingSubsystem<XRTrackedImage, XRImageTrackingSubsystem, XRImageTrackingSubsystemDescriptor, XRImageTrackingSubsystem.Provider>
     {
+        RuntimeReferenceImageLibrary m_ImageLibrary;
+
         /// <summary>
         /// Constructs a subsystem. Do not invoke directly; call <c>Create</c> on the <see cref="XRImageTrackingSubsystemDescriptor"/> instead.
         /// </summary>
@@ -43,10 +46,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get or set the reference image library. This is the set of images to look for in the environment.
         /// </summary>
         /// <remarks>
-        /// A <see cref="RuntimeReferenceImageLibrary"/> is created at runtime and can be modifiable
-        /// (see <see cref="MutableRuntimeReferenceImageLibrary"/>). You can create a <see cref="RuntimeReferenceImageLibrary"/>
-        /// from an <see cref="XRReferenceImageLibrary"/> using
-        /// <see cref="CreateRuntimeLibrary(XRReferenceImageLibrary)"/>.
+        /// A <see cref="RuntimeReferenceImageLibrary"/> is created at runtime. Depending on the provider, it might be mutable
+        /// (a <see cref="MutableRuntimeReferenceImageLibrary"/>) or immutable after creation. You can create a <see cref="RuntimeReferenceImageLibrary"/> from an
+        /// <see cref="XRReferenceImageLibrary"/> using <see cref="TryCreateRuntimeLibraryAsync(XRReferenceImageLibrary, CancellationToken)"/>. The synchronous
+        /// <see cref="CreateRuntimeLibrary(XRReferenceImageLibrary)"/> method is deprecated as of AR Foundation 6.7.
         /// </remarks>
         /// <exception cref="System.ArgumentNullException">Thrown if the subsystem has been started, and you attempt to set the image library to null.</exception>
         /// <seealso cref="OnStart()"/>
@@ -81,16 +84,37 @@ namespace UnityEngine.XR.ARSubsystems
         /// (see <see cref="XRImageTrackingSubsystemDescriptor.supportsMutableLibrary"/>), then the returned
         /// library will be a <see cref="MutableRuntimeReferenceImageLibrary"/>.
         /// </remarks>
-        /// <param name="serializedLibrary">An existing <see cref="XRReferenceImageLibrary"/> created at edit time, or <c>null</c> to create an empty image library.</param>
+        /// <param name="serializedLibrary">An existing <see cref="XRReferenceImageLibrary"/>, or <c>null</c> to create an empty image library.</param>
         /// <returns>A new <see cref="RuntimeReferenceImageLibrary"/> representing the deserialized version of <paramref name="serializedLibrary"/>
         /// or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
         /// <seealso cref="RuntimeReferenceImageLibrary"/>
+        [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.")]
         public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary)
         {
             var library = provider.CreateRuntimeLibrary(serializedLibrary);
             Assert.IsFalse(ReferenceEquals(library, null));
             return library;
         }
+
+        /// <summary>
+        /// Asynchronously creates a <see cref="RuntimeReferenceImageLibrary"/> from an existing
+        /// <see cref="XRReferenceImageLibrary"/>, or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.
+        /// </summary>
+        /// <remarks>
+        /// A provider can limit the number of simultaneous calls to this method. If that limit is
+        /// reached, subsequent calls fail with <see cref="XRResultStatus.StatusCode.LimitReached"/>
+        /// until an operation completes. Use <paramref name="cancellationToken"/> to cancel an operation in progress.
+        /// </remarks>
+        /// <param name="serializedLibrary">An existing <see cref="XRReferenceImageLibrary"/>, or <c>null</c> to create an empty image library.</param>
+        /// <param name="cancellationToken">A cancellation token, which you can use to cancel the operation in progress.</param>
+        /// <returns>The result of the async operation containing the new <see cref="RuntimeReferenceImageLibrary"/>.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the provider doesn't implement
+        /// <see cref="Provider.TryCreateRuntimeLibraryAsync(XRReferenceImageLibrary, CancellationToken)"/>.</exception>
+        /// <exception cref="System.OperationCanceledException">Thrown if the operation is canceled by
+        /// <paramref name="cancellationToken"/>.</exception>
+        public Awaitable<Result<RuntimeReferenceImageLibrary>> TryCreateRuntimeLibraryAsync(
+            XRReferenceImageLibrary serializedLibrary, CancellationToken cancellationToken = default)
+            => provider.TryCreateRuntimeLibraryAsync(serializedLibrary, cancellationToken);
 
         /// <summary>
         /// Retrieve the changes in the state of tracked images (added, updated, and removed) since the last call to <c>GetChanges</c>.
@@ -149,7 +173,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// Sets the set of images to search for in the environment.
             /// </summary>
             /// <remarks>
-            /// Setting this to <c>null</c> implies the subsystem should stop detecting and tracking images.
+            /// Setting this to <c>null</c> or an empty library implies the subsystem should stop detecting and tracking images.
             /// </remarks>
             public abstract RuntimeReferenceImageLibrary imageLibrary { set; }
 
@@ -157,9 +181,29 @@ namespace UnityEngine.XR.ARSubsystems
             /// Creates a <see cref="RuntimeReferenceImageLibrary"/> from an existing <see cref="XRReferenceImageLibrary"/>,
             /// or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.
             /// </summary>
-            /// <param name="serializedLibrary">A <see cref="XRReferenceImageLibrary"/> to deserialize.</param>
+            /// <param name="serializedLibrary">A <see cref="XRReferenceImageLibrary"/> to build the <see cref="RuntimeReferenceImageLibrary"/> from.</param>
             /// <returns>The runtime version of <paramref name="serializedLibrary"/> or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
+            [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.")]
             public abstract RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary);
+
+            /// <summary>
+            /// Asynchronously creates a <see cref="RuntimeReferenceImageLibrary"/> from an existing
+            /// <see cref="XRReferenceImageLibrary"/>, or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.
+            /// </summary>
+            /// <remarks>
+            /// Providers that create libraries asynchronously should throw
+            /// <see cref="OperationCanceledException"/> if <paramref name="cancellationToken"/> is canceled before
+            /// the operation completes. Providers that complete synchronously can ignore
+            /// <paramref name="cancellationToken"/>.
+            /// </remarks>
+            /// <param name="serializedLibrary">A <see cref="XRReferenceImageLibrary"/> to build the <see cref="RuntimeReferenceImageLibrary"/> from,
+            /// or <c>null</c> to create an empty library.</param>
+            /// <param name="cancellationToken">A cancellation token, which you can use to cancel the operation in progress.</param>
+            /// <returns>The result of the async operation that contains the new <see cref="RuntimeReferenceImageLibrary"/>.</returns>
+            /// <exception cref="System.NotSupportedException">Thrown if not overridden by the derived class.</exception>
+            public virtual Awaitable<Result<RuntimeReferenceImageLibrary>> TryCreateRuntimeLibraryAsync(
+                XRReferenceImageLibrary serializedLibrary, CancellationToken cancellationToken = default)
+                => throw new NotSupportedException("This provider doesn't implement TryCreateRuntimeLibraryAsync.");
 
             /// <summary>
             /// The requested maximum number of moving images to track in real time.
@@ -183,8 +227,6 @@ namespace UnityEngine.XR.ARSubsystems
             /// </remarks>
             public virtual int currentMaxNumberOfMovingImages => 0;
         }
-
-        RuntimeReferenceImageLibrary m_ImageLibrary;
 
 #if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
 #if UNITY_6000_6_OR_NEWER

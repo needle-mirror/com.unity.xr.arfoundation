@@ -4,7 +4,7 @@ namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
     /// Flags that represent trackable types in XR.
-    /// A trackable is feature in the physical environment that a device is able to track, such as a surface.
+    /// A trackable is a feature in the physical environment that a device is able to track, such as a surface.
     /// Often used in conjunction with <see cref="XRRaycastHit"/>.
     /// </summary>
     [Flags]
@@ -67,6 +67,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRRaycastSubsystem.Raycast(Ray, TrackableType, Unity.Collections.Allocator)"/>,
         /// the ray is considered to have hit if the ray intersects with any of the plane types.
         /// </remarks>
+        [Obsolete("Planes is deprecated as of AR Foundation 6.7. Use TrackableTypeExtensions.IsPlane or TrackableTypeExtensions.allPlaneTypes instead.")]
         Planes =
             PlaneWithinPolygon |
             PlaneWithinBounds |

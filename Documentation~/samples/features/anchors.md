@@ -19,7 +19,7 @@ The `ARAnchorManager` can create two kinds of anchors based on a ray cast hit:
 
 ## Anchor visualizer
 
-The AR Foundation Samples GitHub repository contains a prefab to visualize anchors in your scene. You can use this prefab to get that you can use to get started with visualizing anchors:
+The AR Foundation Samples GitHub repository contains a prefab to visualize anchors in your scene. You can use this prefab to get started with visualizing anchors:
 
 | Prefab | Description |
 | :----- | :---------- |

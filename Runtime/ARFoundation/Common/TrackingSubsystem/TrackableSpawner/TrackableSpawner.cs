@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEngine.Assertions;
 using UnityEngine.XR.ARSubsystems;
@@ -35,6 +38,10 @@ namespace UnityEngine.XR.ARFoundation
                 return s_Instance;
             }
         }
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static TrackableSpawner s_Instance;
 
         XROrigin m_Origin;

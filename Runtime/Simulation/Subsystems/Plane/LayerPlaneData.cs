@@ -1,9 +1,15 @@
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.Simulation
 {
     class LayerPlaneData
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Stack<LayerPlaneData> k_Pool = new();
 
         // Voxels already contains one element--increase capacity to 32

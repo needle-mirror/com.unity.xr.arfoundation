@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Attempts to get a list of marker types supported by this subsystem implementation.
         /// </summary>
         /// <remarks>
-        /// The list indicates which marker families (such as QR codes, MicroQR codes ArUco tags, or AprilTag)
+        /// The list indicates which marker families (such as QR codes, MicroQR codes, ArUco tags, or AprilTag)
         /// can be detected by this subsystem. Use this for capability checks and feature gating.
         ///
         /// This property returns a `Result` so you must check if the

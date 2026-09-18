@@ -16,6 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_PointCloud)]
     [DisallowMultipleComponent]
     [HelpUrl(typeof(ARPointCloud))]
+    [Icon(Constants.arvrIconPath)]
     public class ARPointCloud : ARTrackable<XRPointCloud, ARPointCloud>
     {
         XRPointCloudData m_Data;

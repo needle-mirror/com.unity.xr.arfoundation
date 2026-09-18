@@ -40,8 +40,49 @@ namespace UnityEngine.XR.ARSubsystems
         /// for more details.
         /// </param>
         public XRReferenceImage(
-            SerializableGuid guid, SerializableGuid textureGuid,
-            Vector2? size, string name, Texture2D texture)
+            SerializableGuid guid,
+            SerializableGuid textureGuid,
+            Vector2? size,
+            string name,
+            Texture2D texture)
+            : this(guid, textureGuid, size, name, texture, MovingImageType.Unspecified)
+        {
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="XRReferenceImage"/>.
+        /// </summary>
+        /// <param name="guid">The [Guid](https://docs.microsoft.com/en-us/dotnet/api/system.guid?view=netframework-4.8)
+        /// associated with this image.</param>
+        /// <param name="textureGuid">
+        /// The [Guid](https://docs.microsoft.com/en-us/dotnet/api/system.guid?view=netframework-4.8)
+        /// of the source texture as it appeared in the
+        /// [AssetDatabase](https://docs.unity3d.com/ScriptReference/AssetDatabase.html)
+        /// in the Editor.
+        /// </param>
+        /// <param name="size">
+        /// Optional. The size of the image, in meters. This can improve image detection,
+        /// and might be required by some platforms.
+        /// </param>
+        /// <param name="name">A name associated with this reference image.</param>
+        /// <param name="texture">
+        /// The source texture which this reference image represents.
+        /// This can be `null` to avoid including the texture in
+        /// the Player build if you don't want that. See `XRReferenceImageLibraryExtensions.SetTexture`
+        /// for more details.
+        /// </param>
+        /// <param name="movingImageType">
+        /// Indicates whether this image is expected to move in the real world. When set to a value other than
+        /// <see cref="ARSubsystems.MovingImageType.Unspecified"/>, it overrides the moving image setting on the image
+        /// library that contains it.
+        /// </param>
+        public XRReferenceImage(
+            SerializableGuid guid,
+            SerializableGuid textureGuid,
+            Vector2? size,
+            string name,
+            Texture2D texture,
+            MovingImageType movingImageType)
         {
             m_SerializedGuid = guid;
             m_SerializedTextureGuid = textureGuid;
@@ -49,6 +90,7 @@ namespace UnityEngine.XR.ARSubsystems
             m_Size = size.HasValue ? size.Value : Vector2.zero;
             m_Name = name;
             m_Texture = texture;
+            m_MovingImageType = movingImageType;
         }
 
         /// <summary>
@@ -99,6 +141,13 @@ namespace UnityEngine.XR.ARSubsystems
         /// for more details.
         /// </summary>
         public Texture2D texture => m_Texture;
+
+        /// <summary>
+        /// Indicates whether this image is expected to move in the real world. When set to a value other than
+        /// <see cref="ARSubsystems.MovingImageType.Unspecified"/>, this overrides the moving image setting on the image
+        /// library that contains it.
+        /// </summary>
+        public MovingImageType movingImageType => m_MovingImageType;
 
         /// <summary>
         /// Provides a string representation suitable for debug logging.
@@ -162,6 +211,10 @@ namespace UnityEngine.XR.ARSubsystems
 
         [SerializeField]
         internal Texture2D m_Texture;
+
+        [SerializeField]
+        [Tooltip("Indicates if this image moves in the real world. This property overrides the moving image setting on the image library that contains it.")]
+        internal MovingImageType m_MovingImageType;
 #pragma warning restore CS0649
     }
 }

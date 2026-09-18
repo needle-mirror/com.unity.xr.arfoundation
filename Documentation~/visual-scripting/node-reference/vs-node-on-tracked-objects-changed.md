@@ -5,7 +5,7 @@ uid: arfoundation-vs-node-on-tracked-objects-changed
 
 Triggers when AR Tracked Objects have changed. AR Tracked Objects can be added, updated, and/or removed every frame if there is an enabled AR Tracked Object Manager in the scene.
 
-![On Tracked Objects Changed](../../images/visual-scripting/vs-on-tracked-objects-changed.png)<br/>*On Tracked Objects Change node, shown with Get Variable*
+![On Tracked Objects Changed](../../images/visual-scripting/vs-on-tracked-objects-changed.png)<br/>*On Tracked Objects Changed node, shown with Get Variable*
 
 ## Input Data Ports
 

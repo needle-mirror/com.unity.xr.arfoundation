@@ -14,7 +14,7 @@ The [ARPlane](xref:UnityEngine.XR.ARFoundation.ARPlane) component is a type of [
 
 ## Plane life cycle
 
-As trackables, AR planes have a life cycle that consists of three phases: added, updated, and removed. Your app can [Respond to detected planes](xref:arfoundation-plane-arplanemanager#respond-to-detected-planes) during your AR session by subscribing to the AR Plane Manger component's `trackablesChanged` event.
+As trackables, AR planes have a life cycle that consists of three phases: added, updated, and removed. Your app can [Respond to detected planes](xref:arfoundation-plane-arplanemanager#respond-to-detected-planes) during your AR session by subscribing to the AR Plane Manager component's `trackablesChanged` event.
 
 ### Added
 

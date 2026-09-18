@@ -1,4 +1,7 @@
 using System;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEditor.XR.Management;
@@ -11,12 +14,30 @@ namespace UnityEditor.XR.Simulation
     [InitializeOnLoad]
     static class XREnvironmentViewUtilities
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static bool s_HasEnvironmentSettings;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static BaseSimulationSceneManager s_SimulationSceneManager;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static SimulationRenderSettings s_SimulationRenderSettings;
 
         // Used to lock out the use of temp render settings and lighting when switching scenes.
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static bool s_RenderingOverrideEnabled;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static bool s_LightingOverrideActive;
 
         internal static SimulationRenderSettings simulationRenderSettings => s_SimulationRenderSettings;

@@ -1,10 +1,16 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.Simulation
 {
     static class SimulationSubsystemAnalytics
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly HashSet<string> s_StartedSubsystems = new();
 
         public static IEnumerable<string> StartedSubsystems => s_StartedSubsystems;

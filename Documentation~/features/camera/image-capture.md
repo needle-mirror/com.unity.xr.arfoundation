@@ -22,7 +22,7 @@ There are two ways to access device camera images:
 
 Camera Textures are usually [external Textures](https://docs.unity3d.com/ScriptReference/Texture2D.CreateExternalTexture.html) that do not last beyond a frame boundary. You can copy the Camera image to a [Render Texture](https://docs.unity3d.com/Manual/class-RenderTexture.html) to persist it or process it further.
 
-The following code sets up a [command buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html) that performs a GPU copy or ["blit"](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.Blit.html) to a Render Texture of your choice immediately. The code clears the the render texture before the copy by calling [ClearRenderTarget](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.ClearRenderTarget.html).
+The following code sets up a [command buffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html) that performs a GPU copy or ["blit"](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.Blit.html) to a Render Texture of your choice immediately. The code clears the render texture before the copy by calling [ClearRenderTarget](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.ClearRenderTarget.html).
 
 [!code-cs[GPU_Blit](../../../Tests/Runtime/CodeSamples/CpuImageSamples.cs#GPU_Blit)]
 

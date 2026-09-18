@@ -7,7 +7,7 @@ Any custom background shaders to render onto XR device screens will use a displa
 
 ## XR vertex shader operation
 
-The vertex shaders will perform the following mathematical operation, where "t<sub>i</sub>" are the texture coordinates of the CPU side image, "D" is the display matrix, and "t<sub>d</sub>" are the texture coordinates of XR device's screen:
+The vertex shaders will perform the following mathematical operation, where "t<sub>i</sub>" are the texture coordinates of the CPU side image, "D" is the display matrix, and "t<sub>d</sub>" are the texture coordinates of the XR device's screen:
 
 ![A vector-matrix multiplication equation. It is a 1 by 4 row vector times a 4 by 4 matrix, which equals another 1 by 4 row vector. The components of the first 1 by 4 row vector are "t i dot x", "t i dot y", 1, 0. "t i" are the texture coordinates of the image. The 4 by 4 matrix is the display matrix called "D." The components of the second 1 by 4 row vector are "t d dot x", "t d dot y", 1, 0. "t_d" are the texture coordinates of the device screen.](../../images/ar-background-shader-math-operation.png)<br/>*Use the display matrix and image texture coordinates to find the output device coordinates*
 

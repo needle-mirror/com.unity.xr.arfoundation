@@ -1,4 +1,7 @@
 using System.Text;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -8,6 +11,9 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     internal static class SharedStringBuilder
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static StringBuilder instance { get; } = new();
     }
 }

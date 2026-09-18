@@ -9,7 +9,7 @@ The AR Foundation meshing feature generates a mesh based on scans of the physica
 
 Refer to the following topics to learn more about meshing in AR Foundation:
 
-| **Topic** | **Desription** |
+| **Topic** | **Description** |
 | :-------- | :------------- |
 | [Meshing platform support](xref:arfoundation-meshing-platform-support) | Understand which platforms support meshing features. |
 | [AR Mesh Manager component](xref:arfoundation-meshing-manager) | Learn about the AR Mesh Manager component. |

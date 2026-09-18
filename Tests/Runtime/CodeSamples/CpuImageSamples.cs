@@ -77,7 +77,7 @@ namespace UnityEngine.XR.ARFoundation
             // Create a Texture2D to store the converted image
             var texture = new Texture2D(image.width, image.height, TextureFormat.RGBA32, false);
 
-            // Texture2D allows us write directly to the raw texture data as an optimization
+            // Texture2D allows us to write directly to the raw texture data as an optimization
             var rawTextureData = texture.GetRawTextureData<byte>();
             try
             {

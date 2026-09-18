@@ -3,7 +3,7 @@ using System.ComponentModel;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// Represents the environment mode.
+    /// Represents the environment depth mode.
     /// </summary>
     public enum EnvironmentDepthMode
     {

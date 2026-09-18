@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine;
 
 namespace UnityEditor.XR.ARSubsystems
@@ -25,13 +28,44 @@ namespace UnityEditor.XR.ARSubsystems
         const float k_FolderButtonWidth = 25f;
 
         // Can't initialize these Rects until OnEnable because it's unsafe to access necessary Editor APIs until then
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_BuildForTargetLabelRect;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_BuildForTargetFieldRect;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_OutputDirectoryLabelRect;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_OutputDirectoryFieldRect;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_OutputDirectoryButtonRect;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_CleanOutputDirectoryLabelRect;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_CleanOutputDirectoryToggleRect;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Rect s_BuildAssetBundlesButtonRect;
 
         static readonly GUIContent k_BuildForTargetContent = new(
@@ -46,6 +80,9 @@ namespace UnityEditor.XR.ARSubsystems
             "Clean Output Directory",
             "If enabled, delete the contents of the output directory before building AssetBundles.");
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Texture2D s_FolderIcon;
 
         // Note: visionOS (lowercase 'v') is the official product name

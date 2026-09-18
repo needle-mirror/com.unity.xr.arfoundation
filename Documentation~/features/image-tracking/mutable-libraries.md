@@ -9,14 +9,14 @@ If this is your first exposure to reference image libraries, first refer to [Int
 
 ## Create a runtime reference image library
 
-When AR Foundation uses a reference image library at runtime, it converts the library from type `XRReferenceImageLibrary`, the Editor-friendly representation, to `RuntimeReferenceImageLibrary`, the runtime representation. You need a `RuntimeReferenceImageLibrary` to use mutable library APIs, and you can create one from an `XRReferenceImageLibrary` using [CreateRuntimeLibrary](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.CreateRuntimeLibrary(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary)):
+When AR Foundation uses a reference image library at runtime, it converts the library from type `XRReferenceImageLibrary`, the Editor-friendly representation, to `RuntimeReferenceImageLibrary`, the runtime representation. You need a `RuntimeReferenceImageLibrary` to use mutable library APIs, and you can create one from an `XRReferenceImageLibrary` using [TryCreateRuntimeLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TryCreateRuntimeLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)):
 
 [!code-cs[trackedimage_createruntimelibraryfromserialized](../../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_createruntimelibraryfromserialized)]
 
 > [!NOTE]
 > The ordering of the [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage)s in the `RuntimeReferenceImageLibrary` is undefined, so it might not match the order in which the images appeared in the source `XRReferenceImageLibrary`.
 
-Alternatively, to create an empty library, call `CreateRuntimeLibrary` without arguments:
+Alternatively, to create an empty library, pass `null` to `TryCreateRuntimeLibraryAsync`:
 
 [!code-cs[trackedimage_createemptyruntimelibrary](../../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_createemptyruntimelibrary)]
 
@@ -53,7 +53,7 @@ To ensure images maintain their aspect ratio when imported:
 2. Under **Advanced** settings, change the **Non-Power of 2** texture import setting to **None**.
 
 >[!NOTE]
-> For textures with power-of 2 aspect ratios, **Non-Power of 2** setting will not be selectable as no adjustments are necessary.
+> For textures with power-of 2 aspect ratios, the **Non-Power of 2** setting will not be selectable as no adjustments are necessary.
 
 ## Related resources
 

@@ -1,6 +1,9 @@
 using System;
 using NUnit.Framework;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.SubsystemsImplementation;
 using UnityEngine.SubsystemsImplementation.Extensions;
 
@@ -100,7 +103,11 @@ namespace UnityEngine.XR.ARSubsystems.Tests
             });
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRTestSubsystemDescriptor> s_Descs = new List<XRTestSubsystemDescriptor>();
+
         static XRTestSubsystem CreateTestSubsystem()
         {
             SubsystemManager.GetSubsystemDescriptors(s_Descs);

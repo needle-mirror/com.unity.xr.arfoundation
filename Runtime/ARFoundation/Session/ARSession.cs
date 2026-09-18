@@ -1,5 +1,8 @@
 using System;
 using System.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
 
@@ -22,19 +25,36 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_Session)]
     [AddComponentMenu("XR/AR Foundation/AR Session")]
     [HelpUrl("features/session")]
+    [Icon(Constants.arvrIconPath)]
+#if UNITY_6000_5_OR_NEWER
+    public sealed partial class ARSession :
+#else
     public sealed class ARSession :
+#endif
         SubsystemLifecycleManager<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {
         // Internal for tests
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         internal static ARSessionState s_State;
 
         /// <summary>
         /// The reason AR tracking was lost.
         /// </summary>
         public static NotTrackingReason notTrackingReason => s_NotTrackingReason;
+
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         static NotTrackingReason s_NotTrackingReason;
 
+#pragma warning disable CS0618
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         static SessionAvailability s_Availability;
+#pragma warning restore CS0618
 
         int m_VSyncCount;
         int m_TargetFrameRate;
@@ -119,6 +139,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// This event is invoked whenever the <see cref="state"/> changes.
         /// </summary>
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
         public static event Action<ARSessionStateChangedEventArgs> stateChanged;
 
         /// <summary>
@@ -213,8 +236,12 @@ namespace UnityEngine.XR.ARFoundation
         /// The availability check can be asynchronous, so this is implemented as a coroutine.
         /// It is safe to call this multiple times; if called a second time while an availability
         /// check is being made, it returns a new coroutine which waits on the first.
+        ///
+        /// Use <see cref="XRSubsystem{TSubsystem, TSubsystemDescriptor, TProvider}.TryStartAsync"/>
+        /// with <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> instead.
         /// </remarks>
         /// <returns>An <c>IEnumerator</c> used for a coroutine.</returns>
+        [Obsolete("CheckAvailability has been deprecated in AR Foundation version 6.7. Use XRSubsystemStartOptions.InstallSoftwareIfNeeded with TryStartAsync instead.")]
         public static IEnumerator CheckAvailability()
         {
             // Wait if availability is currently being checked.
@@ -270,11 +297,16 @@ namespace UnityEngine.XR.ARFoundation
         /// You must call <see cref="CheckAvailability"/> before trying to start the installation,
         /// and the <see cref="state"/> must not be <see cref="ARSessionState.Unsupported"/>
         /// or this method will throw <see cref="System.InvalidOperationException"/>.
+        /// </para><para>
+        /// Use <c>TryInstallAsync</c> on the platform-specific session subsystem, or pass
+        /// <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> to
+        /// <see cref="XRSubsystem{TSubsystem, TSubsystemDescriptor, TProvider}.TryStartAsync"/> instead.
         /// </para>
         /// </remarks>
         /// <returns>An <c>IEnumerator</c> used for a coroutine.</returns>
         /// <exception cref="System.InvalidOperationException">Thrown if <see cref="state"/> is
         ///     <see cref="ARSessionState.None"/> or <see cref="ARSessionState.Unsupported"/>.</exception>
+        [Obsolete("Install has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync instead.")]
         public static IEnumerator Install()
         {
             while (state is ARSessionState.Installing or ARSessionState.CheckingAvailability)
@@ -350,37 +382,7 @@ namespace UnityEngine.XR.ARFoundation
                 // These values must be set before the subsystem is started by SubsystemLifecycleManager.
                 SetMatchFrameRateRequested(m_MatchFrameRate);
                 subsystem.requestedTrackingMode = m_TrackingMode.ToFeature();
-
-                StartCoroutine(Initialize());
             }
-        }
-
-        IEnumerator Initialize()
-        {
-            // Make sure we've checked for availability
-            if (state <= ARSessionState.CheckingAvailability)
-                yield return CheckAvailability();
-
-            // Make sure we didn't get disabled while checking for availability
-            if (!enabled)
-                yield break;
-
-            // Complete install if necessary
-            if ((state == ARSessionState.NeedsInstall && attemptUpdate) || state == ARSessionState.Installing)
-            {
-                yield return Install();
-            }
-
-            // If we're still enabled and everything is ready, then start.
-            if (state == ARSessionState.Ready && enabled)
-                StartSubsystem();
-            else
-                enabled = false;
-        }
-
-        void StartSubsystem()
-        {
-            subsystem.Start();
         }
 
         void Awake()
@@ -474,9 +476,11 @@ namespace UnityEngine.XR.ARFoundation
                 case ARSessionState.Unsupported:
                     s_NotTrackingReason = NotTrackingReason.Unsupported;
                     break;
+#pragma warning disable CS0618
                 case ARSessionState.CheckingAvailability:
                 case ARSessionState.NeedsInstall:
                 case ARSessionState.Installing:
+#pragma warning restore CS0618
                 case ARSessionState.Ready:
                 case ARSessionState.SessionTracking:
                     s_NotTrackingReason = NotTrackingReason.None;

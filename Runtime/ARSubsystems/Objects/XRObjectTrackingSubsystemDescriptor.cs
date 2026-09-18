@@ -69,7 +69,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// This struct is an initializer for the creation of a <see cref="XRObjectTrackingSubsystemDescriptor"/>.
         /// </summary>
         /// <remarks>
-        /// Object tracking data provider should create a descriptor during <c>InitializeOnLoad</c> using
+        /// An object tracking data provider should create a descriptor during <c>InitializeOnLoad</c> using
         /// the parameters here to specify which of the <c>XRObjectTrackingSubsystem</c> features it supports.
         /// </remarks>
         public struct Cinfo : IEquatable<Cinfo>

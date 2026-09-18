@@ -13,7 +13,7 @@ ARCore implements the following optional features of AR Foundation's [XRSessionS
 
 | Feature | Descriptor Property | Supported |
 | :------ | :--------------- | :--------: |
-| **Install** | [supportsInstall](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall) | |
+| **Install** (Deprecated) | [supportsInstall](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall) | |
 | **Match frame rate** | [supportsMatchFrameRate](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsMatchFrameRate) | |
 
 > [!NOTE]

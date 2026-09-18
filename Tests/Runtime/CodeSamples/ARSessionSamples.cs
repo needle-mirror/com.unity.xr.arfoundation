@@ -1,6 +1,7 @@
-using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation.Tests
 {
@@ -12,39 +13,36 @@ namespace UnityEngine.XR.ARFoundation.Tests
             // Use manager.descriptor to determine which optional features
             // are supported on the device. For example:
 
-            if (manager.descriptor.supportsInstall)
+            if (manager.descriptor.supportsMatchFrameRate)
             {
-                // Install is supported.
+                // Match frame rate is supported.
             }
         }
         #endregion
 
-        #region CheckForARSupport
-        public class MyComponent
+        #region InstallAndStartSession
+        async Awaitable InstallAndStartSession(XRSessionSubsystem sessionSubsystem, CancellationToken cancellationToken)
         {
-            [SerializeField]
-            ARSession m_Session;
+            // Pass InstallSoftwareIfNeeded so the subsystem checks for, and installs,
+            // any required AR software before it starts.
+            var result = await sessionSubsystem.TryStartAsync(
+                cancellationToken, XRSubsystemStartOptions.InstallSoftwareIfNeeded);
 
-            IEnumerator Start()
+            if (result.statusCode == XRResultStatus.StatusCode.Unsupported)
             {
-                if ((ARSession.state == ARSessionState.None) ||
-                    (ARSession.state == ARSessionState.CheckingAvailability))
-                {
-                    yield return ARSession.CheckAvailability();
-                }
-
-                if (ARSession.state == ARSessionState.Unsupported)
-                {
-                    // Start some fallback experience for unsupported devices
-                }
-                else
-                {
-                    // Start the AR session
-                    m_Session.enabled = true;
-                }
+                // AR is not supported on this device. Start a fallback (non-AR) experience instead.
+                return;
             }
+
+            if (result.IsError())
+            {
+                // AR is supported, but the required software could not be installed
+                // (for example, the user declined the installation).
+                return;
+            }
+
+            // The session started successfully and AR is now running.
         }
         #endregion
     }
 }
-

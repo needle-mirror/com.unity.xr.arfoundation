@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.6.2",
+  "version": "6.7.0-pre.1",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -37,15 +37,15 @@
     }
   ],
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed the `GizmoSolidColor` shader so that it compiles with DXC, as required by DirectX 12."
+    "changelog": "### Added\n\n- Added the following APIs to implement OpenXR support for image tracking:\n  - [XRImageTrackingSubsystem.TryCreateRuntimeLibraryAsync](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.TryCreateRuntimeLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)), an asynchronous method for creating runtime reference image libraries. This supports providers whose runtime library creation completes asynchronously.\n  - [ARTrackedImageManager.TrySetReferenceLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)) and [TrySetReferenceLibrary](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibrary(UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary)), which create or assign a reference image library on the manager.\n  - [XRImageTrackingSubsystemDescriptor.supportsRuntimeLibrary](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsRuntimeLibrary) (and the corresponding `Cinfo.supportsRuntimeLibraryDelegate`), which a provider sets to report whether it supports image libraries that can be instantiated at runtime.\n- Added the following APIs for authoring reference images and reference image libraries:\n  - [XRReferenceImageBuilder](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageBuilder) for constructing [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage) instances in code, which enables you to assemble reference image libraries at runtime.\n  - The [MovingImageType](xref:UnityEngine.XR.ARSubsystems.MovingImageType) enum and corresponding `movingImageType` support on [XRReferenceImage](xref:UnityEngine.XR.ARSubsystems.XRReferenceImage), [XRReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary), and [XRReferenceImageBuilder](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageBuilder), so you can mark a reference image as static or dynamic.\n- Added `XRSubsystemStartOptions.InstallSoftwareIfNeeded`, a start option that requests a subsystem check whether required software is installed on the device and attempts to install it, if needed, before starting.\n- Added `TrackableTypeExtensions`, a new static class with an `IsPlane` extension method that tests whether a `TrackableType` value includes any plane sub-type, and an `allPlaneTypes` property that returns the combined mask of all plane sub-types.\n- Added `XRResultStatus.StatusCode.LimitReached` as a new error code that AR Foundation methods can return.\n- Added `XRPlaneSubsystemDescriptor.supportsPlaneSubsumption`, to allow a platform to indicate whether it will perform plane subsumption.\n\n### Deprecated\n\n- Deprecated and replaced the following APIs, as necessary to implement OpenXR support for image tracking:\n  - `XRImageTrackingSubsystem.CreateRuntimeLibrary` with [TryCreateRuntimeLibraryAsync](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.TryCreateRuntimeLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken))\n  - `ARTrackedImageManager.referenceLibrary` setter with [TrySetReferenceLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)) or [TrySetReferenceLibrary](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibrary(UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary))\n  - `ARTrackedImageManager.CreateRuntimeLibrary` with [TryCreateRuntimeLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TryCreateRuntimeLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken))\n- Deprecated the following APIs. Pass [XRSubsystemStartOptions.InstallSoftwareIfNeeded](xref:UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded) to [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead:\n  - `ARSession.C"
   },
   "upmCi": {
-    "footprint": "dcbddc5825172a9cd187d164ac1f08d3bae0d094"
+    "footprint": "376d474b8bb3c037deb68d5c89a8eae6cc01b12d"
   },
-  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.6/manual/index.html",
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.7/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/arfoundation.git",
     "type": "git",
-    "revision": "adeacbd7ffbde9352a7fa0903c2bfaef716b5c7a"
+    "revision": "a68b90e7fa9d86632124839f80b75c5d7a55e4d6"
   }
 }

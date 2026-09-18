@@ -107,7 +107,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="swapchainDescriptors">All texture descriptors in the provider's swapchain,
         /// if this method returns <see langword="true"/>. Each texture descriptor represents a possible value used by
-        /// call to <see cref="GetTextureDescriptors"/> on a later frame. Allocator is `Allocator.Temp`.
+        /// a call to <see cref="GetTextureDescriptors"/> on a later frame. Allocator is `Allocator.Temp`.
         ///
         /// Texture descriptors are grouped per frame. All texture descriptors that are used within one frame must
         /// be grouped together in the same inner array.
@@ -494,7 +494,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="swapchainDescriptors">All texture descriptors in the provider's swapchain,
             /// if this method returns <see langword="true"/>. Each texture descriptor represents a possible value used by
-            /// call to <see cref="GetTextureDescriptors"/> on a later frame. Allocator is `Allocator.Temp`.
+            /// a call to <see cref="GetTextureDescriptors"/> on a later frame. Allocator is `Allocator.Temp`.
             ///
             /// Texture descriptors are grouped per frame. All texture descriptors that are used within one frame must
             /// be grouped together in the same inner array.</param>

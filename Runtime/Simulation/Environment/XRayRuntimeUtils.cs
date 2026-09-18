@@ -1,10 +1,16 @@
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.SceneManagement;
 
 namespace UnityEngine.XR.Simulation
 {
     static class XRayRuntimeUtils
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Dictionary<Scene, XRayRegion> m_XRayRegions = new();
 
         /// <summary>

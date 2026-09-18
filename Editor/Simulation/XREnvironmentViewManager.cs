@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
@@ -11,11 +14,30 @@ namespace UnityEditor.XR.Simulation
     class XREnvironmentViewManager : ScriptableSingleton<XREnvironmentViewManager>
     {
         const string k_ViewName = "XR Environment";
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static GUIContent s_SimulationSubsystemNotLoadedContent = new($"{k_ViewName} is not Available.\nEnable XR Simulation in Project Settings > XR Plug-in Management.");
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static GUIContent s_BaseSceneViewContent = new($"{k_ViewName} is not Available.\nUse a Scene View window.");
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static GUIContent s_XREnvironmentViewTitleContent;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static event Action<SceneView> environmentViewEnabled;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static event Action<SceneView> environmentViewDisabled;
 
         [SerializeField]
@@ -339,7 +361,7 @@ namespace UnityEditor.XR.Simulation
         }
 
         /// <summary>
-        /// Checks the the 'main' camera has the <see cref="XREnvironmentViewCamera"/> component added to it.
+        /// Checks that the 'main' camera has the <see cref="XREnvironmentViewCamera"/> component added to it.
         /// This component is used to set render overrides when rendering the scene view camera. It is done this way
         /// since rendering components are copied over from the main camera to the scene view camera before every render.
         /// Directly trying to add the <see cref="XREnvironmentViewCamera"/> to the scene view camera will not work

@@ -177,7 +177,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Set the classifications for build `BoundedPlane` instances.
+        /// Set the classifications for built `BoundedPlane` instances.
         /// </summary>
         /// <param name="classifications">The classifications.</param>
         /// <returns>This instance.</returns>

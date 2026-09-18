@@ -26,7 +26,7 @@ namespace UnityEditor.XR.ARSubsystems
         public IReadOnlyList<XRLoader> activeLoadersForBuildTarget { get; }
 
         /// <summary>
-        /// Construct for <see cref="PreprocessBuildEventArgs"/>.
+        /// Constructor for <see cref="PreprocessBuildEventArgs"/>.
         /// </summary>
         /// <param name="buildTarget">The build target which is being built.</param>
         /// <param name="activeLoadersForBuildTarget"> The collection of active

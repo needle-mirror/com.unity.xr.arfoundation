@@ -12,32 +12,43 @@ namespace UnityEngine.XR.ARFoundation.Tests
         #pragma warning disable CS0649
 
         #region trackedimage_addmanager_to_gameobject
-        void AddManagerToGameObject(GameObject g, XRReferenceImageLibrary library)
+        async void AddManagerToGameObject(GameObject g, XRReferenceImageLibrary library)
         {
             var manager = g.AddComponent<ARTrackedImageManager>();
-            manager.referenceLibrary = library;
-            manager.enabled = true;
+            var result = await manager.TrySetReferenceLibraryAsync(library);
+            if (result.status.IsSuccess())
+                manager.enabled = true;
         }
         #endregion
 
         #region trackedimage_setlibrary
-        void SetLibrary(ARTrackedImageManager manager, XRReferenceImageLibrary library)
+        async void SetLibrary(ARTrackedImageManager manager, XRReferenceImageLibrary library)
         {
-            manager.referenceLibrary = library;
+            var result = await manager.TrySetReferenceLibraryAsync(library);
+            if (!result.status.IsSuccess())
+                Debug.LogError($"Failed to set the reference image library: {result.status}.");
         }
         #endregion
 
         #region trackedimage_createruntimelibraryfromserialized
-        void CreateRuntimeLibrary(ARTrackedImageManager m, XRReferenceImageLibrary lib)
+        async void CreateRuntimeLibrary(ARTrackedImageManager m, XRReferenceImageLibrary lib)
         {
-            var runtimeLibrary = m.CreateRuntimeLibrary(lib);
+            var result = await m.TryCreateRuntimeLibraryAsync(lib);
+            if (result.status.IsSuccess())
+            {
+                var runtimeLibrary = result.value;
+            }
         }
         #endregion
 
         #region trackedimage_createemptyruntimelibrary
-        void CreateEmptyRuntimeLibrary(ARTrackedImageManager m)
+        async void CreateEmptyRuntimeLibrary(ARTrackedImageManager m)
         {
-            var runtimeLibrary = m.CreateRuntimeLibrary();
+            var result = await m.TryCreateRuntimeLibraryAsync(null);
+            if (result.status.IsSuccess())
+            {
+                var runtimeLibrary = result.value;
+            }
         }
         #endregion
 

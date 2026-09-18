@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEngine.SubsystemsImplementation;
 using UnityEngine.XR.ARSubsystems;
@@ -13,10 +16,16 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     class SimulationEnvironmentScanner : IDisposable
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static SimulationEnvironmentScanner s_Instance;
 
         // Local method use only -- created here to reduce garbage collection. Collections must be cleared before use.
         // Reference type collections must also be cleared after use
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<MeshRenderer> s_EnvironmentMeshes = new();
 
         readonly List<SubsystemWithProvider> m_TrackingSubsystems = new();
@@ -51,7 +60,7 @@ namespace UnityEngine.XR.Simulation
         public static SimulationEnvironmentScanner GetOrCreate()
         {
             // Written this way to make it easier to add a breakpoint when new instance is created
-            // ReSharper disable once ConvertIfStatementToNullCoalescingExpression
+            // ReSharper disable once ConvertIfStatementToNullCoalescingAssignment
             if (s_Instance == null)
                 s_Instance = new SimulationEnvironmentScanner();
 

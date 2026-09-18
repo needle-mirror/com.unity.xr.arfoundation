@@ -3,15 +3,15 @@ using System;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// Container for a human body pose 2D joint as part of a AR detected screen space skeleton.
+    /// Container for a human body pose 2D joint as part of an AR detected screen space skeleton.
     /// </summary>
     public struct XRHumanBodyPose2DJoint : IEquatable<XRHumanBodyPose2DJoint>
     {
         /// <summary>
-        /// The index for the joint in the skeleton hierachy.
+        /// The index for the joint in the skeleton hierarchy.
         /// </summary>
         /// <value>
-        /// The index for the joint in the skeleton hierachy.
+        /// The index for the joint in the skeleton hierarchy.
         /// </value>
         /// <remarks>
         /// All indices will be non-negative.
@@ -20,13 +20,13 @@ namespace UnityEngine.XR.ARSubsystems
         int m_Index;
 
         /// <summary>
-        /// The index for the parent joint in the skeleton hierachy.
+        /// The index for the parent joint in the skeleton hierarchy.
         /// </summary>
         /// <value>
-        /// The index for the parent joint in the skeleton hierachy.
+        /// The index for the parent joint in the skeleton hierarchy.
         /// </value>
         /// <remarks>
-        /// A negative parent index means that the joint has no parent in the hierachy.
+        /// A negative parent index means that the joint has no parent in the hierarchy.
         /// </remarks>
         public int parentIndex => m_ParentIndex;
         int m_ParentIndex;
@@ -52,7 +52,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Constructs a <c>XRHumanBodyPose2DJoint</c> with the given parameters.
         /// </summary>
-        /// <param name="index">The index of the joint in the skeleton hierachy.</param>
+        /// <param name="index">The index of the joint in the skeleton hierarchy.</param>
         /// <param name="parentIndex">The index of the parent joint in the skeleton hierarchy.</param>
         /// <param name="position">The position of the joint in 2D screenspace.</param>
         /// <param name="tracked">Whether the joint is tracked.</param>

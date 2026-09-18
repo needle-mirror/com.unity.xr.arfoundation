@@ -13,6 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [RequireComponent(typeof(ARFace))]
     [HelpUrl(typeof(ARFaceMeshVisualizer))]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARFaceMeshVisualizer : MonoBehaviour
     {
         /// <summary>

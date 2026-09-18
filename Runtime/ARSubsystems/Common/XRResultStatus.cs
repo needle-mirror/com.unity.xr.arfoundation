@@ -36,7 +36,7 @@ namespace UnityEngine.XR.ARSubsystems
         ///   </item>
         ///   <item>
         ///     <description>Greater than zero</description>
-        ///     <description>The operation succeeded.</description>
+        ///     <description>The operation succeeded, but additional information is available.</description>
         ///   </item>
         /// </list>
         /// </remarks>
@@ -88,10 +88,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// Indicates that Unity has determined that the operation is not supported on the device.
             /// </summary>
             /// <remarks>
-            /// This status code allows Unity to design APIs where some source other than an a platform error code
+            /// This status code allows Unity to design APIs where some source other than a platform error code
             /// defines whether an operation is supported.
             ///
-            /// This status code should not be used as a replacement for platform error codes such as OpenXR's
+            /// Don't use this status code as a replacement for platform error codes such as OpenXR's
             /// `XrResult.FeatureUnsupported` or `XrResult.FunctionUnsupported`. If an OpenXR runtime returns one of
             /// these `XrResult` values, the corresponding `XRResultStatus.StatusCode` value should be `PlatformError`,
             /// indicating that the OpenXR runtime, not Unity, produced the error code.
@@ -104,8 +104,8 @@ namespace UnityEngine.XR.ARSubsystems
             /// <remarks>
             /// Some OpenXR APIs perform a lookup step as part of their logic, but don't represent failed lookups
             /// as `XrResult` error codes. In these cases, an OpenXR runtime will return `XrResult.Success`, but AR
-            /// Foundation did not receive the data it needs to return a successful result and must therefore
-            /// represent this as an error.
+            /// Foundation didn't receive the data it needs to return a successful result and must therefore
+            /// represent the operation state as an error.
             /// </remarks>
             NotFound = -7,
 
@@ -115,6 +115,19 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <seealso cref="TrackingState"/>
             NotTracking = -8,
+
+            /// <summary>
+            /// Indicates that the operation failed because too many previous instances of the operation are currently
+            /// in progress. If you intend to cancel an operation in progress so that your new request can succeed, use the
+            /// `CancellationToken` that you provided as input to that operation.
+            /// </summary>
+            /// <remarks>
+            /// Don't use this status code as a replacement for platform error codes such as OpenXR's
+            /// `XrResult.LimitReached`. If an OpenXR runtime returns this `XrResult` value, the corresponding
+            /// `XrResultStatus.StatusCode` value should be `PlatformError`, indicating that the OpenXR runtime,
+            /// not Unity, produced the error code.
+            /// </remarks>
+            LimitReached = -9,
         }
 
         /// <summary>

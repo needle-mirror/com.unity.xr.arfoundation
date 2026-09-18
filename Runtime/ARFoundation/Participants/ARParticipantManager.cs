@@ -17,6 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [AddComponentMenu("XR/AR Foundation/AR Participant Manager")]
     [HelpUrl("features/participant-tracking")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARParticipantManager : ARTrackableManager<
         XRParticipantSubsystem,
         XRParticipantSubsystemDescriptor,

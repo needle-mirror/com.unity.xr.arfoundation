@@ -12,6 +12,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <typeparam name="TSubsystem">The [Subsystem](xref:UnityEngine.Subsystem) which provides this manager data.</typeparam>
     /// <typeparam name="TProvider">The [provider](xref:UnityEngine.SubsystemsImplementation.SubsystemProvider) associated with this subsystem.</typeparam>
     /// <typeparam name="TSubsystemDescriptor">The <c>SubsystemDescriptor</c> required to create the Subsystem.</typeparam>
+    [Icon(Constants.arvrIconPath)]
     public class SubsystemLifecycleManager<TSubsystem, TSubsystemDescriptor, TProvider> : MonoBehaviour
         where TSubsystem : SubsystemWithProvider<TSubsystem, TSubsystemDescriptor, TProvider>, new()
         where TSubsystemDescriptor : SubsystemDescriptorWithProvider<TSubsystem, TProvider>
@@ -48,7 +49,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Called by derived classes to initialize the subsystem is initialized before use
+        /// Called by derived classes to ensure the subsystem is initialized before use
         /// </summary>
         protected void EnsureSubsystemInstanceSet()
         {
@@ -78,7 +79,7 @@ namespace UnityEngine.XR.ARFoundation
 
                 if (subsystem is XRSubsystem<TSubsystem, TSubsystemDescriptor, TProvider> xrSubsystem)
                 {
-                    var result = await xrSubsystem.TryStartAsync(m_TokenSource.Token);
+                    var result = await xrSubsystem.TryStartAsync(m_TokenSource.Token, XRSubsystemStartOptions.InstallSoftwareIfNeeded);
                     if (result.IsError())
                     {
                         Debug.LogError($"{subsystem.GetType()} failed to start. Disabling {GetType()}.", this);
@@ -131,7 +132,7 @@ namespace UnityEngine.XR.ARFoundation
         { }
 
         /// <summary>
-        /// Invoked after calling Start on it the Subsystem.
+        /// Invoked after calling Start on the Subsystem.
         /// The <see cref="subsystem"/> is not <c>null</c>.
         /// </summary>
         protected virtual void OnAfterStart()

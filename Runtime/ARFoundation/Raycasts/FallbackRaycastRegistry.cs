@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -12,9 +15,24 @@ namespace UnityEngine.XR.ARFoundation
 
         internal static ARMarkerManager CachedMarkerManager => m_CachedMarkerManager;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static HashSet<IRaycaster> m_Raycasters = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static ARPlaneManager m_CachedPlaneManager;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static ARBoundingBoxManager m_CachedBoundingBoxManager;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static ARMarkerManager m_CachedMarkerManager;
 
         /// <summary>

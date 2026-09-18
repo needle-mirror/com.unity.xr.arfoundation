@@ -93,7 +93,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Convert a an `XrUuid` to a `SerializableGuid`.
+        /// Convert an `XrUuid` to a `SerializableGuid`.
         /// </summary>
         /// <param name="uuid">The UUID.</param>
         /// <returns>The equivalent `SerializableGuid`.</returns>

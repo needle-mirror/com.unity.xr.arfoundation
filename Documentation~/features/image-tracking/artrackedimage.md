@@ -49,7 +49,7 @@ When an image leaves the device camera's field of view, the AR Tracked Image Man
 
 There is no API to determine the visibility of an image. Generally, if the tracking state is [Tracking](xref:UnityEngine.XR.ARSubsystems.TrackingState.Tracking), it likely changes to `Limited` when the image isn't visible. However, there are other situations in which the tracking state can be in states other than `Tracked`.
 
-If this information is important to your application, considering comparing the `ARTrackedImage`'s transform with the camera's view frustum.
+If this information is important to your application, consider comparing the `ARTrackedImage`'s transform with the camera's view frustum.
 
 ### Removed
 

@@ -54,7 +54,7 @@ namespace UnityEditor.XR.Simulation.Rendering
 
         protected class Styles
         {
-            // Catergories
+            // Categories
             public static readonly GUIContent SurfaceOptions =
                 new GUIContent("Surface Options", "Controls how Universal RP renders the Material on a screen.");
 

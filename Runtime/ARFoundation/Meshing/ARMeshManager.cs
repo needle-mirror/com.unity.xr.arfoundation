@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.Events;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Management;
@@ -27,6 +30,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [AddComponentMenu("XR/AR Foundation/AR Mesh Manager")]
     [HelpUrl("features/meshing")]
+    [Icon(Constants.arvrIconPath)]
     public class ARMeshManager : MonoBehaviour
     {
         List<MeshUpdateInfo> m_Added;
@@ -48,8 +52,14 @@ namespace UnityEngine.XR.ARFoundation
 
         internal IXRMeshSubsystem m_Subsystem;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static TrackableIdComparer s_TrackableIdComparer = new();
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<MeshInfo> s_MeshInfos = new();
 
         [SerializeField]
@@ -249,7 +259,7 @@ namespace UnityEngine.XR.ARFoundation
         /// [vertexIndexVectors] that should be considered as one classified element, e.g. 1 for a
         /// single vertex, or 3 for a triangle face.</param>
         /// <param name="vertexIndexVectors">The packed vertex indices that are classified,
-        /// coallated with the applicable [classifications]</param>
+        /// collated with the applicable [classifications]</param>
         /// <param name="classifications">The classifications for the mesh components describing the
         /// vertex indices</param>
         public bool TryGetSubmeshClassifications(

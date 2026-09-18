@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARTrackedImage> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="ARTrackedImage"/>s udpated since the last event.
+        /// The list of <see cref="ARTrackedImage"/>s updated since the last event.
         /// </summary>
         public List<ARTrackedImage> updated { get; private set; }
 

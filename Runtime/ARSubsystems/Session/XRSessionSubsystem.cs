@@ -1,5 +1,8 @@
 using System;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.Rendering;
 using UnityEngine.SubsystemsImplementation;
 
@@ -13,6 +16,9 @@ namespace UnityEngine.XR.ARSubsystems
     public class XRSessionSubsystem
         : XRSubsystem<XRSessionSubsystem, XRSessionSubsystemDescriptor, XRSessionSubsystem.Provider>
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly ConfigurationChooser s_DefaultConfigurationChooser = new DefaultConfigurationChooser();
 
         ConfigurationChooser m_ConfigurationChooser;
@@ -33,9 +39,13 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <remarks>
         /// This platform-agnostic method is typically implemented by a platform-specific package.
+        ///
+        /// Pass <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> to
+        /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
         /// </remarks>
         /// <returns>A <see cref="Promise{SessionAvailability}"/> which can be used to determine when the
         /// availability has been determined and to retrieve the result.</returns>
+        [Obsolete("GetAvailabilityAsync has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync instead.")]
         public Promise<SessionAvailability> GetAvailabilityAsync() => provider.GetAvailabilityAsync();
 
         /// <summary>
@@ -44,9 +54,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <remarks>
         /// This platform-agnostic method is typically implemented by a platform-specific package.
+        ///
+        /// Use <c>TryInstallAsync</c> on the platform-specific session subsystem, or pass
+        /// <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> to
+        /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*).
         /// </remarks>
         /// <returns>A <see cref="Promise{SessionInstallationStatus}"/> which can be used to determine when the
         /// installation completes and to retrieve the result.</returns>
+        [Obsolete("InstallAsync has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync instead.")]
         public Promise<SessionInstallationStatus> InstallAsync()
         {
             if (!subsystemDescriptor.supportsInstall)
@@ -65,7 +80,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Restarts a session. [Stop](xref:UnityEngine.Subsystem.Stop) and [Start](xref:UnityEngine.Subsystem.Start)
-        /// pause and resume a session, respectively. <c>Restart</c> resets the session state and clears and any
+        /// pause and resume a session, respectively. <c>Restart</c> resets the session state and clears any
         /// detected trackables.
         /// </summary>
         public void Reset() => provider.Reset();
@@ -439,6 +454,11 @@ namespace UnityEngine.XR.ARSubsystems
             /// Get the session's availability, such as whether the platform supports XR.
             /// </summary>
             /// <returns>A <see cref="Promise{T}"/> that the caller can yield on until availability is determined.</returns>
+            /// <remarks>
+            /// Use <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> with
+            /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
+            /// </remarks>
+            [Obsolete("GetAvailabilityAsync has been deprecated in AR Foundation version 6.7. Use XRSubsystemStartOptions.InstallSoftwareIfNeeded with TryStartAsync instead.")]
             public virtual Promise<SessionAvailability> GetAvailabilityAsync()
             {
                 return Promise<SessionAvailability>.CreateResolvedPromise(SessionAvailability.None);
@@ -450,6 +470,11 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <returns>A <see cref="Promise{SessionInstallationStatus}"/> which can be used to determine when the
             /// installation completes and to retrieve the result.</returns>
+            /// <remarks>
+            /// Use <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> with
+            /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
+            /// </remarks>
+            [Obsolete("InstallAsync has been deprecated in AR Foundation version 6.7. Use XRSubsystemStartOptions.InstallSoftwareIfNeeded with TryStartAsync instead.")]
             public virtual Promise<SessionInstallationStatus> InstallAsync()
             {
                 return Promise<SessionInstallationStatus>.CreateResolvedPromise(SessionInstallationStatus.ErrorInstallNotSupported);

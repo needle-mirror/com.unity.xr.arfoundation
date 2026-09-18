@@ -3,15 +3,15 @@ using System;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// Containter for the human body joint data.
+    /// Container for the human body joint data.
     /// </summary>
     public struct XRHumanBodyJoint : IEquatable<XRHumanBodyJoint>
     {
         /// <summary>
-        /// The index for the joint in the skeleton hierachy.
+        /// The index for the joint in the skeleton hierarchy.
         /// </summary>
         /// <value>
-        /// The index for the joint in the skeleton hierachy.
+        /// The index for the joint in the skeleton hierarchy.
         /// </value>
         /// <remarks>
         /// All indices will be non-negative.
@@ -20,13 +20,13 @@ namespace UnityEngine.XR.ARSubsystems
         int m_Index;
 
         /// <summary>
-        /// The index for the parent joint in the skeleton hierachy.
+        /// The index for the parent joint in the skeleton hierarchy.
         /// </summary>
         /// <value>
-        /// The index for the parent joint in the skeleton hierachy.
+        /// The index for the parent joint in the skeleton hierarchy.
         /// </value>
         /// <remarks>
-        /// A negative parent index means the joint has no parent in the hierachy.
+        /// A negative parent index means the joint has no parent in the hierarchy.
         /// </remarks>
         public int parentIndex => m_ParentIndex;
         int m_ParentIndex;
@@ -159,7 +159,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Generates a string representation of this <see cref="XRHumanBodyJoint"/>. Floating point
-        /// values using the ["F5"](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings)
+        /// values use the ["F5"](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings)
         /// format specifier.
         /// </summary>
         /// <returns>A string representation of this <see cref="XRHumanBodyJoint"/>.</returns>

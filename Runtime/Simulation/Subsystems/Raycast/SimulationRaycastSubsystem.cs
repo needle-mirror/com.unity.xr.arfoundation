@@ -65,6 +65,11 @@ namespace UnityEngine.XR.Simulation
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
+            var planeTypes = TrackableType.PlaneWithinPolygon
+                | TrackableType.PlaneWithinBounds
+                | TrackableType.PlaneWithinInfinity
+                | TrackableType.PlaneEstimated;
+
             XRRaycastSubsystemDescriptor.Register(new XRRaycastSubsystemDescriptor.Cinfo
             {
                 id = k_SubsystemId,
@@ -72,7 +77,7 @@ namespace UnityEngine.XR.Simulation
                 subsystemTypeOverride = typeof(SimulationRaycastSubsystem),
                 supportsViewportBasedRaycast = false,
                 supportsWorldBasedRaycast = true,
-                supportedTrackableTypesDelegate = () => TrackableType.FeaturePoint | TrackableType.Planes,
+                supportedTrackableTypesDelegate = () => TrackableType.FeaturePoint | planeTypes,
                 supportsTrackedRaycasts = false
             });
         }

@@ -1,4 +1,7 @@
 using System;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 #if UNITY_EDITOR
 using UnityEditor.Callbacks;
@@ -29,6 +32,9 @@ namespace UnityEngine.XR.ARFoundation
         const string k_NdcLinearConversionParametersPropertyName = "_NdcLinearConversionParameters";
         const string k_IsOcclusionOnPropertyName = "_IsOcclusionOn";
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static int s_IsOcclusionOnPropertyNameId;
 
         SoftOcclusionPreprocessor m_SoftOcclusionPreprocessor;
@@ -36,7 +42,14 @@ namespace UnityEngine.XR.ARFoundation
         Matrix4x4[] m_EnvironmentDepthReprojectionMatrices = new Matrix4x4[2];
         bool m_OcclusionShaderKeywordsForModeInitialized;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static event Action<GameObject> shaderOcclusionComponentEnabled;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static event Action<GameObject> shaderOcclusionComponentDisabled;
 
         [SerializeField, HideInInspector]

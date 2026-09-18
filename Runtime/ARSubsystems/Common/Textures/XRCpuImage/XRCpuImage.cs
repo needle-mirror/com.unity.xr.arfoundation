@@ -3,6 +3,9 @@ using System;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -22,6 +25,9 @@ namespace UnityEngine.XR.ARSubsystems
 
         Api m_Api;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Api.OnImageRequestCompleteDelegate s_OnAsyncConversionCompleteDelegate = OnAsyncConversionComplete;
 
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
@@ -478,7 +484,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="conversionParams">The conversion parameters to validate.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the input image rect exceeds the actual
         /// image dimensions or if the output dimensions exceed the input dimensions.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if the texture format is not suppported.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if the texture format is not supported.</exception>
         /// <seealso cref="FormatSupported"/>
         void ValidateConversionParamsAndThrow(ConversionParams conversionParams)
         {

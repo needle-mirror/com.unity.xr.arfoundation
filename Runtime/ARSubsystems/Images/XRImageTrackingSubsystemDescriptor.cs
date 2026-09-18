@@ -71,6 +71,16 @@ namespace UnityEngine.XR.ARSubsystems
             public bool supportsImageValidation { get; set; }
 
             /// <summary>
+            /// Whether the subsystem supports image libraries that can be instantiated at runtime.
+            /// </summary>
+            /// <remarks>
+            /// If the delegate returns <c>true</c>, the provider supports building a library from reference images defined at runtime
+            /// via <see cref="XRImageTrackingSubsystem.Provider.TryCreateRuntimeLibraryAsync(XRReferenceImageLibrary, System.Threading.CancellationToken)"/>.
+            /// </remarks>
+            /// <seealso cref="XRImageTrackingSubsystemDescriptor.supportsRuntimeLibrary"/>
+            public Func<bool> supportsRuntimeLibraryDelegate { get; set; }
+
+            /// <summary>
             /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
             /// </summary>
             /// <returns>A hash code generated from this object's fields.</returns>
@@ -85,6 +95,7 @@ namespace UnityEngine.XR.ARSubsystems
                     hashCode = hashCode * 486187739 + requiresPhysicalImageDimensions.GetHashCode();
                     hashCode = hashCode * 486187739 + supportsMutableLibrary.GetHashCode();
                     hashCode = hashCode * 486187739 + supportsImageValidation.GetHashCode();
+                    hashCode = hashCode * 486187739 + HashCodeUtil.ReferenceHash(supportsRuntimeLibraryDelegate);
                     return hashCode;
                 }
             }
@@ -103,7 +114,8 @@ namespace UnityEngine.XR.ARSubsystems
                     supportsMovingImages == other.supportsMovingImages &&
                     requiresPhysicalImageDimensions == other.requiresPhysicalImageDimensions &&
                     supportsMutableLibrary == other.supportsMutableLibrary &&
-                    supportsImageValidation == other.supportsImageValidation;
+                    supportsImageValidation == other.supportsImageValidation &&
+                    supportsRuntimeLibraryDelegate == other.supportsRuntimeLibraryDelegate;
             }
 
             /// <summary>
@@ -120,7 +132,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
             /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-            public static bool operator==(Cinfo lhs, Cinfo rhs) => lhs.Equals(rhs);
+            public static bool operator ==(Cinfo lhs, Cinfo rhs) => lhs.Equals(rhs);
 
             /// <summary>
             /// Tests for inequality. Same as `!`<see cref="Equals(Cinfo)"/>.
@@ -128,8 +140,10 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="lhs">The left-hand side of the comparison.</param>
             /// <param name="rhs">The right-hand side of the comparison.</param>
             /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-            public static bool operator!=(Cinfo lhs, Cinfo rhs) => !lhs.Equals(rhs);
+            public static bool operator !=(Cinfo lhs, Cinfo rhs) => !lhs.Equals(rhs);
         }
+
+        Func<bool> m_SupportsRuntimeLibraryDelegate;
 
         /// <summary>
         /// <c>True</c> if the subsystem supports tracking the poses of moving images in real time.
@@ -144,7 +158,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Whether the subsystem supports <see cref="MutableRuntimeReferenceImageLibrary"/>, a reference
-        /// image library which can modified at runtime, as opposed to the <see cref="XRReferenceImageLibrary"/>,
+        /// image library which can be modified at runtime, as opposed to the <see cref="XRReferenceImageLibrary"/>,
         /// which is generated at edit time and cannot be modified at runtime.
         /// </summary>
         /// <seealso cref="MutableRuntimeReferenceImageLibrary"/>
@@ -156,6 +170,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="MutableRuntimeReferenceImageLibrary"/>).
         /// </summary>
         public bool supportsImageValidation { get; }
+
+        /// <summary>
+        /// Whether the subsystem supports image libraries that can be instantiated at runtime.
+        /// </summary>
+        public bool supportsRuntimeLibrary => m_SupportsRuntimeLibraryDelegate?.Invoke() ?? false;
 
         /// <summary>
         /// Registers a new descriptor with the <c>SubsystemManager</c>.
@@ -185,6 +204,7 @@ namespace UnityEngine.XR.ARSubsystems
             requiresPhysicalImageDimensions = cinfo.requiresPhysicalImageDimensions;
             supportsMutableLibrary = cinfo.supportsMutableLibrary;
             supportsImageValidation = cinfo.supportsImageValidation;
+            m_SupportsRuntimeLibraryDelegate = cinfo.supportsRuntimeLibraryDelegate;
         }
     }
 }

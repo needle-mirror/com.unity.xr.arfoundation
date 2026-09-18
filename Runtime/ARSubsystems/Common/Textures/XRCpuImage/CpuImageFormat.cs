@@ -18,9 +18,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <para>Three-Plane YUV 420 format commonly used by Android. See
             /// <a href="https://developer.android.com/ndk/reference/group/media#group___media_1gga9c3dace30485a0f28163a882a5d65a19aea9797f9b5db5d26a2055a43d8491890">
             /// AIMAGE_FORMAT_YUV_420_888</a>.</para>
-            /// <para>This format consists of three image planes. The first is the Y (luminocity) plane, with 8 bits per
+            /// <para>This format consists of three image planes. The first is the Y (luminosity) plane, with 8 bits per
             /// pixel. The second and third are the U and V (chromaticity) planes, respectively. Each 2x2 block of pixels
-            /// share the same chromaticity value, so a given (x, y) pixel's chromaticity value is given by
+            /// shares the same chromaticity value, so a given (x, y) pixel's chromaticity value is given by
             /// <c>
             /// u = UPlane[(y / 2) * rowStride + (x / 2) * pixelStride];
             /// v = VPlane[(y / 2) * rowStride + (x / 2) * pixelStride];
@@ -35,7 +35,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// kCVPixelFormatType_420YpCbCr8BiPlanarFullRange</a>.</para>
             /// <para>This format consists of two image planes. The first is the Y (luminosity) plane, with 8 bits per
             /// pixel. The second plane is the UV (chromaticity) plane. The U and V chromaticity values are interleaved
-            /// (u0, v0, u1, v1, etc.). Each 2x2 block of pixels share the same chromaticity values, so a given (x, y)
+            /// (u0, v0, u1, v1, etc.). Each 2x2 block of pixels shares the same chromaticity values, so a given (x, y)
             /// pixel's chromaticity value is given by
             /// <c>
             /// u = UvPlane[(y / 2) * rowStride + (x / 2) * pixelStride];

@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Retrieves a <c>TTrackable</c>s by <c>TrackableId</c>.
+        /// Retrieves a <c>TTrackable</c> by <c>TrackableId</c>.
         /// </summary>
         /// <param name="trackableId">The trackable id associated with the trackable to retrieve.</param>
         /// <value>The <c>TTrackable</c>s if present. Throws <c>KeyNotFoundException</c> if the <paramref name="trackableId"/> is not found.</value>
@@ -75,7 +75,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Retrieves the hashcode of the <see cref="TrackableCollection{TTrackable}"/>.
         /// </summary>
-        /// <returns>The hashcode of if the <see cref="TrackableCollection{TTrackable}"/> is instantiated and <c>0</c> if it is <c>null</c>.</returns>
+        /// <returns>The hashcode if the <see cref="TrackableCollection{TTrackable}"/> is instantiated and <c>0</c> if it is <c>null</c>.</returns>
         public override int GetHashCode()
         {
             unchecked

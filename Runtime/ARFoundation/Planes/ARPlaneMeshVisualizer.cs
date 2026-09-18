@@ -19,12 +19,13 @@ namespace UnityEngine.XR.ARFoundation
     /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
     ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
     /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
-    /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
+    /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is `null`.
     ///
     /// Related information: <a href="xref:arfoundation-plane-arplanemanager#custom-plane-visualizers">Custom plane visualizers</a>
     /// </remarks>
     [RequireComponent(typeof(ARPlane))]
     [HelpUrl("features/plane-detection/arplanemanager", "custom-plane-visualizers")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARPlaneMeshVisualizer : MonoBehaviour
     {
         /// <summary>
@@ -47,7 +48,7 @@ namespace UnityEngine.XR.ARFoundation
         /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
         ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
         /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
-        /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
+        /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is `null`.
         /// </remarks>
         public TrackingState trackingStateVisibilityThreshold
         {
@@ -65,7 +66,7 @@ namespace UnityEngine.XR.ARFoundation
         bool m_HideSubsumed = true;
 
         /// <summary>
-        /// Indicates whether subsumed planes should be rendered. (See <see cref="ARPlane.subsumedBy"/>.)
+        /// Indicates whether to hide the mesh and outline of a subsumed plane. Refer to <see cref="ARPlane.subsumedBy"/>.
         /// </summary>
         /// <remarks>
         /// [MeshRenderer](xref:UnityEngine.MeshRenderer) and [LineRenderer](xref:UnityEngine.LineRenderer) components will only be
@@ -74,7 +75,7 @@ namespace UnityEngine.XR.ARFoundation
         /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
         ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
         /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
-        /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is not `null`.
+        /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is `null`.
         /// </remarks>
         public bool hideSubsumed
         {

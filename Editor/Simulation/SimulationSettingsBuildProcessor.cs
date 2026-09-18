@@ -84,7 +84,7 @@ namespace UnityEditor.XR.Simulation
 
         /// <summary>
         /// Add <paramref name="asset"/> to the list of assets which will be removed
-        /// from the <c>Resources</c> folder to prevent them from bundled in the player build.
+        /// from the <c>Resources</c> folder to prevent them from being bundled in the player build.
         /// </summary>
         /// <param name="asset">The asset to exclude from the player build.</param>
         void ExcludeAssetFromBuild(Object asset)

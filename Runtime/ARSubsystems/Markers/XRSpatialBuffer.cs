@@ -3,7 +3,7 @@ using System;
 namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
-    /// Represents a spatial buffer containing marker's encoded data, as detected by the XR marker subsystem if the marker
+    /// Represents a spatial buffer containing a marker's encoded data, as detected by the XR marker subsystem if the marker
     /// supports encoded data.
     /// </summary>
     public readonly struct XRSpatialBuffer : IEquatable<XRSpatialBuffer>

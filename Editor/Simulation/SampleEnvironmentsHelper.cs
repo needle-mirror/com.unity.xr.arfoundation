@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEditor.PackageManager.UI;
@@ -21,8 +24,19 @@ namespace UnityEditor.XR.Simulation
         const string k_ContentPackagesFolder = "ContentPackages";
         const string k_TgzExtension = ".tgz";
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static UnityWebRequest s_WebRequest;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static AddRequest s_AddRequest;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static ListRequest s_ListRequest;
 
         public static bool processingInstallRequest =>
@@ -33,7 +47,14 @@ namespace UnityEditor.XR.Simulation
             s_AddRequest is { IsCompleted: false } ||
             s_ListRequest is { IsCompleted: false };
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static event Action packageRequestStarted;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static event Action packageRequestCompleted;
 
         /// <summary>
@@ -71,31 +92,45 @@ namespace UnityEditor.XR.Simulation
             s_WebRequest.downloadHandler = new DownloadHandlerFile(fileName);
             s_WebRequest.SendWebRequest().completed += _ =>
             {
-                if (s_WebRequest.result != UnityWebRequest.Result.Success)
+                try
                 {
-                    Debug.LogError($"Failed to download content package from {k_ContentPackageUrl}: {s_WebRequest.error}");
-                    return;
-                }
+                    if (s_WebRequest.result != UnityWebRequest.Result.Success)
+                    {
+                        Debug.LogError($"Failed to download content package from {k_ContentPackageUrl}: {s_WebRequest.error}");
+                        return;
+                    }
 
-                s_AddRequest = Client.Add($"file:../{fileName}");
-                EditorApplication.update += ProcessAddRequest;
-                packageRequestStarted?.Invoke();
+                    s_AddRequest = Client.Add($"file:../{fileName}");
+                    EditorApplication.update += ProcessAddRequest;
+                    packageRequestStarted?.Invoke();
+                }
+                finally
+                {
+                    s_WebRequest = null;
+                }
             };
         }
 
         static void ProcessAddRequest()
         {
-            if (!s_AddRequest.IsCompleted)
+            if (!s_AddRequest?.IsCompleted ?? true)
                 return;
 
             EditorApplication.update -= ProcessAddRequest;
 
-            if (s_AddRequest.Status != StatusCode.Success)
+            try
             {
-                var errorMessage = s_AddRequest.Error?.message;
-                Debug.LogError($"Adding package {k_ContentPackageName} failed: {errorMessage}");
-                packageRequestCompleted?.Invoke();
-                return;
+                if (s_AddRequest.Status != StatusCode.Success)
+                {
+                    var errorMessage = s_AddRequest.Error?.message;
+                    Debug.LogError($"Adding package {k_ContentPackageName} failed: {errorMessage}");
+                    packageRequestCompleted?.Invoke();
+                    return;
+                }
+            }
+            finally
+            {
+                s_AddRequest = null;
             }
 
             // We can't import the package sample until the upm cache updates, which it does after a list request.
@@ -109,17 +144,24 @@ namespace UnityEditor.XR.Simulation
 
         static void ProcessListRequest()
         {
-            if (!s_ListRequest.IsCompleted)
+            if (!s_ListRequest?.IsCompleted ?? true)
                 return;
 
             EditorApplication.update -= ProcessListRequest;
 
-            if (s_ListRequest.Status != StatusCode.Success)
+            try
             {
-                var errorMessage = s_ListRequest.Error?.message;
-                Debug.LogError($"Listing packages failed: {errorMessage}");
-                packageRequestCompleted?.Invoke();
-                return;
+                if (s_ListRequest.Status != StatusCode.Success)
+                {
+                    var errorMessage = s_ListRequest.Error?.message;
+                    Debug.LogError($"Listing packages failed: {errorMessage}");
+                    packageRequestCompleted?.Invoke();
+                    return;
+                }
+            }
+            finally
+            {
+                s_ListRequest = null;
             }
 
             packageRequestCompleted?.Invoke();

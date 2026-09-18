@@ -88,7 +88,7 @@ A trackable's life cycle is managed by its tracking subsystem, and has three pha
 
 #### Adding trackables
 
-Some trackables, like anchors and environment probes, can be added and removed manually. Other trackables, like planes, images, objects, and points clouds, are automatically added and removed by their manager. Some trackables can be added either manually or automatically. Where supported, trackable managers provide methods for manual addition and removal.
+Some trackables, like anchors and environment probes, can be added and removed manually. Other trackables, like planes, images, objects, and point clouds, are automatically added and removed by their manager. Some trackables can be added either manually or automatically. Where supported, trackable managers provide methods for manual addition and removal.
 
 When you manually add a trackable, the underlying subsystem might not track it immediately. You won't receive an `added` event for that trackable until the subsystem reports that it has been added (typically on the next frame). During the time between manual addition and the `added` event, the trackable is in a *pending* state. You can check this with the `pending` property on every trackable.
 
@@ -112,7 +112,7 @@ The exact amount of time a trackable spends in the pending state depends on the 
 
 #### Removing trackables
 
-With the exception of anchors, you should never `Destroy` a trackable component or its GameObject. Trackables are representations of data surfaced by a trackable subsystem and destroying their scene representation has no affect on the subsystem implementation. If a trackable supports manual removal, its manager generally provides a method to remove it. For example, you can remove a persistent raycast by calling `ARRaycastManager.RemoveRaycast(ARRaycast)`.
+With the exception of anchors, you should never `Destroy` a trackable component or its GameObject. Trackables are representations of data surfaced by a trackable subsystem and destroying their scene representation has no effect on the subsystem implementation. If a trackable supports manual removal, its manager generally provides a method to remove it. For example, you can remove a persistent raycast by calling `ARRaycastManager.RemoveRaycast(ARRaycast)`.
 
 Anchors are an exception to this rule; you can safely remove an anchor by destroying its GameObject. For more information about removing anchors, refer to [Remove an anchor](xref:arfoundation-anchors-aranchormanager#remove-an-anchor).
 

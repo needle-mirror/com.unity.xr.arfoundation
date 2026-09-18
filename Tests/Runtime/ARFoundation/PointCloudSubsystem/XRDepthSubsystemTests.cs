@@ -1,6 +1,9 @@
 using NUnit.Framework;
 using Unity.Collections;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems.Tests
 {
@@ -30,7 +33,11 @@ namespace UnityEngine.XR.ARSubsystems.Tests
             });
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor> s_Descs = new List<UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor>();
+
         static UnityEngine.XR.ARSubsystems.XRPointCloudSubsystem CreateTestPointCloudSubsystem()
         {
             SubsystemManager.GetSubsystemDescriptors(s_Descs);

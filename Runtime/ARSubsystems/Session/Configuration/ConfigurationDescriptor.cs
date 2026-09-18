@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <remarks>
     /// A session provider may have multiple, discrete "modes" of operation each with a different set of capabilities.
     /// A configuration descriptor represents the capabilities of a single "mode" of operation,
-    /// which may be a subset of the session's overal capabilities.
+    /// which may be a subset of the session's overall capabilities.
     /// That is, the session may support many features, but not all at the same time.
     /// </remarks>
     /// <seealso cref="ConfigurationChooser"/>

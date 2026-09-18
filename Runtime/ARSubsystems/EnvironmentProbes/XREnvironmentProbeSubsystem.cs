@@ -107,7 +107,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <c>true</c> if the environment probe was successfully added, otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="InvalidOperationException">Thrown when the environment probe subsystem is not running and
-        /// this method is called to an add environment probe.</exception>
+        /// this method is called to add an environment probe.</exception>
         /// <exception cref="NotSupportedException">Thrown for platforms that do not support manual placement of
         /// environment probes.</exception>
         public bool TryAddEnvironmentProbe(Pose pose, Vector3 scale, Vector3 size, out XREnvironmentProbe environmentProbe)
@@ -210,7 +210,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name='trackableId'>Trackable ID of the environment probe to be removed from the AR session.</param>
             /// <returns>
-            /// <c>true</c> whether the environment probe is found in the current AR session and will be removed.
+            /// <c>true</c> if the environment probe is found in the current AR session and will be removed.
             /// Otherwise, <c>false</c>.
             /// </returns>
             /// <remarks>
@@ -238,7 +238,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Registers a subsystem implementation based on the given subystem parameters.
+        /// Registers a subsystem implementation based on the given subsystem parameters.
         /// </summary>
         /// <param name='environmentProbeSubsystemCinfo'>The parameters defining the environment probe functionality
         /// implemented by the subsystem provider.</param>

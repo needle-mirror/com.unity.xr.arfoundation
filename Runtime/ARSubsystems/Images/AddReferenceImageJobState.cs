@@ -67,7 +67,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="obj">The `object` to compare against.</param>
         /// <returns>Returns `true` if <paramref name="obj"/> is of type <see cref="AddReferenceImageJobState"/>
         /// and is considered equal to this <see cref="AddReferenceImageJobState"/> using
-        /// <see cref="Equals(AddReferenceImageJobState)"/>. Returns `false` otherwise `false`.</returns>
+        /// <see cref="Equals(AddReferenceImageJobState)"/>. Returns `false` otherwise.</returns>
         public override bool Equals(object obj) => obj is AddReferenceImageJobState other && Equals(other);
 
         /// <summary>

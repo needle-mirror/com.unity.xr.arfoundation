@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -13,8 +16,23 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(ARPointCloud))]
     [RequireComponent(typeof(ParticleSystem))]
     [HelpUrl(typeof(ARPointCloudParticleVisualizer))]
+    [Icon(Constants.arvrIconPath)]
+#if UNITY_6000_5_OR_NEWER
+    public sealed partial class ARPointCloudParticleVisualizer : MonoBehaviour
+#else
     public sealed class ARPointCloudParticleVisualizer : MonoBehaviour
+#endif
     {
+#if UNITY_6000_5_OR_NEWER
+        [AutoStaticsCleanup]
+#endif
+        static List<Vector3> s_Vertices = new();
+
+        ARPointCloud m_PointCloud;
+        ParticleSystem m_ParticleSystem;
+        ParticleSystem.Particle[] m_Particles;
+        int m_NumParticles;
+
         void OnPointCloudChanged(ARPointCloudUpdatedEventArgs eventArgs)
         {
             var points = s_Vertices;
@@ -93,15 +111,5 @@ namespace UnityEngine.XR.ARFoundation
             if (renderer != null)
                 renderer.enabled = visible;
         }
-
-        ARPointCloud m_PointCloud;
-
-        ParticleSystem m_ParticleSystem;
-
-        ParticleSystem.Particle[] m_Particles;
-
-        int m_NumParticles;
-
-        static List<Vector3> s_Vertices = new ();
     }
 }

@@ -1,5 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 
 namespace UnityEngine.XR.Simulation
@@ -14,6 +17,9 @@ namespace UnityEngine.XR.Simulation
     [AddComponentMenu("")]
     public class SimulationCameraPoseProvider : MonoBehaviour
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static SimulationCameraPoseProvider s_Instance;
 
         bool m_InputHandlerEnabled;

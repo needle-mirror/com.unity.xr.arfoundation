@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using UnityEngine.XR.Management;
 
 namespace UnityEngine.XR.ARFoundation
@@ -12,6 +10,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [AddComponentMenu("XR/AR Foundation/AR Input Manager")]
     [HelpUrl(typeof(ARInputManager))]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARInputManager : MonoBehaviour
     {
         /// <summary>
@@ -39,7 +38,7 @@ namespace UnityEngine.XR.ARFoundation
             subsystem = null;
         }
 
-        XRInputSubsystem GetActiveSubsystemInstance()
+        static XRInputSubsystem GetActiveSubsystemInstance()
         {
             XRInputSubsystem activeSubsystem = null;
 
@@ -61,8 +60,5 @@ namespace UnityEngine.XR.ARFoundation
 
             return activeSubsystem;
         }
-
-        static List<XRInputSubsystemDescriptor> s_SubsystemDescriptors =
-            new List<XRInputSubsystemDescriptor>();
     }
 }

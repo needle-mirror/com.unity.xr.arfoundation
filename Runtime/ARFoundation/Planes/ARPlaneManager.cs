@@ -19,6 +19,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [AddComponentMenu("XR/AR Foundation/AR Plane Manager")]
     [HelpUrl("features/plane-detection/arplanemanager")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARPlaneManager : ARTrackableManager<
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
@@ -93,7 +94,7 @@ namespace UnityEngine.XR.ARFoundation
         public NativeArray<XRRaycastHit> Raycast(Ray ray, TrackableType trackableTypeMask, Allocator allocator)
         {
             // No plane types requested; early out.
-            if ((trackableTypeMask & TrackableType.Planes) == TrackableType.None)
+            if (!trackableTypeMask.IsPlane())
                 return new NativeArray<XRRaycastHit>(0, allocator);
 
             var trackableCollection = trackables;
@@ -229,7 +230,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="plane">The <see cref="ARPlane"/> being updated.</param>
         /// <param name="sessionRelativeData">The new data associated with the plane. All spatial
-        /// data is session-relative space.</param>
+        /// data is in session-relative space.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARPlane plane,
             BoundedPlane sessionRelativeData)

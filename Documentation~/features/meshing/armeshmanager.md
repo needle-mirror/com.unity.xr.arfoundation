@@ -46,7 +46,7 @@ You must set the mesh prefab as outlined in [Set the mesh prefab](xref:arfoundat
 
 ### Density
 
-The [density](xref:UnityEngine.XR.ARFoundation.ARMeshManager.density) property, in the range `0` to `1`, specifies the amount of tessellation to perform on the generated mesh. A value of `0` results in the least amount tessellation, whereas a value of `1` produces the most tessellation.
+The [density](xref:UnityEngine.XR.ARFoundation.ARMeshManager.density) property, in the range `0` to `1`, specifies the amount of tessellation to perform on the generated mesh. A value of `0` results in the least amount of tessellation, whereas a value of `1` produces the most tessellation.
 
 ### Normals
 

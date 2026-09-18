@@ -23,7 +23,7 @@ Your app can check at runtime whether a provider plug-in supports camera compone
 [!include[](../../snippets/initialization.md)]
 
 > [!NOTE]
-> This code example returns `true` if the provider plug-in implements the camera subsystem. The availability of the camera on a specific device may not be available other reasons, for example user permissions.
+> This code example returns `true` if the provider plug-in implements the camera subsystem. The availability of the camera on a specific device may not be available for other reasons, for example user permissions.
 
 ## Optional features
 

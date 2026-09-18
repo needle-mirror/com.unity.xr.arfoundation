@@ -26,7 +26,7 @@ While enabled, the AR Anchor Manager component allows you to create anchors in f
 
 1. **C# scripting — TryAddAnchorAsync** (most widely supported)
 
-    On all platforms that support anchors, you can use [TryAddAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryAddAnchorAsync(UnityEngine.Pose)) with C# async/await syntax as shown in the follwing code example:
+    On all platforms that support anchors, you can use [TryAddAnchorAsync](xref:UnityEngine.XR.ARFoundation.ARAnchorManager.TryAddAnchorAsync(UnityEngine.Pose)) with C# async/await syntax as shown in the following code example:
 
     [!code-cs[TryAddAnchorAsync](../../../Tests/Runtime/CodeSamples/ARAnchorManagerSamples.cs#TryAddAnchorAsync)]
 
@@ -63,7 +63,7 @@ You can subscribe to `trackablesChanged` using either the Inspector or C# script
 
 1. **Use the Inspector**
 
-    a. Create a public method on a `MonoBehaviour` or `ScriptableObject` with a single paramater of type [ARTrackablesChangedEventArgs\<ARAnchor\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1), as shown in the following example code:
+    a. Create a public method on a `MonoBehaviour` or `ScriptableObject` with a single parameter of type [ARTrackablesChangedEventArgs\<ARAnchor\>](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1), as shown in the following example code:
 
     [!code-cs[AnchorsChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#AnchorsChanged)]
 
@@ -95,7 +95,7 @@ While enabled, the AR Anchor Manager component allows you to remove anchors in t
 
 2. **Destroy the AR Anchor component**
 
-    When you [Destroy](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) an AR Anchor component, it will use the AR Anchor Manager component in your scene to remove itself from the anchor subystem. When you remove an anchor this way, the next `ARAnchorManager.trackablesChanged` event contains a null `ARAnchor` component in its [removed](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1.removed) list, because you destroyed the component before this event was invoked.
+    When you [Destroy](xref:UnityEngine.Object.Destroy(UnityEngine.Object)) an AR Anchor component, it will use the AR Anchor Manager component in your scene to remove itself from the anchor subsystem. When you remove an anchor this way, the next `ARAnchorManager.trackablesChanged` event contains a null `ARAnchor` component in its [removed](xref:UnityEngine.XR.ARFoundation.ARTrackablesChangedEventArgs`1.removed) list, because you destroyed the component before this event was invoked.
 
 ## Visualize anchors in the scene
 

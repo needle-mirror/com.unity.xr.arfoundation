@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -9,20 +12,46 @@ namespace UnityEngine.XR.ARFoundation
     /// </summary>
     public static class ARPlaneMeshGenerator
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<Vector3> s_Vertices = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<int> s_TriangleIndices = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<Vector3> s_VertexNormals = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static Bounds s_Bounds;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static LinkedList<int> s_UnusedVertices = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static LinkedListNode<int> s_CurrentUnusedVertexNode;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static HashSet<int> s_ReflexVertices = new();
 
         /// <summary>
-        /// Generates a <c>Mesh</c> from the given parameters. The <paramref name="boundaryVertices"/> is assumed to be a simple polygon. The algorithm uses the ear clipping algorithm with O(n) time complexity for convex polygons and O(n * m) for concave polygons where n is the total number vertices and m is the number of reflex vertices. The space complexity is O(n), scaling linearly with the number of boundary vertices.
+        /// Generates a <c>Mesh</c> from the given parameters. The <paramref name="boundaryVertices"/> is assumed to be a simple polygon. The algorithm uses the ear clipping algorithm with O(n) time complexity for convex polygons and O(n * m) for concave polygons where n is the total number of vertices and m is the number of reflex vertices. The space complexity is O(n), scaling linearly with the number of boundary vertices.
         /// </summary>
         /// <param name="mesh">The <c>Mesh</c> to write results to.</param>
-        /// <param name="boundaryVertices">The vertices of the planes boundary, in plane-space.</param>
+        /// <param name="boundaryVertices">The vertices of the plane's boundary, in plane-space.</param>
         /// <returns><c>True</c> if the <paramref name="mesh"/> was generated, <c>False</c> otherwise.</returns>
         public static bool TryGenerateMesh(Mesh mesh, NativeArray<Vector2> boundaryVertices)
         {

@@ -4,7 +4,9 @@ namespace UnityEngine.XR.ARSubsystems
 {
     /// <summary>
     /// The runtime representation of a <see cref="XRReferenceImageLibrary"/>.
-    /// Some libraries are mutable; see <see cref="MutableRuntimeReferenceImageLibrary"/>.
+    /// Depending on the provider, a runtime library may be immutable after it is created. Some providers
+    /// support mutable libraries that allow you to add images at runtime; see
+    /// <see cref="MutableRuntimeReferenceImageLibrary"/>.
     /// </summary>
     public abstract class RuntimeReferenceImageLibrary : IReferenceImageLibrary
     {

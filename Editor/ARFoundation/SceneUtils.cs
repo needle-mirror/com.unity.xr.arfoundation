@@ -117,12 +117,7 @@ namespace UnityEditor.XR.ARFoundation
             return go;
         }
 
-        [MenuItem("GameObject/XR/AR Debug Menu", false, 10)]
-        static void CreateARDebugMenu(MenuCommand menuCommand)
-        {
-            SpawnObjectWithContext(CreateARDebugMenuWithParent, menuCommand);
-        }
-
+        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7, please download the AR Foundation package sample for debug visualizers in the Package Manager window.")]
         public static GameObject CreateARDebugMenuWithParent(Transform parent)
         {
             var debugMenu = (GameObject)PrefabUtility.InstantiatePrefab(

@@ -1,3 +1,5 @@
+using System;
+
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
@@ -7,7 +9,6 @@ namespace UnityEngine.XR.ARFoundation
     {
         /// <summary>
         /// AR has not been initialized and availability is unknown.
-        /// You can call <see cref="ARSession.CheckAvailability"/> to check availability of AR on the device.
         /// </summary>
         None,
 
@@ -17,22 +18,34 @@ namespace UnityEngine.XR.ARFoundation
         Unsupported,
 
         /// <summary>
-        /// The session subsystem is currently checking availability of AR on the device.
-        /// The <see cref="ARSession.CheckAvailability"/> coroutine has not yet completed.
+        /// (Deprecated.) The session subsystem is currently checking availability of AR on the device.
         /// </summary>
+        /// <remarks>
+        /// This state is only set by the deprecated <see cref="ARSession.CheckAvailability"/> API. Use
+        /// <see cref="UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> with
+        /// <see cref="UnityEngine.XR.ARSubsystems.XRSubsystem{TSubsystem, TSubsystemDescriptor, TProvider}.TryStartAsync"/> instead.
+        /// </remarks>
+        [Obsolete("CheckingAvailability has been deprecated in AR Foundation version 6.7. It is only set by the deprecated ARSession.CheckAvailability API.")]
         CheckingAvailability,
 
         /// <summary>
-        /// The device supports AR, but requires additional software to be installed.
-        /// If the provider [supports runtime installation](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall),
-        /// you can call <see cref="ARSession.Install"/> to attempt installation of AR software on the device.
+        /// (Deprecated.) The device supports AR, but requires additional software to be installed.
         /// </summary>
+        /// <remarks>
+        /// This state is only set by the deprecated <see cref="ARSession.CheckAvailability"/> API. Use
+        /// <c>TryInstallAsync</c> on the platform-specific session subsystem instead.
+        /// </remarks>
+        [Obsolete("NeedsInstall has been deprecated in AR Foundation version 6.7. It is only set by the deprecated ARSession.CheckAvailability API. Await TryStartAsync with XRSubsystemStartOptions.InstallSoftwareIfNeeded instead")]
         NeedsInstall,
 
         /// <summary>
-        /// AR software is currently installing.
-        /// The <see cref="ARSession.Install"/> coroutine has not yet completed.
+        /// (Deprecated.) AR software is currently installing.
         /// </summary>
+        /// <remarks>
+        /// This state is only set by the deprecated <see cref="ARSession.Install"/> API. Use
+        /// <c>TryInstallAsync</c> on the platform-specific session subsystem instead.
+        /// </remarks>
+        [Obsolete("Installing has been deprecated in AR Foundation version 6.7. It is only set by the deprecated ARSession.Install API. Await TryStartAsync with XRSubsystemStartOptions.InstallSoftwareIfNeeded instead.")]
         Installing,
 
         /// <summary>

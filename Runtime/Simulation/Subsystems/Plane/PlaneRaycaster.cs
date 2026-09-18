@@ -52,7 +52,7 @@ namespace UnityEngine.XR.Simulation
             TrackableType trackableTypeMask,
             Allocator allocator)
         {
-            if ((trackableTypeMask & TrackableType.Planes) == TrackableType.None)
+            if (!trackableTypeMask.IsPlane())
                 return default;
 
             var planes = m_PlanesGetter.Invoke();

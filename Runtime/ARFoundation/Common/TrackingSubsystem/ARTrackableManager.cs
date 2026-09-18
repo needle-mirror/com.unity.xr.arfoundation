@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 using Unity.XR.CoreUtils.Collections;
@@ -22,6 +25,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <typeparam name="TTrackable">The type of component that this component will manage (that is, create, update, and destroy).</typeparam>
     [RequireComponent(typeof(XROrigin))]
     [DisallowMultipleComponent]
+    [Icon(Constants.arvrIconPath)]
     public abstract class ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>
         : SubsystemLifecycleManager<TSubsystem, TSubsystemDescriptor, TProvider>, ITrackablesChanged<TTrackable>
         where TSubsystem : TrackingSubsystem<TSessionRelativeData, TSubsystem, TSubsystemDescriptor, TProvider>, new()
@@ -30,18 +34,43 @@ namespace UnityEngine.XR.ARFoundation
         where TSessionRelativeData : struct, ITrackable
         where TTrackable : ARTrackable<TSessionRelativeData, TTrackable>
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<TTrackable> s_Added = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<TTrackable> s_Updated = new();
 
         // The deprecated trackable manager APIs ARPlaneManager.planesChanged, ARAnchorManager.anchorsChanged, etc,
         // require a list of TTrackable to be served to the user. Once these deprecated APIs are removed, this
         // List<TTrackable> should be removed as well. Until then, removed trackables are doubly saved in
         // different formats.
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<TTrackable> s_Removed = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<KeyValuePair<TrackableId, TTrackable>> s_RemovedTrackables = new();
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static ReadOnlyList<TTrackable> s_AddedReadOnly = new(s_Added);
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static ReadOnlyList<TTrackable> s_UpdatedReadOnly = new(s_Updated);
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static ReadOnlyList<KeyValuePair<TrackableId, TTrackable>> s_RemovedReadOnly = new(s_RemovedTrackables);
 
         /// <summary>
@@ -71,6 +100,9 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         protected abstract string gameObjectName { get; }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable> instance { get; private set; }
 
         /// <summary>
@@ -81,7 +113,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The Prefab that should be instantiated when adding a trackable. Can be `null`.
         /// </summary>
-        /// <returns>The prefab should be instantiated when adding a trackable.</returns>
+        /// <returns>The prefab that should be instantiated when adding a trackable.</returns>
         protected virtual GameObject GetPrefab() => null;
 
         /// <summary>
@@ -302,7 +334,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="trackable">An existing trackable to add to the subsystem.</param>
         /// <returns>Returns <see langword="true"/> if this manager is enabled, has a valid subsystem, and
         /// <paramref name="trackable"/> is not already being tracked by this manager.
-        /// Otherwise, returns <see langword="false"/> otherwise.</returns>
+        /// Otherwise, returns <see langword="false"/>.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="trackable"/> is <see langword="null"/>.
         /// </exception>
         protected bool CanBeAddedToSubsystem(TTrackable trackable)

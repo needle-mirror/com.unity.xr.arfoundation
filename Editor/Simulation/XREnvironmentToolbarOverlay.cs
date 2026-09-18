@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
 using UnityEditor.Toolbars;
@@ -28,6 +31,9 @@ namespace UnityEditor.XR.Simulation
         public const string viewEnvironmentIconPath = k_IconsPath + "ViewEnvironment.png";
         public const string viewEnvironmentDisableIconPath = k_IconsPath + "NoViewEnvironment.png";
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static Func<string[], string[]> collectElementIds;
 
         public static bool CanEnableContent(EditorWindow window)
@@ -148,7 +154,11 @@ namespace UnityEditor.XR.Simulation
     [EditorToolbarElement(id, typeof(SceneView))]
     class EnvironmentDropdown : BaseEnvironmentDropdown
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly List<string> k_EnvironmentMenuItemNames = new();
+
         const string k_Tooltip = "Change the environment.";
         const string k_NoEnvironmentText = "No environment set";
         const string k_InstallEnvironmentsText = "Install sample environments";

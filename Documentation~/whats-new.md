@@ -1,30 +1,38 @@
 ---
 uid: arfoundation-whats-new
 ---
-# What's new in version 6.6
+# What's new in version 6.7
 
 This release includes the following significant changes:
 
-## XRSubsystem
+## New features
 
-- Added a new [XRSubsystem](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3) base class that enables providers to incorporate permissions and asynchronous resource creation into their `Start` logic. If you are the owner of a subsystem or provider type, Unity recommends that you inherit the new base class instead of `SubsystemWithProvider`.
-- Changed `SubsystemLifecycleManager.Start` logic to be compatible with the new `XRSubsystem` base class. This is a backwards-compatible change, so Manager components still support `SubsystemWithProvider` as the subsystem base class as well.
-- Reverted a previous change to `SubsystemLifecycleManager.OnEnable`, which allowed the manager component to poll for subsystems that weren't synchronously available. With the addition of `XRSubsystem`, all providers are now expected to create subsystems synchronously during `XRLoader.Initialize`.
+### Install software via TryStartAsync
+
+- Added [XRSubsystemStartOptions.InstallSoftwareIfNeeded](xref:UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded), a new start option you can pass to [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*). On platforms that require additional runtime software, the subsystem will check whether the required software is installed and attempt to install it before starting. This is now the recommended way to handle AR software installation.
+
+### OpenXR image tracking support
+
+- Added support for AR Foundation image tracking via [Unity OpenXR: Spatial Entities](xref:spatialentities-openxr-manual) which allows you to identify and track images in the real world based on a list of reference images. Refer to [Image tracking](xref:spatialentities-openxr-image-tracking) (Spatial Entities) for more information.
 
 ## Other API additions
 
-- Added a `ToString` override for `ARMarker`.
-- Added `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate`, which allows a raycast provider to determine at runtime which trackable types it supports.
-- Added `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachmentsDelegate`, a `Func<bool>` delegate that allows providers to evaluate trackable attachment support dynamically at runtime.
-
-## UI changes
-
-- Added support for Apple visionOS to the Build AssetBundles window (**Assets** > **AR Foundation** > **Build AssetBundles**).
+- Added `TrackableTypeExtensions`, a new static class with an `IsPlane()` extension method that tests whether a `TrackableType` value includes any plane sub-type, and an `allPlaneTypes` property that returns the combined mask of all plane sub-types.
+- Added `XRResultStatus.StatusCode.LimitReached` as a new error code that AR Foundation methods can return.
+- Added `XRPlaneSubsystemDescriptor.supportsPlaneSubsumption`, to allow a platform to indicate whether it will perform plane subsumption. If a platform supports plane subsumption, it sets this value to `true`, and populates `ARPlane.subsumedBy` for the subsumed plane.
 
 ## Deprecations
 
-- Deprecated `XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary<T>` and `XRPlaneSubsystem.Provider.CreateOrResizeNativeArrayIfNecessary<T>`. Use [NativeArrayUtils](xref:Unity.XR.CoreUtils.NativeArrayUtils) instead.
-- Deprecated `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypes`. Use `XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypesDelegate` instead.
-- Deprecated `XRAnchorSubsystemDescriptor.Cinfo.supportsTrackableAttachments`. Use `supportsTrackableAttachmentsDelegate` instead.
+- The following APIs have been deprecated in AR Foundation 6.7 as part of the transition to the new install flow:
+  - `ARSession.CheckAvailability` and `ARSession.Install`: To install required AR software, pass [XRSubsystemStartOptions.InstallSoftwareIfNeeded](xref:UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded) to [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
+  - `ARSessionState.CheckingAvailability`, `ARSessionState.NeedsInstall`, and `ARSessionState.Installing`: These states are only set by the deprecated `ARSession.CheckAvailability` and `ARSession.Install` APIs.
+  - `XRSessionSubsystem.GetAvailabilityAsync`, `XRSessionSubsystem.InstallAsync`, and corresponding `XRSessionSubsystem.Provider` methods: Pass [XRSubsystemStartOptions.InstallSoftwareIfNeeded](xref:UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded) to [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
+  - `SessionAvailability` enum and `SessionAvailabilityExtensions` class: Use the [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) returned by [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
+  - `SessionInstallationStatus` enum: Use the [XRResultStatus](xref:UnityEngine.XR.ARSubsystems.XRResultStatus) returned by [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
+  - `XRSessionSubsystemDescriptor.supportsInstall` and `Cinfo.supportsInstall`: Pass [XRSubsystemStartOptions.InstallSoftwareIfNeeded](xref:UnityEngine.XR.ARSubsystems.XRSubsystemStartOptions.InstallSoftwareIfNeeded) to [TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) to install required software instead.
+- Deprecated `TrackableType.Planes`. Use `TrackableTypeExtensions.IsPlane()` to test whether a value contains any plane sub-type, or `TrackableTypeExtensions.allPlaneTypes` to build a mask that includes all plane sub-types.
+- The following APIs have been deprecated in AR Foundation 6.7 as part of the transition to asynchronous reference image library APIs:
+  - The `ARTrackedImageManager.referenceLibrary` setter: Use `ARTrackedImageManager.TrySetReferenceLibraryAsync` or `ARTrackedImageManager.TrySetReferenceLibrary` instead.
+  - The synchronous `CreateRuntimeLibrary` methods on `XRImageTrackingSubsystem` and `ARTrackedImageManager`: Use `TryCreateRuntimeLibraryAsync` instead.
 
 For a full list of changes in this version including backwards-compatible bugfixes, refer to the package [changelog](xref:arfoundation-changelog).

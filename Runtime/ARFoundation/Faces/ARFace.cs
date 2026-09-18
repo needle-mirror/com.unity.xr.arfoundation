@@ -15,6 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_Face)]
     [HelpUrl(typeof(ARFace))]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARFace : ARTrackable<XRFace, ARFace>
     {
         /// <summary>
@@ -40,7 +41,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The indices defining the triangles of the face mesh. Check for existence with <c>indices.IsCreated</c>.
-        /// The are three times as many indices as triangles, so this will always be a multiple of 3.
+        /// There are three times as many indices as triangles, so this will always be a multiple of 3.
         /// </summary>
         public NativeArray<int> indices => GetUndisposable(m_FaceMesh.indices);
 

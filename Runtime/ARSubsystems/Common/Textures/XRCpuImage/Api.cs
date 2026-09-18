@@ -41,10 +41,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera
             /// image.</exception>
-            public virtual bool TryGetPlane(
-                int nativeHandle,
-                int planeIndex,
-                out Plane.Cinfo planeCinfo)
+            public virtual bool TryGetPlane(int nativeHandle, int planeIndex, out Plane.Cinfo planeCinfo)
             {
                 throw new NotSupportedException("Camera image conversion is not supported by this implementation");
             }
@@ -96,9 +93,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <returns>A unique identifier for this request.</returns>
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera
             /// image.</exception>
-            public virtual int ConvertAsync(
-                int nativeHandle,
-                ConversionParams conversionParams)
+            public virtual int ConvertAsync(int nativeHandle, ConversionParams conversionParams)
             {
                 throw new NotSupportedException("Camera image conversion is not supported by this implementation");
             }
@@ -115,8 +110,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <exception cref="System.NotSupportedException">Thrown if the implementation does not support camera
             /// image.</exception>
             /// <seealso cref="DisposeImage"/>
-            public virtual bool NativeHandleValid(
-                int nativeHandle)
+            public virtual bool NativeHandleValid(int nativeHandle)
             {
                 throw new NotSupportedException("Camera image conversion is not supported by this implementation");
             }

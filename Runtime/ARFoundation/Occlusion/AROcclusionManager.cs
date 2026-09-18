@@ -17,6 +17,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(Camera))]
     [AddComponentMenu("XR/AR Foundation/AR Occlusion Manager")]
     [HelpUrl("features/occlusion")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class AROcclusionManager :
         SubsystemLifecycleManager<XROcclusionSubsystem, XROcclusionSubsystemDescriptor, XROcclusionSubsystem.Provider>
     {
@@ -218,7 +219,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Attempt to get the latest human stencil CPU image. This provides directly access to the raw pixel data.
+        /// Attempt to get the latest human stencil CPU image. This provides direct access to the raw pixel data.
         /// </summary>
         /// <remarks>
         /// The `XRCpuImage` must be disposed to avoid resource leaks.

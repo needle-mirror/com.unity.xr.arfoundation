@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils.Collections;
 using UnityEngine.XR.ARSubsystems;
 
@@ -22,11 +25,19 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(Camera))]
     [AddComponentMenu("XR/AR Foundation/AR Camera Manager")]
     [HelpUrl("features/camera/camera-components")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARCameraManager :
         SubsystemLifecycleManager<XRCameraSubsystem, XRCameraSubsystemDescriptor, XRCameraSubsystem.Provider>,
         ISerializationCallbackReceiver
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<Texture2D> s_Textures = new();
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<int> s_PropertyIds = new();
         ISwapchainStrategy m_SwapchainStrategy = new NoSwapchainStrategy();
 
@@ -96,7 +107,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Get whether Image Stabilization in enabled.
+        /// Get whether Image Stabilization is enabled.
         /// </summary>
         /// <value><see langword="true"/> if EIS is enabled. <see langword="false"/> if EIS is not enabled
         /// or if there is no loaded <see cref="XRCameraSubsystem"/>.</value>
@@ -494,7 +505,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Multiplies the cameras backgorund color with its alpha.
+        /// Multiplies the cameras background color with its alpha.
         /// </summary>
         /// <param name="camera">The camera to premultiply the background color with the alpha. Must not be null.</param>
         void PremultiplyBackgroundColor(Camera camera)

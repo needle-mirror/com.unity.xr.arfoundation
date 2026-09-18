@@ -394,7 +394,7 @@ namespace UnityEngine.XR.ARSubsystems
             }
 
             /// <summary>
-            /// Whether the subsystem supports blend shapes for each detected faces.
+            /// Whether the subsystem supports blend shapes for each detected face.
             /// </summary>
             public bool supportsBlendShapes
             {

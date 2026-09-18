@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.Simulation
 {
@@ -9,6 +12,9 @@ namespace UnityEngine.XR.Simulation
     /// </summary>
     class SimulationRaycasterRegistry
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static SimulationRaycasterRegistry s_Instance;
 
         List<IRaycaster> m_Raycasters = new();

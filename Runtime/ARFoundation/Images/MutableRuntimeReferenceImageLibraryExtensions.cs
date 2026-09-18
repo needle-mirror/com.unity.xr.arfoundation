@@ -20,7 +20,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Image addition can take some time (several frames) due to extra processing that must occur to insert the
         /// image into the library. This is done using the [Unity Job System]
         /// (https://docs.unity3d.com/Manual/JobSystem.html). The returned [JobHandle](xref:Unity.Jobs.JobHandle) can
-        /// be used to chain together multiple tasks or to query for completion, but you can safely discarded if you do
+        /// be used to chain together multiple tasks or to query for completion, but you can safely discard it if you do
         /// not need it.
         ///
         /// This job, like all Unity jobs, can have dependencies (using the <paramref name="inputDeps"/>). If you are
@@ -71,7 +71,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="inputDeps">Input job dependencies (optional).</param>
         /// <returns><para>Returns an <see cref="AddReferenceImageJobState"/> that you can use to query for job completion and
         /// whether the image was successfully added.</para>
-        /// <para>If image validity can be determined, invalid images will be not be added.</para></returns>
+        /// <para>If image validity can be determined, invalid images will not be added.</para></returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="library"/> is <see langword="null"/>.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is <see langword="null"/>.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <see cref="ARSession.state"/> hasn't reached the ready state.</exception>

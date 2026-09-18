@@ -16,6 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBodyManager)]
     [AddComponentMenu("XR/AR Foundation/AR Human Body Manager")]
     [HelpUrl("features/body-tracking")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARHumanBodyManager :
         ARTrackableManager<XRHumanBodySubsystem, XRHumanBodySubsystemDescriptor, XRHumanBodySubsystem.Provider, XRHumanBody, ARHumanBody>
     {
@@ -198,7 +199,7 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="added">The list of human bodies added to the set of trackables.</param>
         /// <param name="updated">The list of human bodies updated in the set of trackables.</param>
-        /// <param name="removed">The list of human bodies removed to the set of trackables.</param>
+        /// <param name="removed">The list of human bodies removed from the set of trackables.</param>
         [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
         protected override void OnTrackablesChanged(List<ARHumanBody> added, List<ARHumanBody> updated, List<ARHumanBody> removed)
         {

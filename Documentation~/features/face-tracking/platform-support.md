@@ -33,7 +33,7 @@ The following table lists the optional features of the face subsystem. Each opti
 | **Face mesh UVs** | [supportsFaceMeshUVs](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor.supportsFaceMeshUVs) | Whether the subsystem supports texture coordinates for each face mesh. |
 | **Face mesh normals** | [supportsFaceMeshNormals](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor.supportsFaceMeshNormals) | Whether the subsystem supports normals for each face mesh. |
 | **Eye tracking** |  [supportsEyeTracking](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor.supportsEyeTracking) | Whether the subsystem supports eye tracking for each detected face. |
-| **Blend Shapes** |  [supportsBlendShapes](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor.supportsBlendShapes) | Whether the subsystem supports blend shapes for each detected faces. |
+| **Blend Shapes** |  [supportsBlendShapes](xref:UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor.supportsBlendShapes) | Whether the subsystem supports blend shapes for each detected face. |
 
 ### Optional feature platform support
 

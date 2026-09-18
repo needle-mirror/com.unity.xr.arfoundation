@@ -16,6 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbeManager)]
     [AddComponentMenu("XR/AR Foundation/AR Environment Probe Manager")]
     [HelpUrl("features/environment-probes", "ar-environment-probe-manager-component")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class AREnvironmentProbeManager : ARTrackableManager<
         XREnvironmentProbeSubsystem,
         XREnvironmentProbeSubsystemDescriptor,

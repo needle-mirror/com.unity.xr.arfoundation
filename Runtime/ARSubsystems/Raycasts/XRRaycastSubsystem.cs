@@ -53,10 +53,10 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Attempts to add a new persistent raycast. The raycast will be updated automatically until
-        /// this subsystem is stopped or destroyed, or the the raycast is removed with
+        /// this subsystem is stopped or destroyed, or the raycast is removed with
         /// <see cref="RemoveRaycast(TrackableId)"/>.
         /// </summary>
-        /// <param name="screenPoint">A point on the screen, in normalized screen coorindates (0, 0)..(1, 1).</param>
+        /// <param name="screenPoint">A point on the screen, in normalized screen coordinates (0, 0)..(1, 1).</param>
         /// <param name="estimatedDistance">The estimated distance to the raycast target. For example, an average
         /// human height might be used to estimate the distance to the floor.</param>
         /// <param name="raycast">The newly added raycast. All spatial data is relative to the XR origin.</param>
@@ -65,7 +65,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Attempts to add a new persistent raycast. The raycast will be updated automatically until
-        /// this subsystem is stopped or destroyed, or the the raycast is removed with
+        /// this subsystem is stopped or destroyed, or the raycast is removed with
         /// <see cref="RemoveRaycast(TrackableId)"/>.
         /// </summary>
         /// <param name="ray">A [ray](https://docs.unity3d.com/ScriptReference/Ray.html) relative to the XR origin defining the raycast.</param>

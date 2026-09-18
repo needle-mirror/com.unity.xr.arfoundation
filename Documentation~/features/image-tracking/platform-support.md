@@ -14,6 +14,7 @@ The AR Foundation [XRImageTrackingSubsystem](xref:UnityEngine.XR.ARSubsystems.XR
 | Apple visionOS XR Plug-in | Yes |  N/A |
 | Unity OpenXR: Meta | | |
 | Unity OpenXR: Android XR | | |
+| Unity OpenXR: Spatial Entities | Yes | [Image tracking](xref:spatialentities-openxr-image-tracking) (Spatial Entities) |
 | XR Simulation | Yes | [Image tracking](xref:arfoundation-simulation-image-tracking) (XR Simulation) |
 
 ## Check for image tracking support
@@ -34,8 +35,9 @@ The following table lists the optional features of the image tracking subsystem.
 | :------ | :--------------- | :----------------- |
 | **Moving images** | [supportsMovingImages](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsMovingImages) | Whether the subsystem supports tracking the poses of moving images in real time. |
 | **Requires physical image dimensions** | [requiresPhysicalImageDimensions](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.requiresPhysicalImageDimensions) | Whether the subsystem requires physical image dimensions to be provided for all reference images. If `False`, specifying the physical dimensions is optional. |
-| **Mutable library** | [supportsMutableLibrary](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsMutableLibrary) | Whether the subsystem supports [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary), a reference image library which can modified at runtime, as opposed to the [XRReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary), which is generated at edit time and cannot be modified at runtime. |
+| **Mutable library** | [supportsMutableLibrary](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsMutableLibrary) | Whether the subsystem supports [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary), a reference image library which can be modified at runtime, as opposed to the [XRReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary), which is generated at edit time and cannot be modified at runtime. |
 | **Image validation** | [supportsImageValidation](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsImageValidation) | Whether the subsystem supports image validation (validating images before they are added to a [MutableRuntimeReferenceImageLibrary](xref:UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary)).|
+| **Runtime library** | [supportsRuntimeLibrary](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsRuntimeLibrary) | Whether the subsystem supports image libraries that you can instantiate at runtime. A runtime library can be mutable or immutable, depending on the platform. To check which of these your target platforms support, refer to [supportsMutableLibrary](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystemDescriptor.supportsMutableLibrary). |
 
 <a id="optional-feature-platform-support"></a>
 
@@ -43,12 +45,13 @@ The following table lists the optional features of the image tracking subsystem.
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature | ARCore | ARKit | VisionOS | XR Simulation |
-| :------ | :----: | :---: | :------: | :-----------: |
-| **Moving images** | Yes | iOS 12+ | Yes | Yes |
-| **Requires physical image dimensions** | | Yes |  | |
-| **Mutable library** | Yes | Yes | Yes | Yes |
-| **Image validation** | Yes | iOS 13+ | Yes | Yes |
+| Feature | ARCore | ARKit | VisionOS | Spatial Entities | XR Simulation |
+| :------ | :----: | :---: | :------: | :--------------: | :-----------: |
+| **Moving images** | Yes | iOS 12+ | Yes | Yes | Yes |
+| **Requires physical image dimensions** | | Yes |  | | |
+| **Mutable library** | Yes | Yes | Yes | | Yes |
+| **Image validation** | Yes | iOS 13+ | Yes | Yes | Yes |
+| **Runtime library** | Yes | Yes | | Yes | Yes |
 
 <a id="check-feature-support"></a>
 

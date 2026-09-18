@@ -11,6 +11,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_EnvironmentProbe)]
     [HelpUrl(typeof(AREnvironmentProbe))]
+    [Icon(Constants.arvrIconPath)]
     public class AREnvironmentProbe : ARTrackable<XREnvironmentProbe, AREnvironmentProbe>
     {
         /*

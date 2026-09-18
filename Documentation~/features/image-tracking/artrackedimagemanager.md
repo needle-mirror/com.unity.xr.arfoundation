@@ -44,7 +44,7 @@ The AR Tracked Image Manager component's reference image library must be non-nul
 
 In the Editor, you can change the AR Tracked Image Manager's reference image library using the component's **Serialized Library** field.
 
-You can also set the reference image library via script:
+You can also set the reference image library via script with [TrySetReferenceLibraryAsync](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager.TrySetReferenceLibraryAsync(UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary,System.Threading.CancellationToken)):
 
 [!code-cs[trackedimage_setlibrary](../../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_setlibrary)]
 
@@ -79,7 +79,7 @@ Subscribe to the `ARTrackedImageManager`'s [trackablesChanged](xref:UnityEngine.
 
 When you add a component to an active GameObject at runtime, Unity immediately invokes the component's `OnEnable` method. However, the `ARTrackedImageManager` requires a non-null reference image library to be successfully enabled. If the reference image library is null when the `ARTrackedImageManager` is enabled, the manager automatically disables itself.
 
-To add an `ARTrackedImageManager` at runtime, set its reference image library and then re-enable it as shown in the following code sample:
+To add an `ARTrackedImageManager` at runtime, set its reference image library with `TrySetReferenceLibraryAsync`, then re-enable it if the operation succeeded, as shown in the following code sample:
 
 [!code-cs[trackedimage_addmanager_to_gameobject](../../../Tests/Runtime/CodeSamples/TrackedImageSamples.cs#trackedimage_addmanager_to_gameobject)]
 

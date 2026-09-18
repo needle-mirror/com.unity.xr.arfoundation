@@ -39,6 +39,7 @@ The following table lists the optional features of the plane subsystem. Each opt
 | **Arbitrary plane detection** | [supportsArbitraryPlaneDetection](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsArbitraryPlaneDetection) | Indicates whether the provider implementation supports the detection of planes that are aligned with neither the horizontal nor vertical axes. |
 | **Boundary vertices** | [supportsBoundaryVertices](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsBoundaryVertices) | Indicates whether the provider implementation supports boundary vertices for its planes. |
 | **Classification** | [supportsClassification](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsClassification) | Indicates whether the provider implementation can provide a value for [ARPlane.classifications](xref:UnityEngine.XR.ARFoundation.ARPlane.classifications). |
+| **Plane Subsumption** | [supportsPlaneSubsumption](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.supportsPlaneSubsumption) | Indicates whether the provider implementation will provide a value for [ARPlane.subsumedBy](xref:UnityEngine.XR.ARFoundation.ARPlane.subsumedBy). |
 
 <a id="optional-features-support-table"></a>
 
@@ -53,6 +54,7 @@ The following table lists whether certain XR plug-in providers support each opti
 | **Arbitrary plane detection**  |        |           | Yes      | Yes         | Yes        | Yes              |               |
 | **Boundary vertices**          | Yes    | Yes       | Yes      | Yes         | Yes        | Yes              | Yes           |
 | **Classification**             |        | iOS 12+   | Yes      | Yes         | Yes        | Yes              |               |
+| **Plane Subsumption**          | Yes    |           |          |             |            | Determined at runtime |          |
 
 <a id="check-feature-support"></a>
 
@@ -60,7 +62,7 @@ The following table lists whether certain XR plug-in providers support each opti
 
 Your app can check at runtime whether a plane detection provider supports any optional features on the user's device. The [XRPlaneSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor) contains boolean properties for each optional feature that tell you whether they are supported.
 
-Refer to example code below to learn how to check for optional feature support:
+Refer to the example code below to learn how to check for optional feature support:
 
 [!code-cs[DescriptorChecks](../../../Tests/Runtime/CodeSamples/ARPlaneManagerSamples.cs#DescriptorChecks)]
 

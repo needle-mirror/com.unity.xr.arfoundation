@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
@@ -17,6 +18,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [AddComponentMenu("XR/AR Foundation/AR Tracked Image Manager")]
     [HelpUrl("features/image-tracking")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARTrackedImageManager : ARTrackableManager<
         XRImageTrackingSubsystem,
         XRImageTrackingSubsystemDescriptor,
@@ -34,13 +36,6 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Get or set the reference image library (that is, the set of images to search for in the physical environment).
         /// </summary>
-        /// <remarks>
-        /// An <c>IReferenceImageLibrary</c> can be either an <c>XRReferenceImageLibrary</c>
-        /// or a <c>RuntimeReferenceImageLibrary</c>. <c>XRReferenceImageLibrary</c>s can only be
-        /// constructed in the Editor and are immutable at runtime. A <c>RuntimeReferenceImageLibrary</c>
-        /// is the runtime representation of a <c>XRReferenceImageLibrary</c> and can be mutable
-        /// at runtime (see <c>MutableRuntimeReferenceImageLibrary</c>).
-        /// </remarks>
         /// <exception cref="System.InvalidOperationException">Thrown if the <see cref="referenceLibrary"/> is set to <c>null</c> while image tracking is enabled.</exception>
         public IReferenceImageLibrary referenceLibrary
         {
@@ -51,6 +46,7 @@ namespace UnityEngine.XR.ARFoundation
 
                 return m_SerializedLibrary;
             }
+            [Obsolete("The referenceLibrary setter is deprecated in AR Foundation 6.7. Use TrySetReferenceLibraryAsync or TrySetReferenceLibrary instead.")]
             set
             {
                 switch (value)
@@ -82,15 +78,110 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
+        /// Attempts to create a runtime reference image library from <paramref name="serializedLibrary"/>, activate it,
+        /// and assign it to this manager.
+        /// </summary>
+        /// <remarks>
+        /// After this operation completes successfully, <see cref="referenceLibrary"/> returns the newly created
+        /// runtime library.
+        ///
+        /// Only one asynchronous operation from this method may be in progress at a time.
+        /// Use the `cancellationToken` to cancel a previous call to this method if needed,
+        /// otherwise subsequent calls will fail while an operation is in progress.
+        /// </remarks>
+        /// <param name="serializedLibrary">The serialized library to convert to a runtime library and assign, or
+        /// <c>null</c> to assign an empty library.</param>
+        /// <param name="cancellationToken">A cancellation token, which you can use to cancel the operation in progress.</param>
+        /// <returns>The result of the async operation.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="serializedLibrary"/> is <c>null</c>.</exception>
+        /// <exception cref="System.OperationCanceledException">Thrown if the operation is canceled, either by
+        /// <paramref name="cancellationToken"/> or because this component was destroyed.</exception>
+        public async Awaitable<Result<RuntimeReferenceImageLibrary>> TrySetReferenceLibraryAsync(
+            XRReferenceImageLibrary serializedLibrary, CancellationToken cancellationToken = default)
+        {
+            EnsureSubsystemInstanceSet();
+            if (subsystem == null)
+            {
+                return new(new XRResultStatus(XRResultStatus.StatusCode.ProviderUninitialized), null);
+            }
+
+            CancellationTokenSource cts = null;
+            CancellationToken token;
+            if (cancellationToken.CanBeCanceled)
+            {
+                cts =
+                    CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken, cancellationToken);
+                token = cts.Token;
+            }
+            else
+            {
+                token = destroyCancellationToken;
+            }
+
+            try
+            {
+                var result = await subsystem.TryCreateRuntimeLibraryAsync(serializedLibrary, token);
+
+                if (!result.status.IsSuccess())
+                {
+                    return result;
+                }
+
+                m_SerializedLibrary = serializedLibrary;
+                subsystem.imageLibrary = result.value;
+                UpdateReferenceImages(subsystem.imageLibrary);
+                return result;
+            }
+            finally
+            {
+                cts?.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Attempts to assign <paramref name="runtimeLibrary"/> to this manager.
+        /// </summary>
+        /// <example>
+        /// <code>
+        ///     var status = manager.TrySetReferenceLibrary(runtimeLibrary);
+        ///     if (status.IsSuccess())
+        ///         DoSomething();
+        /// </code>
+        /// </example>
+        /// <param name="runtimeLibrary">The runtime library to assign.</param>
+        /// <returns>The status of the operation.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="runtimeLibrary"/> is <c>null</c>.</exception>
+        public XRResultStatus TrySetReferenceLibrary(RuntimeReferenceImageLibrary runtimeLibrary)
+        {
+            if (runtimeLibrary == null)
+            {
+                return new XRResultStatus(XRResultStatus.StatusCode.ValidationFailure);
+            }
+
+            EnsureSubsystemInstanceSet();
+            if (subsystem == null)
+            {
+                return new XRResultStatus(XRResultStatus.StatusCode.ProviderUninitialized);
+            }
+
+            m_SerializedLibrary = null;
+            subsystem.imageLibrary = runtimeLibrary;
+            UpdateReferenceImages(subsystem.imageLibrary);
+
+            return XRResultStatus.unqualifiedSuccess;
+        }
+
+        /// <summary>
         /// Creates a <c>UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary</c> from an existing
         /// <c>UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary</c>
         /// or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.
         /// Use this to construct reference image libraries at runtime. If the library is of type
         /// <c>MutableRuntimeReferenceImageLibrary</c>, it is modifiable at runtime.
         /// </summary>
-        /// <param name="serializedLibrary">An existing <c>XRReferenceImageLibrary</c>, or <c>null</c> to create an empty mutable image library.</param>
+        /// <param name="serializedLibrary">An existing <c>XRReferenceImageLibrary</c>, or <c>null</c> to create an empty image library.</param>
         /// <returns>A new <c>RuntimeReferenceImageLibrary</c> representing the deserialized version of <paramref name="serializedLibrary"/> or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if there is no subsystem. This usually means image tracking is not supported.</exception>
+        [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.")]
         public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary = null)
         {
             EnsureSubsystemInstanceSet();
@@ -101,6 +192,36 @@ namespace UnityEngine.XR.ARFoundation
             return subsystem.CreateRuntimeLibrary(serializedLibrary);
         }
 
+        /// <summary>
+        /// Attempts to create a <c>RuntimeReferenceImageLibrary</c> from an existing <c>XRReferenceImageLibrary</c>.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="referenceImageLibrary"/> is <c>null</c>, the new library is empty. You can only add
+        /// images to the resulting library if the platform supports mutable libraries; refer to
+        /// <see cref="XRImageTrackingSubsystemDescriptor.supportsMutableLibrary"/>.
+        /// </remarks>
+        /// <param name="referenceImageLibrary">An existing <c>XRReferenceImageLibrary</c>, or <c>null</c> to create an empty image library.</param>
+        /// <param name="cancellationToken">A cancellation token, which you can use to cancel the operation in progress.</param>
+        /// <returns>The result of the operation.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the provider doesn't implement asynchronous
+        /// library creation.</exception>
+        /// <exception cref="System.OperationCanceledException">Thrown if the operation is canceled by
+        /// <paramref name="cancellationToken"/>.</exception>
+        public Awaitable<Result<RuntimeReferenceImageLibrary>> TryCreateRuntimeLibraryAsync(
+            XRReferenceImageLibrary referenceImageLibrary, CancellationToken cancellationToken = default)
+        {
+            EnsureSubsystemInstanceSet();
+
+            if (subsystem == null)
+            {
+                return AwaitableUtils<Result<RuntimeReferenceImageLibrary>>.FromResult(
+                    new Result<RuntimeReferenceImageLibrary>(
+                        new XRResultStatus(XRResultStatus.StatusCode.ProviderUninitialized), null));
+            }
+
+            return subsystem.TryCreateRuntimeLibraryAsync(referenceImageLibrary, cancellationToken);
+        }
+
         [SerializeField]
         [Tooltip("The maximum number of moving images to track in realtime. Not all implementations support this feature.")]
         int m_MaxNumberOfMovingImages;
@@ -108,17 +229,22 @@ namespace UnityEngine.XR.ARFoundation
         bool supportsMovingImages => descriptor?.supportsMovingImages == true;
 
         /// <summary>
-        /// The requested maximum number of moving images to track in real time. Support can vary between devices and providers. Check
-        /// for support at runtime with <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
-        /// `supportsMovingImages` property.
+        /// The requested maximum number of moving images to track in real time.
         /// </summary>
+        /// <remarks>
+        /// Support can vary between devices and providers. Check for support at runtime with
+        /// <see cref="SubsystemLifecycleManager{TSubsystem,TSubsystemDescriptor,TProvider}.descriptor"/>'s
+        /// `supportsMovingImages` property. If `supportsMovingImages` is `false`, setting this property has no effect.
+        /// The reverse isn't guaranteed: a provider can support moving images without supporting a configurable maximum
+        /// number of them, in which case `supportsMovingImages` will be true, but setting this property has no effect.
+        /// </remarks>
         public int requestedMaxNumberOfMovingImages
         {
             get => supportsMovingImages ? subsystem.requestedMaxNumberOfMovingImages : m_MaxNumberOfMovingImages;
             set
             {
                 m_MaxNumberOfMovingImages = value;
-                 if (enabled && (descriptor?.supportsMovingImages == true))
+                if (enabled && (descriptor?.supportsMovingImages == true))
                 {
                     subsystem.requestedMaxNumberOfMovingImages = value;
                 }
@@ -173,8 +299,8 @@ namespace UnityEngine.XR.ARFoundation
         {
             if (subsystem.imageLibrary == null && m_SerializedLibrary != null)
             {
-                subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(m_SerializedLibrary);
-                m_SerializedLibrary = null;
+                CreateLibraryFromSerializedAsync();
+                return;
             }
 
             UpdateReferenceImages(subsystem.imageLibrary);
@@ -195,6 +321,29 @@ namespace UnityEngine.XR.ARFoundation
                 }
             }
 #endif
+        }
+
+        async void CreateLibraryFromSerializedAsync()
+        {
+            try
+            {
+                var result = await TrySetReferenceLibraryAsync(m_SerializedLibrary, destroyCancellationToken);
+                if (!result.status.IsSuccess())
+                {
+                    enabled = false;
+                    Debug.LogError(
+                        $"{nameof(ARTrackedImageManager)} '{name}' failed to create a runtime reference image library from its serialized library: {result.status}. The component was disabled. Assign a valid reference image library and enable this component to retry.",
+                        this);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // do nothing
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e, this);
+            }
         }
 
         bool FindReferenceImage(Guid guid, out XRReferenceImage referenceImage)
@@ -240,7 +389,7 @@ namespace UnityEngine.XR.ARFoundation
 #if !UNITY_6000_6_OR_NEWER
                 if (Debug.isDebugBuild)
 #endif
-                    Debug.LogError($"Could not find reference image with guid {sessionRelativeData.sourceImageId}");
+                Debug.LogError($"Could not find reference image with guid {sessionRelativeData.sourceImageId}");
             }
 #endif
         }
@@ -268,6 +417,8 @@ namespace UnityEngine.XR.ARFoundation
 
         void UpdateReferenceImages(RuntimeReferenceImageLibrary library)
         {
+            m_ReferenceImages.Clear();
+
             if (library == null)
                 return;
 

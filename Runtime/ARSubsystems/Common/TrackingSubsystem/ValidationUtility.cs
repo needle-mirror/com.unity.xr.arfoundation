@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems
 {
@@ -10,9 +13,19 @@ namespace UnityEngine.XR.ARSubsystems
     /// <seealso cref="XRPointCloudSubsystem"/>
     /// <seealso cref="XRPlaneSubsystem"/>
     /// <seealso cref="XRAnchorSubsystem"/>
-    public class ValidationUtility<T>
-        where T : struct, ITrackable
+    public class ValidationUtility<T> where T : struct, ITrackable
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
+        static HashSet<TrackableId> s_IdSet = new ();
+
+        static readonly string k_AddedAction = "added";
+        static readonly string k_UpdatedAction = "updated";
+        static readonly string k_RemovedAction = "removed";
+
+        HashSet<TrackableId> m_Trackables = new ();
+
         /// <summary>
         /// Performs validation checks that ensure a trackable does not exist in multiple lists
         /// simultaneously (for example, both added and removed). Also ensures that a trackable cannot be
@@ -47,7 +60,7 @@ namespace UnityEngine.XR.ARSubsystems
             try
             {
                 using (new ScopedProfiler("ValidateTrackableChanges"))
-                ValidateAndThrow(changes);
+                    ValidateAndThrow(changes);
             }
             catch
             {
@@ -56,10 +69,7 @@ namespace UnityEngine.XR.ARSubsystems
             }
         }
 
-        void AddToSetAndThrowIfDuplicate(
-            TrackableId trackableId,
-            bool shouldBeInDictionary,
-            string action)
+        void AddToSetAndThrowIfDuplicate(TrackableId trackableId, bool shouldBeInDictionary, string action)
         {
             if (!s_IdSet.Add(trackableId))
                     throw new InvalidOperationException(
@@ -72,15 +82,5 @@ namespace UnityEngine.XR.ARSubsystems
                     "Trackable {0} is being {1} but is {2} in the list of trackables.",
                     trackableId, action, shouldBeInDictionary ? "not" : "already"));
         }
-
-        static HashSet<TrackableId> s_IdSet = new ();
-
-        static readonly string k_AddedAction = "added";
-
-        static readonly string k_UpdatedAction = "updated";
-
-        static readonly string k_RemovedAction = "removed";
-
-        HashSet<TrackableId> m_Trackables = new ();
     }
 }

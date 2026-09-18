@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARPlane> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="ARPlane"/>s udpated since the last event.
+        /// The list of <see cref="ARPlane"/>s updated since the last event.
         /// </summary>
         public List<ARPlane> updated { get; private set; }
 

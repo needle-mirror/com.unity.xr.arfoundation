@@ -15,6 +15,7 @@ namespace UnityEngine.XR.ARFoundation
     [DefaultExecutionOrder(ARUpdateOrder.k_Raycast)]
     [DisallowMultipleComponent]
     [HelpUrl(typeof(ARRaycast))]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARRaycast : ARTrackable<XRRaycast, ARRaycast>
     {
         bool m_Updated;

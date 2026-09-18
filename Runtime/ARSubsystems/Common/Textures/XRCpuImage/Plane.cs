@@ -151,7 +151,7 @@ namespace UnityEngine.XR.ARSubsystems
             public NativeArray<byte> data { get; internal set; }
 
             /// <summary>
-            /// Constructs an <see cref="Plane"/>.
+            /// Constructs a <see cref="Plane"/>.
             /// </summary>
             /// <param name="rowStride">The number of bytes per row for this plane.</param>
             /// <param name="pixelStride">The number of bytes per pixel for this plane.</param>

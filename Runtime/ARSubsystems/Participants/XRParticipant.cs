@@ -93,7 +93,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// A native pointer associated with this participant.
-        /// The data pointer to by this pointer is implementation defined.
+        /// The data pointed to by this pointer is implementation defined.
         /// </summary>
         public IntPtr nativePtr => m_NativePtr;
 

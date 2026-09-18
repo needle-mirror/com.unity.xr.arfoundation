@@ -31,7 +31,7 @@ You can subscribe to `trackablesChanged` in one of two ways:
 
     [!code-cs[PlanesChanged](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#PlanesChanged)]
 
-    b. Select your XR Origin GameObject, then Click the **Add (+)** button on the AR Plane Manger component's **trackablesChanged** property.
+    b. Select your XR Origin GameObject, then Click the **Add (+)** button on the AR Plane Manager component's **trackablesChanged** property.
 
     c. Using the Object picker (⊙), select either a GameObject that contains an instance of your component or an instance of your ScriptableObject, whichever is applicable.
 
@@ -46,6 +46,19 @@ You can subscribe to `trackablesChanged` in one of two ways:
     b. Use the example code below to subscribe to the `trackablesChanged` event:
 
     [!code-cs[PlanesSubscribe](../../../Tests/Runtime/CodeSamples/ARTrackableManagerSamples.cs#PlanesSubscribe)]
+
+<a id="handle-subsumed-planes"></a>
+
+### Handle subsumed planes
+
+Some platforms can determine that two tracked planes represent the same real-world surface, and subsume (absorb) one plane into the other.
+
+When a plane is subsumed by another plane, the planes effectively become duplicates, and share identical `center`, `extents`, and boundary vertex data for the rest of the session. The subsumed plane retains its original `trackableId` value. The [subsumedBy](xref:UnityEngine.XR.ARFoundation.ARPlane.subsumedBy) property references the plane that subsumed it. A subsumed plane continues to exist as a trackable and is still included in `trackablesChanged` events.
+
+If your app tracks its own data per plane, such as attached content, check `subsumedBy` to detect when a plane has been subsumed by another so you can update your data to reference the subsuming plane's `TrackableId`.
+
+> [!NOTE]
+> By default, [ARPlaneMeshVisualizer](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshVisualizer) hides the mesh and outline of a subsumed plane without removing its GameObject. This behavior ensures that when one plane is subsumed by another, your app can avoid drawing duplicate meshes.
 
 ### Visualize planes in the scene
 

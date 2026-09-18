@@ -27,7 +27,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Gets an enumerator which can be used to iterate over the reference objects in this library.
         /// </summary>
         /// <example>
-        /// <para>This examples iterates over the reference objects contained in the library.</para>
+        /// <para>This example iterates over the reference objects contained in the library.</para>
         /// <code>
         /// XRReferenceObjectLibrary library = ...
         /// foreach (var referenceObject in library)

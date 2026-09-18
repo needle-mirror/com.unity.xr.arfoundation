@@ -78,7 +78,10 @@ namespace UnityEngine.XR.Simulation.Tests
             // 'Start()' on it, we first need to make sure that a runtime reference image
             // library is first associated with it.
             var imageTrackingSubsystem = GetSimulationSubsystem<XRImageTrackingSubsystem, SimulationImageTrackingSubsystem>();
-            imageTrackingSubsystem.imageLibrary = imageTrackingSubsystem.CreateRuntimeLibrary(null);
+            var createAwaiter = imageTrackingSubsystem.TryCreateRuntimeLibraryAsync(null).GetAwaiter();
+            while (!createAwaiter.IsCompleted)
+                yield return null;
+            imageTrackingSubsystem.imageLibrary = createAwaiter.GetResult().value;
             imageTrackingSubsystem.Start();
 
             var sessionSubsystem = GetSubsystem<XRSessionSubsystem>();

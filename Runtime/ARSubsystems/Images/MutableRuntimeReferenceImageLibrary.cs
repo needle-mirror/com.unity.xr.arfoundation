@@ -74,7 +74,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>Returns the <see cref="AddReferenceImageJobStatus"/> of an existing
         /// <see cref="AddReferenceImageJobState"/>.</returns>
         /// <exception cref="System.NotImplementedException">Thrown if the <paramref name="state"/> has a non-zero
-        /// <see cref="System.IntPtr"/> (non-zero means the concrete class should have overriden this method).
+        /// <see cref="System.IntPtr"/> (non-zero means the concrete class should have overridden this method).
         /// </exception>
         protected internal virtual AddReferenceImageJobStatus GetAddReferenceImageJobStatus(AddReferenceImageJobState state)
         {
@@ -133,7 +133,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Image addition can take some time (for example, several frames) due to the processing that must occur to
         /// insert the image into the library. This is done using the [Unity Job System]
         /// (https://docs.unity3d.com/Manual/JobSystem.html). The returned <see cref="AddReferenceImageJobState"/>
-        /// allows your to query for the status of the job, and, if the job completed,
+        /// allows you to query for the status of the job, and, if the job completed,
         /// whether it was successful. The job state includes the [JobHandle](xref:Unity.Jobs.JobHandle) which can be
         /// used to chain together multiple tasks.
         ///
@@ -160,7 +160,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="inputDeps">(Optional) Input dependencies for the add image job.</param>
         /// <returns>Returns an <see cref="AddReferenceImageJobState"/> that can be used to query the status of the job.
         /// The <see cref="AddReferenceImageJobState"/> can be used to determine whether the image was successfully
-        /// added. Invalid images will be not be added to the reference image library.</returns>
+        /// added. Invalid images will not be added to the reference image library.</returns>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name="imageBytes"/> does not contain any
         /// bytes.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name="referenceImage"/>'s

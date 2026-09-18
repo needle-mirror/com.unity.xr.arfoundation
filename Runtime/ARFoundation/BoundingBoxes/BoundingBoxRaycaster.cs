@@ -26,7 +26,7 @@ namespace UnityEngine.XR.ARFoundation
         /// Constructs a new instance, initializing the collection of <see cref="XRBoundingBox"/> trackables to test
         /// raycasts against.
         /// </summary>
-        /// <param name="boundingBoxTrackables">The collection of bounding boxes to test raycasts again.</param>
+        /// <param name="boundingBoxTrackables">The collection of bounding boxes to test raycasts against.</param>
         /// <param name="origin">The <see cref="XROrigin"/>, used to access the trackables parent transform when
         /// converting between session space and world space.</param>
         public BoundingBoxRaycaster(TrackableCollection<ARBoundingBox> boundingBoxTrackables, XROrigin origin)

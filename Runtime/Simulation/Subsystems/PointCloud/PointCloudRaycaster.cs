@@ -1,6 +1,9 @@
 using System;
 using Unity.Collections;
 using Unity.Jobs;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
@@ -11,6 +14,10 @@ namespace UnityEngine.XR.Simulation
     class PointCloudRaycaster : IRaycaster
     {
         const float k_RaycastAngleInRadians = Mathf.Deg2Rad * 5f;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static float s_CosineThreshold = Mathf.Cos(k_RaycastAngleInRadians * .5f);
 
         TrackableId m_PointCloudTrackableId;

@@ -9,7 +9,7 @@ AR Foundation defines its AR features using subsystems. For example, the [XRPlan
 
 Subsystem implementations are called *providers*, and are typically made available in separate packages called *provider plug-ins*. For example, the [Google ARCore XR Plug-in](xref:arcore-manual) provides subsystem implementations for the Android platform, and the [Apple ARKit XR Plug-in](xref:arkit-manual) provides implementations for iOS.
 
-With the exception of [Device tracking](xref:arfoundation-device-tracking), the table below lists AR Foundation's AR features and their corresponding subsystems. (Device tracking uses the [Input System](https://docs.unity3d.com/Packages/com.unity.inputsystem@latest) and is not subsytem-based.)
+With the exception of [Device tracking](xref:arfoundation-device-tracking), the table below lists AR Foundation's AR features and their corresponding subsystems. (Device tracking uses the [Input System](https://docs.unity3d.com/Packages/com.unity.inputsystem@latest) and is not subsystem-based.)
 
 | Feature | Subsystem |
 | :------ | :-------- |
@@ -33,11 +33,11 @@ With the exception of [Device tracking](xref:arfoundation-device-tracking), the 
 
 All subsystems have the same life cycle: they can be created, started, stopped, and destroyed. You don't typically need to create or destroy a subsystem instance yourself, as this is the responsibility of Unity's active `XRLoader`. Each provider plug-in contains an `XRLoader` implementation (or simply, a loader).  Most commonly, a loader creates an instance of all applicable subsystems when your application initializes and destroys them when your application quits, although this behavior is configurable. When a trackable manager goes to `Start` a subsystem, it gets the subsystem instance from the project's active loader based on the settings found in **Project Settings** > **XR Plug-in Management**. For more information about loaders and their configuration, see the [XR Plug-in Management end-user documentation](https://docs.unity3d.com/Packages/com.unity.xr.management@latest?subfolder=/manual/EndUser.html).
 
-In a typical AR Foundation scene, any [managers](xref:arfoundation-managers) present in the scene will `Start` and `Stop` their subsystems when the manager is enabled or disabled, respectively. The exact behavior of `Start` and `Stop` varies by subsystem, but generally corresponds to "start doing work" and "stop doing work", respectively. You can start or stop a subystem at any time based on the needs of your application.
+In a typical AR Foundation scene, any [managers](xref:arfoundation-managers) present in the scene will `Start` and `Stop` their subsystems when the manager is enabled or disabled, respectively. The exact behavior of `Start` and `Stop` varies by subsystem, but generally corresponds to "start doing work" and "stop doing work", respectively. You can start or stop a subsystem at any time based on the needs of your application.
 
 ## Subsystem descriptors
 
-Each subsystem has a corresponding [SubsystemDescriptor](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) whose properties describe the range of the subystem's capabilities. Providers might assign different values to these properties at runtime based on different platform or device limitations.
+Each subsystem has a corresponding [SubsystemDescriptor](xref:UnityEngine.SubsystemsImplementation.SubsystemDescriptorWithProvider) whose properties describe the range of the subsystem's capabilities. Providers might assign different values to these properties at runtime based on different platform or device limitations.
 
 Wherever you use a capability described in a subsystem descriptor, you should check its property value at runtime first to confirm whether that capability is supported on the target device, as shown in the example below:
 

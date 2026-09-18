@@ -22,6 +22,12 @@ namespace UnityEngine.XR.ARSubsystems
         /// if they aren't already granted.
         /// </summary>
         RequestPermissionsIfNeeded = 1 << 0,
+
+        /// <summary>
+        /// The subsystem should check whether required software is installed on the device, and
+        /// attempt to install it if needed, before starting.
+        /// </summary>
+        InstallSoftwareIfNeeded = 1 << 1,
     }
 
     /// <summary>

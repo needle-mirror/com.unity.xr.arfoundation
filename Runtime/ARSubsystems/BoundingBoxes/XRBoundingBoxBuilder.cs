@@ -60,7 +60,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Set the size for build `XRBoundingBox` instances.
+        /// Set the size for built `XRBoundingBox` instances.
         /// </summary>
         /// <param name="size">The size.</param>
         /// <returns>This instance.</returns>

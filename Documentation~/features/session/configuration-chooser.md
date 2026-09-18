@@ -43,7 +43,7 @@ Refer to the following section for a sample you can use to get started with crea
 
 ## Configuration Chooser sample
 
-The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) app provide a sample scene that uses a custom Configuration Chooser. This sample includes a custom Configuration Chooser to choose between the user-facing and world-facing camera. This is useful if your project uses [Face tracking](xref:arfoundation-face-tracking) functionality.
+The [AR Foundation Samples](https://github.com/Unity-Technologies/arfoundation-samples/tree/main) app provides a sample scene that uses a custom Configuration Chooser. This sample includes a custom Configuration Chooser to choose between the user-facing and world-facing camera. This is useful if your project uses [Face tracking](xref:arfoundation-face-tracking) functionality.
 
 To access this sample, visit [ConfigurationChooser](https://github.com/Unity-Technologies/arfoundation-samples/tree/main/Assets/Scenes/ConfigurationChooser) (GitHub).
 

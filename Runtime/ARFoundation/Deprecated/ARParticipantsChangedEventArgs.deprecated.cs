@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARParticipant> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="ARParticipant"/>s udpated since the last event.
+        /// The list of <see cref="ARParticipant"/>s updated since the last event.
         /// </summary>
         public List<ARParticipant> updated { get; private set; }
 

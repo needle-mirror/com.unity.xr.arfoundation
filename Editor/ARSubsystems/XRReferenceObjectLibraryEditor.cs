@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
 #if UNITY_6000_5_OR_NEWER
@@ -85,8 +87,14 @@ namespace UnityEditor.XR.ARSubsystems
             List<Type> m_Types = new List<Type>();
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static AssemblyHelper s_AssemblyHelper;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static SerializedProperty m_ReferenceObjects;
 
         void OnEnable()

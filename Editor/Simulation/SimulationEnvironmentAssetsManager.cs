@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using Unity.XR.CoreUtils.Editor;
 using UnityEditor.SceneManagement;
@@ -15,6 +18,9 @@ namespace UnityEditor.XR.Simulation
     [ScriptableSettingsPath(SimulationConstants.userSettingsPath)]
     class SimulationEnvironmentAssetsManager : EditorScriptableSettings<SimulationEnvironmentAssetsManager>
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Comparer<string> k_PrefabPathsComparer = Comparer<string>.Default;
 
         const string k_PrefabFilter = "t:prefab";
@@ -361,6 +367,9 @@ namespace UnityEditor.XR.Simulation
 
         class EnvironmentAssetPostprocessor : AssetPostprocessor
         {
+#if UNITY_6000_5_OR_NEWER
+            [NoAutoStaticsCleanup]
+#endif
             static bool s_NeedsRefresh;
 
             void OnPostprocessPrefab(GameObject g)

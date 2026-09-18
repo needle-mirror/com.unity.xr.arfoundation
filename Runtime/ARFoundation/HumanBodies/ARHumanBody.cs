@@ -13,6 +13,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(ARUpdateOrder.k_HumanBody)]
     [HelpUrl(typeof(ARHumanBody))]
+    [Icon(Constants.arvrIconPath)]
     public class ARHumanBody : ARTrackable<XRHumanBody, ARHumanBody>, IDisposable
     {
         /// <summary>

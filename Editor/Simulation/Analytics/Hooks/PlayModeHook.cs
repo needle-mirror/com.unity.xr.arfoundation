@@ -1,5 +1,8 @@
 using System;
 using System.Linq;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine;
 using UnityEngine.XR.Simulation;
 
@@ -7,6 +10,9 @@ namespace UnityEditor.XR.Simulation
 {
     static class PlayModeHook
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static DateTime s_StartTime;
 
         [InitializeOnEnterPlayMode]

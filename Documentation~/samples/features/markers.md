@@ -33,7 +33,7 @@ The samples app provides some sample markers. To access these sample markers:
 
 After you have built the sample project to your device, enter the markers sample scene. When the menu with the coaching card appears, dismiss the coaching card and confirm that at least one marker type is supported.
 
-Look at a marker to detect it. For each detected marker, the samples app instantiates a marker visualizer to display relevant data about the marker. If your devices supports QR codes and is configured for detecting QR codes, you can use the provided sample markers as outlined in [Access sample markers](#access-sample-markers).
+Look at a marker to detect it. For each detected marker, the samples app instantiates a marker visualizer to display relevant data about the marker. If your device supports QR codes and is configured for detecting QR codes, you can use the provided sample markers as outlined in [Access sample markers](#access-sample-markers).
 
 ![Marker's sample scene enabled marker detection](../../images/samples/samples-markers-configured-markers.png)<br/>*Marker's sample scene enabled marker detection.*
 
@@ -58,7 +58,7 @@ The AR Foundation Samples project uses the marker debug visualizer and will inst
 
 | Prefab | Description |
 | :----- | :---------- |
-| **AR Marker Debug Visualizer** | Visualize markers with a Transform gizmo, line renderer indicating the markers size, and optionally visualize additional information such as the marker's [trackableId](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackableId), [trackingState](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackingState), [markerId](xref:UnityEngine.XR.ARFoundation.ARMarker.markerId), [encode data type](xref:UnityEngine.XR.ARSubsystems.XRSpatialBufferType), and any encoded data. |
+| **AR Marker Debug Visualizer** | Visualize markers with a Transform gizmo, line renderer indicating the marker's size, and optionally visualize additional information such as the marker's [trackableId](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackableId), [trackingState](xref:UnityEngine.XR.ARFoundation.ARTrackable`2.trackingState), [markerId](xref:UnityEngine.XR.ARFoundation.ARMarker.markerId), [encode data type](xref:UnityEngine.XR.ARSubsystems.XRSpatialBufferType), and any encoded data. |
 
 ## Additional resources
 

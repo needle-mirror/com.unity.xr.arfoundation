@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARAnchor> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="ARAnchor"/>s udpated since the last event.
+        /// The list of <see cref="ARAnchor"/>s updated since the last event.
         /// </summary>
         public List<ARAnchor> updated { get; private set; }
 

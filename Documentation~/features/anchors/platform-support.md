@@ -39,7 +39,7 @@ The following table lists the optional features of the anchor subsystem. Each op
 | **Save anchor** | [supportsSaveAnchor](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsSaveAnchor) | Indicates whether the provider implementation supports the ability to persistently save anchors via [TrySaveAnchorAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TrySaveAnchorAsync*). |
 | **Load anchor** | [supportsLoadAnchor](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsLoadAnchor) | Indicates whether the provider implementation supports the ability to load persistently saved anchors via [TryLoadAnchorAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryLoadAnchorAsync*). |
 | **Erase anchor** | [supportsEraseAnchor](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsEraseAnchor) | Indicates whether the provider implementation supports the ability to erase the persistent saved data associated with an anchor via [TryEraseAnchorAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryEraseAnchorAsync*). |
-| **Get saved anchor IDs** | [supportsGetSavedAnchorIds](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsGetSavedAnchorIds) | Indicates whether the provider implementation supports the ability to get all saved persistent anchor GUIDs via [TryGetSavedAnchorIdsAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryGetSavedAnchorIdsAsync*. |
+| **Get saved anchor IDs** | [supportsGetSavedAnchorIds](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsGetSavedAnchorIds) | Indicates whether the provider implementation supports the ability to get all saved persistent anchor GUIDs via [TryGetSavedAnchorIdsAsync](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystem.TryGetSavedAnchorIdsAsync*). |
 | **Async cancellation** | [supportsAsyncCancellation](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.supportsAsyncCancellation) | Indicates whether the provider implementation supports cancelling async operations in progress using a [CancellationToken](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-8.0). |
 
 <a id="optional-features-support-table"></a>
@@ -50,7 +50,7 @@ The following table lists whether certain XR plug-in providers support each opti
 
 | Feature                   | ARCore | ARKit  | visionOS | OpenXR Meta | Android XR | Spatial Entities | XR Simulation |
 | :------------------------ | :----: | :---:  | :------: | :---------: | :--------: | :--------------: | :-----------: |
-| **Trackable attachments** | Yes    | Yes    |          |             | Yes        |                  | Yes           |
+| **Trackable attachments** | Yes    | Yes    |          |             | Yes        | Determined at runtime | Yes           |
 | **Synchronous add**       | Yes    | Yes    |          |             | Yes        | Yes              |               |
 | **Save anchor**           | Yes    |        |          | Yes         | Yes        | Yes              |               |
 | **Load anchor**           | Yes    |        |          | Yes         | Yes        | Yes              |               |

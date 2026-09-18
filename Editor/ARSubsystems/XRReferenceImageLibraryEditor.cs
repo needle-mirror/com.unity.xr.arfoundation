@@ -44,6 +44,14 @@ namespace UnityEditor.XR.ARSubsystems
                 "Physical Size (meters)",
                 "The dimensions of the physical image, in meters.");
 
+            public static readonly GUIContent movingImageTypeImage = new GUIContent(
+                "Moving Image Type",
+                "Should the runtime optimize for a static (unmoving) or dynamic (moving) image. This setting will override that of the library.");
+
+            public static readonly GUIContent movingImageTypeLibrary = new GUIContent(
+                "Default Moving Image Type",
+                "Should the runtime optimize for a static (unmoving) or dynamic (moving) images for the images in this library. This setting serves as a default value for images in the library set to \"Unassigned\".");
+
             public static int addImageControlId
             {
                 get
@@ -73,15 +81,21 @@ namespace UnityEditor.XR.ARSubsystems
         }
 
         SerializedProperty m_ReferenceImages;
+        SerializedProperty m_MovingImageType;
 
         void OnEnable()
         {
             m_ReferenceImages = serializedObject.FindProperty("m_Images");
+            m_MovingImageType = serializedObject.FindProperty("m_MovingImageType");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+
+            EditorGUILayout.PropertyField(m_MovingImageType, Content.movingImageTypeLibrary);
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            EditorGUILayout.Separator();
 
             int indexToRemove = -1;
             for (int i = 0; i < m_ReferenceImages.arraySize; ++i)
@@ -97,6 +111,8 @@ namespace UnityEditor.XR.ARSubsystems
                 if (i < m_ReferenceImages.arraySize - 1)
                     EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
             }
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
 
             if (indexToRemove > -1)
                 m_ReferenceImages.DeleteArrayElementAtIndex(indexToRemove);
@@ -123,6 +139,7 @@ namespace UnityEditor.XR.ARSubsystems
             var sizeProperty = referenceImageProperty.FindPropertyRelative("m_Size");
             var specifySizeProperty = referenceImageProperty.FindPropertyRelative("m_SpecifySize");
             var nameProperty = referenceImageProperty.FindPropertyRelative("m_Name");
+            var movingImageTypeProperty = referenceImageProperty.FindPropertyRelative("m_MovingImageType");
 
             var referenceImage = library[index];
             var texturePath = AssetDatabase.GUIDToAssetPath(referenceImage.textureGuid.ToString("N"));
@@ -213,6 +230,7 @@ namespace UnityEditor.XR.ARSubsystems
                     }
                 }
             }
+            EditorGUILayout.PropertyField(movingImageTypeProperty, Content.movingImageTypeImage);
 
             using (new EditorGUI.DisabledScope(texture == null))
             using (var changeCheck = new EditorGUI.ChangeCheckScope())

@@ -2,6 +2,9 @@ using AOT;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
@@ -27,6 +30,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(ARCameraManager))]
     [AddComponentMenu("XR/AR Foundation/AR Camera Background")]
     [HelpUrl("features/camera/camera-components", "ar-camera-background-component")]
+    [Icon(Constants.arvrIconPath)]
     public class ARCameraBackground : MonoBehaviour
     {
         /// <summary>
@@ -35,11 +39,20 @@ namespace UnityEngine.XR.ARFoundation
         const string k_CustomRenderPassName = "AR Background Pass (LegacyRP)";
 
         /// <summary>
+        /// The signature of <see cref="BeforeBackgroundRenderHandler(int)"/>.
+        /// </summary>
+        /// <remarks>
+        delegate void BeforeBackgroundRenderHandlerDelegate(int eventId);
+
+        /// <summary>
         /// A delegate representation of <see cref="BeforeBackgroundRenderHandler(int)"/>. This maintains a strong
         /// reference to the delegate, which is converted to an IntPtr by <see cref="s_BeforeBackgroundRenderHandlerFuncPtr"/>.
         /// </summary>
         /// <seealso cref="AddBeforeBackgroundRenderHandler(CommandBuffer)"/>
-        static Action<int> s_BeforeBackgroundRenderHandler = BeforeBackgroundRenderHandler;
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
+        static BeforeBackgroundRenderHandlerDelegate s_BeforeBackgroundRenderHandler = BeforeBackgroundRenderHandler;
 
         /// <summary>
         /// A pointer to a method to be called immediately before rendering that is implemented in the XRCameraSubsystem implementation.
@@ -50,13 +63,19 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Static reference to the active XRCameraSubsystem. Necessary here for access from a static delegate.
         /// </summary>
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static XRCameraSubsystem s_CameraSubsystem;
 
         /// <summary>
-        /// A delegate for capturing when the <see cref="currentRenderingMode"/> has changed. Use to change make any changes
-        /// to the parameters of the <see cref="ARCameraBackground"/> (IE. changing custom materials out) before configuring
+        /// A delegate for capturing when the <see cref="currentRenderingMode"/> has changed. Use to make any changes
+        /// to the parameters of the <see cref="ARCameraBackground"/> (i.e. changing custom materials out) before configuring
         /// the command buffer for background rendering.
         /// </summary>
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static Action<XRCameraBackgroundRenderingMode> OnCameraRenderingModeChanged;
 
         /// <summary>
@@ -201,7 +220,7 @@ namespace UnityEngine.XR.ARFoundation
         /// This function calls the XRCameraSubsystem method that should be called immediately before background rendering.
         /// </summary>
         /// <param name="eventId">The id of the event</param>
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [MonoPInvokeCallback(typeof(BeforeBackgroundRenderHandlerDelegate))]
         static void BeforeBackgroundRenderHandler(int eventId)
         {
             s_CameraSubsystem?.OnBeforeBackgroundRender(eventId);
@@ -324,13 +343,13 @@ namespace UnityEngine.XR.ARFoundation
         ///
         /// [BeforeForwardOpaque](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.BeforeForwardOpaque.html)
         /// and
-        /// [BeforeGBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.BeforeGBuffer.html)}.
+        /// [BeforeGBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.BeforeGBuffer.html).
         ///
         /// In the case where After Opaques rendering has been selected it will return:
         ///
         /// [AfterForwardOpaque](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.AfterForwardOpaque.html)
         /// and
-        /// [AfterGBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.AfterGBuffer.html)}.
+        /// [AfterGBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.AfterGBuffer.html).
         ///
         /// Override to use different camera events.
         /// </summary>
@@ -389,7 +408,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Enable background rendering getting a command buffer, and configure it for rendering the background.
+        /// Enable background rendering by getting a command buffer, and configure it for rendering the background.
         /// </summary>
         void EnableBuiltInRenderPipelineBackgroundRendering()
         {
@@ -416,7 +435,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// This adds a command to the <paramref name="commandBuffer"/> to make call from the render thread
+        /// This adds a command to the <paramref name="commandBuffer"/> to make a call from the render thread
         /// to a callback on the `XRCameraSubsystem` implementation. The callback handles any implementation-specific
         /// functionality needed immediately before the background is rendered.
         /// </summary>

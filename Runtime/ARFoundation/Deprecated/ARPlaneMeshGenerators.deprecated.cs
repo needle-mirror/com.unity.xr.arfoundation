@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Generator methods for <see cref="ARPlane"/> mesh geometery.
+    /// Generator methods for <see cref="ARPlane"/> mesh geometry.
     /// </summary>
     /// <remarks>
-    /// These static class provides ways to generate different parts of plane geometry, such as vertices, indices, normals, and UVs.
+    /// This static class provides ways to generate different parts of plane geometry, such as vertices, indices, normals, and UVs.
     /// You can use these methods to build an ARPlane Mesh object.
     /// </remarks>
     [Obsolete("ARPlaneMeshGenerators has been deprecated in AR Foundation version 6.0. Use ARPlaneMeshGenerator instead.", false)]
@@ -156,10 +159,19 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         // Caches to avoid reallocing Lists during calculations
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<int> s_Indices = new List<int>();
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<Vector2> s_Uvs = new List<Vector2>();
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<Vector3> s_Vertices = new List<Vector3>();
     }
 }

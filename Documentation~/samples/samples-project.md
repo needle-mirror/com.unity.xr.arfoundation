@@ -12,6 +12,7 @@ Refer to the following topics to learn more about AR Foundation Samples:
 | [Set up samples](xref:arfoundation-samples-use) | Understand how to clone and open the AR Foundation Samples project in Unity, and build the project to your target device. |
 | [Session configuration samples](xref:arfoundation-samples-session-configuration) | Samples that demonstrate how to configure your AR session. |
 | [Feature samples](xref:arfoundation-samples-features) | Samples that demonstrate AR Foundation features. |
+| [Composition layer samples](xref:arfoundation-samples-composition-layers) | Samples that demonstrate interactive UI on composition layers. |
 | [ARKit samples](xref:arfoundation-samples-arkit)      | Samples that demonstrate functionality specific to ARKit. |
 | [ARCore samples](xref:arfoundation-samples-arcore)    | Samples specific to ARCore. |
 

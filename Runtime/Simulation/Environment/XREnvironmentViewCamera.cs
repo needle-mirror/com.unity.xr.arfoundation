@@ -1,4 +1,7 @@
 using System;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.Simulation
 {
@@ -9,7 +12,14 @@ namespace UnityEngine.XR.Simulation
     [RequireComponent(typeof(Camera))]
     class XREnvironmentViewCamera : MonoBehaviour
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static event Action<Camera> preRender;
+
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static event Action<Camera> postRender;
 
         [SerializeField]

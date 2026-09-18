@@ -1,6 +1,8 @@
+using System;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using Object = UnityEngine.Object;
 
 namespace UnityEditor.XR.ARFoundation.Tests
 {
@@ -87,6 +89,7 @@ namespace UnityEditor.XR.ARFoundation.Tests
             Object.DestroyImmediate(parent.gameObject);
         }
 
+        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7")]
         [Test]
         public void CreateARDebugMenuWithParent_CreatesSuccessfully()
         {
@@ -97,6 +100,7 @@ namespace UnityEditor.XR.ARFoundation.Tests
             Object.DestroyImmediate(parent.gameObject);
         }
 
+        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7")]
         [Test]
         public void CreateARDebugMenuWithoutParent_CreatesSuccessfully()
         {
@@ -106,7 +110,7 @@ namespace UnityEditor.XR.ARFoundation.Tests
             Object.DestroyImmediate(debugMenu);
         }
 
-        [Test]
+        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7")]
         public void UndoRedoCreateARDebugMenu_WorksWithNoErrors()
         {
             Undo.IncrementCurrentGroup();

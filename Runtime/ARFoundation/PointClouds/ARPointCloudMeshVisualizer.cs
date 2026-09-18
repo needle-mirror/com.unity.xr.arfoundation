@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
@@ -11,8 +14,16 @@ namespace UnityEngine.XR.ARFoundation
     /// </remarks>
     [RequireComponent(typeof(ARPointCloud))]
     [HelpUrl(typeof(ARPointCloudMeshVisualizer))]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARPointCloudMeshVisualizer : MonoBehaviour
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
+        static List<Vector3> s_Vertices = new();
+
+        ARPointCloud m_PointCloud;
+
         /// <summary>
         /// Get the <c>Mesh</c> that this visualizer creates and manages.
         /// </summary>
@@ -81,9 +92,5 @@ namespace UnityEngine.XR.ARFoundation
             if (meshRenderer != null)
                 meshRenderer.enabled = visible;
         }
-
-        ARPointCloud m_PointCloud;
-
-        static List<Vector3> s_Vertices = new ();
     }
 }

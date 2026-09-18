@@ -27,7 +27,7 @@ The AR Foundation Samples app provides example objects that you can use to get s
 
 In a typical object tracking workflow, you create a reference object library in the Unity Editor, then populate the library with reference objects.
 
-You must add a provider-specific entry for each provider plug-in your project that supports object tracking.
+You must add a provider-specific entry for each provider plug-in in your project that supports object tracking.
 
 To create a new **Reference Object Library**:
 

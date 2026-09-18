@@ -5,14 +5,15 @@ uid: arfoundation-raycasts-platform-support
 
 The AR Foundation [XRRaycastSubsystem](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystem) is supported on the following platforms:
 
-| Provider plug-in          | Ray casting supported | Provider documentation                         |
-| :------------------------ | :-------------------: | :--------------------------------------------- |
-| Google ARCore XR Plug-in  |           Yes         | [Ray casts](xref:arcore-raycasts) (ARCore)     |
-| Apple ARKit XR Plug-in    |           Yes         | [Ray casts](xref:arkit-raycasts) (ARKit)       |
-| Apple visionOS XR Plug-in |                       |                                                |
-| Unity OpenXR: Meta        |           Yes         | [Ray casts](xref:meta-openxr-raycasts) (OpenXR Meta) |
-| Unity OpenXR: Android XR  |           Yes         | [Ray casts](xref:androidxr-openxr-raycasts) (Android XR) |
-| XR Simulation             |           Yes         | [Ray casts](xref:arfoundation-simulation-raycasts) (XR Simulation) |
+| Provider plug-in               | Ray casting supported | Provider documentation                         |
+| :----------------------------- | :-------------------: | :--------------------------------------------- |
+| Google ARCore XR Plug-in       |           Yes         | [Ray casts](xref:arcore-raycasts) (ARCore)     |
+| Apple ARKit XR Plug-in         |           Yes         | [Ray casts](xref:arkit-raycasts) (ARKit)       |
+| Apple visionOS XR Plug-in      |                       |                                                |
+| Unity OpenXR: Meta             |           Yes         | [Ray casts](xref:meta-openxr-raycasts) (OpenXR Meta) |
+| Unity OpenXR: Android XR       |           Yes         | [Ray casts](xref:androidxr-openxr-raycasts) (Android XR) |
+| Unity OpenXR: Spatial Entities |           Yes         | [Ray casts](xref:spatialentities-openxr-raycasts) (Spatial Entities) |
+| XR Simulation                  |           Yes         | [Ray casts](xref:arfoundation-simulation-raycasts) (XR Simulation) |
 
 ## Check for ray casting support
 
@@ -24,14 +25,14 @@ Your app can check at runtime whether a provider plug-in supports ray casting on
 
 ## Optional features
 
-The following table lists the optional features of the raycast subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRRaycastSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
+The following table lists the optional features of the ray cast subsystem. Each optional feature is defined by a **Descriptor Property** of the [XRRaycastSubsystemDescriptor](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor), which you can check at runtime to determine whether a feature is supported. Refer to [Check for optional feature support](#check-feature-support) for a code example to check whether a feature is supported.
 
-| Feature                    | Descriptor Property | Description |
-| :------------------------- | :------------------ | :---------- |
-| **Viewport based raycast** | [supportsViewportBasedRaycast](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportsViewportBasedRaycast)| Whether the provider supports casting a ray from a screen point. |
-| **World based raycast**    |  [supportsWorldBasedRaycast](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportsWorldBasedRaycast)   | Whether the provider supports casting an arbitrary ray. |
-| **Trackable types**        | [supportedTrackableTypes](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportedTrackableTypes) | The types of trackables against which ray casting is supported. |
-| **Tracked raycasts**       | [supportsTrackedRaycasts](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportsTrackedRaycasts) | Whether tracked raycasts are supported. A tracked raycast is repeated over time and the results are updated automatically. |
+| Feature                     | Descriptor Property | Description |
+| :-------------------------- | :------------------ | :---------- |
+| **Viewport based ray cast** | [supportsViewportBasedRaycast](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportsViewportBasedRaycast)| Whether the provider supports casting a ray from a screen point. |
+| **World based ray cast**    |  [supportsWorldBasedRaycast](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportsWorldBasedRaycast)   | Whether the provider supports casting an arbitrary ray. |
+| **Trackable types**         | [supportedTrackableTypes](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportedTrackableTypes) | The types of trackables against which ray casting is supported. |
+| **Tracked ray casts**       | [supportsTrackedRaycasts](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.supportsTrackedRaycasts) | Whether tracked ray casts are supported. A tracked ray cast is repeated over time and the results are updated automatically. |
 
 <a id="optional-features-support-table"></a>
 
@@ -39,11 +40,11 @@ The following table lists the optional features of the raycast subsystem. Each o
 
 The following table lists whether certain XR plug-in providers support each optional feature:
 
-| Feature                    | ARCore | ARKit   | OpenXR Meta | Android XR | XR Simulation |
-| :------------------------- | :----: | :-----: | :---------: | :--------: | :-----------: |
-| **Viewport based raycast** |   Yes  |   Yes   |             |            |               |
-| **World based raycast**    |   Yes  |         |     Yes     |     Yes    |      Yes      |
-| **Tracked raycasts**       |   Yes  | iOS 13+ |             |            |               |
+| Feature                     | ARCore | ARKit   | OpenXR Meta | Android XR | Spatial Entities | XR Simulation |
+| :-------------------------- | :----: | :-----: | :---------: | :--------: | :--------------: | :-----------: |
+| **Viewport based ray cast** | Yes    | Yes     |             |            |                  |               |
+| **World based ray cast**    | Yes    |         | Yes         | Yes        | Yes              | Yes           |
+| **Tracked ray casts**       | Yes    | iOS 13+ |             |            |                  |               |
 
 > [!NOTE]
 > The OpenXR Meta ray cast implementation performs calculations in Unity world space and does not rely on native platform implementation. Refer to the OpenXR Meta [Ray cast](xref:meta-openxr-raycasts) documentation to understand ray casting on OpenXR Meta devices.
@@ -54,18 +55,18 @@ The following table lists whether certain XR plug-in providers support each opti
 
 [ARRaycastManager](xref:UnityEngine.XR.ARFoundation.ARRaycastManager) supports ray casting against most [TrackableTypes](xref:UnityEngine.XR.ARSubsystems.TrackableType). The following table shows which trackables each platform supports ray casting against:
 
-| TrackableType           | ARCore | ARKit | OpenXR Meta | Android XR | XR Simulation |
-| :---------------------- | :----: | :---: | :---------: | :--------: | :-----------: |
-| **BoundingBox**         |        |       |  Fallback   |            |               |
-| **Depth**               |  Yes   |       |     Yes     |    Yes     |               |
-| **Face**                |        |       |             |            |               |
-| **FeaturePoint**        |  Yes   |  Yes  |             |            |      Yes      |
-| **Image**               |        |       |             |            |               |
-| **Planes**              |  Yes   |  Yes  |             |    Yes     |      Yes      |
-| **PlaneEstimated**      |  Yes   |  Yes  |             |    Yes     |      Yes      |
-| **PlaneWithinBounds**   |  Yes   |  Yes  |  Fallback   |    Yes     |      Yes      |
-| **PlaneWithinInfinity** |        |  Yes  |             |    Yes     |      Yes      |
-| **PlaneWithinPolygon**  |  Yes   |  Yes  |  Fallback   |    Yes     |      Yes      |
+| TrackableType           | ARCore | ARKit | OpenXR Meta | Android XR | Spatial Entities | XR Simulation |
+| :---------------------- | :----: | :---: | :---------: | :--------: | :--------------: | :-----------: |
+| **BoundingBox**         |        |       | Fallback    |            |                  |               |
+| **Depth**               | Yes    |       | Yes         | Yes        | Yes              |               |
+| **Face**                |        |       |             |            |                  |               |
+| **FeaturePoint**        | Yes    | Yes   |             |            |                  | Yes           |
+| **Image**               |        |       |             |            |                  |               |
+| **Planes**              | Yes    | Yes   |             | Yes        |                  | Yes           |
+| **PlaneEstimated**      | Yes    | Yes   |             | Yes        |                  | Yes           |
+| **PlaneWithinBounds**   | Yes    | Yes   | Fallback    | Yes        | Yes              | Yes           |
+| **PlaneWithinInfinity** |        | Yes   |             | Yes        |                  | Yes           |
+| **PlaneWithinPolygon**  | Yes    | Yes   | Fallback    | Yes        | Yes              | Yes           |
 
 <a id="check-feature-support"></a>
 

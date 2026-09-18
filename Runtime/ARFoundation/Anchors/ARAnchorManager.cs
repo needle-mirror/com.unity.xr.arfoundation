@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Unity.Collections;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
@@ -28,6 +31,7 @@ namespace UnityEngine.XR.ARFoundation
     [RequireComponent(typeof(XROrigin))]
     [AddComponentMenu("XR/AR Foundation/AR Anchor Manager")]
     [HelpUrl("features/anchors/aranchormanager")]
+    [Icon(Constants.arvrIconPath)]
     public sealed class ARAnchorManager : ARTrackableManager<
         XRAnchorSubsystem,
         XRAnchorSubsystemDescriptor,
@@ -50,6 +54,9 @@ namespace UnityEngine.XR.ARFoundation
         [FormerlySerializedAs("m_ReferencePointPrefab")]
         GameObject m_AnchorPrefab;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Pool.ObjectPool<Dictionary<TrackableId, ARAnchor>> s_AnchorByTrackableIdMaps =
             ObjectPoolCreateUtil.Create<Dictionary<TrackableId, ARAnchor>>();
 

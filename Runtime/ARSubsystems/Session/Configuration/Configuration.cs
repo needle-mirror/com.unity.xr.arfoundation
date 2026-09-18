@@ -21,7 +21,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// The specific <see cref="Feature"/>(s) that should be enabled by this configuration.
         /// </summary>
         /// <remarks>
-        /// You can ony enable exactly zero or one camera modes (see <see cref="Feature.UserFacingCamera"/> and <see cref="Feature.WorldFacingCamera"/>).
+        /// You can only enable exactly zero or one camera modes (see <see cref="Feature.UserFacingCamera"/> and <see cref="Feature.WorldFacingCamera"/>).
         /// If zero camera modes are enabled, no camera texture will be available. Some platforms might support a configuration that does
         /// not provide camera textures, which can be more performant if they are not necessary.
         /// All enabled features must be supported by the <see cref="descriptor"/>.

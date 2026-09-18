@@ -53,14 +53,14 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
 
         /// <summary>
         /// Subscribes to the trackables-changed event of <paramref name="manager"/>.
-        /// This is method is called in <c>OnEnable</c>.
+        /// This method is called in <c>OnEnable</c>.
         /// </summary>
         /// <param name="manager">The manager instance.</param>
         protected abstract void RegisterTrackablesChangedDelegate(TManager manager);
 
         /// <summary>
         /// Unsubscribes from the trackables-changed event of <paramref name="manager"/>.
-        /// This is method is called in <c>OnDisable</c>.
+        /// This method is called in <c>OnDisable</c>.
         /// </summary>
         /// <param name="manager">The manager instance.</param>
         protected abstract void UnregisterTrackablesChangedDelegate(TManager manager);

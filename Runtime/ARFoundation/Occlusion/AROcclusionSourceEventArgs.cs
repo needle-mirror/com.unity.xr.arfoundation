@@ -1,7 +1,7 @@
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Arguments <see cref="AROcclusionSourceEventArgs"/> that are passed along event when occlusion source was set;
+    /// Arguments <see cref="AROcclusionSourceEventArgs"/> that are passed along with the event when occlusion source was set;
     /// </summary>
     public struct AROcclusionSourceEventArgs
     {

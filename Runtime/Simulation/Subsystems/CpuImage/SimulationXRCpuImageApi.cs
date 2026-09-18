@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEngine.PlayerLoop;
-using UnityEngine.UIElements;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.Simulation
 {
     class SimulationXRCpuImageApi : XRCpuImage.Api
     {
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly HashSet<TextureFormat> k_SingleChannelInputSupportedConversions = new()
         {
             TextureFormat.Alpha8,
@@ -21,6 +21,9 @@ namespace UnityEngine.XR.Simulation
             TextureFormat.RFloat,
         };
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly HashSet<TextureFormat> k_MultiChannelColorInputSupportedConversions = new()
         {
             TextureFormat.RGBA32,
@@ -29,6 +32,9 @@ namespace UnityEngine.XR.Simulation
             TextureFormat.RGB24,
         };
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static readonly Dictionary<XRCpuImage.Format, HashSet<TextureFormat>> k_SupportedFormatConversionMap = new()
         {
             { XRCpuImage.Format.DepthFloat32, k_SingleChannelInputSupportedConversions },
@@ -52,6 +58,9 @@ namespace UnityEngine.XR.Simulation
         /// <summary>
         /// The shared API instance.
         /// </summary>
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         public static SimulationXRCpuImageApi instance { get; } = new();
 
         Dictionary<ImageType, SimulationImageInfo> m_LatestImageCache = new();
@@ -347,10 +356,10 @@ namespace UnityEngine.XR.Simulation
             NativeApi.RegisterPlatformInterface(platformInterface);
         }
 
-
         static class NativeApi
         {
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_TryAcquireLatestImage")]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool TryAcquireLatestImageOfType(ImageType imageType, out XRCpuImage.Cinfo cameraImageCinfo);
 
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_GetAsyncRequestStatus")]
@@ -363,21 +372,21 @@ namespace UnityEngine.XR.Simulation
             public static extern void DisposeAsyncRequest(int requestHandle);
 
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_TryGetPlane")]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool TryGetPlane(
-                int nativeHandle, int planeIndex,
-                out XRCpuImage.Plane.Cinfo planeCinfo);
+                int nativeHandle, int planeIndex, out XRCpuImage.Plane.Cinfo planeCinfo);
 
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_HandleValid")]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool HandleValid(int nativeHandle);
 
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_TryGetConvertedDataSize")]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool TryGetConvertedDataSize(
-                int nativeHandle,
-                Vector2Int dimensions,
-                TextureFormat format,
-                out int size);
+                int nativeHandle, Vector2Int dimensions, TextureFormat format, out int size);
 
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_TryConvert")]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool TryConvert(
                 int nativeHandle,
                 XRCpuImage.ConversionParams conversionParams,
@@ -390,10 +399,9 @@ namespace UnityEngine.XR.Simulation
                 XRCpuImage.ConversionParams conversionParams);
 
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_TryGetAsyncRequestData")]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool TryGetAsyncRequestData(
-                int requestHandle,
-                out IntPtr dataPtr,
-                out int dataLength);
+                int requestHandle, out IntPtr dataPtr, out int dataLength);
 
             [DllImport("XRSimulationSubsystem", EntryPoint = "XRSimulationSubsystem_CpuImage_CreateAsyncConversionRequestWithCallback")]
             public static extern void CreateAsyncConversionRequestWithCallback(

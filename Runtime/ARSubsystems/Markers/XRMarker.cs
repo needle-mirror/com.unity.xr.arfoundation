@@ -98,7 +98,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="size">The detected marker size.</param>
         /// <param name="markerType">Type/classification of marker.</param>
         /// <param name="markerId">Integer identifier.</param>
-        /// <param name="dataBuffer">Optional buffer for marker-specific data encoded data.</param>
+        /// <param name="dataBuffer">Optional buffer for marker-specific encoded data.</param>
         /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
         public XRMarker(
             TrackableId trackableId,

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARFoundation.VisualScripting
 {
@@ -41,6 +44,9 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             public const string participantsChanged = nameof(participantsChanged);
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static readonly Dictionary<Type, string> EventHookNames = new()
         {
             { typeof(ARTrackablesChangedEventArgs<ARPlane>), "ARPlanesChanged" },

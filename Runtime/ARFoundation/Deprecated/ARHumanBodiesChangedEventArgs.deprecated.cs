@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation
         public List<ARHumanBody> added { get; private set; }
 
         /// <summary>
-        /// The list of <see cref="ARHumanBody"/>s udpated since the last event.
+        /// The list of <see cref="ARHumanBody"/>s updated since the last event.
         /// </summary>
         public List<ARHumanBody> updated { get; private set; }
 

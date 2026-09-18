@@ -1,5 +1,8 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 
 namespace UnityEngine.XR.ARSubsystems.Tests
 {
@@ -27,7 +30,11 @@ namespace UnityEngine.XR.ARSubsystems.Tests
             });
         }
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static List<XRCameraSubsystemDescriptor> s_Descs = new List<XRCameraSubsystemDescriptor>();
+
         static XRCameraSubsystem CreateTestCameraSubsystem()
         {
             SubsystemManager.GetSubsystemDescriptors(s_Descs);

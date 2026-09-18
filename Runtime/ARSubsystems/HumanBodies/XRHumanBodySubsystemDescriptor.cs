@@ -278,7 +278,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Registers a subsystem implementation based on the given subystem parameters, and validates that the
+        /// Registers a subsystem implementation based on the given subsystem parameters, and validates that the
         /// <see cref="Cinfo.id"/> and <see cref="Cinfo.providerType"/>
         /// properties are specified.
         /// </summary>

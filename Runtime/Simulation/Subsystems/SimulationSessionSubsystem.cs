@@ -1,4 +1,7 @@
 using System;
+#if UNITY_6000_5_OR_NEWER
+using Unity.Scripting.LifecycleManagement;
+#endif
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARSubsystems;
 #if UNITY_EDITOR
@@ -15,6 +18,9 @@ namespace UnityEngine.XR.Simulation
     {
         internal const string k_SubsystemId = "XRSimulation-Session";
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         static SimulationSceneManager s_SimulationSceneManager;
 
         /// <summary>
@@ -23,10 +29,16 @@ namespace UnityEngine.XR.Simulation
         /// manager to use by the subsystem.  If no factory is set, then the default
         /// behavior of the subsystem is to use the SimulationSceneManager.
         /// </summary>
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static Func<SimulationSceneManager> simulationSceneManagerFactory { get; set; }
 
         internal static SimulationSceneManager simulationSceneManager => s_SimulationSceneManager;
 
+#if UNITY_6000_5_OR_NEWER
+        [NoAutoStaticsCleanup]
+#endif
         internal static event Action s_SimulationSessionReset;
 
         class SimulationProvider : Provider
@@ -40,6 +52,7 @@ namespace UnityEngine.XR.Simulation
 
             public override TrackingState trackingState => TrackingState.Tracking;
 
+            [Obsolete("GetAvailabilityAsync is deprecated. AR is always supported and available in XR Simulation.")]
             public override Promise<SessionAvailability> GetAvailabilityAsync() =>
                 Promise<SessionAvailability>.CreateResolvedPromise(SessionAvailability.Installed | SessionAvailability.Supported);
 
@@ -205,7 +218,9 @@ namespace UnityEngine.XR.Simulation
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),
                 subsystemTypeOverride = typeof(SimulationSessionSubsystem),
+#pragma warning disable CS0618 // supportsInstall is deprecated
                 supportsInstall = false,
+#pragma warning restore CS0618
                 supportsMatchFrameRate = false,
             });
         }

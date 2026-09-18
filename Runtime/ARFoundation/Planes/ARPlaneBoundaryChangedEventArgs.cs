@@ -44,9 +44,9 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Generates a string representation fo this <see cref="ARPlaneBoundaryChangedEventArgs"/>.
+        /// Generates a string representation of this <see cref="ARPlaneBoundaryChangedEventArgs"/>.
         /// </summary>
-        /// <returns>A string representation fo this <see cref="ARPlaneBoundaryChangedEventArgs"/>.</returns>
+        /// <returns>A string representation of this <see cref="ARPlaneBoundaryChangedEventArgs"/>.</returns>
         public override string ToString() => $"ARPlane {(plane ? plane.trackableId.ToString() : "(null)")} boundary updated";
 
         /// <summary>
