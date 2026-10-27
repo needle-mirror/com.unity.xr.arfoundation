@@ -1,7 +1,7 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.7.0",
+  "version": "6.7.1",
   "unity": "6000.0",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
@@ -37,15 +37,15 @@
     }
   ],
   "_upm": {
-    "changelog": "### Added\n\n### Changed\n\n### Deprecated\n\n### Removed\n\n### Fixed\n\n- Fixed a compiler error when this package is imported into the Unity 7 alpha, due to the deprecation of `IProcessSceneWithReport`.\n- Fixed issues in the Visual Scripting assembly related to the `AutoStaticsCleanupAttribute`, as required by Unity versions 6000.7.0b1 and newer.\n- Fixed a deprecation warning in Visual Scripting in `SessionStateSwitchUnit` by disabling the warning.\n\n### Security"
+    "changelog": "### Fixed\n\n- Fixed the macOS XR Simulation native plug-in (`XRSimulationSubsystem.bundle`) not being code signed, which caused it to fail notarization."
   },
   "upmCi": {
-    "footprint": "fa4ec8aadf4ba13cf407a28a9b552b05cfd8ab7b"
+    "footprint": "9b144a252c0d2ce751b081fdc17d3357a69f7c67"
   },
   "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.7/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/xr.git",
     "type": "git",
-    "revision": "21671009324b04a5cf766def6620556e1692d5c4"
+    "revision": "539385b646deb99dd28c87b51eaebb65e91c00a1"
   }
 }

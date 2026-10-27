@@ -8,23 +8,19 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.7.1] - 2026-10-27
+
+### Fixed
+
+- Fixed the macOS XR Simulation native plug-in (`XRSimulationSubsystem.bundle`) not being code signed, which caused it to fail notarization.
+
 ## [6.7.0] - 2026-10-16
-
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 
 - Fixed a compiler error when this package is imported into the Unity 7 alpha, due to the deprecation of `IProcessSceneWithReport`.
 - Fixed issues in the Visual Scripting assembly related to the `AutoStaticsCleanupAttribute`, as required by Unity versions 6000.7.0b1 and newer.
 - Fixed a deprecation warning in Visual Scripting in `SessionStateSwitchUnit` by disabling the warning.
-
-### Security
 
 ## [6.7.0-pre.1] - 2026-09-18
 
