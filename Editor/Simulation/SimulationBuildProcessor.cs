@@ -7,7 +7,7 @@ namespace UnityEditor.XR.Simulation
     /// <summary>
     /// Build processor for XR Simulation.
     /// </summary>
-    [Obsolete("SimulationBuildProcessor is deprecated in AR Foundation 6.5. This class was never used.")]
+    [Obsolete("SimulationBuildProcessor is deprecated in AR Foundation 6.5. This class was never used.", true)]
     public class SimulationBuildProcessor : XRBuildHelper<XRSimulationSettings>
     {
         /// <summary>

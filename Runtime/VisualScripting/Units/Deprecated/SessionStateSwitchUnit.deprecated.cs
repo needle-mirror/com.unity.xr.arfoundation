@@ -13,6 +13,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [UnitCategory(Constants.k_ARFoundation_Unit_Category)]
     [UnitOrder((int)Constants.ARFoundationFeatureOrder.Session)]
     [TypeIcon(typeof(ARSessionState))]
+    [Obsolete("SessionStateSwitchUnit has been deprecated in AR Foundation version 7.0. Use ARSessionStateSwitchUnit instead.", true)]
     public sealed class SessionStateSwitchUnit : Unit
     {
         /// <summary>
@@ -113,11 +114,9 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             {
                 ARSessionState.None => none,
                 ARSessionState.Unsupported => unsupported,
-#pragma warning disable CS0618
                 ARSessionState.CheckingAvailability => checkingAvailability,
                 ARSessionState.NeedsInstall => needsInstall,
                 ARSessionState.Installing => installing,
-#pragma warning restore CS0618
                 ARSessionState.Ready => ready,
                 ARSessionState.SessionInitializing => sessionInitializing,
                 ARSessionState.SessionTracking => sessionTracking,

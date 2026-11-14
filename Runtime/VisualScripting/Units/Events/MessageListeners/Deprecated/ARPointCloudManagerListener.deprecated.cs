@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// Listens to the <see cref="ARPointCloudManager.pointCloudsChanged"/> event and forwards it to the visual scripting event bus.
     /// </summary>
     /// <seealso cref="PointCloudsChangedEventUnit"/>
-    [Obsolete("ARPointCloudManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ARPointCloudManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ARPointCloudManagerListener : TrackableManagerListener<ARPointCloudManager>
     {
         void OnTrackablesChanged(ARPointCloudChangedEventArgs args)

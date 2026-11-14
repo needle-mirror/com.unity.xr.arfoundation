@@ -5,8 +5,8 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Indicates the semantic classification of the plane.
     /// </summary>
-    /// <seealso cref="BoundedPlane.classification"/>
-    [Obsolete("PlaneClassification has been deprecated in AR Foundation version 6.0. Use PlaneClassifications instead.")]
+    /// <seealso cref="XRPlane.classification"/>
+    [Obsolete("PlaneClassification has been deprecated in AR Foundation version 6.0. Use PlaneClassifications instead.", true)]
     public enum PlaneClassification
     {
         /// <summary>
@@ -58,7 +58,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Utility methods for converting between <see cref="PlaneClassification"/> and <see cref="PlaneClassifications"/> values. These methods will be removed once the deprecated `PlaneClassification` enumeration is removed.
     /// </summary>
-    [Obsolete("PlaneClassification has been deprecated in AR Foundation version 6.0. Use PlaneClassifications instead.")]
+    [Obsolete("PlaneClassification has been deprecated in AR Foundation version 6.0. Use PlaneClassifications instead.", true)]
     public static class PlaneClassificationExtensions
     {
         /// <summary>

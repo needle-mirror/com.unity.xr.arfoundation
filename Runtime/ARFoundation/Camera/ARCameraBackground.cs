@@ -33,22 +33,23 @@ namespace UnityEngine.XR.ARFoundation
     [Icon(Constants.arvrIconPath)]
     public class ARCameraBackground : MonoBehaviour
     {
-        /// <summary>
-        /// Name for the custom rendering command buffer.
-        /// </summary>
-        const string k_CustomRenderPassName = "AR Background Pass (LegacyRP)";
+        const string k_BuiltInRenderPipelineObsoleteMessage =
+            "The Built-in Render Pipeline is not supported in Unity 7000.0. AR Foundation no longer uses this member, and it will be removed in a future release. Use the Universal Render Pipeline and the ARBackgroundRendererFeature instead.";
 
+        const string k_CameraRenderingModeChangedObsoleteMessage =
+            "OnCameraRenderingModeChanged is no longer invoked. Only the Built-in Render Pipeline background rendering path raised it, and the Built-in Render Pipeline is not supported in Unity 7000.0. It will be removed in a future release.";
+
+#if URP_7_OR_NEWER
         /// <summary>
         /// The signature of <see cref="BeforeBackgroundRenderHandler(int)"/>.
         /// </summary>
-        /// <remarks>
         delegate void BeforeBackgroundRenderHandlerDelegate(int eventId);
 
         /// <summary>
         /// A delegate representation of <see cref="BeforeBackgroundRenderHandler(int)"/>. This maintains a strong
         /// reference to the delegate, which is converted to an IntPtr by <see cref="s_BeforeBackgroundRenderHandlerFuncPtr"/>.
         /// </summary>
-        /// <seealso cref="AddBeforeBackgroundRenderHandler(CommandBuffer)"/>
+        /// <seealso cref="AddBeforeBackgroundRenderHandler(RasterCommandBuffer)"/>
 #if UNITY_6000_5_OR_NEWER
         [NoAutoStaticsCleanup]
 #endif
@@ -59,6 +60,7 @@ namespace UnityEngine.XR.ARFoundation
         /// It is called via [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
         /// </summary>
         static readonly IntPtr s_BeforeBackgroundRenderHandlerFuncPtr = Marshal.GetFunctionPointerForDelegate(s_BeforeBackgroundRenderHandler);
+#endif // URP_7_OR_NEWER
 
         /// <summary>
         /// Static reference to the active XRCameraSubsystem. Necessary here for access from a static delegate.
@@ -69,13 +71,14 @@ namespace UnityEngine.XR.ARFoundation
         static XRCameraSubsystem s_CameraSubsystem;
 
         /// <summary>
-        /// A delegate for capturing when the <see cref="currentRenderingMode"/> has changed. Use to make any changes
-        /// to the parameters of the <see cref="ARCameraBackground"/> (i.e. changing custom materials out) before configuring
-        /// the command buffer for background rendering.
+        /// (Obsolete) A delegate that was invoked when the <see cref="currentRenderingMode"/> changed while using the
+        /// Built-in Render Pipeline. AR Foundation no longer invokes it because the Built-in Render Pipeline is not
+        /// supported in Unity 7000.0.
         /// </summary>
 #if UNITY_6000_5_OR_NEWER
         [NoAutoStaticsCleanup]
 #endif
+        [Obsolete(k_CameraRenderingModeChangedObsoleteMessage, true)]
         public static Action<XRCameraBackgroundRenderingMode> OnCameraRenderingModeChanged;
 
         /// <summary>
@@ -94,11 +97,6 @@ namespace UnityEngine.XR.ARFoundation
         int m_CameraForwardScaleId;
 
         /// <summary>
-        /// Command buffer for any custom rendering commands.
-        /// </summary>
-        CommandBuffer m_CommandBuffer;
-
-        /// <summary>
         /// The previous clear flags for the camera, if any.
         /// </summary>
         CameraClearFlags? m_PreviousCameraClearFlags;
@@ -107,19 +105,6 @@ namespace UnityEngine.XR.ARFoundation
         /// The original field of view of the camera, before enabling background rendering.
         /// </summary>
         float? m_PreviousCameraFieldOfView;
-
-        /// <summary>
-        /// The original depth mode for the camera.
-        /// </summary>
-        DepthTextureMode m_PreviousCameraDepthMode;
-
-        /// <summary>
-        /// Stores the previous culling state (XRCameraSubsystem.invertCulling).
-        /// If the requested culling state changes, the command buffer must be rebuilt.
-        /// </summary>
-        bool m_CommandBufferCullingState;
-
-        XRCameraBackgroundRenderingMode m_CommandBufferRenderOrderState = XRCameraBackgroundRenderingMode.None;
 
         internal ARDefaultCameraBackgroundRenderingParams defaultCameraBackgroundRenderingParams => m_DefaultCameraBackgroundRenderingParams;
         ARDefaultCameraBackgroundRenderingParams m_DefaultCameraBackgroundRenderingParams;
@@ -152,7 +137,6 @@ namespace UnityEngine.XR.ARFoundation
         /// Whether culling should be inverted. Used during command buffer configuration,
         /// see [CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html).
         /// </summary>
-        /// <seealso cref="ConfigureLegacyCommandBuffer(CommandBuffer)"/>
         protected bool shouldInvertCulling
         {
             get
@@ -214,6 +198,7 @@ namespace UnityEngine.XR.ARFoundation
         public XRCameraBackgroundRenderingMode currentRenderingMode =>
             m_CameraManager == null ? XRCameraBackgroundRenderingMode.None : m_CameraManager.currentRenderingMode;
 
+#if URP_7_OR_NEWER
         /// <summary>
         /// A function that can be invoked by
         /// [CommandBuffer.IssuePluginEvent](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.IssuePluginEvent.html).
@@ -225,6 +210,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             s_CameraSubsystem?.OnBeforeBackgroundRender(eventId);
         }
+#endif // URP_7_OR_NEWER
 
         void Awake()
         {
@@ -243,8 +229,6 @@ namespace UnityEngine.XR.ARFoundation
             cameraManager.frameReceived += OnCameraFrameReceived;
             if (occlusionManager != null)
                 occlusionManager.frameReceived += OnOcclusionFrameReceived;
-
-            m_PreviousCameraDepthMode = camera.depthTextureMode;
 
             var shaderOcclusion = GetComponent<ARShaderOcclusion>();
             m_IsShaderOcclusionComponentEnabled = shaderOcclusion != null && shaderOcclusion.enabled;
@@ -280,8 +264,7 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Enable background rendering by disabling the camera's clear flags, and enabling the legacy RP background
-        /// rendering if your application is in legacy RP mode.
+        /// Enable background rendering by disabling the camera's clear flags.
         /// </summary>
         void EnableBackgroundRendering()
         {
@@ -293,18 +276,14 @@ namespace UnityEngine.XR.ARFoundation
 
             DisableBackgroundClearFlags();
             m_PreviousCameraFieldOfView = m_Camera.fieldOfView;
-            if (ARRenderingUtils.useLegacyRenderPipeline && cameraManager.cameraMaterial != null)
-                EnableBuiltInRenderPipelineBackgroundRendering();
         }
 
         /// <summary>
-        /// Disable background rendering by disabling the legacy RP background rendering if your application is  in legacy RP mode
-        /// and restoring the camera's clear flags.
+        /// Disable background rendering by restoring the camera's clear flags.
         /// </summary>
         void DisableBackgroundRendering()
         {
             m_BackgroundRenderingEnabled = false;
-            DisableBuiltInRenderPipelineBackgroundRendering();
             RestoreBackgroundClearFlags();
 
             if (m_PreviousCameraFieldOfView.HasValue)
@@ -336,25 +315,12 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// The list of [CameraEvent](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.html)s
-        /// to add to the [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html).
-        ///
-        /// In the case where Before Opaques rendering has been selected it will return:
-        ///
-        /// [BeforeForwardOpaque](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.BeforeForwardOpaque.html)
-        /// and
-        /// [BeforeGBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.BeforeGBuffer.html).
-        ///
-        /// In the case where After Opaques rendering has been selected it will return:
-        ///
-        /// [AfterForwardOpaque](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.AfterForwardOpaque.html)
-        /// and
-        /// [AfterGBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CameraEvent.AfterGBuffer.html).
-        ///
-        /// Override to use different camera events.
+        /// (Obsolete) The Built-in Render Pipeline camera events that background rendering used. AR Foundation no
+        /// longer uses this property because the Built-in Render Pipeline is not supported in Unity 7000.0.
         /// </summary>
-        protected virtual IEnumerable<CameraEvent> legacyCameraEvents =>
-            RenderingUtility.BuiltInRendering.GetBuiltInRenderingCameraEvents(m_CommandBufferRenderOrderState);
+        /// <value>An empty collection.</value>
+        [Obsolete(k_BuiltInRenderPipelineObsoleteMessage, true)]
+        protected virtual IEnumerable<CameraEvent> legacyCameraEvents => Array.Empty<CameraEvent>();
 
         /// <summary>
         /// Attempts to read the platform specific rendering parameters from the camera subsystem.
@@ -373,80 +339,20 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Configures the <paramref name="commandBuffer"/> by first clearing it, then adding necessary render commands.
+        /// (Obsolete) Configured the Built-in Render Pipeline background rendering command buffer. AR Foundation no
+        /// longer calls this method because the Built-in Render Pipeline is not supported in Unity 7000.0.
         /// </summary>
         /// <param name="commandBuffer">The command buffer to configure.</param>
-        protected virtual void ConfigureLegacyCommandBuffer(CommandBuffer commandBuffer)
-        {
-            if (!TryGetRenderingParameters(out var backgroundRenderingParams))
-            {
-                backgroundRenderingParams = m_DefaultCameraBackgroundRenderingParams.SelectDefaultBackgroundRenderParametersForRenderMode(currentRenderingMode);
-            }
+        [Obsolete(k_BuiltInRenderPipelineObsoleteMessage, true)]
+        protected virtual void ConfigureLegacyCommandBuffer(CommandBuffer commandBuffer) { }
 
-            var clearFlags = currentRenderingMode == XRCameraBackgroundRenderingMode.AfterOpaques
-                ? RTClearFlags.None
-                : RTClearFlags.Depth;
-
-            commandBuffer.Clear();
-            AddBeforeBackgroundRenderHandler(commandBuffer);
-            m_CommandBufferCullingState = shouldInvertCulling;
-
-            commandBuffer.SetInvertCulling(m_CommandBufferCullingState);
-            m_CommandBufferRenderOrderState = currentRenderingMode;
-
-            commandBuffer.SetViewProjectionMatrices(
-                Matrix4x4.identity,
-                Matrix4x4.identity);
-
-            commandBuffer.ClearRenderTarget(clearFlags, Color.clear);
-
-            commandBuffer.DrawMesh(
-                backgroundRenderingParams.backgroundGeometry,
-                backgroundRenderingParams.backgroundTransform,
-                material);
-            commandBuffer.SetViewProjectionMatrices(camera.worldToCameraMatrix, camera.projectionMatrix);
-        }
-
-        /// <summary>
-        /// Enable background rendering by getting a command buffer, and configure it for rendering the background.
-        /// </summary>
-        void EnableBuiltInRenderPipelineBackgroundRendering()
-        {
-            if (m_CommandBuffer == null)
-            {
-                m_CommandBuffer = new CommandBuffer();
-                m_CommandBuffer.name = k_CustomRenderPassName;
-
-                ConfigureLegacyCommandBuffer(m_CommandBuffer);
-                RenderingUtility.BuiltInRendering.AddCommandBufferToCameraEvent(camera, legacyCameraEvents, m_CommandBuffer);
-            }
-        }
-
-        /// <summary>
-        /// Disable background rendering by removing the command buffer from the camera.
-        /// </summary>
-        void DisableBuiltInRenderPipelineBackgroundRendering()
-        {
-            if (m_CommandBuffer != null)
-            {
-                RenderingUtility.BuiltInRendering.RemoveCommandBufferFromCameraEvents(camera, legacyCameraEvents, m_CommandBuffer);
-                m_CommandBuffer = null;
-            }
-        }
-
+#if URP_7_OR_NEWER
         /// <summary>
         /// This adds a command to the <paramref name="commandBuffer"/> to make a call from the render thread
         /// to a callback on the `XRCameraSubsystem` implementation. The callback handles any implementation-specific
         /// functionality needed immediately before the background is rendered.
         /// </summary>
-        /// <param name="commandBuffer">The [CommandBuffer](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.html)
-        /// to add the command to.</param>
-        internal static void AddBeforeBackgroundRenderHandler(CommandBuffer commandBuffer)
-        {
-            commandBuffer.IssuePluginEvent(s_BeforeBackgroundRenderHandlerFuncPtr, 0);
-        }
-
-#if URP_7_OR_NEWER
+        /// <param name="commandBuffer">The raster command buffer to add the command to.</param>
         internal static void AddBeforeBackgroundRenderHandler(RasterCommandBuffer commandBuffer)
         {
             commandBuffer.IssuePluginEvent(s_BeforeBackgroundRenderHandlerFuncPtr, 0);
@@ -468,29 +374,6 @@ namespace UnityEngine.XR.ARFoundation
                 {
                     DisableBackgroundRendering();
                     return;
-                }
-
-                if (m_CommandBuffer != null)
-                {
-                    var renderModeChanged = false;
-                    if (m_CommandBufferRenderOrderState != activeRenderingMode)
-                    {
-                        RenderingUtility.BuiltInRendering.RemoveCommandBufferFromCameraEvents(camera, legacyCameraEvents, m_CommandBuffer);
-                        RestoreBackgroundClearFlags();
-
-                        OnCameraRenderingModeChanged?.Invoke(activeRenderingMode);
-                        SetCameraDepthTextureMode(activeRenderingMode);
-
-                        renderModeChanged = true;
-                    }
-
-                    ConfigureLegacyCommandBuffer(m_CommandBuffer);
-
-                    if (renderModeChanged)
-                    {
-                        DisableBackgroundClearFlags();
-                        RenderingUtility.BuiltInRendering.AddCommandBufferToCameraEvent(camera, legacyCameraEvents, m_CommandBuffer);
-                    }
                 }
             }
             else if (eventArgs.textures.Count > 0 && activeRenderingMode != XRCameraBackgroundRenderingMode.None)
@@ -523,38 +406,13 @@ namespace UnityEngine.XR.ARFoundation
         }
 
         /// <summary>
-        /// Ensure the camera generates a depth texture after opaques for use when comparing environment depth when rendering
-        /// after opaques.
-        /// </summary>
-        void SetCameraDepthTextureMode(XRCameraBackgroundRenderingMode mode)
-        {
-            switch (mode)
-            {
-                case XRCameraBackgroundRenderingMode.AfterOpaques:
-                {
-                    if (occlusionManager.enabled)
-                    {
-                        m_PreviousCameraDepthMode = camera.depthTextureMode;
-                        camera.depthTextureMode = DepthTextureMode.Depth;
-                    }
-                    break;
-                }
-
-                case XRCameraBackgroundRenderingMode.None:
-                case XRCameraBackgroundRenderingMode.BeforeOpaques:
-                default:
-                    camera.depthTextureMode = m_PreviousCameraDepthMode;
-                    break;
-            }
-        }
-
-        /// <summary>
         /// Callback for the occlusion frame event.
         /// </summary>
         /// <param name="eventArgs">The occlusion frame event arguments.</param>
         void OnOcclusionFrameReceived(AROcclusionFrameEventArgs eventArgs)
         {
-            if (m_IsShaderOcclusionComponentEnabled && m_CommandBufferRenderOrderState != XRCameraBackgroundRenderingMode.AfterOpaques)
+            // ARShaderOcclusion handles the occlusion textures when it's enabled.
+            if (m_IsShaderOcclusionComponentEnabled)
                 return;
 
             var mat = material;

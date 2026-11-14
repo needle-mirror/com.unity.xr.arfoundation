@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// Listens to the <see cref="ARAnchorManager.anchorsChanged"/> event and forwards it to the visual scripting event bus.
     /// </summary>
     /// <seealso cref="AnchorsChangedEventUnit"/>
-    [Obsolete("ARAnchorManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ARAnchorManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ARAnchorManagerListener : TrackableManagerListener<ARAnchorManager>
     {
         void OnTrackablesChanged(ARAnchorsChangedEventArgs args)

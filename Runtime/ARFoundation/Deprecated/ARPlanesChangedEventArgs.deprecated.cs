@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Event arguments for the <see cref="ARPlaneManager.planesChanged"/> event.
     /// </summary>
-    [Obsolete("ARPlanesChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", false)]
+    [Obsolete("ARPlanesChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", true)]
     public struct ARPlanesChangedEventArgs : IEquatable<ARPlanesChangedEventArgs>
     {
         /// <summary>

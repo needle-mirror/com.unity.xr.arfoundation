@@ -22,7 +22,7 @@ The following table lists the optional features of the session subsystem. Each o
 
 | Feature              | Descriptor Property | Description |
 | :------------------- | :------------------ | :----------------- |
-| **Install** (Deprecated) | [supportsInstall](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall) | Whether the session supports the update or installation of session software. |
+| **Install** (Obsolete) | [supportsInstall](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsInstall) | Whether the session supports the update or installation of session software. |
 | **Match frame rate** | [supportsMatchFrameRate](xref:UnityEngine.XR.ARSubsystems.XRSessionSubsystemDescriptor.supportsMatchFrameRate) | Whether the session supports matching the AR frame rate to the Unity frame rate. |
 
 <a id="optional-feature-support"></a>
@@ -33,7 +33,7 @@ The following table lists whether certain XR plug-in providers support each opti
 
 | Feature              | ARCore | ARKit | visionOS | Meta OpenXR | Android XR | XR Simulation|
 | :------------------- | :----: | :---: | :------: | :--------:  | :--------: | :----------: |
-| **Install** (Deprecated) |  Yes   |       |          |             |            |              |
+| **Install** (Obsolete) |  Yes   |       |          |             |            |              |
 | **Match frame rate** |  Yes   |  Yes  |          |             |            |              |
 
 <a id="check-feature-support"></a>

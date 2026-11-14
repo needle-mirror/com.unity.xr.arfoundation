@@ -67,7 +67,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="XRRaycastSubsystem.Raycast(Ray, TrackableType, Unity.Collections.Allocator)"/>,
         /// the ray is considered to have hit if the ray intersects with any of the plane types.
         /// </remarks>
-        [Obsolete("Planes is deprecated as of AR Foundation 6.7. Use TrackableTypeExtensions.IsPlane or TrackableTypeExtensions.allPlaneTypes instead.")]
+        [Obsolete("Planes is deprecated as of AR Foundation 6.7. Use TrackableTypeExtensions.IsPlane or TrackableTypeExtensions.allPlaneTypes instead.", true)]
         Planes =
             PlaneWithinPolygon |
             PlaneWithinBounds |
@@ -113,7 +113,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Deprecated in favor of <see cref="TrackableType.AllTypes"/>. Refers to all trackable types except
         /// <see cref="TrackableType.Depth"/>.
         /// </summary>
-        [Obsolete("Use TrackableType.AllTypes instead. (2021-05-02)")]
+        [Obsolete("Use TrackableType.AllTypes instead. (2021-05-02)", true)]
         All = Planes | FeaturePoint | Image | Face,
 
         /// <summary>

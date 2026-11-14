@@ -45,21 +45,6 @@ namespace UnityEngine.XR.Simulation.Tests
             Assert.IsFalse(xrSubsystem.running);
         }
 
-#pragma warning disable CS0618
-        static bool CheckARAvailabilitySync<TSubsystem>(TSubsystem subsystem)
-            where TSubsystem : XRSessionSubsystem
-        {
-            var availabilityPromise = subsystem.GetAvailabilityAsync();
-
-            while (availabilityPromise.MoveNext())
-            {
-            }
-
-            var availability = availabilityPromise.result;
-            return availability.IsSupported() && availability.IsInstalled();
-        }
-#pragma warning restore CS0618
-
         [Test]
         [Order(1)]
         public void LoaderAvailable()
@@ -159,9 +144,6 @@ namespace UnityEngine.XR.Simulation.Tests
 
             // Subsystem exist
             Assert.IsInstanceOf<SimulationSessionSubsystem>(xrSubsystem, $"No active {nameof(SimulationSessionSubsystem)} is available.");
-
-            var supported = CheckARAvailabilitySync(xrSubsystem);
-            Assert.IsTrue(supported, "AR is not supported in Simulation.");
         }
 
         #region SimulationSubsystemsFunctional

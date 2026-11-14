@@ -22,7 +22,7 @@ namespace UnityEngine.XR.ARFoundation
     [DisallowMultipleComponent]
     [HelpUrl("features/plane-detection/arplane")]
     [Icon(Constants.arvrIconPath)]
-    public sealed class ARPlane : ARTrackable<BoundedPlane, ARPlane>
+    public sealed class ARPlane : ARTrackable<XRPlane, ARPlane>
     {
         [SerializeField]
         [Tooltip("The largest value by which a plane's vertex position may change before the boundaryChanged event is invoked. Units are in meters.")]
@@ -65,16 +65,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The classification of this plane.
         /// </summary>
-        [Obsolete("classification has been deprecated in AR Foundation 6.0. Use classifications instead.")]
-        public PlaneClassification classification
-        {
-            get
-            {
-                PlaneClassification classificationTemp = PlaneClassification.None;
-                classificationTemp.ConvertFromPlaneClassifications(sessionRelativeData.classifications);
-                return classificationTemp;
-            }
-        }
+        [Obsolete("classification has been deprecated in AR Foundation 6.0. Use classifications instead.", true)]
+        public PlaneClassification classification => default;
 
         /// <summary>
         /// The classifications of this plane.

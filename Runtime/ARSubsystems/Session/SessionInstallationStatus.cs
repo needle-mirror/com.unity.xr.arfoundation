@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARSubsystems
     ///
     /// Use <see cref="XRResultStatus"/> returned from a platform-specific <c>TryInstallAsync</c> instead.
     /// </remarks>
-    [Obsolete("SessionInstallationStatus has been deprecated in AR Foundation version 6.7. Refer to the Google ARCore XR Plug-in user manual for replacement API information.")]
+    [Obsolete("SessionInstallationStatus has been deprecated in AR Foundation version 6.7. Refer to the Google ARCore XR Plug-in user manual for replacement API information.", true)]
     public enum SessionInstallationStatus
     {
         /// <summary>

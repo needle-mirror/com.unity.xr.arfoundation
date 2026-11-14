@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [UnitCategory(Constants.k_Event_Unit_Category)]
     [UnitOrder((int)Constants.ARFoundationFeatureOrder.Anchors)]
     [TypeIcon(typeof(ARAnchorManager))]
-    [Obsolete("AnchorsChangedEventUnit has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("AnchorsChangedEventUnit has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class AnchorsChangedEventUnit : TrackablesChangedEventUnit<
         ARAnchorManager,
         XRAnchorSubsystem,

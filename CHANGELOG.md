@@ -8,6 +8,91 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [7.0.0-pre.1] - 2026-11-14
+
+### Changed
+
+- Changed the minimum Unity version from 6000.0 to 7000.0.
+- Changed the minimum dependency version of uGUI from 2.0.0 to 7.0.0.
+- Renamed `BoundedPlane` to [XRPlane](xref:UnityEngine.XR.ARSubsystems.XRPlane). `BoundedPlane` is obsolete. Provider plug-ins must now override [XRPlaneSubsystem.Provider.GetChanges(XRPlane, Allocator)](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem.Provider.GetChanges(UnityEngine.XR.ARSubsystems.XRPlane,Unity.Collections.Allocator)). Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.
+- Renamed `BoundedPlaneBuilder` to [XRPlaneBuilder](xref:UnityEngine.XR.ARSubsystems.XRPlaneBuilder). `BoundedPlaneBuilder` is obsolete. Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.
+- Renamed `BoundedPlaneBuilder.FromBoundedPlane` to [XRPlaneBuilder.FromPlane](xref:UnityEngine.XR.ARSubsystems.XRPlaneBuilder.FromPlane(UnityEngine.XR.ARSubsystems.XRPlane)). `BoundedPlaneBuilder.FromBoundedPlane` is obsolete. Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.
+- Renamed the `ARSession` component to [ARSessionManager](xref:UnityEngine.XR.ARFoundation.ARSessionManager). `ARSession` is obsolete. Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.
+- Changed the sample descriptions in the Package Manager to use one short summary followed by a list of each sample's dependencies, matching the other XR packages.
+
+### Deprecated
+
+#### ARSubsystems
+
+- The following APIs, which were previously deprecated with a warning, now produce compile errors when referenced. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+  - [`LightEstimationMode`](xref:UnityEngine.XR.ARSubsystems.LightEstimationMode). Use the `Feature` flags enum instead.
+  - [`ShaderKeywords`](xref:UnityEngine.XR.ARSubsystems.ShaderKeywords). Use `XRShaderKeywords` instead.
+  - [`XRCameraFrame`](xref:UnityEngine.XR.ARSubsystems.XRCameraFrame) properties `timestampNs`, `averageBrightness`, `averageColorTemperature`, `colorCorrection`, `projectionMatrix`, `displayMatrix`, `averageIntensityInLumens`, `exposureDuration`, `exposureOffset`, `mainLightIntensityLumens`, `mainLightColor`, `mainLightDirection`, `ambientSphericalHarmonics`, `cameraGrain`, and `noiseIntensity`, and their `has` properties `hasTimestamp`, `hasAverageBrightness`, `hasAverageColorTemperature`, `hasColorCorrection`, `hasProjectionMatrix`, `hasDisplayMatrix`, `hasAverageIntensityInLumens`, `hasExposureDuration`, `hasExposureOffset`, `hasMainLightIntensityLumens`, `hasMainLightColor`, `hasMainLightDirection`, `hasAmbientSphericalHarmonics`, `hasCameraGrain`, and `hasNoiseIntensity`. Use the `TryGet` method with the matching name instead, such as `TryGetAverageBrightness`. For `timestampNs` and `hasTimestamp`, use `TryGetTimestamp`.
+  - [`XRCameraSubsystem`](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem) and [`XROcclusionSubsystem`](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) methods `GetMaterialKeywords` and `GetShaderKeywords`. Use `GetShaderKeywords2` instead.
+  - [`XRTextureDescriptor`](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor) property `dimension` and the constructor that takes a `TextureDimension`. Use `textureType` and the constructor that takes an `XRTextureType` instead.
+  - [`XRImageTrackingSubsystem.CreateRuntimeLibrary`](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.CreateRuntimeLibrary*). Use `TryCreateRuntimeLibraryAsync` instead.
+  - [`PlaneClassification`](xref:UnityEngine.XR.ARSubsystems.PlaneClassification), `PlaneClassificationExtensions`, and the [`XRPlane`](xref:UnityEngine.XR.ARSubsystems.XRPlane) property and constructor that use it. Use `PlaneClassifications` and `XRPlane.classifications` instead.
+  - [`XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary`](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary*). Use `NativeArrayUtils` from XR Core Utils instead.
+  - [`TrackableType`](xref:UnityEngine.XR.ARSubsystems.TrackableType) values `Planes` and `All`. Use `TrackableTypeExtensions.allPlaneTypes` or `TrackableTypeExtensions.IsPlane`, and `AllTypes`, instead.
+  - Session availability and install APIs [`SessionAvailability`](xref:UnityEngine.XR.ARSubsystems.SessionAvailability), `SessionAvailabilityExtensions`, `XRSessionSubsystem.GetAvailabilityAsync`, `XRSessionSubsystem.InstallAsync`, and `supportsInstall` on `XRSessionSubsystemDescriptor` and its `Cinfo`. Use `TryStartAsync` with `XRSubsystemStartOptions.InstallSoftwareIfNeeded` instead.
+  - [`SessionInstallationStatus`](xref:UnityEngine.XR.ARSubsystems.SessionInstallationStatus). Use the `XRResultStatus` from a platform-specific `TryInstallAsync` method instead.
+  - [`XRAnchorSubsystemDescriptor.Cinfo`](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.Cinfo) properties `supportsTrackableAttachments`, `supportsSaveAnchor`, `supportsLoadAnchor`, `supportsEraseAnchor`, and `supportsGetSavedAnchorIds`. Use `supportsTrackableAttachmentsDelegate`, `supportsSaveAnchorDelegate`, `supportsLoadAnchorDelegate`, `supportsEraseAnchorDelegate`, and `supportsGetSavedAnchorIdsDelegate` instead.
+  - [`XRPlaneSubsystemDescriptor.Cinfo`](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystemDescriptor.Cinfo) properties `supportsBoundaryVertices` and `supportsClassification`. Use `supportsBoundaryVerticesDelegate` and `supportsClassificationDelegate` instead.
+  - [`XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypes`](xref:UnityEngine.XR.ARSubsystems.XRRaycastSubsystemDescriptor.Cinfo.supportedTrackableTypes). Use `supportedTrackableTypesDelegate` instead.
+  - [`XRAnchorSubsystemDescriptor.Create`](xref:UnityEngine.XR.ARSubsystems.XRAnchorSubsystemDescriptor.Create*), `XRImageTrackingSubsystemDescriptor.Create`, `XRPlaneSubsystemDescriptor.Create`, `XRPointCloudSubsystemDescriptor.RegisterDescriptor`, `XRRaycastSubsystemDescriptor.RegisterDescriptor`, and `XRSessionSubsystemDescriptor.RegisterDescriptor`. Use each descriptor's `Register(Cinfo)` method instead.
+  - [`XRCameraSubsystemCinfo`](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystemCinfo), `XREnvironmentProbeSubsystemCinfo`, `FaceSubsystemParams`, `XRHumanBodySubsystemCinfo`, and `XROcclusionSubsystemCinfo` structs, and the methods that take them: `XRCameraSubsystem.Register`, `XREnvironmentProbeSubsystem.Register`, `XRFaceSubsystemDescriptor.Create`, `XRHumanBodySubsystem.Register`, and `XROcclusionSubsystem.Register`. Use each descriptor's nested `Cinfo` struct and `Register(Cinfo)` method instead.
+  - `Capabilities` types on [`XRObjectTrackingSubsystemDescriptor`](xref:UnityEngine.XR.ARSubsystems.XRObjectTrackingSubsystemDescriptor) and [`XRParticipantSubsystemDescriptor`](xref:UnityEngine.XR.ARSubsystems.XRParticipantSubsystemDescriptor), their `capabilities` properties, and the `Register` methods that take them. Use each descriptor's `Cinfo` struct and `Register(Cinfo)` method instead.
+- Deprecated [`ARRenderingUtils.useLegacyRenderPipeline`](xref:UnityEngine.XR.ARSubsystems.ARRenderingUtils.useLegacyRenderPipeline), which now produces a compile error when referenced. The Built-in Render Pipeline is not supported in Unity 7000.0, and AR Foundation no longer uses this property. To check whether a Scriptable Render Pipeline is active, use [GraphicsSettings.currentRenderPipeline](https://docs.unity3d.com/ScriptReference/Rendering.GraphicsSettings-currentRenderPipeline.html) instead. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+
+#### ARFoundation
+
+- Deprecated the [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) members `legacyCameraEvents`, `ConfigureLegacyCommandBuffer`, and `OnCameraRenderingModeChanged`, which now produce compile errors when referenced. AR Foundation no longer calls or invokes them because the Built-in Render Pipeline is not supported in Unity 7000.0. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+- The following APIs, which were previously deprecated with a warning, now produce compile errors when referenced. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+  - Per-type trackable manager events `anchorsChanged`, `environmentProbesChanged`, `facesChanged`, `humanBodiesChanged`, `participantsChanged`, `planesChanged`, `pointCloudsChanged`, `trackedImagesChanged`, and `trackedObjectsChanged`, and their event argument types `ARAnchorsChangedEventArgs`, `AREnvironmentProbesChangedEvent`, `ARFacesChangedEventArgs`, `ARHumanBodiesChangedEventArgs`, `ARParticipantsChangedEventArgs`, `ARPlanesChangedEventArgs`, `ARPointCloudChangedEventArgs`, `ARTrackedImagesChangedEventArgs`, and `ARTrackedObjectsChangedEventArgs`. Use `trackablesChanged` and `ARTrackablesChangedEventArgs<TTrackable>` instead.
+  - [`ARTrackableManager.OnTrackablesChanged`](xref:UnityEngine.XR.ARFoundation.ARTrackableManager`5.OnTrackablesChanged*) and its override on `ARPointCloudManager`.
+  - [`ARMeshManager.meshesChanged`](xref:UnityEngine.XR.ARFoundation.ARMeshManager.meshesChanged). Use `meshInfosChanged` instead.
+  - [`ARCameraFrameEventArgs`](xref:UnityEngine.XR.ARFoundation.ARCameraFrameEventArgs) and [`AROcclusionFrameEventArgs`](xref:UnityEngine.XR.ARFoundation.AROcclusionFrameEventArgs) properties `enabledMaterialKeywords`, `disabledMaterialKeywords`, `enabledShaderKeywords`, and `disabledShaderKeywords`. Use `shaderKeywords` instead.
+  - [`AROcclusionFrameEventArgs`](xref:UnityEngine.XR.ARFoundation.AROcclusionFrameEventArgs) properties `textures` and `propertyNameIds`. Use `externalTextures` instead.
+  - [`AROcclusionManager`](xref:UnityEngine.XR.ARFoundation.AROcclusionManager) properties `environmentDepthTexture` and `environmentDepthConfidenceTexture`. Use `TryGetEnvironmentDepthTexture` and `TryGetEnvironmentDepthConfidenceTexture` instead.
+  - [`LightEstimationExtensions`](xref:UnityEngine.XR.ARFoundation.LightEstimationExtensions) methods `ToLightEstimation(LightEstimationMode)` and `ToLightEstimationMode(LightEstimation)`.
+  - [`ARPlaneMeshGenerators`](xref:UnityEngine.XR.ARFoundation.ARPlaneMeshGenerators). Use `ARPlaneMeshGenerator` instead.
+  - [`ARPlane.classification`](xref:UnityEngine.XR.ARFoundation.ARPlane.classification). Use `classifications` instead.
+  - [`ARRaycastHit`](xref:UnityEngine.XR.ARFoundation.ARRaycastHit) constructor without an `ARTrackable` parameter. Use `ARRaycastHit(XRRaycastHit, float, Transform, ARTrackable)` instead.
+  - [`ARSessionState`](xref:UnityEngine.XR.ARFoundation.ARSessionState) values `CheckingAvailability`, `NeedsInstall`, and `Installing`. Use `TryStartAsync` with `XRSubsystemStartOptions.InstallSoftwareIfNeeded` instead.
+  - [`ARSessionOrigin`](xref:UnityEngine.XR.ARFoundation.ARSessionOrigin). Use `XROrigin` instead.
+  - [`ARPoseDriver`](xref:UnityEngine.XR.ARFoundation.ARPoseDriver). Use the Input System `TrackedPoseDriver` component instead.
+  - [`ARTrackedImageManager`](xref:UnityEngine.XR.ARFoundation.ARTrackedImageManager) `referenceLibrary` setter and method `CreateRuntimeLibrary`. Use `TrySetReferenceLibraryAsync` or `TrySetReferenceLibrary`, and `TryCreateRuntimeLibraryAsync`, instead.
+  - [`MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob`](xref:UnityEngine.XR.ARFoundation.MutableRuntimeReferenceImageLibraryExtensions.ScheduleAddImageJob*). Use `ScheduleAddImageWithValidationJob` instead.
+  - [`ARDebugMenu`](xref:UnityEngine.XR.ARFoundation.ARDebugMenu), `DebugSlider`, and [`ToolButton`](xref:UnityEngine.XR.ARFoundation.ToolButton). For a debug visualizer, import the **Debug Visualizers** sample from the Package Manager window instead. `DebugSlider` and `ToolButton` have no replacement.
+
+#### Simulation
+
+- The following APIs, which were previously deprecated with a warning, now produce compile errors when referenced. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+  - [`SimulationBuildProcessor`](xref:UnityEditor.XR.Simulation.SimulationBuildProcessor). This class was never used and has no replacement.
+  - [`XRSimulationSettings`](xref:UnityEditor.XR.Simulation.XRSimulationSettings)
+
+#### Visual Scripting
+
+- The following APIs, which were previously deprecated with a warning, now produce compile errors when referenced. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+  - [`AnchorsChangedEventUnit`](xref:UnityEngine.XR.ARFoundation.VisualScripting.AnchorsChangedEventUnit), `EnvironmentProbesChangedEventUnit`, `FacesChangedEventUnit`, `HumanBodiesChangedEventUnit`, `ParticipantsChangedEventUnit`, `PlanesChangedEventUnit`, `PointCloudsChangedEventUnit`, `TrackedImagesChangedEventUnit`, `TrackedObjectsChangedEventUnit`, and their base class `TrackablesChangedEventUnit`.
+  - [`AnchorsChangedEventUnitDescriptor`](xref:UnityEditor.XR.ARFoundation.VisualScripting.AnchorsChangedEventUnitDescriptor), `EnvironmentProbesChangedEventUnitDescriptor`, `FacesChangedEventUnitDescriptor`, `HumanBodiesChangedEventUnitDescriptor`, `ParticipantsChangedEventUnitDescriptor`, `PlanesChangedEventUnitDescriptor`, `PointCloudsChangedEventUnitDescriptor`, `TrackedImagesChangedEventUnitDescriptor`, `TrackedObjectsChangedEventUnitDescriptor`, and their base class `TrackablesChangedEventUnitDescriptor`.
+  - [`ARAnchorManagerListener`](xref:UnityEngine.XR.ARFoundation.VisualScripting.ARAnchorManagerListener), `AREnvironmentProbeManagerListener`, `ARFaceManagerListener`, `ARHumanBodyManagerListener`, `ARParticipantManagerListener`, `ARPlaneManagerListener`, `ARPointCloudManagerListener`, `ARTrackedImageManagerListener`, `ARTrackedObjectManagerListener`, and their base class `TrackableManagerListener`.
+  - [`SessionStateSwitchUnit`](xref:UnityEngine.XR.ARFoundation.VisualScripting.SessionStateSwitchUnit) and [`SessionStateSwitchUnitDescriptor`](xref:UnityEditor.XR.ARFoundation.VisualScripting.SessionStateSwitchUnitDescriptor). Use [`ARSessionStateSwitchUnit`](xref:UnityEngine.XR.ARFoundation.VisualScripting.ARSessionStateSwitchUnit) and [`ARSessionStateSwitchUnitDescriptor`](xref:UnityEditor.XR.ARFoundation.VisualScripting.ARSessionStateSwitchUnitDescriptor) instead.
+
+### Removed
+
+- Removed `XRDepthSubsystem` and `XRDepthSubsystemDescriptor`. Use [`XRPointCloudSubsystem`](xref:UnityEngine.XR.ARSubsystems.XRPointCloudSubsystem) and [`XRPointCloudSubsystemDescriptor`](xref:UnityEngine.XR.ARSubsystems.XRPointCloudSubsystemDescriptor) instead. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+- Removed `ARBackgroundRendererFeature.Execute`, `ARBackgroundRendererFeature.Configure`, and `ARCommandBufferSupportRendererFeature.Execute`. Use the [Render Graph](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest?subfolder=/manual/render-graph.html) system instead.
+- Removed `SimulationCameraTextureReadbackPass.OnCameraSetup` and `SimulationCameraTextureReadbackPass.Execute`. Use the [Render Graph](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest?subfolder=/manual/render-graph.html) system instead.
+- Removed the `Simulation/Legacy/Room X-Ray`, `Simulation/Legacy/Standard`, and `Hidden/Simulation/Legacy/Synthetic` shaders. These were Built-in Render Pipeline fallbacks for the XR Simulation shaders, and the Built-in Render Pipeline is not supported in Unity 7000.0. The `Simulation/Legacy/Room X-Ray` surface shader also failed to compile in Unity 7000.0, which logged shader errors whenever the package was loaded.
+- Removed Built-in Render Pipeline support for [ARCameraBackground](xref:UnityEngine.XR.ARFoundation.ARCameraBackground) background rendering and XR Simulation camera texture readback. The Built-in Render Pipeline is not supported in Unity 7000.0. Use the Universal Render Pipeline with the [ARBackgroundRendererFeature](xref:UnityEngine.XR.ARFoundation.ARBackgroundRendererFeature) instead. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.
+
+### Fixed
+
+- Fixed deprecation warnings about `OnPreRender` and `OnPostRender` being found on `XREnvironmentViewCamera` by subscribing to `RenderPipelineManager.beginCameraRendering` and `RenderPipelineManager.endCameraRendering` instead.
+- Fixed `CS0618` compiler warnings about the obsolete `Camera.onPreRender` and `Camera.onPostRender` in `ARCameraManager` in projects without the Universal Render Pipeline (URP). `ARCameraManager` now always subscribes to `RenderPipelineManager.beginCameraRendering` and `RenderPipelineManager.endCameraRendering`.
+- Fixed a `CS0618` compiler warning about the obsolete `ImageEffectAllowedInSceneView` attribute on `XREnvironmentViewCamera`. The attribute still copies the XR Simulation environment view camera component to the Scene view camera, so the warning is suppressed until it is replaced.
+
 ## [6.7.1] - 2026-10-27
 
 ### Fixed
@@ -1727,7 +1812,6 @@ No changes
 - Removed `ARPlaceOnPlane`, `ARMakeAppearOnPlane`, `ARPlaneMeshVisualizer`, and `ARPointCloudParticleVisualizer` as these were deemed sample content.
 - Removed setup wizard.
 - Renamed `ARRig` to `ARSessionOrigin`.
-
 
 <hr>
 \* *Apple and ARKit are trademarks of Apple Inc., registered in the U.S. and other countries and regions.*

@@ -47,8 +47,10 @@ namespace UnityEngine.XR.ARFoundation
         /// This happens just before <see cref="ARTrackedObject"/>s are destroyed, so you can set <c>ARTrackedObject.destroyOnRemoval</c> to <c>false</c>
         /// from this event to suppress this behavior.
         /// </summary>
-        [Obsolete("pointCloudsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        [Obsolete("pointCloudsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", true)]
+#pragma warning disable CS0067
         public event Action<ARPointCloudChangedEventArgs> pointCloudsChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Invoked when this `MonoBehaviour` is enabled. Used to register with the <see cref="ARRaycastManager"/>.
@@ -103,22 +105,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">A list of objects added this frame.</param>
         /// <param name="updated">A list of objects updated this frame.</param>
         /// <param name="removed">A list of objects removed this frame.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected override void OnTrackablesChanged(
             List<ARPointCloud> added,
             List<ARPointCloud> updated,
             List<ARPointCloud> removed)
-        {
-            if (pointCloudsChanged != null)
-            {
-                using (new ScopedProfiler("OnPointCloudsChanged"))
-                pointCloudsChanged?.Invoke(
-                    new ARPointCloudChangedEventArgs(
-                        added,
-                        updated,
-                        removed));
-            }
-        }
+        { }
 
         /// <summary>
         /// Implementation for the <c>IRaycaster</c> interface. Raycasts against every point cloud.

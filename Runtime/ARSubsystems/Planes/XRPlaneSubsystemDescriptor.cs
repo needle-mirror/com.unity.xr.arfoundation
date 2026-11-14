@@ -18,9 +18,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Indicates whether the provider implementation supports the detection of horizontal planes,
         /// such as the floor.
-        /// If `false`, <see cref="BoundedPlane"/> trackables returned by
+        /// If `false`, <see cref="XRPlane"/> trackables returned by
         /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
-        /// <see cref="BoundedPlane.alignment"/> values set to either <see cref="PlaneAlignment.HorizontalDown"/> or
+        /// <see cref="XRPlane.alignment"/> values set to either <see cref="PlaneAlignment.HorizontalDown"/> or
         /// <see cref="PlaneAlignment.HorizontalUp"/>.
         /// </summary>
         /// <value>`true` if the implementation supports horizontal plane detection.
@@ -29,9 +29,9 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Indicates whether the provider implementation supports the detection of vertical planes, such as walls.
-        /// If `false`, <see cref="BoundedPlane"/> trackables returned by
+        /// If `false`, <see cref="XRPlane"/> trackables returned by
         /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
-        /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
+        /// <see cref="XRPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
         /// </summary>
         /// <value>`true` if the implementation supports vertical plane detection.
         /// Otherwise, `false`.</value>
@@ -40,9 +40,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Indicates whether the provider implementation supports the detection of planes that are aligned with
         /// neither the horizontal nor vertical axes.
-        /// If `false`, <see cref="BoundedPlane"/> trackables returned by
+        /// If `false`, <see cref="XRPlane"/> trackables returned by
         /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
-        /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
+        /// <see cref="XRPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
         /// </summary>
         /// <value>`true` if the implementation supports the detection of planes oriented at arbitrary angles.
         /// Otherwise, `false`.</value>
@@ -60,7 +60,7 @@ namespace UnityEngine.XR.ARSubsystems
 
         /// <summary>
         /// Indicates whether the provider implementation can provide a value for
-        /// <see cref="BoundedPlane.classifications">BoundedPlane.classifications</see>. If `false`, all
+        /// <see cref="XRPlane.classifications">XRPlane.classifications</see>. If `false`, all
         /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have
         /// <c>classifications</c> value of <see cref="PlaneClassifications.None"/>.
         /// </summary>
@@ -72,7 +72,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Indicates whether the provider implementation supports the ability to absorb one plane
         /// into another while plane detection is enabled, if the runtime determines that both planes
-        /// represent the same surface. If `false`, <see cref="BoundedPlane"/> trackables returned by
+        /// represent the same surface. If `false`, <see cref="XRPlane"/> trackables returned by
         /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see>
         /// must have their `subsumedById` properties set to `TrackableId.invalidId`.
         /// </summary>
@@ -108,9 +108,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Indicates whether the provider implementation supports the detection of horizontal planes,
             /// such as the floor.
-            /// If `false`, <see cref="BoundedPlane"/> trackables returned by
+            /// If `false`, <see cref="XRPlane"/> trackables returned by
             /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
-            /// <see cref="BoundedPlane.alignment"/> value set to either <see cref="PlaneAlignment.HorizontalDown"/> or
+            /// <see cref="XRPlane.alignment"/> value set to either <see cref="PlaneAlignment.HorizontalDown"/> or
             /// <see cref="PlaneAlignment.HorizontalUp"/>.
             /// </summary>
             /// <value>`true` if the implementation supports horizontal plane detection.
@@ -119,9 +119,9 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Indicates whether the provider implementation supports the detection of vertical planes, such as walls.
-            /// If `false`, <see cref="BoundedPlane"/> trackables returned by
+            /// If `false`, <see cref="XRPlane"/> trackables returned by
             /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
-            /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
+            /// <see cref="XRPlane.alignment"/> value set to <see cref="PlaneAlignment.Vertical"/>.
             /// </summary>
             /// <value>`true` if the implementation supports vertical plane detection.
             /// Otherwise, `false`.</value>
@@ -130,9 +130,9 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Indicates whether the provider implementation supports the detection of planes that are aligned with
             /// neither the horizontal nor vertical axes.
-            /// If `false`, <see cref="BoundedPlane"/> trackables returned by
+            /// If `false`, <see cref="XRPlane"/> trackables returned by
             /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> must not have their
-            /// <see cref="BoundedPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
+            /// <see cref="XRPlane.alignment"/> value set to <see cref="PlaneAlignment.NotAxisAligned"/>.
             /// </summary>
             /// <value>`true` if the implementation supports the detection of planes oriented at arbitrary angles.
             /// Otherwise, `false`.</value>
@@ -145,18 +145,18 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <value>`true` if the implementation supports boundary vertices for its planes.
             /// Otherwise, `false`.</value>
-            [Obsolete("supportsBoundaryVertices is deprecated in AR Foundation 6.5.0-pre.1. Use supportsBoundaryVerticesDelegate instead.")]
+            [Obsolete("supportsBoundaryVertices is deprecated in AR Foundation 6.5.0-pre.1. Use supportsBoundaryVerticesDelegate instead.", true)]
             public bool supportsBoundaryVertices { get; set; }
 
             /// <summary>
             /// Indicates whether the provider implementation can provide a value for
-            /// <see cref="BoundedPlane.classifications">BoundedPlane.classifications</see>. If `false`, all
+            /// <see cref="XRPlane.classifications">XRPlane.classifications</see>. If `false`, all
             /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have a
             /// <c>classifications</c> value of <see cref="PlaneClassifications.None"/>.
             /// </summary>
             /// <value>`true` if the implementation supports plane classification.
             /// Otherwise, `false`.</value>
-            [Obsolete("supportsClassification is deprecated in AR Foundation 6.5.0-pre.1. Use supportsClassificationDelegate instead.")]
+            [Obsolete("supportsClassification is deprecated in AR Foundation 6.5.0-pre.1. Use supportsClassificationDelegate instead.", true)]
             public bool supportsClassification { get; set; }
 
             /// <summary>
@@ -170,7 +170,7 @@ namespace UnityEngine.XR.ARSubsystems
 
             /// <summary>
             /// Indicates whether the provider implementation can provide a value for
-            /// <see cref="BoundedPlane.classifications">BoundedPlane.classifications</see>. If `false`, all
+            /// <see cref="XRPlane.classifications">XRPlane.classifications</see>. If `false`, all
             /// planes returned by <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see> will have a
             /// <c>classifications</c> value of <see cref="PlaneClassifications.None"/>.
             /// </summary>
@@ -181,7 +181,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// Indicates whether the provider implementation supports the ability to absorb one plane
             /// into another while plane detection is enabled, if the runtime determines that both planes
-            /// represent the same surface. If `false`, <see cref="BoundedPlane"/> trackables returned by
+            /// represent the same surface. If `false`, <see cref="XRPlane"/> trackables returned by
             /// <see cref="XRPlaneSubsystem.GetChanges">XRPlaneSubsystem.GetChanges</see>
             /// must have their `subsumedById` properties set to `TrackableId.invalidId`.
             /// </summary>
@@ -202,10 +202,6 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode.Add(supportsHorizontalPlaneDetection);
                 hashCode.Add(supportsVerticalPlaneDetection);
                 hashCode.Add(supportsArbitraryPlaneDetection);
-#pragma warning disable CS0618 // Type or member is obsolete
-                hashCode.Add(supportsBoundaryVertices);
-                hashCode.Add(supportsClassification);
-#pragma warning restore CS0618 // Type or member is obsolete
                 hashCode.Add(supportsBoundaryVerticesDelegate);
                 hashCode.Add(supportsClassificationDelegate);
                 hashCode.Add(supportsPlaneSubsumptionDelegate);
@@ -229,11 +225,7 @@ namespace UnityEngine.XR.ARSubsystems
                     supportsArbitraryPlaneDetection == other.supportsArbitraryPlaneDetection &&
                     supportsClassificationDelegate == other.supportsClassificationDelegate &&
                     supportsBoundaryVerticesDelegate == other.supportsBoundaryVerticesDelegate &&
-                    supportsPlaneSubsumptionDelegate == other.supportsPlaneSubsumptionDelegate &&
-#pragma warning disable CS0618 // Type or member is obsolete
-                    supportsBoundaryVertices == other.supportsBoundaryVertices &&
-                    supportsClassification == other.supportsClassification;
-#pragma warning restore CS0618 // Type or member is obsolete
+                    supportsPlaneSubsumptionDelegate == other.supportsPlaneSubsumptionDelegate;
 
             }
 
@@ -275,11 +267,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
         /// </summary>
         /// <param name="cinfo">Construction info for the descriptor.</param>
-        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
-        public static void Create(Cinfo cinfo)
-        {
-            Register(cinfo);
-        }
+        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", true)]
+        public static void Create(Cinfo cinfo) { }
 
         /// <summary>
         /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
@@ -298,10 +287,6 @@ namespace UnityEngine.XR.ARSubsystems
             supportsHorizontalPlaneDetection = cinfo.supportsHorizontalPlaneDetection;
             supportsVerticalPlaneDetection = cinfo.supportsVerticalPlaneDetection;
             supportsArbitraryPlaneDetection = cinfo.supportsArbitraryPlaneDetection;
-#pragma warning disable CS0618 // Type or member is obsolete
-            m_SupportsBoundaryVerticesObsolete = cinfo.supportsBoundaryVertices;
-            m_SupportsClassificationObsolete = cinfo.supportsClassification;
-#pragma warning restore CS0618 // Type or member is obsolete
             m_SupportsBoundaryVerticesDelegate = cinfo.supportsBoundaryVerticesDelegate;
             m_SupportsClassificationDelegate = cinfo.supportsClassificationDelegate;
             m_SupportsPlaneSubsumptionDelegate = cinfo.supportsPlaneSubsumptionDelegate;

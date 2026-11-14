@@ -9,9 +9,9 @@ namespace UnityEngine.XR.ARSubsystems
     /// </summary>
     /// <seealso cref="XRPlaneSubsystem"/>
     [StructLayout(LayoutKind.Sequential)]
-    public struct BoundedPlane : ITrackable, IEquatable<BoundedPlane>
+    public struct XRPlane : ITrackable, IEquatable<XRPlane>
     {
-        static readonly BoundedPlane s_Default =
+        static readonly XRPlane s_Default =
             new(
                 TrackableId.invalidId,
                 TrackableId.invalidId,
@@ -40,10 +40,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// different from the zero-initialized version, e.g., the <see cref="pose"/>
         /// is <c>Pose.identity</c> instead of zero-initialized.
         /// </summary>
-        public static BoundedPlane defaultValue => s_Default;
+        public static XRPlane defaultValue => s_Default;
 
         /// <summary>
-        /// Constructs a new instance. <c>Bounded Plane</c> objects are typically created by
+        /// Constructs a new instance. <c>XRPlane</c> objects are typically created by
         /// <see cref="XRPlaneSubsystem.GetChanges(Unity.Collections.Allocator)">XRPlaneSubsystem.GetChanges</see>.
         /// </summary>
         /// <param name="trackableId">The `TrackableId` associated with the plane.</param>
@@ -55,8 +55,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="trackingState">The `TrackingState` associated with the plane.</param>
         /// <param name="nativePtr">The native pointer associated with the plane.</param>
         /// <param name="classification">The `PlaneClassification` associated with the plane.</param>
-        [Obsolete("BoundedPlane(TrackableId, TrackableId, Pose, Vector2, Vector2, PlaneAlignment, TrackingState, IntPtr, PlaneClassification) has been deprecated in AR Foundation version 6.0. Use BoundedPlane(TrackableId, TrackableId, Pose, Vector2, Vector2, PlaneAlignment, TrackingState, IntPtr, PlaneClassifications) instead.")]
-        public BoundedPlane(
+        [Obsolete("XRPlane(TrackableId, TrackableId, Pose, Vector2, Vector2, PlaneAlignment, TrackingState, IntPtr, PlaneClassification) has been deprecated in AR Foundation version 6.0. Use XRPlane(TrackableId, TrackableId, Pose, Vector2, Vector2, PlaneAlignment, TrackingState, IntPtr, PlaneClassifications) instead.", true)]
+        public XRPlane(
             TrackableId trackableId,
             TrackableId subsumedBy,
             Pose pose,
@@ -66,21 +66,11 @@ namespace UnityEngine.XR.ARSubsystems
             TrackingState trackingState,
             IntPtr nativePtr,
             PlaneClassification classification)
-        {
-            m_TrackableId = trackableId;
-            m_SubsumedById = subsumedBy;
-            m_Pose = pose;
-            m_Center = center;
-            m_Size = size;
-            m_Alignment = alignment;
-            m_TrackingState = trackingState;
-            m_NativePtr = nativePtr;
-            m_Classifications = classification.ConvertToPlaneClassifications();
-            m_ParentId = defaultValue.parentId;
-        }
+            : this()
+        { }
 
         /// <summary>
-        /// Constructs a new instance. <c>BoundedPlane</c> objects are typically created by
+        /// Constructs a new instance. <c>XRPlane</c> objects are typically created by
         /// <see cref="XRPlaneSubsystem.GetChanges(Unity.Collections.Allocator)">XRPlaneSubsystem.GetChanges</see>.
         /// </summary>
         /// <param name="trackableId">The `TrackableId` associated with the plane.</param>
@@ -93,7 +83,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="nativePtr">The native pointer associated with the plane.</param>
         /// <param name="classifications">The PlaneClassifications assigned to the plane by the XR device.</param>
         /// <param name="parentId">The <see cref="TrackableId"/> of the parent of this tracked object.</param>
-        public BoundedPlane(
+        public XRPlane(
             TrackableId trackableId,
             TrackableId subsumedBy,
             Pose pose,
@@ -118,7 +108,7 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Constructs a new instance. <c>BoundedPlane</c> objects are typically created by
+        /// Constructs a new instance. <c>XRPlane</c> objects are typically created by
         /// <see cref="XRPlaneSubsystem.GetChanges(Unity.Collections.Allocator)">XRPlaneSubsystem.GetChanges</see>.
         /// </summary>
         /// <param name="trackableId">The `TrackableId` associated with the plane.</param>
@@ -130,7 +120,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="trackingState">The `TrackingState` describing how well the XR device is tracking the plane.</param>
         /// <param name="nativePtr">The native pointer associated with the plane.</param>
         /// <param name="classifications">The PlaneClassifications assigned to the plane by the XR device.</param>
-        public BoundedPlane(
+        public XRPlane(
             TrackableId trackableId,
             TrackableId subsumedBy,
             Pose pose,
@@ -208,16 +198,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The classification of this plane.
         /// </summary>
-        [Obsolete("classification has been deprecated in AR Foundation version 6.0. Use classifications instead.")]
-        public PlaneClassification classification
-        {
-            get
-            {
-                PlaneClassification classificationTemp = PlaneClassification.None;
-                classificationTemp.ConvertFromPlaneClassifications(m_Classifications);
-                return classificationTemp;
-            }
-        }
+        [Obsolete("classification has been deprecated in AR Foundation version 6.0. Use classifications instead.", true)]
+        public PlaneClassification classification => default;
 
         /// <summary>
         /// The classifications of this plane.
@@ -294,9 +276,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// Tests for equality.
         /// </summary>
         /// <param name="obj">The `object` to compare against.</param>
-        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="BoundedPlane"/> and
-        /// <see cref="Equals(BoundedPlane)"/> also returns `true`; otherwise `false`.</returns>
-        public override bool Equals(object obj) => (obj is BoundedPlane other) && Equals(other);
+        /// <returns>`True` if <paramref name="obj"/> is of type <see cref="XRPlane"/> and
+        /// <see cref="Equals(XRPlane)"/> also returns `true`; otherwise `false`.</returns>
+        public override bool Equals(object obj) => (obj is XRPlane other) && Equals(other);
 
         /// <summary>
         /// Generates a hash suitable for use with containers like `HashSet` and `Dictionary`.
@@ -320,27 +302,27 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Tests for equality. Same as <see cref="Equals(BoundedPlane)"/>.
+        /// Tests for equality. Same as <see cref="Equals(XRPlane)"/>.
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-        public static bool operator ==(BoundedPlane lhs, BoundedPlane rhs) => lhs.Equals(rhs);
+        public static bool operator ==(XRPlane lhs, XRPlane rhs) => lhs.Equals(rhs);
 
         /// <summary>
-        /// Tests for inequality. Same as `!`<see cref="Equals(BoundedPlane)"/>.
+        /// Tests for inequality. Same as `!`<see cref="Equals(XRPlane)"/>.
         /// </summary>
         /// <param name="lhs">The left-hand side of the comparison.</param>
         /// <param name="rhs">The right-hand side of the comparison.</param>
         /// <returns>`True` if <paramref name="lhs"/> is not equal to <paramref name="rhs"/>, otherwise `false`.</returns>
-        public static bool operator !=(BoundedPlane lhs, BoundedPlane rhs) => !lhs.Equals(rhs);
+        public static bool operator !=(XRPlane lhs, XRPlane rhs) => !lhs.Equals(rhs);
 
         /// <summary>
         /// Tests for equality.
         /// </summary>
-        /// <param name="other">The other <see cref="BoundedPlane"/> to compare against.</param>
-        /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="BoundedPlane"/>, otherwise false.</returns>
-        public bool Equals(BoundedPlane other)
+        /// <param name="other">The other <see cref="XRPlane"/> to compare against.</param>
+        /// <returns>`True` if every field in <paramref name="other"/> is equal to this <see cref="XRPlane"/>, otherwise false.</returns>
+        public bool Equals(XRPlane other)
         {
             return
                 m_TrackableId.Equals(other.m_TrackableId) &&

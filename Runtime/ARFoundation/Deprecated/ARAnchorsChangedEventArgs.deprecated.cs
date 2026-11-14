@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Event arguments for the <see cref="ARAnchorManager.anchorsChanged"/> event.
     /// </summary>
-    [Obsolete("ARAnchorsChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs&lt;TTrackable&gt; instead.", false)]
+    [Obsolete("ARAnchorsChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs&lt;TTrackable&gt; instead.", true)]
     public struct ARAnchorsChangedEventArgs : IEquatable<ARAnchorsChangedEventArgs>
     {
         /// <summary>

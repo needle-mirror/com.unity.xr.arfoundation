@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Represents the light estimation mode.
     /// </summary>
-    [Obsolete("This enum is no longer used. Its functionality was replaced by the Feature flags enum. (2023-02-02)")]
+    [Obsolete("This enum is no longer used. Its functionality was replaced by the Feature flags enum. (2023-02-02)", true)]
     public enum LightEstimationMode
     {
         /// <summary>

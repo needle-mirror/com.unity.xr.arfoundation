@@ -76,7 +76,6 @@ namespace UnityEngine.XR.Simulation
         internal CameraTextureFrameEventArgs? CameraFrameEventArgs => m_CameraFrameEventArgs;
 
         bool m_Initialized;
-        CommandBuffer m_ReadbackCommandBuffer;
 #if URP_7_OR_NEWER
         SimulationCameraTextureReadbackPass m_SimulationReadbackRenderPass;
 #endif // URP_7_OR_NEWER
@@ -183,7 +182,7 @@ namespace UnityEngine.XR.Simulation
 
             BaseSimulationSceneManager.environmentSetupFinished += OnEnvironmentSetupFinished;
 #if URP_7_OR_NEWER
-            if (!ARRenderingUtils.useLegacyRenderPipeline)
+            if (GraphicsSettings.currentRenderPipeline != null)
                 m_SimulationReadbackRenderPass ??= new SimulationCameraTextureReadbackPass(this);
 #endif // URP_7_OR_NEWER
 
@@ -196,18 +195,7 @@ namespace UnityEngine.XR.Simulation
             BaseSimulationSceneManager.environmentSetupFinished -= OnEnvironmentSetupFinished;
 
             if (m_SimulationCamera != null)
-            {
-                if (m_ReadbackCommandBuffer != null)
-                    m_SimulationCamera.RemoveCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
-
                 m_SimulationCamera.targetTexture = null;
-            }
-
-            if (m_ReadbackCommandBuffer != null)
-            {
-                m_ReadbackCommandBuffer.Dispose();
-                m_ReadbackCommandBuffer = null;
-            }
 
             if (m_SimulationCameraRenderTexture != null)
                 m_SimulationCameraRenderTexture.Release();
@@ -247,11 +235,9 @@ namespace UnityEngine.XR.Simulation
             CopyLimitedSettingsToCamera(m_XrCamera, m_SimulationCamera);
 
 #if URP_7_OR_NEWER
-            if (!ARRenderingUtils.useLegacyRenderPipeline)
+            if (GraphicsSettings.currentRenderPipeline != null)
                 ConfigureTextureReadbackForURP();
-            else
 #endif // URP_7_OR_NEWER
-                ConfigureBuiltInCommandBufferIfNeeded();
 
             DoCameraRender(m_SimulationCamera);
 
@@ -293,29 +279,6 @@ namespace UnityEngine.XR.Simulation
             universalAdditionalCameraData.scriptableRenderer.EnqueuePass(m_SimulationReadbackRenderPass);
         }
 #endif  // URP_7_OR_NEWER
-
-        void ConfigureBuiltInCommandBufferIfNeeded()
-        {
-            if (m_ReadbackCommandBuffer != null)
-                return;
-
-            ConfigureBuiltInCommandBuffer();
-        }
-
-        void ConfigureBuiltInCommandBuffer()
-        {
-            if (m_SimulationCamera == null)
-                return;
-
-            if (m_ReadbackCommandBuffer != null)
-                m_SimulationCamera.RemoveCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
-
-            m_ReadbackCommandBuffer = new CommandBuffer { name = "Simulation Environment Readback Command Buffer" };
-            if (TryConfigureReadbackCommandBuffer(m_ReadbackCommandBuffer))
-            {
-                m_SimulationCamera.AddCommandBuffer(CameraEvent.AfterEverything, m_ReadbackCommandBuffer);
-            }
-        }
 
         void OnEnvironmentSetupFinished()
         {
@@ -359,35 +322,6 @@ namespace UnityEngine.XR.Simulation
             preRenderCamera?.Invoke(renderCamera);
             renderCamera.Render();
             postRenderCamera?.Invoke(renderCamera);
-        }
-
-        /// <summary>
-        /// Performs the Simulation camera render texture (color and/or depth texture) async readback with RenderGraph disabled.
-        /// </summary>
-        /// <returns><c>true</c> if async readback is successful, <c>false</c> otherwise.</returns>
-        /// <param name="cmd">The <c>CommandBuffer</c> object to enqueue rendering commands.</param>
-        /// <seealso cref="SimulationCameraTextureReadbackPass.Execute"/>
-        internal bool TryConfigureReadbackCommandBuffer(CommandBuffer commandBuffer)
-        {
-            commandBuffer.Clear();
-            commandBuffer.name = "Simulation Background Pre-Render";
-            // Must default to true so if depth isn't needed, this function still returns true.
-            bool canReadbackDepth = true;
-            if (m_EnableDepthReadback)
-            {
-                var colorRenderBuffer = m_SimulationCamera.activeTexture.colorBuffer;
-                var depthRenderBuffer = m_SimulationCamera.activeTexture.depthBuffer;
-                commandBuffer.Blit(m_SimulationCameraRenderTexture, m_SimulationCameraDepthRenderTexture, s_DepthCopyShader);
-                commandBuffer.CopyTexture(m_SimulationCameraDepthRenderTexture, m_SimulationReadbackDepthTexture);
-                commandBuffer.SetRenderTarget(colorRenderBuffer, depthRenderBuffer);
-                canReadbackDepth = TryRequestReadbackForImageType(
-                    commandBuffer,
-                    ImageType.Depth,
-                    m_SimulationReadbackDepthTexture);
-            }
-
-            commandBuffer.CopyTexture(m_SimulationCameraRenderTexture, m_SimulationReadbackTexture);
-            return TryRequestReadbackForImageType(commandBuffer, ImageType.Camera, m_SimulationReadbackTexture) && canReadbackDepth;
         }
 
         /// <summary>
@@ -464,13 +398,7 @@ namespace UnityEngine.XR.Simulation
 
         internal void SetEnableDepthReadback(bool useDepth)
         {
-            if (m_EnableDepthReadback != useDepth)
-            {
-                m_EnableDepthReadback = useDepth;
-#if !URP_7_OR_NEWER
-                ConfigureBuiltInCommandBuffer();
-#endif
-            }
+            m_EnableDepthReadback = useDepth;
         }
 
         internal void TryGetTextureDescriptors(out NativeArray<XRTextureDescriptor> planeDescriptors,

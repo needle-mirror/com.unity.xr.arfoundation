@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Event arguments for the <see cref="AREnvironmentProbeManager.environmentProbesChanged"/> event.
     /// </summary>
-    [Obsolete("AREnvironmentProbesChangedEvent has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", false)]
+    [Obsolete("AREnvironmentProbesChangedEvent has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", true)]
     public struct AREnvironmentProbesChangedEvent : IEquatable<AREnvironmentProbesChangedEvent>
     {
         /// <summary>

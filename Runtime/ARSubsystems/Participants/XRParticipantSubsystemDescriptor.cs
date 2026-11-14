@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// used to query a subsystem for capabilities that might vary by platform or implementation.
         /// </summary>
         [Flags]
-        [Obsolete("XRParticipantSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRParticipantSubsystemDescriptor.Cinfo instead of XRParticipantSubsystemDescriptor.Capabilities when registering a descriptor.", false)]
+        [Obsolete("XRParticipantSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRParticipantSubsystemDescriptor.Cinfo instead of XRParticipantSubsystemDescriptor.Capabilities when registering a descriptor.", true)]
         public enum Capabilities
         {
             /// <summary>
@@ -30,7 +30,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// The capabilities provided by this implementation.
         /// </summary>
-        [Obsolete("XRParticipantSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRParticipantSubsystemDescriptor.Cinfo instead of XRParticipantSubsystemDescriptor.Capabilities when registering a descriptor.", false)]
+        [Obsolete("XRParticipantSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRParticipantSubsystemDescriptor.Cinfo instead of XRParticipantSubsystemDescriptor.Capabilities when registering a descriptor.", true)]
         public Capabilities capabilities { get; private set; }
 
         /// <summary>
@@ -123,18 +123,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="subsystemId">The name of the specific subsystem implementation.</param>
         /// <param name="capabilities">The <see cref="Capabilities"/> of the specific subsystem implementation.</param>
         /// <typeparam name="T">The concrete type derived from <see cref="XRParticipantSubsystem"/> being registered.</typeparam>
-        [Obsolete("XRParticipantSubsystemDescriptor.Register<T>(string subsystemId, Capabilities capabilities) has been deprecated in 6.0. Instead use XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo cinfo)", false)]
+        [Obsolete("XRParticipantSubsystemDescriptor.Register<T>(string subsystemId, Capabilities capabilities) has been deprecated in 6.0. Instead use XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo cinfo)", true)]
         public static void Register<T>(string subsystemId, Capabilities capabilities)
             where T : XRParticipantSubsystem.Provider
-        {
-            Register(
-                new XRParticipantSubsystemDescriptor.Cinfo()
-                {
-                    id = subsystemId,
-                    providerType = typeof(T),
-                    subsystemTypeOverride = null
-                });
-        }
+        { }
 
         /// <summary>
         /// Register a provider implementation and subsystem override.
@@ -144,19 +136,11 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="capabilities">The <see cref="Capabilities"/> of the specific subsystem implementation.</param>
         /// <typeparam name="TProvider">The concrete type of the provider being registered.</typeparam>
         /// <typeparam name="TSubsystemOverride">The concrete type of the subsystem being registered.</typeparam>
-        [Obsolete("XRParticipantSubsystemDescriptor.Register<TProvider, TSubsystemOverride>(string subsystemId, Capabilities capabilities) has been deprecated in 6.0. Instead use XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo cinfo)", false)]
+        [Obsolete("XRParticipantSubsystemDescriptor.Register<TProvider, TSubsystemOverride>(string subsystemId, Capabilities capabilities) has been deprecated in 6.0. Instead use XRParticipantSubsystemDescriptor.Register(XRParticipantSubsystemDescriptor.Cinfo cinfo)", true)]
         public static void Register<TProvider, TSubsystemOverride>(string subsystemId, Capabilities capabilities)
             where TProvider : XRParticipantSubsystem.Provider
             where TSubsystemOverride : XRParticipantSubsystem
-        {
-            Register(
-                new XRParticipantSubsystemDescriptor.Cinfo()
-                {
-                    id = subsystemId,
-                    providerType = typeof(TProvider),
-                    subsystemTypeOverride = typeof(TSubsystemOverride)
-                });
-        }
+        { }
 
         XRParticipantSubsystemDescriptor(Cinfo cinfo)
         {

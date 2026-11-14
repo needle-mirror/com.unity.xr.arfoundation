@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// Listens to the <see cref="ARHumanBodyManager.humanBodiesChanged"/> event and forwards it to the visual scripting event bus.
     /// </summary>
     /// <seealso cref="HumanBodiesChangedEventUnit"/>
-    [Obsolete("ARHumanBodyManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ARHumanBodyManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ARHumanBodyManagerListener : TrackableManagerListener<ARHumanBodyManager>
     {
         void OnTrackablesChanged(ARHumanBodiesChangedEventArgs args)

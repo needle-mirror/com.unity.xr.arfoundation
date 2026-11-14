@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Script that handles button highlighting in menus when button is selected.
     /// </summary>
-    [Obsolete("ToolButton is deprecated in AR Foundation 6.7, and will not be replaced by any new API.")]
+    [Obsolete("ToolButton is deprecated in AR Foundation 6.7, and will not be replaced by any new API.", true)]
     [RequireComponent(typeof(Image))]
     [HelpUrl(typeof(ToolButton))]
     public class ToolButton : MonoBehaviour

@@ -16,7 +16,7 @@ namespace UnityEditor.XR.ARFoundation
 #endif
         static readonly Type[] k_ArManagerTypes =
         {
-            typeof(ARSession),
+            typeof(ARSessionManager),
             typeof(ARInputManager),
             typeof(ARCameraManager),
             typeof(ARPlaneManager),

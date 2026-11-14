@@ -20,7 +20,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// <typeparam name="TTrackable">The type of trackable for which we are listening.</typeparam>
     /// <typeparam name="TEventArgs">The trackables-changed event arguments type.</typeparam>
     /// <typeparam name="TListener">The <see cref="MessageListener"/> type.</typeparam>
-    [Obsolete("TrackablesChangedEventUnit has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("TrackablesChangedEventUnit has been deprecated in AR Foundation version 6.0.", true)]
     public abstract class TrackablesChangedEventUnit<TManager, TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable, TEventArgs, TListener>
         : GameObjectEventUnit<TEventArgs>
         where TManager : ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>

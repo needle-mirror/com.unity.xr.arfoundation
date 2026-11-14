@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [UnitCategory(Constants.k_Event_Unit_Category)]
     [UnitOrder((int)Constants.ARFoundationFeatureOrder.Participants)]
     [TypeIcon(typeof(ARParticipantManager))]
-    [Obsolete("ParticipantsChangedEventUnit has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ParticipantsChangedEventUnit has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ParticipantsChangedEventUnit : TrackablesChangedEventUnit<
         ARParticipantManager,
         XRParticipantSubsystem,

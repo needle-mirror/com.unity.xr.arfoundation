@@ -280,7 +280,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="enabledKeywords">The keywords to enable for the Material.</param>
             /// <param name="disabledKeywords">The keywords to disable for the Material.</param>
-            [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords2 instead.")]
+            [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords2 instead.", true)]
             public virtual void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
             {
                 enabledKeywords = null;
@@ -291,7 +291,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// Get the enabled and disabled shader keywords for the Material.
             /// </summary>
             /// <returns>Returns a <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
-            [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
+            [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.", true)]
             public virtual ShaderKeywords GetShaderKeywords() => default;
 
             /// <summary>
@@ -617,16 +617,19 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="enabledKeywords">The keywords to enable for the material.</param>
         /// <param name="disabledKeywords">The keywords to disable for the material.</param>
-        [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords2 instead.")]
+        [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords2 instead.", true)]
         public void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
-            => provider.GetMaterialKeywords(out enabledKeywords, out disabledKeywords);
+        {
+            enabledKeywords = null;
+            disabledKeywords = null;
+        }
 
         /// <summary>
         /// Get the enabled and disabled shader keywords for the material.
         /// </summary>
         /// <returns>Returns a <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
-        [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
-        public ShaderKeywords GetShaderKeywords() => provider.GetShaderKeywords();
+        [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.", true)]
+        public ShaderKeywords GetShaderKeywords() => default;
 
         /// <summary>
         /// Get the shader keywords that are enabled or disabled by the provider.
@@ -664,34 +667,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Typically, this happens when required parameters are <see langword="null"/> or empty
         /// or types that do not derive from the required base class.
         /// </exception>
-        [Obsolete("XRCameraSubsystem.Register(XRCameraSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XRCameraSubsystemDescriptor.Register(XRCameraSubsystemDescriptor.Cinfo) instead.")]
-        public static bool Register(XRCameraSubsystemCinfo cameraSubsystemParams)
-        {
-            var cameraSubsystemCinfo = new XRCameraSubsystemDescriptor.Cinfo
-            {
-                id = cameraSubsystemParams.id,
-                providerType = cameraSubsystemParams.providerType,
-                subsystemTypeOverride = cameraSubsystemParams.subsystemTypeOverride,
-                supportsAverageBrightness = cameraSubsystemParams.supportsAverageBrightness,
-                supportsAverageColorTemperature = cameraSubsystemParams.supportsAverageColorTemperature,
-                supportsColorCorrection = cameraSubsystemParams.supportsColorCorrection,
-                supportsDisplayMatrix = cameraSubsystemParams.supportsDisplayMatrix,
-                supportsProjectionMatrix = cameraSubsystemParams.supportsProjectionMatrix,
-                supportsTimestamp = cameraSubsystemParams.supportsTimestamp,
-                supportsCameraConfigurations = cameraSubsystemParams.supportsCameraConfigurations,
-                supportsCameraImage = cameraSubsystemParams.supportsCameraImage,
-                supportsAverageIntensityInLumens = cameraSubsystemParams.supportsAverageIntensityInLumens,
-                supportsFocusModes = cameraSubsystemParams.supportsFocusModes,
-                supportsFaceTrackingAmbientIntensityLightEstimation = cameraSubsystemParams.supportsFaceTrackingAmbientIntensityLightEstimation,
-                supportsFaceTrackingHDRLightEstimation = cameraSubsystemParams.supportsFaceTrackingHDRLightEstimation,
-                supportsWorldTrackingAmbientIntensityLightEstimation = cameraSubsystemParams.supportsWorldTrackingAmbientIntensityLightEstimation,
-                supportsWorldTrackingHDRLightEstimation = cameraSubsystemParams.supportsWorldTrackingHDRLightEstimation,
-                supportsCameraGrain = cameraSubsystemParams.supportsCameraGrain,
-                supportsImageStabilizationDelegate = cameraSubsystemParams.supportsImageStabilizationDelegate,
-                supportsExifData = cameraSubsystemParams.supportsExifData,
-            };
-            XRCameraSubsystemDescriptor.Register(cameraSubsystemCinfo);
-            return true;
-        }
+        [Obsolete("XRCameraSubsystem.Register(XRCameraSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XRCameraSubsystemDescriptor.Register(XRCameraSubsystemDescriptor.Cinfo) instead.", true)]
+        public static bool Register(XRCameraSubsystemCinfo cameraSubsystemParams) => default;
     }
 }

@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
         XRPlaneSubsystem.Provider,
-        BoundedPlane,
+        XRPlane,
         ARPlane>
     { }
 }

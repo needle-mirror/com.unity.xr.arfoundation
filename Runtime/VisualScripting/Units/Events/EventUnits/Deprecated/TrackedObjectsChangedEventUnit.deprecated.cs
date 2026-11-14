@@ -14,7 +14,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [UnitCategory(Constants.k_Event_Unit_Category)]
     [UnitOrder((int)Constants.ARFoundationFeatureOrder.ObjectTracking)]
     [TypeIcon(typeof(ARTrackedObjectManager))]
-    [Obsolete("TrackedObjectsChangedEventUnit has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("TrackedObjectsChangedEventUnit has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class TrackedObjectsChangedEventUnit : TrackablesChangedEventUnit<
         ARTrackedObjectManager,
         XRObjectTrackingSubsystem,

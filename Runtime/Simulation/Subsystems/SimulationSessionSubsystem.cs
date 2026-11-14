@@ -52,9 +52,8 @@ namespace UnityEngine.XR.Simulation
 
             public override TrackingState trackingState => TrackingState.Tracking;
 
-            [Obsolete("GetAvailabilityAsync is deprecated. AR is always supported and available in XR Simulation.")]
-            public override Promise<SessionAvailability> GetAvailabilityAsync() =>
-                Promise<SessionAvailability>.CreateResolvedPromise(SessionAvailability.Installed | SessionAvailability.Supported);
+            [Obsolete("GetAvailabilityAsync is deprecated. AR is always supported and available in XR Simulation.", true)]
+            public override Promise<SessionAvailability> GetAvailabilityAsync() => null;
 
             public override Guid sessionId => m_SessionId;
 
@@ -218,9 +217,6 @@ namespace UnityEngine.XR.Simulation
                 id = k_SubsystemId,
                 providerType = typeof(SimulationProvider),
                 subsystemTypeOverride = typeof(SimulationSessionSubsystem),
-#pragma warning disable CS0618 // supportsInstall is deprecated
-                supportsInstall = false,
-#pragma warning restore CS0618
                 supportsMatchFrameRate = false,
             });
         }

@@ -126,9 +126,7 @@ namespace UnityEditor.XR.Simulation
             if (!s_RenderingOverrideEnabled)
                 return;
 
-            // Due to the way XREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
-            // But scene view camera is already the current camera when we reach this step.
-            if (!XREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
+            if (!XREnvironmentViewManager.instance.environmentCameras.Contains(camera))
                 return;
 
             if (!s_HasEnvironmentSettings || s_SimulationRenderSettings == null)
@@ -142,9 +140,7 @@ namespace UnityEditor.XR.Simulation
             if (!s_RenderingOverrideEnabled)
                 return;
 
-            // Due to the way XREnvironmentViewCamera is copied, passing the camera in the callback is the wrong camera.
-            // But scene view camera is already the current camera when we reach this step.
-            if (!XREnvironmentViewManager.instance.environmentCameras.Contains(Camera.current))
+            if (!XREnvironmentViewManager.instance.environmentCameras.Contains(camera))
                 return;
 
             RestoreBaseLighting();

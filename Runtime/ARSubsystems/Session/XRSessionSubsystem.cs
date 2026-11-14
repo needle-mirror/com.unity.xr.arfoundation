@@ -45,8 +45,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </remarks>
         /// <returns>A <see cref="Promise{SessionAvailability}"/> which can be used to determine when the
         /// availability has been determined and to retrieve the result.</returns>
-        [Obsolete("GetAvailabilityAsync has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync instead.")]
-        public Promise<SessionAvailability> GetAvailabilityAsync() => provider.GetAvailabilityAsync();
+        [Obsolete("GetAvailabilityAsync has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync instead.", true)]
+        public Promise<SessionAvailability> GetAvailabilityAsync() => null;
 
         /// <summary>
         /// Asynchronously attempts to install XR software on the current device.
@@ -61,14 +61,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// </remarks>
         /// <returns>A <see cref="Promise{SessionInstallationStatus}"/> which can be used to determine when the
         /// installation completes and to retrieve the result.</returns>
-        [Obsolete("InstallAsync has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync instead.")]
-        public Promise<SessionInstallationStatus> InstallAsync()
-        {
-            if (!subsystemDescriptor.supportsInstall)
-                throw new NotSupportedException("InstallAsync is not supported on this platform.");
-
-            return provider.InstallAsync();
-        }
+        [Obsolete("InstallAsync has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync instead.", true)]
+        public Promise<SessionInstallationStatus> InstallAsync() => null;
 
         /// <summary>
         /// Do not call this directly. Call create on a valid <see cref="XRSessionSubsystemDescriptor"/> instead.
@@ -225,14 +219,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Forwards Unity’s [MonoBehaviour.OnApplicationPause(true)](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html)
         /// callback to the `XRSessionSubsystem` to notify the XR provider that the application has paused.
-        /// Invoked automatically by the [ARSession](xref:UnityEngine.XR.ARFoundation.ARSession) component.
+        /// Invoked automatically by the [ARSessionManager](xref:UnityEngine.XR.ARFoundation.ARSessionManager) component.
         /// </summary>
         /// <remarks>
-        /// The `ARSession` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(true)`
-        /// to the `XRSessionSubsystem`. If you are using the `ARSession` component to manage the `XRSessionSubsystem`,
+        /// The `ARSessionManager` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(true)`
+        /// to the `XRSessionSubsystem`. If you are using the `ARSessionManager` component to manage the `XRSessionSubsystem`,
         /// you don’t need to call this method yourself.
         ///
-        /// If you aren't using the `ARSession` component to manage the `XRSessionSubsystem`, you must call this method and
+        /// If you aren't using the `ARSessionManager` component to manage the `XRSessionSubsystem`, you must call this method and
         /// <see cref="OnApplicationResume"/>  to forward the corresponding `MonoBehaviour.OnApplicationPause` callback to the `XRSessionSubsystem`.
         /// </remarks>
         public void OnApplicationPause() => provider.OnApplicationPause();
@@ -240,14 +234,14 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Forwards Unity’s [MonoBehaviour.OnApplicationPause(false)](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html)
         /// callback to the `XRSessionSubsystem` to notify the XR provider that the application has resumed.
-        /// Invoked automatically by the [ARSession](xref:UnityEngine.XR.ARFoundation.ARSession) component.
+        /// Invoked automatically by the [ARSessionManager](xref:UnityEngine.XR.ARFoundation.ARSessionManager) component.
         /// </summary>
         /// <remarks>
-        /// The `ARSession` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(false)`
-        /// to the `XRSessionSubsystem`. If you are using the `ARSession` component to manage the `XRSessionSubsystem`,
+        /// The `ARSessionManager` component automatically calls this method to forward `MonoBehaviour.OnApplicationPause(false)`
+        /// to the `XRSessionSubsystem`. If you are using the `ARSessionManager` component to manage the `XRSessionSubsystem`,
         /// you don’t need to call this method yourself.
         ///
-        /// If you aren't using the `ARSession` component to manage the `XRSessionSubsystem`, you must call this method and
+        /// If you aren't using the `ARSessionManager` component to manage the `XRSessionSubsystem`, you must call this method and
         /// <see cref="OnApplicationPause"/> to forward the corresponding `MonoBehaviour.OnApplicationPause` callback to the `XRSessionSubsystem`.
         /// </remarks>
         public void OnApplicationResume() => provider.OnApplicationResume();
@@ -458,7 +452,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// Use <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> with
             /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
             /// </remarks>
-            [Obsolete("GetAvailabilityAsync has been deprecated in AR Foundation version 6.7. Use XRSubsystemStartOptions.InstallSoftwareIfNeeded with TryStartAsync instead.")]
+            [Obsolete("GetAvailabilityAsync has been deprecated in AR Foundation version 6.7. Use XRSubsystemStartOptions.InstallSoftwareIfNeeded with TryStartAsync instead.", true)]
             public virtual Promise<SessionAvailability> GetAvailabilityAsync()
             {
                 return Promise<SessionAvailability>.CreateResolvedPromise(SessionAvailability.None);
@@ -474,7 +468,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// Use <see cref="XRSubsystemStartOptions.InstallSoftwareIfNeeded"/> with
             /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
             /// </remarks>
-            [Obsolete("InstallAsync has been deprecated in AR Foundation version 6.7. Use XRSubsystemStartOptions.InstallSoftwareIfNeeded with TryStartAsync instead.")]
+            [Obsolete("InstallAsync has been deprecated in AR Foundation version 6.7. Use XRSubsystemStartOptions.InstallSoftwareIfNeeded with TryStartAsync instead.", true)]
             public virtual Promise<SessionInstallationStatus> InstallAsync()
             {
                 return Promise<SessionInstallationStatus>.CreateResolvedPromise(SessionInstallationStatus.ErrorInstallNotSupported);

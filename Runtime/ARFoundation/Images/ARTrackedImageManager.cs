@@ -46,35 +46,8 @@ namespace UnityEngine.XR.ARFoundation
 
                 return m_SerializedLibrary;
             }
-            [Obsolete("The referenceLibrary setter is deprecated in AR Foundation 6.7. Use TrySetReferenceLibraryAsync or TrySetReferenceLibrary instead.")]
-            set
-            {
-                switch (value)
-                {
-                    case null when subsystem != null && subsystem.running:
-                        throw new InvalidOperationException(
-                            "Can't set a null reference library while image tracking is enabled.");
-                    case XRReferenceImageLibrary serializedLibrary:
-                    {
-                        m_SerializedLibrary = serializedLibrary;
-                        if (subsystem != null)
-                            subsystem.imageLibrary = subsystem.CreateRuntimeLibrary(serializedLibrary);
-                        break;
-                    }
-                    case RuntimeReferenceImageLibrary runtimeLibrary:
-                    {
-                        m_SerializedLibrary = null;
-                        EnsureSubsystemInstanceSet();
-
-                        if (subsystem != null)
-                            subsystem.imageLibrary = runtimeLibrary;
-                        break;
-                    }
-                }
-
-                if (subsystem != null)
-                    UpdateReferenceImages(subsystem.imageLibrary);
-            }
+            [Obsolete("The referenceLibrary setter is deprecated in AR Foundation 6.7. Use TrySetReferenceLibraryAsync or TrySetReferenceLibrary instead.", true)]
+            set { }
         }
 
         /// <summary>
@@ -181,16 +154,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="serializedLibrary">An existing <c>XRReferenceImageLibrary</c>, or <c>null</c> to create an empty image library.</param>
         /// <returns>A new <c>RuntimeReferenceImageLibrary</c> representing the deserialized version of <paramref name="serializedLibrary"/> or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if there is no subsystem. This usually means image tracking is not supported.</exception>
-        [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.")]
-        public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary = null)
-        {
-            EnsureSubsystemInstanceSet();
-
-            if (subsystem == null)
-                throw new NotSupportedException("No image tracking subsystem found. This usually means image tracking is not supported.");
-
-            return subsystem.CreateRuntimeLibrary(serializedLibrary);
-        }
+        [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.", true)]
+        public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary = null) => null;
 
         /// <summary>
         /// Attempts to create a <c>RuntimeReferenceImageLibrary</c> from an existing <c>XRReferenceImageLibrary</c>.
@@ -284,8 +249,10 @@ namespace UnityEngine.XR.ARFoundation
         /// This happens just before <see cref="ARTrackedImage"/>s are destroyed, so you can set <c>ARTrackedImage.destroyOnRemoval</c> to <c>false</c>
         /// from this event to suppress this behavior.
         /// </summary>
-        [Obsolete("trackedImagesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        [Obsolete("trackedImagesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", true)]
+#pragma warning disable CS0067
         public event Action<ARTrackedImagesChangedEventArgs> trackedImagesChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new image is detected.
@@ -400,20 +367,10 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">A list of images added this frame.</param>
         /// <param name="updated">A list of images updated this frame.</param>
         /// <param name="removed">A list of images removed this frame.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected override void OnTrackablesChanged(
             List<ARTrackedImage> added, List<ARTrackedImage> updated, List<ARTrackedImage> removed)
-        {
-            if (trackedImagesChanged != null)
-            {
-                using (new ScopedProfiler("OnTrackedImagesChanged"))
-                    trackedImagesChanged?.Invoke(
-                        new ARTrackedImagesChangedEventArgs(
-                            added,
-                            updated,
-                            removed));
-            }
-        }
+        { }
 
         void UpdateReferenceImages(RuntimeReferenceImageLibrary library)
         {

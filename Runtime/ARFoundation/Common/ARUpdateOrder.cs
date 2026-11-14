@@ -6,13 +6,13 @@ namespace UnityEngine.XR.ARFoundation
     public static class ARUpdateOrder
     {
         /// <summary>
-        /// The <see cref="ARSession"/>'s update order. Should come first.
+        /// The <see cref="ARSessionManager"/>'s update order. Should come first.
         /// </summary>
         public const int k_Session = int.MinValue;
 
         /// <summary>
         /// The <see cref="ARPlaneManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_PlaneManager = k_Session + 1;
 
@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARBoundingBoxManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_BoundingBoxManager = k_Session + 1;
 
@@ -36,7 +36,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARMarkerManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_MarkerManager = k_Session + 1;
 
@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARPointCloudManager"/>'s update order. Should come
-        /// after the <see cref="ARSession"/>.
+        /// after the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_PointCloudManager = k_Session + 1;
 
@@ -60,7 +60,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARAnchorManager"/>'s update order.
-        /// Should come after the <see cref="ARSession"/>.
+        /// Should come after the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_AnchorManager = k_Session + 1;
 
@@ -72,25 +72,25 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARInputManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_InputManager = k_Session + 1;
 
         /// <summary>
         /// The <see cref="ARCameraManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_CameraManager = k_Session + 1;
 
         /// <summary>
         /// The <see cref="AROcclusionManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_OcclusionManager = k_Session + 1;
 
         /// <summary>
         /// The <see cref="ARFaceManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_FaceManager = k_Session + 1;
 
@@ -102,7 +102,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARTrackedImageManager"/>'s update order.
-        /// Should come after the <see cref="ARSession"/>.
+        /// Should come after the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_TrackedImageManager = k_Session + 1;
 
@@ -114,7 +114,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="AREnvironmentProbeManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_EnvironmentProbeManager = k_Session + 1;
 
@@ -126,7 +126,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARTrackedObjectManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_TrackedObjectManager = k_Session + 1;
 
@@ -138,7 +138,7 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARHumanBodyManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_HumanBodyManager = k_Session + 1;
 
@@ -150,12 +150,12 @@ namespace UnityEngine.XR.ARFoundation
 
         /// <summary>
         /// The <see cref="ARMeshManager"/>'s update order. Should come after
-        /// the <see cref="ARSession"/>.
+        /// the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_MeshManager = k_Session + 1;
 
         /// <summary>
-        /// The <see cref="ARParticipantManager"/>'s update order. Should come after the <see cref="ARSession"/>.
+        /// The <see cref="ARParticipantManager"/>'s update order. Should come after the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_ParticipantManager = k_Session + 1;
 
@@ -165,7 +165,7 @@ namespace UnityEngine.XR.ARFoundation
         public const int k_Participant = k_ParticipantManager + 1;
 
         /// <summary>
-        /// The <see cref="ARRaycastManager"/>'s update order. Should come after the <see cref="ARSession"/>.
+        /// The <see cref="ARRaycastManager"/>'s update order. Should come after the <see cref="ARSessionManager"/>.
         /// </summary>
         public const int k_RaycastManager = k_Session + 1;
 

@@ -1,8 +1,9 @@
 {
   "name": "com.unity.xr.arfoundation",
   "displayName": "AR Foundation",
-  "version": "6.7.1",
-  "unity": "6000.0",
+  "version": "7.0.0-pre.1",
+  "unity": "7000.0",
+  "unityRelease": "0a12",
   "description": "AR Foundation enables you to create multi-platform augmented reality (AR) apps with Unity. To learn more about AR Foundation, click the Documentation link above.",
   "keywords": [
     "xreditorsubsystem",
@@ -22,7 +23,7 @@
     "com.unity.inputsystem": "1.6.3",
     "com.unity.xr.core-utils": "2.6.0",
     "com.unity.xr.management": "4.4.0",
-    "com.unity.ugui": "2.0.0",
+    "com.unity.ugui": "7.0.0",
     "com.unity.mathematics": "1.2.6",
     "com.unity.modules.particlesystem": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
@@ -32,20 +33,20 @@
   "samples": [
     {
       "displayName": "Debug Visualizers",
-      "description": "Runtime debug visualizers for AR Foundation trackables. Includes a prefab for Markers that displays real-time data properties. Assign it to the 'Prefab' slot on your Trackable Manager to visualize trackable behavior and assist with runtime debugging.",
+      "description": "Prefabs that display live data for AR Foundation trackables, such as markers. Assign one to the Prefab slot of its trackable manager.\n<i>Dependencies:</i>\n • TMP Essential Resources\n • <a href=\"com.unity3d.kharma:upmpackage/com.unity.xr.interaction.toolkit\">XR Interaction Toolkit</a> 3.4.0 or newer (optional, for XR UI input)",
       "path": "Samples~/DebugVisualizers"
     }
   ],
   "_upm": {
-    "changelog": "### Fixed\n\n- Fixed the macOS XR Simulation native plug-in (`XRSimulationSubsystem.bundle`) not being code signed, which caused it to fail notarization."
+    "changelog": "### Changed\n\n- Changed the minimum Unity version from 6000.0 to 7000.0.\n- Changed the minimum dependency version of uGUI from 2.0.0 to 7.0.0.\n- Renamed `BoundedPlane` to [XRPlane](xref:UnityEngine.XR.ARSubsystems.XRPlane). `BoundedPlane` is obsolete. Provider plug-ins must now override [XRPlaneSubsystem.Provider.GetChanges(XRPlane, Allocator)](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem.Provider.GetChanges(UnityEngine.XR.ARSubsystems.XRPlane,Unity.Collections.Allocator)). Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.\n- Renamed `BoundedPlaneBuilder` to [XRPlaneBuilder](xref:UnityEngine.XR.ARSubsystems.XRPlaneBuilder). `BoundedPlaneBuilder` is obsolete. Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.\n- Renamed `BoundedPlaneBuilder.FromBoundedPlane` to [XRPlaneBuilder.FromPlane](xref:UnityEngine.XR.ARSubsystems.XRPlaneBuilder.FromPlane(UnityEngine.XR.ARSubsystems.XRPlane)). `BoundedPlaneBuilder.FromBoundedPlane` is obsolete. Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.\n- Renamed the `ARSession` component to [ARSessionManager](xref:UnityEngine.XR.ARFoundation.ARSessionManager). `ARSession` is obsolete. Refer to [Upgrade to AR Foundation 7.0](xref:arfoundation-upgrade-guide-7-0) for required actions.\n- Changed the sample descriptions in the Package Manager to use one short summary followed by a list of each sample's dependencies, matching the other XR packages.\n\n### Deprecated\n\n#### ARSubsystems\n\n- The following APIs, which were previously deprecated with a warning, now produce compile errors when referenced. Refer to the [upgrade guide](xref:arfoundation-upgrade-guide-7-0) for more information.\n  - [`LightEstimationMode`](xref:UnityEngine.XR.ARSubsystems.LightEstimationMode). Use the `Feature` flags enum instead.\n  - [`ShaderKeywords`](xref:UnityEngine.XR.ARSubsystems.ShaderKeywords). Use `XRShaderKeywords` instead.\n  - [`XRCameraFrame`](xref:UnityEngine.XR.ARSubsystems.XRCameraFrame) properties `timestampNs`, `averageBrightness`, `averageColorTemperature`, `colorCorrection`, `projectionMatrix`, `displayMatrix`, `averageIntensityInLumens`, `exposureDuration`, `exposureOffset`, `mainLightIntensityLumens`, `mainLightColor`, `mainLightDirection`, `ambientSphericalHarmonics`, `cameraGrain`, and `noiseIntensity`, and their `has` properties `hasTimestamp`, `hasAverageBrightness`, `hasAverageColorTemperature`, `hasColorCorrection`, `hasProjectionMatrix`, `hasDisplayMatrix`, `hasAverageIntensityInLumens`, `hasExposureDuration`, `hasExposureOffset`, `hasMainLightIntensityLumens`, `hasMainLightColor`, `hasMainLightDirection`, `hasAmbientSphericalHarmonics`, `hasCameraGrain`, and `hasNoiseIntensity`. Use the `TryGet` method with the matching name instead, such as `TryGetAverageBrightness`. For `timestampNs` and `hasTimestamp`, use `TryGetTimestamp`.\n  - [`XRCameraSubsystem`](xref:UnityEngine.XR.ARSubsystems.XRCameraSubsystem) and [`XROcclusionSubsystem`](xref:UnityEngine.XR.ARSubsystems.XROcclusionSubsystem) methods `GetMaterialKeywords` and `GetShaderKeywords`. Use `GetShaderKeywords2` instead.\n  - [`XRTextureDescriptor`](xref:UnityEngine.XR.ARSubsystems.XRTextureDescriptor) property `dimension` and the constructor that takes a `TextureDimension`. Use `textureType` and the constructor that takes an `XRTextureType` instead.\n  - [`XRImageTrackingSubsystem.CreateRuntimeLibrary`](xref:UnityEngine.XR.ARSubsystems.XRImageTrackingSubsystem.CreateRuntimeLibrary*). Use `TryCreateRuntimeLibraryAsync` instead.\n  - [`PlaneClassification`](xref:UnityEngine.XR.ARSubsystems.PlaneClassification), `PlaneClassificationExtensions`, and the [`XRPlane`](xref:UnityEngine.XR.ARSubsystems.XRPlane) property and constructor that use it. Use `PlaneClassifications` and `XRPlane.classifications` instead.\n  - [`XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary`](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem.CreateOrResizeNativeArrayIfNecessary*). Use `NativeArrayUtils` from XR Core Utils instead"
   },
   "upmCi": {
-    "footprint": "9b144a252c0d2ce751b081fdc17d3357a69f7c67"
+    "footprint": "080401d85d3f518b09b37c7b1b133a2d58b803d5"
   },
-  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@6.7/manual/index.html",
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@7.0/manual/index.html",
   "repository": {
     "url": "https://github.cds.internal.unity3d.com/unity/xr.git",
     "type": "git",
-    "revision": "539385b646deb99dd28c87b51eaebb65e91c00a1"
+    "revision": "97aa00bbf170ab2202509a163aaa8c48beaca341"
   }
 }

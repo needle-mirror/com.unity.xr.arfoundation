@@ -74,6 +74,6 @@ Shader "Hidden/Simulation/Synthetic Lit"
         UsePass "Hidden/Simulation/URP/Synthetic/Universal2D"
     }
 
-    Fallback "Hidden/Simulation/Legacy/Synthetic"
+    Fallback "Unlit/Transparent"
     CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

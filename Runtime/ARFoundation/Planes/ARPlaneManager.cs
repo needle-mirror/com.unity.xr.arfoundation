@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
         XRPlaneSubsystem.Provider,
-        BoundedPlane,
+        XRPlane,
         ARPlane>, IRaycaster
     {
         [SerializeField]
@@ -70,8 +70,10 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Invoked when planes have changed (been added, updated, or removed).
         /// </summary>
-        [Obsolete("planesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        [Obsolete("planesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", true)]
+#pragma warning disable CS0067
         public event Action<ARPlanesChangedEventArgs> planesChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Attempt to retrieve an existing <see cref="ARPlane"/> by <paramref name="trackableId"/>.
@@ -233,7 +235,7 @@ namespace UnityEngine.XR.ARFoundation
         /// data is in session-relative space.</param>
         protected override void OnAfterSetSessionRelativeData(
             ARPlane plane,
-            BoundedPlane sessionRelativeData)
+            XRPlane sessionRelativeData)
         {
             plane.subsumedBy = m_Trackables.GetValueOrDefault(sessionRelativeData.subsumedById);
             plane.UpdateBoundary(subsystem);
@@ -245,15 +247,9 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of added <see cref="ARPlane"/>s.</param>
         /// <param name="updated">The list of updated <see cref="ARPlane"/>s.</param>
         /// <param name="removed">The list of removed <see cref="ARPlane"/>s.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected override void OnTrackablesChanged(List<ARPlane> added, List<ARPlane> updated, List<ARPlane> removed)
-        {
-            if (trackablesChanged != null)
-            {
-                using (new ScopedProfiler("OnPlanesChanged"))
-                    planesChanged?.Invoke(new ARPlanesChangedEventArgs(added, updated, removed));
-            }
-        }
+        { }
 
         /// <summary>
         /// The name to be used for the instantiated GameObject whenever a new plane is detected.

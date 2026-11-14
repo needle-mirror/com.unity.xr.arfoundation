@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*)
         /// to install required software instead.
         /// </remarks>
-        [Obsolete("supportsInstall has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync to install required software instead.")]
+        [Obsolete("supportsInstall has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync to install required software instead.", true)]
         public bool supportsInstall { get; private set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*)
             /// to install required software instead.
             /// </remarks>
-            [Obsolete("supportsInstall has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync to install required software instead.")]
+            [Obsolete("supportsInstall has been deprecated in AR Foundation version 6.7. Pass XRSubsystemStartOptions.InstallSoftwareIfNeeded to TryStartAsync to install required software instead.", true)]
             public bool supportsInstall { get; set; }
 
             /// <summary>
@@ -80,9 +80,6 @@ namespace UnityEngine.XR.ARSubsystems
                     int hash = HashCodeUtil.ReferenceHash(id);
                     hash = hash * 486187739 + HashCodeUtil.ReferenceHash(providerType);
                     hash = hash * 486187739 + HashCodeUtil.ReferenceHash(subsystemTypeOverride);
-#pragma warning disable CS0618 // supportsInstall is deprecated
-                    hash = hash * 486187739 + supportsInstall.GetHashCode();
-#pragma warning restore CS0618
                     hash = hash * 486187739 + supportsMatchFrameRate.GetHashCode();
                     return hash;
                 }
@@ -99,9 +96,6 @@ namespace UnityEngine.XR.ARSubsystems
                     string.Equals(id, other.id) &&
                     ReferenceEquals(providerType, other.providerType) &&
                     ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride) &&
-#pragma warning disable CS0618 // supportsInstall is deprecated
-                    supportsInstall == other.supportsInstall &&
-#pragma warning restore CS0618
                     supportsMatchFrameRate == other.supportsMatchFrameRate;
             }
 
@@ -134,11 +128,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// This should only be used by subsystem implementors.
         /// </summary>
         /// <param name="cinfo">Information used to construct the descriptor.</param>
-        [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
-        public static void RegisterDescriptor(Cinfo cinfo)
-        {
-            Register(cinfo);
-        }
+        [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", true)]
+        public static void RegisterDescriptor(Cinfo cinfo) { }
 
         /// <summary>
         /// Register a subsystem implementation.
@@ -155,9 +146,6 @@ namespace UnityEngine.XR.ARSubsystems
             id = cinfo.id;
             providerType = cinfo.providerType;
             subsystemTypeOverride = cinfo.subsystemTypeOverride;
-#pragma warning disable CS0618 // supportsInstall is deprecated
-            supportsInstall = cinfo.supportsInstall;
-#pragma warning restore CS0618
             supportsMatchFrameRate = cinfo.supportsMatchFrameRate;
         }
     }

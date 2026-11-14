@@ -7,32 +7,32 @@ AR Foundation is an official Unity package available via the [Package Manager](h
 
 ## Editor compatibility
 
-AR Foundation 6.6 is compatible with Unity 6 (6000.0) or newer.
+AR Foundation 7.0 is compatible with Unity 7 (7000.0) or newer.
 
 ### Older Editor versions
 
-If your project requires an older version of the Editor, you can use the following supported versions of AR Foundation:
+If your project requires an older version of the Editor, you can use one of the supported versions of AR Foundation in the following table.
 
 | Editor version | AR Foundation version |
 | :------------: | :-------------------: |
 |     6000.0 LTS |          6.0          |
 |     6000.3 LTS |          6.3          |
-|     6000.5     |          6.5          |
+|     6000.7 LTS |          6.7          |
 
 # Required packages
 
 The AR Foundation package contains interfaces for AR features, but doesn't implement any AR features itself. To use AR Foundation on a target platform, you also need a separate *provider plug-in* package for that platform. A provider plug-in is a separate package containing AR Foundation feature implementations for a given platform.
 
-Unity officially supports the following provider plug-ins with this version of AR Foundation:
+Unity officially supports the provider plug-ins in the following table with this version of AR Foundation.
 
 | Platform         | Plug-in | Version |
 | :--------------- | :------ | :------ |
-| **Android**      | [Google ARCore XR Plug-in](xref:arcore-manual) | 6.6 |
-| **iOS**          | [Apple ARKit XR Plug-in](xref:arkit-manual) | 6.6 |
+| **Android**      | [Google ARCore XR Plug-in](xref:arcore-manual) | 7.0 |
+| **iOS**          | [Apple ARKit XR Plug-in](xref:arkit-manual) | 7.0 |
 | **visionOS**     | [Apple visionOS XR Plug-in](https://docs.unity3d.com/Packages/com.unity.xr.visionos@latest) | 3.1 |
-| **Meta Quest**   | [Unity OpenXR: Meta](xref:meta-openxr-manual) | 2.6 |
-| **Android XR**   | [Unity OpenXR: Android XR](xref:androidxr-openxr-manual) | 1.3 |
-| **Meta Quest** or **Android XR** | [Unity OpenXR: Spatial Entities](xref:spatialentities-openxr-manual) | 6.6 |
+| **Meta Quest**   | [Unity OpenXR: Meta](xref:meta-openxr-manual) | 7.0 |
+| **Android XR**   | [Unity OpenXR: Android XR](xref:androidxr-openxr-manual) | 7.0 |
+| **Meta Quest** or **Android XR** | [Unity OpenXR: Spatial Entities](xref:spatialentities-openxr-manual) | 7.0 |
 
 To use AR Foundation on a device, you must install at least one provider plug-in, either from the Package Manager or by going to **Project Settings** > **XR Plug-in Management** as shown below.
 
@@ -43,7 +43,7 @@ To use AR Foundation on a device, you must install at least one provider plug-in
 
 ## Provider project settings
 
-Some provider plug-ins require that you set specific project settings for AR to function properly. Refer to each provider's documentation for specific instructions:
+Some provider plug-ins require that you set specific project settings for AR to function properly. Refer to each provider's documentation, listed in the following table, for specific instructions.
 
 | Provider plug-in | Setup instructions |
 | :--------------- | :----------------- |

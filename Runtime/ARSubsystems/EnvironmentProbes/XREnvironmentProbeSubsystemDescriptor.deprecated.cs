@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Contains the parameters for creating a new <see cref="XREnvironmentProbeSubsystemDescriptor"/>.
     /// </summary>
-    [Obsolete("XREnvironmentProbeSubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XREnvironmentProbeSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor/Cinfo", false)]
+    [Obsolete("XREnvironmentProbeSubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XREnvironmentProbeSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XREnvironmentProbeSubsystemDescriptor/Cinfo", true)]
     public struct XREnvironmentProbeSubsystemCinfo : IEquatable<XREnvironmentProbeSubsystemCinfo>
     {
         /// <summary>

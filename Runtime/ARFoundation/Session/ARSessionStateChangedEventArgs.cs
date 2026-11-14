@@ -3,7 +3,7 @@ using System;
 namespace UnityEngine.XR.ARFoundation
 {
     /// <summary>
-    /// Event arguments for <see cref="ARSession.stateChanged"/>.
+    /// Event arguments for <see cref="ARSessionManager.stateChanged"/>.
     /// </summary>
     public struct ARSessionStateChangedEventArgs : IEquatable<ARSessionStateChangedEventArgs>
     {

@@ -119,8 +119,10 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Invoked once per frame with lists of environment probes that have been added, updated, and removed since the last frame.
         /// </summary>
-        [Obsolete("environmentProbesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        [Obsolete("environmentProbesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", true)]
+#pragma warning disable CS0067
         public event Action<AREnvironmentProbesChangedEvent> environmentProbesChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Attempts to find the environment probe matching the trackable ID currently in the scene.
@@ -250,20 +252,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of added <see cref="AREnvironmentProbe"/>.</param>
         /// <param name="updated">The list of updated <see cref="AREnvironmentProbe"/>.</param>
         /// <param name="removed">The list of removed <see cref="AREnvironmentProbe"/>.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected override void OnTrackablesChanged(
             List<AREnvironmentProbe> added,
             List<AREnvironmentProbe> updated,
             List<AREnvironmentProbe> removed)
-        {
-            if (environmentProbesChanged != null)
-            {
-                using (new ScopedProfiler("OnEnvironmentProbesChanged"))
-                {
-                    environmentProbesChanged?.Invoke(new AREnvironmentProbesChangedEvent(added, updated, removed));
-                }
-            }
-        }
+        { }
 
         /// <summary>
         /// Invoked when an <see cref="AREnvironmentProbe"/> is created.

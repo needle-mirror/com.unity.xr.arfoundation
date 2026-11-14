@@ -1,6 +1,4 @@
-#if UNITY_6000_5_OR_NEWER
-using Unity.Scripting.LifecycleManagement;
-#endif
+using System;
 using UnityEngine.Rendering;
 
 namespace UnityEngine.XR.ARSubsystems
@@ -15,17 +13,14 @@ namespace UnityEngine.XR.ARSubsystems
     public static class ARRenderingUtils
 #endif
     {
-#if UNITY_6000_5_OR_NEWER
-        [AutoStaticsCleanup]
-#endif
-        static bool? s_UseLegacyRenderPipeline;
-
         /// <summary>
-        /// Whether to use the legacy rendering pipeline.
+        /// (Obsolete) Whether to use the legacy rendering pipeline. The Built-in Render Pipeline is not supported in
+        /// Unity 7000.0, so AR Foundation no longer uses this property.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the legacy render pipeline is in use. Otherwise, <c>false</c>.
+        /// <c>true</c> if no Scriptable Render Pipeline asset is active. Otherwise, <c>false</c>.
         /// </value>
-        public static bool useLegacyRenderPipeline => s_UseLegacyRenderPipeline ??= GraphicsSettings.currentRenderPipeline == null;
+        [Obsolete("The Built-in Render Pipeline is not supported in Unity 7000.0, and AR Foundation no longer uses this property. It will be removed in a future release. To check whether a Scriptable Render Pipeline is active, use GraphicsSettings.currentRenderPipeline instead.", true)]
+        public static bool useLegacyRenderPipeline => GraphicsSettings.currentRenderPipeline == null;
     }
 }

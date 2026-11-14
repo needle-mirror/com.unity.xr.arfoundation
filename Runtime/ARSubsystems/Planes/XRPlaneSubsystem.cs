@@ -13,13 +13,13 @@ namespace UnityEngine.XR.ARSubsystems
     /// This class itself does not implement plane detection.
     /// </remarks>
     public class XRPlaneSubsystem
-        : TrackingSubsystem<BoundedPlane, XRPlaneSubsystem, XRPlaneSubsystemDescriptor, XRPlaneSubsystem.Provider>
+        : TrackingSubsystem<XRPlane, XRPlaneSubsystem, XRPlaneSubsystemDescriptor, XRPlaneSubsystem.Provider>
     {
 #if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
 #if UNITY_6000_6_OR_NEWER
-        ValidationUtility<BoundedPlane> m_ValidationUtility = new();
+        ValidationUtility<XRPlane> m_ValidationUtility = new();
 #else
-        ValidationUtility<BoundedPlane> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<BoundedPlane>() : null;
+        ValidationUtility<XRPlane> m_ValidationUtility = Debug.isDebugBuild ? new ValidationUtility<XRPlane>() : null;
 #endif
 #endif
 
@@ -62,9 +62,9 @@ namespace UnityEngine.XR.ARSubsystems
         /// <see cref="NativeArray{T}"/> objects for the added, updated, and removed planes. These arrays are created
         /// using the <see cref="Allocator"/> type specified by <paramref name="allocator"/>.
         /// </remarks>
-        public override TrackableChanges<BoundedPlane> GetChanges(Allocator allocator)
+        public override TrackableChanges<XRPlane> GetChanges(Allocator allocator)
         {
-            var changes = provider.GetChanges(BoundedPlane.defaultValue, allocator);
+            var changes = provider.GetChanges(XRPlane.defaultValue, allocator);
 #if !UNITY_6000_6_OR_NEWER || UNITY_ENABLE_CHECKS
 #if !UNITY_6000_6_OR_NEWER
             if (m_ValidationUtility != null)
@@ -77,9 +77,9 @@ namespace UnityEngine.XR.ARSubsystems
         }
 
         /// <summary>
-        /// Gets the boundary vertices of a given <see cref="BoundedPlane"/> based on its <see cref="BoundedPlane.trackableId"/>.
+        /// Gets the boundary vertices of a given <see cref="XRPlane"/> based on its <see cref="XRPlane.trackableId"/>.
         /// </summary>
-        /// <param name="trackableId">The <see cref="TrackableId"/> of a <see cref="BoundedPlane"/>.</param>
+        /// <param name="trackableId">The <see cref="TrackableId"/> of an <see cref="XRPlane"/>.</param>
         /// <param name="allocator">An <see cref="Allocator"/> to use if <paramref name="boundary"/> needs to be created.
         ///   <see cref="Allocator.Temp"/> is not supported. Use <see cref="Allocator.TempJob"/> if you need temporary memory.</param>
         /// <param name="boundary">The boundary vertices will be stored here. If the given array is the same length as
@@ -111,23 +111,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="allocator">If allocation is necessary, this allocator will be used to create the new <c>NativeArray</c>.</param>
         /// <param name="array">The array to create or resize.</param>
         /// <typeparam name="T">The type of elements held by the <paramref name="array"/>.</typeparam>
-        [Obsolete("CreateOrResizeNativeArrayIfNecessary is deprecated in AR Foundation 6.6. Use XR Core Utils NativeArrayUtils instead.")]
+        [Obsolete("CreateOrResizeNativeArrayIfNecessary is deprecated in AR Foundation 6.6. Use XR Core Utils NativeArrayUtils instead.", true)]
         protected static void CreateOrResizeNativeArrayIfNecessary<T>(
             int length, Allocator allocator, ref NativeArray<T> array) where T : struct
-        {
-            if (array.IsCreated)
-            {
-                if (array.Length != length)
-                {
-                    array.Dispose();
-                    array = new NativeArray<T>(length, allocator);
-                }
-            }
-            else
-            {
-                array = new NativeArray<T>(length, allocator);
-            }
-        }
+        { }
 
         /// <summary>
         /// The provider API for <see cref="XRPlaneSubsystem"/>-derived classes to implement.
@@ -144,28 +131,15 @@ namespace UnityEngine.XR.ARSubsystems
             /// <param name="allocator">If allocation is necessary, this allocator will be used to create the new <c>NativeArray</c>.</param>
             /// <param name="array">The array to create or resize.</param>
             /// <typeparam name="T">The type of elements held by the <paramref name="array"/>.</typeparam>
-            [Obsolete("CreateOrResizeNativeArrayIfNecessary is deprecated in AR Foundation 6.6. Use XR Core Utils NativeArrayUtils instead.")]
+            [Obsolete("CreateOrResizeNativeArrayIfNecessary is deprecated in AR Foundation 6.6. Use XR Core Utils NativeArrayUtils instead.", true)]
             protected static void CreateOrResizeNativeArrayIfNecessary<T>(
                 int length, Allocator allocator, ref NativeArray<T> array) where T : struct
-            {
-                if (array.IsCreated)
-                {
-                    if (array.Length != length)
-                    {
-                        array.Dispose();
-                        array = new NativeArray<T>(length, allocator);
-                    }
-                }
-                else
-                {
-                    array = new NativeArray<T>(length, allocator);
-                }
-            }
+            { }
 
             /// <summary>
-            /// Gets the boundary vertices of a given <see cref="BoundedPlane"/> based on its <see cref="BoundedPlane.trackableId"/>.
+            /// Gets the boundary vertices of a given <see cref="XRPlane"/> based on its <see cref="XRPlane.trackableId"/>.
             /// </summary>
-            /// <param name="trackableId">The <see cref="TrackableId"/> of a <see cref="BoundedPlane"/>.</param>
+            /// <param name="trackableId">The <see cref="TrackableId"/> of an <see cref="XRPlane"/>.</param>
             /// <param name="allocator">An <see cref="Allocator"/> to use if <paramref name="boundary"/> needs to be created.
             ///   <see cref="Allocator.Temp"/> is not supported. Use <see cref="Allocator.TempJob"/> if you need temporary memory.</param>
             /// <param name="boundary">The boundary vertices will be stored here. If the given array is the same length as
@@ -191,7 +165,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </param>
             /// <param name="allocator">An <c>Allocator</c> to use when allocating the returned <c>NativeArray</c>s.</param>
             /// <returns>The changes to planes since the last call to this method.</returns>
-            public abstract TrackableChanges<BoundedPlane> GetChanges(BoundedPlane defaultPlane, Allocator allocator);
+            public abstract TrackableChanges<XRPlane> GetChanges(XRPlane defaultPlane, Allocator allocator);
 
             /// <summary>
             /// Get or set the requested <see cref="PlaneDetectionMode"/>.

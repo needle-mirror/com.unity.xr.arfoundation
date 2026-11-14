@@ -10,7 +10,6 @@ namespace UnityEditor.XR.ARFoundation
         const string k_BasePath = "Packages/com.unity.xr.arfoundation/";
         const string k_DebugFaceMaterial = k_BasePath + "Assets/Materials/DebugFace.mat";
         const string k_DebugPlaneMaterial = k_BasePath + "Assets/Materials/DebugPlane.mat";
-        const string k_DebugMenuPrefab = k_BasePath + "Assets/Prefabs/DebugMenu.prefab";
 
         const string k_ParticleMaterial = "Default-Particle.mat";
         const string k_LineMaterial = "Default-Line.mat";
@@ -35,7 +34,7 @@ namespace UnityEditor.XR.ARFoundation
         public static GameObject CreateARSessionWithParent(Transform parent)
         {
             var arSession = ObjectFactory.CreateGameObject(
-                "AR Session", typeof(ARSession), typeof(ARInputManager));
+                "AR Session", typeof(ARSessionManager), typeof(ARInputManager));
 
             CreateUtils.Place(arSession, parent);
             Undo.RegisterCreatedObjectUndo(arSession, "Create AR Session");
@@ -117,16 +116,8 @@ namespace UnityEditor.XR.ARFoundation
             return go;
         }
 
-        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7, please download the AR Foundation package sample for debug visualizers in the Package Manager window.")]
-        public static GameObject CreateARDebugMenuWithParent(Transform parent)
-        {
-            var debugMenu = (GameObject)PrefabUtility.InstantiatePrefab(
-                AssetDatabase.LoadAssetAtPath<GameObject>(k_DebugMenuPrefab));
-
-            CreateUtils.Place(debugMenu, parent);
-            Undo.RegisterCreatedObjectUndo(debugMenu, "Create AR Debug Menu");
-            return debugMenu;
-        }
+        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7, please download the AR Foundation package sample for debug visualizers in the Package Manager window.", true)]
+        public static GameObject CreateARDebugMenuWithParent(Transform parent) => null;
 
         static void SetupLineRenderer(LineRenderer lineRenderer)
         {

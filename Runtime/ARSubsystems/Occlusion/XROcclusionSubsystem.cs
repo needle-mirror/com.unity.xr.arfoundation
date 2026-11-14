@@ -336,16 +336,19 @@ namespace UnityEngine.XR.ARSubsystems
         /// </summary>
         /// <param name="enabledKeywords">The keywords to enable for the material.</param>
         /// <param name="disabledKeywords">The keywords to disable for the material.</param>
-        [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.")]
+        [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.", true)]
         public void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
-            => provider.GetMaterialKeywords(out enabledKeywords, out disabledKeywords);
+        {
+            enabledKeywords = null;
+            disabledKeywords = null;
+        }
 
         /// <summary>
         /// Get the enabled and disabled shader keywords for the material.
         /// </summary>
         /// <returns>Returns an <see cref="ShaderKeywords"/> with the enabled and disabled shader keywords for the Material.</returns>
-        [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
-        public ShaderKeywords GetShaderKeywords() => provider.GetShaderKeywords();
+        [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.", true)]
+        public ShaderKeywords GetShaderKeywords() => default;
 
         /// <summary>
         /// Get the shader keywords that are enabled or disabled by the provider.
@@ -359,24 +362,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="occlusionSubsystemCinfo">The occlusion subsystem implementation construction information.
         /// </param>
         /// <returns><c>true</c> if the descriptor was registered. Otherwise, <c>false</c>.</returns>
-        [Obsolete("XROcclusionSubsystem.Register(XROcclusionSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XROcclusionSubsystemDescriptor.Register(XROcclusionSubsystemDescriptor.Cinfo) instead.")]
-        public static bool Register(XROcclusionSubsystemCinfo occlusionSubsystemCinfo)
-        {
-            var occlusionSubsystemInfo = new XROcclusionSubsystemDescriptor.Cinfo
-            {
-                id = occlusionSubsystemCinfo.id,
-                providerType = occlusionSubsystemCinfo.providerType,
-                subsystemTypeOverride = occlusionSubsystemCinfo.subsystemTypeOverride,
-                humanSegmentationStencilImageSupportedDelegate = occlusionSubsystemCinfo.humanSegmentationStencilImageSupportedDelegate,
-                humanSegmentationDepthImageSupportedDelegate = occlusionSubsystemCinfo.humanSegmentationDepthImageSupportedDelegate,
-                environmentDepthImageSupportedDelegate = occlusionSubsystemCinfo.environmentDepthImageSupportedDelegate,
-                environmentDepthConfidenceImageSupportedDelegate = occlusionSubsystemCinfo.environmentDepthConfidenceImageSupportedDelegate,
-                environmentDepthTemporalSmoothingSupportedDelegate = occlusionSubsystemCinfo.environmentDepthTemporalSmoothingSupportedDelegate
-            };
-
-            XROcclusionSubsystemDescriptor.Register(occlusionSubsystemInfo);
-            return true;
-        }
+        [Obsolete("XROcclusionSubsystem.Register(XROcclusionSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XROcclusionSubsystemDescriptor.Register(XROcclusionSubsystemDescriptor.Cinfo) instead.", true)]
+        public static bool Register(XROcclusionSubsystemCinfo occlusionSubsystemCinfo) => default;
 
         /// <summary>
         /// The provider which will service the <see cref="XROcclusionSubsystem"/>.
@@ -698,7 +685,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="enabledKeywords">The keywords to enable for the material.</param>
             /// <param name="disabledKeywords">The keywords to disable for the material.</param>
-            [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.")]
+            [Obsolete("GetMaterialKeywords(out List<string>, out List<string>) has been deprecated in AR Foundation version 6.0. Use GetShaderKeywords() instead.", true)]
             public virtual void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
             {
                 enabledKeywords = null;
@@ -709,7 +696,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// Get the enabled and disabled shader keywords for the material.
             /// </summary>
             /// <returns>The enabled and disabled shader keywords for the Material.</returns>
-            [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.")]
+            [Obsolete("GetShaderKeywords is deprecated as of AR Foundation 6.1. Use GetShaderKeywords2 instead.", true)]
             public virtual ShaderKeywords GetShaderKeywords() => default;
 
             /// <summary>

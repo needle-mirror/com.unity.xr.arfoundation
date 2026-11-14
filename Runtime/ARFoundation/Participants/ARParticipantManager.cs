@@ -42,8 +42,10 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Invoked when participants have changed (been added, updated, or removed).
         /// </summary>
-        [Obsolete("participantsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        [Obsolete("participantsChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", true)]
+#pragma warning disable CS0067
         public event Action<ARParticipantsChangedEventArgs> participantsChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Attempt to retrieve an existing <see cref="ARParticipant"/> by <paramref name="trackableId"/>.
@@ -70,22 +72,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of added <see cref="ARParticipant"/>s.</param>
         /// <param name="updated">The list of updated <see cref="ARParticipant"/>s.</param>
         /// <param name="removed">The list of removed <see cref="ARParticipant"/>s.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected override void OnTrackablesChanged(
             List<ARParticipant> added,
             List<ARParticipant> updated,
             List<ARParticipant> removed)
-        {
-            if (participantsChanged != null)
-            {
-                using (new ScopedProfiler("OnParticipantsChanged"))
-                participantsChanged?.Invoke(
-                    new ARParticipantsChangedEventArgs(
-                        added,
-                        updated,
-                        removed));
-            }
-        }
+        { }
 
         /// <summary>
         /// The name to be used for the <c>GameObject</c> whenever a new participant is detected.

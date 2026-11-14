@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// Listens to the <see cref="ARParticipantManager.participantsChanged"/> event and forwards it to the visual scripting event bus.
     /// </summary>
     /// <seealso cref="ParticipantsChangedEventUnit"/>
-    [Obsolete("ARParticipantManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ARParticipantManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ARParticipantManagerListener : TrackableManagerListener<ARParticipantManager>
     {
         void OnTrackablesChanged(ARParticipantsChangedEventArgs args)

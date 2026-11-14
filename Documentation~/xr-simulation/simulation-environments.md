@@ -168,7 +168,7 @@ Add the `Simulation/Room X-Ray` shader to the walls and ceilings of enclosed env
 ![Simulation shader menu](../images/xray-shader-menu.png)<br/>*Simulation shader menu*
 
 > [!NOTE]
-> You do not need to select the Legacy or URP versions of the shader directly. The `Simulation/Room X-Ray` shader falls back to the URP or legacy built-in versions as needed.
+> You do not need to select the URP version of the shader directly. The `Simulation/Room X-Ray` shader uses the URP version only.
 
 The XR Simulation sample environments include materials that use the X-ray shaders. If you have [installed the sample environments](xref:arfoundation-simulation-getting-started#install-the-sample-environments), you can use these materials, which are located in the `Assets` folder under `UnityXRContent/ARFoundation/SimulationEnvironments/Common/Materials`.
 

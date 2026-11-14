@@ -22,7 +22,7 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
     /// <typeparam name="TEventArgs">The trackables changed event arguments type.</typeparam>
     /// <typeparam name="TListener">The <see cref="MessageListener"/> type.</typeparam>
     /// <seealso href="https://docs.unity3d.com/Packages/com.unity.visualscripting@1.8/manual/vs-create-custom-node-add-docs.html"/>
-    [Obsolete("TrackablesChangedEventUnitDescriptor has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("TrackablesChangedEventUnitDescriptor has been deprecated in AR Foundation version 6.0.", true)]
     public abstract class TrackablesChangedEventUnitDescriptor<TManager, TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable, TEventArgs, TListener>
         : UnitDescriptor<TrackablesChangedEventUnit<TManager, TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable, TEventArgs, TListener>>
         where TManager : ARTrackableManager<TSubsystem, TSubsystemDescriptor, TProvider, TSessionRelativeData, TTrackable>

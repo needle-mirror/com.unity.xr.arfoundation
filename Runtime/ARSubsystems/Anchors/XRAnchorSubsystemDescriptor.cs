@@ -40,7 +40,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// If <see langword="false"/>, <see cref="XRAnchorSubsystem.TryAttachAnchor">XRAnchorSubsystem.TryAttachAnchor</see>
             /// must always return <see langword="false"/>.
             /// </summary>
-            [Obsolete("supportsTrackableAttachments is deprecated in AR Foundation 6.6. Use `supportsTrackableAttachmentsDelegate` instead.")]
+            [Obsolete("supportsTrackableAttachments is deprecated in AR Foundation 6.6. Use `supportsTrackableAttachmentsDelegate` instead.", true)]
             public bool supportsTrackableAttachments { get; set; }
 
             /// <summary>
@@ -55,14 +55,14 @@ namespace UnityEngine.XR.ARSubsystems
             /// Indicates whether the provider implementation supports the ability to persistently save anchors via
             /// <see cref="XRAnchorSubsystem.TrySaveAnchorAsync">XRAnchorSubsystem.TrySaveAnchorAsync</see>.
             /// </summary>
-            [Obsolete("supportsSaveAnchor is deprecated in AR Foundation 6.4.0. Use supportsSaveAnchorDelegate instead.")]
+            [Obsolete("supportsSaveAnchor is deprecated in AR Foundation 6.4.0. Use supportsSaveAnchorDelegate instead.", true)]
             public bool supportsSaveAnchor { get; set; }
 
             /// <summary>
             /// Indicates whether the provider implementation supports the ability to load persistently saved anchors via
             /// <see cref="XRAnchorSubsystem.TryLoadAnchorAsync">XRAnchorSubsystem.TryLoadAnchorAsync</see>.
             /// </summary>
-            [Obsolete("supportsLoadAnchor is deprecated in AR Foundation 6.4.0. Use supportsLoadAnchorDelegate instead.")]
+            [Obsolete("supportsLoadAnchor is deprecated in AR Foundation 6.4.0. Use supportsLoadAnchorDelegate instead.", true)]
             public bool supportsLoadAnchor { get; set; }
 
             /// <summary>
@@ -70,14 +70,14 @@ namespace UnityEngine.XR.ARSubsystems
             /// associated with an anchor via
             /// <see cref="XRAnchorSubsystem.TryEraseAnchorAsync">XRAnchorSubsystem.TryEraseAnchorAsync</see>.
             /// </summary>
-            [Obsolete("supportsEraseAnchor is deprecated in AR Foundation 6.4.0. Use supportsEraseAnchorDelegate instead.")]
+            [Obsolete("supportsEraseAnchor is deprecated in AR Foundation 6.4.0. Use supportsEraseAnchorDelegate instead.", true)]
             public bool supportsEraseAnchor { get; set; }
 
             /// <summary>
             /// Indicates whether the provider implementation supports the ability to get all saved persistent anchor GUIDs
             /// via <see cref="XRAnchorSubsystem.TryGetSavedAnchorIdsAsync">XRAnchorSubsystem.TryGetSavedAnchorIdsAsync</see>.
             /// </summary>
-            [Obsolete("supportsGetSavedAnchorIds is deprecated in AR Foundation 6.4.0. Use supportsGetSavedAnchorIdsDelegate instead.")]
+            [Obsolete("supportsGetSavedAnchorIds is deprecated in AR Foundation 6.4.0. Use supportsGetSavedAnchorIdsDelegate instead.", true)]
             public bool supportsGetSavedAnchorIds { get; set; }
 
             /// <summary>
@@ -141,13 +141,6 @@ namespace UnityEngine.XR.ARSubsystems
                 hashCode.Add(subsystemTypeOverride);
                 hashCode.Add(supportsSynchronousAdd);
                 hashCode.Add(supportsAsyncCancellation);
-#pragma warning disable CS0618 // Type or member is obsolete
-                hashCode.Add(supportsSaveAnchor);
-                hashCode.Add(supportsLoadAnchor);
-                hashCode.Add(supportsEraseAnchor);
-                hashCode.Add(supportsGetSavedAnchorIds);
-                hashCode.Add(supportsTrackableAttachments);
-#pragma warning restore CS0618 // Type or member is obsolete
                 hashCode.Add(supportsSaveAnchorDelegate);
                 hashCode.Add(supportsLoadAnchorDelegate);
                 hashCode.Add(supportsEraseAnchorDelegate);
@@ -169,13 +162,6 @@ namespace UnityEngine.XR.ARSubsystems
                     && ReferenceEquals(providerType, other.providerType)
                     && ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride)
                     && supportsSynchronousAdd == other.supportsSynchronousAdd
-#pragma warning disable CS0618 // Type or member is obsolete
-                    && supportsSaveAnchor == other.supportsSaveAnchor
-                    && supportsLoadAnchor == other.supportsLoadAnchor
-                    && supportsEraseAnchor == other.supportsEraseAnchor
-                    && supportsGetSavedAnchorIds == other.supportsGetSavedAnchorIds
-                    && supportsTrackableAttachments == other.supportsTrackableAttachments
-#pragma warning restore CS0618 // Type or member is obsolete
                     && supportsSaveAnchorDelegate == other.supportsSaveAnchorDelegate
                     && supportsLoadAnchorDelegate == other.supportsLoadAnchorDelegate
                     && supportsEraseAnchorDelegate == other.supportsEraseAnchorDelegate
@@ -285,11 +271,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
         /// </summary>
         /// <param name="cinfo">Construction info for the descriptor.</param>
-        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
-        public static void Create(Cinfo cinfo)
-        {
-            Register(cinfo);
-        }
+        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", true)]
+        public static void Create(Cinfo cinfo) { }
 
         /// <summary>
         /// Creates a new subsystem descriptor instance and registers it with the [SubsystemManager](xref:UnityEngine.SubsystemManager).
@@ -312,13 +295,6 @@ namespace UnityEngine.XR.ARSubsystems
             m_SupportsEraseAnchorDelegate = cinfo.supportsEraseAnchorDelegate;
             m_SupportsGetSavedAnchorIdsDelegate = cinfo.supportsGetSavedAnchorIdsDelegate;
             m_SupportsTrackableAttachmentsDelegate = cinfo.supportsTrackableAttachmentsDelegate;
-#pragma warning disable CS0618 // Type or member is obsolete
-            m_SupportsTrackableAttachmentsObsolete = cinfo.supportsTrackableAttachments;
-            m_SupportsSaveAnchorObsolete = cinfo.supportsSaveAnchor;
-            m_SupportsLoadAnchorObsolete = cinfo.supportsLoadAnchor;
-            m_SupportsEraseAnchorObsolete = cinfo.supportsEraseAnchor;
-            m_SupportsGetSavedAnchorIdsObsolete = cinfo.supportsGetSavedAnchorIds;
-#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 }

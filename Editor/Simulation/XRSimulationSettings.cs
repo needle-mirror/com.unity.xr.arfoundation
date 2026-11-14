@@ -7,7 +7,7 @@ namespace UnityEditor.XR.Simulation
     /// Build settings for XR Simulation.
     /// </summary>
     [Serializable]
-    [Obsolete("XRSimulationSettings has been deprecated in AR Foundation 6.5. Use XRSimulationRuntimeSettingsInstead")]
+    [Obsolete("XRSimulationSettings has been deprecated in AR Foundation 6.5. Use XRSimulationRuntimeSettingsInstead", true)]
     public class XRSimulationSettings : ScriptableObject
     {
         /// <summary>

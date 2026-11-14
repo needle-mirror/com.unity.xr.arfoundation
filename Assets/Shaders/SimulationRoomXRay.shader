@@ -79,6 +79,6 @@ Shader "Simulation/Room X-Ray"
         UsePass "Universal Render Pipeline/Lit/Universal2D"
     }
 
-    Fallback "Simulation/Legacy/Room X-Ray"
+    Fallback "Unlit/Transparent"
     CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

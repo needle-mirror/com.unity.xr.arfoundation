@@ -8,7 +8,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
     class ARSessionSamples
     {
         #region DescriptorChecks
-        void CheckForOptionalFeatureSupport(ARSession manager)
+        void CheckForOptionalFeatureSupport(ARSessionManager manager)
         {
             // Use manager.descriptor to determine which optional features
             // are supported on the device. For example:

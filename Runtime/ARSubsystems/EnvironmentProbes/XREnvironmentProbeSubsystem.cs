@@ -249,23 +249,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// <paramref name="environmentProbeSubsystemCinfo"/> parameter are invalid. Typically, this happens when
         /// required parameters are <see langword="null"/> or empty or types that do not derive from the required base class.
         /// </exception>
-        [Obsolete("XREnvironmentProbeSubsystem.Register(XREnvironmentProbeSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XREnvironmentProbeSubsystemDescriptor.Register(XREnvironmentProbeSubsystemDescriptor.Cinfo) instead.")]
-        public static bool Register(XREnvironmentProbeSubsystemCinfo environmentProbeSubsystemCinfo)
-        {
-            var environmentProbeSubsystemInfo = new XREnvironmentProbeSubsystemDescriptor.Cinfo()
-            {
-                id = environmentProbeSubsystemCinfo.id,
-                providerType = environmentProbeSubsystemCinfo.providerType,
-                subsystemTypeOverride = environmentProbeSubsystemCinfo.subsystemTypeOverride,
-                supportsManualPlacement = environmentProbeSubsystemCinfo.supportsManualPlacement,
-                supportsRemovalOfManual = environmentProbeSubsystemCinfo.supportsRemovalOfManual,
-                supportsAutomaticPlacement = environmentProbeSubsystemCinfo.supportsAutomaticPlacement,
-                supportsRemovalOfAutomatic = environmentProbeSubsystemCinfo.supportsRemovalOfAutomatic,
-                supportsEnvironmentTexture = environmentProbeSubsystemCinfo.supportsEnvironmentTexture,
-                supportsEnvironmentTextureHDR = environmentProbeSubsystemCinfo.supportsEnvironmentTextureHDR
-            };
-            XREnvironmentProbeSubsystemDescriptor.Register(environmentProbeSubsystemInfo);
-            return true;
-        }
+        [Obsolete("XREnvironmentProbeSubsystem.Register(XREnvironmentProbeSubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XREnvironmentProbeSubsystemDescriptor.Register(XREnvironmentProbeSubsystemDescriptor.Cinfo) instead.", true)]
+        public static bool Register(XREnvironmentProbeSubsystemCinfo environmentProbeSubsystemCinfo) => default;
     }
 }

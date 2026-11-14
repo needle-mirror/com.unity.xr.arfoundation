@@ -53,7 +53,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// During <c>InitializeOnLoad</c>, the Face Tracking data provider should create a descriptor using
     /// the parameters here to specify which of the XRFaceSubsystem features it supports.
     /// </remarks>
-    [Obsolete("FaceSubsystemParams has been deprecated in AR Foundation version 6.0. Use XRFaceSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor/Cinfo", false)]
+    [Obsolete("FaceSubsystemParams has been deprecated in AR Foundation version 6.0. Use XRFaceSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRFaceSubsystemDescriptor/Cinfo", true)]
     public struct FaceSubsystemParams : IEquatable<FaceSubsystemParams>
     {
         /// <summary>
@@ -473,22 +473,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// Creates a subsystem descriptor. Used to register an implementation of the <see cref="XRFaceSubsystem"/>.
         /// </summary>
         /// <param name="descriptorParams">Parameters describing the <see cref="XRFaceSubsystem"/>.</param>
-        [Obsolete("Create(FaceSubsystemParams) has been deprecated in AR Foundation version 6.0. Use Register(XRFaceSubsystemDescriptor.Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
-        public static void Create(FaceSubsystemParams descriptorParams)
-        {
-            var FaceSubsystemInfo = new XRFaceSubsystemDescriptor.Cinfo()
-            {
-                id = descriptorParams.id,
-                providerType = descriptorParams.providerType,
-                subsystemTypeOverride = descriptorParams.subsystemTypeOverride,
-                supportsFacePose = descriptorParams.supportsFacePose,
-                supportsFaceMeshVerticesAndIndices = descriptorParams.supportsFaceMeshVerticesAndIndices,
-                supportsFaceMeshUVs = descriptorParams.supportsFaceMeshUVs,
-                supportsFaceMeshNormals = descriptorParams.supportsFaceMeshNormals,
-                supportsEyeTracking = descriptorParams.supportsEyeTracking
-            };
-            Register(FaceSubsystemInfo);
-        }
+        [Obsolete("Create(FaceSubsystemParams) has been deprecated in AR Foundation version 6.0. Use Register(XRFaceSubsystemDescriptor.Cinfo) instead (UnityUpgradable) -> Register(*)", true)]
+        public static void Create(FaceSubsystemParams descriptorParams) { }
 
         /// <summary>
         /// Creates a subsystem descriptor. Used to register an implementation of the <see cref="XRFaceSubsystem"/>.

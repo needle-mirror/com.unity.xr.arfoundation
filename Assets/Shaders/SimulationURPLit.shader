@@ -207,6 +207,6 @@ Shader "Simulation/URP/Lit"
         UsePass "Universal Render Pipeline/Lit/Universal2D"
     }
 
-    Fallback "Simulation/Legacy/Standard"
+    Fallback "Unlit/Transparent"
     CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

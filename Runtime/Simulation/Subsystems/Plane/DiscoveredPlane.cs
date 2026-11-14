@@ -93,7 +93,7 @@ namespace UnityEngine.XR.Simulation
         /// </summary>
         internal NativeArray<Vector2>.ReadOnly vertices => !m_Vertices.IsCreated ? default : m_Vertices.AsReadOnly();
 
-        internal BoundedPlane boundedPlane => new(
+        internal XRPlane boundedPlane => new(
             m_TrackableId,
             m_SubsumedById,
             m_Pose,

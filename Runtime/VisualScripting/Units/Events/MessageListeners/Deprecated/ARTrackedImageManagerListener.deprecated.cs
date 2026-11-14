@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// Listens to the <see cref="ARTrackedImageManager.trackedImagesChanged"/> event and forwards it to the visual scripting event bus.
     /// </summary>
     /// <seealso cref="TrackedImagesChangedEventUnit"/>
-    [Obsolete("ARTrackedImageManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ARTrackedImageManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ARTrackedImageManagerListener : TrackableManagerListener<ARTrackedImageManager>
     {
         void OnTrackablesChanged(ARTrackedImagesChangedEventArgs args)

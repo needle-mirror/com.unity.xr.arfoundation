@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// Listens to the <see cref="ARFaceManager.facesChanged"/> event and forwards it to the visual scripting event bus.
     /// </summary>
     /// <seealso cref="FacesChangedEventUnit"/>
-    [Obsolete("ARFaceManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ARFaceManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ARFaceManagerListener : TrackableManagerListener<ARFaceManager>
     {
         void OnTrackablesChanged(ARFacesChangedEventArgs args)

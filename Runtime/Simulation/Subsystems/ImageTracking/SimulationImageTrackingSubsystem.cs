@@ -69,11 +69,8 @@ namespace UnityEngine.XR.Simulation
             }
 
             /// <inheritdoc/>
-            [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.")]
-            public override RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary)
-            {
-                return new SimulationRuntimeImageLibrary(serializedLibrary);
-            }
+            [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.", true)]
+            public override RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary) => null;
 
             /// <inheritdoc/>
             public override Awaitable<Result<RuntimeReferenceImageLibrary>> TryCreateRuntimeLibraryAsync(

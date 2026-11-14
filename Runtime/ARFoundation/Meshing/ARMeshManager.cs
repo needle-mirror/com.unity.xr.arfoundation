@@ -208,7 +208,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Invoked whenever meshes have changed (been added, updated, or removed).
         /// </summary>
-        [Obsolete("meshesChanged is deprecated in AR Foundation 6.4. Use meshInfosChanged instead")]
+        [Obsolete("meshesChanged is deprecated in AR Foundation 6.4. Use meshInfosChanged instead", true)]
         public event Action<ARMeshesChangedEventArgs> meshesChanged;
 
         /// <summary>

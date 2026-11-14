@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Constructor parameters for the <see cref="XROcclusionSubsystemDescriptor"/>.
     /// </summary>
-    [Obsolete("XROcclusionSubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XROcclusionSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor/Cinfo", false)]
+    [Obsolete("XROcclusionSubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XROcclusionSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XROcclusionSubsystemDescriptor/Cinfo", true)]
     public struct XROcclusionSubsystemCinfo : IEquatable<XROcclusionSubsystemCinfo>
     {
         /// <summary>

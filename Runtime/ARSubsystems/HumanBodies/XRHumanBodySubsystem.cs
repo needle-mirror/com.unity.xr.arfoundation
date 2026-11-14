@@ -138,21 +138,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>
         /// <c>true</c> if the descriptor was registered. Otherwise, <c>false</c>.
         /// </returns>
-        [Obsolete("XRHumanBodySubsystem.Register(XRHumanBodySubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XRHumanBodySubsystemDescriptor.Register(XRHumanBodySubsystemDescriptor.Cinfo) instead.")]
-        public static bool Register(XRHumanBodySubsystemCinfo humanBodySubsystemCinfo)
-        {
-            var humanBodySubsystemInfo = new XRHumanBodySubsystemDescriptor.Cinfo()
-            {
-                id = humanBodySubsystemCinfo.id,
-                providerType = humanBodySubsystemCinfo.providerType,
-                subsystemTypeOverride = humanBodySubsystemCinfo.subsystemTypeOverride,
-                supportsHumanBody2D = humanBodySubsystemCinfo.supportsHumanBody2D,
-                supportsHumanBody3D = humanBodySubsystemCinfo.supportsHumanBody3D,
-                supportsHumanBody3DScaleEstimation = humanBodySubsystemCinfo.supportsHumanBody3DScaleEstimation
-            };
-            XRHumanBodySubsystemDescriptor.Register(humanBodySubsystemInfo);
-            return true;
-        }
+        [Obsolete("XRHumanBodySubsystem.Register(XRHumanBodySubsystemCinfo) has been deprecated in AR Foundation version 6.0. Use XRHumanBodySubsystemDescriptor.Register(XRHumanBodySubsystemDescriptor.Cinfo) instead.", true)]
+        public static bool Register(XRHumanBodySubsystemCinfo humanBodySubsystemCinfo) => default;
 
         /// <summary>
         /// The provider which will service the <see cref="XRHumanBodySubsystem"/>.

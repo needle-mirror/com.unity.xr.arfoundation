@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// Stores the enabled and disabled shader keywords for a material.
     /// </summary>
     /// <seealso href="https://docs.unity3d.com/Manual/shader-keywords.html"/>
-    [Obsolete("ShaderKeywords is deprecated as of AR Foundation 6.1. Use XRShaderKeywords instead.")]
+    [Obsolete("ShaderKeywords is deprecated as of AR Foundation 6.1. Use XRShaderKeywords instead.", true)]
     public struct ShaderKeywords
     {
         /// <summary>

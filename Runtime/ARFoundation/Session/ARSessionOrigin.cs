@@ -52,7 +52,7 @@ namespace UnityEngine.XR.ARFoundation
     /// for example, do not perform well when scaled very small.
     /// </remarks>
     [DisallowMultipleComponent]
-    [Obsolete("ARSessionOrigin has been deprecated. Use XROrigin instead.")]
+    [Obsolete("ARSessionOrigin has been deprecated. Use XROrigin instead.", true)]
     [HelpUrl(typeof(ARSessionOrigin))]
     [Icon(Constants.arvrIconPath)]
     public class ARSessionOrigin : XROrigin
@@ -60,22 +60,22 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// (Deprecated) The <c>Camera</c> to associate with the AR device. It must be a child of this <c>ARSessionOrigin</c>.
         /// </summary>
-        [Obsolete("camera has been deprecated. Use Camera instead.")]
+        [Obsolete("camera has been deprecated. Use Camera instead.", true)]
 #if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
         public new Camera camera
 #else
         public Camera camera
 #endif
         {
-            get => Camera;
-            set => Camera = value;
+            get => null;
+            set { }
         }
 
         /// <summary>
         /// (Deprecated) The parent <c>Transform</c> for all "trackables" (for example, planes and feature points).
         /// </summary>
-        [Obsolete("trackablesParent has been deprecated. Use TrackablesParent instead.")]
-        public Transform trackablesParent => TrackablesParent;
+        [Obsolete("trackablesParent has been deprecated. Use TrackablesParent instead.", true)]
+        public Transform trackablesParent => null;
 
     }
 }

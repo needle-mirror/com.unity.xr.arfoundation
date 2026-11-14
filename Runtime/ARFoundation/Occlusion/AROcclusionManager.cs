@@ -575,32 +575,14 @@ namespace UnityEngine.XR.ARFoundation
         /// The environment depth texture.
         /// </summary>
         /// <value>The environment depth texture, if any. Otherwise, <c>null</c>.</value>
-        [Obsolete("environmentDepthTexture is deprecated in AR Foundation version 6.1. Use TryGetEnvironmentDepthTexture() instead.", false)]
-        public Texture2D environmentDepthTexture
-        {
-            get
-            {
-                if (!TryGetEnvironmentDepthTexture(out var texture))
-                    return null;
-
-                return texture as Texture2D;
-            }
-        }
+        [Obsolete("environmentDepthTexture is deprecated in AR Foundation version 6.1. Use TryGetEnvironmentDepthTexture() instead.", true)]
+        public Texture2D environmentDepthTexture => null;
 
         /// <summary>
         /// The environment depth confidence texture.
         /// </summary>
         /// <value>The environment depth confidence texture, if any. Otherwise, <c>null</c>.</value>
-        [Obsolete("environmentDepthConfidenceTexture is deprecated in AR Foundation version 6.1. Use TryGetEnvironmentDepthConfidenceTexture() instead.", false)]
-        public Texture2D environmentDepthConfidenceTexture
-        {
-            get
-            {
-                if (!TryGetEnvironmentDepthConfidenceTexture(out var gpuTexture))
-                    return null;
-
-                return gpuTexture.texture as Texture2D;
-            }
-        }
+        [Obsolete("environmentDepthConfidenceTexture is deprecated in AR Foundation version 6.1. Use TryGetEnvironmentDepthConfidenceTexture() instead.", true)]
+        public Texture2D environmentDepthConfidenceTexture => null;
     }
 }

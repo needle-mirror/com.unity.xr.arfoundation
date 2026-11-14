@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
     /// </remarks>
     [Flags]
-    [Obsolete("SessionAvailability has been deprecated in AR Foundation version 6.7. Call XRResultStatus.IsSuccess on the result of TryStartAsync instead.")]
+    [Obsolete("SessionAvailability has been deprecated in AR Foundation version 6.7. Call XRResultStatus.IsSuccess on the result of TryStartAsync instead.", true)]
     public enum SessionAvailability
     {
         /// <summary>
@@ -36,7 +36,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// Use <see cref="XRResultStatus.IsSuccess"/> from
     /// [XRSubsystem.TryStartAsync](xref:UnityEngine.XR.ARSubsystems.XRSubsystem`3.TryStartAsync*) instead.
     /// </remarks>
-    [Obsolete("SessionAvailabilityExtensions has been deprecated in AR Foundation version 6.7. Use XRResultStatus.IsSuccess() from TryStartAsync instead.")]
+    [Obsolete("SessionAvailabilityExtensions has been deprecated in AR Foundation version 6.7. Use XRResultStatus.IsSuccess() from TryStartAsync instead.", true)]
     public static class SessionAvailabilityExtensions
     {
         /// <summary>

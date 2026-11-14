@@ -15,7 +15,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [UnitCategory(Constants.k_Event_Unit_Category)]
     [UnitOrder((int)Constants.ARFoundationFeatureOrder.EnvironmentProbes)]
     [TypeIcon(typeof(AREnvironmentProbeManager))]
-    [Obsolete("EnvironmentProbesChangedEventUnit has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("EnvironmentProbesChangedEventUnit has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class EnvironmentProbesChangedEventUnit : TrackablesChangedEventUnit<
         AREnvironmentProbeManager,
         XREnvironmentProbeSubsystem,

@@ -44,48 +44,6 @@ namespace UnityEngine.XR.Simulation
             ConfigureInput(ScriptableRenderPassInput.Depth);
         }
 
-        /// <summary>
-        /// Called by the renderer before rendering a camera. Configures the camera's depth texture input type
-        /// for the non-RenderGraph async readback pass.
-        /// </summary>
-        /// <param name="cmd">The <see cref="CommandBuffer"/> object to enqueue rendering commands.</param>
-        /// <param name="renderingData">Current rendering state information.</param>
-        /// <seealso cref="ScriptableRenderPass.ConfigureInput"/>
-#if !UNITY_6000_4_OR_NEWER
-        [Obsolete("OnCameraSetup is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
-        public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
-        {
-            ConfigureInput(ScriptableRenderPassInput.Depth);
-        }
-#else
-        [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
-        public void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData) { }
-#endif
-
-        /// <summary>
-        /// Queries the <see cref="CameraTextureProvider"/> object to perform Simulation camera texture async readback
-        /// with RenderGraph disabled.
-        /// </summary>
-        /// <param name="context">The <c>ScriptableRenderContext</c> object that lets us execute the rendering commands on
-        /// the <see cref="CommandBuffer"/> object for this render pass.</param>
-        /// <param name="renderingData">Current rendering state information. Unused for this render pass.</param>
-        /// <seealso cref="CameraTextureProvider.TryConfigureReadbackCommandBuffer"/>
-#if !UNITY_6000_4_OR_NEWER
-        [Obsolete("Execute is deprecated as of AR Foundation 6.3, and will be removed soon. At your own risk, you can set URP_COMPATIBILITY_MODE in your project's scripting defines if you require this API.")]
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-        {
-            var commandBuffer = CommandBufferPool.Get(k_PassName);
-            if (m_Provider.TryConfigureReadbackCommandBuffer(commandBuffer))
-            {
-                context.ExecuteCommandBuffer(commandBuffer);
-            }
-            CommandBufferPool.Release(commandBuffer);
-        }
-#else
-        [Obsolete("URP Compatibility Mode is removed in Unity 6.4. You must upgrade to Render Graph.", true)]
-        public void Execute(ScriptableRenderContext context, ref RenderingData renderingData) { }
-#endif
-
 #if URP_17_OR_NEWER
         /// <summary>
         /// Queries the <see cref="CameraTextureProvider"/> object to perform Simulation camera texture async readback

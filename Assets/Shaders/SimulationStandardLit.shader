@@ -120,6 +120,6 @@ Shader "Simulation/Standard Lit"
         }
     }
 
-    Fallback "Simulation/Legacy/Standard"
+    Fallback "Unlit/Transparent"
     CustomEditor "UnityEditor.XR.Simulation.Rendering.MaterialInspector"
 }

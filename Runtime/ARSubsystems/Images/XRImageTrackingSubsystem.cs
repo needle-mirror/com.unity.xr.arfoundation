@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using Unity.Collections;
-using UnityEngine.Assertions;
 using UnityEngine.SubsystemsImplementation;
 
 namespace UnityEngine.XR.ARSubsystems
@@ -88,13 +87,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// <returns>A new <see cref="RuntimeReferenceImageLibrary"/> representing the deserialized version of <paramref name="serializedLibrary"/>
         /// or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
         /// <seealso cref="RuntimeReferenceImageLibrary"/>
-        [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.")]
-        public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary)
-        {
-            var library = provider.CreateRuntimeLibrary(serializedLibrary);
-            Assert.IsFalse(ReferenceEquals(library, null));
-            return library;
-        }
+        [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.", true)]
+        public RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary) => null;
 
         /// <summary>
         /// Asynchronously creates a <see cref="RuntimeReferenceImageLibrary"/> from an existing
@@ -183,7 +177,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// </summary>
             /// <param name="serializedLibrary">A <see cref="XRReferenceImageLibrary"/> to build the <see cref="RuntimeReferenceImageLibrary"/> from.</param>
             /// <returns>The runtime version of <paramref name="serializedLibrary"/> or an empty library if <paramref name="serializedLibrary"/> is <c>null</c>.</returns>
-            [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.")]
+            [Obsolete("CreateRuntimeLibrary is deprecated in AR Foundation 6.7. Use TryCreateRuntimeLibraryAsync instead.", true)]
             public abstract RuntimeReferenceImageLibrary CreateRuntimeLibrary(XRReferenceImageLibrary serializedLibrary);
 
             /// <summary>

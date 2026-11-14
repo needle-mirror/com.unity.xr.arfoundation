@@ -1,5 +1,6 @@
 #if VISUALSCRIPTING_1_8_OR_NEWER
 
+using System;
 using Unity.VisualScripting;
 using UnityEngine.XR.ARFoundation.VisualScripting;
 
@@ -9,6 +10,7 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
     /// Unit descriptor for the <see cref="SessionStateSwitchUnit"/>.
     /// </summary>
     /// <seealso href="https://docs.unity3d.com/Packages/com.unity.visualscripting@1.8/manual/vs-create-custom-node-add-docs.html"/>
+    [Obsolete("SessionStateSwitchUnitDescriptor has been deprecated in AR Foundation version 7.0. Use ARSessionStateSwitchUnitDescriptor instead.", true)]
     [Descriptor(typeof(SessionStateSwitchUnit))]
     public sealed class SessionStateSwitchUnitDescriptor : UnitDescriptor<SessionStateSwitchUnit>
     {
@@ -47,18 +49,6 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
                 case nameof(target.unsupported):
                     portDescription.summary =
                         "Triggers if the session state is Unsupported.\nThe device does not support AR.";
-                    break;
-                case nameof(target.checkingAvailability):
-                    portDescription.summary =
-                        "Triggers if the session state is CheckingAvailability.\nThe session subsystem is currently checking availability of AR on the device.";
-                    break;
-                case nameof(target.needsInstall):
-                    portDescription.summary =
-                        "Triggers if the session state is NeedsInstall.\nThe device supports AR, but requires additional software to be installed.";
-                    break;
-                case nameof(target.installing):
-                    portDescription.summary =
-                        "Triggers if the session state is Installing.\nAR software is currently installing.";
                     break;
                 case nameof(target.ready):
                     portDescription.summary =

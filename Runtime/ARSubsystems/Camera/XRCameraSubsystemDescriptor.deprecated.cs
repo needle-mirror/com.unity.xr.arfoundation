@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Contains the parameters for creating a new <see cref="XRCameraSubsystemDescriptor"/>.
     /// </summary>
-    [Obsolete("XRCameraSubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XRCameraSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor/Cinfo", false)]
+    [Obsolete("XRCameraSubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XRCameraSubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRCameraSubsystemDescriptor/Cinfo", true)]
     public struct XRCameraSubsystemCinfo : IEquatable<XRCameraSubsystemCinfo>
     {
         /// <summary>

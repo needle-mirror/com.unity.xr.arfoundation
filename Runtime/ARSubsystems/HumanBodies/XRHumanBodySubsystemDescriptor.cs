@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARSubsystems
     /// <summary>
     /// Constructor info for the <see cref="XRHumanBodySubsystemDescriptor"/>.
     /// </summary>
-    [Obsolete("XRHumanBodySubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XRHumanBodySubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRHumanBodySubsystemDescriptor/Cinfo", false)]
+    [Obsolete("XRHumanBodySubsystemCinfo has been deprecated in AR Foundation version 6.0. Use XRHumanBodySubsystemDescriptor.Cinfo instead (UnityUpgradable) -> UnityEngine.XR.ARSubsystems.XRHumanBodySubsystemDescriptor/Cinfo", true)]
     public struct XRHumanBodySubsystemCinfo : IEquatable<XRHumanBodySubsystemCinfo>
     {
         /// <summary>

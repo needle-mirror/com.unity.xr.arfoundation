@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Container for the changed <see cref="ARHumanBodyManager.humanBodiesChanged"/> of the event.
     /// </summary>
-    [Obsolete("ARHumanBodiesChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", false)]
+    [Obsolete("ARHumanBodiesChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", true)]
     public struct ARHumanBodiesChangedEventArgs : IEquatable<ARHumanBodiesChangedEventArgs>
     {
         /// <summary>

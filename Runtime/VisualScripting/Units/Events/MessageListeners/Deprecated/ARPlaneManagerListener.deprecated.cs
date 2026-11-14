@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// Listens to the <see cref="ARPlaneManager.planesChanged"/> event and forwards it to the visual scripting event bus.
     /// </summary>
     /// <seealso cref="PlanesChangedEventUnit"/>
-    [Obsolete("ARPlaneManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("ARPlaneManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class ARPlaneManagerListener : TrackableManagerListener<ARPlaneManager>
     {
         void OnTrackablesChanged(ARPlanesChangedEventArgs args)

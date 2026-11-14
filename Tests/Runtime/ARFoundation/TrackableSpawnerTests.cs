@@ -12,7 +12,7 @@ namespace UnityEngine.XR.ARFoundation.Tests
     {
         XROrigin m_Origin;
         TrackableSpawner m_Spawner;
-        BoundedPlaneBuilder m_PlaneBuilder = new();
+        XRPlaneBuilder m_PlaneBuilder = new();
         XRBoundingBoxBuilder m_BoxBuilder = new();
 
         [SetUp]
@@ -38,10 +38,10 @@ namespace UnityEngine.XR.ARFoundation.Tests
         {
             var id0 = new TrackableId(123, 0);
             var plane0 = m_PlaneBuilder.WithTrackableId(id0).Build();
-            var array = new NativeArray<BoundedPlane>(1, Allocator.Temp);
+            var array = new NativeArray<XRPlane>(1, Allocator.Temp);
             array[0] = plane0;
 
-            m_Spawner.CreateOrUpdateTrackables<ARPlane, BoundedPlane>(array, null, "Plane");
+            m_Spawner.CreateOrUpdateTrackables<ARPlane, XRPlane>(array, null, "Plane");
 
             var allEntries = m_Spawner.m_EntriesByTrackableId;
             Assert.AreEqual(1, allEntries.Count);
@@ -63,10 +63,10 @@ namespace UnityEngine.XR.ARFoundation.Tests
             var id0 = new TrackableId(123, 0);
             var missingParentId = new TrackableId(0, 456);
             var plane0 = m_PlaneBuilder.WithTrackableId(id0).WithParentId(missingParentId).Build();
-            var array = new NativeArray<BoundedPlane>(1, Allocator.Temp);
+            var array = new NativeArray<XRPlane>(1, Allocator.Temp);
             array[0] = plane0;
 
-            m_Spawner.CreateOrUpdateTrackables<ARPlane, BoundedPlane>(array, null, "Plane");
+            m_Spawner.CreateOrUpdateTrackables<ARPlane, XRPlane>(array, null, "Plane");
 
             var allEntries = m_Spawner.m_EntriesByTrackableId;
             Assert.AreEqual(2, allEntries.Count);
@@ -97,12 +97,12 @@ namespace UnityEngine.XR.ARFoundation.Tests
             var plane0 = m_PlaneBuilder.WithTrackableId(id0).WithParentId(TrackableId.invalidId).Build();
             var plane1 = m_PlaneBuilder.WithTrackableId(id1).WithParentId(id0).Build();
             var plane2 = m_PlaneBuilder.WithTrackableId(id2).WithParentId(id1).Build();
-            var array = new NativeArray<BoundedPlane>(3, Allocator.Temp);
+            var array = new NativeArray<XRPlane>(3, Allocator.Temp);
             array[0] = plane2;
             array[1] = plane1;
             array[2] = plane0;
 
-            m_Spawner.CreateOrUpdateTrackables<ARPlane, BoundedPlane>(array, null, "Plane");
+            m_Spawner.CreateOrUpdateTrackables<ARPlane, XRPlane>(array, null, "Plane");
             return (id0, id1, id2);
         }
 
@@ -177,12 +177,12 @@ namespace UnityEngine.XR.ARFoundation.Tests
                 .WithClassifications(PlaneClassifications.Seat)
                 .Build();
 
-            var array = new NativeArray<BoundedPlane>(3, Allocator.Temp);
+            var array = new NativeArray<XRPlane>(3, Allocator.Temp);
             array[0] = plane2;
             array[1] = plane1;
             array[2] = plane0;
 
-            m_Spawner.CreateOrUpdateTrackables<ARPlane, BoundedPlane>(array, null, "Plane");
+            m_Spawner.CreateOrUpdateTrackables<ARPlane, XRPlane>(array, null, "Plane");
         }
 
         [Test]
@@ -240,11 +240,11 @@ namespace UnityEngine.XR.ARFoundation.Tests
             var id0 = new TrackableId(111, 0);
             var plane0 = m_PlaneBuilder.WithTrackableId(id0).Build();
             var box0 = m_BoxBuilder.WithTrackableId(id0).Build();
-            var planeArray = new NativeArray<BoundedPlane>(1, Allocator.Temp);
+            var planeArray = new NativeArray<XRPlane>(1, Allocator.Temp);
             planeArray[0] = plane0;
             var boxArray = new NativeArray<XRBoundingBox>(1, Allocator.Temp);
             boxArray[0] = box0;
-            m_Spawner.CreateOrUpdateTrackables<ARPlane, BoundedPlane>(planeArray, null, "Plane");
+            m_Spawner.CreateOrUpdateTrackables<ARPlane, XRPlane>(planeArray, null, "Plane");
             m_Spawner.CreateOrUpdateTrackables<ARBoundingBox, XRBoundingBox>(boxArray, null, "BoundingBox");
 
             Assert.AreEqual(2, m_Spawner.m_EntryPool.CountActive);
@@ -279,10 +279,10 @@ namespace UnityEngine.XR.ARFoundation.Tests
             var plane1 = m_PlaneBuilder.WithTrackableId(id1).WithParentId(id0).Build();
             var boxArray = new NativeArray<XRBoundingBox>(1, Allocator.Temp);
             boxArray[0] = box0;
-            var planeArray = new NativeArray<BoundedPlane>(1, Allocator.Temp);
+            var planeArray = new NativeArray<XRPlane>(1, Allocator.Temp);
             planeArray[0] = plane1;
             m_Spawner.CreateOrUpdateTrackables<ARBoundingBox, XRBoundingBox>(boxArray, null, "BoundingBox");
-            m_Spawner.CreateOrUpdateTrackables<ARPlane, BoundedPlane>(planeArray, null, "Plane");
+            m_Spawner.CreateOrUpdateTrackables<ARPlane, XRPlane>(planeArray, null, "Plane");
 
             Assert.AreEqual(2, m_Spawner.m_EntriesByTrackableId.Count);
             Assert.IsTrue(m_Spawner.m_EntriesByTrackableId.ContainsKey(id0));

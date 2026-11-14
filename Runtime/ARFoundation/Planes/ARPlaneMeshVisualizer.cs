@@ -9,7 +9,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <remarks>
     /// If this component's [GameObject](xref:UnityEngine.GameObject) has a [MeshFilter](xref:UnityEngine.MeshFilter)
     /// and/or a [MeshCollider](xref:UnityEngine.MeshCollider), this component will generate a mesh from the
-    /// [BoundedPlane](xref:UnityEngine.XR.ARSubsystems.BoundedPlane) associated with the <see cref="ARPlane"/>.
+    /// [XRPlane](xref:UnityEngine.XR.ARSubsystems.XRPlane) associated with the <see cref="ARPlane"/>.
     ///
     /// It will also update a [LineRenderer](xref:UnityEngine.LineRenderer) with the boundary points, if present.
     ///
@@ -18,7 +18,7 @@ namespace UnityEngine.XR.ARFoundation
     /// - This component is enabled.
     /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
     ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
-    /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
+    /// - The <see cref="ARSessionManager"/>'s <see cref="ARSessionManager.state"/> is greater than <see cref="ARSessionState.Ready"/>.
     /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is `null`.
     ///
     /// Related information: <a href="xref:arfoundation-plane-arplanemanager#custom-plane-visualizers">Custom plane visualizers</a>
@@ -47,7 +47,7 @@ namespace UnityEngine.XR.ARFoundation
         /// - This component is enabled.
         /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
         ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
-        /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
+        /// - The <see cref="ARSessionManager"/>'s <see cref="ARSessionManager.state"/> is greater than <see cref="ARSessionState.Ready"/>.
         /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is `null`.
         /// </remarks>
         public TrackingState trackingStateVisibilityThreshold
@@ -74,7 +74,7 @@ namespace UnityEngine.XR.ARFoundation
         /// - This component is enabled.
         /// - The plane's <see cref="ARTrackable{TSessionRelativeData,TTrackable}.trackingState"/> is greater than
         ///   or equal to <see cref="trackingStateVisibilityThreshold"/>.
-        /// - The <see cref="ARSession"/>'s <see cref="ARSession.state"/> is greater than <see cref="ARSessionState.Ready"/>.
+        /// - The <see cref="ARSessionManager"/>'s <see cref="ARSessionManager.state"/> is greater than <see cref="ARSessionState.Ready"/>.
         /// - <see cref="hideSubsumed"/> is `false` OR <see cref="ARPlane.subsumedBy"/> is `null`.
         /// </remarks>
         public bool hideSubsumed
@@ -143,7 +143,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             var visible = enabled &&
                 m_Plane.trackingState >= m_TrackingStateVisibilityThreshold &&
-                ARSession.state > ARSessionState.Ready &&
+                ARSessionManager.state > ARSessionState.Ready &&
                 (!m_HideSubsumed || m_Plane.subsumedBy == null);
 
             SetVisible(visible);

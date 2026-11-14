@@ -171,10 +171,10 @@ namespace UnityEngine.XR.Simulation
             /// <inheritdoc/>
             public override PlaneDetectionMode currentPlaneDetectionMode => requestedPlaneDetectionMode;
 
-            public override TrackableChanges<BoundedPlane> GetChanges(BoundedPlane defaultPlane, Allocator allocator)
+            public override TrackableChanges<XRPlane> GetChanges(XRPlane defaultPlane, Allocator allocator)
             {
                 if (!m_Initialized)
-                    return new TrackableChanges<BoundedPlane>();
+                    return new TrackableChanges<XRPlane>();
 
                 using (new ScopedProfiler("SimulationPlaneSubsystem.GetChanges"))
                 {
@@ -188,7 +188,7 @@ namespace UnityEngine.XR.Simulation
                     var numUpdatedPlanes = m_UpdatedPlanes.Count;
                     var numRemovedPlanes = m_RemovedPlanes.Count;
 
-                    var changes = new TrackableChanges<BoundedPlane>(numAddedPlanes, numUpdatedPlanes, numRemovedPlanes, allocator);
+                    var changes = new TrackableChanges<XRPlane>(numAddedPlanes, numUpdatedPlanes, numRemovedPlanes, allocator);
 
                     if (numAddedPlanes > 0)
                     {

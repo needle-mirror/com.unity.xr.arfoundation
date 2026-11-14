@@ -99,7 +99,7 @@ namespace UnityEngine.XR.ARFoundation
         {
             var visible = enabled &&
                 (m_Face.trackingState != TrackingState.None) &&
-                (ARSession.state > ARSessionState.Ready);
+                (ARSessionManager.state > ARSessionState.Ready);
 
             SetVisible(visible);
         }
@@ -129,14 +129,14 @@ namespace UnityEngine.XR.ARFoundation
         void OnEnable()
         {
             m_Face.updated += OnUpdated;
-            ARSession.stateChanged += OnSessionStateChanged;
+            ARSessionManager.stateChanged += OnSessionStateChanged;
             UpdateVisibility();
         }
 
         void OnDisable()
         {
             m_Face.updated -= OnUpdated;
-            ARSession.stateChanged -= OnSessionStateChanged;
+            ARSessionManager.stateChanged -= OnSessionStateChanged;
         }
 
         ARFace m_Face;

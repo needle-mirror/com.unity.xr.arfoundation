@@ -14,13 +14,13 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     [UnitCategory(Constants.k_Event_Unit_Category)]
     [UnitOrder((int)Constants.ARFoundationFeatureOrder.PlaneDetection)]
     [TypeIcon(typeof(ARPlaneManager))]
-    [Obsolete("PlanesChangedEventUnit has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("PlanesChangedEventUnit has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class PlanesChangedEventUnit : TrackablesChangedEventUnit<
         ARPlaneManager,
         XRPlaneSubsystem,
         XRPlaneSubsystemDescriptor,
         XRPlaneSubsystem.Provider,
-        BoundedPlane,
+        XRPlane,
         ARPlane,
         ARPlanesChangedEventArgs,
         ARPlaneManagerListener>

@@ -202,12 +202,6 @@ namespace UnityEngine.XR.ARFoundation
             {
                 // User events
                 bool addedOrUpdated = s_Added.Count > 0 || s_Updated.Count > 0;
-                if (addedOrUpdated || s_Removed.Count > 0)
-                {
-#pragma warning disable CS0618 // disables warning from deprecation
-                    OnTrackablesChanged(s_Added, s_Updated, s_Removed);
-#pragma warning restore CS0618
-                }
 
                 if (addedOrUpdated || s_RemovedTrackables.Count > 0)
                 {
@@ -384,7 +378,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="updated">A list of trackables updated this frame.</param>
         /// <param name="removed">A list of trackables removed this frame.
         /// The trackable components are not destroyed until after this method returns.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected virtual void OnTrackablesChanged(
             List<TTrackable> added, List<TTrackable> updated, List<TTrackable> removed)
         { }

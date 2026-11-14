@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARSubsystems.Tests
             public override void Stop() { }
             public override void Destroy() { }
 
-            public override TrackableChanges<BoundedPlane> GetChanges(BoundedPlane defaultPlane, Allocator allocator)
+            public override TrackableChanges<XRPlane> GetChanges(XRPlane defaultPlane, Allocator allocator)
             {
                 return default;
             }

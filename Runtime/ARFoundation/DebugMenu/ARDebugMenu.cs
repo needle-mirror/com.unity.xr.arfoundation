@@ -16,7 +16,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Menu that is added to a scene to surface tracking data and visualize trackables in order to aid in debugging.
     /// </summary>
-    [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7. For a replacement session configuration debug visualizer, go to Package Manager > AR Foundation > Samples > Debug Visualizers.")]
+    [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7. For a replacement session configuration debug visualizer, go to Package Manager > AR Foundation > Samples > Debug Visualizers.", true)]
     [RequireComponent(typeof(Canvas))]
     [HelpUrl("debug-ar-scenes")]
     public class ARDebugMenu : MonoBehaviour
@@ -494,7 +494,7 @@ namespace UnityEngine.XR.ARFoundation
         //Managers
         XROrigin m_Origin;
 
-        ARSession m_Session;
+        ARSessionManager m_Session;
 
         ARCameraManager m_CameraManager;
 
@@ -683,10 +683,10 @@ namespace UnityEngine.XR.ARFoundation
                 return;
             }
 
-            var session = FindAnyObjectByType<ARSession>();
+            var session = FindAnyObjectByType<ARSessionManager>();
             if(session == null)
             {
-                Debug.LogError($"Failed to find ARSession in current scene. As a result, this component will be disabled.");
+                Debug.LogError($"Failed to find ARSessionManager in current scene. As a result, this component will be disabled.");
                 enabled = false;
                 return;
             }

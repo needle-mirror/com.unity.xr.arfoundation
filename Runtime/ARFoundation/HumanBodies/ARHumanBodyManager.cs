@@ -130,8 +130,10 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The event that is fired when a change to the detected human bodies is reported.
         /// </summary>
-        [Obsolete("humanBodiesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        [Obsolete("humanBodiesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", true)]
+#pragma warning disable CS0067
         public event Action<ARHumanBodiesChangedEventArgs> humanBodiesChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Gets the Prefab object to instantiate at the location of the trackable.
@@ -200,14 +202,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of human bodies added to the set of trackables.</param>
         /// <param name="updated">The list of human bodies updated in the set of trackables.</param>
         /// <param name="removed">The list of human bodies removed from the set of trackables.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected override void OnTrackablesChanged(List<ARHumanBody> added, List<ARHumanBody> updated, List<ARHumanBody> removed)
-        {
-            if (humanBodiesChanged != null)
-            {
-                using (new ScopedProfiler("OnHumanBodiesChanged"))
-                    humanBodiesChanged?.Invoke(new ARHumanBodiesChangedEventArgs(added, updated, removed));
-            }
-        }
+        { }
     }
 }

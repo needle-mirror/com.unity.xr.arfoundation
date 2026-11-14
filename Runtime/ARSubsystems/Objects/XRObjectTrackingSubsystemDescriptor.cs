@@ -18,13 +18,13 @@ namespace UnityEngine.XR.ARSubsystems
         /// <summary>
         /// Describes the capabilities of an <see cref="XRObjectTrackingSubsystem"/> implementation.
         /// </summary>
-        [Obsolete("XRObjectTrackingSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRObjectTrackingSubsystemDescriptor.Cinfo instead of XRObjectTrackingSubsystemDescriptor.Capabilities when registering a descriptor.", false)]
+        [Obsolete("XRObjectTrackingSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRObjectTrackingSubsystemDescriptor.Cinfo instead of XRObjectTrackingSubsystemDescriptor.Capabilities when registering a descriptor.", true)]
         public Capabilities capabilities { get; private set; }
 
         /// <summary>
         /// Describes the capabilities of an <see cref="XRObjectTrackingSubsystem"/> implementation.
         /// </summary>
-        [Obsolete("XRObjectTrackingSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRObjectTrackingSubsystemDescriptor.Cinfo instead of XRObjectTrackingSubsystemDescriptor.Capabilities when registering a descriptor.", false)]
+        [Obsolete("XRObjectTrackingSubsystemDescriptor.Capabilities has been deprecated in AR Foundation 6.0. Use XRObjectTrackingSubsystemDescriptor.Cinfo instead of XRObjectTrackingSubsystemDescriptor.Capabilities when registering a descriptor.", true)]
         public struct Capabilities : IEquatable<Capabilities>
         {
             /// <summary>

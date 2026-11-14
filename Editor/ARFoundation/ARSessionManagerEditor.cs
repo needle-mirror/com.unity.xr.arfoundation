@@ -3,8 +3,8 @@ using UnityEngine.XR.ARFoundation;
 
 namespace UnityEditor.XR.ARFoundation
 {
-    [CustomEditor(typeof(ARSession))]
-    class ARSessionEditor : Editor
+    [CustomEditor(typeof(ARSessionManager))]
+    class ARSessionManagerEditor : Editor
     {
         SerializedProperty m_AttemptUpdate;
         SerializedProperty m_MatchFrameRate;
@@ -38,7 +38,7 @@ namespace UnityEditor.XR.ARFoundation
                     "- Blocks each render frame until the next AR frame is ready\n" +
                     "- Sets the target frame rate to the session's preferred update rate\n" +
                     "- Disables VSync\n" +
-                    "These settings are not reverted when the ARSession is disabled.",
+                    "These settings are not reverted when the ARSessionManager is disabled.",
                     MessageType.Info);
             }
 

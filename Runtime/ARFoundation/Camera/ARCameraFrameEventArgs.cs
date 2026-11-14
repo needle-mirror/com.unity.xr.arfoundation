@@ -70,28 +70,28 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// The list of keywords to be enabled for the material.
         /// </summary>
-        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.")]
+        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.", true)]
         public List<string> enabledMaterialKeywords { get; internal set; }
 
         /// <summary>
         /// The list of keywords to be disabled for the material.
         /// </summary>
-        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.")]
+        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.", true)]
         public List<string> disabledMaterialKeywords { get; internal set; }
 
         /// <summary>
         /// The enabled shader keywords.
         /// </summary>
-        [Obsolete("enabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead.")]
+        [Obsolete("enabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead.", true)]
         public ReadOnlyCollection<string> enabledShaderKeywords
-            => shaderKeywords.enabledKeywords != null ? new(shaderKeywords.enabledKeywords.ToArray()) : null;
+            => null;
 
         /// <summary>
         /// The disabled shader keywords.
         /// </summary>
-        [Obsolete("disabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead")]
+        [Obsolete("disabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead", true)]
         public ReadOnlyCollection<string> disabledShaderKeywords
-            => shaderKeywords.disabledKeywords != null ? new(shaderKeywords.disabledKeywords.ToArray()) : null;
+            => null;
 
         /// <summary>
         /// The enabled and disabled shader keywords.

@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     /// [XR Management](https://docs.unity3d.com/Packages/com.unity.xr.management@4.0/manual/index.html).
     /// </summary>
     /// <remarks>
-    /// XR Management controls the lifecycle of subsystems. Components in AR Foundation, such as `ARSession` or
+    /// XR Management controls the lifecycle of subsystems. Components in AR Foundation, such as `ARSessionManager` or
     /// `ARPlaneManager`, turn subsystems on and off, but do not create or destroy them. Therefore, subsystems
     /// can persist across many scenes. They are automatically created on app startup, but are not destroyed
     /// during a scene switch. This allows you to keep the same session alive between scenes, for example.

@@ -17,7 +17,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// </remarks>
     [AddComponentMenu("")]
     [DisallowMultipleComponent]
-    [Obsolete("TrackableManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("TrackableManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public abstract class TrackableManagerListener<TManager> : MessageListener where TManager : MonoBehaviour
     {
         TManager m_Manager;

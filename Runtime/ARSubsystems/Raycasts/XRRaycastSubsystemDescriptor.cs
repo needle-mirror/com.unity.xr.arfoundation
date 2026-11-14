@@ -48,7 +48,7 @@ namespace UnityEngine.XR.ARSubsystems
             /// <summary>
             /// The types of trackables against which raycasting is supported.
             /// </summary>
-            [Obsolete("supportedTrackableTypes is deprecated in AR Foundation 6.6. Use supportedTrackableTypesDelegate instead.")]
+            [Obsolete("supportedTrackableTypes is deprecated in AR Foundation 6.6. Use supportedTrackableTypesDelegate instead.", true)]
             public TrackableType supportedTrackableTypes { get; set; }
 
             /// <summary>
@@ -77,9 +77,6 @@ namespace UnityEngine.XR.ARSubsystems
                 HashCodeUtil.ReferenceHash(subsystemTypeOverride),
                 supportsViewportBasedRaycast.GetHashCode(),
                 supportsWorldBasedRaycast.GetHashCode(),
-#pragma warning disable CS0618
-                ((int)supportedTrackableTypes).GetHashCode(),
-#pragma warning restore CS0618
                 supportsTrackedRaycasts.GetHashCode());
 
             /// <summary>
@@ -113,9 +110,6 @@ namespace UnityEngine.XR.ARSubsystems
                     && ReferenceEquals(subsystemTypeOverride, other.subsystemTypeOverride)
                     && supportsViewportBasedRaycast == other.supportsViewportBasedRaycast
                     && supportsWorldBasedRaycast == other.supportsWorldBasedRaycast
-#pragma warning disable CS0618
-                    && supportedTrackableTypes == other.supportedTrackableTypes
-#pragma warning restore CS0618
                     && supportedTrackableTypesDelegate == other.supportedTrackableTypesDelegate;
             }
 
@@ -165,11 +159,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// Registers a new descriptor. Should be called by provider implementations.
         /// </summary>
         /// <param name="cinfo">Parameters describing the <see cref="XRRaycastSubsystem"/>.</param>
-        [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
-        public static void RegisterDescriptor(Cinfo cinfo)
-        {
-            Register(cinfo);
-        }
+        [Obsolete("RegisterDescriptor(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", true)]
+        public static void RegisterDescriptor(Cinfo cinfo) { }
 
         /// <summary>
         /// Registers a new descriptor. Should be called by provider implementations.
@@ -187,9 +178,6 @@ namespace UnityEngine.XR.ARSubsystems
             subsystemTypeOverride = cinfo.subsystemTypeOverride;
             supportsViewportBasedRaycast = cinfo.supportsViewportBasedRaycast;
             supportsWorldBasedRaycast = cinfo.supportsWorldBasedRaycast;
-#pragma warning disable CS0618
-            m_SupportedTrackableTypesObsolete = cinfo.supportedTrackableTypes;
-#pragma warning restore CS0618
             supportsTrackedRaycasts = cinfo.supportsTrackedRaycasts;
             m_SupportedTrackableTypesDelegate = cinfo.supportedTrackableTypesDelegate;
         }

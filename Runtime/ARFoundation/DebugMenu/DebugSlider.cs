@@ -7,7 +7,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Slider used for debug options in <see cref="ARDebugMenu"/>.
     /// </summary>
-    [Obsolete("DebugSlider is deprecated in AR Foundation 6.7, and will not be replaced by any new API.")]
+    [Obsolete("DebugSlider is deprecated in AR Foundation 6.7, and will not be replaced by any new API.", true)]
     [HelpUrl(typeof(ARDebugMenu))]
     public class DebugSlider: Slider
     {

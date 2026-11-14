@@ -5,11 +5,8 @@ using Unity.Collections;
 using Unity.Scripting.LifecycleManagement;
 #endif
 using Unity.XR.CoreUtils.Collections;
-using UnityEngine.XR.ARSubsystems;
-
-#if URP_7_OR_NEWER
 using UnityEngine.Rendering;
-#endif
+using UnityEngine.XR.ARSubsystems;
 
 namespace UnityEngine.XR.ARFoundation
 {
@@ -55,13 +52,6 @@ namespace UnityEngine.XR.ARFoundation
         [SerializeField]
         [HideInInspector]
         CameraFocusMode m_FocusMode = CameraFocusMode.Auto;
-
-        [SerializeField]
-        [HideInInspector]
-#pragma warning disable CS0618
-        // If a user has an old project from 2019 lying around, OnAfterDeserialize will auto-upgrade them to the new API.
-        LightEstimationMode m_LightEstimationMode = LightEstimationMode.Disabled;
-#pragma warning restore CS0618
 
         [SerializeField]
         [Tooltip("When enabled, auto focus will be requested on the (physical) AR camera.")]
@@ -252,14 +242,6 @@ namespace UnityEngine.XR.ARFoundation
                 m_AutoFocus = m_FocusMode == CameraFocusMode.Auto;
                 m_FocusMode = (CameraFocusMode)(-1);
             }
-
-#pragma warning disable CS0618
-            if (m_LightEstimationMode != (LightEstimationMode)(-1))
-            {
-                m_LightEstimation = m_LightEstimationMode.ToLightEstimation();
-                m_LightEstimationMode = (LightEstimationMode)(-1);
-            }
-#pragma warning restore CS0618
         }
 
         /// <summary>
@@ -344,13 +326,8 @@ namespace UnityEngine.XR.ARFoundation
         protected override void OnEnable()
         {
             base.OnEnable();
-#if URP_7_OR_NEWER
             RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
             RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
-#else
-            Camera.onPreRender += OnCameraPreRender;
-            Camera.onPostRender += OnCameraPostRender;
-#endif
         }
 
         /// <inheritdoc/>
@@ -366,13 +343,8 @@ namespace UnityEngine.XR.ARFoundation
         /// <inheritdoc/>
         protected override void OnDisable()
         {
-#if URP_7_OR_NEWER
             RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
             RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
-#else
-            Camera.onPreRender -= OnCameraPreRender;
-            Camera.onPostRender -= OnCameraPostRender;
-#endif
             if (m_DidPremultiplyBackgroundColor && m_Camera != null)
             {
                 m_Camera.backgroundColor = m_OriginalBackgroundColor;
@@ -536,16 +508,10 @@ namespace UnityEngine.XR.ARFoundation
             m_DidPremultiplyBackgroundColor = false;
         }
 
-#if URP_7_OR_NEWER
         void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
             => PremultiplyBackgroundColor(camera);
 
         void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
             => RestoreBackgroundColor(camera);
-#else
-        void OnCameraPreRender(Camera camera) => PremultiplyBackgroundColor(camera);
-
-        void OnCameraPostRender(Camera camera) => RestoreBackgroundColor(camera);
-#endif
     }
 }

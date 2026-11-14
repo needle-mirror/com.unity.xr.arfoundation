@@ -13,7 +13,7 @@ namespace UnityEditor.XR.ARFoundation.VisualScripting
     /// </summary>
     /// <seealso href="https://docs.unity3d.com/Packages/com.unity.visualscripting@1.8/manual/vs-create-custom-node-add-docs.html"/>
     [Descriptor(typeof(TrackedImagesChangedEventUnit))]
-    [Obsolete("TrackedImagesChangedEventUnitDescriptor has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("TrackedImagesChangedEventUnitDescriptor has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class TrackedImagesChangedEventUnitDescriptor : TrackablesChangedEventUnitDescriptor<
         ARTrackedImageManager,
         XRImageTrackingSubsystem,

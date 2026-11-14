@@ -180,11 +180,8 @@ namespace UnityEngine.XR.ARSubsystems
         /// Registers a new descriptor with the <c>SubsystemManager</c>.
         /// </summary>
         /// <param name="cinfo">The construction information for the new descriptor.</param>
-        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", false)]
-        public static void Create(Cinfo cinfo)
-        {
-            Register(cinfo);
-        }
+        [Obsolete("Create(Cinfo) has been deprecated in AR Foundation version 6.0. Use Register(Cinfo) instead (UnityUpgradable) -> Register(*)", true)]
+        public static void Create(Cinfo cinfo) { }
 
         /// <summary>
         /// Registers a new descriptor with the <c>SubsystemManager</c>.

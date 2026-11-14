@@ -10,7 +10,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
     /// visual scripting event bus.
     /// </summary>
     /// <seealso cref="EnvironmentProbesChangedEventUnit"/>
-    [Obsolete("AREnvironmentProbeManagerListener has been deprecated in AR Foundation version 6.0.", false)]
+    [Obsolete("AREnvironmentProbeManagerListener has been deprecated in AR Foundation version 6.0.", true)]
     public sealed class AREnvironmentProbeManagerListener : TrackableManagerListener<AREnvironmentProbeManager>
     {
         void OnTrackablesChanged(AREnvironmentProbesChangedEvent args)

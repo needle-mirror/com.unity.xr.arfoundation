@@ -1,4 +1,3 @@
-using System;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -41,15 +40,15 @@ namespace UnityEditor.XR.ARFoundation.Tests
         {
             Undo.IncrementCurrentGroup();
             var parent = new GameObject().transform;
-            var arSession = SceneUtils.CreateARSessionWithParent(parent).GetComponent<ARSession>();
+            var arSession = SceneUtils.CreateARSessionWithParent(parent).GetComponent<ARSessionManager>();
             Assert.IsNotNull(arSession);
 
             Undo.PerformUndo();
-            arSession = Object.FindAnyObjectByType<ARSession>();
+            arSession = Object.FindAnyObjectByType<ARSessionManager>();
             Assert.IsTrue(arSession == null);
 
             Undo.PerformRedo();
-            arSession = Object.FindAnyObjectByType<ARSession>();
+            arSession = Object.FindAnyObjectByType<ARSessionManager>();
             Assert.IsNotNull(arSession);
             Assert.AreEqual(parent, arSession.transform.parent);
             Object.DestroyImmediate(parent.gameObject);
@@ -87,42 +86,6 @@ namespace UnityEditor.XR.ARFoundation.Tests
             Assert.IsNotNull(meshRenderer.sharedMaterials[0]);
 
             Object.DestroyImmediate(parent.gameObject);
-        }
-
-        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7")]
-        [Test]
-        public void CreateARDebugMenuWithParent_CreatesSuccessfully()
-        {
-            var parent = new GameObject().transform;
-            var debugMenu = SceneUtils.CreateARDebugMenuWithParent(parent);
-            Assert.IsNotNull(debugMenu);
-            Assert.AreEqual(parent, debugMenu.transform.parent);
-            Object.DestroyImmediate(parent.gameObject);
-        }
-
-        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7")]
-        [Test]
-        public void CreateARDebugMenuWithoutParent_CreatesSuccessfully()
-        {
-            var debugMenu = SceneUtils.CreateARDebugMenuWithParent(null);
-            Assert.IsNotNull(debugMenu);
-            Assert.IsNull(debugMenu.transform.parent);
-            Object.DestroyImmediate(debugMenu);
-        }
-
-        [Obsolete("ARDebugMenu is deprecated in AR Foundation 6.7")]
-        public void UndoRedoCreateARDebugMenu_WorksWithNoErrors()
-        {
-            Undo.IncrementCurrentGroup();
-            var debugMenu = SceneUtils.CreateARDebugMenuWithParent(null).GetComponent<ARDebugMenu>();
-            Assert.IsNotNull(debugMenu);
-            Undo.PerformUndo();
-            debugMenu = Object.FindAnyObjectByType<ARDebugMenu>();
-            Assert.IsTrue(debugMenu == null); // using Unity's overload for the == operator
-            Undo.PerformRedo();
-            debugMenu = Object.FindAnyObjectByType<ARDebugMenu>();
-            Assert.IsNotNull(debugMenu);
-            Object.DestroyImmediate(debugMenu);
         }
 
         static void DestroyAllGameObjects()

@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Event arguments for the <see cref="ARTrackedObjectManager.trackedObjectsChanged"/> event.
     /// </summary>
-    [Obsolete("ARTrackedObjectsChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", false)]
+    [Obsolete("ARTrackedObjectsChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", true)]
     public struct ARTrackedObjectsChangedEventArgs : IEquatable<ARTrackedObjectsChangedEventArgs>
     {
         /// <summary>

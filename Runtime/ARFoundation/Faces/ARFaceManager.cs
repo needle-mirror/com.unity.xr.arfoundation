@@ -78,8 +78,10 @@ namespace UnityEngine.XR.ARFoundation
         /// <summary>
         /// Raised for each new <see cref="ARFace"/> detected in the environment.
         /// </summary>
-        [Obsolete("facesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", false)]
+        [Obsolete("facesChanged has been deprecated in AR Foundation version 6.0. Use trackablesChanged instead.", true)]
+#pragma warning disable CS0067
         public event Action<ARFacesChangedEventArgs> facesChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Attempts to retrieve an <see cref="ARFace"/>.
@@ -137,18 +139,12 @@ namespace UnityEngine.XR.ARFoundation
         /// <param name="added">The list of added <see cref="ARFace"/>s.</param>
         /// <param name="updated">The list of updated <see cref="ARFace"/>s.</param>
         /// <param name="removed">The list of removed <see cref="ARFace"/>s.</param>
-        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", false)]
+        [Obsolete("OnTrackablesChanged() has been deprecated in AR Foundation version 6.0.", true)]
         protected override void OnTrackablesChanged(
             List<ARFace> added,
             List<ARFace> updated,
             List<ARFace> removed)
-        {
-            if (facesChanged != null)
-            {
-                using (new ScopedProfiler("OnFacesChanged"))
-                    facesChanged?.Invoke(new ARFacesChangedEventArgs(added, updated, removed));
-            }
-        }
+        { }
 
         /// <summary>
         /// Get the Prefab that will be instantiated for each <see cref="ARFace"/>. Can be `null`.

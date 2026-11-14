@@ -75,7 +75,7 @@ namespace UnityEngine.XR.ARSubsystems
         /// Get the dimension of the native texture object.
         /// </summary>
         /// <value>The texture dimension of the native texture object.</value>
-        [Obsolete("dimension has been deprecated in AR Foundation version 6.1. Use textureType instead.")]
+        [Obsolete("dimension has been deprecated in AR Foundation version 6.1. Use textureType instead.", true)]
         public TextureDimension dimension => m_Dimension;
         TextureDimension m_Dimension;
 
@@ -110,10 +110,10 @@ namespace UnityEngine.XR.ARSubsystems
         /// <param name="propertyNameId">The unique shader property name ID for the material shader texture.</param>
         /// <param name="depth">Depth dimension of the native texture. Should be one for all except 3D textures.</param>
         /// <param name="dimension">[Texture dimension](https://docs.unity3d.com/ScriptReference/Rendering.TextureDimension.html) of the native texture object.</param>
-        [Obsolete("This constructor has been deprecated and replaced with a new constructor in AR Foundation 6.1.")]
+        [Obsolete("This constructor has been deprecated and replaced with a new constructor in AR Foundation 6.1.", true)]
         public XRTextureDescriptor(IntPtr nativeTexture, int width, int height, int mipmapCount, TextureFormat format,
             int propertyNameId, int depth, TextureDimension dimension)
-            : this(nativeTexture, width, height, mipmapCount, format, propertyNameId, depth, dimension.ToXRTextureType())
+            : this()
         { }
 
         /// <summary>

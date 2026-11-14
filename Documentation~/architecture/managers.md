@@ -9,7 +9,7 @@ In AR Foundation, a *manager* is a component that provides a scripting interface
 
 AR Foundation defines its AR features using [subsystems](xref:arfoundation-subsystems). Managers make subsystem data accessible in a scene as GameObjects and components, and they also manage the subsystem life cycle. (*Manager* is a shorthand for `SubsystemLifecycleManager`). For example, when the [XRPlaneSubsystem](xref:UnityEngine.XR.ARSubsystems.XRPlaneSubsystem) detects a plane in the environment, the plane manager creates a GameObject representing that plane. Enabling or disabling the plane manager will also enable or disable plane detection in your app, respectively.
 
-Every AR-related subsystem has a corresponding manager. Subsystems in this package follow the naming convention **XR&lt;Feature&gt;Subsystem**, and their managers, with the exception of the [ARSession](xref:UnityEngine.XR.ARFoundation.ARSession) component, are named **AR&lt;Feature&gt;Manager**.
+Every AR-related subsystem has a corresponding manager. Subsystems in this package follow the naming convention **XR&lt;Feature&gt;Subsystem**, and their managers are named **AR&lt;Feature&gt;Manager**.
 
 ## Adding a manager to your scene
 

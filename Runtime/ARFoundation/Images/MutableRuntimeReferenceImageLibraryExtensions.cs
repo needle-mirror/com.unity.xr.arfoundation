@@ -40,16 +40,15 @@ namespace UnityEngine.XR.ARFoundation
         ///     query for completion. Can be safely discarded.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="library"/> is `null`.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is `null`.</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="ARSession.state"/> hasn't reached the ready state.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="ARSessionManager.state"/> hasn't reached the ready state.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
-        [Obsolete("Use " + nameof(ScheduleAddImageWithValidationJob) + " instead. (2020-10-20)")]
+        [Obsolete("Use " + nameof(ScheduleAddImageWithValidationJob) + " instead. (2020-10-20)", true)]
         public static JobHandle ScheduleAddImageJob(
             this MutableRuntimeReferenceImageLibrary library,
             Texture2D texture,
             string name,
             float? widthInMeters,
-            JobHandle inputDeps = default) =>
-            ScheduleAddImageWithValidationJob(library, texture, name, widthInMeters, inputDeps).jobHandle;
+            JobHandle inputDeps = default) => default;
 
         /// <summary>
         /// Asynchronously adds <paramref name="texture"/> to <paramref name="library"/>.
@@ -59,7 +58,7 @@ namespace UnityEngine.XR.ARFoundation
         /// destroyed after this method returns.
         ///
         /// > [!TIP]
-        /// > Do not call this method on your app's first frame. <see cref="ARSession.state">ARSession.state</see> should
+        /// > Do not call this method on your app's first frame. <see cref="ARSessionManager.state">ARSessionManager.state</see> should
         /// > be <see cref="ARSessionState.SessionInitializing"/> or <see cref="ARSessionState.SessionTracking"/> before you schedule an add image job. You can implement a
         /// > <c>MonoBehaviour</c>'s <a href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html">Start</a>
         /// > method as a coroutine and `yield` until the AR Session state is <c>SessionTracking</c>.
@@ -74,7 +73,7 @@ namespace UnityEngine.XR.ARFoundation
         /// <para>If image validity can be determined, invalid images will not be added.</para></returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="library"/> is <see langword="null"/>.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="texture"/> is <see langword="null"/>.</exception>
-        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="ARSession.state"/> hasn't reached the ready state.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown if <see cref="ARSessionManager.state"/> hasn't reached the ready state.</exception>
         /// <exception cref="System.InvalidOperationException">Thrown if <paramref name="texture"/> is not readable.</exception>
         public static AddReferenceImageJobState ScheduleAddImageWithValidationJob(
             this MutableRuntimeReferenceImageLibrary library,
@@ -83,8 +82,8 @@ namespace UnityEngine.XR.ARFoundation
             float? widthInMeters,
             JobHandle inputDeps = default)
         {
-            if (ARSession.state < ARSessionState.Ready)
-                throw new InvalidOperationException("The ARSession has not reached the ready state. Ensure that AR is supported and running before you call this method.");
+            if (ARSessionManager.state < ARSessionState.Ready)
+                throw new InvalidOperationException("The ARSessionManager has not reached the ready state. Ensure that AR is supported and running before you call this method.");
 
             if (ReferenceEquals(library, null))
                 throw new ArgumentNullException(nameof(library));

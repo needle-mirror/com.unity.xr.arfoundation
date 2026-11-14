@@ -17,7 +17,7 @@ The following table describes the available actions in this scene:
 
 | Action     |  Definition |
 |:---------- | :---------- |
-| **Pause**   | Pauses the `ARSession`, meaning device tracking and trackable detection (for example plane detection) is temporarily paused. While paused, the `ARSession` doesn't consume CPU resources. |
-| **Resume** | Resumes a paused `ARSession`. The device will attempt to relocalize and previously detected objects might shift around as tracking is reestablished. |
-| **Reset**  | Clears all detected trackables and effectively begins a new `ARSession`. |
+| **Pause**   | Pauses the `ARSessionManager`, meaning device tracking and trackable detection (for example plane detection) is temporarily paused. While paused, the `ARSessionManager` doesn't consume CPU resources. |
+| **Resume** | Resumes a paused `ARSessionManager`. The device will attempt to relocalize and previously detected objects might shift around as tracking is reestablished. |
+| **Reset**  | Clears all detected trackables and effectively begins a new AR session. |
 | **Reload** | Completely destroys the **ARSession** GameObject and re-instantiates it. This simulates the behavior you might experience during scene switching. |

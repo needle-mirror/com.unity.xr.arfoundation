@@ -9,13 +9,13 @@ using Unity.VisualScripting;
 namespace UnityEngine.XR.ARFoundation.VisualScripting
 {
     /// <summary>
-    /// Uses <see cref="ARSession.stateChanged"/> to listen for an AR Session state changed event, then fires the same event
+    /// Uses <see cref="ARSessionManager.stateChanged"/> to listen for an AR Session state changed event, then fires the same event
     /// on the visual scripting event bus.
     /// </summary>
     [UnitTitle("On Session State Changed")]
     [UnitCategory(Constants.k_Event_Unit_Category)]
     [UnitOrder((int)Constants.ARFoundationFeatureOrder.Session)]
-    [TypeIcon(typeof(ARSession))]
+    [TypeIcon(typeof(ARSessionManager))]
     public sealed class SessionStateChangedEventUnit : GlobalEventUnit<ARSessionState>
     {
 #if UNITY_6000_5_OR_NEWER
@@ -49,7 +49,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
             if (s_CallbackIsRegistered)
                 return;
 
-            ARSession.stateChanged += HandleStateChange;
+            ARSessionManager.stateChanged += HandleStateChange;
             s_CallbackIsRegistered = true;
         }
 
@@ -59,7 +59,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         /// <param name="stack">The graph stack.</param>
         public override void StopListening(GraphStack stack)
         {
-            ARSession.stateChanged -= HandleStateChange;
+            ARSessionManager.stateChanged -= HandleStateChange;
             s_CallbackIsRegistered = false;
             base.StopListening(stack);
         }
@@ -93,7 +93,7 @@ namespace UnityEngine.XR.ARFoundation.VisualScripting
         {
             if (s_CallbackIsRegistered)
             {
-                ARSession.stateChanged -= HandleStateChange;
+                ARSessionManager.stateChanged -= HandleStateChange;
                 s_CallbackIsRegistered = false;
             }
         }

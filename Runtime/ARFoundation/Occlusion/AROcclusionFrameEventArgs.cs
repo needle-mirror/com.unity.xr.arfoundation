@@ -19,68 +19,42 @@ namespace UnityEngine.XR.ARFoundation
         /// on the GPU. To use them on the CPU (for example, for computer vision processing), you must read them back
         /// from the GPU.
         /// </summary>
-        [Obsolete("textures has been deprecated in AR Foundation version 6.1. Use externalTextures instead.")]
-        public List<Texture2D> textures
-        {
-            get
-            {
-                var list = new List<Texture2D>();
-                foreach (var tex in externalTextures)
-                {
-                    if (tex.texture is Texture2D tex2D)
-                        list.Add(tex2D);
-                }
-
-                return list;
-            }
-        }
+        [Obsolete("textures has been deprecated in AR Foundation version 6.1. Use externalTextures instead.", true)]
+        public List<Texture2D> textures => null;
 
         /// <summary>
         /// Ids of the property name associated with each texture. This is a parallel list to `textures`.
         /// </summary>
-        [Obsolete("propertyNameIds has been deprecated in AR Foundation version 6.1. Use externalTextures instead.")]
-        public List<int> propertyNameIds
-        {
-            get
-            {
-                var list = new List<int>();
-                foreach (var tex in externalTextures)
-                {
-                    if (tex.texture is Texture2D)
-                        list.Add(tex.propertyId);
-                }
-
-                return list;
-            }
-        }
+        [Obsolete("propertyNameIds has been deprecated in AR Foundation version 6.1. Use externalTextures instead.", true)]
+        public List<int> propertyNameIds => null;
 
         /// <summary>
         /// The list of keywords to be enabled for the material.
         /// </summary>
-        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.")]
+        [Obsolete("enabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.", true)]
         public List<string> enabledMaterialKeywords
-            => shaderKeywords.enabledKeywords != null ? new(shaderKeywords.enabledKeywords.ToArray()) : null;
+            => null;
 
         /// <summary>
         /// The list of keywords to be disabled for the material.
         /// </summary>
-        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.")]
+        [Obsolete("disabledMaterialKeywords has been deprecated in AR Foundation version 6.0. Use shaderKeywords instead.", true)]
         public List<string> disabledMaterialKeywords
-            => shaderKeywords.disabledKeywords != null ? new(shaderKeywords.disabledKeywords.ToArray()) : null;
+            => null;
 
         /// <summary>
         /// The enabled shader keywords.
         /// </summary>
-        [Obsolete("enabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead.")]
+        [Obsolete("enabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead.", true)]
         public ReadOnlyCollection<string> enabledShaderKeywords
-            => shaderKeywords.enabledKeywords != null ? new(shaderKeywords.enabledKeywords.ToArray()) : null;
+            => null;
 
         /// <summary>
         /// The disabled shader keywords.
         /// </summary>
-        [Obsolete("disabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead")]
+        [Obsolete("disabledShaderKeywords is deprecated as of AR Foundation 6.1. Use shaderKeywords instead", true)]
         public ReadOnlyCollection<string> disabledShaderKeywords
-            => shaderKeywords.disabledKeywords != null ? new(shaderKeywords.disabledKeywords.ToArray()) : null;
+            => null;
 
         /// <summary>
         /// The enabled and disabled shader keywords.

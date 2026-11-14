@@ -6,7 +6,7 @@ namespace UnityEngine.XR.ARFoundation
     /// <summary>
     /// Event arguments for the <see cref="ARPointCloudManager.pointCloudsChanged"/> event.
     /// </summary>
-    [Obsolete("ARPointCloudChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", false)]
+    [Obsolete("ARPointCloudChangedEventArgs has been deprecated in AR Foundation version 6.0. Use ARTrackablesChangedEventArgs<TTrackable> instead.", true)]
     public struct ARPointCloudChangedEventArgs : IEquatable<ARPointCloudChangedEventArgs>
     {
         /// <summary>

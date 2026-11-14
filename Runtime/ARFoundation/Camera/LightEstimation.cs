@@ -95,43 +95,15 @@ namespace UnityEngine.XR.ARFoundation
         /// </summary>
         /// <param name="mode">The <c>LightEstimationMode</c> to convert.</param>
         /// <returns>The <see cref="LightEstimation"/> representation of the <c>LightEstimationMode</c>.</returns>
-        [Obsolete("LightEstimationMode is deprecated. (2023-02-22)")]
-        public static LightEstimation ToLightEstimation(this LightEstimationMode mode)
-        {
-            switch (mode)
-            {
-                case LightEstimationMode.AmbientIntensity:
-                    return LightEstimation.AmbientIntensity
-                         | LightEstimation.AmbientColor;
-                case LightEstimationMode.EnvironmentalHDR:
-                    return LightEstimation.AmbientSphericalHarmonics
-                         | LightEstimation.MainLightIntensity
-                         | LightEstimation.MainLightDirection;
-                default:
-                    return LightEstimation.None;
-            }
-        }
+        [Obsolete("LightEstimationMode is deprecated. (2023-02-22)", true)]
+        public static LightEstimation ToLightEstimation(this LightEstimationMode mode) => default;
 
         /// <summary>
         /// Converts a <see cref="LightEstimation"/> to the deprecated <c>LightEstimationMode</c>.
         /// </summary>
         /// <param name="self">The <see cref="LightEstimation"/> being converted.</param>
         /// <returns>A <c>LightEstimationMode</c> representation of the <see cref="LightEstimation"/>.</returns>
-        [Obsolete("LightEstimationMode is deprecated. (2023-02-22)")]
-        public static LightEstimationMode ToLightEstimationMode(this LightEstimation self)
-        {
-            switch (self)
-            {
-                case LightEstimation.AmbientColor:
-                case LightEstimation.AmbientIntensity:
-                    return LightEstimationMode.AmbientIntensity;
-                case LightEstimation.AmbientSphericalHarmonics:
-                case LightEstimation.MainLightDirection:
-                case LightEstimation.MainLightIntensity:
-                    return LightEstimationMode.EnvironmentalHDR;
-                default:
-                    return LightEstimationMode.Disabled;
-            }
-        }
+        [Obsolete("LightEstimationMode is deprecated. (2023-02-22)", true)]
+        public static LightEstimationMode ToLightEstimationMode(this LightEstimation self) => default;
     }
 }
